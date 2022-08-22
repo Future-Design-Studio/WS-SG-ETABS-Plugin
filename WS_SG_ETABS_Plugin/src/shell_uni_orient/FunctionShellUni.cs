@@ -85,11 +85,7 @@ namespace WS_SG_ETABS_Plugin.src.shell_uni_orient
             }
             
             bool isError = false;
-<<<<<<< HEAD
-            bool showWarning = true;
-=======
             bool showWarning = false;
->>>>>>> master
 
             //Open required tables
             List<Dictionary<string, string>> pointObjConnectivity = new List<Dictionary<string, string>>();
@@ -268,14 +264,6 @@ namespace WS_SG_ETABS_Plugin.src.shell_uni_orient
                         pointList.Add(shellObjConnectivity[index]["UniquePt3"]);
                     }
 
-<<<<<<< HEAD
-                    //Check if UniquePt4 exist, if exist take UniquePt4 else skip
-                    bool keyExists = shellObjConnectivity[index].ContainsKey("UniquePt4");
-                    if (keyExists)
-                    {
-                        pointList.Add(shellObjConnectivity[index]["UniquePt4"]);
-                    }
-=======
                     //Check if UniquePt4 key exist, if exist take UniquePt4 else skip
                     bool keyExists = shellObjConnectivity[index].ContainsKey("UniquePt4");
                     if (keyExists)
@@ -284,9 +272,7 @@ namespace WS_SG_ETABS_Plugin.src.shell_uni_orient
                         {
                             pointList.Add(shellObjConnectivity[index]["UniquePt4"]);
                         }
-                    }
-                        
->>>>>>> master
+                    }                     
 
                     //If this is not last row and below this row still the same shell, go to next row, loop again to get more points
                     if (index < shellObjConnectivity.Count - 1 && shellObjConnectivity[index]["UniqueName"] == shellObjConnectivity[index + 1]["UniqueName"])
