@@ -1,0 +1,11 @@
+﻿<Window x:Class="WS_SG_ETABS_Plugin.src.shell_uni_orient.WindowShellUniResult"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WS_SG_ETABS_Plugin.src.shell_uni_orient"
+             mc:Ignorable="d" Height="100" Width="200" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Label VerticalAlignment="Center" HorizontalAlignment="Center">Flipping shell local axis completed!</Label>
+    </Grid>
+</Window>
