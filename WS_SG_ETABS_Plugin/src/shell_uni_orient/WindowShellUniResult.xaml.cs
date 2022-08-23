@@ -50,5 +50,10 @@ namespace WS_SG_ETABS_Plugin.src.shell_uni_orient
             ShowDialog();
 
         }
+
+        private void buttonOk_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
     }
 }

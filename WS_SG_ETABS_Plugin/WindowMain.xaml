@@ -20,6 +20,6 @@
         <Button Grid.Row="2" x:Name="buttonShellUni" Content="Shell Orientation (Local-3) Uniform" FontSize="16" Click="buttonShellUni_Click"/>
         <Button Grid.Row="3" x:Name="button3" Content="Function 3" FontSize="16"/>
 
-        <Label Grid.Row="4" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="8">version 0.0.1</Label>
+        <Label Grid.Row="4" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="8">version 0.0.2</Label>
     </Grid>
 </Window>
