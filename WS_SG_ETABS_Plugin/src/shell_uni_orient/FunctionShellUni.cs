@@ -71,6 +71,9 @@ namespace WS_SG_ETABS_Plugin.src.shell_uni_orient
             string groupAssignmentsTableKey = "Group Assignments";
             (groupAssignmentsEdit, groupAsignmentsTableVersion, groupAsignmentsFieldsKeysIncluded, groupAsignmentsNumberRecords) = src.HelperEtabs.GetTableEdit(Sap, groupAssignmentsTableKey);
 
+            //Copy original area assigments
+            List<List<Dictionary<string, string>>> originalAreaAssignments = src.HelperEtabs.CopyAreaAssigments(Sap);
+
 
             //Parsing intended direction
             char axisFinal = shellDir[0];
@@ -94,7 +97,7 @@ namespace WS_SG_ETABS_Plugin.src.shell_uni_orient
             List<Dictionary<string, string>> nullAreaObjConnectivity = new List<Dictionary<string, string>>();
 
             string tableKey = "Point Object Connectivity";
-            (isError, pointObjConnectivity) = src.HelperEtabs.GetTableDisplay(Sap, tableKey);
+            (isError, pointObjConnectivity) = src.HelperEtabs.GetTableDisplay(Sap, tableKey, showWarning);
 
             if (isError) { return isError; }
 
@@ -178,10 +181,6 @@ namespace WS_SG_ETABS_Plugin.src.shell_uni_orient
                 }
             }
 
-            //Get area assignment
-
-            //Delete edit area
-
             /*
             //Applying edited table (floor)
             if (floorObjConnectivity != null)
@@ -225,6 +224,8 @@ namespace WS_SG_ETABS_Plugin.src.shell_uni_orient
             //Applying original group assignment
             isError = src.HelperEtabs.ApplyEtabsTable(Sap, groupAssignmentsTableKey, groupAssignmentsEdit, groupAsignmentsTableVersion, groupAsignmentsFieldsKeysIncluded, groupAsignmentsNumberRecords);
             if (isError) { return isError; }
+
+            //Applying original area assignments
        
             //Set isError = false to show windows
             isError = false;

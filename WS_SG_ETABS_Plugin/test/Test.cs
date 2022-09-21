@@ -68,7 +68,7 @@ namespace WS_SG_ETABS_Plugin.test
 
             //Table exist then proceed to print
             List<Dictionary<string, string>> tableInList = null;
-            (isError, tableInList) = src.HelperEtabs.GetTableDisplay( Sap, tableKey);
+            (isError, tableInList) = src.HelperEtabs.GetTableDisplay( Sap, tableKey, false);
 
             if (isError)
             {

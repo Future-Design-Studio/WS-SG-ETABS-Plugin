@@ -107,6 +107,67 @@ namespace WS_SG_ETABS_Plugin.src
             Ret = Sap.AreaObj.AddByPoint(numOfPoints, ref points, ref name, "Default", userName);
         }
 
+        /// <summary>
+        /// Copy all area assignments inside ETABS file
+        /// </summary>
+        /// <param name="Sap"></param>
+        /// <returns>multipleTableInList</returns>
+        public static List<List<Dictionary<string, string>>> CopyAreaAssigments(cSapModel Sap)
+        {
+
+            //List of table names
+            List<string> tableNameToCopy = new List<string>
+            {
+                "Area Assignments - Additional Mass",
+                "Area Assignments - Area Springs",
+                "Area Assignments - Auto Edge Constraints",
+                "Area Assignments - Diaphragms",
+                "Area Assignments - Edge Releases",
+                "Area Assignments - Floor Auto Mesh Options",
+                "Area Assignments - Floor Cracking",
+                "Area Assignments - Insertion Point",
+                "Area Assignments - Local Axes",
+                "Area Assignments - Material Overwrites",
+                "Area Assignments - Pier Labels",
+                "Area Assignments - Section Properties",
+                "Area Assignments - Slab Line Releases",
+                "Area Assignments - Slab Rib Locations",
+                "Area Assignments - Spandrel Labels",
+                "Area Assignments - Stiffness Modifiers",
+                "Area Assignments - Thickness Overwrites",
+                "Area Assignments - Wall Auto Mesh Options",
+                "Area Assignments - Wall Hinge - Auto Fiber PM3",
+                "Area Assignments - Wall Hinge Reinforcement",
+                "Area Assignments - Wall Hinges",
+                "Area Assignments - Wall Rebar Ratio for Creep Analysis",
+                "Area Load Assignments - Non-uniform",
+                "Area Load Assignments - Temperature",
+                "Area Load Assignments - Uniform",
+                "Area Load Assignments - Uniform Load Sets",
+                "Area Load Assignments - Wind Pressure Coefficients"
+            };
+
+            //List to save multiple tables
+            List<List<Dictionary<string, string>>> multipleTableInList = new List<List<Dictionary<string, string>>>();
+
+            //Going to each table and save it if table exists
+            foreach (string tableKey in tableNameToCopy)
+            {
+                bool isError = new bool();
+                List<Dictionary<string, string>> tableInList = new List<Dictionary<string, string>>();
+                bool showWarning = false;
+
+                (isError, tableInList) = GetTableDisplay(Sap, tableKey, showWarning);
+
+                if (!isError)
+                {
+                    multipleTableInList.Add(tableInList);
+                }
+            }
+
+            return multipleTableInList;
+        }
+
         #endregion
 
         #region Database Method
@@ -175,7 +236,7 @@ namespace WS_SG_ETABS_Plugin.src
 
             List<Dictionary<string, string>> tableInList = HelperMethod.EtabsTableToDictionary(TableData, FieldsKeysIncluded);
             return (tableInList, TableVersion, FieldsKeysIncluded, NumberRecords);
-            
+
         }
 
         /// <summary>
@@ -214,9 +275,9 @@ namespace WS_SG_ETABS_Plugin.src
         /// <param name="Sap">Refer to specified SAP model</param>
         /// <param name="tableKey">Table key that we want to extract</param>
         /// <returns>
-        /// Return tupple (tableInList, TableVersion, FieldKeysIncluded, NumberRecords)
+        /// Return tupple (isError, tableInList)
         /// </returns>
-        public static (bool, List<Dictionary<string, string>>) GetTableDisplay(cSapModel Sap, string tableKey)
+        public static (bool, List<Dictionary<string, string>>) GetTableDisplay(cSapModel Sap, string tableKey, bool showWarning)
         {
             string TableKey = tableKey;
             string[] FieldKeyList = null;
@@ -227,13 +288,17 @@ namespace WS_SG_ETABS_Plugin.src
             string[] TableData = null;
             bool isError = false;
 
-            Ret = Sap.DatabaseTables.GetTableForDisplayArray(TableKey, ref FieldKeyList, GroupName, ref TableVersion, 
+            Ret = Sap.DatabaseTables.GetTableForDisplayArray(TableKey, ref FieldKeyList, GroupName, ref TableVersion,
                 ref FieldsKeysIncluded, ref NumberRecords, ref TableData);
 
             //If table doesnt exist, ETABS return first element of FieldKeysIncluded = null
             if (FieldsKeysIncluded[0] == null)
             {
-                src.HelperEtabs.WarningTableDoesNotExist(tableKey);
+                if (showWarning)
+                {
+                    src.HelperEtabs.WarningTableDoesNotExist(tableKey);
+                }
+
                 isError = true;
                 return (isError, null);
             }
@@ -278,7 +343,7 @@ namespace WS_SG_ETABS_Plugin.src
                 {
                     src.HelperEtabs.WarningTableDoesNotExist(tableKey);
                 }
-                
+
                 isError = true;
                 return (isError, null);
             }
@@ -365,7 +430,7 @@ namespace WS_SG_ETABS_Plugin.src
         /// <param name="editColumn">Column to edit</param>
         /// <param name="editValue">Assign this value to editColumn in edited row</param>
         /// <returns></returns>
-        public static List<Dictionary<string, string>> EditTable (List<Dictionary<string, string>> table, string refColumn, string refValue, string editColumn, string editValue)
+        public static List<Dictionary<string, string>> EditTable(List<Dictionary<string, string>> table, string refColumn, string refValue, string editColumn, string editValue)
         {
             List<Dictionary<string, string>> editedTable = new List<Dictionary<string, string>>();
 
@@ -381,8 +446,8 @@ namespace WS_SG_ETABS_Plugin.src
         }
 
 
-        public static bool ApplyEtabsTable(cSapModel Sap, string TableKey, List<Dictionary<string,string>> table, 
-            int TableVersion, string[]  FieldsKeysIncluded, int NumberRecords)
+        public static bool ApplyEtabsTable(cSapModel Sap, string TableKey, List<Dictionary<string, string>> table,
+            int TableVersion, string[] FieldsKeysIncluded, int NumberRecords)
         {
             string[] tableArray = HelperMethod.DictionaryTableToEtabs(table);
 
@@ -405,7 +470,7 @@ namespace WS_SG_ETABS_Plugin.src
             }
 
             return isError;
-            
+
         }
 
         #endregion
@@ -444,7 +509,7 @@ namespace WS_SG_ETABS_Plugin.src
                 Ret = Sap.FrameObj.SetSelected(group, true, eItemType.Group);
                 Ret = Sap.AreaObj.SetSelected(group, true, eItemType.Group);
             }
-            
+
         }
 
         public static void CheckDuplicateObjectInGroup(cSapModel Sap, List<string> groupList)
@@ -557,7 +622,7 @@ namespace WS_SG_ETABS_Plugin.src
         /// </summary>
         /// <param name="pointObjConnectivity"></param>
         /// <returns></returns>
-        public static List<Point3D> ConvertPointDatabaseToPoint3D (List<Dictionary<string, string>> pointObjConnectivity)
+        public static List<Point3D> ConvertPointDatabaseToPoint3D(List<Dictionary<string, string>> pointObjConnectivity)
         {
             List<Point3D> point3DList = new List<Point3D>();
 
