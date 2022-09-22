@@ -125,8 +125,10 @@ namespace WS_SG_ETABS_Plugin.src.carbon
             //Check if checkbox all is checked
             bool? includeAll = checkBoxAll.IsChecked;
 
+            IsEnabled = false;
             //Call up carbon result window
             src.carbon.WindowCarbonResult windowCarbonResult = new src.carbon.WindowCarbonResult(_SapModel, _Plugin, inputCarbon, listChoosenGroup, includeAll);
+            IsEnabled = true;
         }
 
         private void checkBoxAll_Checked(object sender, RoutedEventArgs e)
