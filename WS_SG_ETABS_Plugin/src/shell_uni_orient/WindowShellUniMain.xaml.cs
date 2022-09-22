@@ -66,9 +66,11 @@ namespace WS_SG_ETABS_Plugin.src.shell_uni_orient
 
             string shellDir =  comBoxShellDirection.SelectedValue.ToString();
 
+            IsEnabled = false;
             //Call up carbon result window
             src.shell_uni_orient.WindowShellUniResult windowShellUniResult = new src.shell_uni_orient
                 .WindowShellUniResult(_SapModel, _Plugin, listChoosenGroup, shellDir);
+            IsEnabled = true;
         }
 
         

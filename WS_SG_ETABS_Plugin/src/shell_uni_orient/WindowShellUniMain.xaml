@@ -56,8 +56,7 @@
         <TextBlock Grid.Row="3" Grid.Column="0" TextWrapping="Wrap" TextAlignment="Justify"  
                    Margin="10 0 10 0" FontSize="10">Note:<LineBreak/>
                 1. Choose group(s) to include in shell flip<LineBreak/>
-                2. WARNING: This program does not bring ANY area assignment! (to be included in future updates)<LineBreak/>
-                3. Press OK to proceed
+                2. Press OK to proceed
         </TextBlock>
 
         

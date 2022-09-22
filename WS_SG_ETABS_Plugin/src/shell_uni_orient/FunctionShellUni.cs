@@ -63,17 +63,11 @@ namespace WS_SG_ETABS_Plugin.src.shell_uni_orient
        public static bool MakeShellOrientationUniform(cSapModel Sap, List<string> listChoosenGroup, string shellDir)
         {
             //Copy original group assigments
-            List<Dictionary<string, string>> groupAssignmentsEdit = new List<Dictionary<string, string>>();
-            int groupAsignmentsTableVersion = 0;
-            string[] groupAsignmentsFieldsKeysIncluded = null;
-            int groupAsignmentsNumberRecords = 0;
-
             string groupAssignmentsTableKey = "Group Assignments";
-            (groupAssignmentsEdit, groupAsignmentsTableVersion, groupAsignmentsFieldsKeysIncluded, groupAsignmentsNumberRecords) = src.HelperEtabs.GetTableEdit(Sap, groupAssignmentsTableKey);
+            src.HelperEtabs.DatabaseTable groupAssignmentsTable = src.HelperEtabs.GetTableEdit(Sap, groupAssignmentsTableKey);
 
             //Copy original area assigments
-            List<List<Dictionary<string, string>>> originalAreaAssignments = src.HelperEtabs.CopyAreaAssigments(Sap);
-
+            List<src.HelperEtabs.DatabaseTable> originalAreaAssignments = src.HelperEtabs.CopyAreaAssigments(Sap);
 
             //Parsing intended direction
             char axisFinal = shellDir[0];
@@ -222,11 +216,13 @@ namespace WS_SG_ETABS_Plugin.src.shell_uni_orient
             //Apply area assignment
 
             //Applying original group assignment
-            isError = src.HelperEtabs.ApplyEtabsTable(Sap, groupAssignmentsTableKey, groupAssignmentsEdit, groupAsignmentsTableVersion, groupAsignmentsFieldsKeysIncluded, groupAsignmentsNumberRecords);
+            isError = src.HelperEtabs.ApplyEtabsTable(Sap, groupAssignmentsTable);
             if (isError) { return isError; }
 
             //Applying original area assignments
-       
+            isError = src.HelperEtabs.ApplyMultipleEtabsTable(Sap, originalAreaAssignments);
+            if (isError) { return isError; }
+
             //Set isError = false to show windows
             isError = false;
             return isError;

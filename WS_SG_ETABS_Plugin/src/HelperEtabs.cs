@@ -55,6 +55,27 @@ namespace WS_SG_ETABS_Plugin.src
             }
         }
 
+        public class DatabaseTable
+        {
+            public string TableKey { get; set; }
+            public string GroupName { get; set; }
+            public int TableVersion { get; set; }
+            public string[] FieldsKeysIncluded { get; set; }
+            public int NumberRecords { get; set; }
+            public List<Dictionary<string, string>> TableInList {get; set; }
+
+            public DatabaseTable(string tableKey, string groupName, int tableVersion, string[] fieldsKeysIncluded, int numberRecords, List<Dictionary<string, string>> tableInList)
+            {
+                TableKey =  tableKey;
+                GroupName = groupName;
+                TableVersion = tableVersion;
+                FieldsKeysIncluded = fieldsKeysIncluded;
+                NumberRecords = numberRecords;
+                TableInList = tableInList;
+            }
+        }
+
+
         #endregion
 
         #region ETABS Function Method
@@ -112,7 +133,7 @@ namespace WS_SG_ETABS_Plugin.src
         /// </summary>
         /// <param name="Sap"></param>
         /// <returns>multipleTableInList</returns>
-        public static List<List<Dictionary<string, string>>> CopyAreaAssigments(cSapModel Sap)
+        public static List<DatabaseTable> CopyAreaAssigments(cSapModel Sap)
         {
 
             //List of table names
@@ -148,25 +169,42 @@ namespace WS_SG_ETABS_Plugin.src
             };
 
             //List to save multiple tables
-            List<List<Dictionary<string, string>>> multipleTableInList = new List<List<Dictionary<string, string>>>();
+            List<DatabaseTable> multipleDatabaseTable = new List<DatabaseTable>();
 
             //Going to each table and save it if table exists
             foreach (string tableKey in tableNameToCopy)
             {
-                bool isError = new bool();
-                List<Dictionary<string, string>> tableInList = new List<Dictionary<string, string>>();
-                bool showWarning = false;
+                string TableKey = "";
+                string GroupName = "";
+                int TableVersion = 0;
+                string[] FieldsKeysIncluded = null;
+                int NumberRecords = 0;
+                List<Dictionary<string, string>> tableInList = null;
 
-                (isError, tableInList) = GetTableDisplay(Sap, tableKey, showWarning);
-
-                if (!isError)
-                {
-                    multipleTableInList.Add(tableInList);
-                }
+                DatabaseTable singleTable = new DatabaseTable(TableKey, GroupName, TableVersion, FieldsKeysIncluded, NumberRecords, tableInList);
+                singleTable = GetTableEdit(Sap, tableKey);
+                multipleDatabaseTable.Add(singleTable);
             }
 
-            return multipleTableInList;
+            return multipleDatabaseTable;
         }
+
+
+        public static void ApplyAreaAssigments(cSapModel Sap, List<DatabaseTable> multipleTableInList)
+        {
+
+            foreach(DatabaseTable singleTable in multipleTableInList)
+            {
+                string TableKey = singleTable.TableKey;
+                int TableVersion = singleTable.TableVersion;
+                string[] FieldsKeysIncluded = singleTable.FieldsKeysIncluded;
+                int NumberRecords = singleTable.NumberRecords;
+                List<Dictionary<string, string>> TableInList = singleTable.TableInList;
+
+            }
+
+        }
+
 
         #endregion
 
@@ -222,7 +260,7 @@ namespace WS_SG_ETABS_Plugin.src
         /// <returns>
         /// Return tupple (tableInList, TableVersion, FieldKeysIncluded, NumberRecords)
         /// </returns>
-        public static (List<Dictionary<string, string>>, int, string[], int) GetTableEdit(cSapModel Sap, string tableKey)
+        public static DatabaseTable GetTableEdit(cSapModel Sap, string tableKey)
         {
             string TableKey = tableKey;
             string GroupName = "";
@@ -235,7 +273,11 @@ namespace WS_SG_ETABS_Plugin.src
                     ref NumberRecords, ref TableData);
 
             List<Dictionary<string, string>> tableInList = HelperMethod.EtabsTableToDictionary(TableData, FieldsKeysIncluded);
-            return (tableInList, TableVersion, FieldsKeysIncluded, NumberRecords);
+
+            DatabaseTable databaseTable = new DatabaseTable(TableKey, GroupName, TableVersion, FieldsKeysIncluded,
+                    NumberRecords, tableInList);
+
+            return databaseTable;
 
         }
 
@@ -446,10 +488,16 @@ namespace WS_SG_ETABS_Plugin.src
         }
 
 
-        public static bool ApplyEtabsTable(cSapModel Sap, string TableKey, List<Dictionary<string, string>> table,
-            int TableVersion, string[] FieldsKeysIncluded, int NumberRecords)
+        public static bool ApplyEtabsTable(cSapModel Sap, DatabaseTable databaseTable)
         {
-            string[] tableArray = HelperMethod.DictionaryTableToEtabs(table);
+
+            string TableKey = databaseTable.TableKey;
+            int TableVersion = databaseTable.TableVersion;
+            string [] FieldsKeysIncluded = databaseTable.FieldsKeysIncluded;
+            int NumberRecords = databaseTable.NumberRecords;
+            List<Dictionary<string, string>> tableInList = databaseTable.TableInList;
+
+            string[] tableArray = HelperMethod.DictionaryTableToEtabs(tableInList);
 
             Ret = Sap.DatabaseTables.SetTableForEditingArray(TableKey, ref TableVersion, ref FieldsKeysIncluded, NumberRecords, ref tableArray);
 
@@ -471,6 +519,55 @@ namespace WS_SG_ETABS_Plugin.src
 
             return isError;
 
+        }
+
+        public static bool ApplyMultipleEtabsTable(cSapModel Sap, List<DatabaseTable> multipleDatabaseTable)
+        {
+            foreach (DatabaseTable databaseTable in multipleDatabaseTable)
+            {
+                string TableKey = databaseTable.TableKey;
+                int TableVersion = databaseTable.TableVersion;
+                string[] FieldsKeysIncluded = databaseTable.FieldsKeysIncluded;
+                int NumberRecords = databaseTable.NumberRecords;
+                List<Dictionary<string, string>> tableInList = databaseTable.TableInList;
+
+                string[] tableArray = HelperMethod.DictionaryTableToEtabs(tableInList);
+
+                Ret = Sap.DatabaseTables.SetTableForEditingArray(TableKey, ref TableVersion, ref FieldsKeysIncluded, NumberRecords, ref tableArray);
+
+                /*bool FillImportLog = true;
+                int NumFatalErrors = 0;
+                int NumErrorMsgs = 0;
+                int NumWarnMsgs = 0;
+                int NumInfoMsgs = 0;
+                string ImportLog = "";
+
+                Ret = Sap.DatabaseTables.ApplyEditedTables(FillImportLog, ref NumFatalErrors, ref NumErrorMsgs, ref NumWarnMsgs, ref NumInfoMsgs, ref ImportLog);
+
+                if (Ret != 0)
+                {
+                    isError = true;
+                    src.HelperEtabs.WarningApplyingTable(ImportLog);
+                }*/
+            }
+            
+            bool FillImportLog = true;
+            int NumFatalErrors = 0;
+            int NumErrorMsgs = 0;
+            int NumWarnMsgs = 0;
+            int NumInfoMsgs = 0;
+            string ImportLog = "";
+
+            Ret = Sap.DatabaseTables.ApplyEditedTables(FillImportLog, ref NumFatalErrors, ref NumErrorMsgs, ref NumWarnMsgs, ref NumInfoMsgs, ref ImportLog);
+
+            bool isError = false;
+            if (Ret != 0)
+            {
+                isError = true;
+                src.HelperEtabs.WarningApplyingTable(ImportLog);
+            }
+          
+            return isError;
         }
 
         #endregion

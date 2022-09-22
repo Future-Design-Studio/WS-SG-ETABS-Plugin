@@ -33,11 +33,10 @@ namespace WS_SG_ETABS_Plugin.test
             }
 
             //Table exist then proceed to print
-            List<Dictionary<string, string>> tableInList = null;
-            int TableVersion = 0;
-            string[] FieldsKeysIncluded = null;
-            int NumberRecords = 0;
-            (tableInList, TableVersion, FieldsKeysIncluded, NumberRecords) = src.HelperEtabs.GetTableEdit(Sap, tableKey);
+
+            src.HelperEtabs.DatabaseTable databaseTable = src.HelperEtabs.GetTableEdit(Sap, tableKey);
+
+            List<Dictionary<string, string>> tableInList = databaseTable.TableInList;
 
             foreach (var table in tableInList)
             {

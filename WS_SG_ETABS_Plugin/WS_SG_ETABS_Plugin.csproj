@@ -109,5 +109,13 @@
   <ItemGroup>
     <Folder Include="src\steel_optimization\" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="src\resources\logo-invert.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="src\resources\logo.PNG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -4,9 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WS_SG_ETABS_Plugin.src"
-             mc:Ignorable="d" Height="200" Width="300" Closed="WindowMain_Closed" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+             mc:Ignorable="d" Height="250" Width="300" Closed="WindowMain_Closed" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <Grid Margin="10 0 10 0">
         <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
@@ -19,7 +20,10 @@
         <Button Grid.Row="1" x:Name="buttonCarbon" Content="Carbon Calulator" Click="buttonCarbon_Click" FontSize="16"/>
         <Button Grid.Row="2" x:Name="buttonShellUni" Content="Shell Orientation (Local-3) Uniform" FontSize="16" Click="buttonShellUni_Click"/>
         <Button Grid.Row="3" x:Name="button3" Content="Function 3" FontSize="16"/>
+        
+        <Image Grid.Row="4" Source="/WS_SG_ETABS_Plugin;component/src/resources/logo-invert.PNG" />
 
-        <Label Grid.Row="4" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="8">version 0.0.2</Label>
+
+        <Label Grid.Row="5" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="8">version 0.0.2</Label>
     </Grid>
 </Window>
