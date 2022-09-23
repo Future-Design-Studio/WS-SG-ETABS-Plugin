@@ -183,7 +183,13 @@ namespace WS_SG_ETABS_Plugin.src
 
                 DatabaseTable singleTable = new DatabaseTable(TableKey, GroupName, TableVersion, FieldsKeysIncluded, NumberRecords, tableInList);
                 singleTable = GetTableEdit(Sap, tableKey);
-                multipleDatabaseTable.Add(singleTable);
+
+                //Only save table if its not empty
+                if (singleTable.NumberRecords != 0)
+                {
+                    multipleDatabaseTable.Add(singleTable);
+                }
+                
             }
 
             return multipleDatabaseTable;
@@ -247,7 +253,7 @@ namespace WS_SG_ETABS_Plugin.src
         public static void WarningApplyingTable(string ImportLog)
         {
             System.Diagnostics.Debug.WriteLine(ImportLog);
-            MessageBox.Show("Error! DO NOT save your model and close immediately!" + ImportLog);
+            MessageBox.Show("Plugin ERROR! DO NOT save your model and close immediately!" + ImportLog);
         }
 
         /// <summary>
@@ -534,6 +540,8 @@ namespace WS_SG_ETABS_Plugin.src
                 List<Dictionary<string, string>> tableInList = databaseTable.TableInList;
 
                 string[] tableArray = HelperMethod.DictionaryTableToEtabs(tableInList);
+
+                //string[] tableArray = null;
 
                 Ret = Sap.DatabaseTables.SetTableForEditingArray(TableKey, ref TableVersion, ref FieldsKeysIncluded, NumberRecords, ref tableArray);
 

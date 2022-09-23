@@ -114,7 +114,10 @@ namespace WS_SG_ETABS_Plugin.src.shell_uni_orient
             //Convert points ETABS datase to Point3D
             List<src.HelperEtabs.Point3D> point3DList = src.HelperEtabs.ConvertPointDatabaseToPoint3D(pointObjConnectivity);
 
-            //Getting floor list
+            //List to save flipped shells
+            List<src.HelperEtabs.Shell> listFlipped = new List<src.HelperEtabs.Shell>();
+
+            //Getting floor list and flip it
             List<src.HelperEtabs.Shell> floorList = new List<src.HelperEtabs.Shell>();
             if (floorObjConnectivity != null)
             {
@@ -130,12 +133,18 @@ namespace WS_SG_ETABS_Plugin.src.shell_uni_orient
                 //Check if floor need to be flipped
                 foreach (src.HelperEtabs.Shell floor in floorList)
                 {
-                    FlipShellIfNeeded(Sap, floor, axisFinal, isPositiveFinal);
+                    bool shellFlipped = new bool();
+                    shellFlipped = FlipShellIfNeeded(Sap, floor, axisFinal, isPositiveFinal);
+
+                    //Add to flippedList if shell is flipped
+                    if (shellFlipped) {
+                        listFlipped.Add(floor);
+                    }
                 }
 
             }
 
-            //Getting wall list
+            //Getting wall list and flip it
             List<src.HelperEtabs.Shell> wallList = new List<src.HelperEtabs.Shell>();
             if (wallObjConnectivity != null)
             {
@@ -151,11 +160,18 @@ namespace WS_SG_ETABS_Plugin.src.shell_uni_orient
                 //Flip  wall normal if necessarry
                 foreach (src.HelperEtabs.Shell wall in wallList)
                 {
-                    FlipShellIfNeeded(Sap, wall, axisFinal, isPositiveFinal);
+                    bool shellFlipped = new bool();
+                    shellFlipped = FlipShellIfNeeded(Sap, wall, axisFinal, isPositiveFinal);
+
+                    //Add to flippedList if shell is flipped
+                    if (shellFlipped)
+                    {
+                        listFlipped.Add(wall);
+                    }
                 }
             }
 
-            //Getting null area list
+            //Getting null area list and flip it
             List<src.HelperEtabs.Shell> nullAreaList = new List<src.HelperEtabs.Shell>();
             if (nullAreaObjConnectivity != null)
             {
@@ -171,9 +187,20 @@ namespace WS_SG_ETABS_Plugin.src.shell_uni_orient
                 //Flip null area normal if necessarry
                 foreach (src.HelperEtabs.Shell nullArea in nullAreaList)
                 {
-                    FlipShellIfNeeded(Sap, nullArea, axisFinal, isPositiveFinal);
+                    bool shellFlipped = new bool();
+                    shellFlipped = FlipShellIfNeeded(Sap, nullArea, axisFinal, isPositiveFinal);
+
+                    //Add to flippedList if shell is flipped
+                    if (shellFlipped)
+                    {
+                        listFlipped.Add(nullArea);
+                    }
                 }
             }
+
+
+            //Filtering area assignments database to only have flipped shells
+            filterAreaAssignments(originalAreaAssignments, listFlipped);
 
             /*
             //Applying edited table (floor)
@@ -346,8 +373,10 @@ namespace WS_SG_ETABS_Plugin.src.shell_uni_orient
         /// <param name="shell"></param>
         /// <param name="axisFinal"></param>
         /// <param name="isPositiveFinal"></param>
-        public static void FlipShellIfNeeded(cSapModel Sap, src.HelperEtabs.Shell shell, char axisFinal, bool isPositiveFinal)
+        public static bool FlipShellIfNeeded(cSapModel Sap, src.HelperEtabs.Shell shell, char axisFinal, bool isPositiveFinal)
         {
+            bool flipped = false;
+
             double axisDirection = shell.NormalDirection[axisFinal.ToString()];
 
             //If shell is not perpendicular to normal axis and axisDirection negative but isPositiveFinal is true
@@ -355,6 +384,8 @@ namespace WS_SG_ETABS_Plugin.src.shell_uni_orient
             if ((axisDirection != 0 && axisDirection < 0 && isPositiveFinal) || 
                 (axisDirection != 0 && axisDirection > 0 && !isPositiveFinal))
             {
+                flipped = true;
+
                 //Flipping axis
                 shell.Points.Reverse();
 
@@ -362,6 +393,8 @@ namespace WS_SG_ETABS_Plugin.src.shell_uni_orient
                 HelperEtabs.RecreateExistingAreaByPoints(Sap, shell);
 
             }
+
+            return flipped;
 
         }
 
@@ -389,6 +422,53 @@ namespace WS_SG_ETABS_Plugin.src.shell_uni_orient
             }
 
             return floorObjConnectivityEdit;
+        }
+
+
+        public static void filterAreaAssignments(List<src.HelperEtabs.DatabaseTable> originalAreaAssignments, List<src.HelperEtabs.Shell> listFlipped)
+        {
+            List<src.HelperEtabs.DatabaseTable> originalAreaAssignmentsFiltered = new List<src.HelperEtabs.DatabaseTable>();
+
+            //Goto each table
+            foreach (src.HelperEtabs.DatabaseTable databaseTable in originalAreaAssignments)
+            {
+                List<Dictionary<string, string>> tableInList = databaseTable.TableInList;
+                List<Dictionary<string, string>> removedRows = new List<Dictionary<string, string>>();
+
+                //Goto each row
+                foreach (Dictionary<string, string> row in tableInList)
+                {
+                    bool isInFlippedList = false;
+                    
+                    //If shell in not in flippedList, take note of the row
+                    foreach (src.HelperEtabs.Shell shell in listFlipped)
+                    {
+                        if (row["UniqueName"] == shell.UniqueName)
+                        {
+                            isInFlippedList = true;
+                            break;
+                        }
+                    }
+
+                    if (!isInFlippedList)
+                    {
+                        removedRows.Add(row);
+                    }
+                }
+
+                //After taking all the rows which are not flipped, remove it from the table
+                foreach (Dictionary<string, string> removedRow in removedRows)
+                {
+                    tableInList.Remove(removedRow);
+                }
+
+                databaseTable.NumberRecords = tableInList.Count;
+
+            }
+
+
+
+               
         }
 
 
