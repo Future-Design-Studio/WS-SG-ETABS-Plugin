@@ -523,7 +523,9 @@ namespace WS_SG_ETABS_Plugin.src
 
         public static bool ApplyMultipleEtabsTable(cSapModel Sap, List<DatabaseTable> multipleDatabaseTable)
         {
-            foreach (DatabaseTable databaseTable in multipleDatabaseTable)
+
+            foreach(DatabaseTable databaseTable in multipleDatabaseTable)
+
             {
                 string TableKey = databaseTable.TableKey;
                 int TableVersion = databaseTable.TableVersion;
@@ -549,8 +551,11 @@ namespace WS_SG_ETABS_Plugin.src
                     isError = true;
                     src.HelperEtabs.WarningApplyingTable(ImportLog);
                 }*/
+          
+
             }
-            
+
+
             bool FillImportLog = true;
             int NumFatalErrors = 0;
             int NumErrorMsgs = 0;
@@ -566,7 +571,7 @@ namespace WS_SG_ETABS_Plugin.src
                 isError = true;
                 src.HelperEtabs.WarningApplyingTable(ImportLog);
             }
-          
+
             return isError;
         }
 
