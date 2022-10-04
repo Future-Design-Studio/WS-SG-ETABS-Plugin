@@ -95,8 +95,10 @@ namespace WS_SG_ETABS_Plugin.src.carbon
 
         private void buttonOk_Click(object sender, RoutedEventArgs e)
         {
-            //Compile input into 1 dictionary
-            Dictionary<string, string> inputCarbon = new Dictionary<string, string>() {
+            try
+            {
+                //Compile input into 1 dictionary
+                Dictionary<string, string> inputCarbon = new Dictionary<string, string>() {
                             { "Column Concrete Emission", comBoxColumnConcreteGrade.SelectedValue.ToString()},
                             { "Column Rebar Ratio", textBoxColumnRebar.Text.ToString() },
                             { "Beam Concrete Emission", comBoxBeamConcreteGrade.SelectedValue.ToString() },
@@ -109,26 +111,31 @@ namespace WS_SG_ETABS_Plugin.src.carbon
                             { "Wall Rebar Ratio", textBoxWallRebar.Text.ToString() }
                         };
 
-            /*            Dictionary<string, string> inputCarbon = new Dictionary<string, string>();
-                        inputCarbon.Add("Column Concrete Emission", comBoxColumnConcreteGrade.SelectedValue.ToString());
-                        inputCarbon.Add("Column Rebar Ratio", textBoxColumnRebar.Text.ToString());
-                        inputCarbon.Add("Beam Concrete Emission", comBoxBeamConcreteGrade.SelectedValue.ToString());
-                        inputCarbon.Add("Beam Rebar Ratio", textBoxBeamRebar.Text.ToString());
-                        inputCarbon.Add("Brace Concrete Emission", comBoxBraceConcreteGrade.SelectedValue.ToString());
-                        inputCarbon.Add("Brace Rebar Ratio", textBoxBraceRebar.ToString());
-                        inputCarbon.Add("Slab Concrete Emission", comBoxSlabConcreteGrade.SelectedValue.ToString());
-                        inputCarbon.Add("Slab Rebar Ratio", textBoxSlabRebar.Text.ToString());*/
+                /*            Dictionary<string, string> inputCarbon = new Dictionary<string, string>();
+                            inputCarbon.Add("Column Concrete Emission", comBoxColumnConcreteGrade.SelectedValue.ToString());
+                            inputCarbon.Add("Column Rebar Ratio", textBoxColumnRebar.Text.ToString());
+                            inputCarbon.Add("Beam Concrete Emission", comBoxBeamConcreteGrade.SelectedValue.ToString());
+                            inputCarbon.Add("Beam Rebar Ratio", textBoxBeamRebar.Text.ToString());
+                            inputCarbon.Add("Brace Concrete Emission", comBoxBraceConcreteGrade.SelectedValue.ToString());
+                            inputCarbon.Add("Brace Rebar Ratio", textBoxBraceRebar.ToString());
+                            inputCarbon.Add("Slab Concrete Emission", comBoxSlabConcreteGrade.SelectedValue.ToString());
+                            inputCarbon.Add("Slab Rebar Ratio", textBoxSlabRebar.Text.ToString());*/
 
-            //Casting listbox content to list
-            List<string> listChoosenGroup = listBoxChoosenGroup.Items.OfType<string>().ToList();
+                //Casting listbox content to list
+                List<string> listChoosenGroup = listBoxChoosenGroup.Items.OfType<string>().ToList();
 
-            //Check if checkbox all is checked
-            bool? includeAll = checkBoxAll.IsChecked;
+                //Check if checkbox all is checked
+                bool? includeAll = checkBoxAll.IsChecked;
 
-            IsEnabled = false;
-            //Call up carbon result window
-            src.carbon.WindowCarbonResult windowCarbonResult = new src.carbon.WindowCarbonResult(_SapModel, _Plugin, inputCarbon, listChoosenGroup, includeAll);
-            IsEnabled = true;
+                IsEnabled = false;
+                //Call up carbon result window
+                src.carbon.WindowCarbonResult windowCarbonResult = new src.carbon.WindowCarbonResult(_SapModel, _Plugin, inputCarbon, listChoosenGroup, includeAll);
+                IsEnabled = true;
+            }
+            catch(Exception ex)
+            {
+                System.Windows.Forms.MessageBox.Show(ex.Message);
+            }
         }
 
         private void checkBoxAll_Checked(object sender, RoutedEventArgs e)
