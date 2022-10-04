@@ -69,6 +69,9 @@
     <Compile Include="cPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="src\HelperUI.cs" />
+    <Compile Include="src\rc_beam_schedule\WindowRCBSchedMain.xaml.cs">
+      <DependentUpon>WindowRCBSchedMain.xaml</DependentUpon>
+    </Compile>
     <Compile Include="src\shell_uni_orient\FunctionShellUni.cs" />
     <Compile Include="src\shell_uni_orient\WindowShellUniMain.xaml.cs">
       <DependentUpon>WindowShellUniMain.xaml</DependentUpon>
@@ -87,6 +90,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="src\carbon\WindowCarbonResult.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\rc_beam_schedule\WindowRCBSchedMain.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

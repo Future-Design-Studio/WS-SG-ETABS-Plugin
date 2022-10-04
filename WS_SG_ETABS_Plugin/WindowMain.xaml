@@ -19,11 +19,11 @@
 
         <Button Grid.Row="1" x:Name="buttonCarbon" Content="Carbon Calulator" Click="buttonCarbon_Click" FontSize="16"/>
         <Button Grid.Row="2" x:Name="buttonShellUni" Content="Shell Orientation (Local-3) Uniform" FontSize="16" Click="buttonShellUni_Click"/>
-        <Button Grid.Row="3" x:Name="button3" Content="Function 3" FontSize="16"/>
+        <Button Grid.Row="3" x:Name="button3" Content="RC Beam Schedule" FontSize="16"/>
         
         <Image Grid.Row="4" Source="/WS_SG_ETABS_Plugin;component/src/resources/logo-invert.PNG" />
 
 
-        <Label Grid.Row="5" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="8">version 0.0.2</Label>
+        <Label Grid.Row="5" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="8">version 0.0.3</Label>
     </Grid>
 </Window>
