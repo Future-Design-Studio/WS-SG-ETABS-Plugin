@@ -30,7 +30,7 @@ namespace WS_SG_ETABS_Plugin.src.shell_uni_orient
             _Plugin = Plugin;
 
             //Check if any group is choosen for shell uniform orientation
-            bool requiredGroupListExist = src.HelperUI.CheckGroupListExistCarbon(_SapModel, listChoosenGroup);
+            bool requiredGroupListExist = src.HelperUI.CheckGroupListExist(_SapModel, listChoosenGroup);
 
             if (!requiredGroupListExist)
             {

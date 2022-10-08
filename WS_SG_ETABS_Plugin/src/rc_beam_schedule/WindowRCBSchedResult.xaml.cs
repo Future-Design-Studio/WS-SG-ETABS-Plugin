@@ -29,6 +29,14 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
             _SapModel = SapModel;
             _Plugin = Plugin;
 
+            //Main logic
+            bool isError = src.rc_beam_schedule.FunctionRCBSched.GetRCBeamSchedule(_SapModel, fileName, filePath);
+
+            if (isError)
+            {
+                return;
+            }
+
             InitializeComponent();
 
             //Put ShowDialog at last after completing constructor
