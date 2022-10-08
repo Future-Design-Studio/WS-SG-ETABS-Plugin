@@ -24,13 +24,14 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
         cSapModel _SapModel;
         cPluginCallback _Plugin;
 
-        public WindowRCBSchedResult(cSapModel SapModel, cPluginCallback Plugin, string fileName, string filePath)
+        public WindowRCBSchedResult(cSapModel SapModel, cPluginCallback Plugin, string fileName, string filePath, double leftLength,
+                                                                                 double midLength, double rightLength)
         {
             _SapModel = SapModel;
             _Plugin = Plugin;
 
             //Main logic
-            bool isError = src.rc_beam_schedule.FunctionRCBSched.GetRCBeamSchedule(_SapModel, fileName, filePath);
+            bool isError = src.rc_beam_schedule.FunctionRCBSched.GetRCBeamSchedule(_SapModel, fileName, filePath, leftLength, midLength, rightLength);
 
             if (isError)
             {

@@ -88,10 +88,27 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
             string name = fileName.Text;
             string path = filePath.Text;
 
-            IsEnabled = false;
-            //Call up carbon result window
-            src.rc_beam_schedule.WindowRCBSchedResult windowRCBSchedResult = new src.rc_beam_schedule.WindowRCBSchedResult(_SapModel, _Plugin, name, path);
-            IsEnabled = true;
+            double leftLength = Convert.ToDouble(textBoxLengthLeft.Text);
+            double midLength = Convert.ToDouble(textBoxLengthMid.Text);
+            double rightLength = Convert.ToDouble(textBoxLengthRight.Text);
+
+            //Check if total = 1, else will show warning
+            double totalLength = leftLength + midLength + rightLength;
+
+            if (totalLength != 1)
+            {
+                System.Diagnostics.Debug.WriteLine("Total division of length must be 1!, currently " + totalLength);
+                MessageBox.Show("Total division of length must be 1!, currently " + totalLength);
+            }
+            else
+            {
+                IsEnabled = false;
+                //Call up carbon result window
+                src.rc_beam_schedule.WindowRCBSchedResult windowRCBSchedResult = new src.rc_beam_schedule.WindowRCBSchedResult(_SapModel, _Plugin, name, path, leftLength, 
+                                                                                 midLength, rightLength);
+                IsEnabled = true;
+            }
+            
         }
     }
 }

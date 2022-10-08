@@ -12,7 +12,50 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
 {
     internal class FunctionRCBSched
     {
+
         private static int Ret;
+
+        public static bool GetRCBeamSchedule(cSapModel Sap, string fileName, string filePath, double leftLength, double midLength, double rightLength)
+        {
+            //Get current unit
+            eForce forceUnits = new eForce();
+            eLength lengthUnits = new eLength();
+            eTemperature temperatureUnits = new eTemperature();
+            Ret = Sap.GetPresentUnits_2(ref forceUnits, ref lengthUnits, ref temperatureUnits);
+
+            //Set unit to mm
+            src.HelperEtabs.SetOutputUnitTo_kN_mm_C(Sap);
+
+            bool isError = false;
+
+            bool tableExist = CheckTableExistRCBSched(Sap);
+            
+            if (!tableExist)
+            {
+                isError = true;
+                return isError;
+            }
+
+            //Get RC design result table
+            List<Dictionary<string, string>> tableDesignSummary = new List<Dictionary<string, string>>();
+            (isError, tableDesignSummary) = GetDesignResult(Sap);
+
+            //Get list of beams
+            GetBeamList(tableDesignSummary);
+
+
+
+
+
+
+
+
+
+            //Set back to original units
+            src.HelperEtabs.SetOutputUnit(Sap, forceUnits, lengthUnits, temperatureUnits);
+
+            return isError;
+        }
 
         /// <summary>
         /// Check if the required tables exist
@@ -44,27 +87,7 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
             return true;
         }
 
-        public static bool GetRCBeamSchedule(cSapModel Sap, string fileName, string filePath)
-        {
-            bool isError = false;
 
-            bool tableExist = CheckTableExistRCBSched(Sap);
-            
-            if (!tableExist)
-            {
-                isError = true;
-                return isError;
-            }
-
-            //Get RC design result table
-            List<Dictionary<string, string>> tableDesignSummary = new List<Dictionary<string, string>>();
-            (isError, tableDesignSummary) = GetDesignResult(Sap);
-
-
-
-
-            return isError;
-        }
 
         public static (bool,  List<Dictionary<string, string>>) GetDesignResult(cSapModel Sap)
         {
@@ -80,6 +103,32 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
 
             return (isError, tableInList);
         }
+
+        public static List<src.HelperEtabs.Frame> GetBeamList(List<Dictionary<string, string>> tableDesignSummary)
+        {
+            List<src.HelperEtabs.Frame> frameList = new List<HelperEtabs.Frame>();
+
+            //Get list of unique name
+            List<string> uniqueNameAllList = new List<string>();
+
+            foreach (Dictionary<string, string> row in tableDesignSummary)
+            {
+                uniqueNameAllList.Add(row["UniqueName"]);
+            }
+            List<string> uniqueNameList = uniqueNameAllList.Distinct().ToList();
+
+            //Create frame list
+            foreach (string uniqueName in uniqueNameList)
+            {
+                frameList.Add(new src.HelperEtabs.Frame(uniqueName));
+            }
+
+
+            return frameList;
+
+        }
+
+
 
 
     }

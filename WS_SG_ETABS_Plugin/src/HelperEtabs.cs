@@ -55,6 +55,28 @@ namespace WS_SG_ETABS_Plugin.src
             }
         }
 
+        public class Frame
+        {
+            public string UniqueName { get; set; }
+            public double Length { get; set; }
+            public double Height { get; set; }
+            public double Width { get; set; }
+            public double LeftLength { get; set; }
+            public double MidLength { get; set; }
+            public double RightLength { get; set; }
+            public string LeftTopRebar { get; set; }
+            public string MidTopRebar { get; set; }
+            public string RightTopRebar { get; set; }
+            public string LeftBottomRebar { get; set; }
+            public string MidBottomRebar { get; set; }
+            public string RightBottomRebar { get; set; }
+
+            public Frame(string name)
+            {
+                UniqueName = name;
+            }
+        }
+
         public class DatabaseTable
         {
             public string TableKey { get; set; }
@@ -238,6 +260,16 @@ namespace WS_SG_ETABS_Plugin.src
         public static void SetOutputUnitTo_kN_m_C(cSapModel Sap)
         {
             Ret = Sap.SetPresentUnits_2(eForce.kN, eLength.m, eTemperature.C);
+        }
+
+        public static void SetOutputUnitTo_kN_mm_C(cSapModel Sap)
+        {
+            Ret = Sap.SetPresentUnits_2(eForce.kN, eLength.mm, eTemperature.C);
+        }
+
+        public static void SetOutputUnit(cSapModel Sap, eForce forceUnits, eLength lengthUnits, eTemperature temperatureUnits)
+        {
+            Ret = Sap.SetPresentUnits_2(forceUnits, lengthUnits, temperatureUnits);
         }
 
         /// <summary>
