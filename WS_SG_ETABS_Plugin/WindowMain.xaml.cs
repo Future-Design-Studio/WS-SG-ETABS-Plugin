@@ -68,7 +68,9 @@ namespace WS_SG_ETABS_Plugin
         private void buttonCopyProperties_Click(object sender, RoutedEventArgs e)
         {
             IsEnabled = false;
-            src.HelperEtabs.OpenModel("C:\\Users\\stefa\\Desktop\\TESTER\\ResortCenter_20220531_r4.edb");
+            //Call up shell uniform window
+            src.copy_properties.WindowCopyPropMain WindowCopyPropMain = new src.copy_properties.WindowCopyPropMain(_SapModel, _Plugin);
+            //src.HelperEtabs.OpenModel("C:\\Users\\stefa\\Desktop\\TESTER\\ResortCenter_20220531_r4.edb");
             IsEnabled = true;
         }
     }

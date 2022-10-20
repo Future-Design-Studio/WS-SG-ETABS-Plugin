@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ETABSv1;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,11 +19,19 @@ namespace WS_SG_ETABS_Plugin.src.copy_properties
     /// <summary>
     /// Interaction logic for WindowCopyPropMain.xaml
     /// </summary>
-    public partial class WindowCopyPropMain : UserControl
+    public partial class WindowCopyPropMain : Window
     {
-        public WindowCopyPropMain()
+        cSapModel _SapModel;
+        cPluginCallback _Plugin;
+        string modelPath;
+
+        public WindowCopyPropMain(cSapModel SapModel, cPluginCallback Plugin)
         {
+            _SapModel = SapModel;
+            _Plugin = Plugin;
+
             InitializeComponent();
+
         }
     }
 }
