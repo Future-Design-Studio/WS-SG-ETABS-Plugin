@@ -107,6 +107,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="src\copy_properties\" />
     <Folder Include="src\steel_optimization\" />
   </ItemGroup>
   <ItemGroup>

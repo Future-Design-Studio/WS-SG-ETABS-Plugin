@@ -64,5 +64,12 @@ namespace WS_SG_ETABS_Plugin
             src.shell_uni_orient.WindowShellUniMain windowShellUniMain = new src.shell_uni_orient.WindowShellUniMain(_SapModel, _Plugin);
             IsEnabled = true;
         }
+
+        private void buttonCopyProperties_Click(object sender, RoutedEventArgs e)
+        {
+            IsEnabled = false;
+            src.HelperEtabs.OpenModel("C:\\Users\\stefa\\Desktop\\TESTER\\ResortCenter_20220531_r4.edb");
+            IsEnabled = true;
+        }
     }
 }
