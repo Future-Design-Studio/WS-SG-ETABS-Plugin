@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Microsoft.Win32;
 
 namespace WS_SG_ETABS_Plugin.src.copy_properties
 {
@@ -32,6 +33,49 @@ namespace WS_SG_ETABS_Plugin.src.copy_properties
 
             InitializeComponent();
 
+            ShowDialog();
+        }
+
+        private void buttonDefaultPath_Click(object sender, RoutedEventArgs e)
+        {
+            filePath.Text = modelPath;
+        }
+
+        private void buttonModifyPath_Click(object sender, RoutedEventArgs e)
+        {
+            /*
+            var dialog = new System.Windows.Forms.FolderBrowserDialog();
+            dialog.SelectedPath = filePath.Text;
+
+            System.Windows.Forms.DialogResult result = dialog.ShowDialog();
+
+            if (result == System.Windows.Forms.DialogResult.OK)
+            {
+                filePath.Text = dialog.SelectedPath;
+            }
+            */
+
+            System.Windows.Forms.OpenFileDialog openFileDialog = new System.Windows.Forms.OpenFileDialog();
+            openFileDialog.Filter = "ETABS files(*.edb)|*.edb";
+
+            System.Windows.Forms.DialogResult result = openFileDialog.ShowDialog();
+
+            if (result == System.Windows.Forms.DialogResult.OK)
+            {
+                filePath.Text = openFileDialog.FileName;
+            }
+
+        }
+
+        private void buttonCancel_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void buttonOk_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
+
 }
