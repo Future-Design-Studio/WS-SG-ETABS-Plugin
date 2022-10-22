@@ -21,24 +21,13 @@
 
         <Label Grid.Row="0" Grid.Column="0" Content="RC Beam Schedule" FontSize="28"/>
 
-        <Grid Grid.Row="1" Grid.Column="0" Margin="0 10 0 10">
+        <Grid Grid.Row="1" Grid.Column="0" Margin="0 0 0 0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="4*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
-            <Label Grid.Column="0" Margin="10 0 10 0" Content="Excel file name"></Label>
-            <TextBox x:Name="fileName" Grid.Column="1"/>
-
-        </Grid>
-
-        <Grid Grid.Row="2" Grid.Column="0" Margin="0 10 0 10">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"></ColumnDefinition>
-                <ColumnDefinition Width="4*"></ColumnDefinition>
-            </Grid.ColumnDefinitions>
-
-            <Label Grid.Column="0" Margin="10 0 10 0" Content="Excel file path"></Label>
+            <Label Grid.Column="0" Margin="10 0 10 0" Content="ETABS file path"></Label>
 
             <Grid Grid.Column="2" Margin="0 10 0 10">
                 <Grid.RowDefinitions>
@@ -49,7 +38,6 @@
                 <TextBox x:Name="filePath" Grid.Row="0" IsEnabled="False"></TextBox>
 
                 <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
-                    <Button x:Name="buttonDefaultPath" Content="Default path" Width="100" Click="buttonDefaultPath_Click"/>
                     <Button x:Name="buttonModifyPath" Content="Modify path" Width="100" Click="buttonModifyPath_Click"/>
                 </StackPanel>
 
@@ -57,31 +45,42 @@
 
         </Grid>
 
-        <Grid Grid.Row="3" Grid.Column="0" Margin="0 10 0 10">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
-            </Grid.RowDefinitions>
+        <Grid Grid.Row="2" Grid.Column="0" Margin="0 10 0 10">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
+            
+            <StackPanel Grid.Column="0">
+                <Label Content="Property Definition"></Label>
+                <CheckBox Content="Materials" Name="checkBoxMaterial"></CheckBox>
+                <CheckBox Content="Frame section properties"></CheckBox>
+                <CheckBox Content="Area section properties"></CheckBox>
+                <CheckBox Content="Link section properties"></CheckBox>
+            </StackPanel>
 
-            <Grid Grid.Row="0">
-                <Label Content="Length division left mid right"></Label>
-            </Grid>
+            <StackPanel Grid.Column="1">
+                <Label Content="Miscellaneous"></Label>
+                <CheckBox Content="Mass source" Name="checkBoxMassSource"></CheckBox>
+                <CheckBox Content="P-delta definition"></CheckBox>
+            </StackPanel>
 
-            <Label Grid.Row="1" Grid.Column="0" Content="Left"></Label>
-            <Label Grid.Row="1" Grid.Column="1" Content="Mid"></Label>
-            <Label Grid.Row="1" Grid.Column="2" Content="Right"></Label>
+            <StackPanel Grid.Column="2">
+                <Label Content="Load Pattern Definition"></Label>
+                <CheckBox Content="Load pattern" Name="checkBoxLoadPattern"></CheckBox>
+                <CheckBox Content="Response spectrum function"></CheckBox>
+            </StackPanel>
 
-            <TextBox x:Name="textBoxLengthLeft" Grid.Row="2" Grid.Column="0" Text="0.25"></TextBox>
-            <TextBox x:Name="textBoxLengthMid" Grid.Row="2" Grid.Column="1" Text="0.5"></TextBox>
-            <TextBox x:Name="textBoxLengthRight" Grid.Row="2" Grid.Column="2" Text="0.25"></TextBox>
-
+            <StackPanel Grid.Column="3">
+                <Label Content="Load Case Definition"></Label>
+                <CheckBox Content="Load case" Name="checkBoxLoadCase"></CheckBox>
+                <CheckBox Content="Load combination"></CheckBox>
+            </StackPanel>
+            
         </Grid>
+
 
         <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Right">
             <Button x:Name="buttonCancel" Content="Cancel" Width="100" Click="buttonCancel_Click"/>

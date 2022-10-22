@@ -29,6 +29,8 @@ namespace WS_SG_ETABS_Plugin.src.copy_properties
             _SapModel = SapModel;
             _Plugin = Plugin;
 
+
+
             InitializeComponent();
 
             ShowDialog();

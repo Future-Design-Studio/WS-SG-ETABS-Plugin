@@ -36,11 +36,6 @@ namespace WS_SG_ETABS_Plugin.src.copy_properties
             ShowDialog();
         }
 
-        private void buttonDefaultPath_Click(object sender, RoutedEventArgs e)
-        {
-            filePath.Text = modelPath;
-        }
-
         private void buttonModifyPath_Click(object sender, RoutedEventArgs e)
         {
             /*

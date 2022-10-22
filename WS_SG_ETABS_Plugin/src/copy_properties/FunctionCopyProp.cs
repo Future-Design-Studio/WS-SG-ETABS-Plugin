@@ -8,5 +8,11 @@ namespace WS_SG_ETABS_Plugin.src.copy_properties
 {
     internal class FunctionCopyProp
     {
+        public static void CopyPropertiesFromOtherEtabs(string filePathFrom)
+        {
+
+        }
+
+
     }
 }
