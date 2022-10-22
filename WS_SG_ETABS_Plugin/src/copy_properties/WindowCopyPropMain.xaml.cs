@@ -69,13 +69,19 @@ namespace WS_SG_ETABS_Plugin.src.copy_properties
 
         private void buttonCancel_Click(object sender, RoutedEventArgs e)
         {
-
+            Close();
         }
 
         private void buttonOk_Click(object sender, RoutedEventArgs e)
         {
+            //Casting file path
+            string filePathFrom = filePath.Text;
 
+            IsEnabled = false;
+            //Call up carbon result window
+            src.copy_properties.WindowCopyPropResult windowCopyPropResult = new src.copy_properties.WindowCopyPropResult(_SapModel, _Plugin, filePathFrom);
+            IsEnabled = true;
         }
-    }
+    } 
 
 }

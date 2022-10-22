@@ -67,6 +67,9 @@
     <Compile Include="src\copy_properties\WindowCopyPropMain.xaml.cs">
       <DependentUpon>WindowCopyPropMain.xaml</DependentUpon>
     </Compile>
+    <Compile Include="src\copy_properties\WindowCopyPropResult.xaml.cs">
+      <DependentUpon>WindowCopyPropResult.xaml</DependentUpon>
+    </Compile>
     <Compile Include="src\HelperMethod.cs" />
     <Compile Include="src\HelperEtabs.cs" />
     <Compile Include="src\carbon\FunctionCarbon.cs" />
@@ -95,6 +98,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="src\copy_properties\WindowCopyPropMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\copy_properties\WindowCopyPropResult.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
