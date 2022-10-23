@@ -52,6 +52,7 @@ namespace WS_SG_ETABS_Plugin.src.copy_properties
 
             System.Windows.Forms.OpenFileDialog openFileDialog = new System.Windows.Forms.OpenFileDialog();
             openFileDialog.Filter = "ETABS files(*.edb)|*.edb";
+            //openFileDialog.InitialDirectory = 
 
             System.Windows.Forms.DialogResult result = openFileDialog.ShowDialog();
 
@@ -61,6 +62,8 @@ namespace WS_SG_ETABS_Plugin.src.copy_properties
             }
 
         }
+
+        #region Button Method
 
         private void buttonCancel_Click(object sender, RoutedEventArgs e)
         {
@@ -77,6 +80,72 @@ namespace WS_SG_ETABS_Plugin.src.copy_properties
             src.copy_properties.WindowCopyPropResult windowCopyPropResult = new src.copy_properties.WindowCopyPropResult(_SapModel, _Plugin, filePathFrom);
             IsEnabled = true;
         }
+
+        private void checkBoxMaterial_Checked(object sender, RoutedEventArgs e)
+        {
+            checkBoxFrameSec.IsEnabled = true;
+            checkBoxAreaSec.IsEnabled = true;
+        }
+
+        private void checkBoxMaterial_Unchecked(object sender, RoutedEventArgs e)
+        {
+            checkBoxFrameSec.IsEnabled = false;
+            checkBoxFrameSec.IsChecked = false;
+
+            checkBoxAreaSec.IsEnabled = false;
+            checkBoxAreaSec.IsChecked = false;
+        }
+
+        private void checkBoxLoadCase_Checked(object sender, RoutedEventArgs e)
+        {
+            checkBoxLoadCombination.IsEnabled = true;
+        }
+
+        private void checkBoxLoadCase_Unchecked(object sender, RoutedEventArgs e)
+        {
+            checkBoxLoadCombination.IsEnabled = false;
+            checkBoxLoadCombination.IsChecked = false;
+        }
+
+        private void buttonUncheckAll_Click(object sender, RoutedEventArgs e)
+        {
+            checkBoxMaterial.IsChecked = false;
+            checkBoxFrameSec.IsChecked = false;
+            checkBoxAreaSec.IsChecked = false;
+            checkBoxLinkSec.IsChecked = false;
+
+            checkBoxMassSource.IsChecked = false;
+            checkBoxPDelta.IsChecked = false;
+
+            checkBoxLoadPattern.IsChecked = false;
+            checkBoxResponseSpectrum.IsChecked = false;
+
+            checkBoxLoadCase.IsChecked = false;
+            checkBoxLoadCombination.IsChecked = false;
+        }
+
+        private void buttonCheckAll_Click(object sender, RoutedEventArgs e)
+        {
+            checkBoxMaterial.IsChecked = true;
+            checkBoxFrameSec.IsChecked = true;
+            checkBoxAreaSec.IsChecked = true;
+            checkBoxLinkSec.IsChecked = true;
+
+            checkBoxMassSource.IsChecked = true;
+            checkBoxPDelta.IsChecked = true;
+
+            checkBoxLoadPattern.IsChecked = true;
+            checkBoxResponseSpectrum.IsChecked = true;
+
+            checkBoxLoadCase.IsChecked = true;
+            checkBoxLoadCombination.IsChecked = true;
+        }
+
+
+
+        #endregion
+
+
     } 
 
 }
