@@ -24,12 +24,18 @@ namespace WS_SG_ETABS_Plugin.src.copy_properties
         cSapModel _SapModel;
         cPluginCallback _Plugin;
 
-        public WindowCopyPropResult(cSapModel SapModel, cPluginCallback Plugin, string filePathFrom)
+        public WindowCopyPropResult(cSapModel SapModel, cPluginCallback Plugin, string filePathFrom, Dictionary<string, bool?> selectedDatabaseTables)
         {
             _SapModel = SapModel;
             _Plugin = Plugin;
 
+            //Main logic
+            bool isError = src.copy_properties.FunctionCopyProp.CopyPropertiesFromOtherEtabs(_SapModel, filePathFrom, selectedDatabaseTables);
 
+            if (isError)
+            {
+                return;
+            }
 
             InitializeComponent();
 

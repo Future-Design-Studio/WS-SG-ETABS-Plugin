@@ -25,11 +25,15 @@ namespace WS_SG_ETABS_Plugin.src.copy_properties
         cSapModel _SapModel;
         cPluginCallback _Plugin;
         string modelPath;
+        bool firstPathAssigned = true;
 
         public WindowCopyPropMain(cSapModel SapModel, cPluginCallback Plugin)
         {
             _SapModel = SapModel;
             _Plugin = Plugin;
+
+            //Get model path as a starting directory
+            modelPath = SapModel.GetModelFilepath();
 
             InitializeComponent();
 
@@ -38,21 +42,19 @@ namespace WS_SG_ETABS_Plugin.src.copy_properties
 
         private void buttonModifyPath_Click(object sender, RoutedEventArgs e)
         {
-            /*
-            var dialog = new System.Windows.Forms.FolderBrowserDialog();
-            dialog.SelectedPath = filePath.Text;
-
-            System.Windows.Forms.DialogResult result = dialog.ShowDialog();
-
-            if (result == System.Windows.Forms.DialogResult.OK)
-            {
-                filePath.Text = dialog.SelectedPath;
-            }
-            */
-
             System.Windows.Forms.OpenFileDialog openFileDialog = new System.Windows.Forms.OpenFileDialog();
             openFileDialog.Filter = "ETABS files(*.edb)|*.edb";
-            //openFileDialog.InitialDirectory = 
+
+            //For first time path assignment, initial directory is where model is. After that use current path as a initial directory
+            if (firstPathAssigned)
+            {
+                openFileDialog.InitialDirectory = modelPath;
+            }
+            else
+            {
+                openFileDialog.InitialDirectory = filePath.Text;
+            }
+            
 
             System.Windows.Forms.DialogResult result = openFileDialog.ShowDialog();
 
@@ -61,6 +63,8 @@ namespace WS_SG_ETABS_Plugin.src.copy_properties
                 filePath.Text = openFileDialog.FileName;
             }
 
+            //After first time assigning path, set this flag to false
+            firstPathAssigned = false;
         }
 
         #region Button Method
@@ -75,9 +79,24 @@ namespace WS_SG_ETABS_Plugin.src.copy_properties
             //Casting file path
             string filePathFrom = filePath.Text;
 
+            //Collect which boxes are selected
+            Dictionary<string, bool?> selectedItems = new Dictionary<string, bool?>()
+            {
+                {"material", checkBoxMaterial.IsChecked },
+                {"frameSec", checkBoxFrameSec.IsChecked },
+                {"areaSec", checkBoxAreaSec.IsChecked },
+                {"linkSec", checkBoxLinkSec.IsChecked },
+                {"massSource", checkBoxMassSource.IsChecked },
+                {"pDelta", checkBoxPDelta.IsChecked },
+                {"loadPattern", checkBoxLoadPattern.IsChecked },
+                {"responseSpectrum", checkBoxResponseSpectrum.IsChecked },
+                {"loadCase", checkBoxPDelta.IsChecked },
+                {"loadCombination", checkBoxPDelta.IsChecked },
+            };
+
             IsEnabled = false;
             //Call up carbon result window
-            src.copy_properties.WindowCopyPropResult windowCopyPropResult = new src.copy_properties.WindowCopyPropResult(_SapModel, _Plugin, filePathFrom);
+            src.copy_properties.WindowCopyPropResult windowCopyPropResult = new src.copy_properties.WindowCopyPropResult(_SapModel, _Plugin, filePathFrom, selectedItems);
             IsEnabled = true;
         }
 
@@ -141,9 +160,19 @@ namespace WS_SG_ETABS_Plugin.src.copy_properties
             checkBoxLoadCombination.IsChecked = true;
         }
 
+        private void checkBoxLoadPattern_Checked(object sender, RoutedEventArgs e)
+        {
+            checkBoxLoadCase.IsEnabled = true;
+        }
 
+        private void checkBoxLoadPattern_Unchecked(object sender, RoutedEventArgs e)
+        {
+            checkBoxLoadCase.IsEnabled = false;
+            checkBoxLoadCase.IsChecked = false;
+        }
 
         #endregion
+
 
 
     } 

@@ -95,7 +95,7 @@ namespace WS_SG_ETABS_Plugin.src
         /// </summary>
         /// <param name="filePath"></param>
         /// <returns></returns>
-        public static (bool, cSapModel) OpenModel(string filePath)
+        public static (bool, cSapModel, cOAPI) OpenModel(string filePath)
         {
             bool isError = false;
             cSapModel Sap = null;
@@ -149,7 +149,7 @@ namespace WS_SG_ETABS_Plugin.src
             {
                 MessageBox.Show("Cannot create an instance of the Helper object");
                 isError = true;
-                return (isError, Sap);
+                return (isError, Sap, myETABSObject);
             }
 
             if (AttachToInstance)
@@ -164,7 +164,7 @@ namespace WS_SG_ETABS_Plugin.src
                 {
                     MessageBox.Show("No running instance of the program found or failed to attach.");
                     isError = true;
-                    return (isError, Sap);
+                    return (isError, Sap, myETABSObject);
                 }
             }
             else
@@ -181,7 +181,7 @@ namespace WS_SG_ETABS_Plugin.src
                     {
                         MessageBox.Show("Cannot start a new instance of the program from " + ProgramPath);
                         isError = true;
-                        return (isError, Sap);
+                        return (isError, Sap, myETABSObject);
                     }
                 }
                 else
@@ -196,7 +196,7 @@ namespace WS_SG_ETABS_Plugin.src
                     {
                         MessageBox.Show("Cannot start a new instance of the program.");
                         isError = true;
-                        return (isError, Sap);
+                        return (isError, Sap, myETABSObject);
                     }
                 }
                 //start ETABS application
@@ -217,11 +217,12 @@ namespace WS_SG_ETABS_Plugin.src
                 if (ret == 1)
                 {
                     MessageBox.Show("Error opening ETABS file!");
+                    myETABSObject.ApplicationExit(false);
                     isError = true;
                 }
             }
 
-            return (isError, Sap);
+            return (isError, Sap, myETABSObject);
         }
 
 
@@ -421,6 +422,40 @@ namespace WS_SG_ETABS_Plugin.src
 
             return databaseTable;
 
+        }
+
+        /// <summary>
+        /// Access multiple ETABS database for editing and return it as list of DatabaseTable
+        /// </summary>
+        /// <param name="Sap"></param>
+        /// <param name="tableKeys"></param>
+        /// <returns></returns>
+        public static List<DatabaseTable> GetMultipleTableEdit(cSapModel Sap, List<string> tableKeys)
+        {
+            List<DatabaseTable> multipleDatabaseTable = new List<DatabaseTable>();
+
+            //Going to each table and save it if table exists
+            foreach (string tableKey in tableKeys)
+            {
+                string TableKey = "";
+                string GroupName = "";
+                int TableVersion = 0;
+                string[] FieldsKeysIncluded = null;
+                int NumberRecords = 0;
+                List<Dictionary<string, string>> tableInList = null;
+
+                DatabaseTable singleTable = new DatabaseTable(TableKey, GroupName, TableVersion, FieldsKeysIncluded, NumberRecords, tableInList);
+                singleTable = GetTableEdit(Sap, tableKey);
+
+                //Only save table if its not empty
+                if (singleTable.NumberRecords != 0)
+                {
+                    multipleDatabaseTable.Add(singleTable);
+                }
+                Debug.WriteLine(tableKey);
+            }
+
+            return multipleDatabaseTable;
         }
 
         /// <summary>
