@@ -378,6 +378,47 @@ namespace WS_SG_ETABS_Plugin.src
         }
 
         /// <summary>
+        /// Set output unit to specific unit
+        /// </summary>
+        /// <param name="Sap"></param>
+        public static void SetOutputUnit(cSapModel Sap, eForce forceUnit, eLength lengthUnit, eTemperature temperatureUnit)
+        {
+            Ret = Sap.SetPresentUnits_2(forceUnit, lengthUnit, temperatureUnit);
+        }
+
+        /// <summary>
+        /// Get database unit
+        /// </summary>
+        /// <param name="Sap"></param>
+        /// <returns></returns>
+        public static (eForce forceUnit, eLength lengthUnit, eTemperature temperatureUnit) GetDatabaseUnit(cSapModel Sap)
+        {
+            eForce forceUnit = new eForce();
+            eLength lengthUnit = new eLength();
+            eTemperature temperatureUnit = new eTemperature();
+
+            Ret = Sap.GetDatabaseUnits_2(ref forceUnit, ref lengthUnit, ref temperatureUnit);
+
+            return (forceUnit, lengthUnit, temperatureUnit);
+        }
+
+        /// <summary>
+        /// Get present unit
+        /// </summary>
+        /// <param name="Sap"></param>
+        /// <returns></returns>
+        public static (eForce forceUnit, eLength lengthUnit, eTemperature temperatureUnit) GetPresentUnit(cSapModel Sap)
+        {
+            eForce forceUnit = new eForce();
+            eLength lengthUnit = new eLength();
+            eTemperature temperatureUnit = new eTemperature();
+
+            Ret = Sap.GetPresentUnits_2(ref forceUnit, ref lengthUnit, ref temperatureUnit);
+
+            return (forceUnit, lengthUnit, temperatureUnit);
+        }
+
+        /// <summary>
         /// Show message box if tableKey does not exist in ETABS
         /// </summary>
         /// <param name="tableKey"></param>
@@ -452,7 +493,6 @@ namespace WS_SG_ETABS_Plugin.src
                 {
                     multipleDatabaseTable.Add(singleTable);
                 }
-                Debug.WriteLine(tableKey);
             }
 
             return multipleDatabaseTable;
@@ -996,6 +1036,23 @@ namespace WS_SG_ETABS_Plugin.src
 
         #endregion
 
+        #region Response Spectrum Method
+
+        public static void ConvertAllFunctionToUser(cSapModel Sap)
+        {
+            int NumberNames = 0;
+            string[] MyName = null;
+
+            Ret = Sap.Func.GetNameList(ref NumberNames, ref MyName);
+
+            foreach (string name in MyName)
+            {
+                Ret = Sap.Func.ConvertToUser(name);
+            }
+        }
+
+
+        #endregion
 
     }
 

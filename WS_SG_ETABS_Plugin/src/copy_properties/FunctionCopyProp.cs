@@ -185,6 +185,23 @@ namespace WS_SG_ETABS_Plugin.src.copy_properties
                 {"loadCombination", new List<string>() {"Load Combination Definitions"} },
             };
 
+            //List of table that needs to be filtered (from load case and load combination
+            List<string> databaseTableToFilter = new List<string>()
+            {
+                "Load Case Definitions - Buckling",
+                "Load Case Definitions - Damping - Modal",
+                "Load Case Definitions - Hyperstatic",
+                "Load Case Definitions - Linear Static",
+                "Load Case Definitions - Nonlinear Staged Construction",
+                "Load Case Definitions - Nonlinear Static",
+                "Load Case Definitions - Response Spectrum",
+                "Load Case Definitions - Time History - Linear Direct Integration",
+                "Load Case Definitions - Time History - Linear Modal",
+                "Load Case Definitions - Time History - Nonlin Direct Integration",
+                "Load Case Definitions - Time History - Nonlinear Modal",
+                "Load Combination Definitions"
+            };
+
             //Opening model
             (isError, SapModelFrom, myETABSObjectFrom) = src.HelperEtabs.OpenModel(filePathFrom);
 
@@ -205,6 +222,25 @@ namespace WS_SG_ETABS_Plugin.src.copy_properties
                 return isError;
             }
 
+            /*
+            //Get database unit in EtabsTo
+            eForce forceUnit = new eForce();
+            eLength lengthUnit = new eLength();
+            eTemperature temperatureUnit = new eTemperature();
+
+            (forceUnit, lengthUnit, temperatureUnit) = src.HelperEtabs.GetDatabaseUnit(Sap);
+            */
+
+            //Get unit in EtabsTo
+            eForce forceUnit = new eForce();
+            eLength lengthUnit = new eLength();
+            eTemperature temperatureUnit = new eTemperature();
+            
+            (forceUnit, lengthUnit, temperatureUnit) = src.HelperEtabs.GetPresentUnit(Sap);
+
+            //Set unit in EtabsFrom
+            src.HelperEtabs.SetOutputUnit(SapModelFrom, forceUnit, lengthUnit, temperatureUnit);
+
             //Going through each checkbox and take note of table keys to save
             foreach (KeyValuePair<string, bool?> selectedDatabaseTable in selectedDatabaseTables)
             {
@@ -214,6 +250,12 @@ namespace WS_SG_ETABS_Plugin.src.copy_properties
                     {
                         if (selectedDatabaseTable.Key == databaseTableKey.Key)
                         {
+                            //If response spectrum is selected, convert response spectrum function to user function first
+                            if (selectedDatabaseTable.Key == "responseSpectrum")
+                            {
+                                src.HelperEtabs.ConvertAllFunctionToUser(SapModelFrom);
+                            }
+
                             //Going through each table key and save it as a flat list
                             foreach (string tableKey in databaseTableKey.Value)
                             {
@@ -235,7 +277,6 @@ namespace WS_SG_ETABS_Plugin.src.copy_properties
             foreach (src.HelperEtabs.DatabaseTable databaseTableEtabsFrom in databaseTablesEtabsFrom)
             {
                 
-
                 string TableKey = "";
                 string GroupName = "";
                 int TableVersion = 0;
@@ -247,6 +288,33 @@ namespace WS_SG_ETABS_Plugin.src.copy_properties
                 src.HelperEtabs.DatabaseTable mergedDatabaseTableEtabs = new src.HelperEtabs.DatabaseTable(TableKey, GroupName, TableVersion, FieldsKeysIncluded, NumberRecords, tableInList);
 
                 databaseTableEtabsTo = src.HelperEtabs.GetTableEdit(Sap, databaseTableEtabsFrom.TableKey);
+
+
+                //Filtering load case and load combination from databaseTableEtabsTo so no duplicate load
+                List<Dictionary<string, string>> removedRows = new List<Dictionary<string, string>>();
+
+                if (databaseTableToFilter.Contains(databaseTableEtabsTo.TableKey))
+                {
+                    //Going through each row and take note of rows to remove
+                    foreach (Dictionary<string, string> rowEtabsFrom in databaseTableEtabsFrom.TableInList)
+                    {
+                        foreach (Dictionary<string, string> rowEtabsTo in databaseTableEtabsTo.TableInList)
+                        {
+                            //Filter by column: "Name"
+                            if (rowEtabsFrom["Name"] == rowEtabsTo["Name"])
+                            {
+                                removedRows.Add(rowEtabsTo);
+                            }
+                        }
+                    }
+
+                    //Go through removal list and remove the row in rowEtabsTo
+                    foreach (Dictionary<string, string> removedRow in removedRows)
+                    {
+                        databaseTableEtabsTo.TableInList.Remove(removedRow);
+                    }
+                }
+
 
                 //Merging data from EtabsTo and EtabsFrom
                 mergedDatabaseTableEtabs.TableInList.AddRange(databaseTableEtabsTo.TableInList);
