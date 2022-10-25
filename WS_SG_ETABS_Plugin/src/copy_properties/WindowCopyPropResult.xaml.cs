@@ -41,5 +41,10 @@ namespace WS_SG_ETABS_Plugin.src.copy_properties
 
             ShowDialog();
         }
+
+        private void buttonOk_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
     }
 }
