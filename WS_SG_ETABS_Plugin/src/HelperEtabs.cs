@@ -414,11 +414,6 @@ namespace WS_SG_ETABS_Plugin.src
             Ret = Sap.SetPresentUnits_2(eForce.kN, eLength.mm, eTemperature.C);
         }
 
-        public static void SetOutputUnit(cSapModel Sap, eForce forceUnits, eLength lengthUnits, eTemperature temperatureUnits)
-        {
-            Ret = Sap.SetPresentUnits_2(forceUnits, lengthUnits, temperatureUnits);
-        }
-
         /// <summary>
         /// Set output unit to specific unit
         /// </summary>
