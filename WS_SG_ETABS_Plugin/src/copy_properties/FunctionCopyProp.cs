@@ -170,7 +170,9 @@ namespace WS_SG_ETABS_Plugin.src.copy_properties
                                                     "Shell Uniform Load Sets",
                                                     } },
                 {"responseSpectrum", new List<string>() {"Functions - Response Spectrum - User Defined" } },
-                {"loadCase", new List<string>() {"Load Case Definitions - Buckling",
+                {"loadCase", new List<string>() {   "Modal Case Definitions - Eigen",
+                                                    "Modal Case Definitions - Ritz",
+                                                    "Load Case Definitions - Buckling",
                                                     "Load Case Definitions - Damping - Modal",
                                                     "Load Case Definitions - Hyperstatic",
                                                     "Load Case Definitions - Linear Static",
@@ -186,20 +188,26 @@ namespace WS_SG_ETABS_Plugin.src.copy_properties
             };
 
             //List of table that needs to be filtered (from load case and load combination
-            List<string> databaseTableToFilter = new List<string>()
+            List<Dictionary<string, string>> databaseTablesToFilter = new List<Dictionary<string, string>>()
+            
             {
-                "Load Case Definitions - Buckling",
-                "Load Case Definitions - Damping - Modal",
-                "Load Case Definitions - Hyperstatic",
-                "Load Case Definitions - Linear Static",
-                "Load Case Definitions - Nonlinear Staged Construction",
-                "Load Case Definitions - Nonlinear Static",
-                "Load Case Definitions - Response Spectrum",
-                "Load Case Definitions - Time History - Linear Direct Integration",
-                "Load Case Definitions - Time History - Linear Modal",
-                "Load Case Definitions - Time History - Nonlin Direct Integration",
-                "Load Case Definitions - Time History - Nonlinear Modal",
-                "Load Combination Definitions"
+                new Dictionary<string, string>() { { "tableKey", "Mass Source Definition" }, {"columnToFilter", "Name" } },
+                new Dictionary<string, string>() { { "tableKey", "P-Delta Option Definition" }, {"columnToFilter", "LoadPattern" } },
+                new Dictionary<string, string>() { { "tableKey", "Functions - Response Spectrum - User Defined" }, {"columnToFilter", "Name" } },
+                new Dictionary<string, string>() { { "tableKey", "Modal Case Definitions - Eigen" }, {"columnToFilter", "Name" } },
+                new Dictionary<string, string>() { { "tableKey", "Modal Case Definitions - Ritz" }, {"columnToFilter", "Name" } },
+                new Dictionary<string, string>() { { "tableKey", "Load Case Definitions - Buckling" }, {"columnToFilter", "Name" } },
+                new Dictionary<string, string>() { { "tableKey", "Load Case Definitions - Damping - Modal" }, {"columnToFilter", "Name" } },
+                new Dictionary<string, string>() { { "tableKey", "Load Case Definitions - Hyperstatic" }, {"columnToFilter", "Name" } },
+                new Dictionary<string, string>() { { "tableKey", "Load Case Definitions - Linear Static" }, {"columnToFilter", "Name" } },
+                new Dictionary<string, string>() { { "tableKey", "Load Case Definitions - Nonlinear Staged Construction" }, {"columnToFilter", "Name" } },
+                new Dictionary<string, string>() { { "tableKey", "Load Case Definitions - Nonlinear Static" }, {"columnToFilter", "Name" } },
+                new Dictionary<string, string>() { { "tableKey", "Load Case Definitions - Response Spectrum" }, {"columnToFilter", "Name" } },
+                new Dictionary<string, string>() { { "tableKey", "Load Case Definitions - Time History - Linear Direct Integration" }, {"columnToFilter", "Name" } },
+                new Dictionary<string, string>() { { "tableKey", "Load Case Definitions - Time History - Linear Modal" }, {"columnToFilter", "Name" } },
+                new Dictionary<string, string>() { { "tableKey", "Load Case Definitions - Time History - Nonlin Direct Integration" }, {"columnToFilter", "Name" } },
+                new Dictionary<string, string>() { { "tableKey", "Load Case Definitions - Time History - Nonlinear Modal" }, {"columnToFilter", "Name" } },
+                new Dictionary<string, string>() { { "tableKey", "Load Combination Definitions" }, {"columnToFilter", "Name" } },
             };
 
             //Opening model
@@ -293,15 +301,28 @@ namespace WS_SG_ETABS_Plugin.src.copy_properties
                 //Filtering load case and load combination from databaseTableEtabsTo so no duplicate load
                 List<Dictionary<string, string>> removedRows = new List<Dictionary<string, string>>();
 
-                if (databaseTableToFilter.Contains(databaseTableEtabsTo.TableKey))
+                //Check if table key is in filter list
+                bool needFilter = false;
+                string columnToFilter = "";
+                foreach (Dictionary<string, string> databaseTableToFilter in databaseTablesToFilter)
+                {
+                    if (databaseTableToFilter["tableKey"] == databaseTableEtabsTo.TableKey)
+                    {
+                        needFilter = true;
+                        columnToFilter = databaseTableToFilter["columnToFilter"];
+                        break;
+                    }
+                };
+
+                if (needFilter)
                 {
                     //Going through each row and take note of rows to remove
                     foreach (Dictionary<string, string> rowEtabsFrom in databaseTableEtabsFrom.TableInList)
                     {
                         foreach (Dictionary<string, string> rowEtabsTo in databaseTableEtabsTo.TableInList)
                         {
-                            //Filter by column: "Name"
-                            if (rowEtabsFrom["Name"] == rowEtabsTo["Name"])
+                            //Filter by column name
+                            if (rowEtabsFrom[columnToFilter] == rowEtabsTo[columnToFilter])
                             {
                                 removedRows.Add(rowEtabsTo);
                             }

@@ -208,7 +208,17 @@ namespace WS_SG_ETABS_Plugin.src
             Sap = myETABSObject.SapModel;
 
             //initialize model
-            ret = Sap.InitializeNewModel();
+            try
+            {
+                ret = Sap.InitializeNewModel();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Cannot start a new ETABS. Possibly no license.");
+                isError = true;
+                return (isError, Sap, myETABSObject);
+            }
+            
 
             if (!AttachToInstance)
             {

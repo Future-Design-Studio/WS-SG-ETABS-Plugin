@@ -32,6 +32,15 @@ namespace WS_SG_ETABS_Plugin.src.copy_properties
             _SapModel = SapModel;
             _Plugin = Plugin;
 
+            //Check if model is locked
+            bool modelToLocked = _SapModel.GetModelIsLocked();
+
+            if (modelToLocked)
+            {
+                MessageBox.Show("ETABS file is locked! Please unlock the model!");
+                return;
+            }
+
             //Get model path as a starting directory
             modelPath = SapModel.GetModelFilepath();
 
@@ -95,7 +104,7 @@ namespace WS_SG_ETABS_Plugin.src.copy_properties
             };
 
             IsEnabled = false;
-            //Call up carbon result window
+            //Call up copy property result window
             src.copy_properties.WindowCopyPropResult windowCopyPropResult = new src.copy_properties.WindowCopyPropResult(_SapModel, _Plugin, filePathFrom, selectedItems);
             IsEnabled = true;
         }
