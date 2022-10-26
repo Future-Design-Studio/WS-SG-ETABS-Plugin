@@ -64,5 +64,13 @@ namespace WS_SG_ETABS_Plugin
             src.shell_uni_orient.WindowShellUniMain windowShellUniMain = new src.shell_uni_orient.WindowShellUniMain(_SapModel, _Plugin);
             IsEnabled = true;
         }
+
+        private void buttonCopyProperties_Click(object sender, RoutedEventArgs e)
+        {
+            IsEnabled = false;
+            //Call up shell uniform window
+            src.copy_properties.WindowCopyPropMain WindowCopyPropMain = new src.copy_properties.WindowCopyPropMain(_SapModel, _Plugin);
+            IsEnabled = true;
+        }
     }
 }
