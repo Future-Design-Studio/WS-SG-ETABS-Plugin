@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -88,6 +89,152 @@ namespace WS_SG_ETABS_Plugin.src
         {
             Ret = Sap.Analyze.RunAnalysis();
         }
+
+        /// <summary>
+        /// Opening another etabs file
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
+        public static (bool, cSapModel, cOAPI) OpenModel(string filePath)
+        {
+            bool isError = false;
+            cSapModel Sap = null;
+            
+            //set the following flag to true to attach to an existing instance of the program 
+            //otherwise a new instance of the program will be started 
+            bool AttachToInstance;
+            AttachToInstance = false;
+
+            //set the following flag to true to manually specify the path to ETABS.exe
+            //this allows for a connection to a version of ETABS other than the latest installation
+            //otherwise the latest installed version of ETABS will be launched
+            bool SpecifyPath;
+            SpecifyPath = false;
+
+            //if the above flag is set to true, specify the path to ETABS below
+            string ProgramPath;
+            ProgramPath = @"C:\Program Files\Computers and Structures\ETABS 19\ETABS.exe";
+
+            /*
+            //full path to the model 
+            //set it to an already existing folder 
+            string ModelDirectory = @"C:\CSi_ETABS_API_Example";
+            try
+            {
+                System.IO.Directory.CreateDirectory(ModelDirectory);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Could not create directory: " + ModelDirectory);
+            }
+
+            string ModelName = "ETABS_API_Example.edb";
+            string ModelPath = ModelDirectory + System.IO.Path.DirectorySeparatorChar + ModelName;
+
+            */
+
+            //dimension the ETABS Object as cOAPI type
+            ETABSv1.cOAPI myETABSObject = null;
+
+            //Use ret to check if functions return successfully (ret = 0) or fail (ret = nonzero) 
+            int ret = 0;
+
+            //create API helper object
+            ETABSv1.cHelper myHelper;
+            try
+            {
+                myHelper = new ETABSv1.Helper();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Cannot create an instance of the Helper object");
+                isError = true;
+                return (isError, Sap, myETABSObject);
+            }
+
+            if (AttachToInstance)
+            {
+                //attach to a running instance of ETABS 
+                try
+                {
+                    //get the active ETABS object
+                    myETABSObject = myHelper.GetObject("CSI.ETABS.API.ETABSObject");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("No running instance of the program found or failed to attach.");
+                    isError = true;
+                    return (isError, Sap, myETABSObject);
+                }
+            }
+            else
+            {
+                if (SpecifyPath)
+                {
+                    //'create an instance of the ETABS object from the specified path
+                    try
+                    {
+                        //create ETABS object
+                        myETABSObject = myHelper.CreateObject(ProgramPath);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Cannot start a new instance of the program from " + ProgramPath);
+                        isError = true;
+                        return (isError, Sap, myETABSObject);
+                    }
+                }
+                else
+                {
+                    //'create an instance of the ETABS object from the latest installed ETABS
+                    try
+                    {
+                        //create ETABS object
+                        myETABSObject = myHelper.CreateObjectProgID("CSI.ETABS.API.ETABSObject");
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Cannot start a new instance of the program.");
+                        isError = true;
+                        return (isError, Sap, myETABSObject);
+                    }
+                }
+                //start ETABS application
+                ret = myETABSObject.ApplicationStart();
+            }
+
+            //Get a reference to cSapModel to access all API classes and functions
+            //Sap = default(ETABSv1.cSapModel);
+            Sap = myETABSObject.SapModel;
+
+            //initialize model
+            try
+            {
+                ret = Sap.InitializeNewModel();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Cannot start a new ETABS. Possibly no license.");
+                isError = true;
+                return (isError, Sap, myETABSObject);
+            }
+            
+
+            if (!AttachToInstance)
+            {
+                ret = Sap.File.OpenFile(filePath);
+
+                if (ret == 1)
+                {
+                    MessageBox.Show("Error opening ETABS file!");
+                    myETABSObject.ApplicationExit(false);
+                    isError = true;
+                }
+            }
+
+            return (isError, Sap, myETABSObject);
+        }
+
 
         #endregion
 
@@ -241,6 +388,47 @@ namespace WS_SG_ETABS_Plugin.src
         }
 
         /// <summary>
+        /// Set output unit to specific unit
+        /// </summary>
+        /// <param name="Sap"></param>
+        public static void SetOutputUnit(cSapModel Sap, eForce forceUnit, eLength lengthUnit, eTemperature temperatureUnit)
+        {
+            Ret = Sap.SetPresentUnits_2(forceUnit, lengthUnit, temperatureUnit);
+        }
+
+        /// <summary>
+        /// Get database unit
+        /// </summary>
+        /// <param name="Sap"></param>
+        /// <returns></returns>
+        public static (eForce forceUnit, eLength lengthUnit, eTemperature temperatureUnit) GetDatabaseUnit(cSapModel Sap)
+        {
+            eForce forceUnit = new eForce();
+            eLength lengthUnit = new eLength();
+            eTemperature temperatureUnit = new eTemperature();
+
+            Ret = Sap.GetDatabaseUnits_2(ref forceUnit, ref lengthUnit, ref temperatureUnit);
+
+            return (forceUnit, lengthUnit, temperatureUnit);
+        }
+
+        /// <summary>
+        /// Get present unit
+        /// </summary>
+        /// <param name="Sap"></param>
+        /// <returns></returns>
+        public static (eForce forceUnit, eLength lengthUnit, eTemperature temperatureUnit) GetPresentUnit(cSapModel Sap)
+        {
+            eForce forceUnit = new eForce();
+            eLength lengthUnit = new eLength();
+            eTemperature temperatureUnit = new eTemperature();
+
+            Ret = Sap.GetPresentUnits_2(ref forceUnit, ref lengthUnit, ref temperatureUnit);
+
+            return (forceUnit, lengthUnit, temperatureUnit);
+        }
+
+        /// <summary>
         /// Show message box if tableKey does not exist in ETABS
         /// </summary>
         /// <param name="tableKey"></param>
@@ -285,6 +473,39 @@ namespace WS_SG_ETABS_Plugin.src
 
             return databaseTable;
 
+        }
+
+        /// <summary>
+        /// Access multiple ETABS database for editing and return it as list of DatabaseTable
+        /// </summary>
+        /// <param name="Sap"></param>
+        /// <param name="tableKeys"></param>
+        /// <returns></returns>
+        public static List<DatabaseTable> GetMultipleTableEdit(cSapModel Sap, List<string> tableKeys)
+        {
+            List<DatabaseTable> multipleDatabaseTable = new List<DatabaseTable>();
+
+            //Going to each table and save it if table exists
+            foreach (string tableKey in tableKeys)
+            {
+                string TableKey = "";
+                string GroupName = "";
+                int TableVersion = 0;
+                string[] FieldsKeysIncluded = null;
+                int NumberRecords = 0;
+                List<Dictionary<string, string>> tableInList = null;
+
+                DatabaseTable singleTable = new DatabaseTable(TableKey, GroupName, TableVersion, FieldsKeysIncluded, NumberRecords, tableInList);
+                singleTable = GetTableEdit(Sap, tableKey);
+
+                //Only save table if its not empty
+                if (singleTable.NumberRecords != 0)
+                {
+                    multipleDatabaseTable.Add(singleTable);
+                }
+            }
+
+            return multipleDatabaseTable;
         }
 
         /// <summary>
@@ -748,6 +969,96 @@ namespace WS_SG_ETABS_Plugin.src
             }
 
             return point3DList;
+        }
+
+
+        #endregion
+
+        #region Material Method
+
+        /// <summary>
+        /// Copy all material properties inside ETABS file
+        /// </summary>
+        /// <param name="Sap"></param>
+        /// <returns>multipleTableInList</returns>
+        public static List<DatabaseTable> CopyMaterialProperties(cSapModel Sap)
+        {
+
+            //List of table names
+            List<string> tableNameToCopy = new List<string>
+            {
+                "Material Properties - Acceptance Criteria",
+                "Material Properties - Aluminum Data",
+                "Material Properties - Basic Mechanical Properties",
+                "Material Properties - Coldformed Data",
+                "Material Properties - Concrete Data",
+                "Material Properties - Damping Parameters",
+                "Material Properties - General",
+                "Material Properties - Hysteresis Parameters - BRB Hardening",
+                "Material Properties - Hysteresis Parameters - Concrete",
+                "Material Properties - Hysteresis Parameters - Degrading",
+                "Material Properties - Hysteresis Parameters - Pivot",
+                "Material Properties - Masonry Data",
+                "Material Properties - Other Data",
+                "Material Properties - Rebar Data",
+                "Material Properties - Steel Data",
+                "Material Properties - Tendon Data",
+                "Material Properties - Time Dependence - ACI 209R-92",
+                "Material Properties - Time Dependence - AS 3600-2009",
+                "Material Properties - Time Dependence - AS 3600-2018",
+                "Material Properties - Time Dependence - CEB-FIP 2010",
+                "Material Properties - Time Dependence - CEB-FIP 90",
+                "Material Properties - Time Dependence - Eurocode 2-2004",
+                "Material Properties - Time Dependence - GL2000",
+                "Material Properties - Time Dependence - NZS 3101-2006",
+                "Material Properties - Time Dependence - User Creep",
+                "Material Properties - Time Dependence - User Shrinkage",
+                "Material Properties - Time Dependence - User Stiffness",
+                "Material Properties - User Stress-Strain Curves",
+            };
+
+            //List to save multiple tables
+            List<DatabaseTable> multipleDatabaseTable = new List<DatabaseTable>();
+
+            //Going to each table and save it if table exists
+            foreach (string tableKey in tableNameToCopy)
+            {
+                string TableKey = "";
+                string GroupName = "";
+                int TableVersion = 0;
+                string[] FieldsKeysIncluded = null;
+                int NumberRecords = 0;
+                List<Dictionary<string, string>> tableInList = null;
+
+                DatabaseTable singleTable = new DatabaseTable(TableKey, GroupName, TableVersion, FieldsKeysIncluded, NumberRecords, tableInList);
+                singleTable = GetTableEdit(Sap, tableKey);
+
+                //Only save table if its not empty
+                if (singleTable.NumberRecords != 0)
+                {
+                    multipleDatabaseTable.Add(singleTable);
+                }
+
+            }
+
+            return multipleDatabaseTable;
+        }
+
+        #endregion
+
+        #region Response Spectrum Method
+
+        public static void ConvertAllFunctionToUser(cSapModel Sap)
+        {
+            int NumberNames = 0;
+            string[] MyName = null;
+
+            Ret = Sap.Func.GetNameList(ref NumberNames, ref MyName);
+
+            foreach (string name in MyName)
+            {
+                Ret = Sap.Func.ConvertToUser(name);
+            }
         }
 
 
