@@ -72,5 +72,10 @@ namespace WS_SG_ETABS_Plugin
             src.copy_properties.WindowCopyPropMain WindowCopyPropMain = new src.copy_properties.WindowCopyPropMain(_SapModel, _Plugin);
             IsEnabled = true;
         }
+
+        private void buttonPlotReaction_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
