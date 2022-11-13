@@ -33,5 +33,13 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
 
             ShowDialog();
         }
+
+        private void Plot_Click(object sender, RoutedEventArgs e)
+        {
+            IsEnabled = false;
+            //Call up copy property result window
+            src.plot_reaction.WindowPlotReactionResult windowPlotReactionResult = new src.plot_reaction.WindowPlotReactionResult();
+            IsEnabled = true;
+        }
     }
 }

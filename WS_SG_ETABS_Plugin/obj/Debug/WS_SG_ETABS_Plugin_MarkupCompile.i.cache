@@ -10,11 +10,11 @@ none
 false
 DEBUG;TRACE
 
-81912671229
+9-33194879
 
-19-2015047203
-182086220535
-src\carbon\WindowCarbonMain.xaml;src\carbon\WindowCarbonResult.xaml;src\copy_properties\WindowCopyPropMain.xaml;src\copy_properties\WindowCopyPropResult.xaml;src\plot_reaction\WindowPlotReactionMain.xaml;src\shell_uni_orient\WindowShellUniMain.xaml;src\shell_uni_orient\WindowShellUniResult.xaml;WindowMain.xaml;
+20-852274819
+25-1928168032
+src\carbon\WindowCarbonMain.xaml;src\carbon\WindowCarbonResult.xaml;src\copy_properties\WindowCopyPropMain.xaml;src\copy_properties\WindowCopyPropResult.xaml;src\plot_reaction\WindowPlotReactionMain.xaml;src\plot_reaction\WindowPlotReactionResult.xaml;src\shell_uni_orient\WindowShellUniMain.xaml;src\shell_uni_orient\WindowShellUniResult.xaml;WindowMain.xaml;
 
 True
 

@@ -75,6 +75,10 @@ namespace WS_SG_ETABS_Plugin
 
         private void buttonPlotReaction_Click(object sender, RoutedEventArgs e)
         {
+            IsEnabled = false;
+            //Call up shell uniform window
+            src.plot_reaction.WindowPlotReactionMain windowPlotReactionMain = new src.plot_reaction.WindowPlotReactionMain(_SapModel, _Plugin);
+            IsEnabled = true;
 
         }
     }
