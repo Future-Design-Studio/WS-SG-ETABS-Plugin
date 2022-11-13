@@ -13,6 +13,7 @@
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="0.6*"></RowDefinition>
         </Grid.RowDefinitions>
 
@@ -22,10 +23,11 @@
         <Button Grid.Row="2" x:Name="buttonShellUni" Content="Shell Orientation (Local-3) Uniform" FontSize="16" Click="buttonShellUni_Click"/>
         <Button Grid.Row="3" x:Name="button3" Content="Function 3" FontSize="16"/>
         <Button Grid.Row="4" x:Name="buttonCopyProperties" Content="Copy Properties From Other File" FontSize="16" Click="buttonCopyProperties_Click"/>
+        <Button Grid.Row="5" x:Name="buttonPlotReaction" Content="Plot Reaction" FontSize="16" Click="buttonPlotReaction_Click"/>
         
-        <Image Grid.Row="5" Source="/WS_SG_ETABS_Plugin;component/src/resources/logo-invert.PNG" />
+        <Image Grid.Row="6" Source="/WS_SG_ETABS_Plugin;component/src/resources/logo-invert.PNG" />
 
 
-        <Label Grid.Row="6" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="8">version 0.0.3</Label>
+        <Label Grid.Row="7" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="8">version 0.0.3</Label>
     </Grid>
 </Window>
