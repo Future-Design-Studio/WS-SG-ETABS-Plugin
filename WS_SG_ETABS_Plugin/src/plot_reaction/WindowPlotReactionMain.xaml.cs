@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ETABSv1;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,11 +19,19 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
     /// <summary>
     /// Interaction logic for WindowPlotReactionMain.xaml
     /// </summary>
-    public partial class WindowPlotReactionMain : UserControl
+    public partial class WindowPlotReactionMain : Window
     {
-        public WindowPlotReactionMain()
+        cSapModel _SapModel;
+        cPluginCallback _Plugin;
+
+        public WindowPlotReactionMain(cSapModel SapModel, cPluginCallback Plugin)
         {
+            _SapModel = SapModel;
+            _Plugin = Plugin;
+
             InitializeComponent();
+
+            ShowDialog();
         }
     }
 }
