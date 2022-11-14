@@ -21,7 +21,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
 
         #endregion
 
-        public static bool PlotReaction(cSapModel Sap, List<string> listChoosenGroup, string outputCase, string reactionDirection, WpfPlot ReactionPlot, double bubbleScaleFactor, double textScaleFactor)
+        public static bool PlotReaction(cSapModel Sap, List<string> listChoosenGroup, string outputCase, string reactionDirection, WpfPlot ReactionPlot, double forceFactor, double bubbleScaleFactor, double textSize)
         {
             bool isError = false;
             bool showWarning = true;
@@ -38,7 +38,15 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
             foreach (string group in listChoosenGroup)
             {
                 //Bubble color is between 0 and 1 based on how many groups there are
-                double plotColor = (Convert.ToDouble(groupIndex)  + 1) / Convert.ToDouble(listChoosenGroup.Count());
+                double plotColor = new double();
+                if (listChoosenGroup.Count > 1)
+                {
+                    plotColor = Convert.ToDouble(groupIndex) / (Convert.ToDouble(listChoosenGroup.Count) - 1);
+                }
+                else
+                {
+                    plotColor = 0;
+                }
 
 
                 //Get joint reaction for 1 specific group
@@ -69,11 +77,12 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
                             {
                                 xCoord = Convert.ToDouble(pointRow["X"]);
                                 yCoord = Convert.ToDouble(pointRow["Y"]);
+                                break;
                             }
                         }
 
                         //Plotting
-                        double bubbleSize = Math.Abs(Convert.ToDouble(jointReactionRow[reactionDirection])) * bubbleScaleFactor;
+                        double bubbleSize = Math.Abs(Convert.ToDouble(jointReactionRow[reactionDirection])) * bubbleScaleFactor *forceFactor;
                         System.Drawing.Color bubbleColor = ScottPlot.Drawing.Colormap.Jet.GetColor(plotColor, .5);
 
                         var myBubblePlot = ReactionPlot.Plot.AddBubblePlot();
@@ -86,9 +95,9 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
                             edgeWidth: 1
                         );
 
-                        var txt = ReactionPlot.Plot.AddText(jointReactionRow[reactionDirection], xCoord, yCoord);
+                        var txt = ReactionPlot.Plot.AddText(Convert.ToString(Convert.ToInt32(Convert.ToDouble(jointReactionRow[reactionDirection]) * forceFactor)), xCoord, yCoord);
                         //txt.FontBold = true;
-                        txt.FontSize = Convert.ToSingle(12 * textScaleFactor);
+                        txt.FontSize = Convert.ToSingle(textSize);
                         txt.Color = System.Drawing.Color.Black;
                         txt.Alignment = Alignment.MiddleCenter;
 

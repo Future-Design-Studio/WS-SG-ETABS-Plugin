@@ -17,6 +17,7 @@
             <RowDefinition Height="0.5*"></RowDefinition>
             <RowDefinition Height="0.5*"></RowDefinition>
             <RowDefinition Height="0.5*"></RowDefinition>
+            <RowDefinition Height="0.5*"></RowDefinition>
             <RowDefinition Height="1.2*"></RowDefinition>
             <RowDefinition Height="0.5*"></RowDefinition>
         </Grid.RowDefinitions>
@@ -73,8 +74,8 @@
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
-            <Label Grid.Column="0" VerticalAlignment="Center" Grid.ColumnSpan="2">Bubble scale factor:</Label>
-            <TextBox Grid.Column="1" x:Name="textBoxBubbleScaleFactor" Grid.Row="0" TextAlignment="Center" Text="0.01" InputScope="Digits"/>
+            <Label Grid.Column="0" VerticalAlignment="Center" Grid.ColumnSpan="2">Force factor (if factor = 1, plot is kN):</Label>
+            <TextBox Grid.Column="1" x:Name="textBoxForceFactor" Grid.Row="0" TextAlignment="Center" Text="1" InputScope="Digits"/>
         </Grid>
 
         <Grid Grid.Row="5" Margin="10 0 10 0">
@@ -83,18 +84,28 @@
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
-            <Label Grid.Column="0" VerticalAlignment="Center" Grid.ColumnSpan="2">Text scale factor:</Label>
-            <TextBox Grid.Column="1" x:Name="textBoxTextScaleFactor" Grid.Row="0" TextAlignment="Center" Text="1" InputScope="Digits"/>
+            <Label Grid.Column="0" VerticalAlignment="Center" Grid.ColumnSpan="2">Bubble scale factor:</Label>
+            <TextBox Grid.Column="1" x:Name="textBoxBubbleScaleFactor" Grid.Row="0" TextAlignment="Center" Text="0.01" InputScope="Digits"/>
         </Grid>
 
-        <TextBlock Grid.Row="6" Grid.Column="0" TextWrapping="Wrap" TextAlignment="Justify"  
+        <Grid Grid.Row="6" Margin="10 0 10 0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <Label Grid.Column="0" VerticalAlignment="Center" Grid.ColumnSpan="2">Text size:</Label>
+            <TextBox Grid.Column="1" x:Name="textBoxTextSize" Grid.Row="0" TextAlignment="Center" Text="12" InputScope="Number"/>
+        </Grid>
+
+        <TextBlock Grid.Row="7" Grid.Column="0" TextWrapping="Wrap" TextAlignment="Justify"  
                    Margin="10 0 10 0" FontSize="10">Note:<LineBreak/>
                 1. Choose load case or load combination to include in plot<LineBreak/>
                 2. Choose group(s) to include in plot<LineBreak/>
                 3. Press OK to proceed
         </TextBlock>
 
-        <StackPanel Grid.Row="7" Orientation="Horizontal" HorizontalAlignment="Right">
+        <StackPanel Grid.Row="8" Orientation="Horizontal" HorizontalAlignment="Right">
             <Button x:Name="buttonCancel" Content="Cancel" Width="100" Click="buttonCancel_Click"/>
             <Button x:Name="buttonOk" Content="OK" Width="100" Click="buttonOk_Click"/>
         </StackPanel>

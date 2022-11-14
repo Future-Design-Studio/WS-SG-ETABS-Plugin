@@ -28,7 +28,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
         cSapModel _SapModel;
         cPluginCallback _Plugin;
 
-        public WindowPlotReactionResult(cSapModel SapModel, cPluginCallback Plugin, List<string> listChoosenGroup, string outputCase, string reactionDirection, double bubbleScaleFactor, double textScaleFactor)
+        public WindowPlotReactionResult(cSapModel SapModel, cPluginCallback Plugin, List<string> listChoosenGroup, string outputCase, string reactionDirection, double forceFactor, double bubbleScaleFactor, double textSize)
         {
 
             _SapModel = SapModel;
@@ -45,7 +45,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
             InitializeComponent();
 
             //Main logic
-            bool isError = src.plot_reaction.FunctionPlotReaction.PlotReaction(_SapModel, listChoosenGroup, outputCase, reactionDirection, ReactionPlot, bubbleScaleFactor, textScaleFactor);
+            bool isError = src.plot_reaction.FunctionPlotReaction.PlotReaction(_SapModel, listChoosenGroup, outputCase, reactionDirection, ReactionPlot, forceFactor, bubbleScaleFactor, textSize);
 
             if (isError)
             {

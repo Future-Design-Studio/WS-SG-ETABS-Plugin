@@ -65,20 +65,32 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
 
         private void buttonOk_Click(object sender, RoutedEventArgs e)
         {
-            //Casting listbox content to list
-            List<string> listChoosenGroup = listBoxChoosenGroup.Items.OfType<string>().ToList();
-
-            string outputCase = comBoxOutputCase.SelectedValue.ToString();
-            string reactionDirection = comBoxReactionDirection.SelectedValue.ToString();
-            double bubbleScaleFactor = Convert.ToDouble(textBoxBubbleScaleFactor.Text);
-            double textScaleFactor = Convert.ToDouble(textBoxTextScaleFactor.Text);
-
             IsEnabled = false;
-            //Call up copy property result window
-            src.plot_reaction.WindowPlotReactionResult windowPlotReactionResult = new src.plot_reaction.WindowPlotReactionResult(_SapModel, _Plugin, listChoosenGroup, 
-                outputCase, reactionDirection, bubbleScaleFactor, textScaleFactor);
-            IsEnabled = true;
 
+            try
+            {
+                //Casting listbox content to list
+                List<string> listChoosenGroup = listBoxChoosenGroup.Items.OfType<string>().ToList();
+
+                string outputCase = comBoxOutputCase.SelectedValue.ToString();
+                string reactionDirection = comBoxReactionDirection.SelectedValue.ToString();
+                double forceFactor = Convert.ToDouble(textBoxForceFactor.Text);
+                double bubbleScaleFactor = Convert.ToDouble(textBoxBubbleScaleFactor.Text);
+                double textSize = Convert.ToDouble(textBoxTextSize.Text);
+
+                IsEnabled = false;
+                //Call up copy property result window
+                src.plot_reaction.WindowPlotReactionResult windowPlotReactionResult = new src.plot_reaction.WindowPlotReactionResult(_SapModel, _Plugin, listChoosenGroup,
+                    outputCase, reactionDirection, forceFactor, bubbleScaleFactor, textSize);
+                IsEnabled = true;
+            }
+
+            catch (Exception ex)
+            {
+                System.Windows.Forms.MessageBox.Show(ex.Message);
+            }
+
+            IsEnabled = true;
         }
 
         #endregion
