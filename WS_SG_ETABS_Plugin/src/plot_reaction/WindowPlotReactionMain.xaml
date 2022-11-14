@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WS_SG_ETABS_Plugin.src.plot_reaction"
              mc:Ignorable="d" Height="650" Width="600" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
-    
+
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"></ColumnDefinition>
@@ -51,7 +51,7 @@
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
-            <Label Grid.Column="0" VerticalAlignment="Center">Output case to plot:</Label>
+            <Label Grid.Column="0" VerticalAlignment="Center">Load case or load combination to plot:</Label>
             <ComboBox Grid.Column="1" x:Name="comBoxOutputCase" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"></ComboBox>
         </Grid>
 
@@ -61,13 +61,13 @@
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
-            <Label Grid.Column="0" VerticalAlignment="Center">Reaction force or moment direction to plot:</Label>
+            <Label Grid.Column="0" VerticalAlignment="Center" Grid.ColumnSpan="2">Reaction force or moment direction to plot:</Label>
             <ComboBox Grid.Column="1" x:Name="comBoxReactionDirection" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"></ComboBox>
         </Grid>
 
         <TextBlock Grid.Row="4" Grid.Column="0" TextWrapping="Wrap" TextAlignment="Justify"  
                    Margin="10 0 10 0" FontSize="10">Note:<LineBreak/>
-                1. Choose case(s) to include in plot<LineBreak/>
+                1. Choose load case or load combination to include in plot<LineBreak/>
                 2. Choose group(s) to include in plot<LineBreak/>
                 3. Press OK to proceed
         </TextBlock>

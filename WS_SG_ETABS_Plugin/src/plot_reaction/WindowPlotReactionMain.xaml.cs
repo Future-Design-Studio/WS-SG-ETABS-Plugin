@@ -34,6 +34,11 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
             //Fill in available groups list box
             src.HelperUI.PopulateListBoxAvailGroup(_SapModel, listBoxAvailGroup);
 
+            //Fill in combobox for output case
+            List<string> outputCasesList = src.HelperEtabs.GetLoadCasesAndComboList(_SapModel);
+            comBoxOutputCase.ItemsSource = outputCasesList;
+            comBoxOutputCase.SelectedIndex = 0;
+
             //Fill in combobox for direction
             comBoxReactionDirection.ItemsSource = src.plot_reaction.FunctionPlotReaction.reactionDirectionList;
             comBoxReactionDirection.SelectedIndex = 0;
