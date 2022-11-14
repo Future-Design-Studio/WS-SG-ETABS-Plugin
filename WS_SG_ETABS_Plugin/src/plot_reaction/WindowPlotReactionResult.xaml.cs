@@ -1,4 +1,5 @@
-﻿using ScottPlot;
+﻿using ETABSv1;
+using ScottPlot;
 using ScottPlot.Plottable;
 using System;
 using System.Collections.Generic;
@@ -24,50 +25,32 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
     /// </summary>
     public partial class WindowPlotReactionResult : Window
     {
-        public WindowPlotReactionResult()
+        cSapModel _SapModel;
+        cPluginCallback _Plugin;
+
+        public WindowPlotReactionResult(cSapModel SapModel, cPluginCallback Plugin, List<string> listChoosenGroup, string outputCase, string reactionDirection, double bubbleScaleFactor, double textScaleFactor)
         {
-            InitializeComponent();
 
-            /*
-            double[] dataX = new double[] { 1, 2, 3, 4, 5 };
-            double[] dataY = new double[] { 1, 4, 9, 16, 25 };
-            ReactionPlot.Plot.AddScatter(dataX, dataY);
-            ReactionPlot.Refresh();
-            */
-            Random rand = new Random(0);
-            int pointCount = 30;
-            double[] xs = DataGen.Consecutive(pointCount);
-            double[] ys = DataGen.Random(rand, pointCount, 10);
-            string[] labels = ys.Select(x => x.ToString("N2")).ToArray();
+            _SapModel = SapModel;
+            _Plugin = Plugin;
 
-            for (int i = 0; i < xs.Length; i++)
+            //Check if any group is choosen
+            bool requiredGroupListExist = src.HelperUI.CheckGroupListExist(_SapModel, listChoosenGroup);
+
+            if (!requiredGroupListExist)
             {
-                // give each bubble a random size and make smaller ones bluer
-                double randomValue = rand.NextDouble();
-                double colourValue = Convert.ToDouble(i) / Convert.ToDouble(xs.Length);
-                double bubbleSize = randomValue * 30 + 10;
-                System.Drawing.Color bubbleColor = ScottPlot.Drawing.Colormap.Jet.GetColor(colourValue, .5);
-
-                var myBubblePlot = ReactionPlot.Plot.AddBubblePlot();
-                myBubblePlot.Add(
-                    x: xs[i],
-                    y: ys[i],
-                    radius: bubbleSize,
-                    fillColor: bubbleColor,
-                    edgeColor: System.Drawing.Color.Transparent,
-                    edgeWidth: 1
-                );
-
-                var txt = ReactionPlot.Plot.AddText(labels[i], xs[i], ys[i]);
-                txt.FontBold = true;
-                txt.Color = System.Drawing.Color.Black;
-                txt.Alignment = Alignment.MiddleCenter;
-
+                return;
             }
 
-            ReactionPlot.Plot.Title("Bubble Plot with Labels");
-            ReactionPlot.Plot.AxisAuto(.2, .25); // zoom out to accommodate large bubbles
-            ReactionPlot.Refresh();
+            InitializeComponent();
+
+            //Main logic
+            bool isError = src.plot_reaction.FunctionPlotReaction.PlotReaction(_SapModel, listChoosenGroup, outputCase, reactionDirection, ReactionPlot, bubbleScaleFactor, textScaleFactor);
+
+            if (isError)
+            {
+                return;
+            }
 
             ShowDialog();
 

@@ -35,7 +35,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
             src.HelperUI.PopulateListBoxAvailGroup(_SapModel, listBoxAvailGroup);
 
             //Fill in combobox for output case
-            List<string> outputCasesList = src.HelperEtabs.GetLoadCasesAndComboList(_SapModel);
+            List<string> outputCasesList = src.HelperEtabs.GetLoadCaseAndComboList(_SapModel);
             comBoxOutputCase.ItemsSource = outputCasesList;
             comBoxOutputCase.SelectedIndex = 0;
 
@@ -65,9 +65,18 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
 
         private void buttonOk_Click(object sender, RoutedEventArgs e)
         {
+            //Casting listbox content to list
+            List<string> listChoosenGroup = listBoxChoosenGroup.Items.OfType<string>().ToList();
+
+            string outputCase = comBoxOutputCase.SelectedValue.ToString();
+            string reactionDirection = comBoxReactionDirection.SelectedValue.ToString();
+            double bubbleScaleFactor = Convert.ToDouble(textBoxBubbleScaleFactor.Text);
+            double textScaleFactor = Convert.ToDouble(textBoxTextScaleFactor.Text);
+
             IsEnabled = false;
             //Call up copy property result window
-            src.plot_reaction.WindowPlotReactionResult windowPlotReactionResult = new src.plot_reaction.WindowPlotReactionResult();
+            src.plot_reaction.WindowPlotReactionResult windowPlotReactionResult = new src.plot_reaction.WindowPlotReactionResult(_SapModel, _Plugin, listChoosenGroup, 
+                outputCase, reactionDirection, bubbleScaleFactor, textScaleFactor);
             IsEnabled = true;
 
         }

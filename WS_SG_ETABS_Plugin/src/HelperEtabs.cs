@@ -804,6 +804,23 @@ namespace WS_SG_ETABS_Plugin.src
             return isError;
         }
 
+        public static void OnAllLoadDatabase(cSapModel Sap)
+        {
+            //Load Pattern
+            int NumberNames = 0;
+            string[] MyName = null;
+            Sap.LoadPatterns.GetNameList(ref NumberNames, ref MyName);
+            Ret = Sap.DatabaseTables.SetLoadPatternsSelectedForDisplay(ref MyName);
+
+            //Load Case
+            Sap.LoadCases.GetNameList(ref NumberNames, ref MyName);
+            Ret = Sap.DatabaseTables.SetLoadCasesSelectedForDisplay(ref MyName);
+
+            //Load Combination
+            Sap.RespCombo.GetNameList(ref NumberNames, ref MyName);
+            Ret = Sap.DatabaseTables.SetLoadCombinationsSelectedForDisplay(ref MyName);
+        }
+
         #endregion
 
         #region Group Method
@@ -1098,7 +1115,7 @@ namespace WS_SG_ETABS_Plugin.src
         /// </summary>
         /// <param name="Sap"></param>
         /// <returns></returns>
-        public static List<string> GetLoadCasesAndComboList(cSapModel Sap)
+        public static List<string> GetLoadCaseAndComboList(cSapModel Sap)
         {
             List<string> outputCasesList = new List<string>();
 

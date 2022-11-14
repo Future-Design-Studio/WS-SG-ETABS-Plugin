@@ -56,7 +56,7 @@ namespace WS_SG_ETABS_Plugin.src
             }
         }
 
-        public static bool CheckGroupListExistCarbon(cSapModel Sap, List<string> listChoosenGroup)
+        public static bool CheckGroupListExist(cSapModel Sap, List<string> listChoosenGroup)
         {
             if (listChoosenGroup.Count == 0)
             {
