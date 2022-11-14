@@ -97,6 +97,7 @@
     <Compile Include="cPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="src\HelperUI.cs" />
+    <Compile Include="src\plot_reaction\FunctionPlotReaction.cs" />
     <Compile Include="src\plot_reaction\WindowPlotReactionMain.xaml.cs">
       <DependentUpon>WindowPlotReactionMain.xaml</DependentUpon>
     </Compile>

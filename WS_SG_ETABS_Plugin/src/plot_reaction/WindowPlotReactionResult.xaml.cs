@@ -44,6 +44,11 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
             {
                 // give each bubble a random size and make smaller ones bluer
                 double randomValue = rand.NextDouble();
+                double colourValue = i / xs.Length;
+                System.Diagnostics.Debug.WriteLine(i);
+                System.Diagnostics.Debug.WriteLine(xs.Length);
+                System.Diagnostics.Debug.WriteLine(colourValue);
+                System.Diagnostics.Debug.WriteLine(randomValue);
                 double bubbleSize = randomValue * 30 + 10;
                 System.Drawing.Color bubbleColor = ScottPlot.Drawing.Colormap.Jet.GetColor(randomValue, .5);
 

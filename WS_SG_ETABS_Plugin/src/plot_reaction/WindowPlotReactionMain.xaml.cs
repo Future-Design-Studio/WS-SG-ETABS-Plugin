@@ -31,15 +31,44 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
 
             InitializeComponent();
 
+            //Fill in available groups list box
+            src.HelperUI.PopulateListBoxAvailGroup(_SapModel, listBoxAvailGroup);
+
+            //Fill in combobox for direction
+            comBoxReactionDirection.ItemsSource = src.plot_reaction.FunctionPlotReaction.reactionDirectionList;
+            comBoxReactionDirection.SelectedIndex = 0;
+
             ShowDialog();
         }
 
-        private void Plot_Click(object sender, RoutedEventArgs e)
+        #region Button Method
+
+        private void buttonAdd_Click(object sender, RoutedEventArgs e)
+        {
+            src.HelperUI.MoveItemsFromListBox(listBoxAvailGroup, listBoxChoosenGroup);
+        }
+
+        private void buttonRemove_Click(object sender, RoutedEventArgs e)
+        {
+            src.HelperUI.MoveItemsFromListBox(listBoxChoosenGroup, listBoxAvailGroup);
+        }
+
+        private void buttonCancel_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+
+        private void buttonOk_Click(object sender, RoutedEventArgs e)
         {
             IsEnabled = false;
             //Call up copy property result window
             src.plot_reaction.WindowPlotReactionResult windowPlotReactionResult = new src.plot_reaction.WindowPlotReactionResult();
             IsEnabled = true;
+
         }
+
+        #endregion
+
+
     }
 }
