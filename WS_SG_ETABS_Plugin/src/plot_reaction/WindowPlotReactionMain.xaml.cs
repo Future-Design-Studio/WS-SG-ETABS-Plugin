@@ -31,8 +31,8 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
 
             InitializeComponent();
 
-            //Fill in available groups list box
-            src.HelperUI.PopulateListBoxAvailGroup(_SapModel, listBoxAvailGroup);
+            //Fill in combobox for available groups
+            src.HelperUI.PopulateComboBoxAvailGroup(_SapModel, comBoxGroup);
 
             //Fill in combobox for output case
             List<string> outputCasesList = src.HelperEtabs.GetLoadCaseAndComboList(_SapModel);
@@ -50,12 +50,12 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
 
         private void buttonAdd_Click(object sender, RoutedEventArgs e)
         {
-            src.HelperUI.MoveItemsFromListBox(listBoxAvailGroup, listBoxChoosenGroup);
+            //src.HelperUI.MoveItemsFromListBox(listBoxAvailGroup, listBoxChoosenGroup);
         }
 
         private void buttonRemove_Click(object sender, RoutedEventArgs e)
         {
-            src.HelperUI.MoveItemsFromListBox(listBoxChoosenGroup, listBoxAvailGroup);
+            //src.HelperUI.MoveItemsFromListBox(listBoxChoosenGroup, listBoxAvailGroup);
         }
 
         private void buttonCancel_Click(object sender, RoutedEventArgs e)
@@ -93,8 +93,25 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
             IsEnabled = true;
         }
 
+
         #endregion
 
 
+        private void checkBoxDefault_Checked(object sender, RoutedEventArgs e)
+        {
+            ClrPcker.IsEnabled = false;
+            textBoxOpacity.IsEnabled = false;
+        }
+
+        private void checkBoxDefault_UnChecked(object sender, RoutedEventArgs e)
+        {
+            ClrPcker.IsEnabled = true;
+            textBoxOpacity.IsEnabled = true;
+        }
+
+        private void ClrPcker_SelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<Color?> e)
+        {
+
+        }
     }
 }
