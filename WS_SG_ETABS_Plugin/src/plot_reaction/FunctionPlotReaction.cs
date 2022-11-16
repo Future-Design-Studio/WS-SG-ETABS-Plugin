@@ -21,7 +21,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
 
         #endregion
 
-        public static bool PlotReaction(cSapModel Sap, List<string> listChoosenGroup, string outputCase, string reactionDirection, WpfPlot ReactionPlot, double forceFactor, double bubbleScaleFactor, double textSize)
+        public static bool PlotReaction(cSapModel Sap, List<object> listChoosenGroup, string outputCase, string reactionDirection, WpfPlot ReactionPlot, double forceFactor, double bubbleScaleFactor, double textSize)
         {
             bool isError = false;
             bool showWarning = true;

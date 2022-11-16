@@ -31,6 +31,9 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
 
             InitializeComponent();
 
+            //Fill in title
+            textBoxTitle.Text = "Reaction Plot";
+
             //Fill in combobox for available groups
             src.HelperUI.PopulateComboBoxAvailGroup(_SapModel, comBoxGroup);
 
@@ -51,11 +54,25 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
         private void buttonAdd_Click(object sender, RoutedEventArgs e)
         {
             //src.HelperUI.MoveItemsFromListBox(listBoxAvailGroup, listBoxChoosenGroup);
+            if (checkBoxDefault.IsChecked == true)
+            {
+                string selectedString = comBoxGroup.Text + "," + "Auto" + "," + "Auto";
+                listBoxChoosenGroup.Items.Add(selectedString);
+            }
+            else
+            {
+                string selectedColor = ClrPcker.SelectedColor.ToString();
+                string selectedOpacity = textBoxOpacity.Text;
+
+                string selectedString = comBoxGroup.Text + "," + selectedColor + "," + selectedOpacity;
+                listBoxChoosenGroup.Items.Add(selectedString);
+            }
         }
 
         private void buttonRemove_Click(object sender, RoutedEventArgs e)
         {
             //src.HelperUI.MoveItemsFromListBox(listBoxChoosenGroup, listBoxAvailGroup);
+            listBoxChoosenGroup.Items.RemoveAt(listBoxChoosenGroup.SelectedIndex);
         }
 
         private void buttonCancel_Click(object sender, RoutedEventArgs e)
@@ -69,8 +86,28 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
 
             try
             {
+                //Casting listbox content to list of dictionary
+                List<Dictionary<string, string>> listChoosenGroup = new List<Dictionary<string, string>>(); 
+                
+                foreach (string group in listBoxChoosenGroup.Items)
+                {
+                    //Split the string using comma ','
+                    string[] splitted = group.Split(',');
+
+                    Dictionary<string, string> groupDict = new Dictionary<string, string>()
+                    {
+                        {"groupName", splitted[0]},
+                        {"color", splitted[1]},
+                        {"opacity", splitted[2]},
+                    };
+
+                    listChoosenGroup.Add(groupDict);
+                }
+
+
+
                 //Casting listbox content to list
-                List<string> listChoosenGroup = listBoxChoosenGroup.Items.OfType<string>().ToList();
+                //List<string> listChoosenGroup = listBoxChoosenGroup.Items.OfType<string>().ToList();
 
                 string outputCase = comBoxOutputCase.SelectedValue.ToString();
                 string reactionDirection = comBoxReactionDirection.SelectedValue.ToString();
@@ -93,10 +130,6 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
             IsEnabled = true;
         }
 
-
-        #endregion
-
-
         private void checkBoxDefault_Checked(object sender, RoutedEventArgs e)
         {
             ClrPcker.IsEnabled = false;
@@ -113,5 +146,11 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
         {
 
         }
+
+
+        #endregion
+
+
+
     }
 }

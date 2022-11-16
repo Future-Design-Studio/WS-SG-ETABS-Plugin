@@ -33,7 +33,7 @@
             </Grid.ColumnDefinitions>
 
             <Label Grid.Column="0" Content="Title:"></Label>
-            <TextBox Grid.Column="1" x:Name="textTitle" Grid.Row="0" TextAlignment="Center"/>
+            <TextBox Grid.Column="1" x:Name="textBoxTitle" Grid.Row="0" TextAlignment="Center"/>
             
         </Grid>
 
@@ -63,7 +63,8 @@
             </xctk:ColorPicker>
 
             <ComboBox  Grid.Row="1" Grid.Column="0" x:Name="comBoxGroup" 
-                       VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
+                       VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+                       Text="0.5" InputScope="Digits">
             </ComboBox>
 
             <TextBox x:Name="textBoxOpacity" Grid.Row="1" Grid.Column="2" TextAlignment="Center" IsEnabled="False" ></TextBox>

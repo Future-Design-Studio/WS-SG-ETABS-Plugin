@@ -28,7 +28,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
         cSapModel _SapModel;
         cPluginCallback _Plugin;
 
-        public WindowPlotReactionResult(cSapModel SapModel, cPluginCallback Plugin, List<string> listChoosenGroup, string outputCase, string reactionDirection, double forceFactor, double bubbleScaleFactor, double textSize)
+        public WindowPlotReactionResult(cSapModel SapModel, cPluginCallback Plugin, List<Dictionary<string, string>> listChoosenGroup, string outputCase, string reactionDirection, double forceFactor, double bubbleScaleFactor, double textSize)
         {
 
             _SapModel = SapModel;
