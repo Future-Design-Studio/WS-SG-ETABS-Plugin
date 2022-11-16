@@ -31,10 +31,8 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
             src.HelperEtabs.OnAllLoadDatabase(Sap);
 
             //Get required table
-            
             List<Dictionary<string, string>> pointConnectivityTable = new List<Dictionary<string, string>>();            
             (isError, pointConnectivityTable) = src.HelperEtabs.GetTableDisplay(Sap, "Point Object Connectivity", showWarning);
-
 
             //Casting List<string> content to List<dictionary>
             List<object> listChoosenGroupParsed = new List<object>();
@@ -51,7 +49,6 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
 
                 listChoosenGroupParsed.Add(groupDict);
             }
-
 
             int groupIndex = 0;
             foreach (Dictionary<string, string> group in listChoosenGroupParsed)
