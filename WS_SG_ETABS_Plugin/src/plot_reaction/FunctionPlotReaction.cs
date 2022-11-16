@@ -5,6 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Markup;
+using System.Windows.Media.Media3D;
+using System.Windows.Media.TextFormatting;
 
 namespace WS_SG_ETABS_Plugin.src.plot_reaction
 {
@@ -22,10 +25,12 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
         #endregion
 
         public static bool PlotReaction(cSapModel Sap, List<string> listChoosenGroup, string outputCase, string reactionDirection, 
-            WpfPlot ReactionPlot, double forceFactor, double bubbleScaleFactor, double textSize, string title)
+            WpfPlot ReactionPlot, double forceFactor, double bubbleScaleFactor, int textSize, string title, bool splitX, bool splitY,
+            int divisionX, int divisionY, double offsetX, double offsetY)
         {
             bool isError = false;
             bool showWarning = true;
+            List<Dictionary<string, object>> compiledReactionData = new List<Dictionary<string, object>>();
 
             //Turn on all load
             src.HelperEtabs.OnAllLoadDatabase(Sap);
@@ -57,18 +62,27 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
                 string color = group["color"];
 
                 //Bubble color is either decided by user or auto (between 0 and 1 based on how many groups there are)
-                double colorMapFraction = new double();
+                System.Drawing.Color bubbleColor = new System.Drawing.Color();
                 if (color == "Auto")
                 {
+
                     if (listChoosenGroup.Count > 1)
                     {
-                        colorMapFraction = Convert.ToDouble(groupIndex) / (Convert.ToDouble(listChoosenGroup.Count) - 1);
+                        double colorMapFraction = Convert.ToDouble(groupIndex) / (Convert.ToDouble(listChoosenGroup.Count) - 1);
+                        bubbleColor = ScottPlot.Drawing.Colormap.Jet.GetColor(colorMapFraction, .5);
                     }
                     else
                     {
-                        colorMapFraction = 0;
+                        double colorMapFraction = 0;
+                        bubbleColor = ScottPlot.Drawing.Colormap.Jet.GetColor(colorMapFraction, .5);
                     }
                 }
+                else
+                {
+                    string colorHex = color;
+                    bubbleColor = System.Drawing.ColorTranslator.FromHtml(colorHex);
+                }
+
 
                 //Get joint reaction for 1 specific group
                 List<Dictionary<string, string>> jointReactionTable = new List<Dictionary<string, string>>();
@@ -102,43 +116,133 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
                             }
                         }
 
-                        //Plotting
-                        //Bubble size is from force factored
-                        double bubbleSize = Math.Abs(Convert.ToDouble(jointReactionRow[reactionDirection])) * bubbleScaleFactor * forceFactor;
+                        //Bubble size and text
+                        double reaction = Convert.ToDouble(jointReactionRow[reactionDirection]);
+                        double bubbleSize = Math.Abs(reaction) * bubbleScaleFactor * forceFactor;
+                        string bubbleText = Convert.ToString(Convert.ToInt32(reaction) * forceFactor);
 
-                        //Color is either auto from colormap or hexcode
-                        System.Drawing.Color bubbleColor = new System.Drawing.Color();
-                        if (color == "Auto")
+                        //Compile the data inside dictionary for sum
+                        Dictionary<string, object> reactionData = new Dictionary<string, object>()
                         {
-                            bubbleColor = ScottPlot.Drawing.Colormap.Jet.GetColor(colorMapFraction, .5);
-                        }
-                        else
-                        {
-                            bubbleColor = System.Drawing.ColorTranslator.FromHtml(color);
-                        }
+                            {"groupName", groupName},
+                            {"reaction",  reaction},
+                            {"xCoord", xCoord},
+                            {"yCoord", yCoord}
+                        };
+                        compiledReactionData.Add(reactionData);
 
-                        var myBubblePlot = ReactionPlot.Plot.AddBubblePlot();
-                        myBubblePlot.Add(
-                            x: xCoord,
-                            y: yCoord,
-                            radius: bubbleSize,
-                            fillColor: bubbleColor,
-                            edgeColor: System.Drawing.Color.Transparent,
-                            edgeWidth: 1
-                        );
-
-                        var txt = ReactionPlot.Plot.AddText(Convert.ToString(Convert.ToInt32(Convert.ToDouble(jointReactionRow[reactionDirection]) * forceFactor)), xCoord, yCoord);
-                        //txt.FontBold = true;
-                        txt.FontSize = Convert.ToSingle(textSize);
-                        txt.Color = System.Drawing.Color.Black;
-                        txt.Alignment = Alignment.MiddleCenter;
-                        txt.FontName = "Arial Narrow";
+                        src.HelperPlot.BubblePlotter(ReactionPlot, bubbleSize, bubbleText, textSize, bubbleColor, xCoord, yCoord);
 
                     }
+
                 }
 
                 groupIndex++;
             }
+
+            //Summing up reaction
+            if (splitX || splitY)
+            {
+
+                (double minXCoord, double maxXCoord) = src.HelperMethod.GetMinMaxDictionary(compiledReactionData, "xCoord");
+                (double minYCoord, double maxYCoord) = src.HelperMethod.GetMinMaxDictionary(compiledReactionData, "yCoord");
+
+                if (splitX)
+                {
+                    //For y only split into 2. Start from minYCoord
+                    double lowY = minYCoord;
+                    double highY = minYCoord;
+
+                    for (int divisionYIndex = 0; divisionYIndex < 2; divisionYIndex++)
+                    {
+                        lowY = highY;
+                        highY = highY + (maxYCoord - minYCoord) / 2;
+
+                        //Start from minXCoord
+                        double lowX = minXCoord;
+                        double highX = minXCoord;
+
+                        for (int divisionXIndex = 0; divisionXIndex < divisionX; divisionXIndex++)
+                        {
+                            lowX = highX;
+                            highX = highX + (maxXCoord - minXCoord) / divisionX;
+
+                            //Inside each divison total reaction for each group
+                            int groupSumIndex = 0;
+                            foreach (Dictionary<string, string> group in listChoosenGroupParsed)
+                            {
+                                string groupName = group["groupName"];
+                                string color = group["color"];
+
+                                //Text color is either decided by user or auto (between 0 and 1 based on how many groups there are)
+                                System.Drawing.Color textColor = new System.Drawing.Color();
+                                if (color == "Auto")
+                                {
+                                    if (listChoosenGroup.Count > 1)
+                                    {
+                                        double colorMapFraction = Convert.ToDouble(groupIndex) / (Convert.ToDouble(listChoosenGroup.Count) - 1);
+                                        textColor = ScottPlot.Drawing.Colormap.Jet.GetColor(colorMapFraction, .5);
+                                    }
+                                    else
+                                    {
+                                        double colorMapFraction = 0;
+                                        textColor = ScottPlot.Drawing.Colormap.Jet.GetColor(colorMapFraction, .5);
+                                    }
+                                }
+                                else
+                                {
+                                    string colorHex = color;
+                                    textColor = System.Drawing.ColorTranslator.FromHtml(colorHex);
+                                }
+
+                                double reactionSum = 0;
+
+                                //Inside each group go through each point
+                                foreach (Dictionary<string, object> reactionData in compiledReactionData)
+                                {
+                                    double yCoord = Convert.ToDouble(reactionData["yCoord"]);
+                                    double xCoord = Convert.ToDouble(reactionData["xCoord"]);
+
+                                    //If the point is within grid, then add into reactionSum
+                                    if (yCoord >= lowY && yCoord < highY && xCoord >= lowX && xCoord < highX)
+                                    {
+                                        reactionSum += Convert.ToDouble(reactionData["reaction"]);
+                                    }
+                                }
+
+                                //Put the sum inside plot
+                                if (divisionYIndex == 0)
+                                {
+                                    double textXCoord = (lowX + highX) / 2;
+                                    double textYCoord = (lowY + highY) / 2 - offsetY - groupSumIndex * 2;
+                                    ReactionPlot.Plot.AddText(Convert.ToString(Convert.ToInt32(reactionSum)), textXCoord, textYCoord, 12, textColor);
+                                }
+                                else
+                                {
+                                    double textXCoord = (lowX + highX) / 2;
+                                    double textYCoord = (lowY + highY) / 2 + offsetY + groupSumIndex * 2;
+                                    ReactionPlot.Plot.AddText(Convert.ToString(Convert.ToInt32(reactionSum)), textXCoord, textYCoord, 12, textColor);
+                                }
+
+                                groupSumIndex++;
+
+                            }
+
+
+                        }
+
+
+
+                    }
+
+
+
+
+                }
+
+
+            }
+
 
             ReactionPlot.Plot.AxisScaleLock(true);
             ReactionPlot.Plot.Title(title, true, null, 36, "Arial Narrow");
@@ -154,6 +258,8 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
 
             return isError;
         }
+        
+
 
     }
 }

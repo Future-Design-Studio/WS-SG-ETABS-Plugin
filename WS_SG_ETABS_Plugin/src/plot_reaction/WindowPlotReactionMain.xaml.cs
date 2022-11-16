@@ -1,6 +1,7 @@
 ﻿using ETABSv1;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -70,8 +71,12 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
 
         private void buttonRemove_Click(object sender, RoutedEventArgs e)
         {
+            if (listBoxChoosenGroup.Items.Count != 0)
+            {
+                listBoxChoosenGroup.Items.RemoveAt(listBoxChoosenGroup.SelectedIndex);
+            }
             //src.HelperUI.MoveItemsFromListBox(listBoxChoosenGroup, listBoxAvailGroup);
-            listBoxChoosenGroup.Items.RemoveAt(listBoxChoosenGroup.SelectedIndex);
+            
         }
 
         private void buttonCancel_Click(object sender, RoutedEventArgs e)
@@ -114,12 +119,48 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
                 string reactionDirection = comBoxReactionDirection.SelectedValue.ToString();
                 double forceFactor = Convert.ToDouble(textBoxForceFactor.Text);
                 double bubbleScaleFactor = Convert.ToDouble(textBoxBubbleScaleFactor.Text);
-                double textSize = Convert.ToDouble(textBoxTextSize.Text);
+                int textSize = Convert.ToInt32(textBoxTextSize.Text);
+
+                //Splitting x or y
+                bool splitX = new bool();
+                bool splitY = new bool();
+                int divisionX = new int();
+                int divisionY = new int();
+                double offsetX = new double();
+                double offsetY = new double();
+                if (radioButtonSplitX.IsChecked == true)
+                {
+                    splitX = true;
+                    splitY = false;
+                    divisionX = Convert.ToInt32(textBoxDivisionX.Text);
+                    divisionY = 0;
+                    offsetX = 0;
+                    offsetY = Convert.ToDouble(textBoxOffsetY.Text);
+                }
+                else if (radioButtonSplitY.IsChecked == true)
+                {
+                    splitX = false;
+                    splitY = true;
+                    divisionX = 0;
+                    divisionY = Convert.ToInt32(textBoxDivisionX.Text);
+                    offsetX = Convert.ToDouble(textBoxOffsetX.Text);
+                    offsetY = 0;
+                }
+                else
+                {
+                    splitX = false;
+                    splitY = false;
+                    divisionX = 0;
+                    divisionY = 0;
+                    offsetX = 0;
+                    offsetY = 0;
+                }
+                
 
                 IsEnabled = false;
                 //Call up copy property result window
                 src.plot_reaction.WindowPlotReactionResult windowPlotReactionResult = new src.plot_reaction.WindowPlotReactionResult(_SapModel, _Plugin, listChoosenGroup,
-                    outputCase, reactionDirection, forceFactor, bubbleScaleFactor, textSize, title);
+                    outputCase, reactionDirection, forceFactor, bubbleScaleFactor, textSize, title, splitX, splitY, divisionX, divisionY, offsetX, offsetY);
                 IsEnabled = true;
             }
 
@@ -146,9 +187,49 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
 
         }
 
+        private void checkBoxSum_Checked(object sender, RoutedEventArgs e)
+        {
+            radioButtonSplitX.IsEnabled = true;
+            radioButtonSplitY.IsEnabled = true;
+        }
+
+        private void checkBoxSum_Unchecked(object sender, RoutedEventArgs e)
+        {
+            radioButtonSplitX.IsChecked = false;
+            radioButtonSplitY.IsChecked = false;
+
+            radioButtonSplitX.IsEnabled = false;
+            radioButtonSplitY.IsEnabled = false;
+        }
+
+        private void radioButtonSplitX_Checked(object sender, RoutedEventArgs e)
+        {
+            textBoxDivisionX.IsEnabled = true;
+            textBoxOffsetY.IsEnabled = true;
+        }
+
+        private void radioButtonSplitX_Unchecked(object sender, RoutedEventArgs e)
+        {
+            textBoxDivisionX.IsEnabled = false;
+            textBoxOffsetY.IsEnabled = false;
+        }
+
+        private void radioButtonSplitY_Checked(object sender, RoutedEventArgs e)
+        {
+            textBoxDivisionY.IsEnabled = true;
+            textBoxOffsetX.IsEnabled = true;
+        }
+
+        private void radioButtonSplitY_Unchecked(object sender, RoutedEventArgs e)
+        {
+            textBoxDivisionY.IsEnabled = false;
+            textBoxOffsetX.IsEnabled = false;
+        }
+
+
+
 
         #endregion
-
 
 
     }

@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WS_SG_ETABS_Plugin.src.plot_reaction"
             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-             mc:Ignorable="d" Height="650" Width="600" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+             mc:Ignorable="d" Height="900" Width="600" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
 
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
@@ -14,12 +14,13 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="0.5*"></RowDefinition>
-            <RowDefinition Height="6*"></RowDefinition>
+            <RowDefinition Height="5.5*"></RowDefinition>
             <RowDefinition Height="0.5*"></RowDefinition>
             <RowDefinition Height="0.5*"></RowDefinition>
             <RowDefinition Height="0.5*"></RowDefinition>
             <RowDefinition Height="0.5*"></RowDefinition>
             <RowDefinition Height="0.5*"></RowDefinition>
+            <RowDefinition Height="1.8*"></RowDefinition>
             <RowDefinition Height="1.2*"></RowDefinition>
             <RowDefinition Height="0.5*"></RowDefinition>
         </Grid.RowDefinitions>
@@ -136,7 +137,7 @@
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
-            <Label Grid.Column="0" VerticalAlignment="Center" Grid.ColumnSpan="2">Force factor (if factor = 1, plot is kN):</Label>
+            <Label Grid.Column="0" VerticalAlignment="Center" Grid.ColumnSpan="2">Force factor (if factor = 1, plot is in kN):</Label>
             <TextBox Grid.Column="1" x:Name="textBoxForceFactor" Grid.Row="0" TextAlignment="Center" Text="1" InputScope="Digits"/>
         </Grid>
 
@@ -160,14 +161,83 @@
             <TextBox Grid.Column="1" x:Name="textBoxTextSize" Grid.Row="0" TextAlignment="Center" Text="12" InputScope="Number"/>
         </Grid>
 
-        <TextBlock Grid.Row="8" Grid.Column="0" TextWrapping="Wrap" TextAlignment="Justify"  
+        <Grid Grid.Row="8" Margin="10 10 10 0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="2*"></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <CheckBox x:Name="checkBoxSum" Checked="checkBoxSum_Checked" Unchecked="checkBoxSum_Unchecked">Show sum of reactions</CheckBox>
+
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                
+                <RadioButton x:Name="radioButtonSplitX" Grid.Column="0" GroupName="radioSum" IsEnabled="False" Checked="radioButtonSplitX_Checked" Unchecked="radioButtonSplitX_Unchecked">
+                    Split X axis
+                </RadioButton>
+                <RadioButton x:Name="radioButtonSplitY" Grid.Column="1" GroupName="radioSum" IsEnabled="False" Checked="radioButtonSplitY_Checked" Unchecked="radioButtonSplitY_Unchecked">
+                    Split Y axis
+                </RadioButton>
+            </Grid>
+
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+
+                <Grid Grid.Column="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                    </Grid.RowDefinitions>
+
+                    <Label Grid.Column="0" Grid.Row="0" Content="Division of X axis"></Label>
+                    <Label Grid.Column="0" Grid.Row="1" Content="Offset of sum label in Y (m)"></Label>
+
+                    <TextBox x:Name="textBoxDivisionX" Grid.Column="1" Grid.Row="0" IsEnabled="False" InputScope="Number" Text="2"></TextBox>
+                    <TextBox x:Name="textBoxOffsetY" Grid.Column="1" Grid.Row="1" IsEnabled="False" InputScope="Digits" Text="2"></TextBox>
+
+                </Grid>
+
+                <Grid Grid.Column="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                    </Grid.RowDefinitions>
+
+                    <Label Grid.Column="0" Grid.Row="0" Content="Division of Y axis"></Label>
+                    <Label Grid.Column="0" Grid.Row="1" Content="Offset of sum label in X (m)"></Label>
+
+                    <TextBox x:Name="textBoxDivisionY" Grid.Column="1" Grid.Row="0" IsEnabled="False" InputScope="Number" Text="2"></TextBox>
+                    <TextBox x:Name="textBoxOffsetX" Grid.Column="1" Grid.Row="1" IsEnabled="False" InputScope="Digits" Text="2"></TextBox>
+
+                </Grid>
+            </Grid>
+        </Grid>
+        
+        <TextBlock Grid.Row="9" Grid.Column="0" TextWrapping="Wrap" TextAlignment="Justify"  
                        Margin="10 0 10 0" FontSize="10">Note:<LineBreak/>
                     1. Choose load case or load combination to include in plot<LineBreak/>
                     2. Choose group(s) to include in plot<LineBreak/>
                     3. Press OK to proceed
         </TextBlock>
 
-        <StackPanel Grid.Row="9" Orientation="Horizontal" HorizontalAlignment="Right">
+        <StackPanel Grid.Row="10" Orientation="Horizontal" HorizontalAlignment="Right">
             <Button x:Name="buttonCancel" Content="Cancel" Width="100" Click="buttonCancel_Click"/>
             <Button x:Name="buttonOk" Content="OK" Width="100" Click="buttonOk_Click"/>
         </StackPanel>
