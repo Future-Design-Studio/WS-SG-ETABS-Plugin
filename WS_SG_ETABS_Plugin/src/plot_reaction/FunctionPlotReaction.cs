@@ -21,7 +21,8 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
 
         #endregion
 
-        public static bool PlotReaction(cSapModel Sap, List<object> listChoosenGroup, string outputCase, string reactionDirection, WpfPlot ReactionPlot, double forceFactor, double bubbleScaleFactor, double textSize)
+        public static bool PlotReaction(cSapModel Sap, List<string> listChoosenGroup, string outputCase, string reactionDirection, 
+            WpfPlot ReactionPlot, double forceFactor, double bubbleScaleFactor, double textSize, string title)
         {
             bool isError = false;
             bool showWarning = true;
@@ -34,26 +35,49 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
             List<Dictionary<string, string>> pointConnectivityTable = new List<Dictionary<string, string>>();            
             (isError, pointConnectivityTable) = src.HelperEtabs.GetTableDisplay(Sap, "Point Object Connectivity", showWarning);
 
-            int groupIndex = 0;
+
+            //Casting List<string> content to List<dictionary>
+            List<object> listChoosenGroupParsed = new List<object>();
             foreach (string group in listChoosenGroup)
             {
-                //Bubble color is between 0 and 1 based on how many groups there are
-                double plotColor = new double();
-                if (listChoosenGroup.Count > 1)
-                {
-                    plotColor = Convert.ToDouble(groupIndex) / (Convert.ToDouble(listChoosenGroup.Count) - 1);
-                }
-                else
-                {
-                    plotColor = 0;
-                }
+                //Split the string using comma ','
+                string[] splitted = group.Split(',');
 
+                Dictionary<string, string> groupDict = new Dictionary<string, string>()
+                    {
+                        {"groupName", splitted[0]},
+                        {"color", splitted[1]},
+                    };
+
+                listChoosenGroupParsed.Add(groupDict);
+            }
+
+
+            int groupIndex = 0;
+            foreach (Dictionary<string, string> group in listChoosenGroupParsed)
+            {
+                string groupName = group["groupName"];
+                string color = group["color"];
+
+                //Bubble color is either decided by user or auto (between 0 and 1 based on how many groups there are)
+                double colorMapFraction = new double();
+                if (color == "Auto")
+                {
+                    if (listChoosenGroup.Count > 1)
+                    {
+                        colorMapFraction = Convert.ToDouble(groupIndex) / (Convert.ToDouble(listChoosenGroup.Count) - 1);
+                    }
+                    else
+                    {
+                        colorMapFraction = 0;
+                    }
+                }
 
                 //Get joint reaction for 1 specific group
                 List<Dictionary<string, string>> jointReactionTable = new List<Dictionary<string, string>>();
 
                 List<string> groupList = new List<string>();
-                groupList.Add(group);
+                groupList.Add(groupName);
 
                 (isError, jointReactionTable)  = src.HelperEtabs.GetTableDisplaySpecificGroup(Sap, "Joint Reactions", groupList, showWarning);
 
@@ -82,8 +106,19 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
                         }
 
                         //Plotting
-                        double bubbleSize = Math.Abs(Convert.ToDouble(jointReactionRow[reactionDirection])) * bubbleScaleFactor *forceFactor;
-                        System.Drawing.Color bubbleColor = ScottPlot.Drawing.Colormap.Jet.GetColor(plotColor, .5);
+                        //Bubble size is from force factored
+                        double bubbleSize = Math.Abs(Convert.ToDouble(jointReactionRow[reactionDirection])) * bubbleScaleFactor * forceFactor;
+
+                        //Color is either auto from colormap or hexcode
+                        System.Drawing.Color bubbleColor = new System.Drawing.Color();
+                        if (color == "Auto")
+                        {
+                            bubbleColor = ScottPlot.Drawing.Colormap.Jet.GetColor(colorMapFraction, .5);
+                        }
+                        else
+                        {
+                            bubbleColor = System.Drawing.ColorTranslator.FromHtml(color);
+                        }
 
                         var myBubblePlot = ReactionPlot.Plot.AddBubblePlot();
                         myBubblePlot.Add(
@@ -100,6 +135,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
                         txt.FontSize = Convert.ToSingle(textSize);
                         txt.Color = System.Drawing.Color.Black;
                         txt.Alignment = Alignment.MiddleCenter;
+                        txt.FontName = "Arial Narrow";
 
                     }
                 }
@@ -108,8 +144,15 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
             }
 
             ReactionPlot.Plot.AxisScaleLock(true);
-            ReactionPlot.Plot.Title("Bubble Plot with Labels");
+            ReactionPlot.Plot.Title(title, true, null, 36, "Arial Narrow");
             ReactionPlot.Plot.AxisAuto(.2, .25); // zoom out to accommodate large bubbles
+
+            //Axis
+            ReactionPlot.Plot.YAxis.Label("Y coordinate (m)", null, 28, true, "Arial Narrow");
+            ReactionPlot.Plot.XAxis.Label("X coordinate (m)", null, 28, true, "Arial Narrow");
+            ReactionPlot.Plot.YAxis.MinimumTickSpacing(50);
+            ReactionPlot.Plot.XAxis.MinimumTickSpacing(50);
+
             ReactionPlot.Refresh();
 
             return isError;

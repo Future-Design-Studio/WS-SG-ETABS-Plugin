@@ -44,7 +44,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
 
             //Fill in combobox for direction
             comBoxReactionDirection.ItemsSource = src.plot_reaction.FunctionPlotReaction.reactionDirectionList;
-            comBoxReactionDirection.SelectedIndex = 0;
+            comBoxReactionDirection.SelectedIndex = 2;
 
             ShowDialog();
         }
@@ -56,15 +56,14 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
             //src.HelperUI.MoveItemsFromListBox(listBoxAvailGroup, listBoxChoosenGroup);
             if (checkBoxDefault.IsChecked == true)
             {
-                string selectedString = comBoxGroup.Text + "," + "Auto" + "," + "Auto";
+                string selectedString = comBoxGroup.Text + "," + "Auto";
                 listBoxChoosenGroup.Items.Add(selectedString);
             }
             else
             {
                 string selectedColor = ClrPcker.SelectedColor.ToString();
-                string selectedOpacity = textBoxOpacity.Text;
 
-                string selectedString = comBoxGroup.Text + "," + selectedColor + "," + selectedOpacity;
+                string selectedString = comBoxGroup.Text + "," + selectedColor;
                 listBoxChoosenGroup.Items.Add(selectedString);
             }
         }
@@ -86,8 +85,13 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
 
             try
             {
+                //Casting listbox content to list
+                List<string> listChoosenGroup = listBoxChoosenGroup.Items.OfType<string>().ToList();
+
+                /*
                 //Casting listbox content to list of dictionary
-                List<Dictionary<string, string>> listChoosenGroup = new List<Dictionary<string, string>>(); 
+                List<object> listChoosenGroup = new List<object>(); 
+                
                 
                 foreach (string group in listBoxChoosenGroup.Items)
                 {
@@ -103,12 +107,9 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
 
                     listChoosenGroup.Add(groupDict);
                 }
+                */
 
-
-
-                //Casting listbox content to list
-                //List<string> listChoosenGroup = listBoxChoosenGroup.Items.OfType<string>().ToList();
-
+                string title = textBoxTitle.Text;
                 string outputCase = comBoxOutputCase.SelectedValue.ToString();
                 string reactionDirection = comBoxReactionDirection.SelectedValue.ToString();
                 double forceFactor = Convert.ToDouble(textBoxForceFactor.Text);
@@ -118,7 +119,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
                 IsEnabled = false;
                 //Call up copy property result window
                 src.plot_reaction.WindowPlotReactionResult windowPlotReactionResult = new src.plot_reaction.WindowPlotReactionResult(_SapModel, _Plugin, listChoosenGroup,
-                    outputCase, reactionDirection, forceFactor, bubbleScaleFactor, textSize);
+                    outputCase, reactionDirection, forceFactor, bubbleScaleFactor, textSize, title);
                 IsEnabled = true;
             }
 
@@ -133,13 +134,11 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
         private void checkBoxDefault_Checked(object sender, RoutedEventArgs e)
         {
             ClrPcker.IsEnabled = false;
-            textBoxOpacity.IsEnabled = false;
         }
 
         private void checkBoxDefault_UnChecked(object sender, RoutedEventArgs e)
         {
             ClrPcker.IsEnabled = true;
-            textBoxOpacity.IsEnabled = true;
         }
 
         private void ClrPcker_SelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<Color?> e)
