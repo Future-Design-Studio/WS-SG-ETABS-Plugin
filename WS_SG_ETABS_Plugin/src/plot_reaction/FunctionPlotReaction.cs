@@ -119,13 +119,14 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
                         //Bubble size and text
                         double reaction = Convert.ToDouble(jointReactionRow[reactionDirection]);
                         double bubbleSize = Math.Abs(reaction) * bubbleScaleFactor * forceFactor;
-                        string bubbleText = Convert.ToString(Convert.ToInt32(reaction) * forceFactor);
+                        string bubbleText = Convert.ToString(Convert.ToInt32(reaction * forceFactor));
 
                         //Compile the data inside dictionary for sum
                         Dictionary<string, object> reactionData = new Dictionary<string, object>()
                         {
+                            {"uniqueName", jointReactionRow["UniqueName"]},
                             {"groupName", groupName},
-                            {"reaction",  reaction},
+                            {"reaction",  reaction * forceFactor},
                             {"xCoord", xCoord},
                             {"yCoord", yCoord}
                         };
@@ -180,7 +181,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
                                 {
                                     if (listChoosenGroup.Count > 1)
                                     {
-                                        double colorMapFraction = Convert.ToDouble(groupIndex) / (Convert.ToDouble(listChoosenGroup.Count) - 1);
+                                        double colorMapFraction = Convert.ToDouble(groupSumIndex) / (Convert.ToDouble(listChoosenGroup.Count) - 1);
                                         textColor = ScottPlot.Drawing.Colormap.Jet.GetColor(colorMapFraction, .5);
                                     }
                                     else
@@ -195,7 +196,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
                                     textColor = System.Drawing.ColorTranslator.FromHtml(colorHex);
                                 }
 
-                                double reactionSum = 0;
+                                double reactionSum = new double();
 
                                 //Inside each group go through each point
                                 foreach (Dictionary<string, object> reactionData in compiledReactionData)
@@ -204,7 +205,8 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
                                     double xCoord = Convert.ToDouble(reactionData["xCoord"]);
 
                                     //If the point is within grid, then add into reactionSum
-                                    if (yCoord >= lowY && yCoord < highY && xCoord >= lowX && xCoord < highX)
+                                    if ((yCoord >= lowY) && (yCoord < highY) && (xCoord >= lowX) && (xCoord < highX) 
+                                        && (Convert.ToString(reactionData["groupName"]) == groupName))
                                     {
                                         reactionSum += Convert.ToDouble(reactionData["reaction"]);
                                     }
@@ -214,14 +216,14 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
                                 if (divisionYIndex == 0)
                                 {
                                     double textXCoord = (lowX + highX) / 2;
-                                    double textYCoord = (lowY + highY) / 2 - offsetY - groupSumIndex * 2;
-                                    ReactionPlot.Plot.AddText(Convert.ToString(Convert.ToInt32(reactionSum)), textXCoord, textYCoord, 12, textColor);
+                                    double textYCoord = (lowY + highY) / 2 - offsetY - groupSumIndex * 6;
+                                    ReactionPlot.Plot.AddText(Convert.ToString(Convert.ToInt32(reactionSum)), textXCoord, textYCoord, 20, textColor);
                                 }
                                 else
                                 {
                                     double textXCoord = (lowX + highX) / 2;
-                                    double textYCoord = (lowY + highY) / 2 + offsetY + groupSumIndex * 2;
-                                    ReactionPlot.Plot.AddText(Convert.ToString(Convert.ToInt32(reactionSum)), textXCoord, textYCoord, 12, textColor);
+                                    double textYCoord = (lowY + highY) / 2 + offsetY + groupSumIndex * 6;
+                                    ReactionPlot.Plot.AddText(Convert.ToString(Convert.ToInt32(reactionSum)), textXCoord, textYCoord, 20, textColor);
                                 }
 
                                 groupSumIndex++;
