@@ -290,7 +290,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
 
 
             ReactionPlot.Plot.AxisScaleLock(true);
-            ReactionPlot.Plot.Title(title, true, null, 36, "Arial");
+            ReactionPlot.Plot.Title(title, true, null, 36, "Arial Narrow");
             ReactionPlot.Plot.AxisAuto(.2, .25); // zoom out to accommodate large bubbles
 
             //Axis
