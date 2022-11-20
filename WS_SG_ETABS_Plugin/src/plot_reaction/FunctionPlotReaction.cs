@@ -1,4 +1,5 @@
 ﻿using ETABSv1;
+using LiveCharts.Wpf.Charts.Base;
 using ScottPlot;
 using System;
 using System.Collections.Generic;
@@ -182,17 +183,24 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
                                     if (listChoosenGroup.Count > 1)
                                     {
                                         double colorMapFraction = Convert.ToDouble(groupSumIndex) / (Convert.ToDouble(listChoosenGroup.Count) - 1);
-                                        textColor = ScottPlot.Drawing.Colormap.Jet.GetColor(colorMapFraction, .5);
+                                        textColor = ScottPlot.Drawing.Colormap.Jet.GetColor(colorMapFraction, 1);
                                     }
                                     else
                                     {
                                         double colorMapFraction = 0;
-                                        textColor = ScottPlot.Drawing.Colormap.Jet.GetColor(colorMapFraction, .5);
+                                        textColor = ScottPlot.Drawing.Colormap.Jet.GetColor(colorMapFraction, 1);
                                     }
                                 }
                                 else
                                 {
                                     string colorHex = color;
+
+                                    //Removing transparency
+                                    char[] colorHexArray = colorHex.ToCharArray();
+                                    colorHexArray[1] = 'F';
+                                    colorHexArray[2] = 'F';
+                                    colorHex = new string(colorHexArray);
+                                    
                                     textColor = System.Drawing.ColorTranslator.FromHtml(colorHex);
                                 }
 
@@ -204,11 +212,46 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
                                     double yCoord = Convert.ToDouble(reactionData["yCoord"]);
                                     double xCoord = Convert.ToDouble(reactionData["xCoord"]);
 
-                                    //If the point is within grid, then add into reactionSum
-                                    if ((yCoord >= lowY) && (yCoord < highY) && (xCoord >= lowX) && (xCoord < highX) 
-                                        && (Convert.ToString(reactionData["groupName"]) == groupName))
+                                    //If it is last diviion x and not last division y
+                                    if (divisionXIndex == divisionX - 1 && divisionYIndex != 1)
+                                    {   
+                                        //If the point is within grid, then add into reactionSum
+                                        if ((yCoord >= lowY) && (yCoord < highY) && (xCoord >= lowX) && (xCoord <= highX)
+                                            && (Convert.ToString(reactionData["groupName"]) == groupName))
+                                        {
+                                            reactionSum += Convert.ToDouble(reactionData["reaction"]);
+                                        }
+
+                                    }
+                                    //If it is last diviion y and not last division x
+                                    else if (divisionXIndex != divisionX - 1 && divisionYIndex == 1)
                                     {
-                                        reactionSum += Convert.ToDouble(reactionData["reaction"]);
+                                        //If the point is within grid, then add into reactionSum
+                                        if ((yCoord >= lowY) && (yCoord <= highY) && (xCoord >= lowX) && (xCoord < highX)
+                                            && (Convert.ToString(reactionData["groupName"]) == groupName))
+                                        {
+                                            reactionSum += Convert.ToDouble(reactionData["reaction"]);
+                                        }
+                                    }
+                                    //If it is last of diviion y and last division x
+                                    else if (divisionXIndex == divisionX - 1 && divisionYIndex == 1)
+                                    {
+                                        //If the point is within grid, then add into reactionSum
+                                        if ((yCoord >= lowY) && (yCoord <= highY) && (xCoord >= lowX) && (xCoord <= highX)
+                                            && (Convert.ToString(reactionData["groupName"]) == groupName))
+                                        {
+                                            reactionSum += Convert.ToDouble(reactionData["reaction"]);
+                                        }
+                                    }
+                                    //If not both condition
+                                    else
+                                    {
+                                        //If the point is within grid, then add into reactionSum
+                                        if ((yCoord >= lowY) && (yCoord < highY) && (xCoord >= lowX) && (xCoord < highX)
+                                            && (Convert.ToString(reactionData["groupName"]) == groupName))
+                                        {
+                                            reactionSum += Convert.ToDouble(reactionData["reaction"]);
+                                        }
                                     }
                                 }
 
@@ -247,7 +290,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
 
 
             ReactionPlot.Plot.AxisScaleLock(true);
-            ReactionPlot.Plot.Title(title, true, null, 36, "Arial Narrow");
+            ReactionPlot.Plot.Title(title, true, null, 36, "Arial");
             ReactionPlot.Plot.AxisAuto(.2, .25); // zoom out to accommodate large bubbles
 
             //Axis
