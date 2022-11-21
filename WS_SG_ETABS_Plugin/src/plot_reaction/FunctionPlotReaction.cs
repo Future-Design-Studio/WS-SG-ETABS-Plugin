@@ -37,8 +37,13 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
             src.HelperEtabs.OnAllLoadDatabase(Sap);
 
             //Get required table
-            List<Dictionary<string, string>> pointConnectivityTable = new List<Dictionary<string, string>>();            
-            (isError, pointConnectivityTable) = src.HelperEtabs.GetTableDisplay(Sap, "Point Object Connectivity", showWarning);
+            List<Dictionary<string, string>> pointConnectivityTable = new List<Dictionary<string, string>>();
+            (isError, pointConnectivityTable) = src.HelperEtabs.GetTableDisplaySpecificGroup(Sap, "Point Object Connectivity", listChoosenGroup, showWarning);
+
+            if (isError)
+            {
+                return isError;
+            }
 
             //Casting List<string> content to List<dictionary>
             List<object> listChoosenGroupParsed = new List<object>();
@@ -97,7 +102,6 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
                 {
                     return isError;
                 }
-
 
                 foreach(Dictionary<string, string>  jointReactionRow in jointReactionTable)
                 {
@@ -272,19 +276,140 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
                                 groupSumIndex++;
 
                             }
-
-
                         }
-
-
 
                     }
 
-
-
-
                 }
 
+                else if (splitY)
+                {
+                    //For x only split into 2. Start from minXCoord
+                    double lowX = minXCoord;
+                    double highX = minXCoord;
+
+                    for (int divisionXIndex = 0; divisionXIndex < 2; divisionXIndex++)
+                    {
+                        lowX = highX;
+                        highX = highX + (maxXCoord - minXCoord) / 2;
+
+                        //Start from minXCoord
+                        double lowY = minYCoord;
+                        double highY = minYCoord;
+
+                        for (int divisionYIndex = 0; divisionYIndex < divisionY; divisionYIndex++)
+                        {
+                            lowY = highY;
+                            highY = highY + (maxYCoord - minYCoord) / divisionY;
+
+                            //Inside each divison total reaction for each group
+                            int groupSumIndex = 0;
+                            foreach (Dictionary<string, string> group in listChoosenGroupParsed)
+                            {
+                                string groupName = group["groupName"];
+                                string color = group["color"];
+
+                                //Text color is either decided by user or auto (between 0 and 1 based on how many groups there are)
+                                System.Drawing.Color textColor = new System.Drawing.Color();
+                                if (color == "Auto")
+                                {
+                                    if (listChoosenGroup.Count > 1)
+                                    {
+                                        double colorMapFraction = Convert.ToDouble(groupSumIndex) / (Convert.ToDouble(listChoosenGroup.Count) - 1);
+                                        textColor = ScottPlot.Drawing.Colormap.Jet.GetColor(colorMapFraction, 1);
+                                    }
+                                    else
+                                    {
+                                        double colorMapFraction = 0;
+                                        textColor = ScottPlot.Drawing.Colormap.Jet.GetColor(colorMapFraction, 1);
+                                    }
+                                }
+                                else
+                                {
+                                    string colorHex = color;
+
+                                    //Removing transparency
+                                    char[] colorHexArray = colorHex.ToCharArray();
+                                    colorHexArray[1] = 'F';
+                                    colorHexArray[2] = 'F';
+                                    colorHex = new string(colorHexArray);
+
+                                    textColor = System.Drawing.ColorTranslator.FromHtml(colorHex);
+                                }
+
+                                double reactionSum = new double();
+
+                                //Inside each group go through each point
+                                foreach (Dictionary<string, object> reactionData in compiledReactionData)
+                                {
+                                    double yCoord = Convert.ToDouble(reactionData["yCoord"]);
+                                    double xCoord = Convert.ToDouble(reactionData["xCoord"]);
+
+                                    //If it is last division y and not last division x
+                                    if (divisionYIndex == divisionY - 1 && divisionXIndex != 1)
+                                    {
+                                        //If the point is within grid, then add into reactionSum
+                                        if ((yCoord >= lowY) && (yCoord <= highY) && (xCoord >= lowX) && (xCoord < highX)
+                                            && (Convert.ToString(reactionData["groupName"]) == groupName))
+                                        {
+                                            reactionSum += Convert.ToDouble(reactionData["reaction"]);
+                                        }
+
+                                    }
+                                    //If it is last division x and not last division y
+                                    else if (divisionYIndex != divisionY - 1 && divisionXIndex == 1)
+                                    {
+                                        //If the point is within grid, then add into reactionSum
+                                        if ((yCoord >= lowY) && (yCoord < highY) && (xCoord >= lowX) && (xCoord <= highX)
+                                            && (Convert.ToString(reactionData["groupName"]) == groupName))
+                                        {
+                                            reactionSum += Convert.ToDouble(reactionData["reaction"]);
+                                        }
+                                    }
+                                    //If it is last of diviion y and last division x
+                                    else if (divisionYIndex == divisionY - 1 && divisionXIndex == 1)
+                                    {
+                                        //If the point is within grid, then add into reactionSum
+                                        if ((yCoord >= lowY) && (yCoord <= highY) && (xCoord >= lowX) && (xCoord <= highX)
+                                            && (Convert.ToString(reactionData["groupName"]) == groupName))
+                                        {
+                                            reactionSum += Convert.ToDouble(reactionData["reaction"]);
+                                        }
+                                    }
+                                    //If not both condition
+                                    else
+                                    {
+                                        //If the point is within grid, then add into reactionSum
+                                        if ((yCoord >= lowY) && (yCoord < highY) && (xCoord >= lowX) && (xCoord < highX)
+                                            && (Convert.ToString(reactionData["groupName"]) == groupName))
+                                        {
+                                            reactionSum += Convert.ToDouble(reactionData["reaction"]);
+                                        }
+                                    }
+                                }
+
+                                //Put the sum inside plot
+                                if (divisionXIndex == 0)
+                                {
+                                    double textXCoord = (lowX + highX) / 2 - offsetX;
+                                    double textYCoord = (lowY + highY) / 2 - groupSumIndex * 6;
+                                    ReactionPlot.Plot.AddText(Convert.ToString(Convert.ToInt32(reactionSum)), textXCoord, textYCoord, 20, textColor);
+                                }
+                                else
+                                {
+                                    double textXCoord = (lowX + highX) / 2 + offsetX;
+                                    double textYCoord = (lowY + highY) / 2 - groupSumIndex * 6;
+                                    ReactionPlot.Plot.AddText(Convert.ToString(Convert.ToInt32(reactionSum)), textXCoord, textYCoord, 20, textColor);
+                                }
+
+                                groupSumIndex++;
+
+                            }
+                        }
+
+                    }
+
+                }
 
             }
 
