@@ -133,11 +133,11 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
                 bool splitX = new bool();
                 bool splitY = new bool();
                 int divisionX = Convert.ToInt32(textBoxDivisionX.Text);
-                int divisionY = Convert.ToInt32(textBoxDivisionX.Text);
+                int divisionY = Convert.ToInt32(textBoxDivisionY.Text);
                 double offsetX = Convert.ToDouble(textBoxOffsetX.Text);
                 double offsetY = Convert.ToDouble(textBoxOffsetY.Text);
                 int sumTextSizeX = Convert.ToInt32(textBoxSumTextSizeX.Text);
-                int sumTextSizeY = Convert.ToInt32(textBoxSumTextSizeX.Text);
+                int sumTextSizeY = Convert.ToInt32(textBoxSumTextSizeY.Text);
                 int separationX = Convert.ToInt32(textBoxSeparationX.Text);
                 int separationY = Convert.ToInt32(textBoxSeparationY.Text);
                 if (radioButtonSplitX.IsChecked == true)
