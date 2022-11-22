@@ -30,7 +30,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
 
         public WindowPlotReactionResult(cSapModel SapModel, cPluginCallback Plugin, List<string> listChoosenGroup, string outputCase, 
             string reactionDirection, double forceFactor, double bubbleScaleFactor, int textSize, string title, bool splitX, bool splitY, 
-            int divisionX, int divisionY, double offsetX, double offsetY)
+            int divisionX, int divisionY, double offsetX, double offsetY, int sumTextSizeX, int sumTextSizeY, double separationX, double separationY)
         {
 
             _SapModel = SapModel;
@@ -48,7 +48,8 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
 
             //Main logic
             bool isError = src.plot_reaction.FunctionPlotReaction.PlotReaction(_SapModel, listChoosenGroup, 
-                outputCase, reactionDirection, ReactionPlot, forceFactor, bubbleScaleFactor, textSize, title, splitX, splitY, divisionX, divisionY, offsetX, offsetY);
+                outputCase, reactionDirection, ReactionPlot, forceFactor, bubbleScaleFactor, textSize, title, splitX, splitY, divisionX, divisionY, offsetX, offsetY,
+                sumTextSizeX, sumTextSizeY, separationX, separationY);
 
             if (isError)
             {

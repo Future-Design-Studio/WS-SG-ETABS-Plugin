@@ -27,7 +27,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
 
         public static bool PlotReaction(cSapModel Sap, List<string> listChoosenGroup, string outputCase, string reactionDirection, 
             WpfPlot ReactionPlot, double forceFactor, double bubbleScaleFactor, int textSize, string title, bool splitX, bool splitY,
-            int divisionX, int divisionY, double offsetX, double offsetY)
+            int divisionX, int divisionY, double offsetX, double offsetY, int sumTextSizeX, int sumTextSizeY, double separationX, double separationY)
         {
             bool isError = false;
             bool showWarning = true;
@@ -263,14 +263,14 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
                                 if (divisionYIndex == 0)
                                 {
                                     double textXCoord = (lowX + highX) / 2;
-                                    double textYCoord = (lowY + highY) / 2 - offsetY - groupSumIndex * 6;
-                                    ReactionPlot.Plot.AddText(Convert.ToString(Convert.ToInt32(reactionSum)), textXCoord, textYCoord, 20, textColor);
+                                    double textYCoord = (lowY + highY) / 2 - offsetX - groupSumIndex * separationX;
+                                    ReactionPlot.Plot.AddText(Convert.ToString(Convert.ToInt32(reactionSum)), textXCoord, textYCoord, sumTextSizeX, textColor);
                                 }
                                 else
                                 {
                                     double textXCoord = (lowX + highX) / 2;
-                                    double textYCoord = (lowY + highY) / 2 + offsetY + groupSumIndex * 6;
-                                    ReactionPlot.Plot.AddText(Convert.ToString(Convert.ToInt32(reactionSum)), textXCoord, textYCoord, 20, textColor);
+                                    double textYCoord = (lowY + highY) / 2 + offsetX + groupSumIndex * separationX;
+                                    ReactionPlot.Plot.AddText(Convert.ToString(Convert.ToInt32(reactionSum)), textXCoord, textYCoord, sumTextSizeX, textColor);
                                 }
 
                                 groupSumIndex++;
@@ -391,15 +391,15 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
                                 //Put the sum inside plot
                                 if (divisionXIndex == 0)
                                 {
-                                    double textXCoord = (lowX + highX) / 2 - offsetX;
-                                    double textYCoord = (lowY + highY) / 2 - groupSumIndex * 6;
-                                    ReactionPlot.Plot.AddText(Convert.ToString(Convert.ToInt32(reactionSum)), textXCoord, textYCoord, 20, textColor);
+                                    double textXCoord = (lowX + highX) / 2 - offsetY;
+                                    double textYCoord = (lowY + highY) / 2 - groupSumIndex * separationY;
+                                    ReactionPlot.Plot.AddText(Convert.ToString(Convert.ToInt32(reactionSum)), textXCoord, textYCoord, sumTextSizeY, textColor);
                                 }
                                 else
                                 {
-                                    double textXCoord = (lowX + highX) / 2 + offsetX;
-                                    double textYCoord = (lowY + highY) / 2 - groupSumIndex * 6;
-                                    ReactionPlot.Plot.AddText(Convert.ToString(Convert.ToInt32(reactionSum)), textXCoord, textYCoord, 20, textColor);
+                                    double textXCoord = (lowX + highX) / 2 + offsetY;
+                                    double textYCoord = (lowY + highY) / 2 - groupSumIndex * separationY;
+                                    ReactionPlot.Plot.AddText(Convert.ToString(Convert.ToInt32(reactionSum)), textXCoord, textYCoord, sumTextSizeY, textColor);
                                 }
 
                                 groupSumIndex++;
