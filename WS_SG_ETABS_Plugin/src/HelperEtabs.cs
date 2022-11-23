@@ -804,6 +804,23 @@ namespace WS_SG_ETABS_Plugin.src
             return isError;
         }
 
+        public static void OnAllLoadDatabase(cSapModel Sap)
+        {
+            //Load Pattern
+            int NumberNames = 0;
+            string[] MyName = null;
+            Sap.LoadPatterns.GetNameList(ref NumberNames, ref MyName);
+            Ret = Sap.DatabaseTables.SetLoadPatternsSelectedForDisplay(ref MyName);
+
+            //Load Case
+            Sap.LoadCases.GetNameList(ref NumberNames, ref MyName);
+            Ret = Sap.DatabaseTables.SetLoadCasesSelectedForDisplay(ref MyName);
+
+            //Load Combination
+            Sap.RespCombo.GetNameList(ref NumberNames, ref MyName);
+            Ret = Sap.DatabaseTables.SetLoadCombinationsSelectedForDisplay(ref MyName);
+        }
+
         #endregion
 
         #region Group Method
@@ -1061,6 +1078,59 @@ namespace WS_SG_ETABS_Plugin.src
             }
         }
 
+
+        #endregion
+
+        #region Load Method
+
+        /// <summary>
+        /// Get list of all loads (patterns, cases and combo)
+        /// </summary>
+        /// <param name="Sap"></param>
+        /// <returns></returns>
+        public static List<string> GetAllLoadList(cSapModel Sap)
+        {
+            List<string> outputCasesList = new List<string>();
+
+            //Load Pattern
+            int NumberNames = 0;
+            string[] MyName = null;
+            Sap.LoadPatterns.GetNameList(ref NumberNames, ref MyName);
+
+            outputCasesList.AddRange(MyName);
+
+            //Load Case
+            Sap.LoadCases.GetNameList(ref NumberNames, ref MyName);
+            outputCasesList.AddRange(MyName);
+
+            //Load Combination
+            Sap.RespCombo.GetNameList(ref NumberNames, ref MyName);
+            outputCasesList.AddRange(MyName);
+
+            return outputCasesList;
+        }
+
+        /// <summary>
+        /// Get list of load cases and combo
+        /// </summary>
+        /// <param name="Sap"></param>
+        /// <returns></returns>
+        public static List<string> GetLoadCaseAndComboList(cSapModel Sap)
+        {
+            List<string> outputCasesList = new List<string>();
+
+            //Load Case
+            int NumberNames = 0;
+            string[] MyName = null;
+            Sap.LoadCases.GetNameList(ref NumberNames, ref MyName);
+            outputCasesList.AddRange(MyName);
+
+            //Load Combination
+            Sap.RespCombo.GetNameList(ref NumberNames, ref MyName);
+            outputCasesList.AddRange(MyName);
+
+            return outputCasesList;
+        }
 
         #endregion
 

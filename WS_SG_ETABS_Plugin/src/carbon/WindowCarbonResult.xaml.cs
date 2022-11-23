@@ -40,7 +40,7 @@ namespace WS_SG_ETABS_Plugin.src.carbon
             else
             {
                 //Check if any group is choosen for carbon calculation
-                bool requiredGroupListExist = src.HelperUI.CheckGroupListExistCarbon(_SapModel, listChoosenGroup);
+                bool requiredGroupListExist = src.HelperUI.CheckGroupListExist(_SapModel, listChoosenGroup);
 
                 if (!requiredGroupListExist)
                 {

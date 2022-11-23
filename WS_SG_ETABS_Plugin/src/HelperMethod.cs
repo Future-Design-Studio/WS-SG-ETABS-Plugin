@@ -131,6 +131,41 @@ namespace WS_SG_ETABS_Plugin.src
 
         #endregion
 
+        /// <summary>
+        /// Finding min and max value in list of dictionary based on given key. Value must be number
+        /// </summary>
+        /// <param name="listOfDictionary"></param>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public static (double, double) GetMinMaxDictionary (List<Dictionary<string, object>> listOfDictionary, string key)
+        {
+            double min = 0;
+            double max = 0;
+            bool firstLoop = true;
+            //Looking for minimum maximum x and y
+            foreach (Dictionary<string, object> dictionary in listOfDictionary)
+            {
+                if (firstLoop)
+                {
+                    min = Convert.ToDouble(dictionary[key]);
+                    max = Convert.ToDouble(dictionary[key]);
+                    firstLoop = false;
+                }
+                else
+                {
+                    if (Convert.ToDouble(dictionary[key]) < min)
+                    {
+                        min = Convert.ToDouble(dictionary[key]);
+                    }
+                    if(Convert.ToDouble(dictionary[key]) > max)
+                    {
+                        max = Convert.ToDouble(dictionary[key]);
+                    }
+                }
+            }
+            return (min, max);
+        }
+
     }
 
 

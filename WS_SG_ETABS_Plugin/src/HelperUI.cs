@@ -32,8 +32,36 @@ namespace WS_SG_ETABS_Plugin.src
                 {
                     listBox.Items.Add(group);
                 }
-
             }
+        }
+
+        /// <summary>
+        /// Populate comboBox with available groups
+        /// </summary>
+        /// <param name="SapModel"></param>
+        /// <param name="listBox"></param>
+        public static void PopulateComboBoxAvailGroup(cSapModel SapModel, ComboBox comboBox)
+        {
+            string[] groupList = src.HelperEtabs.GetGroupList(SapModel);
+            List<string> groupListConverted = groupList.ToList();
+
+            List<int> indexToRemove = new List<int>();
+            foreach (string group in groupListConverted)
+            {
+                if (group == "All")
+                {
+                    indexToRemove.Add(groupListConverted.IndexOf(group));
+                }
+            }
+
+            foreach (int index in indexToRemove)
+            {
+                groupListConverted.RemoveAt(index);
+            }
+
+            comboBox.ItemsSource = groupListConverted;
+            comboBox.SelectedIndex = 0;
+
         }
 
         /// <summary>
@@ -56,7 +84,7 @@ namespace WS_SG_ETABS_Plugin.src
             }
         }
 
-        public static bool CheckGroupListExistCarbon(cSapModel Sap, List<string> listChoosenGroup)
+        public static bool CheckGroupListExist(cSapModel Sap, List<string> listChoosenGroup)
         {
             if (listChoosenGroup.Count == 0)
             {
