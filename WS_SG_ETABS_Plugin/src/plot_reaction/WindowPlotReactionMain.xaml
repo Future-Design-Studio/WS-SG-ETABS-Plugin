@@ -203,10 +203,10 @@
                         <RowDefinition Height="*"></RowDefinition>
                     </Grid.RowDefinitions>
 
-                    <Label Grid.Column="0" Grid.Row="0" Content="Division of X axis"></Label>
-                    <Label Grid.Column="0" Grid.Row="1" Content="Offset of sum label in Y (m)"></Label>
-                    <Label Grid.Column="0" Grid.Row="2" Content="Total text size"></Label>
-                    <Label Grid.Column="0" Grid.Row="3" Content="Separation each group label in Y (m)"></Label>
+                    <Label Grid.Column="0" Grid.Row="0" Content="Division of X axis:"></Label>
+                    <Label Grid.Column="0" Grid.Row="1" Content="Offset of sum label in Y (m):"></Label>
+                    <Label Grid.Column="0" Grid.Row="2" Content="Total text size:"></Label>
+                    <Label Grid.Column="0" Grid.Row="3" Content="Separation each group label in Y (m):"></Label>
 
                     <TextBox x:Name="textBoxDivisionX" Grid.Column="1" Grid.Row="0" IsEnabled="False" InputScope="Number" Text="4"></TextBox>
                     <TextBox x:Name="textBoxOffsetX" Grid.Column="1" Grid.Row="1" IsEnabled="False" InputScope="Number" Text="10"></TextBox>
@@ -228,10 +228,10 @@
                         <RowDefinition Height="*"></RowDefinition>
                     </Grid.RowDefinitions>
 
-                    <Label Grid.Column="0" Grid.Row="0" Content="Division of Y axis"></Label>
-                    <Label Grid.Column="0" Grid.Row="1" Content="Offset of sum label in X (m)"></Label>
-                    <Label Grid.Column="0" Grid.Row="2" Content="Total text size"></Label>
-                    <Label Grid.Column="0" Grid.Row="3" Content="Separation each group label in Y (m)"></Label>
+                    <Label Grid.Column="0" Grid.Row="0" Content="Division of Y axis:"></Label>
+                    <Label Grid.Column="0" Grid.Row="1" Content="Offset of sum label in X (m):"></Label>
+                    <Label Grid.Column="0" Grid.Row="2" Content="Total text size:"></Label>
+                    <Label Grid.Column="0" Grid.Row="3" Content="Separation each group label in Y (m):"></Label>
 
                     <TextBox x:Name="textBoxDivisionY" Grid.Column="1" Grid.Row="0" IsEnabled="False" InputScope="Number" Text="4"></TextBox>
                     <TextBox x:Name="textBoxOffsetY" Grid.Column="1" Grid.Row="1" IsEnabled="False" InputScope="Number" Text="10"></TextBox>
