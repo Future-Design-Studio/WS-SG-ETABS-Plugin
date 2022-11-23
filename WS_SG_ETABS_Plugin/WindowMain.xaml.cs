@@ -72,5 +72,14 @@ namespace WS_SG_ETABS_Plugin
             src.copy_properties.WindowCopyPropMain WindowCopyPropMain = new src.copy_properties.WindowCopyPropMain(_SapModel, _Plugin);
             IsEnabled = true;
         }
+
+        private void buttonPlotReaction_Click(object sender, RoutedEventArgs e)
+        {
+            IsEnabled = false;
+            //Call up shell uniform window
+            src.plot_reaction.WindowPlotReactionMain windowPlotReactionMain = new src.plot_reaction.WindowPlotReactionMain(_SapModel, _Plugin);
+            IsEnabled = true;
+
+        }
     }
 }
