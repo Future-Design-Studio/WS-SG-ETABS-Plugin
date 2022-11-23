@@ -37,8 +37,8 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
             src.HelperEtabs.OnAllLoadDatabase(Sap);
 
             //Get required table
-            List<Dictionary<string, string>> pointConnectivityTable = new List<Dictionary<string, string>>();
-            (isError, pointConnectivityTable) = src.HelperEtabs.GetTableDisplaySpecificGroup(Sap, "Point Object Connectivity", listChoosenGroup, showWarning);
+            //List<Dictionary<string, string>> pointConnectivityTable = new List<Dictionary<string, string>>();
+            //(isError, pointConnectivityTable) = src.HelperEtabs.GetTableDisplaySpecificGroup(Sap, "Point Object Connectivity", listChoosenGroup, showWarning);
 
             if (isError)
             {
@@ -89,7 +89,6 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
                     bubbleColor = System.Drawing.ColorTranslator.FromHtml(colorHex);
                 }
 
-
                 //Get joint reaction for 1 specific group
                 List<Dictionary<string, string>> jointReactionTable = new List<Dictionary<string, string>>();
 
@@ -109,7 +108,9 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
                     {
                         double xCoord = new double();
                         double yCoord = new double();
+                        double zCoord = new double();
 
+                        /*
                         //Find coordinate of the joint
                         foreach (Dictionary<string, string> pointRow in pointConnectivityTable)
                         {
@@ -120,6 +121,10 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
                                 break;
                             }
                         }
+                        */
+
+                        //Find coordinate of the joint
+                        Ret = Sap.PointObj.GetCoordCartesian(jointReactionRow["UniqueName"], ref xCoord, ref yCoord, ref zCoord);
 
                         //Bubble size and text
                         double reaction = Convert.ToDouble(jointReactionRow[reactionDirection]);
@@ -264,13 +269,19 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
                                 {
                                     double textXCoord = (lowX + highX) / 2;
                                     double textYCoord = (lowY + highY) / 2 - offsetX - groupSumIndex * separationX;
-                                    ReactionPlot.Plot.AddText(Convert.ToString(Convert.ToInt32(reactionSum)), textXCoord, textYCoord, sumTextSizeX, textColor);
+                                    
+                                    var txt = ReactionPlot.Plot.AddText(Convert.ToString(Convert.ToInt32(reactionSum)), textXCoord, textYCoord, sumTextSizeX, textColor);
+                                    txt.Alignment = Alignment.MiddleCenter;
+                                    txt.FontBold = true;
                                 }
                                 else
                                 {
                                     double textXCoord = (lowX + highX) / 2;
                                     double textYCoord = (lowY + highY) / 2 + offsetX + groupSumIndex * separationX;
-                                    ReactionPlot.Plot.AddText(Convert.ToString(Convert.ToInt32(reactionSum)), textXCoord, textYCoord, sumTextSizeX, textColor);
+
+                                    var txt = ReactionPlot.Plot.AddText(Convert.ToString(Convert.ToInt32(reactionSum)), textXCoord, textYCoord, sumTextSizeX, textColor);
+                                    txt.Alignment = Alignment.MiddleCenter;
+                                    txt.FontBold = true;
                                 }
 
                                 groupSumIndex++;
@@ -393,13 +404,19 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
                                 {
                                     double textXCoord = (lowX + highX) / 2 - offsetY;
                                     double textYCoord = (lowY + highY) / 2 - groupSumIndex * separationY;
-                                    ReactionPlot.Plot.AddText(Convert.ToString(Convert.ToInt32(reactionSum)), textXCoord, textYCoord, sumTextSizeY, textColor);
+
+                                    var txt = ReactionPlot.Plot.AddText(Convert.ToString(Convert.ToInt32(reactionSum)), textXCoord, textYCoord, sumTextSizeY, textColor);
+                                    txt.Alignment = Alignment.MiddleCenter;
+                                    txt.FontBold = true;
                                 }
                                 else
                                 {
                                     double textXCoord = (lowX + highX) / 2 + offsetY;
                                     double textYCoord = (lowY + highY) / 2 - groupSumIndex * separationY;
-                                    ReactionPlot.Plot.AddText(Convert.ToString(Convert.ToInt32(reactionSum)), textXCoord, textYCoord, sumTextSizeY, textColor);
+
+                                    var txt = ReactionPlot.Plot.AddText(Convert.ToString(Convert.ToInt32(reactionSum)), textXCoord, textYCoord, sumTextSizeY, textColor); 
+                                    txt.Alignment = Alignment.MiddleCenter;
+                                    txt.FontBold = true;
                                 }
 
                                 groupSumIndex++;
