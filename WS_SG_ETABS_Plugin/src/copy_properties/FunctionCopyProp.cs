@@ -17,6 +17,9 @@ namespace WS_SG_ETABS_Plugin.src.copy_properties
             bool isError = false;
             List<string> tableKeysToSave = new List<string>();
 
+            //Turn on all load
+            src.HelperEtabs.OnAllLoadDatabase(Sap);
+
             Dictionary<string, List<string>> databaseTableKeys = new Dictionary<string, List<string>>()
             {
                 { "material", new List<string>(){"Material Properties - Acceptance Criteria",
@@ -224,8 +227,8 @@ namespace WS_SG_ETABS_Plugin.src.copy_properties
 
             if (modelFromLocked)
             {
-                MessageBox.Show("Reference ETABS file is locked! Please 'save as' the model to unlock it!");
                 myETABSObjectFrom.ApplicationExit(false);
+                MessageBox.Show("Reference ETABS file is locked! Please 'save as' the model to unlock it!");
                 isError = true;
                 return isError;
             }
