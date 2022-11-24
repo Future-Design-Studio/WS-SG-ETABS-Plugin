@@ -535,18 +535,15 @@ namespace WS_SG_ETABS_Plugin.src
 
         }
 
-
         /// <summary>
-        /// Access ETABS database for display and return it as list of dictionary
-        /// Each dictionary in the list is 1 row
-        /// Dictionary key is column
+        /// Access ETABS database for display and return it as DatabaseTable
         /// </summary>
         /// <param name="Sap">Refer to specified SAP model</param>
         /// <param name="tableKey">Table key that we want to extract</param>
         /// <returns>
         /// Return tupple (isError, tableInList)
         /// </returns>
-        public static (bool, List<Dictionary<string, string>>) GetTableDisplay(cSapModel Sap, string tableKey, bool showWarning)
+        public static (bool, DatabaseTable) GetTableDisplay(cSapModel Sap, string tableKey, bool showWarning)
         {
             string TableKey = tableKey;
             string[] FieldKeyList = null;
@@ -575,24 +572,44 @@ namespace WS_SG_ETABS_Plugin.src
             List<Dictionary<string, string>> tableInList = new List<Dictionary<string, string>>();
 
             tableInList = HelperMethod.EtabsTableToDictionary(TableData, FieldsKeysIncluded);
-            return (isError, tableInList);
+
+            DatabaseTable databaseTable = new DatabaseTable(TableKey, GroupName, TableVersion, FieldsKeysIncluded,
+                    NumberRecords, tableInList);
+
+            return (isError, databaseTable);
         }
 
-        public static (bool, List<Dictionary<string, string>>) GetTableDisplaySpecificGroup(cSapModel Sap, string tableKey, List<string> groupList, bool showWarning)
+        /// <summary>
+        /// Access single ETABS database for display but onyl for specified groups and return it as list of DatabaseTable
+        /// </summary>
+        /// <param name="Sap"></param>
+        /// <param name="tableKey"></param>
+        /// <param name="groupList"></param>
+        /// <param name="showWarning"></param>
+        /// <returns></returns>
+        public static (bool, DatabaseTable) GetTableDisplaySpecificGroup(cSapModel Sap, string tableKey, List<string> groupList, bool showWarning)
         {
             List<string> compiledTableData = new List<string>();
             string[] columnLabel = new string[] { null }; //to save FieldsKeysIncluded, simulate data structure of FieldsKeysIncluded
             bool isError = false;
 
+            string TableKey = tableKey;
+            string[] FieldKeyList = null;
+            string GroupName = null;
+            int TableVersion = 0;
+            string[] FieldsKeysIncluded = null;
+            int NumberRecords = 0;
+            string[] TableData = null;
+
             foreach (string group in groupList)
             {
-                string TableKey = tableKey;
-                string[] FieldKeyList = null;
-                string GroupName = group;
-                int TableVersion = 0;
-                string[] FieldsKeysIncluded = null;
-                int NumberRecords = 0;
-                string[] TableData = null;
+                TableKey = tableKey;
+                FieldKeyList = null;
+                GroupName = group;
+                TableVersion = 0;
+                FieldsKeysIncluded = null;
+                NumberRecords = 0;
+                TableData = null;
 
                 Ret = Sap.DatabaseTables.GetTableForDisplayArray(TableKey, ref FieldKeyList, GroupName, ref TableVersion,
                     ref FieldsKeysIncluded, ref NumberRecords, ref TableData);
@@ -623,7 +640,46 @@ namespace WS_SG_ETABS_Plugin.src
             List<Dictionary<string, string>> tableInList = new List<Dictionary<string, string>>();
 
             tableInList = HelperMethod.EtabsTableToDictionary(compiledTableDataInList, columnLabel);
-            return (isError, tableInList);
+
+            DatabaseTable databaseTable = new DatabaseTable(TableKey, GroupName, TableVersion, FieldsKeysIncluded,
+                    NumberRecords, tableInList);
+
+            return (isError, databaseTable);
+        }
+
+
+        /// <summary>
+        /// Access multiple ETABS database for display and return it as list of DatabaseTable
+        /// </summary>
+        /// <param name="Sap"></param>
+        /// <param name="tableKeys"></param>
+        /// <returns></returns>
+        public static (bool, List<DatabaseTable>) GetMultipleTableDisplay(cSapModel Sap, List<string> tableKeys, bool showWarning)
+        {
+            List<DatabaseTable> multipleDatabaseTable = new List<DatabaseTable>();
+            bool isError = false;
+
+            //Going to each table and save it if table exists
+            foreach (string tableKey in tableKeys)
+            {
+                string TableKey = "";
+                string GroupName = "";
+                int TableVersion = 0;
+                string[] FieldsKeysIncluded = null;
+                int NumberRecords = 0;
+                List<Dictionary<string, string>> tableInList = null;
+
+                DatabaseTable singleTable = new DatabaseTable(TableKey, GroupName, TableVersion, FieldsKeysIncluded, NumberRecords, tableInList);
+                (isError, singleTable) = GetTableDisplay(Sap, tableKey, showWarning);
+
+                //Only save table if its not empty
+                if (singleTable.NumberRecords != 0)
+                {
+                    multipleDatabaseTable.Add(singleTable);
+                }
+            }
+
+            return (isError, multipleDatabaseTable);
         }
 
         /// <summary>
@@ -970,11 +1026,11 @@ namespace WS_SG_ETABS_Plugin.src
         /// </summary>
         /// <param name="pointObjConnectivity"></param>
         /// <returns></returns>
-        public static List<Point3D> ConvertPointDatabaseToPoint3D(List<Dictionary<string, string>> pointObjConnectivity)
+        public static List<Point3D> ConvertPointDatabaseToPoint3D(DatabaseTable pointObjConnectivity)
         {
             List<Point3D> point3DList = new List<Point3D>();
 
-            foreach (Dictionary<string, string> singlePoint in pointObjConnectivity)
+            foreach (Dictionary<string, string> singlePoint in pointObjConnectivity.TableInList)
             {
                 string uniqueName = singlePoint["UniqueName"];
                 double xCoordinate = Convert.ToDouble(singlePoint["X"]);

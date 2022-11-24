@@ -85,10 +85,10 @@ namespace WS_SG_ETABS_Plugin.src.shell_uni_orient
             bool showWarning = false;
 
             //Open required tables
-            List<Dictionary<string, string>> pointObjConnectivity = new List<Dictionary<string, string>>();
-            List<Dictionary<string, string>> floorObjConnectivity = new List<Dictionary<string, string>>();
-            List<Dictionary<string, string>> wallObjConnectivity = new List<Dictionary<string, string>>();
-            List<Dictionary<string, string>> nullAreaObjConnectivity = new List<Dictionary<string, string>>();
+            src.HelperEtabs.DatabaseTable pointObjConnectivity = null;
+            src.HelperEtabs.DatabaseTable floorObjConnectivity = null;
+            src.HelperEtabs.DatabaseTable wallObjConnectivity = null;
+            src.HelperEtabs.DatabaseTable nullAreaObjConnectivity = null;
 
             string tableKey = "Point Object Connectivity";
             (isError, pointObjConnectivity) = src.HelperEtabs.GetTableDisplay(Sap, tableKey, showWarning);
@@ -261,12 +261,12 @@ namespace WS_SG_ETABS_Plugin.src.shell_uni_orient
         /// </summary>
         /// <param name="shellObjConnectivity"></param>
         /// <returns></returns>
-        public static List<src.HelperEtabs.Shell> GetShellsPoints (List<Dictionary<string,string>> shellObjConnectivity)
+        public static List<src.HelperEtabs.Shell> GetShellsPoints (src.HelperEtabs.DatabaseTable shellObjConnectivity)
         {
             int index = 0;
             List<src.HelperEtabs.Shell> shellList = new List<src.HelperEtabs.Shell>();
 
-            while (index < shellObjConnectivity.Count) 
+            while (index < shellObjConnectivity.TableInList.Count) 
             {
                 List<string> pointList = new List<string>();
 
@@ -275,31 +275,31 @@ namespace WS_SG_ETABS_Plugin.src.shell_uni_orient
 
                 while (rowBelowIsSameShell)
                 {
-                    if (shellObjConnectivity[index]["UniquePt1"] != null)
+                    if (shellObjConnectivity.TableInList[index]["UniquePt1"] != null)
                     {
-                        pointList.Add(shellObjConnectivity[index]["UniquePt1"]);
+                        pointList.Add(shellObjConnectivity.TableInList[index]["UniquePt1"]);
                     }
-                    if (shellObjConnectivity[index]["UniquePt2"] != null)
+                    if (shellObjConnectivity.TableInList[index]["UniquePt2"] != null)
                     {
-                        pointList.Add(shellObjConnectivity[index]["UniquePt2"]);
+                        pointList.Add(shellObjConnectivity.TableInList[index]["UniquePt2"]);
                     }
-                    if (shellObjConnectivity[index]["UniquePt3"] != null)
+                    if (shellObjConnectivity.TableInList[index]["UniquePt3"] != null)
                     {
-                        pointList.Add(shellObjConnectivity[index]["UniquePt3"]);
+                        pointList.Add(shellObjConnectivity.TableInList[index]["UniquePt3"]);
                     }
 
                     //Check if UniquePt4 key exist, if exist take UniquePt4 else skip
-                    bool keyExists = shellObjConnectivity[index].ContainsKey("UniquePt4");
+                    bool keyExists = shellObjConnectivity.TableInList[index].ContainsKey("UniquePt4");
                     if (keyExists)
                     {
-                        if (shellObjConnectivity[index]["UniquePt4"] != null)
+                        if (shellObjConnectivity.TableInList[index]["UniquePt4"] != null)
                         {
-                            pointList.Add(shellObjConnectivity[index]["UniquePt4"]);
+                            pointList.Add(shellObjConnectivity.TableInList[index]["UniquePt4"]);
                         }
                     }                     
 
                     //If this is not last row and below this row still the same shell, go to next row, loop again to get more points
-                    if (index < shellObjConnectivity.Count - 1 && shellObjConnectivity[index]["UniqueName"] == shellObjConnectivity[index + 1]["UniqueName"])
+                    if (index < shellObjConnectivity.TableInList.Count - 1 && shellObjConnectivity.TableInList[index]["UniqueName"] == shellObjConnectivity.TableInList[index + 1]["UniqueName"])
                     {
                         index++;
                     }
@@ -309,7 +309,7 @@ namespace WS_SG_ETABS_Plugin.src.shell_uni_orient
                         rowBelowIsSameShell = false;
                     }
                 }
-                src.HelperEtabs.Shell shell = new src.HelperEtabs.Shell(shellObjConnectivity[index]["UniqueName"], pointList);
+                src.HelperEtabs.Shell shell = new src.HelperEtabs.Shell(shellObjConnectivity.TableInList[index]["UniqueName"], pointList);
                 shellList.Add(shell);
 
                 index++;

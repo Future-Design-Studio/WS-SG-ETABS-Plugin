@@ -81,5 +81,13 @@ namespace WS_SG_ETABS_Plugin
             IsEnabled = true;
 
         }
+
+        private void buttonTransferMidas_Click(object sender, RoutedEventArgs e)
+        {
+            IsEnabled = false;
+            //Call up transfer midas window
+            src.transfer_midas.WindowTransferMidasMain windowTransferMidasMain = new src.transfer_midas.WindowTransferMidasMain(_SapModel, _Plugin);
+            IsEnabled = true;
+        }
     }
 }

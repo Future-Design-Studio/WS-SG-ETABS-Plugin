@@ -1,0 +1,227 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using ETABSv1;
+
+namespace WS_SG_ETABS_Plugin.src.transfer_midas
+{
+    internal class FunctionTransferMidas
+    {
+        public static bool TransferToMidas(cSapModel Sap, string filePathFrom, Dictionary<string, bool?> selectedDatabaseTables)
+        {
+            bool isError = false;
+            List<string> tableKeysToSave = new List<string>();
+
+            //List of database table keys
+            Dictionary<string, List<string>> databaseTableKeys = new Dictionary<string, List<string>>()
+            {
+                { "material", new List<string>(){"Material Properties - Acceptance Criteria",
+                                                    "Material Properties - Aluminum Data",
+                                                    "Material Properties - Basic Mechanical Properties",
+                                                    "Material Properties - Coldformed Data",
+                                                    "Material Properties - Concrete Data",
+                                                    "Material Properties - Damping Parameters",
+                                                    "Material Properties - General",
+                                                    "Material Properties - Hysteresis Parameters - BRB Hardening",
+                                                    "Material Properties - Hysteresis Parameters - Concrete",
+                                                    "Material Properties - Hysteresis Parameters - Degrading",
+                                                    "Material Properties - Hysteresis Parameters - Pivot",
+                                                    "Material Properties - Masonry Data",
+                                                    "Material Properties - Other Data",
+                                                    "Material Properties - Rebar Data",
+                                                    "Material Properties - Steel Data",
+                                                    "Material Properties - Tendon Data",
+                                                    "Material Properties - Time Dependence - ACI 209R-92",
+                                                    "Material Properties - Time Dependence - AS 3600-2009",
+                                                    "Material Properties - Time Dependence - AS 3600-2018",
+                                                    "Material Properties - Time Dependence - CEB-FIP 2010",
+                                                    "Material Properties - Time Dependence - CEB-FIP 90",
+                                                    "Material Properties - Time Dependence - Eurocode 2-2004",
+                                                    "Material Properties - Time Dependence - GL2000",
+                                                    "Material Properties - Time Dependence - NZS 3101-2006",
+                                                    "Material Properties - Time Dependence - User Creep",
+                                                    "Material Properties - Time Dependence - User Shrinkage",
+                                                    "Material Properties - Time Dependence - User Stiffness",
+                                                    "Material Properties - User Stress-Strain Curves",
+                                                     } },
+                { "frameSec", new List<string>() {"Frame Section Property Definitions - Auto Select List",
+                                                    "Frame Section Property Definitions - Buckling Restrained Brace",
+                                                    "Frame Section Property Definitions - Cold Formed C",
+                                                    "Frame Section Property Definitions - Cold Formed Hat",
+                                                    "Frame Section Property Definitions - Cold Formed Z",
+                                                    "Frame Section Property Definitions - Conc Encasement Rectangle",
+                                                    "Frame Section Property Definitions - Concrete Beam Reinforcing",
+                                                    "Frame Section Property Definitions - Concrete Box",
+                                                    "Frame Section Property Definitions - Concrete Circle",
+                                                    "Frame Section Property Definitions - Concrete Column Reinforcing",
+                                                    "Frame Section Property Definitions - Concrete Cross",
+                                                    "Frame Section Property Definitions - Concrete Encasement Circle",
+                                                    "Frame Section Property Definitions - Concrete L",
+                                                    "Frame Section Property Definitions - Concrete Pipe",
+                                                    "Frame Section Property Definitions - Concrete Precast I",
+                                                    "Frame Section Property Definitions - Concrete Rectangular",
+                                                    "Frame Section Property Definitions - Concrete Tee",
+                                                    "Frame Section Property Definitions - Concrete Trapezoid",
+                                                    "Frame Section Property Definitions - CoreBrace BRB",
+                                                    "Frame Section Property Definitions - Filled Steel Pipe",
+                                                    "Frame Section Property Definitions - Filled Steel Tube",
+                                                    "Frame Section Property Definitions - General",
+                                                    "Frame Section Property Definitions - Nonprismatic",
+                                                    "Frame Section Property Definitions - Section Designer",
+                                                    "Frame Section Property Definitions - Steel Angle",
+                                                    "Frame Section Property Definitions - Steel BU I Cover Plate",
+                                                    "Frame Section Property Definitions - Steel Castellated",
+                                                    "Frame Section Property Definitions - Steel Cellular",
+                                                    "Frame Section Property Definitions - Steel Channel",
+                                                    "Frame Section Property Definitions - Steel Double Angle",
+                                                    "Frame Section Property Definitions - Steel Double Channel",
+                                                    "Frame Section Property Definitions - Steel I/Wide Flange",
+                                                    "Frame Section Property Definitions - Steel Joist",
+                                                    "Frame Section Property Definitions - Steel Pipe",
+                                                    "Frame Section Property Definitions - Steel Plate",
+                                                    "Frame Section Property Definitions - Steel Rod",
+                                                    "Frame Section Property Definitions - Steel Tee",
+                                                    "Frame Section Property Definitions - Steel Tube",
+                                                    } },
+                {"areaSec", new List<string>() {"Slab Property Definitions",
+                                                    "Slab Property Definitions - Layers",
+                                                    "Deck Property Definitions",
+                                                    "Wall Property Definitions - Auto Select List",
+                                                    "Wall Property Definitions - Layers",
+                                                    "Wall Property Definitions - Specified",
+                                                     } },
+                {"linkSec", new List<string>() {"Link Property Definitions - Acceptance Criteria - Displacement",
+                                                    "Link Property Definitions - Acceptance Criteria - Force",
+                                                    "Link Property Definitions - Damper - Bilinear",
+                                                    "Link Property Definitions - Damper - Exponential",
+                                                    "Link Property Definitions - Damper - Friction Spring",
+                                                    "Link Property Definitions - Gap",
+                                                    "Link Property Definitions - Hook",
+                                                    "Link Property Definitions - Isolator - Friction",
+                                                    "Link Property Definitions - Isolator - High Damping Rubber",
+                                                    "Link Property Definitions - Isolator - Rubber",
+                                                    "Link Property Definitions - Isolator - TC Friction",
+                                                    "Link Property Definitions - Isolator - Triple Pendulum",
+                                                    "Link Property Definitions - Linear",
+                                                    "Link Property Definitions - Multilinear - Elastic",
+                                                    "Link Property Definitions - Multilinear - Plastic",
+                                                    "Link Property Definitions - Plastic Wen",
+                                                     } },
+                {"massSource", new List<string>() {"Mass Source Definition" } },
+                {"pDelta", new List<string>() { "P-Delta Option Definition" } },
+                {"loadPattern", new List<string>() {"Load Pattern Definitions",
+                                                    "Load Pattern Definitions - Auto Notional Loads",
+                                                    "Load Pattern Definitions - Auto Seismic - AS 1170 2007",
+                                                    "Load Pattern Definitions - Auto Seismic - ASCE 7-02",
+                                                    "Load Pattern Definitions - Auto Seismic - ASCE 7-05",
+                                                    "Load Pattern Definitions - Auto Seismic - ASCE 7-10",
+                                                    "Load Pattern Definitions - Auto Seismic - ASCE 7-16",
+                                                    "Load Pattern Definitions - Auto Seismic - Chinese 2010",
+                                                    "Load Pattern Definitions - Auto Seismic - Dominican Rep R-001",
+                                                    "Load Pattern Definitions - Auto Seismic - Eurocode8 2004",
+                                                    "Load Pattern Definitions - Auto Seismic - IS 1893 2002",
+                                                    "Load Pattern Definitions - Auto Seismic - IS 1893 2016",
+                                                    "Load Pattern Definitions - Auto Seismic - Italian NTC 2008",
+                                                    "Load Pattern Definitions - Auto Seismic - Italian NTC 2018",
+                                                    "Load Pattern Definitions - Auto Seismic - KBC 2009",
+                                                    "Load Pattern Definitions - Auto Seismic - KBC 2016",
+                                                    "Load Pattern Definitions - Auto Seismic - KDS 41 17 00:2019",
+                                                    "Load Pattern Definitions - Auto Seismic - NBCC 2005",
+                                                    "Load Pattern Definitions - Auto Seismic - NBCC 2010",
+                                                    "Load Pattern Definitions - Auto Seismic - NBCC 2015",
+                                                    "Load Pattern Definitions - Auto Seismic - NBCC 95",
+                                                    "Load Pattern Definitions - Auto Seismic - NEHRP 97",
+                                                    "Load Pattern Definitions - Auto Seismic - NZS 1170 2004",
+                                                    "Load Pattern Definitions - Auto Seismic - TCVN 9386 2012",
+                                                    "Load Pattern Definitions - Auto Seismic - TSC 2007",
+                                                    "Load Pattern Definitions - Auto Seismic - TSC 2018",
+                                                    "Load Pattern Definitions - Auto Seismic - UBC 97",
+                                                    "Load Pattern Definitions - Auto Seismic - User Coefficient",
+                                                    "Load Pattern Definitions - Auto Seismic - User Loads",
+                                                    "Load Pattern Definitions - Auto Wind - AS and NZS 1170 2 2002",
+                                                    "Load Pattern Definitions - Auto Wind - AS and NZS 1170 2 2011",
+                                                    "Load Pattern Definitions - Auto Wind - AS and NZS 1170 2 2021",
+                                                    "Load Pattern Definitions - Auto Wind - ASCE 7-02",
+                                                    "Load Pattern Definitions - Auto Wind - ASCE 7-05",
+                                                    "Load Pattern Definitions - Auto Wind - ASCE 7-10",
+                                                    "Load Pattern Definitions - Auto Wind - ASCE 7-16",
+                                                    "Load Pattern Definitions - Auto Wind - ASCE 7-88",
+                                                    "Load Pattern Definitions - Auto Wind - ASCE 7-95",
+                                                    "Load Pattern Definitions - Auto Wind - BS 6399-95",
+                                                    "Load Pattern Definitions - Auto Wind - Chinese 2010",
+                                                    "Load Pattern Definitions - Auto Wind - Eurocode1 2005",
+                                                    "Load Pattern Definitions - Auto Wind - Indian IS 875 1987",
+                                                    "Load Pattern Definitions - Auto Wind - Indian IS 875 2015",
+                                                    "Load Pattern Definitions - Auto Wind - Italian NTC 2008",
+                                                    "Load Pattern Definitions - Auto Wind - Italian NTC 2018",
+                                                    "Load Pattern Definitions - Auto Wind - KBC 2016",
+                                                    "Load Pattern Definitions - Auto Wind - Mexican",
+                                                    "Load Pattern Definitions - Auto Wind - NBCC 2005",
+                                                    "Load Pattern Definitions - Auto Wind - NBCC 2010",
+                                                    "Load Pattern Definitions - Auto Wind - NBCC 2015",
+                                                    "Load Pattern Definitions - Auto Wind - NBCC 95",
+                                                    "Load Pattern Definitions - Auto Wind - TCVN 2737 1995",
+                                                    "Load Pattern Definitions - Auto Wind - Turkish TS 498-97",
+                                                    "Load Pattern Definitions - Auto Wind - User Loads",
+                                                    "Shell Uniform Load Sets",
+                                                    } },
+                {"responseSpectrum", new List<string>() {"Functions - Response Spectrum - User Defined" } },
+                {"loadCase", new List<string>() {   "Modal Case Definitions - Eigen",
+                                                    "Modal Case Definitions - Ritz",
+                                                    "Load Case Definitions - Buckling",
+                                                    "Load Case Definitions - Damping - Modal",
+                                                    "Load Case Definitions - Hyperstatic",
+                                                    "Load Case Definitions - Linear Static",
+                                                    "Load Case Definitions - Nonlinear Staged Construction",
+                                                    "Load Case Definitions - Nonlinear Static",
+                                                    "Load Case Definitions - Response Spectrum",
+                                                    "Load Case Definitions - Time History - Linear Direct Integration",
+                                                    "Load Case Definitions - Time History - Linear Modal",
+                                                    "Load Case Definitions - Time History - Nonlin Direct Integration",
+                                                    "Load Case Definitions - Time History - Nonlinear Modal",
+                                                    } },
+                {"loadCombination", new List<string>() {"Load Combination Definitions"} },
+            };
+
+            //Going through each checkbox and take note of table keys to save
+            foreach (KeyValuePair<string, bool?> selectedDatabaseTable in selectedDatabaseTables)
+            {
+                if (selectedDatabaseTable.Value == true)
+                {
+                    foreach (KeyValuePair<string, List<string>> databaseTableKey in databaseTableKeys)
+                    {
+                        if (selectedDatabaseTable.Key == databaseTableKey.Key)
+                        {
+                            /*
+                            //If response spectrum is selected, convert response spectrum function to user function first
+                            if (selectedDatabaseTable.Key == "responseSpectrum")
+                            {
+                                src.HelperEtabs.ConvertAllFunctionToUser(Sap);
+                            }
+                            */
+
+                            //Going through each table key and save it as a flat list
+                            foreach (string tableKey in databaseTableKey.Value)
+                            {
+                                tableKeysToSave.Add(tableKey);
+                            }
+
+                        }
+
+                    }
+                }
+            };
+
+            //Copy multiple tables from reference etabs
+            List<src.HelperEtabs.DatabaseTable> databaseTablesEtabsFrom = new List<src.HelperEtabs.DatabaseTable>();
+            (isError, databaseTablesEtabsFrom) = src.HelperEtabs.GetMultipleTableDisplay(Sap, tableKeysToSave, true);
+
+
+
+            return isError;
+        }
+
+    }
+}

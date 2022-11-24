@@ -81,12 +81,12 @@ namespace WS_SG_ETABS_Plugin.src
         /// <param name="columnKey">Column key to filter from</param>
         /// <param name="keywordInColumn">Keyword to find</param>
         /// <returns>Filtered table with the same data structure as input</returns>
-        public static List<Dictionary<string, string>> FilterEtabsDatabase(List<Dictionary<string, string>> tableInList, 
+        public static src.HelperEtabs.DatabaseTable FilterEtabsDatabase(src.HelperEtabs.DatabaseTable databaseTable, 
             string columnKey, string keywordInColumn)
         {
             List<Dictionary<string, string>> tableFiltered = new List<Dictionary<string, string>>();
 
-            foreach (Dictionary<string, string> row in tableInList)
+            foreach (Dictionary<string, string> row in databaseTable.TableInList)
             {
                 if (row[columnKey] == keywordInColumn)
                 {
@@ -94,7 +94,14 @@ namespace WS_SG_ETABS_Plugin.src
                 }
             }
 
-            return tableFiltered;          
+            string TableKey = databaseTable.TableKey;
+            string GroupName = databaseTable.GroupName;
+            int TableVersion = databaseTable.TableVersion;
+            string[] FieldsKeysIncluded = databaseTable.FieldsKeysIncluded;
+            int NumberRecords = databaseTable.NumberRecords;
+            src.HelperEtabs.DatabaseTable filteredDatabaseTable = new src.HelperEtabs.DatabaseTable(TableKey, GroupName, TableVersion, FieldsKeysIncluded, NumberRecords, tableFiltered);
+
+            return filteredDatabaseTable;          
 
         }
 

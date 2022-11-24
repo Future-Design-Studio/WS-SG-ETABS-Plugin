@@ -127,6 +127,13 @@
     <Compile Include="src\shell_uni_orient\WindowShellUniResult.xaml.cs">
       <DependentUpon>WindowShellUniResult.xaml</DependentUpon>
     </Compile>
+    <Compile Include="src\transfer_midas\FunctionTransferMidas.cs" />
+    <Compile Include="src\transfer_midas\WindowTransferMidasMain.xaml.cs">
+      <DependentUpon>WindowTransferMidasMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\transfer_midas\WindowTransferMidasResult.xaml.cs">
+      <DependentUpon>WindowTransferMidasResult.xaml</DependentUpon>
+    </Compile>
     <Compile Include="test\Test.cs" />
     <Compile Include="WindowMain.xaml.cs">
       <DependentUpon>WindowMain.xaml</DependentUpon>
@@ -162,6 +169,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="src\shell_uni_orient\WindowShellUniResult.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\transfer_midas\WindowTransferMidasMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\transfer_midas\WindowTransferMidasResult.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
