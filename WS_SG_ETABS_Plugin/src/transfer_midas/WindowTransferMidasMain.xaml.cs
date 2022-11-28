@@ -30,6 +30,8 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
             _Plugin = Plugin;
 
             InitializeComponent();
+
+            ShowDialog();
         }
 
         private void buttonOk_Click(object sender, RoutedEventArgs e)

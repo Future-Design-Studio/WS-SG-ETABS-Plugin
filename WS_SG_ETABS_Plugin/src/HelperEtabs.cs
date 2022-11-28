@@ -662,6 +662,7 @@ namespace WS_SG_ETABS_Plugin.src
             //Going to each table and save it if table exists
             foreach (string tableKey in tableKeys)
             {
+                isError = false;
                 string TableKey = "";
                 string GroupName = "";
                 int TableVersion = 0;
@@ -673,13 +674,54 @@ namespace WS_SG_ETABS_Plugin.src
                 (isError, singleTable) = GetTableDisplay(Sap, tableKey, showWarning);
 
                 //Only save table if its not empty
-                if (singleTable.NumberRecords != 0)
+                if (isError == false)
                 {
                     multipleDatabaseTable.Add(singleTable);
                 }
             }
 
             return (isError, multipleDatabaseTable);
+        }
+
+        /// <summary>
+        /// Access ETABS database for display but only return the data
+        /// Each dictionary in the list is 1 row
+        /// Dictionary key is column
+        /// </summary>
+        /// <param name="Sap">Refer to specified SAP model</param>
+        /// <param name="tableKey">Table key that we want to extract</param>
+        /// <returns>
+        /// Return tupple (tableInList, TableVersion, FieldKeysIncluded, NumberRecords)
+        /// </returns>
+        public static (bool, List<Dictionary<string, string>>) GetTableDisplayOnlyData(cSapModel Sap, string tableKey, bool showWarning)
+        {
+            string TableKey = tableKey;
+            string[] FieldKeyList = null;
+            string GroupName = "";
+            int TableVersion = 0;
+            string[] FieldsKeysIncluded = null;
+            int NumberRecords = 0;
+            string[] TableData = null;
+            bool isError = false;
+
+            Ret = Sap.DatabaseTables.GetTableForDisplayArray(TableKey, ref FieldKeyList, GroupName, ref TableVersion,
+                ref FieldsKeysIncluded, ref NumberRecords, ref TableData);
+
+            //If table doesnt exist, ETABS return first element of FieldKeysIncluded = null
+            if (FieldsKeysIncluded[0] == null)
+            {
+                if (showWarning)
+                {
+                    src.HelperEtabs.WarningTableDoesNotExist(tableKey);
+                }
+
+                isError = true;
+                return (isError, null);
+            }
+
+            List<Dictionary<string, string>> tableInList = new List<Dictionary<string, string>>();
+
+            return (isError, tableInList);
         }
 
         /// <summary>

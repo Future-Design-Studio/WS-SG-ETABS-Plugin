@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ETABSv1;
+using System.IO;
+using System.Windows.Forms;
 
 namespace WS_SG_ETABS_Plugin.src.transfer_midas
 {
@@ -11,8 +13,17 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
     {
         public static bool TransferToMidas(cSapModel Sap, string filePathFrom, Dictionary<string, bool?> selectedDatabaseTables)
         {
+            //Text file line by line to be converted to MGT
+            List<string> textLineByLine = new List<string>();
+
             bool isError = false;
             List<string> tableKeysToSave = new List<string>();
+
+            //Change MIDAS unit to kN M C
+            changeUnitMidas(Sap, textLineByLine);
+
+            //Change ETABS unit to kN M C
+            src.HelperEtabs.SetOutputUnit(Sap, eForce.kN, eLength.m, eTemperature.C);
 
             //List of database table keys
             Dictionary<string, List<string>> databaseTableKeys = new Dictionary<string, List<string>>()
@@ -194,13 +205,17 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                     {
                         if (selectedDatabaseTable.Key == databaseTableKey.Key)
                         {
-                            /*
-                            //If response spectrum is selected, convert response spectrum function to user function first
-                            if (selectedDatabaseTable.Key == "responseSpectrum")
+                            //Going through each category to copy
+                            //Copying material
+                            if (databaseTableKey.Key == "material")
                             {
-                                src.HelperEtabs.ConvertAllFunctionToUser(Sap);
+                                copyMaterialToMidas(Sap, databaseTableKey.Value, textLineByLine);
                             }
-                            */
+
+                            if (databaseTableKey.Key == "frameSec")
+                            {
+                                copyFrameSecToMidas(Sap, databaseTableKey.Value, textLineByLine);
+                            }
 
                             //Going through each table key and save it as a flat list
                             foreach (string tableKey in databaseTableKey.Value)
@@ -212,16 +227,185 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
 
                     }
                 }
+
             };
 
+            /*
             //Copy multiple tables from reference etabs
             List<src.HelperEtabs.DatabaseTable> databaseTablesEtabsFrom = new List<src.HelperEtabs.DatabaseTable>();
             (isError, databaseTablesEtabsFrom) = src.HelperEtabs.GetMultipleTableDisplay(Sap, tableKeysToSave, true);
+            */
 
-
+            writeMgtFile(Sap, textLineByLine);
 
             return isError;
+
+        }
+
+        //Change MGT unit to kN m and C
+        private static void changeUnitMidas(cSapModel Sap,  List<string> textLineByLine)
+        {
+            textLineByLine.Add("*UNIT");
+            textLineByLine.Add("KN, M, BTU, C");
+        }
+
+        //Method to copy material to MIDAS
+        private static void copyMaterialToMidas(cSapModel Sap, List<string> tableKeys, List<string> textLineByLine)
+        {
+            //MGTHeader
+            textLineByLine.Add("*MATERIAL");
+
+            bool showWarning = false;
+            bool isError = false;
+
+            List<src.HelperEtabs.DatabaseTable> databaseTables = new List<src.HelperEtabs.DatabaseTable>();
+
+            (isError, databaseTables) = src.HelperEtabs.GetMultipleTableDisplay(Sap, tableKeys, showWarning);
+
+            //Placeholder for each table
+            List<Dictionary<string, string>> tableGeneral = new List<Dictionary<string, string>>();
+            List<Dictionary<string, string>> tableMechProp = new List<Dictionary<string, string>>();
+
+            //Gothrough each table key to get the needed table
+            foreach (src.HelperEtabs.DatabaseTable databaseTable in databaseTables)
+            {
+                if (databaseTable.TableKey == "Material Properties - General")
+                {
+                    tableGeneral = databaseTable.TableInList;
+                }
+                else if (databaseTable.TableKey == "Material Properties - Basic Mechanical Properties")
+                {
+                    tableMechProp = databaseTable.TableInList;
+                }
+
+            }
+
+            int index = 1;
+            foreach (Dictionary<string, string> rowTableGeneral in tableGeneral)
+            {
+                //For concrete type
+                if (rowTableGeneral["Type"] == "Concrete")
+                {
+                    string materialName = rowTableGeneral["Material"];
+                    string unitWeight = "";
+                    string unitMass = "";
+                    string elasticModulus = "";
+                    string poissonRatio = "";
+                    string thermalCoefficient = "";
+
+                    //Going through basic mech prop to find density, modulus and possion ratio
+                    foreach (Dictionary<string, string> rowTableMechProp in tableMechProp)
+                    {
+                        if (materialName == rowTableMechProp["Material"])
+                        {
+                            unitWeight = rowTableMechProp["UnitWeight"];
+                            unitMass = rowTableMechProp["UnitMass"];
+                            elasticModulus = rowTableMechProp["E1"];
+                            poissonRatio = rowTableMechProp["U12"];
+                            thermalCoefficient = rowTableMechProp["A1"];
+                            break;
+                        }
+                    }
+                    
+                    textLineByLine.Add($"{index}, CONC, {materialName}, 0, 0, ,C, NO, 0.05, 2, {elasticModulus}, {poissonRatio}, {thermalCoefficient}, {unitWeight}, {unitMass}");
+                    index++;
+                }
+
+                //For steel type
+                else if (rowTableGeneral["Type"] == "Steel")
+                {
+                    string materialName = rowTableGeneral["Material"];
+                    string unitWeight = "";
+                    string unitMass = "";
+                    string elasticModulus = "";
+                    string poissonRatio = "";
+                    string thermalCoefficient = "";
+
+                    //Going through basic mech prop to find density, modulus and possion ratio
+                    foreach (Dictionary<string, string> rowTableMechProp in tableMechProp)
+                    {
+                        if (materialName == rowTableMechProp["Material"])
+                        {
+                            unitWeight = rowTableMechProp["UnitWeight"];
+                            unitMass = rowTableMechProp["UnitMass"];
+                            elasticModulus = rowTableMechProp["E1"];
+                            poissonRatio = rowTableMechProp["U12"];
+                            thermalCoefficient = rowTableMechProp["A1"];
+                            break;
+                        }
+                    }
+
+                    textLineByLine.Add($"{index}, STEEL, {materialName}, 0, 0, ,C, NO, 0.05, 2, {elasticModulus}, {poissonRatio}, {thermalCoefficient}, {unitWeight}, {unitMass}");
+                    index++;
+                }
+
+                /*
+                //For rebar type
+                else if (rowTableGeneral["Type"] == "Rebar")
+                {
+                    string materialName = rowTableGeneral["Material"];
+                    string unitWeight = "";
+                    string unitMass = "";
+                    string elasticModulus = "";
+                    string poissonRatio = "";
+                    string thermalCoefficient = "";
+
+                    //Going through basic mech prop to find density, modulus and possion ratio
+                    foreach (Dictionary<string, string> rowTableMechProp in tableMechProp)
+                    {
+                        if (materialName == rowTableMechProp["Material"])
+                        {
+                            unitWeight = rowTableMechProp["UnitWeight"];
+                            unitMass = rowTableMechProp["UnitMass"];
+                            elasticModulus = rowTableMechProp["E1"];
+                            poissonRatio = Convert.ToString(0.05);
+                            thermalCoefficient = rowTableMechProp["A1"];
+                            break;
+                        }
+                    }
+
+                    textLineByLine.Add($"{index}, USER, {materialName}, 0, 0, ,C, NO, 0.05, 2, {elasticModulus}, {poissonRatio}, {thermalCoefficient}, {unitWeight}, {unitMass}");
+                    index++;
+                }
+                */
+
+                else
+                {
+                    MessageBox.Show($"Have material type other than concrete and steel. {rowTableGeneral["Type"]} will NOT be imported!");
+                }
+            }
+
+        }
+
+        //Method to copy material to MIDAS
+        private static void copyFrameSecToMidas(cSapModel Sap, List<string> tableKeys, List<string> textLineByLine)
+        {
+
+        }
+
+        private static void writeMgtFile(cSapModel Sap, List<string> textLineByLine)
+        {            
+            //Text file properties
+            string modelPath = Sap.GetModelFilepath() + "test.mgt";
+            //string fileName = @"C:\Temp\Mahesh.txt";
+            FileStream stream = null;
+            stream = new FileStream(modelPath, FileMode.OpenOrCreate);
+
+            Encoding utf8WithoutBom = new UTF8Encoding(false);
+
+            using (StreamWriter writer = new StreamWriter(stream, utf8WithoutBom))
+            {
+                foreach (string line in textLineByLine)
+                {
+                    writer.WriteLine(line);
+                }
+
+            }
+
         }
 
     }
+
+
+
 }
