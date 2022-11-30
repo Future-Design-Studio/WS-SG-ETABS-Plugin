@@ -254,6 +254,8 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
         {
             //MGTHeader
             textLineByLine.Add("*MATERIAL");
+            textLineByLine.Add("; i, CONC/STEEL, (name), (spheat=0), (heatco=0), (plast=\"\"), (tunit), (bmass=no), (damp ratio), (2), " +
+                "(modulus elasticity), (poisson), (thermal coeff), (density), (mass)");
 
             bool showWarning = false;
             bool isError = false;
@@ -380,7 +382,209 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
         //Method to copy material to MIDAS
         private static void copyFrameSecToMidas(cSapModel Sap, List<string> tableKeys, List<string> textLineByLine)
         {
+            //MGTHeader
+            textLineByLine.Add("*SECTION");
+            textLineByLine.Add("; i, (section type), (name), (offset=CC), (iCENT=0), (iREF=0), (iHORZ=0), (huser=0), (iVERT=0), (vuser=0), (consider shear deformation=\"YES\"), " +
+                "(consider warping effect=\"NO\"), (shape type), 2, (dimension 1 to 10)");
 
+            bool showWarning = false;
+            bool isError = false;
+
+            List<src.HelperEtabs.DatabaseTable> databaseTables = new List<src.HelperEtabs.DatabaseTable>();
+
+            (isError, databaseTables) = src.HelperEtabs.GetMultipleTableDisplay(Sap, tableKeys, showWarning);
+
+            if (isError)
+            {
+                return;
+            }
+
+            //Gothrough each table key to get the needed table
+            int index = 1;
+            foreach (src.HelperEtabs.DatabaseTable databaseTable in databaseTables)
+            {
+                //Placeholder for each table
+                List<Dictionary<string, string>> table = new List<Dictionary<string, string>>();
+
+                if (databaseTable.TableKey == "Frame Section Property Definitions - Steel I/Wide Flange")
+                {
+                    table = databaseTable.TableInList;
+
+                    //For I section
+                    foreach (Dictionary<string, string> row in table)
+                    {
+                        string name = row["Name"];
+                        string sectionShape = "H";
+                        double depth = Convert.ToDouble(row["t3"]);
+                        double widthTop = Convert.ToDouble(row["t2"]);
+                        double webThickness = Convert.ToDouble(row["tw"]);
+                        double flangeThicknessTop = Convert.ToDouble(row["tf"]);
+                        double widthBottom = Convert.ToDouble(row["t2b"]);
+                        double flangeThicknessBottom = Convert.ToDouble(row["tfb"]);
+                        double radiusInner = Convert.ToDouble(row["FilletRad"]);
+                        double radiusOuter = 0;
+
+                        textLineByLine.Add($"{index}, DBUSER, {name}, CC, 0, 0, 0, 0, 0, 0, YES, NO, {sectionShape}, 2, {depth}, {widthTop}, {webThickness}, {flangeThicknessTop}," +
+                            $"{widthBottom}, {flangeThicknessBottom}, {radiusInner}, {radiusOuter}, 0, 0");
+
+                        index++;
+                    }
+                }
+                else if (databaseTable.TableKey == "Frame Section Property Definitions - Steel Channel")
+                {
+                    table = databaseTable.TableInList;
+
+                    foreach (Dictionary<string, string> row in table)
+                    {
+                        string name = row["Name"];
+                        string sectionShape = "C";
+                        double depth = Convert.ToDouble(row["t3"]);
+                        double widthTop = Convert.ToDouble(row["t2"]);
+                        double webThickness = Convert.ToDouble(row["tw"]);
+                        double flangeThicknessTop = Convert.ToDouble(row["tf"]);
+                        double widthBottom = Convert.ToDouble(row["t2"]);
+                        double flangeThicknessBottom = Convert.ToDouble(row["tf"]);
+                        double radiusInner = Convert.ToDouble(row["FilletRad"]);
+                        double radiusOuter = 0;
+
+                        textLineByLine.Add($"{index}, DBUSER, {name}, CC, 0, 0, 0, 0, 0, 0, YES, NO, {sectionShape}, 2, {depth}, {widthTop}, {webThickness}, {flangeThicknessTop}," +
+                            $"{widthBottom}, {flangeThicknessBottom}, {radiusInner}, {radiusOuter}, 0, 0");
+
+                        index++;
+                    }
+
+                }
+                else if (databaseTable.TableKey == "Frame Section Property Definitions - Steel Tee")
+                {
+                    table = databaseTable.TableInList;
+
+                    foreach (Dictionary<string, string> row in table)
+                    {
+                        string name = row["Name"];
+                        string sectionShape = "T";
+                        double depth = Convert.ToDouble(row["t3"]);
+                        double width = Convert.ToDouble(row["t2"]);
+                        double webThickness = Convert.ToDouble(row["tw"]);
+                        double flangeThickness = Convert.ToDouble(row["tf"]);
+
+                        textLineByLine.Add($"{index}, DBUSER, {name}, CC, 0, 0, 0, 0, 0, 0, YES, NO, {sectionShape}, 2, {depth}, {width}, {webThickness}, {flangeThickness}, 0, 0, 0, 0, 0, 0");
+
+                        index++;
+                    }
+                }
+                else if (databaseTable.TableKey == "Frame Section Property Definitions - Steel Angle")
+                {
+                    table = databaseTable.TableInList;
+
+                    foreach (Dictionary<string, string> row in table)
+                    {
+                        string name = row["Name"];
+                        string sectionShape = "L";
+                        double depth = Convert.ToDouble(row["t3"]);
+                        double width = Convert.ToDouble(row["t2"]);
+                        double webThickness = Convert.ToDouble(row["tw"]);
+                        double flangeThickness = Convert.ToDouble(row["tf"]);
+
+                        textLineByLine.Add($"{index}, DBUSER, {name}, CC, 0, 0, 0, 0, 0, 0, YES, NO, {sectionShape}, 2, {depth}, {width}, {webThickness}, {flangeThickness}, 0, 0, 0, 0, 0, 0");
+
+                        index++;
+                    }
+                }
+                else if (databaseTable.TableKey == "Frame Section Property Definitions - Steel Double Angle")
+                {
+                    table = databaseTable.TableInList;
+
+                    foreach (Dictionary<string, string> row in table)
+                    {
+                        string name = row["Name"];
+                        string sectionShape = "2L";
+                        double depth = Convert.ToDouble(row["t3"]);
+                        double widthSingleAngle = Convert.ToDouble(row["SingleAngW"]);
+                        double webThickness = Convert.ToDouble(row["tw"]);
+                        double flangeThickness = Convert.ToDouble(row["tf"]);
+                        double gap = Convert.ToDouble(row["dis"]);
+
+                        textLineByLine.Add($"{index}, DBUSER, {name}, CC, 0, 0, 0, 0, 0, 0, YES, NO, {sectionShape}, 2, {depth}, {widthSingleAngle}, {webThickness}, {flangeThickness}, " +
+                            $"{gap}, 0, 0, 0, 0, 0");
+
+                        index++;
+                    }
+                }
+                else if (databaseTable.TableKey == "Frame Section Property Definitions - Steel Double Channel")
+                {
+                    table = databaseTable.TableInList;
+
+                    foreach (Dictionary<string, string> row in table)
+                    {
+                        string name = row["Name"];
+                        string sectionShape = "2C";
+                        double depth = Convert.ToDouble(row["t3"]);
+                        double widthSingleChannel = Convert.ToDouble(row["SingleChanW"]);
+                        double webThickness = Convert.ToDouble(row["tw"]);
+                        double flangeThickness = Convert.ToDouble(row["tf"]);
+                        double gap = Convert.ToDouble(row["dis"]);
+
+                        textLineByLine.Add($"{index}, DBUSER, {name}, CC, 0, 0, 0, 0, 0, 0, YES, NO, {sectionShape}, 2, {depth}, {widthSingleChannel}, {webThickness}, {flangeThickness}, " +
+                            $"{gap}, 0, 0, 0, 0, 0");
+
+                        index++;
+                    }
+                }
+                else if (databaseTable.TableKey == "Frame Section Property Definitions - Steel Tube")
+                {
+                    table = databaseTable.TableInList;
+
+                    foreach (Dictionary<string, string> row in table)
+                    {
+                        string name = row["Name"];
+                        string sectionShape = "B";
+                        double depth = Convert.ToDouble(row["t3"]);
+                        double width = Convert.ToDouble(row["t2"]);
+                        double webThickness = Convert.ToDouble(row["tw"]);
+                        double flangeThicknessTop = Convert.ToDouble(row["tf"]);
+                        double centerToCenter = 0;
+                        double flangeThicknessBottom = Convert.ToDouble(row["tf"]);
+
+                        textLineByLine.Add($"{index}, DBUSER, {name}, CC, 0, 0, 0, 0, 0, 0, YES, NO, {sectionShape}, 2, {depth}, {width}, {webThickness}, {flangeThicknessTop}, " +
+                            $"{centerToCenter}, {flangeThicknessBottom}, 0, 0, 0, 0");
+
+                        index++;
+                    }
+                }
+                else if (databaseTable.TableKey == "Frame Section Property Definitions - Steel Pipe")
+                {
+                    table = databaseTable.TableInList;
+
+                    foreach (Dictionary<string, string> row in table)
+                    {
+                        string name = row["Name"];
+                        string sectionShape = "P";
+                        double diameter = Convert.ToDouble(row["Diameter"]);
+                        double thickness = Convert.ToDouble(row["Thickness"]);
+
+                        textLineByLine.Add($"{index}, DBUSER, {name}, CC, 0, 0, 0, 0, 0, 0, YES, NO, {sectionShape}, 2, {diameter}, {thickness}, 0, 0, 0, 0, 0, 0, 0, 0");
+
+                        index++;
+                    }
+                }
+                else if (databaseTable.TableKey == "Frame Section Property Definitions - Steel Plate")
+                {
+                    table = databaseTable.TableInList;
+
+                    foreach (Dictionary<string, string> row in table)
+                    {
+                        string name = row["Name"];
+                        string sectionShape = "SB";
+                        double depth = Convert.ToDouble(row["Thickness"]);
+                        double width = Convert.ToDouble(row["Width"]);
+
+                        textLineByLine.Add($"{index}, DBUSER, {name}, CC, 0, 0, 0, 0, 0, 0, YES, NO, {sectionShape}, 2, {depth}, {width}, 0, 0, 0, 0, 0, 0, 0, 0");
+
+                        index++;
+                    }
+                }
+
+            }
         }
 
         private static void writeMgtFile(cSapModel Sap, List<string> textLineByLine)
