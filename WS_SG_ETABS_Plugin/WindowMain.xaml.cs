@@ -81,5 +81,13 @@ namespace WS_SG_ETABS_Plugin
             IsEnabled = true;
 
         }
+
+        private void buttonLoadCombo_Click(object sender, RoutedEventArgs e)
+        {
+            IsEnabled = false;
+            //Call up load combo window
+            src.load_combo_EN.WindowLoadComboMain windowLoadComboMain = new src.load_combo_EN.WindowLoadComboMain(_SapModel, _Plugin);
+            IsEnabled = true;
+        }
     }
 }

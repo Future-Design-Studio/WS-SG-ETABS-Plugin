@@ -1,0 +1,244 @@
+﻿<Window x:Class="WS_SG_ETABS_Plugin.src.load_combo_EN.WindowLoadComboMain"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WS_SG_ETABS_Plugin.src.load_combo_EN"
+             mc:Ignorable="d" Height="900" Width="1300" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+
+    <Grid Margin="10">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.1*"></RowDefinition>
+            <RowDefinition Height="0.5*"></RowDefinition>
+            <RowDefinition Height="0.4*"></RowDefinition>
+            <RowDefinition Height="0.1*"></RowDefinition>
+            <RowDefinition Height="0.05*"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <Label Grid.Row="0" Grid.Column="0" Content="Load Combo EN" FontSize="28"/>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"></ColumnDefinition>
+                <ColumnDefinition Width="1*"></ColumnDefinition>
+                <ColumnDefinition Width="1*"></ColumnDefinition>
+                <ColumnDefinition Width="1*"></ColumnDefinition>
+                <ColumnDefinition Width="1*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="3*"></RowDefinition>
+                <RowDefinition Height="0.5*"></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <Label Grid.Column="1" Content="Load Pattern Name" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <Label Grid.Column="2" Content="Category for Quasi Permenant Load" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <Label Grid.Column="3" Content="Consider +/- ?" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+
+
+            <Label Grid.Row="1" Content="SDL" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <Label Grid.Row="2" Content="LL" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <Label Grid.Row="3" Content="AL" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            
+            
+            <Label Grid.Row="1" Grid.Column="2" Content="NIL" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <Label Grid.Row="1" Grid.Column="3" Content="NIL" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <Label Grid.Row="2" Grid.Column="3" Content="NIL" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <Label Grid.Row="3" Grid.Column="2" Content="NIL" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+
+            <CheckBox x:Name="checkBoxAL" Grid.Row="3" Grid.Column="3"  Grid.ColumnSpan="1"
+                      Checked="checkBoxAL_Checked" Unchecked="checkBoxAL_UnChecked" 
+                      VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="False">
+            </CheckBox>
+            
+            <Button Grid.Row="1" Grid.Column="4" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="2" Margin="21,0,0,0" ></Button>
+            <Button Grid.Row="2" Grid.Column="4" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="2" Margin="21,0,0,0" ></Button>
+            <Button Grid.Row="3" Grid.Column="4" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="2" Margin="21,0,0,0" ></Button>
+
+            <TextBox Grid.Column="1" x:Name="textBoxNameSDL" Grid.Row="1"></TextBox>
+            <TextBox Grid.Column="1" x:Name="textBoxNameLL" Grid.Row="2"></TextBox>
+            <TextBox Grid.Column="1" x:Name="textBoxNameAL" Grid.Row="3"></TextBox>
+
+            <ComboBox  Grid.Row="2" Grid.Column="2" x:Name="comBoxSDL" 
+                       VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+                       Text="0.5" SelectionChanged="comBoxSDL_SelectionChanged"></ComboBox>
+
+            <ListBox x:Name="listBoxChoosenGroup" Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="5" 
+                     d:ItemsSource="{d:SampleData ItemCount=5}" SelectionMode="Single"
+                     Margin="0 10 0 10" SelectionChanged="listBoxChoosenGroup_SelectionChanged">
+            </ListBox>
+
+            <Button Grid.Row="6" Grid.Column="4" Content="Remove" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="2" Margin="21,0,0,0" ></Button>
+
+
+
+
+
+        </Grid>
+    
+
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+
+
+            <Label Grid.Column="1" Content="Load Pattern Name" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <Label Grid.Column="2" Content="Category for Quasi Permenant Load" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <Label Grid.Column="3" Content="Factor" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <Label Grid.Column="4" Content="Consider +/- ?" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <Label Grid.Column="5" Content="Consider Vertical Load?" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <Label Grid.Column="6" Content="Number of Directions" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <Label Grid.Column="7" Content="Include?" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+
+
+            <Label Grid.Row="1" Content="Notional" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <Label Grid.Row="2" Content="EHF" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <Label Grid.Row="3" Content="Temperature" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <Label Grid.Row="4" Content="Uplift" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <Label Grid.Row="5" Content="Seismic" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <Label Grid.Row="6" Content="Wind" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            
+            
+            <Label Grid.Row="1" Grid.Column="1" Content="NIL" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <Label Grid.Row="1" Grid.Column="2" Content="NIL" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <Label Grid.Row="1" Grid.Column="4" Content="NIL" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <Label Grid.Row="1" Grid.Column="5" Content="NIL" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <Label Grid.Row="1" Grid.Column="6" Content="NIL" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            
+            <Label Grid.Row="2" Grid.Column="1" Content="NIL" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <Label Grid.Row="2" Grid.Column="2" Content="NIL" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <Label Grid.Row="2" Grid.Column="4" Content="NIL" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <Label Grid.Row="2" Grid.Column="5" Content="NIL" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <Label Grid.Row="2" Grid.Column="6" Content="NIL" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            
+            <Label Grid.Row="3" Grid.Column="3" Content="NIL" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <Label Grid.Row="3" Grid.Column="5" Content="NIL" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <Label Grid.Row="3" Grid.Column="6" Content="NIL" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            
+            <Label Grid.Row="4" Grid.Column="1" Content="NIL" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <Label Grid.Row="4" Grid.Column="2" Content="NIL" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <Label Grid.Row="4" Grid.Column="3" Content="NIL" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <Label Grid.Row="4" Grid.Column="4" Content="NIL" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <Label Grid.Row="4" Grid.Column="5" Content="NIL" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <Label Grid.Row="4" Grid.Column="6" Content="NIL" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+
+            <Label Grid.Row="5" Grid.Column="1" Content="NIL" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <Label Grid.Row="5" Grid.Column="2" Content="NIL" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <Label Grid.Row="5" Grid.Column="3" Content="NIL" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <Label Grid.Row="5" Grid.Column="4" Content="NIL" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <Label Grid.Row="5" Grid.Column="5" Content="NIL" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <Label Grid.Row="5" Grid.Column="6" Content="NIL" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+
+            <Label Grid.Row="6" Grid.Column="1" Content="NIL" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <Label Grid.Row="6" Grid.Column="3" Content="NIL" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+
+
+
+            <CheckBox x:Name="checkBoxTemp" Grid.Row="3" Grid.Column="4"  Grid.ColumnSpan="1"
+                      Checked="checkBoxTemp_Checked" Unchecked="checkBoxTemp_UnChecked" 
+                      VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="False">
+            </CheckBox>
+            <CheckBox x:Name="checkBoxWind" Grid.Row="6" Grid.Column="4"  Grid.ColumnSpan="1"
+                      Checked="checkBoxWind_Checked" Unchecked="checkBoxWind_UnChecked" 
+                      VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="False">
+            </CheckBox>
+            
+            <CheckBox x:Name="checkBoxWindZ" Grid.Row="6" Grid.Column="5"  Grid.ColumnSpan="1"
+                      Checked="checkBoxWindZ_Checked" Unchecked="checkBoxWindZ_UnChecked" 
+                      VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="False">
+            </CheckBox>
+            
+            <CheckBox x:Name="checkBoxNotionalInclude" Grid.Row="1" Grid.Column="7"  Grid.ColumnSpan="1"
+                      Checked="checkBoxNotionalInclude_Checked" Unchecked="checkBoxNotionalInclude_UnChecked" 
+                      VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="False">
+            </CheckBox>
+            <CheckBox x:Name="checkBoxEHFInclude" Grid.Row="2" Grid.Column="7"  Grid.ColumnSpan="1"
+                      Checked="checkBoxEHFInclude_Checked" Unchecked="checkBoxEHFInclude_UnChecked" 
+                      VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="False">
+            </CheckBox>
+            <CheckBox x:Name="checkBoxTEMPInclude" Grid.Row="3" Grid.Column="7"  Grid.ColumnSpan="1"
+                      Checked="checkBoxTEMPInclude_Checked" Unchecked="checkBoxTEMPInclude_UnChecked" 
+                      VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="False">
+            </CheckBox>
+            <CheckBox x:Name="checkBoxUPLIFTInclude" Grid.Row="4" Grid.Column="7"  Grid.ColumnSpan="1"
+                      Checked="checkBoxUPLIFTInclude_Checked" Unchecked="checkBoxUPLIFTInclude_UnChecked" 
+                      VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="False">
+            </CheckBox>
+            <CheckBox x:Name="checkBoxSEISMICInclude" Grid.Row="5" Grid.Column="7"  Grid.ColumnSpan="1"
+                      Checked="checkBoxSEISMICInclude_Checked" Unchecked="checkBoxSEISMICInclude_UnChecked" 
+                      VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="False">
+            </CheckBox>
+            <CheckBox x:Name="checkBoxWINDInclude" Grid.Row="6" Grid.Column="7"  Grid.ColumnSpan="1"
+                      Checked="checkBoxWINDInclude_Checked" Unchecked="checkBoxWINDInclude_UnChecked" 
+                      VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="False">
+            </CheckBox>
+
+
+            <TextBox Grid.Column="1" x:Name="textBoxNameTEMP" Grid.Row="3"></TextBox>
+            <TextBox Grid.Column="3" x:Name="textBoxFactorNotional" Grid.Row="1" InputScope="Digits" ></TextBox>
+            <TextBox Grid.Column="3" x:Name="textBoxFactorEHF" Grid.Row="2" InputScope="Digits" ></TextBox>
+
+
+            <ComboBox  Grid.Row="3" Grid.Column="2" x:Name="comBoxTEMP" 
+                       VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+                       Text="0.5" ></ComboBox>
+            <ComboBox  Grid.Row="6" Grid.Column="2" x:Name="comBoxWind" 
+                       VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+                       Text="0.5" ></ComboBox>
+            <ComboBox  Grid.Row="6" Grid.Column="6" x:Name="comBoxWindDirections" 
+                       VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+                       Text="0.5" ></ComboBox>
+
+
+            
+        </Grid>
+
+        <Grid Grid.Row="3">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <Label Grid.Row="0" Grid.Column="0" Content="Notes" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+            <Label Grid.Row="1" Grid.Column="0" Content="1) For Seismic, please manually input the response spectrum. From the Load Case created through this plugin, please edit from there instead of creating a new load case so that load combinations will not be affected." VerticalAlignment="Center" HorizontalAlignment="Left"/>
+            <Label Grid.Row="2" Grid.Column="0" Content="2) Wind Load is also created as other load for now for simplicity. Please change the load pattern as required to input proper wind factors if you would like to use diaphragm or shell extents for wind load application." VerticalAlignment="Center" HorizontalAlignment="Left"/>
+        </Grid>
+
+
+        <Grid Grid.Row="4">
+            <StackPanel Grid.Row="10" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button x:Name="buttonCancel" Content="Cancel" Width="100" Click="buttonCancel_Click"/>
+            <Button x:Name="buttonOk" Content="OK" Width="100" Click="buttonOk_Click"/>
+            </StackPanel>
+        </Grid>
+
+
+    </Grid>
+            
+
+</Window>

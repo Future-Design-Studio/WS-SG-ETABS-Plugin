@@ -113,6 +113,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="src\HelperPlot.cs" />
     <Compile Include="src\HelperUI.cs" />
+    <Compile Include="src\load_combo_EN\WindowLoadComboMain.xaml.cs">
+      <DependentUpon>WindowLoadComboMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\load_combo_EN\WindowLoadComboResult.xaml.cs">
+      <DependentUpon>WindowLoadComboResult.xaml</DependentUpon>
+    </Compile>
     <Compile Include="src\plot_reaction\FunctionPlotReaction.cs" />
     <Compile Include="src\plot_reaction\WindowPlotReactionMain.xaml.cs">
       <DependentUpon>WindowPlotReactionMain.xaml</DependentUpon>
@@ -146,6 +152,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="src\copy_properties\WindowCopyPropResult.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\load_combo_EN\WindowLoadComboMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\load_combo_EN\WindowLoadComboResult.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
