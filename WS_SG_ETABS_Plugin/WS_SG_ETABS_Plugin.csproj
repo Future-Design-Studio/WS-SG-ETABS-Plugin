@@ -113,6 +113,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="src\HelperPlot.cs" />
     <Compile Include="src\HelperUI.cs" />
+    <Compile Include="src\load_combo_EN\FunctionLoadCombo.cs" />
     <Compile Include="src\load_combo_EN\WindowLoadComboMain.xaml.cs">
       <DependentUpon>WindowLoadComboMain.xaml</DependentUpon>
     </Compile>
