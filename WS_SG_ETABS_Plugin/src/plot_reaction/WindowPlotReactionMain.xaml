@@ -118,7 +118,7 @@
             </Grid.ColumnDefinitions>
 
             <Label Grid.Column="0" VerticalAlignment="Center">Load case or load combination to plot:</Label>
-            <ComboBox Grid.Column="1" x:Name="comBoxOutputCase" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"></ComboBox>
+            <ComboBox Grid.Column="1" x:Name="comBoxOutputCase" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" SelectionChanged="comBoxOutputCase_SelectionChanged"></ComboBox>
         </Grid>
 
         <Grid Grid.Row="4" Margin="10 0 10 0">

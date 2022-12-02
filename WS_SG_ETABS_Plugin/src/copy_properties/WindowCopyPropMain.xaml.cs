@@ -180,10 +180,14 @@ namespace WS_SG_ETABS_Plugin.src.copy_properties
             checkBoxLoadCase.IsChecked = false;
         }
 
+
+
         #endregion
 
+        private void checkBoxAreaSec_Checked(object sender, RoutedEventArgs e)
+        {
 
-
+        }
     } 
 
 }

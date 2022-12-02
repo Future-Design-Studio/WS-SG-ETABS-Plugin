@@ -33,6 +33,8 @@
                 <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
             <Grid.RowDefinitions>
@@ -43,21 +45,29 @@
             </Grid.RowDefinitions>
 
             <Label Grid.Column="0" Content="Load Pattern Type" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="2"/>
-            <Label Grid.Column="2" Content="Load Pattern Name" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <Label Grid.Column="2" Content="Use Existing Load Pattern?" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1"/>
+            <Label Grid.Column="3" Content="Load Pattern Name" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="2"/>
 
             <Label Grid.Row="1" Content="Gk" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             <Label Grid.Row="1" Grid.Column="1" Content="Dead Load" VerticalAlignment="Center" HorizontalAlignment="Center"/>
 
-            <TextBox Grid.Column="2" x:Name="textBoxNameDL" Grid.Row="1"></TextBox>
+            <CheckBox x:Name="checkBoxEXISTINGDL" Grid.Row="1" Grid.Column="2"  Grid.ColumnSpan="1"
+                      Checked="checkBoxEXISTINGDL_Checked" Unchecked="checkBoxEXISTINGDL_UnChecked" 
+                      VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="True">
+            </CheckBox>
+            <ComboBox  Grid.Row="1" Grid.Column="3" x:Name="comBoxEXISTINGDL" 
+                       VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+                       Text="0.5" SelectionChanged="comBoxEXISTINGDL_SelectionChanged"></ComboBox>
+            <TextBox Grid.Column="4" x:Name="textBoxNameDL" Grid.Row="1" IsEnabled="False"></TextBox>
 
-            <Button Grid.Row="1" Grid.Column="3" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" ></Button>
+            <Button Grid.Row="1" Grid.Column="5" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" ></Button>
 
-            <ListBox x:Name="listBoxChoosenDL" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="4" 
+            <ListBox x:Name="listBoxChoosenDL" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="6" 
                      d:ItemsSource="{d:SampleData ItemCount=1}" SelectionMode="Single"
                      Margin="0 10 0 10" SelectionChanged="listBoxChoosenGroup_SelectionChanged">
             </ListBox>
 
-            <Button Grid.Row="3" Grid.Column="3" Content="Remove" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" ></Button>
+            <Button Grid.Row="3" Grid.Column="5" Content="Remove" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" ></Button>
 
         </Grid>
 
@@ -73,6 +83,8 @@
                 <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
             <Grid.RowDefinitions>
@@ -83,21 +95,29 @@
             </Grid.RowDefinitions>
 
             <Label Grid.Column="0" Content="Load Pattern Type" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="2"/>
-            <Label Grid.Column="2" Content="Load Pattern Name" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <Label Grid.Column="2" Content="Use Existing Load Pattern?" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1"/>
+            <Label Grid.Column="3" Content="Load Pattern Name" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="2"/>
 
             <Label Grid.Row="1" Content="Gk" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             <Label Grid.Row="1" Grid.Column="1" Content="Superimposed Dead Load" VerticalAlignment="Center" HorizontalAlignment="Center"/>
 
-            <TextBox Grid.Column="2" x:Name="textBoxNameSDL" Grid.Row="1"></TextBox>
+            <CheckBox x:Name="checkBoxEXISTINGSDL" Grid.Row="1" Grid.Column="2"  Grid.ColumnSpan="1"
+                      Checked="checkBoxEXISTINGSDL_Checked" Unchecked="checkBoxEXISTINGSDL_UnChecked" 
+                      VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="True">
+            </CheckBox>
+            <ComboBox  Grid.Row="1" Grid.Column="3" x:Name="comBoxEXISTINGSDL" 
+                       VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+                       Text="0.5" SelectionChanged="comBoxEXISTINGSDL_SelectionChanged"></ComboBox>
+            <TextBox Grid.Column="4" x:Name="textBoxNameSDL" Grid.Row="1" IsEnabled="False"></TextBox>
 
-            <Button Grid.Row="1" Grid.Column="3" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" ></Button>
+            <Button Grid.Row="1" Grid.Column="5" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" ></Button>
 
-            <ListBox x:Name="listBoxChoosenSDL" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="4" 
+            <ListBox x:Name="listBoxChoosenSDL" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="6" 
                      d:ItemsSource="{d:SampleData ItemCount=4}" SelectionMode="Single"
                      Margin="0 10 0 10" SelectionChanged="listBoxChoosenSDL_SelectionChanged">
             </ListBox>
 
-            <Button Grid.Row="3" Grid.Column="3" Content="Remove" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" ></Button>
+            <Button Grid.Row="3" Grid.Column="5" Content="Remove" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" ></Button>
 
         </Grid>
 
@@ -106,9 +126,11 @@
 
 
 
-        <Grid Grid.Row="3">
+        <Grid Grid.Row="3" HorizontalAlignment="Left" Margin="0,0,0,236" Grid.RowSpan="2" Width="1900">
 
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
@@ -124,26 +146,34 @@
             </Grid.RowDefinitions>
 
             <Label Grid.Column="0" Content="Load Pattern Type" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="2"/>
-            <Label Grid.Column="2" Content="Load Pattern Name" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-            <Label Grid.Column="3" Content="Category for ψ factor" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <Label Grid.Column="2" Content="Use Existing Load Pattern?" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1"/>
+            <Label Grid.Column="3" Content="Load Pattern Name" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="2"/>
+            <Label Grid.Column="5" Content="Category for ψ factor" VerticalAlignment="Center" HorizontalAlignment="Center"/>
 
             <Label Grid.Row="1" Content="Qk" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             <Label Grid.Row="1" Grid.Column="1" Content="Live Load" VerticalAlignment="Center" HorizontalAlignment="Center"/>
 
-            <TextBox Grid.Column="2" x:Name="textBoxNameLL" Grid.Row="1"></TextBox>
+            <CheckBox x:Name="checkBoxEXISTINGLL" Grid.Row="1" Grid.Column="2"  Grid.ColumnSpan="1"
+                      Checked="checkBoxEXISTINGLL_Checked" Unchecked="checkBoxEXISTINGLL_UnChecked" 
+                      VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="True">
+            </CheckBox>
+            <ComboBox  Grid.Row="1" Grid.Column="3" x:Name="comBoxEXISTINGLL" 
+                       VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+                       Text="0.5" SelectionChanged="comBoxEXISTINGLL_SelectionChanged"></ComboBox>
+            <TextBox Grid.Column="4" x:Name="textBoxNameLL" Grid.Row="1" IsEnabled="False"></TextBox>
 
-            <ComboBox  Grid.Row="1" Grid.Column="3" x:Name="comBoxLL" 
+            <ComboBox  Grid.Row="1" Grid.Column="5" x:Name="comBoxLL" 
                        VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
                        Text="0.5" SelectionChanged="comBoxLL_SelectionChanged"></ComboBox>
 
-            <Button Grid.Row="1" Grid.Column="4" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" ></Button>
+            <Button Grid.Row="1" Grid.Column="6" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" ></Button>
 
-            <ListBox x:Name="listBoxChoosenLL" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="5" 
+            <ListBox x:Name="listBoxChoosenLL" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="7" 
                      d:ItemsSource="{d:SampleData ItemCount=10}" SelectionMode="Single"
                      Margin="0 10 0 10" SelectionChanged="listBoxChoosenLL_SelectionChanged">
             </ListBox>
 
-            <Button Grid.Row="3" Grid.Column="4" Content="Remove" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" ></Button>
+            <Button Grid.Row="3" Grid.Column="6" Content="Remove" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" ></Button>
 
         </Grid>
 
@@ -162,6 +192,8 @@
                 <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
             <Grid.RowDefinitions>
@@ -173,47 +205,62 @@
             </Grid.RowDefinitions>
 
             <Label Grid.Column="0" Content="Load Pattern Type" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="2"/>
-            <Label Grid.Column="2" Content="Load Pattern Name" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-            <Label Grid.Column="3" Content="Category for ψ factor" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-            <Label Grid.Column="4" Content="Consider +/- ?" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-            <Label Grid.Column="5" Content="Number of Directions" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <Label Grid.Column="2" Content="Use Existing Load Pattern?" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1"/>
+            <Label Grid.Column="3" Content="Load Pattern Name" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="2"/>
+            <Label Grid.Column="5" Content="Category for ψ factor" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <Label Grid.Column="6" Content="Consider +/- ?" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <Label Grid.Column="7" Content="Number of Directions" VerticalAlignment="Center" HorizontalAlignment="Center"/>
 
             <Label Grid.Row="1" Content="Qk" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.RowSpan="2"/>
             <Label Grid.Row="1" Grid.Column="1" Content="Wind Load" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             <Label Grid.Row="2" Grid.Column="1" Content="Wind Vertical Load" VerticalAlignment="Center" HorizontalAlignment="Center"/>
 
-            <TextBox Grid.Column="2" x:Name="textBoxNameWIND" Grid.Row="1"></TextBox>
-            <TextBox Grid.Column="2" x:Name="textBoxNameWINDVERTICAL" Grid.Row="2"></TextBox>
+            <CheckBox x:Name="checkBoxEXISTINGWIND" Grid.Row="1" Grid.Column="2"  Grid.ColumnSpan="1"
+                      Checked="checkBoxEXISTINGWIND_Checked" Unchecked="checkBoxEXISTINGWIND_UnChecked" 
+                      VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="True">
+            </CheckBox>
+            <ComboBox  Grid.Row="1" Grid.Column="3" x:Name="comBoxEXISTINGWIND" 
+                       VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+                       Text="0.5" SelectionChanged="comBoxEXISTINGWIND_SelectionChanged"></ComboBox>
+            <TextBox Grid.Column="4" x:Name="textBoxNameWIND" Grid.Row="1" IsEnabled="False"></TextBox>
+            <CheckBox x:Name="checkBoxEXISTINGWINDVERTICAL" Grid.Row="2" Grid.Column="2"  Grid.ColumnSpan="1"
+                      Checked="checkBoxEXISTINGWINDVERTICAL_Checked" Unchecked="checkBoxEXISTINGWINDVERTICAL_UnChecked" 
+                      VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="True">
+            </CheckBox>
+            <ComboBox  Grid.Row="2" Grid.Column="3" x:Name="comBoxEXISTINGWINDVERTICAL" 
+                       VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+                       Text="0.5" SelectionChanged="comBoxEXISTINGWINDVERTICAL_SelectionChanged"></ComboBox>
+            <TextBox Grid.Column="4" x:Name="textBoxNameWINDVERTICAL" Grid.Row="2" IsEnabled="False"></TextBox>
 
-            <ComboBox  Grid.Row="1" Grid.Column="3" x:Name="comBoxWIND" 
+            <ComboBox  Grid.Row="1" Grid.Column="5" x:Name="comBoxWIND" 
                        VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
                        Text="0.5"></ComboBox>
-            <ComboBox  Grid.Row="2" Grid.Column="3" x:Name="comBoxWINDVERTICAL" 
+            <ComboBox  Grid.Row="2" Grid.Column="5" x:Name="comBoxWINDVERTICAL" 
                        VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
                        Text="0.5"></ComboBox>
 
-            <CheckBox x:Name="checkBoxWIND" Grid.Row="1" Grid.Column="4"  Grid.ColumnSpan="1"
+            <CheckBox x:Name="checkBoxWIND" Grid.Row="1" Grid.Column="6"  Grid.ColumnSpan="1"
                       Checked="checkBoxWIND_Checked" Unchecked="checkBoxWIND_UnChecked" 
                       VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="False">
             </CheckBox>
-            <CheckBox x:Name="checkBoxWINDVERTICAL" Grid.Row="2" Grid.Column="4"  Grid.ColumnSpan="1"
+            <CheckBox x:Name="checkBoxWINDVERTICAL" Grid.Row="2" Grid.Column="6"  Grid.ColumnSpan="1"
                       Checked="checkBoxWINDVERTICAL_Checked" Unchecked="checkBoxWINDVERTICAL_UnChecked" 
                       VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="False">
             </CheckBox>
 
-            <ComboBox  Grid.Row="1" Grid.Column="5" x:Name="comBoxWINDDIRECTION" 
+            <ComboBox  Grid.Row="1" Grid.Column="7" x:Name="comBoxWINDDIRECTION" 
                        VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
                        Text="0.5"></ComboBox>
 
-            <Button Grid.Row="1" Grid.Column="6" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" ></Button>
-            <Button Grid.Row="2" Grid.Column="6" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" ></Button>
+            <Button Grid.Row="1" Grid.Column="8" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" ></Button>
+            <Button Grid.Row="2" Grid.Column="8" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" ></Button>
 
-            <ListBox x:Name="listBoxChoosenWIND" Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="7" 
+            <ListBox x:Name="listBoxChoosenWIND" Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="9" 
                      d:ItemsSource="{d:SampleData ItemCount=10}" SelectionMode="Single"
                      Margin="0 10 0 10" SelectionChanged="listBoxChoosenWIND_SelectionChanged">
             </ListBox>
 
-            <Button Grid.Row="4" Grid.Column="6" Content="Remove" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" ></Button>
+            <Button Grid.Row="4" Grid.Column="8" Content="Remove" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" ></Button>
 
         </Grid>
 
@@ -264,6 +311,7 @@
                 <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
             <Grid.RowDefinitions>
@@ -274,32 +322,34 @@
             </Grid.RowDefinitions>
 
             <Label Grid.Column="0" Content="Load Pattern Type" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="2"/>
-            <Label Grid.Column="2" Content="Load Pattern Name" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-            <Label Grid.Column="3" Content="Category for ψ factor" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-            <Label Grid.Column="4" Content="Consider +/- ?" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <Label Grid.Column="2" Content="Use Existing Load Pattern?" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1"/>
+            <Label Grid.Column="3" Content="Load Pattern Name" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="2"/>
+            <Label Grid.Column="5" Content="Category for ψ factor" VerticalAlignment="Center" HorizontalAlignment="Center"/>
 
             <Label Grid.Row="1" Grid.Column="1" Content="Temperature Load" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             <Label Grid.Row="1" Grid.Column="0" Content="Qk" VerticalAlignment="Center" HorizontalAlignment="Center"/>
 
-            <TextBox Grid.Column="2" x:Name="textBoxNameTEMP" Grid.Row="1"></TextBox>
+            <CheckBox x:Name="checkBoxEXISTINGTEMP" Grid.Row="1" Grid.Column="2"  Grid.ColumnSpan="1"
+                      Checked="checkBoxEXISTINGTEMP_Checked" Unchecked="checkBoxEXISTINGTEMP_UnChecked" 
+                      VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="True">
+            </CheckBox>
+            <ComboBox  Grid.Row="1" Grid.Column="3" x:Name="comBoxEXISTINGTEMP" 
+                       VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+                       Text="0.5" SelectionChanged="comBoxEXISTINGTEMP_SelectionChanged"></ComboBox>
+            <TextBox Grid.Column="4" x:Name="textBoxNameTEMP" Grid.Row="1" IsEnabled="False"></TextBox>
 
-            <ComboBox  Grid.Row="1" Grid.Column="3" x:Name="comBoxTEMP" 
+            <ComboBox  Grid.Row="1" Grid.Column="5" x:Name="comBoxTEMP" 
                        VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
                        Text="0.5"></ComboBox>
 
-            <CheckBox x:Name="checkBoxTEMP" Grid.Row="1" Grid.Column="4"  Grid.ColumnSpan="1"
-                      Checked="checkBoxTEMP_Checked" Unchecked="checkBoxTEMP_UnChecked" 
-                      VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="False">
-            </CheckBox>
+            <Button Grid.Row="1" Grid.Column="6" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" ></Button>
 
-            <Button Grid.Row="1" Grid.Column="5" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" ></Button>
-
-            <ListBox x:Name="listBoxChoosenTEMP" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="6" 
+            <ListBox x:Name="listBoxChoosenTEMP" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="7" 
                      d:ItemsSource="{d:SampleData ItemCount=2}" SelectionMode="Single"
                      Margin="0 10 0 10" SelectionChanged="listBoxChoosenTEMP_SelectionChanged">
             </ListBox>
 
-            <Button Grid.Row="3" Grid.Column="5" Content="Remove" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" ></Button>
+            <Button Grid.Row="3" Grid.Column="6" Content="Remove" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" ></Button>
 
         </Grid>
 
@@ -313,6 +363,8 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
             <Grid.RowDefinitions>
@@ -323,17 +375,27 @@
             </Grid.RowDefinitions>
 
             <Label Grid.Column="0" Content="Load Pattern Type" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1"/>
+            <Label Grid.Column="1" Content="Use Existing Load Pattern?" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1"/>
+            <Label Grid.Column="2" Content="Load Pattern Name" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1"/>
 
             <Label Grid.Row="1" Grid.Column="0" Content="Seismic Load" VerticalAlignment="Center" HorizontalAlignment="Center"/>
 
-            <Button Grid.Row="1" Grid.Column="5" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" ></Button>
+            <CheckBox x:Name="checkBoxEXISTINGSEISMIC" Grid.Row="1" Grid.Column="1"  Grid.ColumnSpan="1"
+                      Checked="checkBoxEXISTINGSEISMIC_Checked" Unchecked="checkBoxEXISTINGSEISMIC_UnChecked" 
+                      VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="True">
+            </CheckBox>
+            <ComboBox  Grid.Row="1" Grid.Column="2" x:Name="comBoxEXISTINGSEISMIC" 
+                       VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+                       Text="0.5" SelectionChanged="comBoxEXISTINGSEISMIC_SelectionChanged"></ComboBox>
+            
+            <Button Grid.Row="1" Grid.Column="3" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" ></Button>
 
-            <ListBox x:Name="listBoxChoosenSEISMIC" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" 
+            <ListBox x:Name="listBoxChoosenSEISMIC" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="4" 
                      d:ItemsSource="{d:SampleData ItemCount=3}" SelectionMode="Single"
                      Margin="0 10 0 10" SelectionChanged="listBoxChoosenSEISMIC_SelectionChanged">
             </ListBox>
 
-            <Button Grid.Row="3" Grid.Column="1" Content="Remove" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" ></Button>
+            <Button Grid.Row="3" Grid.Column="3" Content="Remove" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" ></Button>
 
         </Grid>
 
@@ -349,6 +411,8 @@
                 <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
             <Grid.RowDefinitions>
@@ -359,26 +423,33 @@
             </Grid.RowDefinitions>
 
             <Label Grid.Column="0" Content="Load Pattern Type" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1"/>
-            <Label Grid.Column="1" Content="Load Pattern Name" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-            <Label Grid.Column="2" Content="Consider +/- ?" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <Label Grid.Column="2" Content="Load Pattern Name" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="2"/>
+            <Label Grid.Column="4" Content="Consider +/- ?" VerticalAlignment="Center" HorizontalAlignment="Center"/>
 
             <Label Grid.Row="1" Grid.Column="0" Content="Accidental Load" VerticalAlignment="Center" HorizontalAlignment="Center"/>
 
-            <TextBox Grid.Column="1" x:Name="textBoxNameAL" Grid.Row="1"></TextBox>
+            <CheckBox x:Name="checkBoxEXISTINGAL" Grid.Row="1" Grid.Column="1"  Grid.ColumnSpan="1"
+                      Checked="checkBoxEXISTINGAL_Checked" Unchecked="checkBoxEXISTINGAL_UnChecked" 
+                      VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="True">
+            </CheckBox>
+            <ComboBox  Grid.Row="1" Grid.Column="2" x:Name="comBoxEXISTINGAL" 
+                       VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+                       Text="0.5" SelectionChanged="comBoxEXISTINGAL_SelectionChanged"></ComboBox>
+            <TextBox Grid.Column="3" x:Name="textBoxNameAL" Grid.Row="1" IsEnabled="False"></TextBox>
 
-            <CheckBox x:Name="checkBoxAL" Grid.Row="1" Grid.Column="2"  Grid.ColumnSpan="1"
+            <CheckBox x:Name="checkBoxAL" Grid.Row="1" Grid.Column="4"  Grid.ColumnSpan="1"
                       Checked="checkBoxAL_Checked" Unchecked="checkBoxAL_UnChecked" 
                       VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="False">
             </CheckBox>
 
-            <Button Grid.Row="1" Grid.Column="3" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" ></Button>
+            <Button Grid.Row="1" Grid.Column="5" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" ></Button>
 
-            <ListBox x:Name="listBoxChoosenAL" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="4" 
+            <ListBox x:Name="listBoxChoosenAL" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="6" 
                      d:ItemsSource="{d:SampleData ItemCount=4}" SelectionMode="Single"
                      Margin="0 10 0 10" SelectionChanged="listBoxChoosenAL_SelectionChanged">
             </ListBox>
 
-            <Button Grid.Row="3" Grid.Column="3" Content="Remove" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" ></Button>
+            <Button Grid.Row="3" Grid.Column="5" Content="Remove" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" ></Button>
 
         </Grid>
 
@@ -392,6 +463,8 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
             <Grid.RowDefinitions>
@@ -402,17 +475,27 @@
             </Grid.RowDefinitions>
 
             <Label Grid.Column="0" Content="Load Pattern Type" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1"/>
+            <Label Grid.Column="1" Content="Use Existing Load Pattern?" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1"/>
+            <Label Grid.Column="2" Content="Load Pattern Name" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1"/>
 
             <Label Grid.Row="1" Grid.Column="0" Content="Uplift Load" VerticalAlignment="Center" HorizontalAlignment="Center"/>
 
-            <Button Grid.Row="1" Grid.Column="5" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" ></Button>
+            <CheckBox x:Name="checkBoxEXISTINGUPLIFT" Grid.Row="1" Grid.Column="1"  Grid.ColumnSpan="1"
+                      Checked="checkBoxEXISTINGUPLIFT_Checked" Unchecked="checkBoxEXISTINGUPLIFT_UnChecked" 
+                      VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="True">
+            </CheckBox>
+            <ComboBox  Grid.Row="1" Grid.Column="2" x:Name="comBoxEXISTINGUPLIFT" 
+                       VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+                       Text="0.5" SelectionChanged="comBoxEXISTINGUPLIFT_SelectionChanged"></ComboBox>
+            
+            <Button Grid.Row="1" Grid.Column="3" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" ></Button>
 
-            <ListBox x:Name="listBoxChoosenUPLIFT" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" 
+            <ListBox x:Name="listBoxChoosenUPLIFT" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="4" 
                      d:ItemsSource="{d:SampleData ItemCount=1}" SelectionMode="Single"
                      Margin="0 10 0 10" SelectionChanged="listBoxChoosenUPLIFT_SelectionChanged">
             </ListBox>
 
-            <Button Grid.Row="3" Grid.Column="1" Content="Remove" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" ></Button>
+            <Button Grid.Row="3" Grid.Column="3" Content="Remove" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" ></Button>
 
         </Grid>
 

@@ -23,7 +23,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
     /// </summary>
     public partial class WindowPlotReactionMain : Window
     {
-        cSapModel _SapModel;
+        cSapModel _SapModel;`
         cPluginCallback _Plugin;
 
         public WindowPlotReactionMain(cSapModel SapModel, cPluginCallback Plugin)
@@ -237,8 +237,12 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
 
 
 
+
         #endregion
 
+        private void comBoxOutputCase_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
 
+        }
     }
 }

@@ -61,7 +61,7 @@
                     <Label Content="Property Definition"></Label>
                     <CheckBox Name="checkBoxMaterial" Content="Materials" Checked="checkBoxMaterial_Checked" Unchecked="checkBoxMaterial_Unchecked"></CheckBox>
                     <CheckBox Name="checkBoxFrameSec" Content="Frame section properties" IsEnabled="False"></CheckBox>
-                    <CheckBox Name="checkBoxAreaSec" Content="Area section properties" IsEnabled="False"></CheckBox>
+                    <CheckBox Name="checkBoxAreaSec" Content="Area section properties" IsEnabled="False" Checked="checkBoxAreaSec_Checked"></CheckBox>
                     <CheckBox Name="checkBoxLinkSec" Content="Link section properties"></CheckBox>
                 </StackPanel>
 
