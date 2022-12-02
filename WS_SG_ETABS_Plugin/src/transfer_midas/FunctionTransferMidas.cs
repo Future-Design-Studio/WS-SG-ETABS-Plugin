@@ -29,7 +29,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
             src.HelperEtabs.SetOutputUnit(Sap, eForce.kN, eLength.m, eTemperature.C);
 
             //List of database table keys
-            Dictionary<string, List<string>> databaseTableKeys = new Dictionary<string, List<string>>()
+            Dictionary<string, List<string>> databaseTableKeysDisplay = new Dictionary<string, List<string>>()
             {
                 { "material", new List<string>(){"Material Properties - Acceptance Criteria",
                                                     "Material Properties - Aluminum Data",
@@ -98,6 +98,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                                                     "Frame Section Property Definitions - Steel Rod",
                                                     "Frame Section Property Definitions - Steel Tee",
                                                     "Frame Section Property Definitions - Steel Tube",
+                                                    "Frame Section Property Definitions - Summary"
                                                     } },
                 {"areaSec", new List<string>() {"Slab Property Definitions",
                                                     "Slab Property Definitions - Layers",
@@ -126,6 +127,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                 {"massSource", new List<string>() {"Mass Source Definition" } },
                 {"pDelta", new List<string>() { "P-Delta Option Definition" } },
                 {"loadPattern", new List<string>() {"Load Pattern Definitions",
+                                                    /*
                                                     "Load Pattern Definitions - Auto Notional Loads",
                                                     "Load Pattern Definitions - Auto Seismic - AS 1170 2007",
                                                     "Load Pattern Definitions - Auto Seismic - ASCE 7-02",
@@ -179,6 +181,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                                                     "Load Pattern Definitions - Auto Wind - TCVN 2737 1995",
                                                     "Load Pattern Definitions - Auto Wind - Turkish TS 498-97",
                                                     "Load Pattern Definitions - Auto Wind - User Loads",
+                                                    */
                                                     "Shell Uniform Load Sets",
                                                     } },
                 {"responseSpectrum", new List<string>() {"Functions - Response Spectrum - User Defined" } },
@@ -197,14 +200,34 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                                                     "Load Case Definitions - Time History - Nonlinear Modal",
                                                     } },
                 {"loadCombination", new List<string>() {"Load Combination Definitions"} },
+                {"objectConnectivity", new List<string>() {"Point Object Connectivity",
+                                                            "Beam Object Connectivity",
+                                                            "Column Object Connectivity",
+                                                            "Brace Object Connectivity",
+                                                            "Frame Assignments - Section Properties",
+                                                            } },
             };
+
+            //add in temporary in selectedDatabaseTables
+            selectedDatabaseTables.Add("objectConnectivity", true);
+
+            //To save material index
+            Dictionary<string, string> nameIndexMaterial = new Dictionary<string, string>();
+
+            //To save section properties material index
+            Dictionary<string, string> nameIndexSecProp = new Dictionary<string, string>();
+            Dictionary<string, string> nameMatIndexSecProp = new Dictionary<string, string>();
+
+            //To save area properties material index
+            Dictionary<string, string> nameIndexAreaProp = new Dictionary<string, string>();
+            Dictionary<string, string> nameMatIndexAreaProp = new Dictionary<string, string>();
 
             //Going through each checkbox and take note of table keys to save
             foreach (KeyValuePair<string, bool?> selectedDatabaseTable in selectedDatabaseTables)
             {
                 if (selectedDatabaseTable.Value == true)
                 {
-                    foreach (KeyValuePair<string, List<string>> databaseTableKey in databaseTableKeys)
+                    foreach (KeyValuePair<string, List<string>> databaseTableKey in databaseTableKeysDisplay)
                     {
                         if (selectedDatabaseTable.Key == databaseTableKey.Key)
                         {
@@ -212,17 +235,27 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                             //Copying material
                             if (databaseTableKey.Key == "material")
                             {
-                                copyMaterialToMidas(Sap, databaseTableKey.Value, textMgt, textWarning);
+                                nameIndexMaterial = copyMaterialToMidas(Sap, databaseTableKey.Value, textMgt, textWarning);
                             }
 
                             if (databaseTableKey.Key == "frameSec")
                             {
-                                copyFrameSecToMidas(Sap, databaseTableKey.Value, textMgt, textWarning);
+                                (nameIndexSecProp, nameMatIndexSecProp) = copyFrameSecToMidas(Sap, databaseTableKey.Value, textMgt, textWarning, nameIndexMaterial);
                             }
 
                             if (databaseTableKey.Key == "areaSec")
                             {
-                                copyAreaSecToMidas(Sap, databaseTableKey.Value, textMgt, textWarning);
+                                (nameIndexAreaProp, nameMatIndexAreaProp) = copyAreaSecToMidas(Sap, databaseTableKey.Value, textMgt, textWarning, nameIndexMaterial);
+                            }
+
+                            if (databaseTableKey.Key == "loadPattern")
+                            {
+                                copyLoadPatternToMidas(Sap, databaseTableKey.Value, textMgt, textWarning);
+                            }
+
+                            if (databaseTableKey.Key == "objectConnectivity")
+                            {
+                                copyObjectConnectivityToMidas(Sap, databaseTableKey.Value, textMgt, textWarning, nameIndexSecProp, nameMatIndexSecProp, nameIndexAreaProp, nameMatIndexAreaProp);
                             }
 
                             //Going through each table key and save it as a flat list
@@ -259,8 +292,11 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
         }
 
         //Method to copy material to MIDAS
-        private static void copyMaterialToMidas(cSapModel Sap, List<string> tableKeys, List<string> textMgt, List<string> textWarning)
+        private static Dictionary<string, string> copyMaterialToMidas(cSapModel Sap, List<string> tableKeys, List<string> textMgt, List<string> textWarning)
         {
+            //List to save name and index
+            Dictionary<string, string> nameIndexMaterial = new Dictionary<string, string>();
+
             //MGTHeader
             textMgt.Add("*MATERIAL");
             textMgt.Add("; i, CONC/STEEL, (name), (spheat=0), (heatco=0), (plast=\"\"), (tunit), (bmass=no), (damp ratio), (2), " +
@@ -273,10 +309,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
 
             (isError, databaseTables) = src.HelperEtabs.GetMultipleTableDisplay(Sap, tableKeys, showWarning);
 
-            if (isError)
-            {
-                return;
-            }
+            //if (isError){return;}
 
             //Placeholder for each table
             List<Dictionary<string, string>> tableGeneral = new List<Dictionary<string, string>>();
@@ -330,6 +363,11 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                     }
                     
                     textMgt.Add($"{index}, CONC, {materialName}, 0, 0, ,C, NO, 0.05, 2, {elasticModulus}, {poissonRatio}, {thermalCoefficient}, {unitWeight}, {unitMass}");
+
+                    //Save material name and index
+                    Dictionary<string, string> nameIndexMaterialSingle = new Dictionary<string, string>() { };
+                    nameIndexMaterial.Add(rowTableGeneral["Material"], Convert.ToString(index));
+
                     index++;
                 }
 
@@ -364,6 +402,11 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                     }
 
                     textMgt.Add($"{index}, STEEL, {materialName}, 0, 0, ,C, NO, 0.05, 2, {elasticModulus}, {poissonRatio}, {thermalCoefficient}, {unitWeight}, {unitMass}");
+
+                    //Save material name and index
+                    Dictionary<string, string> nameIndexMaterialSingle = new Dictionary<string, string>() { };
+                    nameIndexMaterial.Add(rowTableGeneral["Material"], Convert.ToString(index));
+
                     index++;
                 }
 
@@ -419,22 +462,30 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                     double thermalCoefficient = 0;
 
                     textMgt.Add($"{index}, CONC, {materialName}, 0, 0, ,C, NO, 0.05, 2, {elasticModulus}, {poissonRatio}, {thermalCoefficient}, {unitWeight}, {unitMass}");
+
+                    //Save material name and index
+                    Dictionary<string, string> nameIndexMaterialSingle = new Dictionary<string, string>() { };
+                    nameIndexMaterial.Add(rowTableGeneral["Material"], Convert.ToString(index));
+
                     index++;
                 }
             }
 
+            return nameIndexMaterial;
+
         }
 
         //Method to copy frame section to MIDAS
-        private static void copyFrameSecToMidas(cSapModel Sap, List<string> tableKeys, List<string> textMgt, List<string> textWarning)
+        private static (Dictionary<string, string>, Dictionary<string, string>) copyFrameSecToMidas(cSapModel Sap, List<string> tableKeys, List<string> textMgt, List<string> textWarning, 
+            Dictionary<string, string> nameIndexMaterial)
         {
             //MGTHeader
             textMgt.Add("*SECTION");
             textMgt.Add("; i, (section type), (name), (offset=CC), (iCENT=0), (iREF=0), (iHORZ=0), (huser=0), (iVERT=0), (vuser=0), (consider shear deformation=\"YES\"), " +
                 "(consider warping effect=\"NO\"), (shape type), 2, (dimension 1 to 10)");
 
-            //List to save property modifier
-            List<Dictionary<string, double>> propertyModifiers = new List<Dictionary<string,double>>();
+            //List to save name and index
+            Dictionary<string, string> nameIndexSecProp = new Dictionary<string, string>();
 
             bool showWarning = false;
             bool isError = false;
@@ -443,10 +494,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
 
             (isError, databaseTables) = src.HelperEtabs.GetMultipleTableDisplay(Sap, tableKeys, showWarning);
 
-            if (isError)
-            {
-                return;
-            }
+            //if (isError){return;}
 
             //Gothrough each table key to get the needed table
             int index = 1;
@@ -482,9 +530,8 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                         textMgt.Add($"{index}, DBUSER, {name}, CC, 0, 0, 0, 0, 0, 0, YES, NO, {sectionShape}, 2, {depth}, {widthTop}, {webThickness}, {flangeThicknessTop}," +
                             $"{widthBottom}, {flangeThicknessBottom}, {radiusInner}, {radiusOuter}, 0, 0");
 
-                        //Save property modifier
-                        propertyModifierSaver(propertyModifiers, index, Convert.ToDouble(row["AMod"]), Convert.ToDouble(row["A2Mod"]), Convert.ToDouble(row["A3Mod"]),
-                            Convert.ToDouble(row["JMod"]), Convert.ToDouble(row["I2Mod"]), Convert.ToDouble(row["I3Mod"]), Convert.ToDouble(row["MMod"]), Convert.ToDouble(row["WMod"]));
+                        //Save property name and index
+                        nameIndexSecProp.Add( row["Name"], Convert.ToString(index));
 
                         index++;
                     }
@@ -518,6 +565,9 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                         textMgt.Add($"{index}, DBUSER, {name}, CC, 0, 0, 0, 0, 0, 0, YES, NO, {sectionShape}, 2, {depth}, {widthTop}, {webThickness}, {flangeThicknessTop}," +
                             $"{widthBottom}, {flangeThicknessBottom}, {radiusInner}, {radiusOuter}, 0, 0");
 
+                        //Save property name and index
+                        nameIndexSecProp.Add(row["Name"], Convert.ToString(index));
+
                         index++;
                     }
 
@@ -546,6 +596,9 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
 
                         textMgt.Add($"{index}, DBUSER, {name}, CC, 0, 0, 0, 0, 0, 0, YES, NO, {sectionShape}, 2, {depth}, {width}, {webThickness}, {flangeThickness}, 0, 0, 0, 0, 0, 0");
 
+                        //Save property name and index
+                        nameIndexSecProp.Add(row["Name"], Convert.ToString(index));
+
                         index++;
                     }
                 }
@@ -572,6 +625,9 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                         double flangeThickness = Convert.ToDouble(row["tf"]);
 
                         textMgt.Add($"{index}, DBUSER, {name}, CC, 0, 0, 0, 0, 0, 0, YES, NO, {sectionShape}, 2, {depth}, {width}, {webThickness}, {flangeThickness}, 0, 0, 0, 0, 0, 0");
+
+                        //Save property name and index
+                        nameIndexSecProp.Add(row["Name"], Convert.ToString(index));
 
                         index++;
                     }
@@ -602,6 +658,9 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                         textMgt.Add($"{index}, DBUSER, {name}, CC, 0, 0, 0, 0, 0, 0, YES, NO, {sectionShape}, 2, {depth}, {widthSingleAngle}, {webThickness}, {flangeThickness}, " +
                             $"{gap}, 0, 0, 0, 0, 0");
 
+                        //Save property name and index
+                        nameIndexSecProp.Add(row["Name"], Convert.ToString(index));
+
                         index++;
                     }
                 }
@@ -630,6 +689,9 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
 
                         textMgt.Add($"{index}, DBUSER, {name}, CC, 0, 0, 0, 0, 0, 0, YES, NO, {sectionShape}, 2, {depth}, {widthSingleChannel}, {webThickness}, {flangeThickness}, " +
                             $"{gap}, 0, 0, 0, 0, 0");
+
+                        //Save property name and index
+                        nameIndexSecProp.Add(row["Name"], Convert.ToString(index));
 
                         index++;
                     }
@@ -661,6 +723,9 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                         textMgt.Add($"{index}, DBUSER, {name}, CC, 0, 0, 0, 0, 0, 0, YES, NO, {sectionShape}, 2, {depth}, {width}, {webThickness}, {flangeThicknessTop}, " +
                             $"{centerToCenter}, {flangeThicknessBottom}, 0, 0, 0, 0");
 
+                        //Save property name and index
+                        nameIndexSecProp.Add(row["Name"], Convert.ToString(index));
+
                         index++;
                     }
                 }
@@ -685,6 +750,9 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                         double thickness = Convert.ToDouble(row["tw"]);
 
                         textMgt.Add($"{index}, DBUSER, {name}, CC, 0, 0, 0, 0, 0, 0, YES, NO, {sectionShape}, 2, {diameter}, {thickness}, 0, 0, 0, 0, 0, 0, 0, 0");
+
+                        //Save property name and index
+                        nameIndexSecProp.Add(row["Name"], Convert.ToString(index));
 
                         index++;
                     }
@@ -711,6 +779,9 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
 
                         textMgt.Add($"{index}, DBUSER, {name}, CC, 0, 0, 0, 0, 0, 0, YES, NO, {sectionShape}, 2, {depth}, {width}, 0, 0, 0, 0, 0, 0, 0, 0");
 
+                        //Save property name and index
+                        nameIndexSecProp.Add(row["Name"], Convert.ToString(index));
+
                         index++;
                     }
                 }
@@ -734,6 +805,9 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                         double diameter = Convert.ToDouble(row["t3"]);
 
                         textMgt.Add($"{index}, DBUSER, {name}, CC, 0, 0, 0, 0, 0, 0, YES, NO, {sectionShape}, 2, {diameter}, 0, 0, 0, 0, 0, 0, 0, 0, 0");
+
+                        //Save property name and index
+                        nameIndexSecProp.Add(row["Name"], Convert.ToString(index));
 
                         index++;
                     }
@@ -760,6 +834,9 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
 
                         textMgt.Add($"{index}, DBUSER, {name}, CC, 0, 0, 0, 0, 0, 0, YES, NO, {sectionShape}, 2, {depth}, {width}, 0, 0, 0, 0, 0, 0, 0, 0");
 
+                        //Save property name and index
+                        nameIndexSecProp.Add(row["Name"], Convert.ToString(index));
+
                         index++;
                     }
                 }
@@ -783,6 +860,9 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                         double diameter = Convert.ToDouble(row["t3"]);
 
                         textMgt.Add($"{index}, DBUSER, {name}, CC, 0, 0, 0, 0, 0, 0, YES, NO, {sectionShape}, 2, {diameter}, 0, 0, 0, 0, 0, 0, 0, 0, 0");
+
+                        //Save property name and index
+                        nameIndexSecProp.Add(row["Name"], Convert.ToString(index));
 
                         index++;
                     }
@@ -814,6 +894,9 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                         textMgt.Add($"{index}, DBUSER, {name}, CC, 0, 0, 0, 0, 0, 0, YES, NO, {sectionShape}, 2, {depth}, {width}, {webThickness}, {flangeThicknessTop}, " +
                             $"{centerToCenter}, {flangeThicknessBottom}, 0, 0, 0, 0");
 
+                        //Save property name and index
+                        nameIndexSecProp.Add(row["Name"], Convert.ToString(index));
+
                         index++;
                     }
                 }
@@ -838,6 +921,9 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                         double thickness = Convert.ToDouble(row["tw"]);
 
                         textMgt.Add($"{index}, DBUSER, {name}, CC, 0, 0, 0, 0, 0, 0, YES, NO, {sectionShape}, 2, {diameter}, {thickness}, 0, 0, 0, 0, 0, 0, 0, 0");
+
+                        //Save property name and index
+                        nameIndexSecProp.Add(row["Name"], Convert.ToString(index));
 
                         index++;
                     }
@@ -867,6 +953,9 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
 
                         textMgt.Add($"{index}, DBUSER, {name}, CC, 0, 0, 0, 0, 0, 0, YES, NO, {sectionShape}, 2, {depth}, {width}, {thickness}, {radius}," +
                             $"{lip}, 0, 0, 0, 0, 0");
+
+                        //Save property name and index
+                        nameIndexSecProp.Add(row["Name"], Convert.ToString(index));
 
                         index++;
                     }
@@ -898,6 +987,9 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                         textMgt.Add($"{index}, DBUSER, {name}, CC, 0, 0, 0, 0, 0, 0, YES, NO, {sectionShape}, 2, {depth}, {width}, {thickness}, {radius}," +
                             $"{lip}, {lipAngle}, 0, 0, 0, 0");
 
+                        //Save property name and index
+                        nameIndexSecProp.Add(row["Name"], Convert.ToString(index));
+
                         index++;
                     }
                 }
@@ -905,9 +997,22 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                 {
                     //Auto select will not be bring over
                 }
+                else if (databaseTable.TableKey == "Frame Section Property Definitions - Concrete Beam Reinforcing")
+                {
+                    //Concrete beam reinforcing will not be bring over
+                }
+                else if (databaseTable.TableKey == "Frame Section Property Definitions - Concrete Column Reinforcing")
+                {
+                    //Concrete column reinforcing will not be bring over
+                }
+                else if (databaseTable.TableKey == "Frame Section Property Definitions - Summary")
+                {
+                    //Summary will not be bring over
+                }
                 else
                 {
                     if (databaseTable.NumberRecords > 0)
+  
                     {
                         //Show warning that the type cant be converted to midas
                         string warning = $"{databaseTable.TableKey} not supported! Will import as a rectangular section with _CHECK behind its name!";
@@ -936,38 +1041,111 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
 
                             textMgt.Add($"{index}, DBUSER, {name}, CC, 0, 0, 0, 0, 0, 0, YES, NO, {sectionShape}, 2, {depth}, {width}, 0, 0, 0, 0, 0, 0, 0, 0");
 
+                            //Save property name and index
+                            nameIndexSecProp.Add(row["Name"], Convert.ToString(index));
+
                             index++;
                         }
                     }
                 }
             }
-        }
 
-        //Method to save property modifier
-        private static void propertyModifierSaver(List<Dictionary<string,double>> propertyModifiers, int index, double areaMod, double a2Mod, double a3Mod, double jMod, double i2Mod, 
-            double i3Mod, double mMod, double wMod)
-        {
-            Dictionary<string, double> propertyModifier = new Dictionary<string, double>()
+            //List to save material index
+            Dictionary<string, string> nameMatIndexSecProp = new Dictionary<string, string>();
+
+            //MGTHeader for section property stiffness modifier
+            textMgt.Add("*SECT-SCALE");
+            textMgt.Add("; i, (area modifier), (shear minor modifier), (shear major modifier), (torsion modifier), (moment minor modifier), (moment major modifier)");
+
+            //Save stiffness modifiers and material index
+            foreach (src.HelperEtabs.DatabaseTable databaseTable in databaseTables)
             {
-                {"areaMod", areaMod},
-                {"aYMod", a2Mod},
-                {"aZMod", a3Mod},
-                {"torsionalMod", jMod},
-                {"iYMod", i2Mod},
-                {"iZMod", i3Mod},
-                {"weightMod", mMod},
-            };
+                //Finding the summary table
+                if (databaseTable.TableKey == "Frame Section Property Definitions - Summary")
+                {
+                    //Going through each row in the summary table and find the matching name
+                    foreach (Dictionary<string, string> row in databaseTable.TableInList)
+                    {
+                        //Check if section property exist in nameIndexSecProp
+                        if (nameIndexSecProp.ContainsKey(row["Name"]))
+                        {
+                            //Writing modifiers
+                            if (row["Shape"] == "Auto Select" || row["Shape"] == "Joist Section" || row["Shape"] == "Nonprismatic")
+                            {
+                                //For this shape there is no option to add modifiers
+                            }
+                            else
+                            {
+                                //Access using key=name to access value=index
+                                string secPropIndex = nameIndexSecProp[row["Name"]];
 
-            propertyModifiers.Add(propertyModifier);
+                                double areaMod = Convert.ToDouble(row["AMod"]);
+                                double aYMod = Convert.ToDouble(row["A2Mod"]);
+                                double aZMod = Convert.ToDouble(row["A3Mod"]);
+                                double jMod = Convert.ToDouble(row["JMod"]);
+                                double iYMod = Convert.ToDouble(row["I2Mod"]);
+                                double iZMod = Convert.ToDouble(row["I3Mod"]);
+                                double weightMod = 0;
 
+                                if (Convert.ToDouble(row["MMod"]) != Convert.ToDouble(row["WMod"]))
+                                {
+                                    string warning = $"Different weight and mass modifier found in {row["Name"]}. Highest value will be used!";
+                                    MessageBox.Show(warning);
+                                    textWarning.Add(warning);
+
+                                    if (Convert.ToDouble(row["MMod"]) > Convert.ToDouble(row["WMod"]))
+                                    {
+                                        weightMod = Convert.ToDouble(row["MMod"]);
+                                    }
+                                    else
+                                    {
+                                        weightMod = Convert.ToDouble(row["WMod"]);
+                                    }
+                                }
+                                else
+                                {
+                                    weightMod = Convert.ToDouble(row["WMod"]);
+                                }
+
+                                if (areaMod == 1 && aYMod == 1 && aZMod == 1 && jMod == 1 && iYMod == 1 && iZMod == 1 && weightMod == 1)
+                                {
+                                    //if no modifier then do nothing
+                                }
+                                else
+                                {
+                                    textMgt.Add($"{secPropIndex}, {areaMod}, {aYMod}, {aZMod}, {jMod}, {iYMod}, {iZMod}, {weightMod}");
+                                }
+                            }
+
+                            //Finding material index
+                            if (row["Shape"] == "Auto Select" || row["Shape"] == "BU I Cover Plate" || row["Shape"] == "Nonprismatic")
+                            {
+                                //For this shape there is no option to add material thus put material index 0
+                                nameMatIndexSecProp.Add(row["Name"], "0");
+                            }
+                            else
+                            {
+                                string materialIndex = nameIndexMaterial[row["Material"]];
+                                nameMatIndexSecProp.Add(row["Name"], materialIndex);
+                            }
+                        }
+                    }
+                }
+            }
+
+            return (nameIndexSecProp, nameMatIndexSecProp);
         }
 
         //Method to copy area section to MIDAS
-        private static void copyAreaSecToMidas(cSapModel Sap, List<string> tableKeys, List<string> textMgt, List<string> textWarning)
+        private static (Dictionary<string, string>, Dictionary<string, string>) copyAreaSecToMidas(cSapModel Sap, List<string> tableKeys, List<string> textMgt, List<string> textWarning, 
+            Dictionary<string, string> nameIndexMaterial)
         {
             //MGTHeader
             textMgt.Add("*THICKNESS");
             textMgt.Add("; i, (section type=VALUE), (name), (same thickness all around=YES), (thickness in plane), (thickness out of plane=0), (offset=NO), (offtype=0), (value=0)");
+
+            //List to save name and index
+            Dictionary<string, string> nameIndexAreaProp = new Dictionary<string, string>();
 
             bool showWarning = false;
             bool isError = false;
@@ -976,10 +1154,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
 
             (isError, databaseTables) = src.HelperEtabs.GetMultipleTableDisplay(Sap, tableKeys, showWarning);
 
-            if (isError)
-            {
-                return;
-            }
+            //if (isError){return;}
 
             //Gothrough each table key to get the needed table
             int index = 1;
@@ -1032,6 +1207,9 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                             double thickness = 0.1;
 
                             textMgt.Add($"{index}, VALUE, {name}, YES, {thickness}, 0, NO, 0, 0");
+
+                            //Save property name and index
+                            nameIndexAreaProp.Add(row["Name"], Convert.ToString(index));
 
                             index++;
                         }
@@ -1090,6 +1268,9 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                             double thickness = Convert.ToDouble(row["Thickness"]);
 
                             textMgt.Add($"{index}, VALUE, {name}, YES, {thickness}, 0, NO, 0, 0");
+
+                            //Save property name and index
+                            nameIndexAreaProp.Add(row["Name"], Convert.ToString(index));
 
                             index++;
                         }
@@ -1160,6 +1341,9 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
 
                             textMgt.Add($"{index}, VALUE, {name}, YES, {thickness}, 0, NO, 0, 0");
 
+                            //Save property name and index
+                            nameIndexAreaProp.Add(row["Name"], Convert.ToString(index));
+
                             index++;
                         }
                     }
@@ -1184,6 +1368,9 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
 
                         textMgt.Add($"{index}, VALUE, {name}, YES, {thickness}, 0, NO, 0, 0");
 
+                        //Save property name and index
+                        nameIndexAreaProp.Add(row["Name"], Convert.ToString(index));
+
                         index++;
                     }
                 }
@@ -1195,6 +1382,252 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                         string warning = $"{databaseTable.TableKey} not supported! Will NOT be imported!";
                         //MessageBox.Show(warning);
                         textWarning.Add(warning);
+                    }
+                }
+            }
+
+            //List to save material index
+            Dictionary<string, string> nameMatIndexAreaProp = new Dictionary<string, string>();
+
+            //Save stiffness modifiers and material index
+            foreach (src.HelperEtabs.DatabaseTable databaseTable in databaseTables)
+            {
+                //Finding the summary table
+                if (databaseTable.TableKey == "Area Section Property Definitions - Summary")
+                {
+                    //Going through each row in the summary table and find the matching name
+                    foreach (Dictionary<string, string> row in databaseTable.TableInList)
+                    {
+                        //Check if section property exist in nameIndexSecProp
+                        if (nameIndexAreaProp.ContainsKey(row["Name"]))
+                        {
+                            //Finding material index
+                            if (row["Shape"] == "Auto Select" || row["Shape"] == "BU I Cover Plate" || row["Shape"] == "Nonprismatic")
+                            {
+                                //For this shape there is no option to add material thus put material index 0
+                                nameMatIndexAreaProp.Add(row["Name"], "0");
+                            }
+                            else
+                            {
+                                string materialIndex = nameIndexMaterial[row["Material"]];
+                                nameMatIndexAreaProp.Add(row["Name"], materialIndex);
+                            }
+                        }
+                    }
+                }
+            }
+            return (nameIndexAreaProp, nameMatIndexAreaProp);
+        }
+
+        private static void copyLoadPatternToMidas(cSapModel Sap, List<string> tableKeys, List<string> textMgt, List<string> textWarning)
+        {
+            //MGTHeader
+            textMgt.Add("*STLDCASE");
+            textMgt.Add("; (name), (load type), (desc)");
+
+            bool showWarning = false;
+            bool isError = false;
+
+            List<src.HelperEtabs.DatabaseTable> databaseTables = new List<src.HelperEtabs.DatabaseTable>();
+
+            (isError, databaseTables) = src.HelperEtabs.GetMultipleTableDisplay(Sap, tableKeys, showWarning);
+
+            //if (isError){return;}
+
+            //Saving load pattern that contains selfweight
+            Dictionary<string, double> selfWeightLoadPatterns = new Dictionary<string, double>();
+
+            //Gothrough each table key to get the needed table
+            foreach (src.HelperEtabs.DatabaseTable databaseTable in databaseTables)
+            {
+                if (databaseTable.TableKey == "Shell Uniform Load Sets")
+                {
+                    if (databaseTable.NumberRecords != 0)
+                    {
+                        string warning = "Shell uniform load sets not support! Will NOT be transferred!";
+                        MessageBox.Show(warning);
+                        textWarning.Add(warning);
+                    }
+                }
+                else if (databaseTable.TableKey == "Load Pattern Definitions")
+                {
+                    //Placeholder for each table
+                    List<Dictionary<string, string>> table = new List<Dictionary<string, string>>();
+
+                    table = databaseTable.TableInList;
+
+                    foreach (Dictionary<string,string> row in table)
+                    {
+                        if (row["IsAuto"] == "No")
+                        {
+                            string name = row["Name"];
+                            string typeEtabs = row["Type"];
+                            double swMultiplier = Convert.ToDouble(row["SelfWtMult"]);
+
+                            if (swMultiplier != 0)
+                            {
+                                selfWeightLoadPatterns[name] = swMultiplier;
+                            }
+
+                            //Change etabs type to midas type
+                            string typeMidas = "";
+                            if (typeEtabs == "Dead" || typeEtabs == "Super Dead")
+                            {
+                                typeMidas = "D";
+                            }
+                            else if (typeEtabs == "Live" || typeEtabs == "Reducible Live")
+                            {
+                                typeMidas = "L";
+                            }
+                            else if (typeEtabs == "Roof Live")
+                            {
+                                typeMidas = "LR";
+                            }
+                            else if (typeEtabs == "Wind")
+                            {
+                                typeMidas = "W";
+                            }
+                            else if (typeEtabs == "Snow")
+                            {
+                                typeMidas = "S";
+                            }
+                            else if (typeEtabs == "Temperature")
+                            {
+                                typeMidas = "T";
+                            }
+                            else if (typeEtabs == "Other")
+                            {
+                                typeMidas = "USER";
+                            }
+                            else
+                            {
+                                typeMidas = "USER";
+                                name = name + "_CHECK";
+
+                                string warning = $"Load pattern {typeEtabs} not supported in MIDAS. Will import as USER load with _CHECK behind its name!";
+                                MessageBox.Show(warning);
+                                textWarning.Add(warning);
+                            }
+                            textMgt.Add($"{name}, {typeMidas},");
+                        }
+                    }
+
+                    //For self weight
+                    foreach (KeyValuePair<string, double> selfWeightLoadPattern in selfWeightLoadPatterns)
+                    {
+                        string loadPattern = selfWeightLoadPattern.Key;
+                        double swMultiplier = selfWeightLoadPattern.Value;
+
+                        textMgt.Add($"*USE-STLD, {loadPattern}");
+                        textMgt.Add($"*SELFWEIGHT");
+                        textMgt.Add($"0, 0, {-1 * swMultiplier},");
+
+                    }
+                }
+            }
+        }
+
+        private static void copyObjectConnectivityToMidas(cSapModel Sap, List<string> tableKeys, List<string> textMgt, List<string> textWarning,
+            Dictionary<string, string> nameIndexSecProp, Dictionary<string, string> nameMatIndexSecProp, Dictionary<string, string> nameIndexAreaProp, Dictionary<string, string> nameMatIndexAreaProp)
+        {
+            //MGTHeader
+            textMgt.Add("*NODE");
+            textMgt.Add("; i, (X), (Y), (Z)");
+
+            //List to save node name and index
+            Dictionary<string, string> nameIndexNode = new Dictionary<string, string>();
+
+            //List to save frame name and index
+            Dictionary<string, string> nameIndexFrame = new Dictionary<string, string>();
+
+            bool showWarning = false;
+            bool isError = false;
+
+            List<src.HelperEtabs.DatabaseTable> databaseTables = new List<src.HelperEtabs.DatabaseTable>();
+
+            (isError, databaseTables) = src.HelperEtabs.GetMultipleTableDisplay(Sap, tableKeys, showWarning);
+
+            //if (isError){return;}
+
+            //Go to point object connectivity table
+            int index = 1;
+            foreach (src.HelperEtabs.DatabaseTable databaseTable in databaseTables)
+            {
+                if (databaseTable.TableKey == "Point Object Connectivity")
+                {
+                    List<Dictionary<string, string>> table = new List<Dictionary<string, string>>();
+
+                    table = databaseTable.TableInList;
+
+                    foreach (Dictionary<string, string> row in table)
+                    {
+                        double xCoord = Convert.ToDouble(row["X"]);
+                        double yCoord = Convert.ToDouble(row["Y"]);
+                        double zCoord = Convert.ToDouble(row["Z"]);
+
+                        textMgt.Add($"{index}, {xCoord}, {yCoord}, {zCoord}");
+
+                        //Save node name and index
+                        nameIndexNode.Add(row["UniqueName"], Convert.ToString(index));
+
+                        index++;
+                    }
+                }
+            }
+
+            //MGTHeader
+            textMgt.Add("*ELEMENT");
+            textMgt.Add("; i, BEAM, (index material), (index property), (index joint i), (index joint j), (angle=0), (index subtype=0)");
+
+            Dictionary<string, string> secPropAssigned = new Dictionary<string, string>();
+            //Go through frame assignment to get section property for each frame
+            foreach (src.HelperEtabs.DatabaseTable databaseTable in databaseTables)
+            {
+                if (databaseTable.TableKey == "Frame Assignments - Section Properties")
+                {
+                    List<Dictionary<string, string>> table = new List<Dictionary<string, string>>();
+
+                    table = databaseTable.TableInList;
+
+                    foreach (Dictionary<string, string> row in table)
+                    {
+                        secPropAssigned.Add(row["UniqueName"], row["SectProp"]);
+                    }
+                }
+            }
+
+            //Go to beam, brace, column object connectivity table
+            index = 1;
+            foreach (src.HelperEtabs.DatabaseTable databaseTable in databaseTables)
+            {
+                if (databaseTable.TableKey == "Beam Object Connectivity" || databaseTable.TableKey == "Column Object Connectivity" || databaseTable.TableKey == "Brace Object Connectivity")
+                {
+                    List<Dictionary<string, string>> table = new List<Dictionary<string, string>>();
+
+                    table = databaseTable.TableInList;
+
+                    foreach (Dictionary<string, string> row in table)
+                    {
+                        //Finding section property index
+                        string secProp = secPropAssigned[row["UniqueName"]];
+                        string iProp = nameIndexSecProp[secProp];
+
+                        //Finding material index
+                        string iMaterial = nameMatIndexSecProp[secProp];
+
+                        //Finding node index
+                        string ptI = row["UniquePtI"];
+                        string indexPtI = nameIndexNode[ptI];
+
+                        string ptJ = row["UniquePtJ"];
+                        string indexPtJ = nameIndexNode[ptJ];
+
+                        //Save node name and index
+                        nameIndexFrame.Add(row["UniqueName"], Convert.ToString(index));
+
+                        textMgt.Add($"{index}, BEAM, {iMaterial}, {iProp}, {indexPtI}, {indexPtJ}, 0, 0");
+
+                        index++;
                     }
                 }
             }
