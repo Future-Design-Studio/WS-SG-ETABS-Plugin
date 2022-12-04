@@ -206,10 +206,13 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                                                             "Brace Object Connectivity",
                                                             "Frame Assignments - Section Properties",
                                                             } },
+                {"frameAssignments", new List<string>() {"Frame Assignments - Releases and Partial Fixity",
+                                                            } },
             };
 
             //add in temporary in selectedDatabaseTables
             selectedDatabaseTables.Add("objectConnectivity", true);
+            selectedDatabaseTables.Add("frameAssignments", true);
 
             //To save material index
             Dictionary<string, string> nameIndexMaterial = new Dictionary<string, string>();
@@ -221,6 +224,10 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
             //To save area properties material index
             Dictionary<string, string> nameIndexAreaProp = new Dictionary<string, string>();
             Dictionary<string, string> nameMatIndexAreaProp = new Dictionary<string, string>();
+
+            //To save node, frame and area index
+            Dictionary<string, string> nameIndexNode = new Dictionary<string, string>();
+            Dictionary<string, string> nameIndexFrame = new Dictionary<string, string>();
 
             //Going through each checkbox and take note of table keys to save
             foreach (KeyValuePair<string, bool?> selectedDatabaseTable in selectedDatabaseTables)
@@ -255,7 +262,12 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
 
                             if (databaseTableKey.Key == "objectConnectivity")
                             {
-                                copyObjectConnectivityToMidas(Sap, databaseTableKey.Value, textMgt, textWarning, nameIndexSecProp, nameMatIndexSecProp, nameIndexAreaProp, nameMatIndexAreaProp);
+                                (nameIndexNode, nameIndexFrame) = copyObjectConnectivityToMidas(Sap, databaseTableKey.Value, textMgt, textWarning, nameIndexSecProp, nameMatIndexSecProp, nameIndexAreaProp, nameMatIndexAreaProp);
+                            }
+
+                            if (databaseTableKey.Key == "frameAssignments")
+                            {
+                                copyFrameAssignmentsToMidas(Sap, databaseTableKey.Value, textMgt, textWarning, nameIndexNode, nameIndexFrame);
                             }
 
                             //Going through each table key and save it as a flat list
@@ -1527,13 +1539,10 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
             }
         }
 
-        private static void copyObjectConnectivityToMidas(cSapModel Sap, List<string> tableKeys, List<string> textMgt, List<string> textWarning,
-            Dictionary<string, string> nameIndexSecProp, Dictionary<string, string> nameMatIndexSecProp, Dictionary<string, string> nameIndexAreaProp, Dictionary<string, string> nameMatIndexAreaProp)
+        private static (Dictionary<string, string>, Dictionary<string, string>) copyObjectConnectivityToMidas(cSapModel Sap, List<string> tableKeys, List<string> textMgt, 
+            List<string> textWarning, Dictionary<string, string> nameIndexSecProp, Dictionary<string, string> nameMatIndexSecProp, Dictionary<string, string> nameIndexAreaProp, 
+            Dictionary<string, string> nameMatIndexAreaProp)
         {
-            //MGTHeader
-            textMgt.Add("*NODE");
-            textMgt.Add("; i, (X), (Y), (Z)");
-
             //List to save node name and index
             Dictionary<string, string> nameIndexNode = new Dictionary<string, string>();
 
@@ -1548,6 +1557,10 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
             (isError, databaseTables) = src.HelperEtabs.GetMultipleTableDisplay(Sap, tableKeys, showWarning);
 
             //if (isError){return;}
+
+            //MGTHeader
+            textMgt.Add("*NODE");
+            textMgt.Add("; i, (X), (Y), (Z)");
 
             //Go to point object connectivity table
             int index = 1;
@@ -1631,9 +1644,48 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                     }
                 }
             }
+
+            return (nameIndexNode, nameIndexFrame);
         }
 
-        private static void writeTextFile(cSapModel Sap, List<string> textLineByLine, string filename)
+        private static void copyFrameAssignmentsToMidas(cSapModel Sap, List<string> tableKeys, List<string> textMgt, List<string> textWarning,
+            Dictionary<string, string> nameIndexNode, Dictionary<string, string> nameIndexFrame)
+        {
+            //MGTHeader
+            textMgt.Add("*FRAME-RLS");
+            textMgt.Add("; (index element), (insert value=yes), (release condition-i 000000), (spring Fxi), (spring Fyi), (spring Fzi), (spring Mxi), (spring Myi), (spring Mzi) - 1ST LINE");
+            textMgt.Add("                                       (release condition-j 000000), (spring Fxj), (spring Fyj), (spring Fzj), (spring Mxj), (spring Myj), (spring Mzj) - 2ND LINE");
+
+            bool showWarning = false;
+            bool isError = false;
+
+            List<src.HelperEtabs.DatabaseTable> databaseTables = new List<src.HelperEtabs.DatabaseTable>();
+
+            (isError, databaseTables) = src.HelperEtabs.GetMultipleTableDisplay(Sap, tableKeys, showWarning);
+
+            //if (isError){return;}
+
+            //Go to point object connectivity table
+            int index = 1;
+            foreach (src.HelperEtabs.DatabaseTable databaseTable in databaseTables)
+            {
+                if (databaseTable.TableKey == "Point Object Connectivity")
+                {
+                    List<Dictionary<string, string>> table = new List<Dictionary<string, string>>();
+
+                    table = databaseTable.TableInList;
+
+                    foreach (Dictionary<string, string> row in table)
+                    {
+                    }
+                }
+            }
+        }
+
+
+
+
+                private static void writeTextFile(cSapModel Sap, List<string> textLineByLine, string filename)
         {            
             //Text file properties
             string modelPath = Sap.GetModelFilepath() + filename;
