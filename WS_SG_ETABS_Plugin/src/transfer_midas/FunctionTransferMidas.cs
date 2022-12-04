@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 using ETABSv1;
 using System.IO;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
+using System.Reflection;
+using System.Security.Policy;
 
 namespace WS_SG_ETABS_Plugin.src.transfer_midas
 {
@@ -206,13 +209,56 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                                                             "Brace Object Connectivity",
                                                             "Frame Assignments - Section Properties",
                                                             } },
-                {"frameAssignments", new List<string>() {"Frame Assignments - Releases and Partial Fixity",
+                {"frameAssignments", new List<string>() {"Frame Assignments - Additional Mass",
+                                                            "Frame Assignments - Advanced Nonprismatic Section Parameters",
+                                                            "Frame Assignments - Column Splice Overwrites",
+                                                            "Frame Assignments - Corebrace BRB Details",
+                                                            "Frame Assignments - End Length Offsets",
+                                                            "Frame Assignments - Floor Cracking",
+                                                            "Frame Assignments - Frame Auto Mesh Options",
+                                                            "Frame Assignments - Frame Floor Meshing Option",
+                                                            "Frame Assignments - Hinge - ASCE 41-13 - Concrete Beam",
+                                                            "Frame Assignments - Hinge - ASCE 41-13 - Concrete Column",
+                                                            "Frame Assignments - Hinge - ASCE 41-13 - Steel Beam",
+                                                            "Frame Assignments - Hinge - ASCE 41-13 - Steel Brace",
+                                                            "Frame Assignments - Hinge - ASCE 41-13 - Steel Column",
+                                                            "Frame Assignments - Hinge - ASCE 41-17 - Concrete Beam",
+                                                            "Frame Assignments - Hinge - ASCE 41-17 - Concrete Column",
+                                                            "Frame Assignments - Hinge - ASCE 41-17 - Steel Beam",
+                                                            "Frame Assignments - Hinge - ASCE 41-17 - Steel Brace",
+                                                            "Frame Assignments - Hinge - ASCE 41-17 - Steel Column",
+                                                            "Frame Assignments - Hinge - BRB",
+                                                            "Frame Assignments - Hinge - Overwrites",
+                                                            "Frame Assignments - Hinge - Summary",
+                                                            "Frame Assignments - Hinge - User",
+                                                            "Frame Assignments - Insertion Point",
+                                                            "Frame Assignments - Line Springs",
+                                                            "Frame Assignments - Local Axes",
+                                                            "Frame Assignments - Material Overwrites",
+                                                            "Frame Assignments - Moment Frame Beam Connection Type",
+                                                            "Frame Assignments - Output Stations",
+                                                            "Frame Assignments - Pier Labels",
+                                                            "Frame Assignments - Property Modifiers",
+                                                            "Frame Assignments - Rebar Ratio For Creep Analysis",
+                                                            "Frame Assignments - Releases and Partial Fixity",
+                                                            "Frame Assignments - Section Properties",
+                                                            "Frame Assignments - SidePlate Data",
+                                                            "Frame Assignments - Spandrel Labels",
+                                                            "Frame Assignments - Tension and Compression Limits",
                                                             } },
+                {"jointAssignments", new List<string>() {"Joint Assignments - Additional Mass",
+                                            "Joint Assignments - Diaphragms",
+                                            "Joint Assignments - Floor Meshing Option",
+                                            "Joint Assignments - Panel Zone",
+                                            "Joint Assignments - Restraints",
+                                            "Joint Assignments - Springs",
+                                            } },
             };
 
             //add in temporary in selectedDatabaseTables
             selectedDatabaseTables.Add("objectConnectivity", true);
             selectedDatabaseTables.Add("frameAssignments", true);
+            selectedDatabaseTables.Add("jointAssignments", true);
 
             //To save material index
             Dictionary<string, string> nameIndexMaterial = new Dictionary<string, string>();
@@ -265,9 +311,16 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                                 (nameIndexNode, nameIndexFrame) = copyObjectConnectivityToMidas(Sap, databaseTableKey.Value, textMgt, textWarning, nameIndexSecProp, nameMatIndexSecProp, nameIndexAreaProp, nameMatIndexAreaProp);
                             }
 
+                            /*
                             if (databaseTableKey.Key == "frameAssignments")
                             {
                                 copyFrameAssignmentsToMidas(Sap, databaseTableKey.Value, textMgt, textWarning, nameIndexNode, nameIndexFrame);
+                            }
+                            */
+
+                            if (databaseTableKey.Key == "frameAssignments")
+                            {
+
                             }
 
                             //Going through each table key and save it as a flat list
