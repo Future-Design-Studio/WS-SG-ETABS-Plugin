@@ -122,7 +122,7 @@ namespace WS_SG_ETABS_Plugin.src.shell_uni_orient
             if (floorObjConnectivity != null)
             {
                 //Parse floor points from ETABS database to Shell type
-                floorList = GetShellsPoints(floorObjConnectivity);
+                floorList = src.HelperEtabs.GetShellsPoints(floorObjConnectivity);
 
                 //Getting floor normal directions
                 foreach (src.HelperEtabs.Shell floor in floorList)
@@ -149,7 +149,7 @@ namespace WS_SG_ETABS_Plugin.src.shell_uni_orient
             if (wallObjConnectivity != null)
             {
                 //Parse wall points from ETABS database to Shell
-                wallList = GetShellsPoints(wallObjConnectivity);
+                wallList = src.HelperEtabs.GetShellsPoints(wallObjConnectivity);
 
                 //Getting floor normal directions
                 foreach (src.HelperEtabs.Shell wall in wallList)
@@ -176,7 +176,7 @@ namespace WS_SG_ETABS_Plugin.src.shell_uni_orient
             if (nullAreaObjConnectivity != null)
             {
                 //Parse wall points from ETABS database to Shell
-                nullAreaList = GetShellsPoints(nullAreaObjConnectivity);
+                nullAreaList = src.HelperEtabs.GetShellsPoints(nullAreaObjConnectivity);
 
                 //Getting floor normal directions
                 foreach (src.HelperEtabs.Shell nullArea in nullAreaList)
@@ -254,68 +254,6 @@ namespace WS_SG_ETABS_Plugin.src.shell_uni_orient
             isError = false;
             return isError;
 
-        }
-
-        /// <summary>
-        /// Parsing shell edge points from ETABS database
-        /// </summary>
-        /// <param name="shellObjConnectivity"></param>
-        /// <returns></returns>
-        public static List<src.HelperEtabs.Shell> GetShellsPoints (src.HelperEtabs.DatabaseTable shellObjConnectivity)
-        {
-            int index = 0;
-            List<src.HelperEtabs.Shell> shellList = new List<src.HelperEtabs.Shell>();
-
-            while (index < shellObjConnectivity.TableInList.Count) 
-            {
-                List<string> pointList = new List<string>();
-
-                //Assume that row below is same shell so can enter while loop
-                bool rowBelowIsSameShell = true;
-
-                while (rowBelowIsSameShell)
-                {
-                    if (shellObjConnectivity.TableInList[index]["UniquePt1"] != null)
-                    {
-                        pointList.Add(shellObjConnectivity.TableInList[index]["UniquePt1"]);
-                    }
-                    if (shellObjConnectivity.TableInList[index]["UniquePt2"] != null)
-                    {
-                        pointList.Add(shellObjConnectivity.TableInList[index]["UniquePt2"]);
-                    }
-                    if (shellObjConnectivity.TableInList[index]["UniquePt3"] != null)
-                    {
-                        pointList.Add(shellObjConnectivity.TableInList[index]["UniquePt3"]);
-                    }
-
-                    //Check if UniquePt4 key exist, if exist take UniquePt4 else skip
-                    bool keyExists = shellObjConnectivity.TableInList[index].ContainsKey("UniquePt4");
-                    if (keyExists)
-                    {
-                        if (shellObjConnectivity.TableInList[index]["UniquePt4"] != null)
-                        {
-                            pointList.Add(shellObjConnectivity.TableInList[index]["UniquePt4"]);
-                        }
-                    }                     
-
-                    //If this is not last row and below this row still the same shell, go to next row, loop again to get more points
-                    if (index < shellObjConnectivity.TableInList.Count - 1 && shellObjConnectivity.TableInList[index]["UniqueName"] == shellObjConnectivity.TableInList[index + 1]["UniqueName"])
-                    {
-                        index++;
-                    }
-                    //else go out the loop and save points
-                    else
-                    {
-                        rowBelowIsSameShell = false;
-                    }
-                }
-                src.HelperEtabs.Shell shell = new src.HelperEtabs.Shell(shellObjConnectivity.TableInList[index]["UniqueName"], pointList);
-                shellList.Add(shell);
-
-                index++;
-            }
-
-            return shellList;
         }
 
         public static Dictionary<string, double> GetShellNormalDirection(src.HelperEtabs.Shell shell, List<src.HelperEtabs.Point3D> point3DList)

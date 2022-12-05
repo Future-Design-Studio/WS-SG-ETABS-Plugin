@@ -1232,6 +1232,72 @@ namespace WS_SG_ETABS_Plugin.src
 
         #endregion
 
+        #region shell method
+
+        /// <summary>
+        /// Parsing shell edge points from ETABS database
+        /// </summary>
+        /// <param name="shellObjConnectivity"></param>
+        /// <returns></returns>
+        public static List<Shell> GetShellsPoints(DatabaseTable shellObjConnectivity)
+        {
+            int index = 0;
+            List<Shell> shellList = new List<Shell>();
+
+            while (index < shellObjConnectivity.TableInList.Count)
+            {
+                List<string> pointList = new List<string>();
+
+                //Assume that row below is same shell so can enter while loop
+                bool rowBelowIsSameShell = true;
+
+                while (rowBelowIsSameShell)
+                {
+                    if (shellObjConnectivity.TableInList[index]["UniquePt1"] != null)
+                    {
+                        pointList.Add(shellObjConnectivity.TableInList[index]["UniquePt1"]);
+                    }
+                    if (shellObjConnectivity.TableInList[index]["UniquePt2"] != null)
+                    {
+                        pointList.Add(shellObjConnectivity.TableInList[index]["UniquePt2"]);
+                    }
+                    if (shellObjConnectivity.TableInList[index]["UniquePt3"] != null)
+                    {
+                        pointList.Add(shellObjConnectivity.TableInList[index]["UniquePt3"]);
+                    }
+
+                    //Check if UniquePt4 key exist, if exist take UniquePt4 else skip
+                    bool keyExists = shellObjConnectivity.TableInList[index].ContainsKey("UniquePt4");
+                    if (keyExists)
+                    {
+                        if (shellObjConnectivity.TableInList[index]["UniquePt4"] != null)
+                        {
+                            pointList.Add(shellObjConnectivity.TableInList[index]["UniquePt4"]);
+                        }
+                    }
+
+                    //If this is not last row and below this row still the same shell, go to next row, loop again to get more points
+                    if (index < shellObjConnectivity.TableInList.Count - 1 && shellObjConnectivity.TableInList[index]["UniqueName"] == shellObjConnectivity.TableInList[index + 1]["UniqueName"])
+                    {
+                        index++;
+                    }
+                    //else go out the loop and save points
+                    else
+                    {
+                        rowBelowIsSameShell = false;
+                    }
+                }
+                Shell shell = new Shell(shellObjConnectivity.TableInList[index]["UniqueName"], pointList);
+                shellList.Add(shell);
+
+                index++;
+            }
+
+            return shellList;
+        }
+
+        #endregion
+
     }
 
 }
