@@ -31,6 +31,9 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
             //Change ETABS unit to kN M C
             src.HelperEtabs.SetOutputUnit(Sap, eForce.kN, eLength.m, eTemperature.C);
 
+            //Turn on all load
+            src.HelperEtabs.OnAllLoadDatabase(Sap);
+
             //List of database table keys
             Dictionary<string, List<string>> databaseTableKeysDisplay = new Dictionary<string, List<string>>()
             {
@@ -241,24 +244,35 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                                                             "Frame Assignments - Property Modifiers",
                                                             "Frame Assignments - Rebar Ratio For Creep Analysis",
                                                             "Frame Assignments - Releases and Partial Fixity",
-                                                            "Frame Assignments - Section Properties",
+                                                            //"Frame Assignments - Section Properties",
                                                             "Frame Assignments - SidePlate Data",
                                                             "Frame Assignments - Spandrel Labels",
                                                             "Frame Assignments - Tension and Compression Limits",
                                                             } },
                 {"jointAssignments", new List<string>() {"Joint Assignments - Additional Mass",
-                                            "Joint Assignments - Diaphragms",
-                                            "Joint Assignments - Floor Meshing Option",
-                                            "Joint Assignments - Panel Zone",
-                                            "Joint Assignments - Restraints",
-                                            "Joint Assignments - Springs",
-                                            } },
+                                                        "Joint Assignments - Diaphragms",
+                                                        "Joint Assignments - Floor Meshing Option",
+                                                        "Joint Assignments - Panel Zone",
+                                                        "Joint Assignments - Restraints",
+                                                        "Joint Assignments - Springs",
+                                                        } },
+                {"frameLoadsAssignments", new List<string>() {"Frame Loads Assignments - Distributed",
+                                                            "Frame Loads Assignments - Open Structure Wind Parameters",
+                                                            "Frame Loads Assignments - Point",
+                                                            "Frame Loads Assignments - Temperature",
+                                                            } },
+                {"jointLoadsAssignments", new List<string>() {"Joint Loads Assignments - Force",
+                                                            "Joint Loads Assignments - Ground Displacement",
+                                                            "Joint Loads Assignments - Temperature",
+                                                            } },
             };
 
             //add in temporary in selectedDatabaseTables
             selectedDatabaseTables.Add("objectConnectivity", true);
             selectedDatabaseTables.Add("frameAssignments", true);
             selectedDatabaseTables.Add("jointAssignments", true);
+            selectedDatabaseTables.Add("frameLoadsAssignments", true);
+            selectedDatabaseTables.Add("jointLoadsAssignments", true);
 
             //To save material index
             Dictionary<string, string> nameIndexMaterial = new Dictionary<string, string>();
@@ -270,6 +284,9 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
             //To save area properties material index
             Dictionary<string, string> nameIndexAreaProp = new Dictionary<string, string>();
             Dictionary<string, string> nameMatIndexAreaProp = new Dictionary<string, string>();
+
+            //To load pattern
+            Dictionary<string, string> loadPatternNameEtabsMidas = new Dictionary<string, string>();
 
             //To save node, frame and area index
             Dictionary<string, string> nameIndexNode = new Dictionary<string, string>();
@@ -303,7 +320,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
 
                             if (databaseTableKey.Key == "loadPattern")
                             {
-                                copyLoadPatternToMidas(Sap, databaseTableKey.Value, textMgt, textWarning);
+                                loadPatternNameEtabsMidas = copyLoadPatternToMidas(Sap, databaseTableKey.Value, textMgt, textWarning);
                             }
 
                             if (databaseTableKey.Key == "objectConnectivity")
@@ -311,16 +328,24 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                                 (nameIndexNode, nameIndexFrame) = copyObjectConnectivityToMidas(Sap, databaseTableKey.Value, textMgt, textWarning, nameIndexSecProp, nameMatIndexSecProp, nameIndexAreaProp, nameMatIndexAreaProp);
                             }
 
-                            /*
                             if (databaseTableKey.Key == "frameAssignments")
                             {
-                                copyFrameAssignmentsToMidas(Sap, databaseTableKey.Value, textMgt, textWarning, nameIndexNode, nameIndexFrame);
+                                copyFrameAssignmentsToMidas(Sap, databaseTableKey.Value, textMgt, textWarning, nameIndexFrame);
                             }
-                            */
 
-                            if (databaseTableKey.Key == "frameAssignments")
+                            if (databaseTableKey.Key == "jointAssignments")
                             {
+                                copyJointAssignmentsToMidas(Sap, databaseTableKey.Value, textMgt, textWarning, nameIndexNode);
+                            }
 
+                            if (databaseTableKey.Key == "frameLoadsAssignments")
+                            {
+                                copyFrameLoadsAssignmentsToMidas(Sap, databaseTableKey.Value, textMgt, textWarning, nameIndexFrame, loadPatternNameEtabsMidas);
+                            }
+
+                            if (databaseTableKey.Key == "jointLoadsAssignments")
+                            {
+                                copyJointLoadsAssignmentsToMidas(Sap, databaseTableKey.Value, textMgt, textWarning, nameIndexNode, loadPatternNameEtabsMidas);
                             }
 
                             //Going through each table key and save it as a flat list
@@ -1120,7 +1145,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
 
             //MGTHeader for section property stiffness modifier
             textMgt.Add("*SECT-SCALE");
-            textMgt.Add("; i, (area modifier), (shear minor modifier), (shear major modifier), (torsion modifier), (moment minor modifier), (moment major modifier)");
+            textMgt.Add("; i, (area modifier), (shear minor modifier), (shear major modifier), (torsion modifier), (moment major modifier), (moment minor modifier)");
 
             //Save stiffness modifiers and material index
             foreach (src.HelperEtabs.DatabaseTable databaseTable in databaseTables)
@@ -1148,13 +1173,13 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                                 double aYMod = Convert.ToDouble(row["A2Mod"]);
                                 double aZMod = Convert.ToDouble(row["A3Mod"]);
                                 double jMod = Convert.ToDouble(row["JMod"]);
-                                double iYMod = Convert.ToDouble(row["I2Mod"]);
-                                double iZMod = Convert.ToDouble(row["I3Mod"]);
+                                double iYMod = Convert.ToDouble(row["I3Mod"]);
+                                double iZMod = Convert.ToDouble(row["I2Mod"]);
                                 double weightMod = 0;
 
                                 if (Convert.ToDouble(row["MMod"]) != Convert.ToDouble(row["WMod"]))
                                 {
-                                    string warning = $"Different weight and mass modifier found in {row["Name"]}. Highest value will be used!";
+                                    string warning = $"Different weight and mass modifier found in section property {row["Name"]}. Highest value will be used!";
                                     MessageBox.Show(warning);
                                     textWarning.Add(warning);
 
@@ -1484,7 +1509,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
             return (nameIndexAreaProp, nameMatIndexAreaProp);
         }
 
-        private static void copyLoadPatternToMidas(cSapModel Sap, List<string> tableKeys, List<string> textMgt, List<string> textWarning)
+        private static Dictionary<string, string> copyLoadPatternToMidas(cSapModel Sap, List<string> tableKeys, List<string> textMgt, List<string> textWarning)
         {
             //MGTHeader
             textMgt.Add("*STLDCASE");
@@ -1501,6 +1526,9 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
 
             //Saving load pattern that contains selfweight
             Dictionary<string, double> selfWeightLoadPatterns = new Dictionary<string, double>();
+
+            //To save load pattern name in etabs and in midas
+            Dictionary<string, string> loadPatternNameEtabsMidas = new Dictionary<string, string>();
 
             //Gothrough each table key to get the needed table
             foreach (src.HelperEtabs.DatabaseTable databaseTable in databaseTables)
@@ -1574,6 +1602,9 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                                 textWarning.Add(warning);
                             }
                             textMgt.Add($"{name}, {typeMidas},");
+
+                            //Saving load pattern name
+                            loadPatternNameEtabsMidas.Add(row["Name"], name);
                         }
                     }
 
@@ -1590,6 +1621,8 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                     }
                 }
             }
+
+            return loadPatternNameEtabsMidas;
         }
 
         private static (Dictionary<string, string>, Dictionary<string, string>) copyObjectConnectivityToMidas(cSapModel Sap, List<string> tableKeys, List<string> textMgt, 
@@ -1701,13 +1734,383 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
             return (nameIndexNode, nameIndexFrame);
         }
 
-        private static void copyFrameAssignmentsToMidas(cSapModel Sap, List<string> tableKeys, List<string> textMgt, List<string> textWarning,
-            Dictionary<string, string> nameIndexNode, Dictionary<string, string> nameIndexFrame)
+        private static void copyFrameAssignmentsToMidas(cSapModel Sap, List<string> tableKeys, List<string> textMgt, List<string> textWarning, Dictionary<string, string> nameIndexFrame)
         {
-            //MGTHeader
-            textMgt.Add("*FRAME-RLS");
-            textMgt.Add("; (index element), (insert value=yes), (release condition-i 000000), (spring Fxi), (spring Fyi), (spring Fzi), (spring Mxi), (spring Myi), (spring Mzi) - 1ST LINE");
-            textMgt.Add("                                       (release condition-j 000000), (spring Fxj), (spring Fyj), (spring Fzj), (spring Mxj), (spring Myj), (spring Mzj) - 2ND LINE");
+            bool showWarning = false;
+            bool isError = false;
+
+            List<src.HelperEtabs.DatabaseTable> databaseTables = new List<src.HelperEtabs.DatabaseTable>();
+
+            (isError, databaseTables) = src.HelperEtabs.GetMultipleTableDisplay(Sap, tableKeys, showWarning);
+
+            //if (isError){return;}
+
+            int index = 1;
+            foreach (src.HelperEtabs.DatabaseTable databaseTable in databaseTables)
+            {
+                if (databaseTable.TableKey == "Frame Assignments - Releases and Partial Fixity")
+                {
+                    //Frame releases
+                    //MGTHeader
+                    textMgt.Add("*FRAME-RLS");
+                    textMgt.Add("; (index element), (insert value=yes), (release condition-i 000000), (spring Fxi), (spring Fyi), (spring Fzi), (spring Mxi), (spring Myi), (spring Mzi) - 1ST LINE");
+                    textMgt.Add(";                                      (release condition-j 000000), (spring Fxj), (spring Fyj), (spring Fzj), (spring Mxj), (spring Myj), (spring Mzj) - 2ND LINE");
+
+                    List<Dictionary<string, string>> table = new List<Dictionary<string, string>>();
+
+                    table = databaseTable.TableInList;
+
+                    foreach (Dictionary<string, string> row in table)
+                    {
+                        string indexFrame = nameIndexFrame[row["UniqueName"]];
+
+                        int releaseFxI = parseYesNoToBinary(row["PI"]);
+                        int releaseFyI = parseYesNoToBinary(row["V2I"]);
+                        int releaseFzI = parseYesNoToBinary(row["V3I"]);
+                        int releaseMxI = parseYesNoToBinary(row["TI"]);
+                        int releaseMyI = parseYesNoToBinary(row["M3I"]);
+                        int releaseMzI = parseYesNoToBinary(row["M2I"]);
+
+                        double springFxI = 0;
+                        double springFyI = 0;
+                        double springFzI = 0;
+                        double springMxI = 0;
+                        double springMyI = 0;
+                        double springMzI = 0;
+                        if (row.ContainsKey("PISpring"))
+                        {
+                            if (row["PISpring"] != "")
+                            {
+                                springFxI = Convert.ToDouble(row["PISpring"]);
+                            }
+                            if (row["V2ISpring"] != "")
+                            {
+                                springFyI = Convert.ToDouble(row["V2ISpring"]);
+                            }
+                            if (row["V3ISpring"] != "")
+                            {
+                                springFzI = Convert.ToDouble(row["V3ISpring"]);
+                            }
+                            if (row["TISpring"] != "")
+                            {
+                                springMxI = Convert.ToDouble(row["TISpring"]);
+                            }
+                            if (row["M3ISpring"] != "")
+                            {
+                                springMyI = Convert.ToDouble(row["M3ISpring"]);
+                            }
+                            if (row["M2ISpring"] != "")
+                            {
+                                springMyI = Convert.ToDouble(row["M2ISpring"]);
+                            }
+                        };
+
+                        string releaseBinaryI = releaseFxI.ToString() + releaseFyI.ToString() + releaseFzI.ToString() +
+                            releaseMxI.ToString() + releaseMyI.ToString() + releaseMzI.ToString();
+
+                        int releaseFxJ = parseYesNoToBinary(row["PJ"]);
+                        int releaseFyJ = parseYesNoToBinary(row["V2J"]);
+                        int releaseFzJ = parseYesNoToBinary(row["V3J"]);
+                        int releaseMxJ = parseYesNoToBinary(row["TJ"]);
+                        int releaseMyJ = parseYesNoToBinary(row["M3J"]);
+                        int releaseMzJ = parseYesNoToBinary(row["M2J"]);
+
+                        double springFxJ = 0;
+                        double springFyJ = 0;
+                        double springFzJ = 0;
+                        double springMxJ = 0;
+                        double springMyJ = 0;
+                        double springMzJ = 0;
+                        if (row.ContainsKey("PJSpring"))
+                        {
+                            if (row["PJSpring"] != "")
+                            {
+                                springFxJ = Convert.ToDouble(row["PJSpring"]);
+                            }
+                            if (row["V2JSpring"] != "")
+                            {
+                                springFyJ = Convert.ToDouble(row["V2JSpring"]);
+                            }
+                            if (row["V3JSpring"] != "")
+                            {
+                                springFzJ = Convert.ToDouble(row["V3JSpring"]);
+                            }
+                            if (row["TJSpring"] != "")
+                            {
+                                springMxJ = Convert.ToDouble(row["TJSpring"]);
+                            }
+                            if (row["M3JSpring"] != "")
+                            {
+                                springMyJ = Convert.ToDouble(row["M3JSpring"]);
+                            }
+                            if (row["M2JSpring"] != "")
+                            {
+                                springMyJ = Convert.ToDouble(row["M2JSpring"]);
+                            }
+                        }
+
+                        string releaseBinaryJ = releaseFxJ.ToString() + releaseFyJ.ToString() + releaseFzJ.ToString() +
+                            releaseMxJ.ToString() + releaseMyJ.ToString() + releaseMzJ.ToString();
+
+                        textMgt.Add($"{indexFrame}, YES, {releaseBinaryI}, {springFxI}, {springFyI}, {springFzI}, {springMxI}, {springMyI}, {springMzI}");
+                        textMgt.Add($"{releaseBinaryJ}, {springFxJ}, {springFyJ}, {springFzJ}, {springMxJ}, {springMyJ}, {springMzJ}");
+                    }
+                }
+                else if (databaseTable.TableKey == "Frame Assignments - Property Modifiers")
+                {
+                    //Frame property modifiers
+                    //MGTHeader
+                    textMgt.Add("*ELEM-SRF    ; Element Stiffness Scale Factor");
+                    textMgt.Add("; i, (area modifier), (shear minor modifier), (shear major modifier), (torsion modifier), (moment major modifier), (moment minor modifier), (weight modifier), (group=''), (iPart=1)");
+
+                    List<Dictionary<string, string>> table = new List<Dictionary<string, string>>();
+
+                    table = databaseTable.TableInList;
+
+                    foreach (Dictionary<string, string> row in table)
+                    {
+                        //Access using key=name to access value=index
+                        string indexFrame = nameIndexFrame[row["UniqueName"]];
+
+                        double areaMod = Convert.ToDouble(row["AMod"]);
+                        double aYMod = Convert.ToDouble(row["A2Mod"]);
+                        double aZMod = Convert.ToDouble(row["A3Mod"]);
+                        double jMod = Convert.ToDouble(row["JMod"]);
+                        double iYMod = Convert.ToDouble(row["I3Mod"]);
+                        double iZMod = Convert.ToDouble(row["I2Mod"]);
+                        double weightMod = 0;
+
+                        if (Convert.ToDouble(row["MMod"]) != Convert.ToDouble(row["WMod"]))
+                        {
+                            string warning = $"Different weight and mass modifier found in element {row["Name"]}. Highest value will be used!";
+                            MessageBox.Show(warning);
+                            textWarning.Add(warning);
+
+                            if (Convert.ToDouble(row["MMod"]) > Convert.ToDouble(row["WMod"]))
+                            {
+                                weightMod = Convert.ToDouble(row["MMod"]);
+                            }
+                            else
+                            {
+                                weightMod = Convert.ToDouble(row["WMod"]);
+                            }
+                        }
+                        else
+                        {
+                            weightMod = Convert.ToDouble(row["WMod"]);
+                        }
+
+                        if (areaMod == 1 && aYMod == 1 && aZMod == 1 && jMod == 1 && iYMod == 1 && iZMod == 1 && weightMod == 1)
+                        {
+                            //if no modifier then do nothing
+                        }
+                        else
+                        {
+                            textMgt.Add($"{indexFrame}, {areaMod}, {aYMod}, {aZMod}, {jMod}, {iYMod}, {iZMod}, {weightMod}, ,1");
+                        }
+                    }
+                }
+                else
+                {
+                    if (databaseTable.NumberRecords > 0)
+                    {
+                        //Show warning that the type cant be converted to midas
+                        string warning = $"{databaseTable.TableKey} not supported! Will NOT be imported!";
+                        MessageBox.Show(warning);
+                        textWarning.Add(warning);
+                    }
+                }
+            }
+        }
+
+        private static void copyFrameLoadsAssignmentsToMidas(cSapModel Sap, List<string> tableKeys, List<string> textMgt, List<string> textWarning, Dictionary<string, string> nameIndexFrame, 
+            Dictionary<string, string>  loadPatternNameEtabsMidas)
+        {
+            
+            bool showWarning = false;
+            bool isError = false;
+
+            List<src.HelperEtabs.DatabaseTable> databaseTables = new List<src.HelperEtabs.DatabaseTable>();
+
+            (isError, databaseTables) = src.HelperEtabs.GetMultipleTableDisplay(Sap, tableKeys, showWarning);
+
+            //if (isError){return;}
+
+            //Distributed load UDL
+            int index = 1;
+            foreach (src.HelperEtabs.DatabaseTable databaseTable in databaseTables)
+            {
+                if (databaseTable.TableKey == "Frame Loads Assignments - Distributed")
+                {
+                    List<Dictionary<string, string>> table = new List<Dictionary<string, string>>();
+
+                    table = databaseTable.TableInList;
+
+                    foreach (Dictionary<string, string> row in table)
+                    {
+                        string loadPattern = loadPatternNameEtabsMidas[row["LoadPattern"]];
+
+                        string indexFrame = nameIndexFrame[row["UniqueName"]];
+
+                        string directionEtabs = row["Dir"];
+                        (string directionMidas, string projected, double loadFactor) = parseDireactionEtabsToMidas(directionEtabs);
+
+                        string loadTypeEtabs = row["LoadType"];
+                        string loadTypeMidas = "";
+                        double force1 = 0;
+                        double force2 = 0;
+                        if (loadTypeEtabs == "Force")
+                        {
+                            loadTypeMidas = "UNILOAD";
+                            force1 = Convert.ToDouble(row["ForceA"]) * loadFactor;
+                            force2 = Convert.ToDouble(row["ForceB"]) * loadFactor;
+                        }
+                        else if(loadTypeEtabs == "Moment")
+                        {
+                            loadTypeMidas = "UNIMOMENT";
+                            force1 = Convert.ToDouble(row["MomentA"]) * loadFactor;
+                            force2 = Convert.ToDouble(row["MomentB"]) * loadFactor;
+                        }
+
+                        double location1 = Convert.ToDouble(row["RelDistA"]);
+                        double location2 = Convert.ToDouble(row["RelDistB"]);
+
+                        //MGTHeader
+                        textMgt.Add($"*USE-STLD, {loadPattern}");                      
+                        textMgt.Add("*BEAMLOAD");
+                        textMgt.Add("; (index element), (load classificiation=BEAM), (loadtype=UNILOAD), (direction), (projected), (bEccen=NO), (eccenDir=aDir[1]), (i-end=''), (j-end=''), (bj-end=''), " +
+                            "(location relative 1), (force1), (location relative 2), (force2), (location relative 3=0), (force3=0), (location relative 4=0), (force4=0)");
+                        textMgt.Add($"{indexFrame}, BEAM, {loadTypeMidas}, {directionMidas}, {projected}, NO, aDir[1], , , , {location1}, {force1}, {location2}, {force2}, 0, 0, 0, 0");
+                    }
+                }
+                else if (databaseTable.TableKey == "Frame Loads Assignments - Point")
+                {
+                    List<Dictionary<string, string>> table = new List<Dictionary<string, string>>();
+
+                    table = databaseTable.TableInList;
+
+                    foreach (Dictionary<string, string> row in table)
+                    {
+                        string loadPattern = loadPatternNameEtabsMidas[row["LoadPattern"]];
+
+                        string indexFrame = nameIndexFrame[row["UniqueName"]];
+
+                        string directionEtabs = row["Dir"];
+                        (string directionMidas, string projected, double loadFactor) = parseDireactionEtabsToMidas(directionEtabs);
+
+                        string loadTypeEtabs = row["LoadType"];
+                        string loadTypeMidas = "";
+                        double force = 0;
+                        if (loadTypeEtabs == "Force")
+                        {
+                            loadTypeMidas = "CONLOAD";
+                            force = Convert.ToDouble(row["Force"]) * loadFactor;
+                        }
+                        else if (loadTypeEtabs == "Moment")
+                        {
+                            loadTypeMidas = "CONMOMENT";
+                            force = Convert.ToDouble(row["Moment"]) * loadFactor;
+                        }
+
+                        double location = Convert.ToDouble(row["RelDist"]);
+
+                        //MGTHeader
+                        textMgt.Add($"*USE-STLD, {loadPattern}");
+                        textMgt.Add("*BEAMLOAD");
+                        textMgt.Add("; (index element), (load classificiation=BEAM), (loadtype=UNILOAD), (direction), (projected), (bEccen=NO), (eccenDir=aDir[1]), (i-end=''), (j-end=''), (bj-end=''), " +
+                            "(location relative 1), (force1), (location relative 2=0), (force2=0), (location relative 3=0), (force3=0), (location relative 4=0), (force4=0)");
+                        textMgt.Add($"{indexFrame}, BEAM, {loadTypeMidas}, {directionMidas}, {projected}, NO, aDir[1], , , , {location}, {force}, 0, 0, 0, 0, 0, 0");
+                    }
+                }
+                else if (databaseTable.TableKey == "Frame Loads Assignments - Temperature")
+                {
+                    List<Dictionary<string, string>> table = new List<Dictionary<string, string>>();
+
+                    table = databaseTable.TableInList;
+
+                    foreach (Dictionary<string, string> row in table)
+                    {
+                        string loadPattern = loadPatternNameEtabsMidas[row["LoadPattern"]];
+                        string indexFrame = nameIndexFrame[row["UniqueName"]];
+                        double temperature = Convert.ToDouble(row["Temp"]);
+
+                        //MGTHeader
+                        textMgt.Add($"*USE-STLD, {loadPattern}");
+                        textMgt.Add("*ELTEMPER");
+                        textMgt.Add("; (index element), (temperature), (group)");
+                        textMgt.Add($"{indexFrame}, {temperature}, ");
+                    }
+                }
+                else
+                {
+                    if (databaseTable.NumberRecords > 0)
+                    {
+                        //Show warning that the type cant be converted to midas
+                        string warning = $"{databaseTable.TableKey} not supported! Will NOT be imported!";
+                        MessageBox.Show(warning);
+                        textWarning.Add(warning);
+                    }
+                }
+            }
+        }
+
+        private static void copyJointAssignmentsToMidas(cSapModel Sap, List<string> tableKeys, List<string> textMgt, List<string> textWarning, Dictionary<string, string> nameIndexNode)
+        {
+            bool showWarning = false;
+            bool isError = false;
+
+            List<src.HelperEtabs.DatabaseTable> databaseTables = new List<src.HelperEtabs.DatabaseTable>();
+
+            (isError, databaseTables) = src.HelperEtabs.GetMultipleTableDisplay(Sap, tableKeys, showWarning);
+
+            //if (isError){return;}
+
+            int index = 1;
+            foreach (src.HelperEtabs.DatabaseTable databaseTable in databaseTables)
+            {
+                if (databaseTable.TableKey == "Joint Assignments - Restraints")
+                {
+                    //Joint restraint
+                    //MGTHeader
+                    textMgt.Add("*CONSTRAINT ; Restraints");
+                    textMgt.Add("; (index node), (resrtaint condition-i 000000 Dx,Dy,Dz,Rx,Ry,Rz), (groups='')");
+
+                    List<Dictionary<string, string>> table = new List<Dictionary<string, string>>();
+
+                    table = databaseTable.TableInList;
+
+                    foreach (Dictionary<string, string> row in table)
+                    {
+                        string indexNode = nameIndexNode[row["UniqueName"]];
+
+                        int dX = parseYesNoToBinary(row["UX"]);
+                        int dY = parseYesNoToBinary(row["UY"]);
+                        int dZ = parseYesNoToBinary(row["UZ"]);
+                        int rX = parseYesNoToBinary(row["RX"]);
+                        int rY = parseYesNoToBinary(row["RY"]);
+                        int rZ = parseYesNoToBinary(row["RZ"]);
+
+                        string supportBinary = dX.ToString() + dY.ToString() + dZ.ToString() + rX.ToString() + rY.ToString() + rZ.ToString();
+
+                        textMgt.Add($"{indexNode}, {supportBinary}, ");
+                    }
+                }
+                else
+                {
+                    if (databaseTable.NumberRecords > 0)
+                    {
+                        //Show warning that the type cant be converted to midas
+                        string warning = $"{databaseTable.TableKey} not supported! Will NOT be imported!";
+                        MessageBox.Show(warning);
+                        textWarning.Add(warning);
+                    }
+                }
+            }
+        }
+
+        private static void copyJointLoadsAssignmentsToMidas(cSapModel Sap, List<string> tableKeys, List<string> textMgt, List<string> textWarning, Dictionary<string, string> nameIndexNode,
+                                                            Dictionary<string, string> loadPatternNameEtabsMidas)
+        {
 
             bool showWarning = false;
             bool isError = false;
@@ -1718,11 +2121,10 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
 
             //if (isError){return;}
 
-            //Go to point object connectivity table
-            int index = 1;
+            //Point load
             foreach (src.HelperEtabs.DatabaseTable databaseTable in databaseTables)
             {
-                if (databaseTable.TableKey == "Point Object Connectivity")
+                if (databaseTable.TableKey == "Joint Loads Assignments - Force")
                 {
                     List<Dictionary<string, string>> table = new List<Dictionary<string, string>>();
 
@@ -1730,15 +2132,135 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
 
                     foreach (Dictionary<string, string> row in table)
                     {
+                        string loadPattern = loadPatternNameEtabsMidas[row["LoadPattern"]];
+
+                        string indexNode = nameIndexNode[row["UniqueName"]];
+
+                        double fX = Convert.ToDouble(row["FX"]);
+                        double fY = Convert.ToDouble(row["FY"]);
+                        double fZ = Convert.ToDouble(row["FZ"]);
+                        double mX = Convert.ToDouble(row["MX"]);
+                        double mY = Convert.ToDouble(row["MY"]);
+                        double mZ = Convert.ToDouble(row["MZ"]);
+
+                        //MGTHeader
+                        textMgt.Add($"*USE-STLD, {loadPattern}");
+                        textMgt.Add("*CONLOAD");
+                        textMgt.Add("; (index node), (FX), (FY), (FZ), (MX), (MY), (MZ), (group='') ");
+                        textMgt.Add($"{indexNode}, {fX}, {fY}, {fZ}, {mX}, {mY}, {mZ}, ");
+                    }
+                }
+                else if (databaseTable.TableKey == "Joint Loads Assignments - Temperature")
+                {
+                    List<Dictionary<string, string>> table = new List<Dictionary<string, string>>();
+
+                    table = databaseTable.TableInList;
+
+                    foreach (Dictionary<string, string> row in table)
+                    {
+                        string loadPattern = loadPatternNameEtabsMidas[row["LoadPattern"]];
+                        string indexNode = nameIndexNode[row["UniqueName"]];
+                        double temperature = Convert.ToDouble(row["T"]);
+
+                        //MGTHeader
+                        textMgt.Add($"*USE-STLD, {loadPattern}");
+                        textMgt.Add("*ELTEMPER");
+                        textMgt.Add("; (index node), (temperature), (group)");
+                        textMgt.Add($"{indexNode}, {temperature}, ");
+                    }
+                }
+                else
+                {
+                    if (databaseTable.NumberRecords > 0)
+                    {
+                        //Show warning that the type cant be converted to midas
+                        string warning = $"{databaseTable.TableKey} not supported! Will NOT be imported!";
+                        MessageBox.Show(warning);
+                        textWarning.Add(warning);
                     }
                 }
             }
         }
 
+        #region Other methods
+
+        private static (string, string, double) parseDireactionEtabsToMidas (string directionEtabs)
+        {
+            string directionMidas = "";
+            string projected = "";
+            double loadFactor = 1;
+
+            //Parsing direction Etabs to direction Midas
+            if (directionEtabs == "Local-1")
+            {
+                directionMidas = "Lx";
+                projected = "NO";
+            }
+            else if (directionEtabs == "Local-2")
+            {
+                directionMidas = "Lz";
+                projected = "NO";
+            }
+            else if (directionEtabs == "Local-3")
+            {
+                directionMidas = "Ly";
+                projected = "NO";
+            }
+            else if (directionEtabs == "Global-X")
+            {
+                directionMidas = "Gx";
+                projected = "NO";
+            }
+            else if (directionEtabs == "Global-Y")
+            {
+                directionMidas = "Gy";
+                projected = "NO";
+            }
+            else if (directionEtabs == "Gravity")
+            {
+                directionMidas = "Gz";
+                projected = "NO";
+                loadFactor = -1;
+            }
+            else if (directionEtabs == "Global-X Proj")
+            {
+                directionMidas = "Gx";
+                projected = "YES";
+            }
+            else if (directionEtabs == "Global-Y Proj")
+            {
+                directionMidas = "Gy";
+                projected = "YES";
+            }
+            else if (directionEtabs == "Gravity Proj")
+            {
+                directionMidas = "Gz";
+                projected = "YES";
+                loadFactor = -1;
+            }
+            return (directionMidas, projected, loadFactor);
+        }
+
+        private static int parseYesNoToBinary(string yesNo)
+        {
+            if (yesNo == "Yes")
+            {
+                return 1;
+            }
+            else if (yesNo == "No")
+            {
+                return 0;
+            }
+            else
+            {
+                return -1;
+            }
+        }
+
+        #endregion
 
 
-
-                private static void writeTextFile(cSapModel Sap, List<string> textLineByLine, string filename)
+        private static void writeTextFile(cSapModel Sap, List<string> textLineByLine, string filename)
         {            
             //Text file properties
             string modelPath = Sap.GetModelFilepath() + filename;
