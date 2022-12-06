@@ -36,28 +36,61 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
 
         private void buttonOk_Click(object sender, RoutedEventArgs e)
         {
+            /*
+            try
+            {
+                //Casting file path
+                string filePathFrom = filePath.Text;
+
+                //Collect which boxes are selected
+                Dictionary<string, bool?> selectedItems = new Dictionary<string, bool?>()
+                {
+                    {"material", checkBoxMaterial.IsChecked },
+                    {"frameSec", checkBoxFrameSec.IsChecked },
+                    {"areaSec", checkBoxAreaSec.IsChecked },
+                    {"linkSec", checkBoxLinkSec.IsChecked },
+                    {"massSource", checkBoxMassSource.IsChecked },
+                    {"pDelta", checkBoxPDelta.IsChecked },
+                    {"loadPattern", checkBoxLoadPattern.IsChecked },
+                    {"responseSpectrum", checkBoxResponseSpectrum.IsChecked },
+                    {"loadCase", checkBoxPDelta.IsChecked },
+                    {"loadCombination", checkBoxPDelta.IsChecked },
+                };
+
+                IsEnabled = false;
+                //Call up copy property result window
+                src.transfer_midas.WindowTransferMidasResult windowCopyPropResult = new src.transfer_midas.WindowTransferMidasResult(_SapModel, _Plugin, filePathFrom, selectedItems);
+                IsEnabled = true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            */
+
             //Casting file path
             string filePathFrom = filePath.Text;
 
             //Collect which boxes are selected
             Dictionary<string, bool?> selectedItems = new Dictionary<string, bool?>()
-            {
-                {"material", checkBoxMaterial.IsChecked },
-                {"frameSec", checkBoxFrameSec.IsChecked },
-                {"areaSec", checkBoxAreaSec.IsChecked },
-                {"linkSec", checkBoxLinkSec.IsChecked },
-                {"massSource", checkBoxMassSource.IsChecked },
-                {"pDelta", checkBoxPDelta.IsChecked },
-                {"loadPattern", checkBoxLoadPattern.IsChecked },
-                {"responseSpectrum", checkBoxResponseSpectrum.IsChecked },
-                {"loadCase", checkBoxPDelta.IsChecked },
-                {"loadCombination", checkBoxPDelta.IsChecked },
-            };
+                {
+                    {"material", checkBoxMaterial.IsChecked },
+                    {"frameSec", checkBoxFrameSec.IsChecked },
+                    {"areaSec", checkBoxAreaSec.IsChecked },
+                    {"linkSec", checkBoxLinkSec.IsChecked },
+                    {"massSource", checkBoxMassSource.IsChecked },
+                    {"pDelta", checkBoxPDelta.IsChecked },
+                    {"loadPattern", checkBoxLoadPattern.IsChecked },
+                    {"responseSpectrum", checkBoxResponseSpectrum.IsChecked },
+                    {"loadCase", checkBoxPDelta.IsChecked },
+                    {"loadCombination", checkBoxPDelta.IsChecked },
+                };
 
             IsEnabled = false;
             //Call up copy property result window
             src.transfer_midas.WindowTransferMidasResult windowCopyPropResult = new src.transfer_midas.WindowTransferMidasResult(_SapModel, _Plugin, filePathFrom, selectedItems);
             IsEnabled = true;
+
         }
 
         private void buttonModifyPath_Click(object sender, RoutedEventArgs e)

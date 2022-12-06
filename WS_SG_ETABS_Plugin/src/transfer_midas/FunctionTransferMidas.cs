@@ -15,7 +15,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
     internal class FunctionTransferMidas
     {
         public static bool TransferToMidas(cSapModel Sap, string filePathFrom, Dictionary<string, bool?> selectedDatabaseTables)
-        {
+        {            
             //Text file line by line to be converted to MGT
             List<string> textMgt = new List<string>();
 
@@ -344,6 +344,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
             Dictionary<string, string> nameIndexNode = new Dictionary<string, string>();
             Dictionary<string, string> nameIndexFrame = new Dictionary<string, string>();
             Dictionary<string, string> nameIndexArea = new Dictionary<string, string>();
+            List<string> skippedAreas = new List<string>();
 
             //Going through each checkbox and take note of table keys to save
             foreach (KeyValuePair<string, bool?> selectedDatabaseTable in selectedDatabaseTables)
@@ -378,7 +379,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
 
                             if (databaseTableKey.Key == "objectConnectivity")
                             {
-                                (nameIndexNode, nameIndexFrame, nameIndexArea) = copyObjectConnectivityToMidas(Sap, databaseTableKey.Value, textMgt, textWarning, nameIndexSecProp, 
+                                (nameIndexNode, nameIndexFrame, nameIndexArea, skippedAreas) = copyObjectConnectivityToMidas(Sap, databaseTableKey.Value, textMgt, textWarning, nameIndexSecProp, 
                                     nameMatIndexSecProp, nameIndexAreaProp, nameMatIndexAreaProp, nameThinThickAreaProp);
                             }
 
@@ -409,12 +410,10 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                                 copyJointLoadsAssignmentsToMidas(Sap, databaseTableKey.Value, textMgt, textWarning, nameIndexNode, loadPatternNameEtabsMidas);
                             }
 
-                            /*
-                            nameIndexNode;
-                            nameIndexFrame;
-                            nameIndexArea
-                            */
-
+                            if (databaseTableKey.Key == "areaLoadAssignments")
+                            {
+                                copyAreaLoadAssignmentsToMidas(Sap, databaseTableKey.Value, textMgt, textWarning, nameIndexArea, loadPatternNameEtabsMidas, skippedAreas);
+                            }
 
                             /*
                             //Going through each table key and save it as a flat list
@@ -439,6 +438,9 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
 
             writeTextFile(Sap, textMgt, "test.mgt");
             writeTextFile(Sap, textWarning, "warning.txt");
+
+            //CreateExcelComparingEtabsMidas(Sap, nameIndexNode, nameIndexFrame, nameIndexArea);
+            CreateCsvComparingEtabsMidas(Sap, nameIndexNode, nameIndexFrame, nameIndexArea);
 
             return isError;
 
@@ -602,7 +604,8 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
 
                 else
                 {
-                    string warning = $"Have material type other than concrete and steel. {rowTableGeneral["Type"]} will be imported as concrete with _CHECK behind its name!";
+                    string warning = $"Have material type other than concrete and steel. {rowTableGeneral["Material"]} with type {rowTableGeneral["Type"]} " +
+                        $"will be imported as concrete with _CHECK behind its name!";
                     MessageBox.Show(warning);
                     textWarning.Add(warning);
 
@@ -1691,7 +1694,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                                 typeMidas = "USER";
                                 name = name + "_CHECK";
 
-                                string warning = $"Load pattern {typeEtabs} not supported in MIDAS. Will import as USER load with _CHECK behind its name!";
+                                string warning = $"Load pattern {name} with type {typeEtabs} not supported in MIDAS. Will import as USER load with _CHECK behind its name!";
                                 MessageBox.Show(warning);
                                 textWarning.Add(warning);
                             }
@@ -1719,7 +1722,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
             return loadPatternNameEtabsMidas;
         }
 
-        private static (Dictionary<string, string>, Dictionary<string, string>, Dictionary<string, string>) copyObjectConnectivityToMidas(cSapModel Sap, List<string> tableKeys, List<string> textMgt, 
+        private static (Dictionary<string, string>, Dictionary<string, string>, Dictionary<string, string>, List<string>) copyObjectConnectivityToMidas(cSapModel Sap, List<string> tableKeys, List<string> textMgt, 
             List<string> textWarning, Dictionary<string, string> nameIndexSecProp, Dictionary<string, string> nameMatIndexSecProp, Dictionary<string, string> nameIndexAreaProp, 
             Dictionary<string, string> nameMatIndexAreaProp, Dictionary<string, string> nameThinThickAreaProp)
         {
@@ -1731,6 +1734,9 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
 
             //List to save area name and index
             Dictionary<string, string> nameIndexArea = new Dictionary<string, string>();
+
+            //Saving area unique name that have more than 4 nodes to be skipped
+            List<string> skippedAreas = new List<string>();
 
             bool showWarning = false;
             bool isError = false;
@@ -1896,33 +1902,42 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                         }
 
                         //Finding node index
-                        string pt1 = area.Points[0];
-                        string indexPt1 = nameIndexNode[pt1];
-
-                        string pt2 = area.Points[1];
-                        string indexPt2 = nameIndexNode[pt2];
-
-                        string pt3 = area.Points[2];
-                        string indexPt3 = nameIndexNode[pt3];
-
+                        string indexPt1 = "0";
+                        string indexPt2 = "0";
+                        string indexPt3 = "0";
                         string indexPt4 = "0";
-                        if (area.Points.Count > 3)
+                        if (area.Points.Count == 3 || area.Points.Count == 4)
                         {
-                            string pt4 = area.Points[3];
-                            indexPt4 = nameIndexNode[pt4];
-                        };
+                            string pt1 = area.Points[0];
+                            indexPt1 = nameIndexNode[pt1];
 
-                        //Save node name and index
-                        nameIndexArea.Add(area.UniqueName, Convert.ToString(index));
+                            string pt2 = area.Points[1];
+                            indexPt2 = nameIndexNode[pt2];
 
-                        textMgt.Add($"{index}, PLATE, {iMaterial}, {iProp}, {indexPt1}, {indexPt2}, {indexPt3}, {indexPt4}, {indexThinThick}, 0");
+                            string pt3 = area.Points[2];
+                            indexPt3 = nameIndexNode[pt3];
 
+                            if (area.Points.Count == 4)
+                            {
+                                string pt4 = area.Points[3];
+                                indexPt4 = nameIndexNode[pt4];
+                            };
+
+                            //Save area name and index
+                            nameIndexArea.Add(area.UniqueName, Convert.ToString(index));
+
+                            textMgt.Add($"{index}, PLATE, {iMaterial}, {iProp}, {indexPt1}, {indexPt2}, {indexPt3}, {indexPt4}, {indexThinThick}, 0");
+                        }
+                        else
+                        {
+                            skippedAreas.Add(area.UniqueName);
+                        }
                         index++;
                     }
                 }
             }
 
-            return (nameIndexNode, nameIndexFrame, nameIndexArea);
+            return (nameIndexNode, nameIndexFrame, nameIndexArea, skippedAreas);
         }
 
         private static void copyFrameAssignmentsToMidas(cSapModel Sap, List<string> tableKeys, List<string> textMgt, List<string> textWarning, Dictionary<string, string> nameIndexFrame)
@@ -2073,7 +2088,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
 
                         if (Convert.ToDouble(row["MMod"]) != Convert.ToDouble(row["WMod"]))
                         {
-                            string warning = $"Different weight and mass modifier found in element {row["UniqueName"]} (in ETABS). Highest value will be used!";
+                            string warning = $"Different weight and mass modifier found in element {row["UniqueName"]} (in ETABS) or {indexFrame} (in MIDAS). Highest value will be used!";
                             //MessageBox.Show(warning);
                             textWarning.Add(warning);
 
@@ -2144,7 +2159,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                         string indexFrame = nameIndexFrame[row["UniqueName"]];
 
                         string directionEtabs = row["Dir"];
-                        (string directionMidas, string projected, double loadFactor) = parseDireactionEtabsToMidas(directionEtabs);
+                        (string directionMidas, string projected, double loadFactor) = parseLoadFrameDirectionEtabsToMidas(directionEtabs);
 
                         string loadTypeEtabs = row["LoadType"];
                         string loadTypeMidas = "";
@@ -2166,12 +2181,24 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                         double location1 = Convert.ToDouble(row["RelDistA"]);
                         double location2 = Convert.ToDouble(row["RelDistB"]);
 
-                        //MGTHeader
-                        textMgt.Add($"*USE-STLD, {loadPattern}");                      
-                        textMgt.Add("*BEAMLOAD");
-                        textMgt.Add("; (index element), (load classificiation=BEAM), (loadtype=UNILOAD), (direction), (projected), (bEccen=NO), (eccenDir=aDir[1]), (i-end=''), (j-end=''), (bj-end=''), " +
-                            "(location relative 1), (force1), (location relative 2), (force2), (location relative 3=0), (force3=0), (location relative 4=0), (force4=0)");
-                        textMgt.Add($"{indexFrame}, BEAM, {loadTypeMidas}, {directionMidas}, {projected}, NO, aDir[1], , , , {location1}, {force1}, {location2}, {force2}, 0, 0, 0, 0");
+                        //Check if location 1 and location 2 different. Else will put warning and ignore the load
+                        if (location1 != location2)
+                        {
+                            //MGTHeader
+                            textMgt.Add($"*USE-STLD, {loadPattern}");
+                            textMgt.Add("*BEAMLOAD");
+                            textMgt.Add("; (index element), (load classificiation=BEAM), (loadtype=UNILOAD), (direction), (projected), (bEccen=NO), (eccenDir=aDir[1]), (i-end=''), (j-end=''), (bj-end=''), " +
+                                "(location relative 1), (force1), (location relative 2), (force2), (location relative 3=0), (force3=0), (location relative 4=0), (force4=0)");
+                            textMgt.Add($"{indexFrame}, BEAM, {loadTypeMidas}, {directionMidas}, {projected}, NO, aDir[1], , , , {location1}, {force1}, {location2}, {force2}, 0, 0, 0, 0");
+                        }
+                        else
+                        {
+                            string warning = $"Frame load distributed have same start and end in element {row["UniqueName"]} (in ETABS) or {indexFrame} (in MIDAS). Will ignore load!";
+                            //MessageBox.Show(warning);
+                            textWarning.Add(warning);
+                        }
+
+                        
                     }
                 }
                 else if (databaseTable.TableKey == "Frame Loads Assignments - Point")
@@ -2187,7 +2214,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                         string indexFrame = nameIndexFrame[row["UniqueName"]];
 
                         string directionEtabs = row["Dir"];
-                        (string directionMidas, string projected, double loadFactor) = parseDireactionEtabsToMidas(directionEtabs);
+                        (string directionMidas, string projected, double loadFactor) = parseLoadFrameDirectionEtabsToMidas(directionEtabs);
 
                         string loadTypeEtabs = row["LoadType"];
                         string loadTypeMidas = "";
@@ -2321,11 +2348,13 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
 
                     table = databaseTable.TableInList;
 
+                    //Total up load in each node because midas can only have one load in each node
+                    List<Dictionary<string, string>> nodeLoad = new List<Dictionary<string, string>>();
+
                     foreach (Dictionary<string, string> row in table)
                     {
-                        string loadPattern = loadPatternNameEtabsMidas[row["LoadPattern"]];
-
-                        string indexNode = nameIndexNode[row["UniqueName"]];
+                        string uniqueName = row["UniqueName"];
+                        string loadPattern = row["LoadPattern"];
 
                         double fX = Convert.ToDouble(row["FX"]);
                         double fY = Convert.ToDouble(row["FY"]);
@@ -2333,6 +2362,84 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                         double mX = Convert.ToDouble(row["MX"]);
                         double mY = Convert.ToDouble(row["MY"]);
                         double mZ = Convert.ToDouble(row["MZ"]);
+
+                        bool nodeNameAndLoadPatternExist = false;
+
+                        //Going through nodeLoad list and see if already have same node with same load pattern
+                        foreach(Dictionary<string, string> nodeLoadSingle in nodeLoad)
+                        {
+                            if(nodeLoadSingle["uniqueName"] == uniqueName)
+                            {
+                                if(nodeLoadSingle["loadPattern"] == loadPattern)
+                                {
+                                    //Found unique name and load pattern already exist
+                                    nodeNameAndLoadPatternExist = true;
+
+                                    nodeLoadSingle["fX"] = (Convert.ToDouble(nodeLoadSingle["fX"]) + fX).ToString();
+                                    nodeLoadSingle["fY"] = (Convert.ToDouble(nodeLoadSingle["fY"]) + fY).ToString();
+                                    nodeLoadSingle["fZ"] = (Convert.ToDouble(nodeLoadSingle["fZ"]) + fZ).ToString();
+                                    nodeLoadSingle["mX"] = (Convert.ToDouble(nodeLoadSingle["mX"]) + mX).ToString();
+                                    nodeLoadSingle["mY"] = (Convert.ToDouble(nodeLoadSingle["mY"]) + mY).ToString();
+                                    nodeLoadSingle["mZ"] = (Convert.ToDouble(nodeLoadSingle["mZ"]) + mZ).ToString();
+
+                                    break;
+                                }
+                            }
+                        }
+
+                        if (!nodeNameAndLoadPatternExist)
+                        {
+                            Dictionary<string, string> nodeLoadSingle = new Dictionary<string, string>();
+
+                            nodeLoadSingle["uniqueName"] = uniqueName;
+                            nodeLoadSingle["loadPattern"] = loadPattern;
+
+                            nodeLoadSingle["fX"] = fX.ToString();
+                            nodeLoadSingle["fY"] = fY.ToString();
+                            nodeLoadSingle["fZ"] = fZ.ToString();
+                            nodeLoadSingle["mX"] = mX.ToString();
+                            nodeLoadSingle["mY"] = mY.ToString();
+                            nodeLoadSingle["mZ"] = mZ.ToString();
+
+                            nodeLoad.Add(nodeLoadSingle);
+                        }
+
+                    }
+
+                    //Filtering node that has 0 load
+                    List<Dictionary<string, string>> nodeLoadToRemove = new List<Dictionary<string, string>>();
+                    foreach (Dictionary<string, string> nodeLoadSingle in nodeLoad)
+                    {
+                        double fX = Convert.ToDouble(nodeLoadSingle["fX"]);
+                        double fY = Convert.ToDouble(nodeLoadSingle["fY"]);
+                        double fZ = Convert.ToDouble(nodeLoadSingle["fZ"]);
+                        double mX = Convert.ToDouble(nodeLoadSingle["mX"]);
+                        double mY = Convert.ToDouble(nodeLoadSingle["mY"]);
+                        double mZ = Convert.ToDouble(nodeLoadSingle["mZ"]);
+
+                        if (fX == 0 && fY == 0 && fZ == 0 && mX == 0 && mY == 0 && mZ == 0)
+                        {
+                            nodeLoadToRemove.Add(nodeLoadSingle);
+                        }
+
+                    }
+                    foreach (Dictionary<string, string> nodeLoadSingleToRemove in nodeLoadToRemove)
+                    {
+                        nodeLoad.Remove(nodeLoadSingleToRemove);
+                    }
+
+                    foreach (Dictionary<string, string> nodeLoadSingle in nodeLoad)
+                    {
+                        string loadPattern = nodeLoadSingle["loadPattern"];
+
+                        string indexNode = nameIndexNode[nodeLoadSingle["uniqueName"]];
+
+                        double fX = Convert.ToDouble(nodeLoadSingle["fX"]);
+                        double fY = Convert.ToDouble(nodeLoadSingle["fY"]);
+                        double fZ = Convert.ToDouble(nodeLoadSingle["fZ"]);
+                        double mX = Convert.ToDouble(nodeLoadSingle["mX"]);
+                        double mY = Convert.ToDouble(nodeLoadSingle["mY"]);
+                        double mZ = Convert.ToDouble(nodeLoadSingle["mZ"]);
 
                         //MGTHeader
                         textMgt.Add($"*USE-STLD, {loadPattern}");
@@ -2373,9 +2480,78 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
             }
         }
 
+        private static void copyAreaLoadAssignmentsToMidas(cSapModel Sap, List<string> tableKeys, List<string> textMgt, List<string> textWarning, Dictionary<string, string> nameIndexArea,
+                                                    Dictionary<string, string> loadPatternNameEtabsMidas, List<string> skippedAreas)
+        {
+
+            bool showWarning = false;
+            bool isError = false;
+
+            List<src.HelperEtabs.DatabaseTable> databaseTables = new List<src.HelperEtabs.DatabaseTable>();
+
+            (isError, databaseTables) = src.HelperEtabs.GetMultipleTableDisplay(Sap, tableKeys, showWarning);
+
+            //if (isError){return;}
+
+            //Area load unfiorm
+            foreach (src.HelperEtabs.DatabaseTable databaseTable in databaseTables)
+            {
+                if (databaseTable.TableKey == "Area Load Assignments - Uniform")
+                {
+                    List<Dictionary<string, string>> table = new List<Dictionary<string, string>>();
+
+                    table = databaseTable.TableInList;
+
+                    foreach (Dictionary<string, string> row in table)
+                    {
+                        bool inSkippedAreas = false;
+                        foreach (string skippedArea in skippedAreas)
+                        {
+                            if (row["UniqueName"] == skippedArea)
+                            {
+                                inSkippedAreas = true;
+                                break;
+                            }
+                        }
+
+                        if (!inSkippedAreas)
+                        {
+
+                            string loadPattern = loadPatternNameEtabsMidas[row["LoadPattern"]];
+
+                            string indexArea = nameIndexArea[row["UniqueName"]];
+
+                            string directionEtabs = row["Dir"];
+                            (string directionMidas, string projected, double loadFactor) = parseLoadAreaDirectionEtabsToMidas(directionEtabs);
+
+                            double force = Convert.ToDouble(row["Load"]) * loadFactor;
+
+                            //MGTHeader
+                            textMgt.Add($"*USE-STLD, {loadPattern}");
+                            textMgt.Add("*PRESSURE   ;Pressure Loads");
+                            textMgt.Add("; (index element), (load classificiation=PRES), (elementtype=PLATE), (loadtype=FACE), (direction), (Vx=0), (Vy=0), (Vz=0)," +
+                                "(projected yes/no), (load uniform), (P1=0), (P2=0), (P3=0), (P4=0), (group=''), (psltkey=0)");
+                            textMgt.Add($"{indexArea}, PRES, PLATE, FACE, {directionMidas}, 0, 0, 0, {projected}, {force}, 0, 0, 0, 0, ,0");
+                        }
+
+                    }
+                }
+                else
+                {
+                    if (databaseTable.NumberRecords > 0)
+                    {
+                        //Show warning that the type cant be converted to midas
+                        string warning = $"{databaseTable.TableKey} not supported! Will NOT be imported!";
+                        MessageBox.Show(warning);
+                        textWarning.Add(warning);
+                    }
+                }
+            }
+        }
+
         #region Other methods
 
-        private static (string, string, double) parseDireactionEtabsToMidas (string directionEtabs)
+        private static (string, string, double) parseLoadFrameDirectionEtabsToMidas (string directionEtabs)
         {
             string directionMidas = "";
             string projected = "";
@@ -2432,6 +2608,64 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
             return (directionMidas, projected, loadFactor);
         }
 
+        private static (string, string, double) parseLoadAreaDirectionEtabsToMidas(string directionEtabs)
+        {
+            string directionMidas = "";
+            string projected = "";
+            double loadFactor = 1;
+
+            //Parsing direction Etabs to direction Midas
+            if (directionEtabs == "Local-1")
+            {
+                directionMidas = "Ly";
+                projected = "NO";
+                loadFactor = -1;
+            }
+            else if (directionEtabs == "Local-2")
+            {
+                directionMidas = "Lx";
+                projected = "NO";
+            }
+            else if (directionEtabs == "Local-3")
+            {
+                directionMidas = "Lz";
+                projected = "NO";
+            }
+            else if (directionEtabs == "Global-X")
+            {
+                directionMidas = "Gx";
+                projected = "NO";
+            }
+            else if (directionEtabs == "Global-Y")
+            {
+                directionMidas = "Gy";
+                projected = "NO";
+            }
+            else if (directionEtabs == "Gravity")
+            {
+                directionMidas = "Gz";
+                projected = "NO";
+                loadFactor = -1;
+            }
+            else if (directionEtabs == "Global-X Proj")
+            {
+                directionMidas = "Gx";
+                projected = "YES";
+            }
+            else if (directionEtabs == "Global-Y Proj")
+            {
+                directionMidas = "Gy";
+                projected = "YES";
+            }
+            else if (directionEtabs == "Gravity Proj")
+            {
+                directionMidas = "Gz";
+                projected = "YES";
+                loadFactor = -1;
+            }
+            return (directionMidas, projected, loadFactor);
+        }
+
         private static int parseYesNoToBinary(string yesNo)
         {
             if (yesNo == "Yes")
@@ -2446,6 +2680,129 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
             {
                 return -1;
             }
+        }
+
+        public static void CreateExcelComparingEtabsMidas(cSapModel Sap, Dictionary<string, string> nameIndexNode, Dictionary<string, string> nameIndexFrame, Dictionary<string, string> nameIndexArea)
+        {
+            Microsoft.Office.Interop.Excel.Application xlApp = new Microsoft.Office.Interop.Excel.Application();
+
+            if (xlApp == null)
+            {
+                MessageBox.Show("Excel is not properly installed!!");
+                return;
+            }
+
+            Microsoft.Office.Interop.Excel.Workbook xlWorkBook;
+            Microsoft.Office.Interop.Excel.Worksheet xlWorkSheetNode;
+            Microsoft.Office.Interop.Excel.Worksheet xlWorkSheetFrame;
+            Microsoft.Office.Interop.Excel.Worksheet xlWorkSheetArea;
+            object misValue = System.Reflection.Missing.Value;
+
+            xlWorkBook = xlApp.Workbooks.Add(misValue);
+            xlWorkSheetNode = (Microsoft.Office.Interop.Excel.Worksheet)xlWorkBook.Worksheets.get_Item(1);
+            xlWorkSheetFrame = (Microsoft.Office.Interop.Excel.Worksheet)xlWorkBook.Worksheets.Add();
+            xlWorkSheetArea = (Microsoft.Office.Interop.Excel.Worksheet)xlWorkBook.Worksheets.Add();
+
+            //Creating node list
+            xlWorkSheetNode.Cells[1, 1] = "Node";
+
+            xlWorkSheetNode.Cells[2, 1] = "ETABS Unique Name";
+            xlWorkSheetNode.Cells[2, 2] = "MIDAS Index";
+
+            int xlRow = 3;
+            foreach (KeyValuePair<string, string> node in nameIndexNode)
+            {
+                string etabsUniqueName = node.Key;
+                string midasIndex = node.Value;
+
+                xlWorkSheetNode.Cells[xlRow, 1] = etabsUniqueName;
+                xlWorkSheetNode.Cells[xlRow, 2] = midasIndex;
+
+                xlRow++;
+            }
+
+            //Creating frame list
+            xlWorkSheetFrame.Cells[1, 1] = "Frame";
+
+            xlWorkSheetFrame.Cells[2, 1] = "ETABS Unique Name";
+            xlWorkSheetFrame.Cells[2, 2] = "MIDAS Index";
+
+            xlRow = 3;
+            foreach (KeyValuePair<string, string> node in nameIndexFrame)
+            {
+                string etabsUniqueName = node.Key;
+                string midasIndex = node.Value;
+
+                xlWorkSheetFrame.Cells[xlRow, 1] = etabsUniqueName;
+                xlWorkSheetFrame.Cells[xlRow, 2] = midasIndex;
+
+                xlRow++;
+            }
+
+            //Creating frame list
+            xlWorkSheetArea.Cells[1, 1] = "Area";
+
+            xlWorkSheetArea.Cells[2, 1] = "ETABS Unique Name";
+            xlWorkSheetArea.Cells[2, 2] = "MIDAS Index";
+
+            xlRow = 3;
+            foreach (KeyValuePair<string, string> node in nameIndexArea)
+            {
+                string etabsUniqueName = node.Key;
+                string midasIndex = node.Value;
+
+                xlWorkSheetArea.Cells[xlRow, 1] = etabsUniqueName;
+                xlWorkSheetArea.Cells[xlRow, 2] = midasIndex;
+
+                xlRow++;
+            }
+
+            //Here saving the file in xlsx
+            string excelPath = Sap.GetModelFilepath() + "test.xlsx";
+            xlWorkBook.SaveAs(excelPath, Microsoft.Office.Interop.Excel.XlFileFormat.xlOpenXMLWorkbook);
+
+            xlWorkBook.Close(true, misValue, misValue);
+            xlApp.Quit();
+
+        }
+
+        public static void CreateCsvComparingEtabsMidas(cSapModel Sap, Dictionary<string, string> nameIndexNode, Dictionary<string, string> nameIndexFrame, Dictionary<string, string> nameIndexArea)
+        {
+            List<string> csvNode = new List<string>();
+            csvNode.Add("Node");
+            csvNode.Add("ETABS Unique Name" + "," + "MIDAS Index");
+            foreach (KeyValuePair<string, string> node in nameIndexNode)
+            {
+                string etabsUniqueName = node.Key;
+                string midasIndex = node.Value;
+
+                csvNode.Add(etabsUniqueName + "," + midasIndex);
+            }
+            writeTextFile(Sap, csvNode, "csvNode.csv");
+
+            List<string> csvFrame = new List<string>();
+            csvFrame.Add("Frame");
+            csvFrame.Add("ETABS Unique Name" + "," + "MIDAS Index");
+            foreach (KeyValuePair<string, string> frame in nameIndexFrame)
+            {
+                string etabsUniqueName = frame.Key;
+                string midasIndex = frame.Value;
+
+                csvFrame.Add(etabsUniqueName + "," + midasIndex);
+            }
+            writeTextFile(Sap, csvFrame, "csvFrame.csv");
+
+            List<string> csvArea = new List<string>();
+            csvArea.Add("Area");
+            csvArea.Add("ETABS Unique Name" + "," + "MIDAS Index");
+            foreach (KeyValuePair<string, string> area in nameIndexArea)
+            {
+                string etabsUniqueName = area.Key;
+                string midasIndex = area.Value;
+
+                csvArea.Add(etabsUniqueName + "," + midasIndex);
+            }
+            writeTextFile(Sap, csvArea, "csvArea.csv");
         }
 
         #endregion
