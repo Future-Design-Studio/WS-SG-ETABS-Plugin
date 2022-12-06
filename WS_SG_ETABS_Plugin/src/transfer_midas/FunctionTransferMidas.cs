@@ -106,13 +106,14 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                                                     "Frame Section Property Definitions - Steel Tube",
                                                     "Frame Section Property Definitions - Summary"
                                                     } },
-                {"areaSec", new List<string>() {"Slab Property Definitions",
-                                                    "Slab Property Definitions - Layers",
-                                                    "Deck Property Definitions",
-                                                    "Wall Property Definitions - Auto Select List",
-                                                    "Wall Property Definitions - Layers",
-                                                    "Wall Property Definitions - Specified",
-                                                     } },
+                {"areaSec", new List<string>() {"Area Section Property Definitions - Summary",
+                                                "Slab Property Definitions",
+                                                "Slab Property Definitions - Layers",
+                                                "Deck Property Definitions",
+                                                "Wall Property Definitions - Auto Select List",
+                                                "Wall Property Definitions - Layers",
+                                                "Wall Property Definitions - Specified",
+                                                    } },
                 {"linkSec", new List<string>() {"Link Property Definitions - Acceptance Criteria - Displacement",
                                                     "Link Property Definitions - Acceptance Criteria - Force",
                                                     "Link Property Definitions - Damper - Bilinear",
@@ -206,11 +207,29 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                                                     "Load Case Definitions - Time History - Nonlinear Modal",
                                                     } },
                 {"loadCombination", new List<string>() {"Load Combination Definitions"} },
-                {"objectConnectivity", new List<string>() {"Point Object Connectivity",
-                                                            "Beam Object Connectivity",
-                                                            "Column Object Connectivity",
+                {"objectConnectivity", new List<string>() {"Beam Object Connectivity",
                                                             "Brace Object Connectivity",
+                                                            "Column Object Connectivity",
+                                                            "Floor Object Connectivity",
+                                                            "Line Gauge Object Connectivity",
+                                                            "Link Object Connectivity",
+                                                            "Null Area Object Connectivity",
+                                                            "Null Line Object Connectivity",
+                                                            "Point Object Connectivity",
+                                                            "Quad Gauge Object Connectivity",
+                                                            "Strip Object Connectivity",
+                                                            "Tendon Object Connectivity",
+                                                            "Wall Object Connectivity",
+                                                            "Beam Object Curve Data",
+                                                            "Wall Object Curve Data",
+                                                            "Floor Object Curved Edge Data",
+                                                            "Slab Rebar Object Geometry",
+                                                            "Dimension Line Object Geometry",
+                                                            //Assignments needed in MIDAS for geometry creation
                                                             "Frame Assignments - Section Properties",
+                                                            "Frame Assignments - Local Axes",
+                                                            "Area Assignments - Section Properties",
+                                                            "Area Assignments - Local Axes",
                                                             } },
                 {"frameAssignments", new List<string>() {"Frame Assignments - Additional Mass",
                                                             "Frame Assignments - Advanced Nonprismatic Section Parameters",
@@ -236,7 +255,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                                                             "Frame Assignments - Hinge - User",
                                                             "Frame Assignments - Insertion Point",
                                                             "Frame Assignments - Line Springs",
-                                                            "Frame Assignments - Local Axes",
+                                                            //"Frame Assignments - Local Axes", put inside object connectivity
                                                             "Frame Assignments - Material Overwrites",
                                                             "Frame Assignments - Moment Frame Beam Connection Type",
                                                             "Frame Assignments - Output Stations",
@@ -244,7 +263,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                                                             "Frame Assignments - Property Modifiers",
                                                             "Frame Assignments - Rebar Ratio For Creep Analysis",
                                                             "Frame Assignments - Releases and Partial Fixity",
-                                                            //"Frame Assignments - Section Properties",
+                                                            //"Frame Assignments - Section Properties", put inside object connectivity
                                                             "Frame Assignments - SidePlate Data",
                                                             "Frame Assignments - Spandrel Labels",
                                                             "Frame Assignments - Tension and Compression Limits",
@@ -256,6 +275,30 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                                                         "Joint Assignments - Restraints",
                                                         "Joint Assignments - Springs",
                                                         } },
+                {"areaAssignments", new List<string>() {"Area Assignments - Additional Mass",
+                                                        "Area Assignments - Area Springs",
+                                                        "Area Assignments - Auto Edge Constraints",
+                                                        "Area Assignments - Diaphragms",
+                                                        "Area Assignments - Edge Releases",
+                                                        "Area Assignments - Floor Auto Mesh Options",
+                                                        "Area Assignments - Floor Cracking",
+                                                        "Area Assignments - Insertion Point",
+                                                        //"Area Assignments - Local Axes", put inside object connectivity
+                                                        "Area Assignments - Material Overwrites",
+                                                        "Area Assignments - Pier Labels",
+                                                        //"Area Assignments - Section Properties", put inside object connectivity
+                                                        "Area Assignments - Slab Line Releases",
+                                                        "Area Assignments - Slab Rib Locations",
+                                                        "Area Assignments - Spandrel Labels",
+                                                        "Area Assignments - Stiffness Modifiers",
+                                                        "Area Assignments - Summary",
+                                                        "Area Assignments - Thickness Overwrites",
+                                                        "Area Assignments - Wall Auto Mesh Options",
+                                                        "Area Assignments - Wall Hinge - Auto Fiber PM3",
+                                                        "Area Assignments - Wall Hinge Reinforcement",
+                                                        "Area Assignments - Wall Hinges",
+                                                        "Area Assignments - Wall Rebar Ratio for Creep Analysis",
+                                                        } },
                 {"frameLoadsAssignments", new List<string>() {"Frame Loads Assignments - Distributed",
                                                             "Frame Loads Assignments - Open Structure Wind Parameters",
                                                             "Frame Loads Assignments - Point",
@@ -265,14 +308,22 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                                                             "Joint Loads Assignments - Ground Displacement",
                                                             "Joint Loads Assignments - Temperature",
                                                             } },
+                {"areaLoadAssignments", new List<string>() {"Area Load Assignments - Non-uniform",
+                                                            "Area Load Assignments - Temperature",
+                                                            "Area Load Assignments - Uniform",
+                                                            "Area Load Assignments - Uniform Load Sets",
+                                                            "Area Load Assignments - Wind Pressure Coefficients",
+                                                            } },
             };
 
             //add in temporary in selectedDatabaseTables
             selectedDatabaseTables.Add("objectConnectivity", true);
             selectedDatabaseTables.Add("frameAssignments", true);
             selectedDatabaseTables.Add("jointAssignments", true);
+            selectedDatabaseTables.Add("areaAssignments", true);
             selectedDatabaseTables.Add("frameLoadsAssignments", true);
             selectedDatabaseTables.Add("jointLoadsAssignments", true);
+            selectedDatabaseTables.Add("areaLoadAssignments", true);
 
             //To save material index
             Dictionary<string, string> nameIndexMaterial = new Dictionary<string, string>();
@@ -284,13 +335,15 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
             //To save area properties material index
             Dictionary<string, string> nameIndexAreaProp = new Dictionary<string, string>();
             Dictionary<string, string> nameMatIndexAreaProp = new Dictionary<string, string>();
-
+            Dictionary<string, string> nameThinThickAreaProp = new Dictionary<string, string>();
+            
             //To load pattern
             Dictionary<string, string> loadPatternNameEtabsMidas = new Dictionary<string, string>();
 
             //To save node, frame and area index
             Dictionary<string, string> nameIndexNode = new Dictionary<string, string>();
             Dictionary<string, string> nameIndexFrame = new Dictionary<string, string>();
+            Dictionary<string, string> nameIndexArea = new Dictionary<string, string>();
 
             //Going through each checkbox and take note of table keys to save
             foreach (KeyValuePair<string, bool?> selectedDatabaseTable in selectedDatabaseTables)
@@ -315,7 +368,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
 
                             if (databaseTableKey.Key == "areaSec")
                             {
-                                (nameIndexAreaProp, nameMatIndexAreaProp) = copyAreaSecToMidas(Sap, databaseTableKey.Value, textMgt, textWarning, nameIndexMaterial);
+                                (nameIndexAreaProp, nameMatIndexAreaProp, nameThinThickAreaProp) = copyAreaSecToMidas(Sap, databaseTableKey.Value, textMgt, textWarning, nameIndexMaterial);
                             }
 
                             if (databaseTableKey.Key == "loadPattern")
@@ -325,7 +378,8 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
 
                             if (databaseTableKey.Key == "objectConnectivity")
                             {
-                                (nameIndexNode, nameIndexFrame) = copyObjectConnectivityToMidas(Sap, databaseTableKey.Value, textMgt, textWarning, nameIndexSecProp, nameMatIndexSecProp, nameIndexAreaProp, nameMatIndexAreaProp);
+                                (nameIndexNode, nameIndexFrame, nameIndexArea) = copyObjectConnectivityToMidas(Sap, databaseTableKey.Value, textMgt, textWarning, nameIndexSecProp, 
+                                    nameMatIndexSecProp, nameIndexAreaProp, nameMatIndexAreaProp, nameThinThickAreaProp);
                             }
 
                             if (databaseTableKey.Key == "frameAssignments")
@@ -338,6 +392,13 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                                 copyJointAssignmentsToMidas(Sap, databaseTableKey.Value, textMgt, textWarning, nameIndexNode);
                             }
 
+                            /*
+                            if (databaseTableKey.Key == "areaAssignments")
+                            {
+                                copyAreaAssignmentsToMidas(Sap, databaseTableKey.Value, textMgt, textWarning, nameIndexAreaProp);
+                            }
+                            */
+
                             if (databaseTableKey.Key == "frameLoadsAssignments")
                             {
                                 copyFrameLoadsAssignmentsToMidas(Sap, databaseTableKey.Value, textMgt, textWarning, nameIndexFrame, loadPatternNameEtabsMidas);
@@ -348,11 +409,20 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                                 copyJointLoadsAssignmentsToMidas(Sap, databaseTableKey.Value, textMgt, textWarning, nameIndexNode, loadPatternNameEtabsMidas);
                             }
 
+                            /*
+                            nameIndexNode;
+                            nameIndexFrame;
+                            nameIndexArea
+                            */
+
+
+                            /*
                             //Going through each table key and save it as a flat list
                             foreach (string tableKey in databaseTableKey.Value)
                             {
                                 tableKeysToSave.Add(tableKey);
                             }
+                            */
 
                         }
 
@@ -1227,8 +1297,8 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
         }
 
         //Method to copy area section to MIDAS
-        private static (Dictionary<string, string>, Dictionary<string, string>) copyAreaSecToMidas(cSapModel Sap, List<string> tableKeys, List<string> textMgt, List<string> textWarning, 
-            Dictionary<string, string> nameIndexMaterial)
+        private static (Dictionary<string, string>, Dictionary<string, string>, Dictionary<string, string>) copyAreaSecToMidas(cSapModel Sap, List<string> tableKeys, 
+            List<string> textMgt, List<string> textWarning, Dictionary<string, string> nameIndexMaterial)
         {
             //MGTHeader
             textMgt.Add("*THICKNESS");
@@ -1236,6 +1306,9 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
 
             //List to save name and index
             Dictionary<string, string> nameIndexAreaProp = new Dictionary<string, string>();
+
+            //List to save thin thick
+            Dictionary<string, string> nameThinThickAreaProp = new Dictionary<string, string>();
 
             bool showWarning = false;
             bool isError = false;
@@ -1309,7 +1382,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                             //Show membrane warning if havent shown
                             if (!membraneWarningShown && row["ModelType"] == "Membrane")
                             {
-                                string warning = "Membrane type is not supported in MIDAS! Will import as normal slab!";
+                                string warning = "Membrane type is not supported in MIDAS! Will import as normal (analysis type thin) slab!";
                                 MessageBox.Show(warning);
                                 textWarning.Add(warning);
                                 membraneWarningShown = true;
@@ -1362,6 +1435,16 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                             //Save property name and index
                             nameIndexAreaProp.Add(row["Name"], Convert.ToString(index));
 
+                            //Save shell name and thin or thick
+                            if(row["ModelType"] == "Shell-Thin" || row["ModelType"] == "Membrane")
+                            {
+                                nameThinThickAreaProp.Add(row["Name"], "thin");
+                            }
+                            else if(row["ModelType"] == "Shell-Thick")
+                            {
+                                nameThinThickAreaProp.Add(row["Name"], "thick");
+                            }
+                            
                             index++;
                         }
                         //Normal slab proceed as usual
@@ -1370,7 +1453,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                             //Show membrane warning if havent shown
                             if (!membraneWarningShown && row["ModelType"] == "Membrane")
                             {
-                                string warning = "Membrane type is not supported in MIDAS! Will import as normal slab!";
+                                string warning = "Membrane type is not supported in MIDAS! Will import as normal (analysis type thin) slab!";
                                 MessageBox.Show(warning);
                                 textWarning.Add(warning);
                                 membraneWarningShown = true;
@@ -1434,6 +1517,16 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                             //Save property name and index
                             nameIndexAreaProp.Add(row["Name"], Convert.ToString(index));
 
+                            //Save shell name and thin or thick
+                            if (row["ModelType"] == "Shell-Thin" || row["ModelType"] == "Membrane")
+                            {
+                                nameThinThickAreaProp.Add(row["Name"], "thin");
+                            }
+                            else if (row["ModelType"] == "Shell-Thick")
+                            {
+                                nameThinThickAreaProp.Add(row["Name"], "thick");
+                            }
+
                             index++;
                         }
                     }
@@ -1460,6 +1553,16 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
 
                         //Save property name and index
                         nameIndexAreaProp.Add(row["Name"], Convert.ToString(index));
+
+                        //Save shell name and thin or thick
+                        if (row["ModelType"] == "Shell-Thin" || row["ModelType"] == "Membrane")
+                        {
+                            nameThinThickAreaProp.Add(row["Name"], "thin");
+                        }
+                        else if (row["ModelType"] == "Shell-Thick")
+                        {
+                            nameThinThickAreaProp.Add(row["Name"], "thick");
+                        }
 
                         index++;
                     }
@@ -1491,22 +1594,13 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                         //Check if section property exist in nameIndexSecProp
                         if (nameIndexAreaProp.ContainsKey(row["Name"]))
                         {
-                            //Finding material index
-                            if (row["Shape"] == "Auto Select" || row["Shape"] == "BU I Cover Plate" || row["Shape"] == "Nonprismatic")
-                            {
-                                //For this shape there is no option to add material thus put material index 0
-                                nameMatIndexAreaProp.Add(row["Name"], "0");
-                            }
-                            else
-                            {
-                                string materialIndex = nameIndexMaterial[row["Material"]];
-                                nameMatIndexAreaProp.Add(row["Name"], materialIndex);
-                            }
+                            string materialIndex = nameIndexMaterial[row["Material"]];
+                            nameMatIndexAreaProp.Add(row["Name"], materialIndex);
                         }
                     }
                 }
             }
-            return (nameIndexAreaProp, nameMatIndexAreaProp);
+            return (nameIndexAreaProp, nameMatIndexAreaProp, nameThinThickAreaProp);
         }
 
         private static Dictionary<string, string> copyLoadPatternToMidas(cSapModel Sap, List<string> tableKeys, List<string> textMgt, List<string> textWarning)
@@ -1625,15 +1719,18 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
             return loadPatternNameEtabsMidas;
         }
 
-        private static (Dictionary<string, string>, Dictionary<string, string>) copyObjectConnectivityToMidas(cSapModel Sap, List<string> tableKeys, List<string> textMgt, 
+        private static (Dictionary<string, string>, Dictionary<string, string>, Dictionary<string, string>) copyObjectConnectivityToMidas(cSapModel Sap, List<string> tableKeys, List<string> textMgt, 
             List<string> textWarning, Dictionary<string, string> nameIndexSecProp, Dictionary<string, string> nameMatIndexSecProp, Dictionary<string, string> nameIndexAreaProp, 
-            Dictionary<string, string> nameMatIndexAreaProp)
+            Dictionary<string, string> nameMatIndexAreaProp, Dictionary<string, string> nameThinThickAreaProp)
         {
             //List to save node name and index
             Dictionary<string, string> nameIndexNode = new Dictionary<string, string>();
 
             //List to save frame name and index
             Dictionary<string, string> nameIndexFrame = new Dictionary<string, string>();
+
+            //List to save area name and index
+            Dictionary<string, string> nameIndexArea = new Dictionary<string, string>();
 
             bool showWarning = false;
             bool isError = false;
@@ -1644,16 +1741,16 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
 
             //if (isError){return;}
 
-            //MGTHeader
-            textMgt.Add("*NODE");
-            textMgt.Add("; i, (X), (Y), (Z)");
-
-            //Go to point object connectivity table
+            //Nodes geometry
             int index = 1;
             foreach (src.HelperEtabs.DatabaseTable databaseTable in databaseTables)
             {
                 if (databaseTable.TableKey == "Point Object Connectivity")
                 {
+                    //MGTHeader
+                    textMgt.Add("*NODE");
+                    textMgt.Add("; i, (X), (Y), (Z)");
+
                     List<Dictionary<string, string>> table = new List<Dictionary<string, string>>();
 
                     table = databaseTable.TableInList;
@@ -1674,11 +1771,10 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                 }
             }
 
-            //MGTHeader
-            textMgt.Add("*ELEMENT");
-            textMgt.Add("; i, BEAM, (index material), (index property), (index joint i), (index joint j), (angle=0), (index subtype=0)");
-
+            //Getting property assigned to section and area
             Dictionary<string, string> secPropAssigned = new Dictionary<string, string>();
+            Dictionary<string, string> areaPropAssigned = new Dictionary<string, string>();
+
             //Go through frame assignment to get section property for each frame
             foreach (src.HelperEtabs.DatabaseTable databaseTable in databaseTables)
             {
@@ -1693,14 +1789,30 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                         secPropAssigned.Add(row["UniqueName"], row["SectProp"]);
                     }
                 }
+                else if (databaseTable.TableKey == "Area Assignments - Section Properties")
+                {
+                    List<Dictionary<string, string>> table = new List<Dictionary<string, string>>();
+
+                    table = databaseTable.TableInList;
+
+                    foreach (Dictionary<string, string> row in table)
+                    {
+                        areaPropAssigned.Add(row["UniqueName"], row["SectProp"]);
+                    }
+                }
             }
 
-            //Go to beam, brace, column object connectivity table
+            //Creating frame and area geometry
             index = 1;
             foreach (src.HelperEtabs.DatabaseTable databaseTable in databaseTables)
             {
+                //Frame geometry
                 if (databaseTable.TableKey == "Beam Object Connectivity" || databaseTable.TableKey == "Column Object Connectivity" || databaseTable.TableKey == "Brace Object Connectivity")
                 {
+                    //MGTHeader
+                    textMgt.Add("*ELEMENT");
+                    textMgt.Add("; i, BEAM, (index material), (index property), (index joint i), (index joint j), (angle=0), (index subtype=0)");
+
                     List<Dictionary<string, string>> table = new List<Dictionary<string, string>>();
 
                     table = databaseTable.TableInList;
@@ -1729,9 +1841,88 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                         index++;
                     }
                 }
+
+                //Area geometry
+
+                //Indicator if one way slab warning has been shown
+                bool moreThan4NodesWarningShown = false;
+
+                if (databaseTable.TableKey == "Wall Object Connectivity" || databaseTable.TableKey == "Floor Object Connectivity")
+                {
+                    //Getting area list parsed as Shell type
+                    List<src.HelperEtabs.Shell> areaList = src.HelperEtabs.GetShellsPoints(databaseTable);
+
+                    //MGTHeader
+                    textMgt.Add("*ELEMENT");
+                    textMgt.Add("; i, PLATE, (index material), (index property), (index joint 1), (index joint 2), (index joint 3), (index joint 4), (subtype thick=1 thin=2), (local axis)");
+
+                    foreach (src.HelperEtabs.Shell area in areaList)
+                    {
+                        //Show warning if there are more than 4 points
+                        if (area.Points.Count > 4)
+                        {
+                            string warning = "";
+
+                            //Show warning once
+                            if (!moreThan4NodesWarningShown)
+                            {
+                                warning = $"Area with > 4 nodes is found! Max node number in MIDAS is 4!";
+                                MessageBox.Show(warning);
+                                moreThan4NodesWarningShown = true;
+                            }
+
+                            warning = $"Area {area.UniqueName} (in ETABS) or {index} (in MIDAS) has {area.Points.Count} nodes! Max node number in MIDAS is 4!";
+                            //MessageBox.Show(warning);
+                            textWarning.Add(warning);
+                        }
+
+                        //Finding section property index
+                        string areaProp = areaPropAssigned[area.UniqueName];
+                        string iProp = nameIndexAreaProp[areaProp];
+
+                        //Finding material index
+                        string iMaterial = nameMatIndexAreaProp[areaProp];
+
+                        //Finding thin or thick
+                        string thinThick = nameThinThickAreaProp[areaProp];
+                        string indexThinThick = "";
+                        if (thinThick == "thick")
+                        {
+                            indexThinThick = "1";
+                        }
+                        else if (thinThick == "thin")
+                        {
+                            indexThinThick = "2";
+                        }
+
+                        //Finding node index
+                        string pt1 = area.Points[0];
+                        string indexPt1 = nameIndexNode[pt1];
+
+                        string pt2 = area.Points[1];
+                        string indexPt2 = nameIndexNode[pt2];
+
+                        string pt3 = area.Points[2];
+                        string indexPt3 = nameIndexNode[pt3];
+
+                        string indexPt4 = "0";
+                        if (area.Points.Count > 3)
+                        {
+                            string pt4 = area.Points[3];
+                            indexPt4 = nameIndexNode[pt4];
+                        };
+
+                        //Save node name and index
+                        nameIndexArea.Add(area.UniqueName, Convert.ToString(index));
+
+                        textMgt.Add($"{index}, PLATE, {iMaterial}, {iProp}, {indexPt1}, {indexPt2}, {indexPt3}, {indexPt4}, {indexThinThick}, 0");
+
+                        index++;
+                    }
+                }
             }
 
-            return (nameIndexNode, nameIndexFrame);
+            return (nameIndexNode, nameIndexFrame, nameIndexArea);
         }
 
         private static void copyFrameAssignmentsToMidas(cSapModel Sap, List<string> tableKeys, List<string> textMgt, List<string> textWarning, Dictionary<string, string> nameIndexFrame)
@@ -1748,7 +1939,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
             int index = 1;
             foreach (src.HelperEtabs.DatabaseTable databaseTable in databaseTables)
             {
-                if (databaseTable.TableKey == "Frame Assignments - Releases and Partial Fixity")
+                if (databaseTable.TableKey == "Frame Assignments - Releases and Partial Fixity" && databaseTable.NumberRecords != 0)
                 {
                     //Frame releases
                     //MGTHeader
@@ -1856,7 +2047,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                         textMgt.Add($"{releaseBinaryJ}, {springFxJ}, {springFyJ}, {springFzJ}, {springMxJ}, {springMyJ}, {springMzJ}");
                     }
                 }
-                else if (databaseTable.TableKey == "Frame Assignments - Property Modifiers")
+                else if (databaseTable.TableKey == "Frame Assignments - Property Modifiers" && databaseTable.NumberRecords != 0)
                 {
                     //Frame property modifiers
                     //MGTHeader
@@ -1882,8 +2073,8 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
 
                         if (Convert.ToDouble(row["MMod"]) != Convert.ToDouble(row["WMod"]))
                         {
-                            string warning = $"Different weight and mass modifier found in element {row["Name"]}. Highest value will be used!";
-                            MessageBox.Show(warning);
+                            string warning = $"Different weight and mass modifier found in element {row["UniqueName"]} (in ETABS). Highest value will be used!";
+                            //MessageBox.Show(warning);
                             textWarning.Add(warning);
 
                             if (Convert.ToDouble(row["MMod"]) > Convert.ToDouble(row["WMod"]))
