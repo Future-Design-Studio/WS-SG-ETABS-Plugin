@@ -340,6 +340,10 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
             //To load pattern
             Dictionary<string, string> loadPatternNameEtabsMidas = new Dictionary<string, string>();
 
+            //To save local axis
+            Dictionary<string, string> nameLocalAxisFrame = new Dictionary<string, string>();
+            Dictionary<string, string> nameLocalAxisArea = new Dictionary<string, string>();
+
             //To save node, frame and area index
             Dictionary<string, string> nameIndexNode = new Dictionary<string, string>();
             Dictionary<string, string> nameIndexFrame = new Dictionary<string, string>();
@@ -379,8 +383,10 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
 
                             if (databaseTableKey.Key == "objectConnectivity")
                             {
+                                nameLocalAxisFrame = copyFrameAssignmentsLocalAxis(Sap);
+                                nameLocalAxisArea = copyAreaAssignmentsLocalAxis(Sap);
                                 (nameIndexNode, nameIndexFrame, nameIndexArea, skippedAreas) = copyObjectConnectivityToMidas(Sap, databaseTableKey.Value, textMgt, textWarning, nameIndexSecProp, 
-                                    nameMatIndexSecProp, nameIndexAreaProp, nameMatIndexAreaProp, nameThinThickAreaProp);
+                                    nameMatIndexSecProp, nameIndexAreaProp, nameMatIndexAreaProp, nameThinThickAreaProp, nameLocalAxisFrame, nameLocalAxisArea);
                             }
 
                             if (databaseTableKey.Key == "frameAssignments")
@@ -1352,6 +1358,9 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
             //List to save thin thick
             Dictionary<string, string> nameThinThickAreaProp = new Dictionary<string, string>();
 
+            //List to save modifier
+            List<Dictionary<string, string>> nameModifierAreaProp = new List<Dictionary<string, string>>();
+
             bool showWarning = false;
             bool isError = false;
 
@@ -1433,6 +1442,14 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                             //Save property name and index
                             nameIndexAreaProp.Add(row["Name"], Convert.ToString(index));
 
+                            //Save shell name and thin or thick
+                            nameThinThickAreaProp.Add(row["Name"], "thin");
+
+                            //Save shell modifier
+                            Dictionary<string, string> nameModifierAreaPropSingle = new Dictionary<string, string>();
+                            nameModifierAreaPropSingle.Add("name", row[name]);
+                            nameModifierAreaPropSingle.Add("f11Mod", row["f11Mod"]);
+
                             index++;
                         }
                         //Ribbed and waffle type not supported in MIDAS
@@ -1495,7 +1512,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                             nameIndexAreaProp.Add(row["Name"], Convert.ToString(index));
 
                             //Save shell name and thin or thick
-                            if(row["ModelType"] == "Shell-Thin" || row["ModelType"] == "Membrane")
+                            if(row["ModelType"] == "Shell-Thin" || row["ModelType"] == "Membrane") //Membrane also save as thin
                             {
                                 nameThinThickAreaProp.Add(row["Name"], "thin");
                             }
@@ -1782,9 +1799,47 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
             return loadPatternNameEtabsMidas;
         }
 
+        private static Dictionary<string, string> copyFrameAssignmentsLocalAxis(cSapModel Sap)
+        {
+            Dictionary<string, string>  nameLocalAxisFrame = new Dictionary<string, string>();
+
+            bool showWarning = false;
+            bool isError = false;
+
+            //Display table
+            src.HelperEtabs.DatabaseTable databaseTable = null;
+            (isError, databaseTable) = src.HelperEtabs.GetTableDisplay(Sap, "Frame Assignments - Local Axes", showWarning);
+
+            foreach (Dictionary<string, string> row in databaseTable.TableInList)
+            {
+                nameLocalAxisFrame.Add(row["UniqueName"], row["Angle"]);
+            }
+
+            return nameLocalAxisFrame;
+        }
+
+        private static Dictionary<string, string> copyAreaAssignmentsLocalAxis(cSapModel Sap)
+        {
+            Dictionary<string, string> nameLocalAxisArea = new Dictionary<string, string>();
+
+            bool showWarning = false;
+            bool isError = false;
+
+            //Display table
+            src.HelperEtabs.DatabaseTable databaseTable = null;
+            (isError, databaseTable) = src.HelperEtabs.GetTableDisplay(Sap, "Area Assignments - Local Axes", showWarning);
+
+            foreach (Dictionary<string, string> row in databaseTable.TableInList)
+            {
+                nameLocalAxisArea.Add(row["UniqueName"], row["Angle"]);
+            }
+
+            return nameLocalAxisArea;
+        }
+
         private static (Dictionary<string, string>, Dictionary<string, string>, Dictionary<string, string>, List<string>) copyObjectConnectivityToMidas(cSapModel Sap, List<string> tableKeys, List<string> textMgt, 
             List<string> textWarning, Dictionary<string, string> nameIndexSecProp, Dictionary<string, string> nameMatIndexSecProp, Dictionary<string, string> nameIndexAreaProp, 
-            Dictionary<string, string> nameMatIndexAreaProp, Dictionary<string, string> nameThinThickAreaProp)
+            Dictionary<string, string> nameMatIndexAreaProp, Dictionary<string, string> nameThinThickAreaProp, Dictionary<string, string> nameLocalAxisFrame, Dictionary<string, string>  nameLocalAxisArea)
         {
             //List to save node name and index
             Dictionary<string, string> nameIndexNode = new Dictionary<string, string>();
@@ -1868,7 +1923,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                 }
             }
 
-            //Creating frame and area geometry
+            //Creating frame geometry
             index = 1;
             foreach (src.HelperEtabs.DatabaseTable databaseTable in databaseTables)
             {
@@ -1899,10 +1954,17 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                         string ptJ = row["UniquePtJ"];
                         string indexPtJ = nameIndexNode[ptJ];
 
+                        //Finding local axis angle
+                        string localAxis = "0";
+                        if (nameLocalAxisFrame.ContainsKey(row["UniqueName"]))
+                        {
+                            localAxis = nameLocalAxisFrame[row["UniqueName"]];
+                        }
+
                         //Save node name and index
                         nameIndexFrame.Add(row["UniqueName"], Convert.ToString(index));
 
-                        textMgt.Add($"{index}, BEAM, {iMaterial}, {iProp}, {indexPtI}, {indexPtJ}, 0, 0");
+                        textMgt.Add($"{index}, BEAM, {iMaterial}, {iProp}, {indexPtI}, {indexPtJ}, {localAxis}, 0");
 
                         index++;
                     }
@@ -1933,10 +1995,17 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                         string ptJ = row["UniquePtJ"];
                         string indexPtJ = nameIndexNode[ptJ];
 
+                        //Finding local axis angle
+                        string localAxis = "0";
+                        if (nameLocalAxisFrame.ContainsKey(row["UniqueName"]))
+                        {
+                            localAxis = nameLocalAxisFrame[row["UniqueName"]];
+                        }
+
                         //Save node name and index
                         nameIndexFrame.Add(row["UniqueName"], Convert.ToString(index));
 
-                        textMgt.Add($"{index}, BEAM, {iMaterial}, {iProp}, {indexPtI}, {indexPtJ}, 0, 0");
+                        textMgt.Add($"{index}, BEAM, {iMaterial}, {iProp}, {indexPtI}, {indexPtJ}, {localAxis}, 0");
 
                         index++;
                     }
@@ -1995,6 +2064,13 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                             indexThinThick = "2";
                         }
 
+                        //Finding local axis angle
+                        string localAxis = "0";
+                        if (nameLocalAxisArea.ContainsKey(area.UniqueName))
+                        {
+                            localAxis = nameLocalAxisArea[area.UniqueName];
+                        }
+
                         //Finding node index
                         string indexPt1 = "0";
                         string indexPt2 = "0";
@@ -2020,7 +2096,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                             //Save area name and index
                             nameIndexArea.Add(area.UniqueName, Convert.ToString(index));
 
-                            textMgt.Add($"{index}, PLATE, {iMaterial}, {iProp}, {indexPt1}, {indexPt2}, {indexPt3}, {indexPt4}, {indexThinThick}, 0");
+                            textMgt.Add($"{index}, PLATE, {iMaterial}, {iProp}, {indexPt1}, {indexPt2}, {indexPt3}, {indexPt4}, {indexThinThick}, {localAxis}");
                         }
                         else
                         {
@@ -2077,6 +2153,13 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                             indexThinThick = "2";
                         }
 
+                        //Finding local axis angle
+                        string localAxis = "0";
+                        if (nameLocalAxisArea.ContainsKey(area.UniqueName))
+                        {
+                            localAxis = nameLocalAxisArea[area.UniqueName];
+                        }
+
                         //Finding node index
                         string indexPt1 = "0";
                         string indexPt2 = "0";
@@ -2102,7 +2185,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                             //Save area name and index
                             nameIndexArea.Add(area.UniqueName, Convert.ToString(index));
 
-                            textMgt.Add($"{index}, PLATE, {iMaterial}, {iProp}, {indexPt1}, {indexPt2}, {indexPt3}, {indexPt4}, {indexThinThick}, 0");
+                            textMgt.Add($"{index}, PLATE, {iMaterial}, {iProp}, {indexPt1}, {indexPt2}, {indexPt3}, {indexPt4}, {indexThinThick}, {localAxis}");
                         }
                         else
                         {
@@ -2291,6 +2374,10 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                             textMgt.Add($"{indexFrame}, {areaMod}, {aYMod}, {aZMod}, {jMod}, {iYMod}, {iZMod}, {weightMod}, ,1");
                         }
                     }
+                }
+                else if (databaseTable.TableKey == "Frame Assignments - Local Axes" && databaseTable.NumberRecords != 0)
+                {
+                    //Dont show warning because already captured in copyFrameAssignmentsLocalAxis
                 }
                 else
                 {
@@ -2793,13 +2880,12 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
             //Parsing direction Etabs to direction Midas
             if (directionEtabs == "Local-1")
             {
-                directionMidas = "Ly";
+                directionMidas = "Lx";
                 projected = "NO";
-                loadFactor = -1;
             }
             else if (directionEtabs == "Local-2")
             {
-                directionMidas = "Lx";
+                directionMidas = "Ly";
                 projected = "NO";
             }
             else if (directionEtabs == "Local-3")
