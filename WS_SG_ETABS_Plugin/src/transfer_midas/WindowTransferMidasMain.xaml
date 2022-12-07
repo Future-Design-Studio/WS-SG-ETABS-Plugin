@@ -88,9 +88,11 @@
 
             <TextBlock Grid.Row="1" Grid.Column="0" TextWrapping="Wrap" TextAlignment="Justify"  
                    Margin="10 0 10 0" FontSize="10">Note:<LineBreak/>
-                1. Only steel and concrete material is transfered<LineBreak/>
-                2. fck and rebar used in property definition not transfered<LineBreak/>
-                3. Does not seperate material for composite elements (ETABS does not seperate)<LineBreak/>
+                1. Please understand the warning that is given! Refer to warning.txt generated if needed<LineBreak/>
+                2. Only steel and concrete material is transfered<LineBreak/>
+                3. fck and rebar used in property definition not transfered. It does not affect FEM analysis<LineBreak/>
+                4. Null frame created using circular section diameter 0.01m<LineBreak/>
+                4. Null area created using slab thickness 0.01m<LineBreak/>
                 4. Press OK to proceed
             </TextBlock>
 

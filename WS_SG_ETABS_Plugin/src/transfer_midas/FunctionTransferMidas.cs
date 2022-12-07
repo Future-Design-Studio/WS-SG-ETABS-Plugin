@@ -494,6 +494,26 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
             int index = 1;
             foreach (Dictionary<string, string> rowTableGeneral in tableGeneral)
             {
+                //For index = 1, create null material for null frame and null area
+                if (index == 1)
+                {
+                    string materialName = "Null material";
+
+                    double unitWeight = 0;
+                    double unitMass = 0;
+                    double elasticModulus = 0.01;
+                    double poissonRatio = 0;
+                    double thermalCoefficient = 0;
+
+                    textMgt.Add($"{index}, CONC, {materialName}, 0, 0, ,C, NO, 0.05, 2, {elasticModulus}, {poissonRatio}, {thermalCoefficient}, {unitWeight}, {unitMass}");
+
+                    //Save material name and index
+                    Dictionary<string, string> nameIndexMaterialSingle = new Dictionary<string, string>() { };
+                    nameIndexMaterial.Add(materialName, Convert.ToString(index));
+
+                    index++;
+                }
+
                 //For concrete type
                 if (rowTableGeneral["Type"] == "Concrete")
                 {
@@ -663,7 +683,22 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
             int index = 1;
             foreach (src.HelperEtabs.DatabaseTable databaseTable in databaseTables)
             {
-                
+                //For first loop, will add in NULL FRAME
+                if (index == 1)
+                {
+                    string name = "Null frame";
+
+                    string sectionShape = "SR";
+                    double diameter = Convert.ToDouble(0.01);
+
+                    textMgt.Add($"{index}, DBUSER, {name}, CC, 0, 0, 0, 0, 0, 0, YES, NO, {sectionShape}, 2, {diameter}, 0, 0, 0, 0, 0, 0, 0, 0, 0");
+
+                    //Save property name and index
+                    nameIndexSecProp.Add(name, Convert.ToString(index));
+
+                    index++;
+                }
+
                 if (databaseTable.TableKey == "Frame Section Property Definitions - Steel I/Wide Flange")
                 {
                     //Placeholder for each table
@@ -1216,6 +1251,10 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
             //List to save material index
             Dictionary<string, string> nameMatIndexSecProp = new Dictionary<string, string>();
 
+            //Save material index for NULL FRAME
+            string materialIndex = nameIndexMaterial["Null material"];
+            nameMatIndexSecProp.Add("Null frame", materialIndex);
+
             //MGTHeader for section property stiffness modifier
             textMgt.Add("*SECT-SCALE");
             textMgt.Add("; i, (area modifier), (shear minor modifier), (shear major modifier), (torsion modifier), (moment major modifier), (moment minor modifier)");
@@ -1288,7 +1327,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                             }
                             else
                             {
-                                string materialIndex = nameIndexMaterial[row["Material"]];
+                                materialIndex = nameIndexMaterial[row["Material"]];
                                 nameMatIndexSecProp.Add(row["Name"], materialIndex);
                             }
                         }
@@ -1326,6 +1365,23 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
             int index = 1;
             foreach (src.HelperEtabs.DatabaseTable databaseTable in databaseTables)
             {
+                //For index = 1 create null area
+                if (index == 1)
+                {
+                    string name = "Null area";
+                    double thickness = 0.01;
+
+                    textMgt.Add($"{index}, VALUE, {name}, YES, {thickness}, 0, NO, 0, 0");
+
+                    //Save property name and index
+                    nameIndexAreaProp.Add(name, Convert.ToString(index));
+
+                    //Save shell name and thin or thick
+                    nameThinThickAreaProp.Add(name, "thin");
+
+                    index++;
+                }
+                
                 if (databaseTable.TableKey == "Area Section Property Definitions - Summary")
                 {
                     //do nothing for the summary
@@ -1585,6 +1641,10 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
             //List to save material index
             Dictionary<string, string> nameMatIndexAreaProp = new Dictionary<string, string>();
 
+            //Save material index for NULL AREA
+            string materialIndex = nameIndexMaterial["Null material"];
+            nameMatIndexAreaProp.Add("Null area", materialIndex);
+
             //Save stiffness modifiers and material index
             foreach (src.HelperEtabs.DatabaseTable databaseTable in databaseTables)
             {
@@ -1597,7 +1657,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                         //Check if section property exist in nameIndexSecProp
                         if (nameIndexAreaProp.ContainsKey(row["Name"]))
                         {
-                            string materialIndex = nameIndexMaterial[row["Material"]];
+                            materialIndex = nameIndexMaterial[row["Material"]];
                             nameMatIndexAreaProp.Add(row["Name"], materialIndex);
                         }
                     }
@@ -1847,6 +1907,40 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                         index++;
                     }
                 }
+                else if (databaseTable.TableKey == "Null Line Object Connectivity")
+                {
+                    //MGTHeader
+                    textMgt.Add("*ELEMENT");
+                    textMgt.Add("; i, BEAM, (index material), (index property), (index joint i), (index joint j), (angle=0), (index subtype=0)");
+
+                    List<Dictionary<string, string>> table = new List<Dictionary<string, string>>();
+
+                    table = databaseTable.TableInList;
+
+                    foreach (Dictionary<string, string> row in table)
+                    {
+                        //Finding section property index
+                        string secProp = "Null frame";
+                        string iProp = nameIndexSecProp[secProp];
+
+                        //Finding material index
+                        string iMaterial = nameMatIndexSecProp[secProp];
+
+                        //Finding node index
+                        string ptI = row["UniquePtI"];
+                        string indexPtI = nameIndexNode[ptI];
+
+                        string ptJ = row["UniquePtJ"];
+                        string indexPtJ = nameIndexNode[ptJ];
+
+                        //Save node name and index
+                        nameIndexFrame.Add(row["UniqueName"], Convert.ToString(index));
+
+                        textMgt.Add($"{index}, BEAM, {iMaterial}, {iProp}, {indexPtI}, {indexPtJ}, 0, 0");
+
+                        index++;
+                    }
+                }
 
                 //Area geometry
 
@@ -1884,6 +1978,88 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
 
                         //Finding section property index
                         string areaProp = areaPropAssigned[area.UniqueName];
+                        string iProp = nameIndexAreaProp[areaProp];
+
+                        //Finding material index
+                        string iMaterial = nameMatIndexAreaProp[areaProp];
+
+                        //Finding thin or thick
+                        string thinThick = nameThinThickAreaProp[areaProp];
+                        string indexThinThick = "";
+                        if (thinThick == "thick")
+                        {
+                            indexThinThick = "1";
+                        }
+                        else if (thinThick == "thin")
+                        {
+                            indexThinThick = "2";
+                        }
+
+                        //Finding node index
+                        string indexPt1 = "0";
+                        string indexPt2 = "0";
+                        string indexPt3 = "0";
+                        string indexPt4 = "0";
+                        if (area.Points.Count == 3 || area.Points.Count == 4)
+                        {
+                            string pt1 = area.Points[0];
+                            indexPt1 = nameIndexNode[pt1];
+
+                            string pt2 = area.Points[1];
+                            indexPt2 = nameIndexNode[pt2];
+
+                            string pt3 = area.Points[2];
+                            indexPt3 = nameIndexNode[pt3];
+
+                            if (area.Points.Count == 4)
+                            {
+                                string pt4 = area.Points[3];
+                                indexPt4 = nameIndexNode[pt4];
+                            };
+
+                            //Save area name and index
+                            nameIndexArea.Add(area.UniqueName, Convert.ToString(index));
+
+                            textMgt.Add($"{index}, PLATE, {iMaterial}, {iProp}, {indexPt1}, {indexPt2}, {indexPt3}, {indexPt4}, {indexThinThick}, 0");
+                        }
+                        else
+                        {
+                            skippedAreas.Add(area.UniqueName);
+                        }
+                        index++;
+                    }
+                }
+                else if (databaseTable.TableKey == "Null Area Object Connectivity")
+                {
+                    //Getting area list parsed as Shell type
+                    List<src.HelperEtabs.Shell> areaList = src.HelperEtabs.GetShellsPoints(databaseTable);
+
+                    //MGTHeader
+                    textMgt.Add("*ELEMENT");
+                    textMgt.Add("; i, PLATE, (index material), (index property), (index joint 1), (index joint 2), (index joint 3), (index joint 4), (subtype thick=1 thin=2), (local axis)");
+
+                    foreach (src.HelperEtabs.Shell area in areaList)
+                    {
+                        //Show warning if there are more than 4 points
+                        if (area.Points.Count > 4)
+                        {
+                            string warning = "";
+
+                            //Show warning once
+                            if (!moreThan4NodesWarningShown)
+                            {
+                                warning = $"Area with > 4 nodes is found! Max node number in MIDAS is 4!";
+                                MessageBox.Show(warning);
+                                moreThan4NodesWarningShown = true;
+                            }
+
+                            warning = $"Area {area.UniqueName} (in ETABS) or {index} (in MIDAS) has {area.Points.Count} nodes! Max node number in MIDAS is 4!";
+                            //MessageBox.Show(warning);
+                            textWarning.Add(warning);
+                        }
+
+                        //Finding section property index
+                        string areaProp = "Null area";
                         string iProp = nameIndexAreaProp[areaProp];
 
                         //Finding material index
