@@ -1111,6 +1111,25 @@ namespace WS_SG_ETABS_Plugin.src
         }
 
         /// <summary>
+        /// Get list of all loads patterns
+        /// </summary>
+        /// <param name="Sap"></param>
+        /// <returns></returns>
+        public static List<string> GetAllLoadPattern(cSapModel Sap)
+        {
+            List<string> outputPatternsList = new List<string>();
+
+            //Load Pattern
+            int NumberNames = 0;
+            string[] MyName = null;
+            Sap.LoadPatterns.GetNameList(ref NumberNames, ref MyName);
+
+            outputPatternsList.AddRange(MyName);
+
+            return outputPatternsList;
+        }
+
+        /// <summary>
         /// Get list of load cases and combo
         /// </summary>
         /// <param name="Sap"></param>

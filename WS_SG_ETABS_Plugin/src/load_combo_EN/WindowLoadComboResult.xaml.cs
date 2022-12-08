@@ -18,7 +18,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
     /// <summary>
     /// Interaction logic for WindowLoadComboResult.xaml
     /// </summary>
-    public partial class WindowLoadComboResult : UserControl
+    public partial class WindowLoadComboResult : Window
     {
         public WindowLoadComboResult()
         {

@@ -4,27 +4,44 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WS_SG_ETABS_Plugin.src.load_combo_EN"
-             mc:Ignorable="d" Height="2400" Width="1920" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+             mc:Ignorable="d" Height="1100" Width="2400" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
 
     <Grid Margin="10">
+
+        <Grid.Resources>
+            <SolidColorBrush x:Key="brush" Color="Black"/>
+        </Grid.Resources>
 
         <Grid.RowDefinitions>
             <RowDefinition Height="0.4*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
-            <RowDefinition Height="1.2*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
-            <RowDefinition Height="*"></RowDefinition>
-            <RowDefinition Height="*"></RowDefinition>
-            <RowDefinition Height="*"></RowDefinition>
-            <RowDefinition Height="*"></RowDefinition>
-            <RowDefinition Height="*"></RowDefinition>
-            <RowDefinition Height="0.4*"></RowDefinition>
+            <RowDefinition Height="0.5*"></RowDefinition>
+            <RowDefinition Height="0.2*"></RowDefinition>
         </Grid.RowDefinitions>
 
-        <Label Grid.Row="0" Grid.Column="0" Content="Load Pattern and Load Case Definition" FontSize="28"/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+        <Border BorderBrush="{StaticResource brush}" BorderThickness="1 1 0 1" Grid.Column="0"></Border>
+        <Border BorderBrush="{StaticResource brush}" BorderThickness="0 1 1 1" Grid.Column="1"></Border>
+        <Border BorderBrush="{StaticResource brush}" BorderThickness="1 1 1 1" Grid.Column="0" Grid.Row="1"></Border>
+        <Border BorderBrush="{StaticResource brush}" BorderThickness="1 1 1 1" Grid.Column="1" Grid.Row="1"></Border>
+        <Border BorderBrush="{StaticResource brush}" BorderThickness="1 1 1 1" Grid.Column="0" Grid.Row="2"></Border>
+        <Border BorderBrush="{StaticResource brush}" BorderThickness="1 1 1 1" Grid.Column="1" Grid.Row="2"></Border>
+        <Border BorderBrush="{StaticResource brush}" BorderThickness="1 1 1 1" Grid.Column="0" Grid.Row="3"></Border>
+        <Border BorderBrush="{StaticResource brush}" BorderThickness="1 1 1 1" Grid.Column="1" Grid.Row="3"></Border>
+        <Border BorderBrush="{StaticResource brush}" BorderThickness="1 1 1 1" Grid.Column="0" Grid.Row="4"></Border>
+        <Border BorderBrush="{StaticResource brush}" BorderThickness="1 1 1 1" Grid.Column="1" Grid.Row="4"></Border>
+        <Border BorderBrush="{StaticResource brush}" BorderThickness="1 1 1 1" Grid.Column="0" Grid.Row="5"></Border>
+        <Border BorderBrush="{StaticResource brush}" BorderThickness="1 1 1 1" Grid.Column="1" Grid.Row="5"></Border>
+
+        <Label Grid.Row="0" Grid.Column="0" Content="Load Pattern and Load Case Definition" FontSize="28" Grid.ColumnSpan="2"/>
 
         <Grid Grid.Row="1">
 
@@ -51,23 +68,23 @@
             <Label Grid.Row="1" Content="Gk" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             <Label Grid.Row="1" Grid.Column="1" Content="Dead Load" VerticalAlignment="Center" HorizontalAlignment="Center"/>
 
-            <CheckBox x:Name="checkBoxEXISTINGDL" Grid.Row="1" Grid.Column="2"  Grid.ColumnSpan="1"
-                      Checked="checkBoxEXISTINGDL_Checked" Unchecked="checkBoxEXISTINGDL_UnChecked" 
+            <CheckBox x:Name="checkBoxExistingDL" Grid.Row="1" Grid.Column="2"  Grid.ColumnSpan="1"
+                      Checked="checkBoxExistingDL_Checked" Unchecked="checkBoxExistingDL_Unchecked" 
                       VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="True">
             </CheckBox>
-            <ComboBox  Grid.Row="1" Grid.Column="3" x:Name="comBoxEXISTINGDL" 
+            <ComboBox  Grid.Row="1" Grid.Column="3" x:Name="comBoxExistingDL" 
                        VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
-                       Text="0.5" SelectionChanged="comBoxEXISTINGDL_SelectionChanged"></ComboBox>
-            <TextBox Grid.Column="4" x:Name="textBoxNameDL" Grid.Row="1" IsEnabled="False"></TextBox>
+                       Text="0.5" SelectionChanged="comBoxExistingDL_SelectionChanged"></ComboBox>
+            <TextBox Grid.Column="4" x:Name="textBoxNameDL" Grid.Row="1" IsEnabled="False" TextChanged="textBoxNameDL_TextChanged"></TextBox>
 
-            <Button Grid.Row="1" Grid.Column="5" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" ></Button>
+            <Button Grid.Row="1" Grid.Column="5" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_Click" ></Button>
 
             <ListBox x:Name="listBoxChoosenDL" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="6" 
                      d:ItemsSource="{d:SampleData ItemCount=1}" SelectionMode="Single"
                      Margin="0 10 0 10" SelectionChanged="listBoxChoosenGroup_SelectionChanged">
             </ListBox>
 
-            <Button Grid.Row="3" Grid.Column="5" Content="Remove" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" ></Button>
+            <Button Grid.Row="3" Grid.Column="5" Content="Remove" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_Click_1" ></Button>
 
         </Grid>
 
@@ -76,7 +93,7 @@
 
 
 
-        <Grid Grid.Row="2">
+        <Grid Grid.Row="1" Grid.Column="1">
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"></ColumnDefinition>
@@ -101,23 +118,23 @@
             <Label Grid.Row="1" Content="Gk" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             <Label Grid.Row="1" Grid.Column="1" Content="Superimposed Dead Load" VerticalAlignment="Center" HorizontalAlignment="Center"/>
 
-            <CheckBox x:Name="checkBoxEXISTINGSDL" Grid.Row="1" Grid.Column="2"  Grid.ColumnSpan="1"
-                      Checked="checkBoxEXISTINGSDL_Checked" Unchecked="checkBoxEXISTINGSDL_UnChecked" 
+            <CheckBox x:Name="checkBoxExistingSDL" Grid.Row="1" Grid.Column="2"  Grid.ColumnSpan="1"
+                      Checked="checkBoxExistingSDL_Checked" Unchecked="checkBoxExistingSDL_Unchecked" 
                       VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="True">
             </CheckBox>
-            <ComboBox  Grid.Row="1" Grid.Column="3" x:Name="comBoxEXISTINGSDL" 
+            <ComboBox  Grid.Row="1" Grid.Column="3" x:Name="comBoxExistingSDL" 
                        VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
-                       Text="0.5" SelectionChanged="comBoxEXISTINGSDL_SelectionChanged"></ComboBox>
-            <TextBox Grid.Column="4" x:Name="textBoxNameSDL" Grid.Row="1" IsEnabled="False"></TextBox>
+                       Text="0.5" SelectionChanged="comBoxExistingSDL_SelectionChanged"></ComboBox>
+            <TextBox Grid.Column="4" x:Name="textBoxNameSDL" Grid.Row="1" IsEnabled="False" TextChanged="textBoxNameSDL_TextChanged"></TextBox>
 
-            <Button Grid.Row="1" Grid.Column="5" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" ></Button>
+            <Button Grid.Row="1" Grid.Column="5" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_Click_2" ></Button>
 
             <ListBox x:Name="listBoxChoosenSDL" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="6" 
                      d:ItemsSource="{d:SampleData ItemCount=4}" SelectionMode="Single"
                      Margin="0 10 0 10" SelectionChanged="listBoxChoosenSDL_SelectionChanged">
             </ListBox>
 
-            <Button Grid.Row="3" Grid.Column="5" Content="Remove" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" ></Button>
+            <Button Grid.Row="3" Grid.Column="5" Content="Remove" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_Click_3" ></Button>
 
         </Grid>
 
@@ -126,7 +143,7 @@
 
 
 
-        <Grid Grid.Row="3" HorizontalAlignment="Left" Margin="0,0,0,236" Grid.RowSpan="2" Width="1900">
+        <Grid Grid.Row="2">
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"></ColumnDefinition>
@@ -153,27 +170,27 @@
             <Label Grid.Row="1" Content="Qk" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             <Label Grid.Row="1" Grid.Column="1" Content="Live Load" VerticalAlignment="Center" HorizontalAlignment="Center"/>
 
-            <CheckBox x:Name="checkBoxEXISTINGLL" Grid.Row="1" Grid.Column="2"  Grid.ColumnSpan="1"
-                      Checked="checkBoxEXISTINGLL_Checked" Unchecked="checkBoxEXISTINGLL_UnChecked" 
+            <CheckBox x:Name="checkBoxExistingLL" Grid.Row="1" Grid.Column="2"  Grid.ColumnSpan="1"
+                      Checked="checkBoxExistingLL_Checked" Unchecked="checkBoxExistingLL_Unchecked" 
                       VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="True">
             </CheckBox>
-            <ComboBox  Grid.Row="1" Grid.Column="3" x:Name="comBoxEXISTINGLL" 
+            <ComboBox  Grid.Row="1" Grid.Column="3" x:Name="comBoxExistingLL" 
                        VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
-                       Text="0.5" SelectionChanged="comBoxEXISTINGLL_SelectionChanged"></ComboBox>
-            <TextBox Grid.Column="4" x:Name="textBoxNameLL" Grid.Row="1" IsEnabled="False"></TextBox>
+                       Text="0.5" SelectionChanged="comBoxExistingLL_SelectionChanged"></ComboBox>
+            <TextBox Grid.Column="4" x:Name="textBoxNameLL" Grid.Row="1" IsEnabled="False" TextChanged="textBoxNameLL_TextChanged"></TextBox>
 
             <ComboBox  Grid.Row="1" Grid.Column="5" x:Name="comBoxLL" 
                        VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
                        Text="0.5" SelectionChanged="comBoxLL_SelectionChanged"></ComboBox>
 
-            <Button Grid.Row="1" Grid.Column="6" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" ></Button>
+            <Button Grid.Row="1" Grid.Column="6" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_Click_4" ></Button>
 
             <ListBox x:Name="listBoxChoosenLL" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="7" 
                      d:ItemsSource="{d:SampleData ItemCount=10}" SelectionMode="Single"
                      Margin="0 10 0 10" SelectionChanged="listBoxChoosenLL_SelectionChanged">
             </ListBox>
 
-            <Button Grid.Row="3" Grid.Column="6" Content="Remove" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" ></Button>
+            <Button Grid.Row="3" Grid.Column="6" Content="Remove" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_Click_5" ></Button>
 
         </Grid>
 
@@ -182,7 +199,7 @@
 
 
 
-        <Grid Grid.Row="4">
+        <Grid Grid.Row="2" Grid.Column="1">
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"></ColumnDefinition>
@@ -215,52 +232,52 @@
             <Label Grid.Row="1" Grid.Column="1" Content="Wind Load" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             <Label Grid.Row="2" Grid.Column="1" Content="Wind Vertical Load" VerticalAlignment="Center" HorizontalAlignment="Center"/>
 
-            <CheckBox x:Name="checkBoxEXISTINGWIND" Grid.Row="1" Grid.Column="2"  Grid.ColumnSpan="1"
-                      Checked="checkBoxEXISTINGWIND_Checked" Unchecked="checkBoxEXISTINGWIND_UnChecked" 
+            <CheckBox x:Name="checkBoxExistingWIND" Grid.Row="1" Grid.Column="2"  Grid.ColumnSpan="1"
+                      Checked="checkBoxExistingWIND_Checked" Unchecked="checkBoxExistingWIND_Unchecked" 
                       VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="True">
             </CheckBox>
-            <ComboBox  Grid.Row="1" Grid.Column="3" x:Name="comBoxEXISTINGWIND" 
+            <ComboBox  Grid.Row="1" Grid.Column="3" x:Name="comBoxExistingWIND" 
                        VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
-                       Text="0.5" SelectionChanged="comBoxEXISTINGWIND_SelectionChanged"></ComboBox>
-            <TextBox Grid.Column="4" x:Name="textBoxNameWIND" Grid.Row="1" IsEnabled="False"></TextBox>
-            <CheckBox x:Name="checkBoxEXISTINGWINDVERTICAL" Grid.Row="2" Grid.Column="2"  Grid.ColumnSpan="1"
-                      Checked="checkBoxEXISTINGWINDVERTICAL_Checked" Unchecked="checkBoxEXISTINGWINDVERTICAL_UnChecked" 
+                       Text="0.5" SelectionChanged="comBoxExistingWIND_SelectionChanged"></ComboBox>
+            <TextBox Grid.Column="4" x:Name="textBoxNameWIND" Grid.Row="1" IsEnabled="False" TextChanged="textBoxNameWIND_TextChanged"></TextBox>
+            <CheckBox x:Name="checkBoxExistingWINDVERTICAL" Grid.Row="2" Grid.Column="2"  Grid.ColumnSpan="1"
+                      Checked="checkBoxExistingWINDVERTICAL_Checked" Unchecked="checkBoxExistingWINDVERTICAL_Unchecked" 
                       VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="True">
             </CheckBox>
-            <ComboBox  Grid.Row="2" Grid.Column="3" x:Name="comBoxEXISTINGWINDVERTICAL" 
+            <ComboBox  Grid.Row="2" Grid.Column="3" x:Name="comBoxExistingWINDVERTICAL" 
                        VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
-                       Text="0.5" SelectionChanged="comBoxEXISTINGWINDVERTICAL_SelectionChanged"></ComboBox>
-            <TextBox Grid.Column="4" x:Name="textBoxNameWINDVERTICAL" Grid.Row="2" IsEnabled="False"></TextBox>
+                       Text="0.5" SelectionChanged="comBoxExistingWINDVERTICAL_SelectionChanged"></ComboBox>
+            <TextBox Grid.Column="4" x:Name="textBoxNameWINDVERTICAL" Grid.Row="2" IsEnabled="False" TextChanged="textBoxNameWINDVERTICAL_TextChanged"></TextBox>
 
             <ComboBox  Grid.Row="1" Grid.Column="5" x:Name="comBoxWIND" 
                        VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
-                       Text="0.5"></ComboBox>
+                       Text="0.5" SelectionChanged="comBoxWIND_SelectionChanged"></ComboBox>
             <ComboBox  Grid.Row="2" Grid.Column="5" x:Name="comBoxWINDVERTICAL" 
                        VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
-                       Text="0.5"></ComboBox>
+                       Text="0.5" SelectionChanged="comBoxWINDVERTICAL_SelectionChanged"></ComboBox>
 
             <CheckBox x:Name="checkBoxWIND" Grid.Row="1" Grid.Column="6"  Grid.ColumnSpan="1"
-                      Checked="checkBoxWIND_Checked" Unchecked="checkBoxWIND_UnChecked" 
-                      VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="False">
+                      Checked="checkBoxWIND_Checked" Unchecked="checkBoxWIND_Unchecked" 
+                      VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="False" IsEnabled="False">
             </CheckBox>
             <CheckBox x:Name="checkBoxWINDVERTICAL" Grid.Row="2" Grid.Column="6"  Grid.ColumnSpan="1"
-                      Checked="checkBoxWINDVERTICAL_Checked" Unchecked="checkBoxWINDVERTICAL_UnChecked" 
-                      VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="False">
+                      Checked="checkBoxWINDVERTICAL_Checked" Unchecked="checkBoxWINDVERTICAL_Unchecked" 
+                      VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="False" IsEnabled="False">
             </CheckBox>
 
             <ComboBox  Grid.Row="1" Grid.Column="7" x:Name="comBoxWINDDIRECTION" 
                        VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
-                       Text="0.5"></ComboBox>
+                       Text="0.5" SelectionChanged="comBoxWINDDIRECTION_SelectionChanged"></ComboBox>
 
-            <Button Grid.Row="1" Grid.Column="8" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" ></Button>
-            <Button Grid.Row="2" Grid.Column="8" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" ></Button>
+            <Button Grid.Row="1" Grid.Column="8" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_Click_6" ></Button>
+            <Button Grid.Row="2" Grid.Column="8" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_Click_7" ></Button>
 
             <ListBox x:Name="listBoxChoosenWIND" Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="9" 
                      d:ItemsSource="{d:SampleData ItemCount=10}" SelectionMode="Single"
                      Margin="0 10 0 10" SelectionChanged="listBoxChoosenWIND_SelectionChanged">
             </ListBox>
 
-            <Button Grid.Row="4" Grid.Column="8" Content="Remove" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" ></Button>
+            <Button Grid.Row="4" Grid.Column="8" Content="Remove" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_Click_8" ></Button>
 
         </Grid>
 
@@ -269,7 +286,7 @@
 
 
 
-        <Grid Grid.Row="5">
+        <Grid Grid.Row="3">
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"></ColumnDefinition>
@@ -287,7 +304,7 @@
 
             <Label Grid.Row="1" Grid.Column="0" Content="Notional Load" VerticalAlignment="Center" HorizontalAlignment="Center"/>
 
-            <TextBox Grid.Column="2" x:Name="textBoxNameNOTIONALFACTOR" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" >0.015</TextBox>
+            <TextBox Grid.Column="2" x:Name="textBoxNameNOTIONALFACTOR" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" TextChanged="textBoxNameNOTIONALFACTOR_TextChanged" >0.015</TextBox>
 
             <ListBox x:Name="listBoxChoosenNOTIONAL" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="5" 
                      d:ItemsSource="{d:SampleData ItemCount=10}" SelectionMode="Single"
@@ -302,7 +319,7 @@
 
 
 
-        <Grid Grid.Row="6">
+        <Grid Grid.Row="3" Grid.Column="1">
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"></ColumnDefinition>
@@ -329,27 +346,27 @@
             <Label Grid.Row="1" Grid.Column="1" Content="Temperature Load" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             <Label Grid.Row="1" Grid.Column="0" Content="Qk" VerticalAlignment="Center" HorizontalAlignment="Center"/>
 
-            <CheckBox x:Name="checkBoxEXISTINGTEMP" Grid.Row="1" Grid.Column="2"  Grid.ColumnSpan="1"
-                      Checked="checkBoxEXISTINGTEMP_Checked" Unchecked="checkBoxEXISTINGTEMP_UnChecked" 
+            <CheckBox x:Name="checkBoxExistingTEMP" Grid.Row="1" Grid.Column="2"  Grid.ColumnSpan="1"
+                      Checked="checkBoxExistingTEMP_Checked" Unchecked="checkBoxExistingTEMP_Unchecked" 
                       VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="True">
             </CheckBox>
-            <ComboBox  Grid.Row="1" Grid.Column="3" x:Name="comBoxEXISTINGTEMP" 
+            <ComboBox  Grid.Row="1" Grid.Column="3" x:Name="comBoxExistingTEMP" 
                        VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
-                       Text="0.5" SelectionChanged="comBoxEXISTINGTEMP_SelectionChanged"></ComboBox>
-            <TextBox Grid.Column="4" x:Name="textBoxNameTEMP" Grid.Row="1" IsEnabled="False"></TextBox>
+                       Text="0.5" SelectionChanged="comBoxExistingTEMP_SelectionChanged"></ComboBox>
+            <TextBox Grid.Column="4" x:Name="textBoxNameTEMP" Grid.Row="1" IsEnabled="False" TextChanged="textBoxNameTEMP_TextChanged"></TextBox>
 
             <ComboBox  Grid.Row="1" Grid.Column="5" x:Name="comBoxTEMP" 
                        VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
-                       Text="0.5"></ComboBox>
+                       Text="0.5" SelectionChanged="comBoxTEMP_SelectionChanged"></ComboBox>
 
-            <Button Grid.Row="1" Grid.Column="6" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" ></Button>
+            <Button Grid.Row="1" Grid.Column="6" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_Click_9" ></Button>
 
             <ListBox x:Name="listBoxChoosenTEMP" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="7" 
                      d:ItemsSource="{d:SampleData ItemCount=2}" SelectionMode="Single"
                      Margin="0 10 0 10" SelectionChanged="listBoxChoosenTEMP_SelectionChanged">
             </ListBox>
 
-            <Button Grid.Row="3" Grid.Column="6" Content="Remove" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" ></Button>
+            <Button Grid.Row="3" Grid.Column="6" Content="Remove" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_Click_10" ></Button>
 
         </Grid>
 
@@ -358,7 +375,7 @@
 
 
 
-        <Grid Grid.Row="7">
+        <Grid Grid.Row="4">
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"></ColumnDefinition>
@@ -380,22 +397,22 @@
 
             <Label Grid.Row="1" Grid.Column="0" Content="Seismic Load" VerticalAlignment="Center" HorizontalAlignment="Center"/>
 
-            <CheckBox x:Name="checkBoxEXISTINGSEISMIC" Grid.Row="1" Grid.Column="1"  Grid.ColumnSpan="1"
-                      Checked="checkBoxEXISTINGSEISMIC_Checked" Unchecked="checkBoxEXISTINGSEISMIC_UnChecked" 
+            <CheckBox x:Name="checkBoxExistingSEISMIC" Grid.Row="1" Grid.Column="1"  Grid.ColumnSpan="1"
+                      Checked="checkBoxExistingSEISMIC_Checked" Unchecked="checkBoxExistingSEISMIC_Unchecked" 
                       VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="True">
             </CheckBox>
-            <ComboBox  Grid.Row="1" Grid.Column="2" x:Name="comBoxEXISTINGSEISMIC" 
+            <ComboBox  Grid.Row="1" Grid.Column="2" x:Name="comBoxExistingSEISMIC" 
                        VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
-                       Text="0.5" SelectionChanged="comBoxEXISTINGSEISMIC_SelectionChanged"></ComboBox>
-            
-            <Button Grid.Row="1" Grid.Column="3" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" ></Button>
+                       Text="0.5" SelectionChanged="comBoxExistingSEISMIC_SelectionChanged"></ComboBox>
+
+            <Button Grid.Row="1" Grid.Column="3" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_Click_11" ></Button>
 
             <ListBox x:Name="listBoxChoosenSEISMIC" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="4" 
                      d:ItemsSource="{d:SampleData ItemCount=3}" SelectionMode="Single"
                      Margin="0 10 0 10" SelectionChanged="listBoxChoosenSEISMIC_SelectionChanged">
             </ListBox>
 
-            <Button Grid.Row="3" Grid.Column="3" Content="Remove" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" ></Button>
+            <Button Grid.Row="3" Grid.Column="3" Content="Remove" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_Click_12" ></Button>
 
         </Grid>
 
@@ -404,7 +421,7 @@
 
 
 
-        <Grid Grid.Row="8">
+        <Grid Grid.Row="4" Grid.Column="1">
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"></ColumnDefinition>
@@ -428,28 +445,28 @@
 
             <Label Grid.Row="1" Grid.Column="0" Content="Accidental Load" VerticalAlignment="Center" HorizontalAlignment="Center"/>
 
-            <CheckBox x:Name="checkBoxEXISTINGAL" Grid.Row="1" Grid.Column="1"  Grid.ColumnSpan="1"
-                      Checked="checkBoxEXISTINGAL_Checked" Unchecked="checkBoxEXISTINGAL_UnChecked" 
+            <CheckBox x:Name="checkBoxExistingAL" Grid.Row="1" Grid.Column="1"  Grid.ColumnSpan="1"
+                      Checked="checkBoxExistingAL_Checked" Unchecked="checkBoxExistingAL_Unchecked" 
                       VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="True">
             </CheckBox>
-            <ComboBox  Grid.Row="1" Grid.Column="2" x:Name="comBoxEXISTINGAL" 
+            <ComboBox  Grid.Row="1" Grid.Column="2" x:Name="comBoxExistingAL" 
                        VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
-                       Text="0.5" SelectionChanged="comBoxEXISTINGAL_SelectionChanged"></ComboBox>
-            <TextBox Grid.Column="3" x:Name="textBoxNameAL" Grid.Row="1" IsEnabled="False"></TextBox>
+                       Text="0.5" SelectionChanged="comBoxExistingAL_SelectionChanged"></ComboBox>
+            <TextBox Grid.Column="3" x:Name="textBoxNameAL" Grid.Row="1" IsEnabled="False" TextChanged="textBoxNameAL_TextChanged"></TextBox>
 
             <CheckBox x:Name="checkBoxAL" Grid.Row="1" Grid.Column="4"  Grid.ColumnSpan="1"
-                      Checked="checkBoxAL_Checked" Unchecked="checkBoxAL_UnChecked" 
-                      VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="False">
+                      Checked="checkBoxAL_Checked" Unchecked="checkBoxAL_Unchecked" 
+                      VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="False" IsEnabled="False">
             </CheckBox>
 
-            <Button Grid.Row="1" Grid.Column="5" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" ></Button>
+            <Button Grid.Row="1" Grid.Column="5" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_Click_13" ></Button>
 
             <ListBox x:Name="listBoxChoosenAL" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="6" 
                      d:ItemsSource="{d:SampleData ItemCount=4}" SelectionMode="Single"
                      Margin="0 10 0 10" SelectionChanged="listBoxChoosenAL_SelectionChanged">
             </ListBox>
 
-            <Button Grid.Row="3" Grid.Column="5" Content="Remove" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" ></Button>
+            <Button Grid.Row="3" Grid.Column="5" Content="Remove" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_Click_14" ></Button>
 
         </Grid>
 
@@ -458,7 +475,7 @@
 
 
 
-        <Grid Grid.Row="9">
+        <Grid Grid.Row="5">
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"></ColumnDefinition>
@@ -480,22 +497,22 @@
 
             <Label Grid.Row="1" Grid.Column="0" Content="Uplift Load" VerticalAlignment="Center" HorizontalAlignment="Center"/>
 
-            <CheckBox x:Name="checkBoxEXISTINGUPLIFT" Grid.Row="1" Grid.Column="1"  Grid.ColumnSpan="1"
-                      Checked="checkBoxEXISTINGUPLIFT_Checked" Unchecked="checkBoxEXISTINGUPLIFT_UnChecked" 
+            <CheckBox x:Name="checkBoxExistingUPLIFT" Grid.Row="1" Grid.Column="1"  Grid.ColumnSpan="1"
+                      Checked="checkBoxExistingUPLIFT_Checked" Unchecked="checkBoxExistingUPLIFT_Unchecked" 
                       VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="True">
             </CheckBox>
-            <ComboBox  Grid.Row="1" Grid.Column="2" x:Name="comBoxEXISTINGUPLIFT" 
+            <ComboBox  Grid.Row="1" Grid.Column="2" x:Name="comBoxExistingUPLIFT" 
                        VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
-                       Text="0.5" SelectionChanged="comBoxEXISTINGUPLIFT_SelectionChanged"></ComboBox>
-            
-            <Button Grid.Row="1" Grid.Column="3" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" ></Button>
+                       Text="0.5" SelectionChanged="comBoxExistingUPLIFT_SelectionChanged"></ComboBox>
+
+            <Button Grid.Row="1" Grid.Column="3" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_Click_15" ></Button>
 
             <ListBox x:Name="listBoxChoosenUPLIFT" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="4" 
                      d:ItemsSource="{d:SampleData ItemCount=1}" SelectionMode="Single"
                      Margin="0 10 0 10" SelectionChanged="listBoxChoosenUPLIFT_SelectionChanged">
             </ListBox>
 
-            <Button Grid.Row="3" Grid.Column="3" Content="Remove" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" ></Button>
+            <Button Grid.Row="3" Grid.Column="3" Content="Remove" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_Click_16" ></Button>
 
         </Grid>
 
@@ -504,7 +521,7 @@
 
 
 
-        <Grid Grid.Row="10">
+        <Grid Grid.Row="5" Grid.Column="1">
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"></ColumnDefinition>
@@ -524,16 +541,16 @@
 
             <Label Grid.Row="1" Grid.Column="0" Content="Equivalent Horizontal Force" VerticalAlignment="Center" HorizontalAlignment="Center"/>
 
-            <TextBox Grid.Column="1" x:Name="textBoxNameEHF" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" >0.005</TextBox>
+            <TextBox Grid.Column="1" x:Name="textBoxNameEHF" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" TextChanged="textBoxNameEHF_TextChanged" >0.005</TextBox>
 
-            <Button Grid.Row="1" Grid.Column="2" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" ></Button>
+            <Button Grid.Row="1" Grid.Column="2" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_Click_17" ></Button>
 
             <ListBox x:Name="listBoxChoosenEHF" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="5" 
                      d:ItemsSource="{d:SampleData ItemCount=30}" SelectionMode="Single"
                      Margin="0 10 0 10" SelectionChanged="listBoxChoosenEHF_SelectionChanged">
             </ListBox>
 
-            <Button Grid.Row="3" Grid.Column="2" Content="Remove" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" ></Button>
+            <Button Grid.Row="3" Grid.Column="2" Content="Remove" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_Click_18" ></Button>
 
         </Grid>
 
@@ -542,7 +559,7 @@
 
 
 
-        <Grid Grid.Row="11">
+        <Grid Grid.Row="6" Grid.ColumnSpan="2">
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"></RowDefinition>
@@ -560,7 +577,7 @@
 
 
 
-        <Grid Grid.Row="12">
+        <Grid Grid.Row="7" Grid.ColumnSpan="2">
             <StackPanel Grid.Row="10" Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button x:Name="buttonCancel" Content="Cancel" Width="100" Click="buttonCancel_Click"/>
                 <Button x:Name="buttonOk" Content="OK" Width="100" Click="buttonOk_Click"/>
