@@ -336,7 +336,13 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
             Dictionary<string, string> nameIndexAreaProp = new Dictionary<string, string>();
             Dictionary<string, string> nameMatIndexAreaProp = new Dictionary<string, string>();
             Dictionary<string, string> nameThinThickAreaProp = new Dictionary<string, string>();
-            
+
+            //To save area property assigned to each area
+            Dictionary<string, string> areaPropAssigned = new Dictionary<string, string>();
+
+            //To save area section modifier from area properties
+            List<Dictionary<string, string>> nameModifierAreaProp = new List<Dictionary<string, string>>();
+
             //To load pattern
             Dictionary<string, string> loadPatternNameEtabsMidas = new Dictionary<string, string>();
 
@@ -373,7 +379,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
 
                             if (databaseTableKey.Key == "areaSec")
                             {
-                                (nameIndexAreaProp, nameMatIndexAreaProp, nameThinThickAreaProp) = copyAreaSecToMidas(Sap, databaseTableKey.Value, textMgt, textWarning, nameIndexMaterial);
+                                (nameIndexAreaProp, nameMatIndexAreaProp, nameThinThickAreaProp, nameModifierAreaProp) = copyAreaSecToMidas(Sap, databaseTableKey.Value, textMgt, textWarning, nameIndexMaterial);
                             }
 
                             if (databaseTableKey.Key == "loadPattern")
@@ -385,7 +391,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                             {
                                 nameLocalAxisFrame = copyFrameAssignmentsLocalAxis(Sap);
                                 nameLocalAxisArea = copyAreaAssignmentsLocalAxis(Sap);
-                                (nameIndexNode, nameIndexFrame, nameIndexArea, skippedAreas) = copyObjectConnectivityToMidas(Sap, databaseTableKey.Value, textMgt, textWarning, nameIndexSecProp, 
+                                (nameIndexNode, nameIndexFrame, nameIndexArea, skippedAreas, areaPropAssigned) = copyObjectConnectivityToMidas(Sap, databaseTableKey.Value, textMgt, textWarning, nameIndexSecProp, 
                                     nameMatIndexSecProp, nameIndexAreaProp, nameMatIndexAreaProp, nameThinThickAreaProp, nameLocalAxisFrame, nameLocalAxisArea);
                             }
 
@@ -398,14 +404,12 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                             {
                                 copyJointAssignmentsToMidas(Sap, databaseTableKey.Value, textMgt, textWarning, nameIndexNode);
                             }
-
-                            /*
+                            
                             if (databaseTableKey.Key == "areaAssignments")
                             {
-                                copyAreaAssignmentsToMidas(Sap, databaseTableKey.Value, textMgt, textWarning, nameIndexAreaProp);
+                                copyAreaAssignmentsToMidas(Sap, databaseTableKey.Value, textMgt, textWarning, nameIndexArea, nameModifierAreaProp, areaPropAssigned);
                             }
-                            */
-
+                            
                             if (databaseTableKey.Key == "frameLoadsAssignments")
                             {
                                 copyFrameLoadsAssignmentsToMidas(Sap, databaseTableKey.Value, textMgt, textWarning, nameIndexFrame, loadPatternNameEtabsMidas);
@@ -507,7 +511,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
 
                     double unitWeight = 0;
                     double unitMass = 0;
-                    double elasticModulus = 0.01;
+                    double elasticModulus = 1;
                     double poissonRatio = 0;
                     double thermalCoefficient = 0;
 
@@ -1345,7 +1349,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
         }
 
         //Method to copy area section to MIDAS
-        private static (Dictionary<string, string>, Dictionary<string, string>, Dictionary<string, string>) copyAreaSecToMidas(cSapModel Sap, List<string> tableKeys, 
+        private static (Dictionary<string, string>, Dictionary<string, string>, Dictionary<string, string>, List<Dictionary<string, string>>) copyAreaSecToMidas(cSapModel Sap, List<string> tableKeys, 
             List<string> textMgt, List<string> textWarning, Dictionary<string, string> nameIndexMaterial)
         {
             //MGTHeader
@@ -1358,7 +1362,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
             //List to save thin thick
             Dictionary<string, string> nameThinThickAreaProp = new Dictionary<string, string>();
 
-            //List to save modifier
+            //List to save modifier in area prop
             List<Dictionary<string, string>> nameModifierAreaProp = new List<Dictionary<string, string>>();
 
             bool showWarning = false;
@@ -1415,6 +1419,8 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
 
                     foreach (Dictionary<string, string> row in table)
                     {
+                        string name = row["Name"];
+
                         //Layered type does not show any thickness. Thus need to seperate
                         if (row["ModelType"] == "Layered")
                         {
@@ -1428,7 +1434,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                             }
 
                             //Maximum character for area property name is 28
-                            string name = row["Name"];
+                            //string name = row["Name"];
                             if (name.Length > 28 - 7)
                             {
                                 name = name.Substring(0, 28 - 7);
@@ -1444,11 +1450,6 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
 
                             //Save shell name and thin or thick
                             nameThinThickAreaProp.Add(row["Name"], "thin");
-
-                            //Save shell modifier
-                            Dictionary<string, string> nameModifierAreaPropSingle = new Dictionary<string, string>();
-                            nameModifierAreaPropSingle.Add("name", row[name]);
-                            nameModifierAreaPropSingle.Add("f11Mod", row["f11Mod"]);
 
                             index++;
                         }
@@ -1497,7 +1498,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                             }
 
                             //Maximum character for area property name is 28
-                            string name = row["Name"];
+                            //string name = row["Name"];
                             if (name.Length > 28 - 7)
                             {
                                 name = name.Substring(0, 28 - 7);
@@ -1580,7 +1581,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                             }
 
                             //Maximum character for area property name is 28
-                            string name = row["Name"];
+                            //string name = row["Name"];
                             if (name.Length > 28)
                             {
                                 name = name.Substring(0, 28);
@@ -1605,6 +1606,59 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
 
                             index++;
                         }
+
+                        //Save shell modifier in area prop
+                        Dictionary<string, string> nameModifierAreaPropSingle = new Dictionary<string, string>();
+
+                        double fxxMod = Convert.ToDouble(row["f11Mod"]);
+                        double fyyMod = Convert.ToDouble(row["f22Mod"]);
+                        double fxyMod = Convert.ToDouble(row["f12Mod"]);
+                        double mxxMod = Convert.ToDouble(row["m22Mod"]);
+                        double myyMod = Convert.ToDouble(row["m11Mod"]);
+                        double mxyMod = Convert.ToDouble(row["m12Mod"]);
+                        double vxxMod = Convert.ToDouble(row["v13Mod"]);
+                        double vyyMod = Convert.ToDouble(row["v23Mod"]);
+                        double weightMod = 0;
+
+                        if (Convert.ToDouble(row["MMod"]) != Convert.ToDouble(row["WMod"]))
+                        {
+                            string warning = $"Different weight and mass modifier found in area property {row["Name"]}. Highest value will be used!";
+                            //MessageBox.Show(warning);
+                            textWarning.Add(warning);
+
+                            if (Convert.ToDouble(row["MMod"]) > Convert.ToDouble(row["WMod"]))
+                            {
+                                weightMod = Convert.ToDouble(row["MMod"]);
+                            }
+                            else
+                            {
+                                weightMod = Convert.ToDouble(row["WMod"]);
+                            }
+                        }
+                        else
+                        {
+                            weightMod = Convert.ToDouble(row["WMod"]);
+                        }
+
+                        if (fxxMod == 1 && fyyMod == 1 && fxyMod == 1 && mxxMod == 1 && myyMod == 1 && mxyMod == 1 && vxxMod == 1 && vyyMod == 1 && weightMod == 1)
+                        {
+                            //if no modifier then do nothing
+                        }
+                        else
+                        {
+                            nameModifierAreaPropSingle.Add("nameAreaProp", name.ToString());
+                            nameModifierAreaPropSingle.Add("fxx", fxxMod.ToString());
+                            nameModifierAreaPropSingle.Add("fyy", fyyMod.ToString());
+                            nameModifierAreaPropSingle.Add("fxy", fxyMod.ToString());
+                            nameModifierAreaPropSingle.Add("mxx", mxxMod.ToString());
+                            nameModifierAreaPropSingle.Add("myy", myyMod.ToString());
+                            nameModifierAreaPropSingle.Add("mxy", mxyMod.ToString());
+                            nameModifierAreaPropSingle.Add("vxx", vxxMod.ToString());
+                            nameModifierAreaPropSingle.Add("vyy", vyyMod.ToString());
+                            nameModifierAreaPropSingle.Add("weightMod", weightMod.ToString());
+
+                            nameModifierAreaProp.Add(nameModifierAreaPropSingle);
+                        }                        
                     }
                 }
                 else if (databaseTable.TableKey == "Wall Property Definitions - Specified")
@@ -1640,6 +1694,60 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                             nameThinThickAreaProp.Add(row["Name"], "thick");
                         }
 
+
+                        //Save shell modifier
+                        Dictionary<string, string> nameModifierAreaPropSingle = new Dictionary<string, string>();
+
+                        double fxxMod = Convert.ToDouble(row["f11Mod"]);
+                        double fyyMod = Convert.ToDouble(row["f22Mod"]);
+                        double fxyMod = Convert.ToDouble(row["f12Mod"]);
+                        double mxxMod = Convert.ToDouble(row["m22Mod"]);
+                        double myyMod = Convert.ToDouble(row["m11Mod"]);
+                        double mxyMod = Convert.ToDouble(row["m12Mod"]);
+                        double vxxMod = Convert.ToDouble(row["v13Mod"]);
+                        double vyyMod = Convert.ToDouble(row["v23Mod"]);
+                        double weightMod = 0;
+
+                        if (Convert.ToDouble(row["MMod"]) != Convert.ToDouble(row["WMod"]))
+                        {
+                            string warning = $"Different weight and mass modifier found in area property {row["Name"]}. Highest value will be used!";
+                            //MessageBox.Show(warning);
+                            textWarning.Add(warning);
+
+                            if (Convert.ToDouble(row["MMod"]) > Convert.ToDouble(row["WMod"]))
+                            {
+                                weightMod = Convert.ToDouble(row["MMod"]);
+                            }
+                            else
+                            {
+                                weightMod = Convert.ToDouble(row["WMod"]);
+                            }
+                        }
+                        else
+                        {
+                            weightMod = Convert.ToDouble(row["WMod"]);
+                        }
+
+                        if (fxxMod == 1 && fyyMod == 1 && fxyMod == 1 && mxxMod == 1 && myyMod == 1 && mxyMod == 1 && vxxMod == 1 && vyyMod == 1 && weightMod == 1)
+                        {
+                            //if no modifier then do nothing
+                        }
+                        else
+                        {
+                            nameModifierAreaPropSingle.Add("nameAreaProp", name.ToString());
+                            nameModifierAreaPropSingle.Add("fxx", fxxMod.ToString());
+                            nameModifierAreaPropSingle.Add("fyy", fyyMod.ToString());
+                            nameModifierAreaPropSingle.Add("fxy", fxyMod.ToString());
+                            nameModifierAreaPropSingle.Add("mxx", mxxMod.ToString());
+                            nameModifierAreaPropSingle.Add("myy", myyMod.ToString());
+                            nameModifierAreaPropSingle.Add("mxy", mxyMod.ToString());
+                            nameModifierAreaPropSingle.Add("vxx", vxxMod.ToString());
+                            nameModifierAreaPropSingle.Add("vyy", vyyMod.ToString());
+                            nameModifierAreaPropSingle.Add("weightMod", weightMod.ToString());
+
+                            nameModifierAreaProp.Add(nameModifierAreaPropSingle);
+                        }
+
                         index++;
                     }
                 }
@@ -1662,7 +1770,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
             string materialIndex = nameIndexMaterial["Null material"];
             nameMatIndexAreaProp.Add("Null area", materialIndex);
 
-            //Save stiffness modifiers and material index
+            //Save area material index
             foreach (src.HelperEtabs.DatabaseTable databaseTable in databaseTables)
             {
                 //Finding the summary table
@@ -1671,7 +1779,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                     //Going through each row in the summary table and find the matching name
                     foreach (Dictionary<string, string> row in databaseTable.TableInList)
                     {
-                        //Check if section property exist in nameIndexSecProp
+                        //Check if section property exist in nameIndexAreaProp
                         if (nameIndexAreaProp.ContainsKey(row["Name"]))
                         {
                             materialIndex = nameIndexMaterial[row["Material"]];
@@ -1680,7 +1788,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                     }
                 }
             }
-            return (nameIndexAreaProp, nameMatIndexAreaProp, nameThinThickAreaProp);
+            return (nameIndexAreaProp, nameMatIndexAreaProp, nameThinThickAreaProp, nameModifierAreaProp);
         }
 
         private static Dictionary<string, string> copyLoadPatternToMidas(cSapModel Sap, List<string> tableKeys, List<string> textMgt, List<string> textWarning)
@@ -1810,9 +1918,12 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
             src.HelperEtabs.DatabaseTable databaseTable = null;
             (isError, databaseTable) = src.HelperEtabs.GetTableDisplay(Sap, "Frame Assignments - Local Axes", showWarning);
 
-            foreach (Dictionary<string, string> row in databaseTable.TableInList)
+            if (databaseTable != null)
             {
-                nameLocalAxisFrame.Add(row["UniqueName"], row["Angle"]);
+                foreach (Dictionary<string, string> row in databaseTable.TableInList)
+                {
+                    nameLocalAxisFrame.Add(row["UniqueName"], row["Angle"]);
+                }
             }
 
             return nameLocalAxisFrame;
@@ -1829,15 +1940,18 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
             src.HelperEtabs.DatabaseTable databaseTable = null;
             (isError, databaseTable) = src.HelperEtabs.GetTableDisplay(Sap, "Area Assignments - Local Axes", showWarning);
 
-            foreach (Dictionary<string, string> row in databaseTable.TableInList)
+            if (databaseTable != null)
             {
-                nameLocalAxisArea.Add(row["UniqueName"], row["Angle"]);
+                foreach (Dictionary<string, string> row in databaseTable.TableInList)
+                {
+                    nameLocalAxisArea.Add(row["UniqueName"], row["Angle"]);
+                }
             }
 
             return nameLocalAxisArea;
         }
 
-        private static (Dictionary<string, string>, Dictionary<string, string>, Dictionary<string, string>, List<string>) copyObjectConnectivityToMidas(cSapModel Sap, List<string> tableKeys, List<string> textMgt, 
+        private static (Dictionary<string, string>, Dictionary<string, string>, Dictionary<string, string>, List<string>, Dictionary<string, string>) copyObjectConnectivityToMidas(cSapModel Sap, List<string> tableKeys, List<string> textMgt, 
             List<string> textWarning, Dictionary<string, string> nameIndexSecProp, Dictionary<string, string> nameMatIndexSecProp, Dictionary<string, string> nameIndexAreaProp, 
             Dictionary<string, string> nameMatIndexAreaProp, Dictionary<string, string> nameThinThickAreaProp, Dictionary<string, string> nameLocalAxisFrame, Dictionary<string, string>  nameLocalAxisArea)
         {
@@ -1893,8 +2007,8 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
             }
 
             //Getting property assigned to section and area
-            Dictionary<string, string> secPropAssigned = new Dictionary<string, string>();
-            Dictionary<string, string> areaPropAssigned = new Dictionary<string, string>();
+            Dictionary<string, string> nameSecPropAssigned = new Dictionary<string, string>();
+            Dictionary<string, string> nameAreaPropAssigned = new Dictionary<string, string>();
 
             //Go through frame assignment to get section property for each frame
             foreach (src.HelperEtabs.DatabaseTable databaseTable in databaseTables)
@@ -1907,7 +2021,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
 
                     foreach (Dictionary<string, string> row in table)
                     {
-                        secPropAssigned.Add(row["UniqueName"], row["SectProp"]);
+                        nameSecPropAssigned.Add(row["UniqueName"], row["SectProp"]);
                     }
                 }
                 else if (databaseTable.TableKey == "Area Assignments - Section Properties")
@@ -1918,7 +2032,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
 
                     foreach (Dictionary<string, string> row in table)
                     {
-                        areaPropAssigned.Add(row["UniqueName"], row["SectProp"]);
+                        nameAreaPropAssigned.Add(row["UniqueName"], row["SectProp"]);
                     }
                 }
             }
@@ -1941,7 +2055,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                     foreach (Dictionary<string, string> row in table)
                     {
                         //Finding section property index
-                        string secProp = secPropAssigned[row["UniqueName"]];
+                        string secProp = nameSecPropAssigned[row["UniqueName"]];
                         string iProp = nameIndexSecProp[secProp];
 
                         //Finding material index
@@ -2016,6 +2130,16 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                 //Indicator if one way slab warning has been shown
                 bool moreThan4NodesWarningShown = false;
 
+                //Get node coordinate table for area local axis adjustment
+                List<Dictionary<string, string>> tableNodeCoordinate = null;
+                foreach (src.HelperEtabs.DatabaseTable databaseTableForPointConnectivity in databaseTables)
+                {
+                    if (databaseTableForPointConnectivity.TableKey == "Point Object Connectivity")
+                    {
+                        tableNodeCoordinate = databaseTableForPointConnectivity.TableInList;
+                    }
+                }
+
                 if (databaseTable.TableKey == "Wall Object Connectivity" || databaseTable.TableKey == "Floor Object Connectivity")
                 {
                     //Getting area list parsed as Shell type
@@ -2046,7 +2170,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                         }
 
                         //Finding section property index
-                        string areaProp = areaPropAssigned[area.UniqueName];
+                        string areaProp = nameAreaPropAssigned[area.UniqueName];
                         string iProp = nameIndexAreaProp[areaProp];
 
                         //Finding material index
@@ -2065,10 +2189,13 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                         }
 
                         //Finding local axis angle
-                        string localAxis = "0";
+                        double localAxis = 0;
+                        //For area need to adjust MIDAS local axis to ETABS local axis
+                        localAxis = adjustAreaLocalAxisBasedOnEtabs(area, tableNodeCoordinate);
+
                         if (nameLocalAxisArea.ContainsKey(area.UniqueName))
                         {
-                            localAxis = nameLocalAxisArea[area.UniqueName];
+                            localAxis = localAxis + Convert.ToDouble(nameLocalAxisArea[area.UniqueName]);
                         }
 
                         //Finding node index
@@ -2154,10 +2281,13 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                         }
 
                         //Finding local axis angle
-                        string localAxis = "0";
+                        double localAxis = 0;
+                        //For area need to adjust MIDAS local axis to ETABS local axis
+                        localAxis = adjustAreaLocalAxisBasedOnEtabs(area, tableNodeCoordinate);
+
                         if (nameLocalAxisArea.ContainsKey(area.UniqueName))
                         {
-                            localAxis = nameLocalAxisArea[area.UniqueName];
+                            localAxis = localAxis + Convert.ToDouble(nameLocalAxisArea[area.UniqueName]);
                         }
 
                         //Finding node index
@@ -2196,7 +2326,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                 }
             }
 
-            return (nameIndexNode, nameIndexFrame, nameIndexArea, skippedAreas);
+            return (nameIndexNode, nameIndexFrame, nameIndexArea, skippedAreas, nameAreaPropAssigned);
         }
 
         private static void copyFrameAssignmentsToMidas(cSapModel Sap, List<string> tableKeys, List<string> textMgt, List<string> textWarning, Dictionary<string, string> nameIndexFrame)
@@ -2213,7 +2343,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
             int index = 1;
             foreach (src.HelperEtabs.DatabaseTable databaseTable in databaseTables)
             {
-                if (databaseTable.TableKey == "Frame Assignments - Releases and Partial Fixity" && databaseTable.NumberRecords != 0)
+                if (databaseTable.TableKey == "Frame Assignments - Releases and Partial Fixity")// && databaseTable.NumberRecords != 0)
                 {
                     //Frame releases
                     //MGTHeader
@@ -2321,7 +2451,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                         textMgt.Add($"{releaseBinaryJ}, {springFxJ}, {springFyJ}, {springFzJ}, {springMxJ}, {springMyJ}, {springMzJ}");
                     }
                 }
-                else if (databaseTable.TableKey == "Frame Assignments - Property Modifiers" && databaseTable.NumberRecords != 0)
+                else if (databaseTable.TableKey == "Frame Assignments - Property Modifiers") //&& databaseTable.NumberRecords != 0)
                 {
                     //Frame property modifiers
                     //MGTHeader
@@ -2375,7 +2505,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                         }
                     }
                 }
-                else if (databaseTable.TableKey == "Frame Assignments - Local Axes" && databaseTable.NumberRecords != 0)
+                else if (databaseTable.TableKey == "Frame Assignments - Local Axes")
                 {
                     //Dont show warning because already captured in copyFrameAssignmentsLocalAxis
                 }
@@ -2460,8 +2590,6 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                             //MessageBox.Show(warning);
                             textWarning.Add(warning);
                         }
-
-                        
                     }
                 }
                 else if (databaseTable.TableKey == "Frame Loads Assignments - Point")
@@ -2812,6 +2940,203 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
             }
         }
 
+        private static void copyAreaAssignmentsToMidas(cSapModel Sap, List<string> tableKeys, List<string> textMgt, List<string> textWarning, Dictionary<string, string> nameIndexArea,
+            List<Dictionary<string, string>> nameModifierAreaProp, Dictionary<string, string> nameAreaPropAssigned)
+        {
+            bool showWarning = false;
+            bool isError = false;
+
+            //List to save modifier in area assign
+            List<Dictionary<string, string>> nameModifierAreaAssign = new List<Dictionary<string, string>>();
+
+            List<src.HelperEtabs.DatabaseTable> databaseTables = new List<src.HelperEtabs.DatabaseTable>();
+
+            (isError, databaseTables) = src.HelperEtabs.GetMultipleTableDisplay(Sap, tableKeys, showWarning);
+
+            //if (isError){return;}
+
+            foreach (src.HelperEtabs.DatabaseTable databaseTable in databaseTables)
+            {
+                if (databaseTable.TableKey == "Area Assignments - Stiffness Modifiers")
+                {
+                    
+                    List<Dictionary<string, string>> table = new List<Dictionary<string, string>>();
+
+                    table = databaseTable.TableInList;
+
+                    foreach (Dictionary<string, string> row in table)
+                    {
+
+                        //Save shell modifier in area assignment
+                        Dictionary<string, string> nameModifierAreaAssignSingle = new Dictionary<string, string>();
+
+                        double fxxMod = Convert.ToDouble(row["f11Mod"]);
+                        double fyyMod = Convert.ToDouble(row["f22Mod"]);
+                        double fxyMod = Convert.ToDouble(row["f12Mod"]);
+                        double mxxMod = Convert.ToDouble(row["m22Mod"]);
+                        double myyMod = Convert.ToDouble(row["m11Mod"]);
+                        double mxyMod = Convert.ToDouble(row["m12Mod"]);
+                        double vxxMod = Convert.ToDouble(row["v13Mod"]);
+                        double vyyMod = Convert.ToDouble(row["v23Mod"]);
+                        double weightMod = 0;
+
+                        if (Convert.ToDouble(row["MMod"]) != Convert.ToDouble(row["WMod"]))
+                        {
+                            string warning = $"Different weight and mass modifier found in area {row["UniqueName"]} (in ETABS). Highest value will be used!";
+                            //MessageBox.Show(warning);
+                            textWarning.Add(warning);
+
+                            if (Convert.ToDouble(row["MMod"]) > Convert.ToDouble(row["WMod"]))
+                            {
+                                weightMod = Convert.ToDouble(row["MMod"]);
+                            }
+                            else
+                            {
+                                weightMod = Convert.ToDouble(row["WMod"]);
+                            }
+                        }
+                        else
+                        {
+                            weightMod = Convert.ToDouble(row["WMod"]);
+                        }
+
+                        if (fxxMod == 1 && fyyMod == 1 && fxyMod == 1 && mxxMod == 1 && myyMod == 1 && mxyMod == 1 && vxxMod == 1 && vyyMod == 1 && weightMod == 1)
+                        {
+                            //if no modifier then do nothing
+                        }
+                        else
+                        {
+                            nameModifierAreaAssignSingle.Add("uniqueName",row["UniqueName"]);
+                            nameModifierAreaAssignSingle.Add("fxx", fxxMod.ToString());
+                            nameModifierAreaAssignSingle.Add("fyy", fyyMod.ToString());
+                            nameModifierAreaAssignSingle.Add("fxy", fxyMod.ToString());
+                            nameModifierAreaAssignSingle.Add("mxx", mxxMod.ToString());
+                            nameModifierAreaAssignSingle.Add("myy", myyMod.ToString());
+                            nameModifierAreaAssignSingle.Add("mxy", mxyMod.ToString());
+                            nameModifierAreaAssignSingle.Add("vxx", vxxMod.ToString());
+                            nameModifierAreaAssignSingle.Add("vyy", myyMod.ToString());
+                            nameModifierAreaAssignSingle.Add("weightMod", myyMod.ToString());
+
+                            nameModifierAreaAssign.Add(nameModifierAreaAssignSingle);
+                        }
+                    }
+                }
+                else
+                {
+                    if (databaseTable.NumberRecords > 0)
+                    {
+                        //Show warning that the type cant be converted to midas
+                        string warning = $"{databaseTable.TableKey} not supported! Will NOT be imported!";
+                        MessageBox.Show(warning);
+                        textWarning.Add(warning);
+                    }
+                }
+            }
+
+            //Going through each area to combine area modifier applied in area prop and area assignment
+            //MGTHeader for area assignment stiffness modifier
+            textMgt.Add("*PLATE-SSRF    ;*Plate Stiffness Scale Factor");
+            textMgt.Add("; i, (axial Fxx modifier), (axial Fyy modifier), (axial Fxy modifier), (moment Mxx modifier), (moment Myy modifier), (moment Mxy modifier), (moment Vxx modifier), (moment Vyy modifier), (group='')");
+            foreach (KeyValuePair<string, string> area in nameIndexArea)
+            {
+                string uniqueName = area.Key;
+                string areaIndex = area.Value;
+                string areaProp = nameAreaPropAssigned[uniqueName];
+
+                //Go through area modifier which are defined in area property
+                double fxxModFromAreaProp = 1;
+                double fyyModFromAreaProp = 1;
+                double fxyModFromAreaProp = 1;
+                double mxxModFromAreaProp = 1;
+                double myyModFromAreaProp = 1;
+                double mxyModFromAreaProp = 1;
+                double vxxModFromAreaProp = 1;
+                double vyyModFromAreaProp = 1;
+                double weightModFromAreaProp = 1;
+
+                foreach (Dictionary<string, string> nameModifierAreaPropSingle in nameModifierAreaProp)
+                {
+                    if (nameModifierAreaPropSingle["nameAreaProp"] == areaProp)
+                    {
+                        //If have area modifier defined in area property
+                        fxxModFromAreaProp = Convert.ToDouble(nameModifierAreaPropSingle["fxx"]);
+                        fyyModFromAreaProp = Convert.ToDouble(nameModifierAreaPropSingle["fyy"]);
+                        fxyModFromAreaProp = Convert.ToDouble(nameModifierAreaPropSingle["fxy"]);
+                        mxxModFromAreaProp = Convert.ToDouble(nameModifierAreaPropSingle["mxx"]);
+                        myyModFromAreaProp = Convert.ToDouble(nameModifierAreaPropSingle["myy"]);
+                        mxyModFromAreaProp = Convert.ToDouble(nameModifierAreaPropSingle["mxy"]);
+                        vxxModFromAreaProp = Convert.ToDouble(nameModifierAreaPropSingle["vxx"]);
+                        vyyModFromAreaProp = Convert.ToDouble(nameModifierAreaPropSingle["vyy"]);
+                        weightModFromAreaProp = Convert.ToDouble(nameModifierAreaPropSingle["weightMod"]);
+
+                        break;
+                    }
+                }
+
+                //Go through area modifier which are defined in area assign
+                double fxxModFromAreaAssign = 1;
+                double fyyModFromAreaAssign = 1;
+                double fxyModFromAreaAssign = 1;
+                double mxxModFromAreaAssign = 1;
+                double myyModFromAreaAssign = 1;
+                double mxyModFromAreaAssign = 1;
+                double vxxModFromAreaAssign = 1;
+                double vyyModFromAreaAssign = 1;
+                double weightModFromAreaAssign = 1;
+
+                foreach (Dictionary<string, string> nameModifierAreaAssignSingle in nameModifierAreaAssign)
+                {
+                    if (nameModifierAreaAssignSingle["uniqueName"] == uniqueName)
+                    {
+                        //If have area modifier defined in area property
+                        fxxModFromAreaAssign = Convert.ToDouble(nameModifierAreaAssignSingle["fxx"]);
+                        fyyModFromAreaAssign = Convert.ToDouble(nameModifierAreaAssignSingle["fyy"]);
+                        fxyModFromAreaAssign = Convert.ToDouble(nameModifierAreaAssignSingle["fxy"]);
+                        mxxModFromAreaAssign = Convert.ToDouble(nameModifierAreaAssignSingle["mxx"]);
+                        myyModFromAreaAssign = Convert.ToDouble(nameModifierAreaAssignSingle["myy"]);
+                        mxyModFromAreaAssign = Convert.ToDouble(nameModifierAreaAssignSingle["mxy"]);
+                        vxxModFromAreaAssign = Convert.ToDouble(nameModifierAreaAssignSingle["vxx"]);
+                        vyyModFromAreaAssign = Convert.ToDouble(nameModifierAreaAssignSingle["vyy"]);
+                        weightModFromAreaAssign = Convert.ToDouble(nameModifierAreaAssignSingle["weightMod"]);
+
+                        break;
+                    }
+                }
+
+                //Multiply both
+                double fxxMod = fxxModFromAreaProp * fxxModFromAreaAssign;
+                double fyyMod = fyyModFromAreaProp * fyyModFromAreaAssign;
+                double fxyMod = fxyModFromAreaProp * fxyModFromAreaAssign;
+                double mxxMod = mxxModFromAreaProp * mxxModFromAreaAssign;
+                double myyMod = myyModFromAreaProp * myyModFromAreaAssign;
+                double mxyMod = mxyModFromAreaProp * mxyModFromAreaAssign;
+                double vxxMod = vxxModFromAreaProp * vxxModFromAreaAssign;
+                double vyyMod = vyyModFromAreaProp * vyyModFromAreaAssign;
+                double weightMod = weightModFromAreaProp * weightModFromAreaAssign;
+
+                //Write in MGT
+                if (fxxMod == 1 && fyyMod == 1 && fxyMod == 1 && mxxMod == 1 && myyMod == 1 && mxyMod == 1 && vxxMod == 1 && vyyMod == 1 && weightMod == 1)
+                {
+                    //if no modifier then do nothing
+                }
+                else
+                {
+                    textMgt.Add($"{areaIndex}, {fxxMod}, {fyyMod}, {fxyMod}, {mxxMod}, {myyMod}, {mxyMod}, {vxxMod}, {vyyMod}, ");
+                }
+
+
+                //MIDAS cant have weight modifier, put warning if weight modifier is not 1
+                if (weightMod != 1)
+                {
+                    string warning = $"Weight or mass modifier found in area assignment {uniqueName} (in ETABS). MIDAS cant have weight modifier!";
+                    //MessageBox.Show(warning);
+                    textWarning.Add(warning);
+                }
+
+            }
+
+        }
+
         #region Other methods
 
         private static (string, string, double) parseLoadFrameDirectionEtabsToMidas (string directionEtabs)
@@ -3066,6 +3391,232 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
             }
             writeTextFile(Sap, csvArea, "csvArea.csv");
         }
+
+        private static double adjustAreaLocalAxisBasedOnEtabs(src.HelperEtabs.Shell area, List<Dictionary<string, string>> tableNodeCoordinate)
+        {
+            double localAxis = 0;
+            double angleFromGlobalX = 0;
+            List<src.HelperEtabs.Point3D> point3DList = new List<src.HelperEtabs.Point3D>();
+
+            foreach (string point in area.Points)
+            {
+                foreach(Dictionary<string, string> row in tableNodeCoordinate)
+                {
+                    if (row["UniqueName"] == point)
+                    {
+                        src.HelperEtabs.Point3D point3D = new src.HelperEtabs.Point3D(row["UniqueName"], Convert.ToDouble(row["X"]),
+                            Convert.ToDouble(row["Y"]), Convert.ToDouble(row["Z"]));
+
+                        point3DList.Add(point3D);
+                    }
+                }
+            }
+
+            //Check if area horizontal
+            bool areaHorizontal = src.HelperMethod.IsAreaHorizontal(point3DList);
+
+            if (areaHorizontal)
+            {
+                //ETABS area X axis is following global X axis if area is horizontal
+                //For 3 nodes area, MIDAS area X axis is following vector of point 1 to point 2
+                //For 4 nodes area, MIDAS area X axis is following bisecting angle diagonal connection point 1 to 3 and 4 to 2
+                //Originally want to split for 3 or 4 nodes area, but dont understand yet. Current method seems ok
+                if (point3DList.Count == 3 || point3DList.Count == 4)
+                {
+                    //If 3 nodes area, take vector from point 1 to point2
+                    double point1X = point3DList[0].XCoordinate;
+                    double point1Y = point3DList[0].YCoordinate;
+                    double point2X = point3DList[1].XCoordinate;
+                    double point2Y = point3DList[1].YCoordinate;
+
+
+                    //If point 1 X and point 2 X is equal then angle = 0
+                    if (point1X != point2X && point1Y != point2Y)
+                    {
+                        double angleFromHorizontal = Math.Atan((point2Y - point1Y) / (point2X - point1X)) * 180 / Math.PI;
+
+                        if (point2Y > point1Y && point2X > point1X)
+                        {
+                            //In quadrant 1
+                            angleFromGlobalX = angleFromHorizontal;
+                        }
+                        else if (point2Y > point1Y && point2X < point1X)
+                        {
+                            //In quadrant 2
+                            angleFromGlobalX = 180 + angleFromHorizontal;
+                        }
+                        else if (point2Y < point1Y && point2X < point1X)
+                        {
+                            //In quadrant 3
+                            angleFromGlobalX = 180 + angleFromHorizontal;
+                        }
+                        else if (point2Y < point1Y && point2X > point1X)
+                        {
+                            //In quadrant 4
+                            angleFromGlobalX = 360 + angleFromHorizontal;
+                        }
+                    }
+                    else if (point1X == point2X)
+                    {
+                        if (point2Y > point1Y)
+                        {
+                            angleFromGlobalX = 90;
+                        }
+                        else
+                        {
+                            angleFromGlobalX = 360 - 90;
+                        }
+                    }
+                    else if (point1Y == point2Y)
+                    {
+                        if (point2X > point1X)
+                        {
+                            angleFromGlobalX = 0;
+                        }
+                        else
+                        {
+                            angleFromGlobalX = 180 - 0;
+                        }
+                    }
+                }
+                /* Cant understand MIDAS correctly yet
+                else if (point3DList.Count == 4)
+                {
+                    //If 4 nodes area, MIDAS area X axis is following bisecting angle diagonal connection point 1 to 3 and 4 to 2
+                    double point1X = point3DList[0].XCoordinate;
+                    double point1Y = point3DList[0].YCoordinate;
+                    double point2X = point3DList[1].XCoordinate;
+                    double point2Y = point3DList[1].YCoordinate;
+                    double point3X = point3DList[2].XCoordinate;
+                    double point3Y = point3DList[2].YCoordinate;
+                    double point4X = point3DList[3].XCoordinate;
+                    double point4Y = point3DList[3].YCoordinate;
+
+                    double angleFromGlobalXPoint13 = 0;
+                    double angleFromGlobalXPoint42 = 0;
+
+                    //Do for point 1 and 3
+                    if (point1X != point3X && point1Y != point3Y)
+                    {
+                        double angleFromHorizontal = Math.Atan((point3Y - point1Y) / (point3X - point1X)) * 180 / Math.PI;
+
+                        if (point3Y > point1Y && point3X > point1X)
+                        {
+                            //In quadrant 1
+                            angleFromGlobalXPoint13 = angleFromHorizontal;
+                        }
+                        else if (point3Y > point1Y && point3X < point1X)
+                        {
+                            //In quadrant 2
+                            angleFromGlobalXPoint13 = 180 + angleFromHorizontal;
+                        }
+                        else if (point3Y < point1Y && point3X < point1X)
+                        {
+                            //In quadrant 3
+                            angleFromGlobalXPoint13 = 180 + angleFromHorizontal;
+                        }
+                        else if (point3Y < point1Y && point3X > point1X)
+                        {
+                            //In quadrant 4
+                            angleFromGlobalXPoint13 = 360 + angleFromHorizontal;
+                        }
+                    }
+                    else if (point1X == point3X)
+                    {
+                        if (point3Y > point1Y)
+                        {
+                            angleFromGlobalXPoint13 = 90;
+                        }
+                        else
+                        {
+                            angleFromGlobalXPoint13 = 360 - 90;
+                        }
+                    }
+                    else if (point1Y == point3Y)
+                    {
+                        if (point3X > point1X)
+                        {
+                            angleFromGlobalXPoint13 = 0;
+                        }
+                        else
+                        {
+                            angleFromGlobalXPoint13 = 180 - 0;
+                        }
+                    }
+
+                    //Do for point 4 and 2
+                    if (point4X != point2X && point4Y != point2Y)
+                    {
+                        double angleFromHorizontal = Math.Atan((point2Y - point4Y) / (point2X - point4X)) * 180 / Math.PI;
+
+                        if (point2Y > point4Y && point2X > point4X)
+                        {
+                            //In quadrant 1
+                            angleFromGlobalXPoint42 = angleFromHorizontal;
+                        }
+                        else if (point2Y > point4Y && point2X < point4X)
+                        {
+                            //In quadrant 2
+                            angleFromGlobalXPoint42 = 180 + angleFromHorizontal;
+                        }
+                        else if (point2Y < point4Y && point2X < point4X)
+                        {
+                            //In quadrant 3
+                            angleFromGlobalXPoint42 = 180 + angleFromHorizontal;
+                        }
+                        else if (point2Y < point4Y && point2X > point4X)
+                        {
+                            //In quadrant 4
+                            angleFromGlobalXPoint42 = 360 + angleFromHorizontal;
+                        }
+                    }
+                    else if (point4X == point2X)
+                    {
+                        if (point2Y > point4Y)
+                        {
+                            angleFromGlobalXPoint42 = 90;
+                        }
+                        else
+                        {
+                            angleFromGlobalXPoint42 = 360 - 90;
+                        }
+                    }
+                    else if (point4Y == point2Y)
+                    {
+                        if (point2X > point4X)
+                        {
+                            angleFromGlobalXPoint42 = 0;
+                        }
+                        else
+                        {
+                            angleFromGlobalXPoint42 = 180 - 0;
+                        }
+                    }
+
+                    //Get the bisecting angle
+                    if (angleFromGlobalXPoint13 > angleFromGlobalXPoint42)
+                    {
+                        double bisectingAngle = (angleFromGlobalXPoint13 - angleFromGlobalXPoint42)/2;
+                        angleFromGlobalX = angleFromGlobalXPoint13 + bisectingAngle;
+                    }
+                    else
+                    {
+                        double bisectingAngle = (angleFromGlobalXPoint42 - angleFromGlobalXPoint13) / 2;
+                        angleFromGlobalX = angleFromGlobalXPoint42 + bisectingAngle;
+                    }
+                }
+                */
+
+            }
+            else
+            {
+                //Dont know yet if area is not horizontal
+            }
+
+            localAxis = angleFromGlobalX * -1; //Reverse of this
+            return localAxis;
+        }
+
 
         #endregion
 

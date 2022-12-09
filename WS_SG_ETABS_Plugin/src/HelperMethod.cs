@@ -138,6 +138,36 @@ namespace WS_SG_ETABS_Plugin.src
 
         #endregion
 
+        #region Geometry Method
+        
+        public static bool IsAreaHorizontal (List<src.HelperEtabs.Point3D> pointList)
+        {
+            bool isHorizontal = true;
+            double zCoord = 0;
+            bool firstRun = true;
+
+            foreach (src.HelperEtabs.Point3D point in pointList)
+            {
+                if (firstRun)
+                {
+                    zCoord = point.ZCoordinate;
+                    firstRun = false;
+                }
+                else
+                {
+                    if (point.ZCoordinate != zCoord)
+                    {
+                        isHorizontal = false;
+                        return isHorizontal;
+                    }
+                }
+            }
+
+            return isHorizontal;
+        }
+
+        #endregion
+
         /// <summary>
         /// Finding min and max value in list of dictionary based on given key. Value must be number
         /// </summary>
@@ -172,6 +202,8 @@ namespace WS_SG_ETABS_Plugin.src
             }
             return (min, max);
         }
+
+
 
     }
 
