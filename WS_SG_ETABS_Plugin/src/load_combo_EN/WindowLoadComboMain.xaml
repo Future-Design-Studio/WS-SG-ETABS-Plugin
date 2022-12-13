@@ -70,21 +70,21 @@
 
             <CheckBox x:Name="checkBoxExistingDL" Grid.Row="1" Grid.Column="2"  Grid.ColumnSpan="1"
                       Checked="checkBoxExistingDL_Checked" Unchecked="checkBoxExistingDL_Unchecked" 
-                      VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="True">
+                      VerticalAlignment="Center" HorizontalAlignment="Center">
             </CheckBox>
             <ComboBox  Grid.Row="1" Grid.Column="3" x:Name="comBoxExistingDL" 
                        VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
                        Text="0.5" SelectionChanged="comBoxExistingDL_SelectionChanged"></ComboBox>
             <TextBox Grid.Column="4" x:Name="textBoxNameDL" Grid.Row="1" IsEnabled="False" TextChanged="textBoxNameDL_TextChanged"></TextBox>
 
-            <Button Grid.Row="1" Grid.Column="5" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_Click" ></Button>
+            <Button Grid.Row="1" Grid.Column="5" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_ADD_DL_Click" ></Button>
 
             <ListBox x:Name="listBoxChoosenDL" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="6" 
                      d:ItemsSource="{d:SampleData ItemCount=1}" SelectionMode="Single"
                      Margin="0 10 0 10" SelectionChanged="listBoxChoosenGroup_SelectionChanged">
             </ListBox>
 
-            <Button Grid.Row="3" Grid.Column="5" Content="Remove" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_Click_1" ></Button>
+            <Button Grid.Row="3" Grid.Column="5" Content="Remove" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_REMOVE_DL_Click" ></Button>
 
         </Grid>
 
@@ -120,21 +120,21 @@
 
             <CheckBox x:Name="checkBoxExistingSDL" Grid.Row="1" Grid.Column="2"  Grid.ColumnSpan="1"
                       Checked="checkBoxExistingSDL_Checked" Unchecked="checkBoxExistingSDL_Unchecked" 
-                      VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="True">
+                      VerticalAlignment="Center" HorizontalAlignment="Center">
             </CheckBox>
             <ComboBox  Grid.Row="1" Grid.Column="3" x:Name="comBoxExistingSDL" 
                        VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
                        Text="0.5" SelectionChanged="comBoxExistingSDL_SelectionChanged"></ComboBox>
             <TextBox Grid.Column="4" x:Name="textBoxNameSDL" Grid.Row="1" IsEnabled="False" TextChanged="textBoxNameSDL_TextChanged"></TextBox>
 
-            <Button Grid.Row="1" Grid.Column="5" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_Click_2" ></Button>
+            <Button Grid.Row="1" Grid.Column="5" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_ADD_SDL_Click" ></Button>
 
             <ListBox x:Name="listBoxChoosenSDL" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="6" 
                      d:ItemsSource="{d:SampleData ItemCount=4}" SelectionMode="Single"
                      Margin="0 10 0 10" SelectionChanged="listBoxChoosenSDL_SelectionChanged">
             </ListBox>
 
-            <Button Grid.Row="3" Grid.Column="5" Content="Remove" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_Click_3" ></Button>
+            <Button Grid.Row="3" Grid.Column="5" Content="Remove" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_REMOVE_SDL_Click" ></Button>
 
         </Grid>
 
@@ -172,7 +172,7 @@
 
             <CheckBox x:Name="checkBoxExistingLL" Grid.Row="1" Grid.Column="2"  Grid.ColumnSpan="1"
                       Checked="checkBoxExistingLL_Checked" Unchecked="checkBoxExistingLL_Unchecked" 
-                      VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="True">
+                      VerticalAlignment="Center" HorizontalAlignment="Center">
             </CheckBox>
             <ComboBox  Grid.Row="1" Grid.Column="3" x:Name="comBoxExistingLL" 
                        VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
@@ -183,14 +183,14 @@
                        VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
                        Text="0.5" SelectionChanged="comBoxLL_SelectionChanged"></ComboBox>
 
-            <Button Grid.Row="1" Grid.Column="6" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_Click_4" ></Button>
+            <Button Grid.Row="1" Grid.Column="6" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_ADD_LL_Click" ></Button>
 
             <ListBox x:Name="listBoxChoosenLL" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="7" 
                      d:ItemsSource="{d:SampleData ItemCount=10}" SelectionMode="Single"
                      Margin="0 10 0 10" SelectionChanged="listBoxChoosenLL_SelectionChanged">
             </ListBox>
 
-            <Button Grid.Row="3" Grid.Column="6" Content="Remove" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_Click_5" ></Button>
+            <Button Grid.Row="3" Grid.Column="6" Content="Remove" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_REMOVE_LL_Click" ></Button>
 
         </Grid>
 
@@ -234,20 +234,25 @@
 
             <CheckBox x:Name="checkBoxExistingWIND" Grid.Row="1" Grid.Column="2"  Grid.ColumnSpan="1"
                       Checked="checkBoxExistingWIND_Checked" Unchecked="checkBoxExistingWIND_Unchecked" 
-                      VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="True">
+                      VerticalAlignment="Center" HorizontalAlignment="Center">
             </CheckBox>
             <ComboBox  Grid.Row="1" Grid.Column="3" x:Name="comBoxExistingWIND" 
                        VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
                        Text="0.5" SelectionChanged="comBoxExistingWIND_SelectionChanged"></ComboBox>
-            <TextBox Grid.Column="4" x:Name="textBoxNameWIND" Grid.Row="1" IsEnabled="False" TextChanged="textBoxNameWIND_TextChanged"></TextBox>
+            <ComboBox  Grid.Row="1" Grid.Column="4" x:Name="comBoxNameWIND" 
+                       VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+                       Text="0.5" SelectionChanged="comBoxNameWIND_SelectionChanged" IsEnabled="False"></ComboBox>
+            
             <CheckBox x:Name="checkBoxExistingWINDVERTICAL" Grid.Row="2" Grid.Column="2"  Grid.ColumnSpan="1"
                       Checked="checkBoxExistingWINDVERTICAL_Checked" Unchecked="checkBoxExistingWINDVERTICAL_Unchecked" 
-                      VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="True">
+                      VerticalAlignment="Center" HorizontalAlignment="Center">
             </CheckBox>
             <ComboBox  Grid.Row="2" Grid.Column="3" x:Name="comBoxExistingWINDVERTICAL" 
                        VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
                        Text="0.5" SelectionChanged="comBoxExistingWINDVERTICAL_SelectionChanged"></ComboBox>
-            <TextBox Grid.Column="4" x:Name="textBoxNameWINDVERTICAL" Grid.Row="2" IsEnabled="False" TextChanged="textBoxNameWINDVERTICAL_TextChanged"></TextBox>
+            <ComboBox  Grid.Row="2" Grid.Column="4" x:Name="comBoxNameWINDVERTICAL" 
+                       VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+                       Text="0.5" SelectionChanged="comBoxNameWINDVERTICAL_SelectionChanged" IsEnabled="False"></ComboBox>
 
             <ComboBox  Grid.Row="1" Grid.Column="5" x:Name="comBoxWIND" 
                        VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
@@ -269,15 +274,15 @@
                        VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
                        Text="0.5" SelectionChanged="comBoxWINDDIRECTION_SelectionChanged"></ComboBox>
 
-            <Button Grid.Row="1" Grid.Column="8" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_Click_6" ></Button>
-            <Button Grid.Row="2" Grid.Column="8" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_Click_7" ></Button>
+            <Button Grid.Row="1" Grid.Column="8" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_ADD_WIND_Click" ></Button>
+            <Button Grid.Row="2" Grid.Column="8" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_ADD_WINDVERTICAL_Click" ></Button>
 
             <ListBox x:Name="listBoxChoosenWIND" Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="9" 
                      d:ItemsSource="{d:SampleData ItemCount=10}" SelectionMode="Single"
                      Margin="0 10 0 10" SelectionChanged="listBoxChoosenWIND_SelectionChanged">
             </ListBox>
 
-            <Button Grid.Row="4" Grid.Column="8" Content="Remove" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_Click_8" ></Button>
+            <Button Grid.Row="4" Grid.Column="8" Content="Remove" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_REMOVE_WINDS_Click" ></Button>
 
         </Grid>
 
@@ -348,7 +353,7 @@
 
             <CheckBox x:Name="checkBoxExistingTEMP" Grid.Row="1" Grid.Column="2"  Grid.ColumnSpan="1"
                       Checked="checkBoxExistingTEMP_Checked" Unchecked="checkBoxExistingTEMP_Unchecked" 
-                      VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="True">
+                      VerticalAlignment="Center" HorizontalAlignment="Center">
             </CheckBox>
             <ComboBox  Grid.Row="1" Grid.Column="3" x:Name="comBoxExistingTEMP" 
                        VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
@@ -399,7 +404,7 @@
 
             <CheckBox x:Name="checkBoxExistingSEISMIC" Grid.Row="1" Grid.Column="1"  Grid.ColumnSpan="1"
                       Checked="checkBoxExistingSEISMIC_Checked" Unchecked="checkBoxExistingSEISMIC_Unchecked" 
-                      VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="True">
+                      VerticalAlignment="Center" HorizontalAlignment="Center">
             </CheckBox>
             <ComboBox  Grid.Row="1" Grid.Column="2" x:Name="comBoxExistingSEISMIC" 
                        VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
@@ -447,7 +452,7 @@
 
             <CheckBox x:Name="checkBoxExistingAL" Grid.Row="1" Grid.Column="1"  Grid.ColumnSpan="1"
                       Checked="checkBoxExistingAL_Checked" Unchecked="checkBoxExistingAL_Unchecked" 
-                      VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="True">
+                      VerticalAlignment="Center" HorizontalAlignment="Center">
             </CheckBox>
             <ComboBox  Grid.Row="1" Grid.Column="2" x:Name="comBoxExistingAL" 
                        VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
@@ -499,7 +504,7 @@
 
             <CheckBox x:Name="checkBoxExistingUPLIFT" Grid.Row="1" Grid.Column="1"  Grid.ColumnSpan="1"
                       Checked="checkBoxExistingUPLIFT_Checked" Unchecked="checkBoxExistingUPLIFT_Unchecked" 
-                      VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="True">
+                      VerticalAlignment="Center" HorizontalAlignment="Center">
             </CheckBox>
             <ComboBox  Grid.Row="1" Grid.Column="2" x:Name="comBoxExistingUPLIFT" 
                        VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
