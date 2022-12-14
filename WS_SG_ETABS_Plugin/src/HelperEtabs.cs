@@ -1255,15 +1255,28 @@ namespace WS_SG_ETABS_Plugin.src
                 {
                     if (shellObjConnectivity.TableInList[index]["UniquePt1"] != null)
                     {
-                        pointList.Add(shellObjConnectivity.TableInList[index]["UniquePt1"]);
+                        //Only add if no duplicate points
+                        if (!pointList.Contains(shellObjConnectivity.TableInList[index]["UniquePt1"]))
+                        {
+                            pointList.Add(shellObjConnectivity.TableInList[index]["UniquePt1"]);
+                        }
+                        
                     }
                     if (shellObjConnectivity.TableInList[index]["UniquePt2"] != null)
                     {
-                        pointList.Add(shellObjConnectivity.TableInList[index]["UniquePt2"]);
+                        //Only add if no duplicate points
+                        if (!pointList.Contains(shellObjConnectivity.TableInList[index]["UniquePt2"]))
+                        {
+                            pointList.Add(shellObjConnectivity.TableInList[index]["UniquePt2"]);
+                        }
                     }
                     if (shellObjConnectivity.TableInList[index]["UniquePt3"] != null)
                     {
-                        pointList.Add(shellObjConnectivity.TableInList[index]["UniquePt3"]);
+                        //Only add if no duplicate points
+                        if (!pointList.Contains(shellObjConnectivity.TableInList[index]["UniquePt3"]))
+                        {
+                            pointList.Add(shellObjConnectivity.TableInList[index]["UniquePt3"]);
+                        }
                     }
 
                     //Check if UniquePt4 key exist, if exist take UniquePt4 else skip
@@ -1272,7 +1285,11 @@ namespace WS_SG_ETABS_Plugin.src
                     {
                         if (shellObjConnectivity.TableInList[index]["UniquePt4"] != null)
                         {
-                            pointList.Add(shellObjConnectivity.TableInList[index]["UniquePt4"]);
+                            //Only add if no duplicate points
+                            if (!pointList.Contains(shellObjConnectivity.TableInList[index]["UniquePt4"]))
+                            {
+                                pointList.Add(shellObjConnectivity.TableInList[index]["UniquePt4"]);
+                            }
                         }
                     }
 
