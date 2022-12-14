@@ -134,7 +134,6 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                 {"massSource", new List<string>() {"Mass Source Definition" } },
                 {"pDelta", new List<string>() { "P-Delta Option Definition" } },
                 {"loadPattern", new List<string>() {"Load Pattern Definitions",
-                                                    /*
                                                     "Load Pattern Definitions - Auto Notional Loads",
                                                     "Load Pattern Definitions - Auto Seismic - AS 1170 2007",
                                                     "Load Pattern Definitions - Auto Seismic - ASCE 7-02",
@@ -188,7 +187,6 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                                                     "Load Pattern Definitions - Auto Wind - TCVN 2737 1995",
                                                     "Load Pattern Definitions - Auto Wind - Turkish TS 498-97",
                                                     "Load Pattern Definitions - Auto Wind - User Loads",
-                                                    */
                                                     "Shell Uniform Load Sets",
                                                     } },
                 {"responseSpectrum", new List<string>() {"Functions - Response Spectrum - User Defined" } },
@@ -356,6 +354,9 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
             Dictionary<string, string> nameIndexArea = new Dictionary<string, string>();
             List<string> skippedAreas = new List<string>();
 
+            //To save shell uniform load sets
+            Dictionary<string, Dictionary<string, string>> uniformLoadSets = new Dictionary<string, Dictionary<string, string>>();
+
             //Going through each checkbox and take note of table keys to save
             foreach (KeyValuePair<string, bool?> selectedDatabaseTable in selectedDatabaseTables)
             {
@@ -384,7 +385,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
 
                             if (databaseTableKey.Key == "loadPattern")
                             {
-                                loadPatternNameEtabsMidas = copyLoadPatternToMidas(Sap, databaseTableKey.Value, textMgt, textWarning);
+                                (loadPatternNameEtabsMidas, uniformLoadSets) = copyLoadPatternToMidas(Sap, databaseTableKey.Value, textMgt, textWarning);
                             }
 
                             if (databaseTableKey.Key == "objectConnectivity")
@@ -422,7 +423,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
 
                             if (databaseTableKey.Key == "areaLoadAssignments")
                             {
-                                copyAreaLoadAssignmentsToMidas(Sap, databaseTableKey.Value, textMgt, textWarning, nameIndexArea, loadPatternNameEtabsMidas, skippedAreas);
+                                copyAreaLoadAssignmentsToMidas(Sap, databaseTableKey.Value, textMgt, textWarning, nameIndexArea, loadPatternNameEtabsMidas, skippedAreas, uniformLoadSets);
                             }
 
                             /*
@@ -1791,7 +1792,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
             return (nameIndexAreaProp, nameMatIndexAreaProp, nameThinThickAreaProp, nameModifierAreaProp);
         }
 
-        private static Dictionary<string, string> copyLoadPatternToMidas(cSapModel Sap, List<string> tableKeys, List<string> textMgt, List<string> textWarning)
+        private static (Dictionary<string, string>, Dictionary<string, Dictionary<string, string>>) copyLoadPatternToMidas(cSapModel Sap, List<string> tableKeys, List<string> textMgt, List<string> textWarning)
         {
             //MGTHeader
             textMgt.Add("*STLDCASE");
@@ -1812,16 +1813,42 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
             //To save load pattern name in etabs and in midas
             Dictionary<string, string> loadPatternNameEtabsMidas = new Dictionary<string, string>();
 
+            //To save shell uniform load sets
+            Dictionary<string, Dictionary<string, string>> uniformLoadSets = new Dictionary<string, Dictionary<string, string>>();
+
             //Gothrough each table key to get the needed table
             foreach (src.HelperEtabs.DatabaseTable databaseTable in databaseTables)
             {
                 if (databaseTable.TableKey == "Shell Uniform Load Sets")
                 {
+                    /*
                     if (databaseTable.NumberRecords != 0)
                     {
                         string warning = "Shell uniform load sets not support! Will NOT be transferred!";
                         MessageBox.Show(warning);
                         textWarning.Add(warning);
+                    }
+                    */
+
+                    foreach (Dictionary<string, string> row in databaseTable.TableInList)
+                    {
+                        string uniformLoadSetName = row["Name"];
+                        Dictionary<string, string> uniformLoadSetLoadPattern = new Dictionary<string, string>();
+
+                        //if the load set havent been recorded previously
+                        if (!uniformLoadSets.ContainsKey(uniformLoadSetName))
+                        {
+                            //Go through each row 1 by 1 to find the load set
+                            foreach (Dictionary<string, string> row_inside in databaseTable.TableInList)
+                            {
+                                if (uniformLoadSetName == row_inside["Name"])
+                                {
+                                    uniformLoadSetLoadPattern.Add(row_inside["LoadPattern"], row_inside["LoadValue"]);
+                                }
+
+                            }
+                            uniformLoadSets.Add(uniformLoadSetName, uniformLoadSetLoadPattern);
+                        }
                     }
                 }
                 else if (databaseTable.TableKey == "Load Pattern Definitions")
@@ -1902,9 +1929,19 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
 
                     }
                 }
+                else
+                {
+                    if (databaseTable.NumberRecords > 0)
+                    {
+                        //Show warning that the type cant be converted to midas
+                        string warning = $"{databaseTable.TableKey} not supported! Will NOT be imported!";
+                        MessageBox.Show(warning);
+                        textWarning.Add(warning);
+                    }
+                }
             }
 
-            return loadPatternNameEtabsMidas;
+            return (loadPatternNameEtabsMidas, uniformLoadSets);
         }
 
         private static Dictionary<string, string> copyFrameAssignmentsLocalAxis(cSapModel Sap)
@@ -2872,7 +2909,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
         }
 
         private static void copyAreaLoadAssignmentsToMidas(cSapModel Sap, List<string> tableKeys, List<string> textMgt, List<string> textWarning, Dictionary<string, string> nameIndexArea,
-                                                    Dictionary<string, string> loadPatternNameEtabsMidas, List<string> skippedAreas)
+                                                    Dictionary<string, string> loadPatternNameEtabsMidas, List<string> skippedAreas, Dictionary<string, Dictionary<string, string>> uniformLoadSets)
         {
 
             bool showWarning = false;
@@ -2925,6 +2962,49 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                             textMgt.Add($"{indexArea}, PRES, PLATE, FACE, {directionMidas}, 0, 0, 0, {projected}, {force}, 0, 0, 0, 0, ,0");
                         }
 
+                    }
+                }
+                else if (databaseTable.TableKey == "Area Load Assignments - Uniform Load Sets")
+                {
+                    List<Dictionary<string, string>> table = new List<Dictionary<string, string>>();
+
+                    table = databaseTable.TableInList;
+
+                    foreach (Dictionary<string, string> row in table)
+                    {
+                        bool inSkippedAreas = false;
+                        foreach (string skippedArea in skippedAreas)
+                        {
+                            if (row["UniqueName"] == skippedArea)
+                            {
+                                inSkippedAreas = true;
+                                break;
+                            }
+                        }
+
+                        if (!inSkippedAreas)
+                        {
+                            string indexArea = nameIndexArea[row["UniqueName"]];
+
+                            string uniformLoadSetName = row["LoadSet"];
+
+                            //Adding each uniform load in uniform load sets into the shell
+                            Dictionary<string, string> uniformLoadsInLoadSet = uniformLoadSets[uniformLoadSetName];
+                            foreach (KeyValuePair<string, string> uniformLoad in uniformLoadsInLoadSet)
+                            {
+                                string loadPattern = uniformLoad.Key;
+                                double force = Convert.ToDouble(uniformLoad.Value) * -1;
+                                string directionMidas = "Gz";
+                                string projected = "NO";
+
+                                //MGTHeader
+                                textMgt.Add($"*USE-STLD, {loadPattern}");
+                                textMgt.Add("*PRESSURE   ;Pressure Loads");
+                                textMgt.Add("; (index element), (load classificiation=PRES), (elementtype=PLATE), (loadtype=FACE), (direction), (Vx=0), (Vy=0), (Vz=0)," +
+                                    "(projected yes/no), (load uniform), (P1=0), (P2=0), (P3=0), (P4=0), (group=''), (psltkey=0)");
+                                textMgt.Add($"{indexArea}, PRES, PLATE, FACE, {directionMidas}, 0, 0, 0, {projected}, {force}, 0, 0, 0, 0, ,0");
+                            }
+                        }
                     }
                 }
                 else
