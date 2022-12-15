@@ -312,6 +312,28 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                                                             "Area Load Assignments - Uniform Load Sets",
                                                             "Area Load Assignments - Wind Pressure Coefficients",
                                                             } },
+                {"links", new List<string>() {"Link Assignments - Link Properties",
+                                                "Link Assignments - Local Axes",
+                                                //"Link Assignments - Summary",
+                                                "Link Object Connectivity",
+                                                //"Link Property Definitions - Acceptance Criteria - Displacement",
+                                                //"Link Property Definitions - Acceptance Criteria - Force",
+                                                //"Link Property Definitions - Damper - Bilinear",
+                                                //"Link Property Definitions - Damper - Exponential",
+                                                //"Link Property Definitions - Damper - Friction Spring",
+                                                //"Link Property Definitions - Gap",
+                                                //"Link Property Definitions - Hook",
+                                                //"Link Property Definitions - Isolator - Friction",
+                                                //"Link Property Definitions - Isolator - High Damping Rubber",
+                                                //"Link Property Definitions - Isolator - Rubber",
+                                                //"Link Property Definitions - Isolator - TC Friction",
+                                                //"Link Property Definitions - Isolator - Triple Pendulum",
+                                                "Link Property Definitions - Linear",
+                                                //"Link Property Definitions - Multilinear - Elastic",
+                                                //"Link Property Definitions - Multilinear - Plastic",
+                                                //"Link Property Definitions - Plastic Wen",
+                                                //"Link Property Definitions - Summary",
+                                                } },
             };
 
             //add in temporary in selectedDatabaseTables
@@ -322,6 +344,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
             selectedDatabaseTables.Add("frameLoadsAssignments", true);
             selectedDatabaseTables.Add("jointLoadsAssignments", true);
             selectedDatabaseTables.Add("areaLoadAssignments", true);
+            selectedDatabaseTables.Add("links", true);
 
             //To save material index
             Dictionary<string, string> nameIndexMaterial = new Dictionary<string, string>();
@@ -424,6 +447,11 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                             if (databaseTableKey.Key == "areaLoadAssignments")
                             {
                                 copyAreaLoadAssignmentsToMidas(Sap, databaseTableKey.Value, textMgt, textWarning, nameIndexArea, loadPatternNameEtabsMidas, skippedAreas, uniformLoadSets);
+                            }
+
+                            if (databaseTableKey.Key == "links")
+                            {
+                                copyLinksToMidas(Sap, databaseTableKey.Value, textMgt, textWarning, nameIndexNode);
                             }
 
                             /*
@@ -3215,6 +3243,231 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
 
             }
 
+        }
+        private static void copyLinksToMidas(cSapModel Sap, List<string> tableKeys, List<string> textMgt, List<string> textWarning, Dictionary<string, string> nameIndexNode)
+        {
+            bool showWarning = false;
+            bool isError = false;
+
+            //List to save link assigned property
+            Dictionary<string, string> nameLinkProperty = new Dictionary<string, string>();
+            Dictionary<string, string> nameLinkLocalAxis = new Dictionary<string, string>();
+            Dictionary<string, Dictionary<string, string>> linkProperties = new Dictionary<string, Dictionary<string, string>>();
+
+            List<src.HelperEtabs.DatabaseTable> databaseTables = new List<src.HelperEtabs.DatabaseTable>();
+
+            (isError, databaseTables) = src.HelperEtabs.GetMultipleTableDisplay(Sap, tableKeys, showWarning);
+
+            //if (isError){return;}
+
+            foreach (src.HelperEtabs.DatabaseTable databaseTable in databaseTables)
+            {
+                if (databaseTable.TableKey == "Link Assignments - Link Properties")
+                {
+                    List<Dictionary<string, string>> table = new List<Dictionary<string, string>>();
+
+                    table = databaseTable.TableInList;
+
+                    foreach (Dictionary<string, string> row in table)
+                    {
+                        nameLinkProperty.Add(row["Name"], row["LinkProp"]);
+                    }
+                }
+                else if (databaseTable.TableKey == "Link Assignments - Local Axes")
+                {
+                    List<Dictionary<string, string>> table = new List<Dictionary<string, string>>();
+
+                    table = databaseTable.TableInList;
+
+                    foreach (Dictionary<string, string> row in table)
+                    {
+                        nameLinkLocalAxis.Add(row["Name"], row["Angle"]);
+                    }
+                }
+                else if (databaseTable.TableKey == "Link Property Definitions - Linear")
+                {
+                    List<Dictionary<string, string>> table = new List<Dictionary<string, string>>();
+
+                    table = databaseTable.TableInList;
+
+                    foreach (Dictionary<string, string> row in table)
+                    {
+                        Dictionary<string, string> linkPropertiesSingle = new Dictionary<string, string>();
+
+                        string name = row["Name"];
+                        string statusDx = row["U1Status"];
+                        string statusDz = row["U2Status"];
+                        string statusDy = row["U3Status"];
+                        string statusRx = row["R1Status"];
+                        string statusRz = row["R2Status"];
+                        string statusRy = row["R3Status"];
+
+                        string rigidDx = "NO";
+                        string rigidDz = "NO";
+                        string rigidDy = "NO";
+                        string rigidRx = "NO";
+                        string rigidRz = "NO";
+                        string rigidRy = "NO";
+
+                        double stiffnessDx = 0;
+                        double stiffnessDz = 0;
+                        double stiffnessDy = 0;
+                        double stiffnessRx = 0;
+                        double stiffnessRz = 0;
+                        double stiffnessRy = 0;
+
+                        if (statusDx == "Fixed")
+                        {
+                            rigidDx = "YES";
+                        }
+                        else if (statusDx == "Inactive")
+                        {
+                            rigidDx = "NO";
+                        }
+                        else if (statusDx == "Active")
+                        {
+                            rigidDx = "NO";
+                            stiffnessDx = Convert.ToDouble(row["StiffU1"]);
+                        }
+
+                        if (statusDz == "Fixed")
+                        {
+                            rigidDz = "YES";
+                        }
+                        else if (statusDz == "Inactive")
+                        {
+                            rigidDz = "NO";
+                        }
+                        else if (statusDz == "Active")
+                        {
+                            rigidDz = "NO";
+                            stiffnessDz = Convert.ToDouble(row["StiffU2"]);
+                        }
+
+
+                        if (statusDy == "Fixed")
+                        {
+                            rigidDy = "YES";
+                        }
+                        else if (statusDy == "Inactive")
+                        {
+                            rigidDy = "NO";
+                        }
+                        else if (statusDy == "Active")
+                        {
+                            rigidDy = "NO";
+                            stiffnessDy = Convert.ToDouble(row["StiffU3"]);
+                        }
+
+                        if (statusRx == "Fixed")
+                        {
+                            rigidRx = "YES";
+                        }
+                        else if (statusRx == "Inactive")
+                        {
+                            rigidRx = "NO";
+                        }
+                        else if (statusRx == "Active")
+                        {
+                            rigidRx = "NO";
+                            stiffnessRx = Convert.ToDouble(row["StiffU4"]);
+                        }
+
+                        if (statusRz == "Fixed")
+                        {
+                            rigidRz = "YES";
+                        }
+                        else if (statusRz == "Inactive")
+                        {
+                            rigidRz = "NO";
+                        }
+                        else if (statusRz == "Active")
+                        {
+                            rigidRz = "NO";
+                            stiffnessRz = Convert.ToDouble(row["StiffU5"]);
+                        }
+
+                        if (statusRy == "Fixed")
+                        {
+                            rigidRy = "YES";
+                        }
+                        else if (statusRy == "Inactive")
+                        {
+                            rigidRy = "NO";
+                        }
+                        else if (statusRy == "Active")
+                        {
+                            rigidRy = "NO";
+                            stiffnessRy = Convert.ToDouble(row["StiffU6"]);
+                        }
+
+                        linkPropertiesSingle.Add("rigidDx", rigidDx);
+                        linkPropertiesSingle.Add("rigidDz", rigidDz);
+                        linkPropertiesSingle.Add("rigidDy", rigidDy);
+                        linkPropertiesSingle.Add("rigidRx", rigidRx);
+                        linkPropertiesSingle.Add("rigidRz", rigidRz);
+                        linkPropertiesSingle.Add("rigidRy", rigidRy);
+
+                        linkPropertiesSingle.Add("stiffnessDx", stiffnessDx.ToString());
+                        linkPropertiesSingle.Add("stiffnessDz", stiffnessDz.ToString());
+                        linkPropertiesSingle.Add("stiffnessDy", stiffnessDy.ToString());
+                        linkPropertiesSingle.Add("stiffnessRx", stiffnessRx.ToString());
+                        linkPropertiesSingle.Add("stiffnessRz", stiffnessRz.ToString());
+                        linkPropertiesSingle.Add("stiffnessRy", stiffnessRy.ToString());
+
+                        linkProperties.Add(name, linkPropertiesSingle);
+                    }
+                }
+            }
+
+            foreach (src.HelperEtabs.DatabaseTable databaseTable in databaseTables)
+            {
+                if (databaseTable.TableKey == "Link Object Connectivity")
+                {
+                    //MGTHeader for area assignment stiffness modifier
+                    textMgt.Add("*ELASTICLINK    ; Elastic Link");
+                    textMgt.Add("; i, (index node 1), (index node 2), (link=GEN), (angle), (rigid Dx), (rigid Dy), (rigid Dz), (rigid Rx), (rigid Ry), (rigid Rz), (stiffness Dx), (stiffness Dy), (stiffness Dz)" +
+                        ", (stiffness Rx), (stiffness Ry), (stiffness Rz), (bShear=NO), (DRy=0.5), (DRz=0.5), (group='')");
+
+                    List<Dictionary<string, string>> table = new List<Dictionary<string, string>>();
+
+                    table = databaseTable.TableInList;
+
+                    int index = 1;
+
+                    foreach (Dictionary<string, string> row in table)
+                    {
+                        string pt1 = row["UniquePt1"];
+                        string indexPt1 = nameIndexNode[pt1];
+
+                        string pt2 = row["UniquePt2"];
+                        string indexPt2 = nameIndexNode[pt2];
+
+                        string linkName = row["Name"];
+                        string linkProperty = nameLinkProperty[linkName];
+                        string linkLocalAxis = nameLinkLocalAxis[linkName];
+
+                        string rigidDx = linkProperties[linkProperty]["rigidDx"];
+                        string rigidDz = linkProperties[linkProperty]["rigidDz"];
+                        string rigidDy = linkProperties[linkProperty]["rigidDy"];
+                        string rigidRx = linkProperties[linkProperty]["rigidRx"];
+                        string rigidRz = linkProperties[linkProperty]["rigidRz"];
+                        string rigidRy = linkProperties[linkProperty]["rigidRy"];
+
+                        string stiffnessDx = linkProperties[linkProperty]["stiffnessDx"];
+                        string stiffnessDz = linkProperties[linkProperty]["stiffnessDz"];
+                        string stiffnessDy = linkProperties[linkProperty]["stiffnessDy"];
+                        string stiffnessRx = linkProperties[linkProperty]["stiffnessRx"];
+                        string stiffnessRz = linkProperties[linkProperty]["stiffnessRz"];
+                        string stiffnessRy = linkProperties[linkProperty]["stiffnessRy"];
+
+                        textMgt.Add($"{index}, {indexPt1}, {indexPt2}, GEN, {linkLocalAxis}, {rigidDx}, {rigidDy}, {rigidDz}, {rigidRx}, {rigidRy}, {rigidRz}, {stiffnessDx}, {stiffnessDy}, {stiffnessDz}, " +
+                            $"{stiffnessRx}, {stiffnessRy}, {stiffnessRz}, NO, 0.5, 0.5, ");
+
+                        index++;
+                    }
+                }
+            }
         }
 
         #region Other methods
