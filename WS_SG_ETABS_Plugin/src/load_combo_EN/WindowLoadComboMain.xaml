@@ -81,7 +81,7 @@
 
             <ListBox x:Name="listBoxChoosenDL" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="6" 
                      d:ItemsSource="{d:SampleData ItemCount=1}" SelectionMode="Single"
-                     Margin="0 10 0 10" SelectionChanged="listBoxChoosenGroup_SelectionChanged">
+                     Margin="0 0 0 0" SelectionChanged="listBoxChoosenGroup_SelectionChanged">
             </ListBox>
 
             <Button Grid.Row="3" Grid.Column="5" Content="Remove" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_REMOVE_DL_Click" ></Button>
@@ -131,7 +131,7 @@
 
             <ListBox x:Name="listBoxChoosenSDL" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="6" 
                      d:ItemsSource="{d:SampleData ItemCount=4}" SelectionMode="Single"
-                     Margin="0 10 0 10" SelectionChanged="listBoxChoosenSDL_SelectionChanged">
+                     Margin="0 0 0 0" SelectionChanged="listBoxChoosenSDL_SelectionChanged">
             </ListBox>
 
             <Button Grid.Row="3" Grid.Column="5" Content="Remove" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_REMOVE_SDL_Click" ></Button>
@@ -187,7 +187,7 @@
 
             <ListBox x:Name="listBoxChoosenLL" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="7" 
                      d:ItemsSource="{d:SampleData ItemCount=10}" SelectionMode="Single"
-                     Margin="0 10 0 10" SelectionChanged="listBoxChoosenLL_SelectionChanged">
+                     Margin="0 0 0 0" SelectionChanged="listBoxChoosenLL_SelectionChanged">
             </ListBox>
 
             <Button Grid.Row="3" Grid.Column="6" Content="Remove" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_REMOVE_LL_Click" ></Button>
@@ -279,7 +279,7 @@
 
             <ListBox x:Name="listBoxChoosenWIND" Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="9" 
                      d:ItemsSource="{d:SampleData ItemCount=10}" SelectionMode="Single"
-                     Margin="0 10 0 10" SelectionChanged="listBoxChoosenWIND_SelectionChanged">
+                     Margin="0 0 0 0" SelectionChanged="listBoxChoosenWIND_SelectionChanged">
             </ListBox>
 
             <Button Grid.Row="4" Grid.Column="8" Content="Remove" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_REMOVE_WINDS_Click" ></Button>
@@ -299,9 +299,10 @@
             </Grid.ColumnDefinitions>
 
             <Grid.RowDefinitions>
-                <RowDefinition Height="0.4*"></RowDefinition>
-                <RowDefinition Height="0.4*"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="0.3*"></RowDefinition>
+                <RowDefinition Height="0.3*"></RowDefinition>
+                <RowDefinition Height="0.5*"></RowDefinition>
+                <RowDefinition Height="0.5*"></RowDefinition>
             </Grid.RowDefinitions>
 
             <Label Grid.Column="0" Content="Load Pattern Type" VerticalAlignment="Center" HorizontalAlignment="Center"/>
@@ -311,10 +312,16 @@
 
             <TextBox Grid.Column="2" x:Name="textBoxNameNOTIONALFACTOR" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" TextChanged="textBoxNameNOTIONALFACTOR_TextChanged" >0.015</TextBox>
 
-            <ListBox x:Name="listBoxChoosenNOTIONAL" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="5" 
+            <ListBox x:Name="listBoxChoosenNOTIONALDL" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="5" 
                      d:ItemsSource="{d:SampleData ItemCount=10}" SelectionMode="Single"
-                     Margin="0 10 0 10" SelectionChanged="listBoxChoosenNOTIONAL_SelectionChanged">
+                     Margin="0 0 0 0" SelectionChanged="listBoxChoosenNOTIONALDL_SelectionChanged">
             </ListBox>
+
+            <ListBox x:Name="listBoxChoosenNOTIONALSDL" Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="5" 
+                     d:ItemsSource="{d:SampleData ItemCount=10}" SelectionMode="Single"
+                     Margin="0 0 0 0" SelectionChanged="listBoxChoosenNOTIONALSDL_SelectionChanged">
+            </ListBox>
+            
 
 
         </Grid>
@@ -364,14 +371,14 @@
                        VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
                        Text="0.5" SelectionChanged="comBoxTEMP_SelectionChanged"></ComboBox>
 
-            <Button Grid.Row="1" Grid.Column="6" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_Click_9" ></Button>
+            <Button Grid.Row="1" Grid.Column="6" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_ADD_TEMP_Click" ></Button>
 
             <ListBox x:Name="listBoxChoosenTEMP" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="7" 
                      d:ItemsSource="{d:SampleData ItemCount=2}" SelectionMode="Single"
-                     Margin="0 10 0 10" SelectionChanged="listBoxChoosenTEMP_SelectionChanged">
+                     Margin="0 0 0 0" SelectionChanged="listBoxChoosenTEMP_SelectionChanged">
             </ListBox>
 
-            <Button Grid.Row="3" Grid.Column="6" Content="Remove" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_Click_10" ></Button>
+            <Button Grid.Row="3" Grid.Column="6" Content="Remove" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_REMOVE_TEMP_Click" ></Button>
 
         </Grid>
 
@@ -410,14 +417,14 @@
                        VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
                        Text="0.5" SelectionChanged="comBoxExistingSEISMIC_SelectionChanged"></ComboBox>
 
-            <Button Grid.Row="1" Grid.Column="3" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_Click_11" ></Button>
+            <Button Grid.Row="1" Grid.Column="3" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_ADD_SEISMIC_Click" ></Button>
 
             <ListBox x:Name="listBoxChoosenSEISMIC" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="4" 
                      d:ItemsSource="{d:SampleData ItemCount=3}" SelectionMode="Single"
-                     Margin="0 10 0 10" SelectionChanged="listBoxChoosenSEISMIC_SelectionChanged">
+                     Margin="0 0 0 0" SelectionChanged="listBoxChoosenSEISMIC_SelectionChanged">
             </ListBox>
 
-            <Button Grid.Row="3" Grid.Column="3" Content="Remove" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_Click_12" ></Button>
+            <Button Grid.Row="3" Grid.Column="3" Content="Remove" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_REMOVE_SEISMIC_Click" ></Button>
 
         </Grid>
 
@@ -464,14 +471,14 @@
                       VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="False" IsEnabled="False">
             </CheckBox>
 
-            <Button Grid.Row="1" Grid.Column="5" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_Click_13" ></Button>
+            <Button Grid.Row="1" Grid.Column="5" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_ADD_AL_Click" ></Button>
 
             <ListBox x:Name="listBoxChoosenAL" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="6" 
                      d:ItemsSource="{d:SampleData ItemCount=4}" SelectionMode="Single"
-                     Margin="0 10 0 10" SelectionChanged="listBoxChoosenAL_SelectionChanged">
+                     Margin="0 0 0 0" SelectionChanged="listBoxChoosenAL_SelectionChanged">
             </ListBox>
 
-            <Button Grid.Row="3" Grid.Column="5" Content="Remove" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_Click_14" ></Button>
+            <Button Grid.Row="3" Grid.Column="5" Content="Remove" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_REMOVE_AL_Click" ></Button>
 
         </Grid>
 
@@ -510,14 +517,14 @@
                        VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
                        Text="0.5" SelectionChanged="comBoxExistingUPLIFT_SelectionChanged"></ComboBox>
 
-            <Button Grid.Row="1" Grid.Column="3" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_Click_15" ></Button>
+            <Button Grid.Row="1" Grid.Column="3" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_ADD_UPLIFT_Click" ></Button>
 
             <ListBox x:Name="listBoxChoosenUPLIFT" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="4" 
                      d:ItemsSource="{d:SampleData ItemCount=1}" SelectionMode="Single"
-                     Margin="0 10 0 10" SelectionChanged="listBoxChoosenUPLIFT_SelectionChanged">
+                     Margin="0 0 0 0" SelectionChanged="listBoxChoosenUPLIFT_SelectionChanged">
             </ListBox>
 
-            <Button Grid.Row="3" Grid.Column="3" Content="Remove" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_Click_16" ></Button>
+            <Button Grid.Row="3" Grid.Column="3" Content="Remove" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_REMOVE_UPLIFT_Click" ></Button>
 
         </Grid>
 
@@ -548,14 +555,14 @@
 
             <TextBox Grid.Column="1" x:Name="textBoxNameEHF" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" TextChanged="textBoxNameEHF_TextChanged" >0.005</TextBox>
 
-            <Button Grid.Row="1" Grid.Column="2" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_Click_17" ></Button>
+            <Button Grid.Row="1" Grid.Column="2" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_ADD_EHF_Click" ></Button>
 
             <ListBox x:Name="listBoxChoosenEHF" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="5" 
                      d:ItemsSource="{d:SampleData ItemCount=30}" SelectionMode="Single"
-                     Margin="0 10 0 10" SelectionChanged="listBoxChoosenEHF_SelectionChanged">
+                     Margin="0 0 0 0" SelectionChanged="listBoxChoosenEHF_SelectionChanged">
             </ListBox>
 
-            <Button Grid.Row="3" Grid.Column="2" Content="Remove" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_Click_18" ></Button>
+            <Button Grid.Row="3" Grid.Column="2" Content="Remove" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_REMOVE_EHF_Click" ></Button>
 
         </Grid>
 

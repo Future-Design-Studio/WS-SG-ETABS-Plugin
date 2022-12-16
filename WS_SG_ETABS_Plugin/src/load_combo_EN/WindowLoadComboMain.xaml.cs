@@ -87,6 +87,24 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
         #endregion
 
+        #region Data source
+
+        public static List<string> notionalxyList = new List<string>()
+        {
+            "Nx (", "Ny ("
+        };
+
+        #endregion
+
+        #region Data source
+
+        public static List<string> seismicList = new List<string>()
+        {
+            "RSA", "EQx", "EQy"
+        };
+
+        #endregion
+
         public WindowLoadComboMain(cSapModel SapModel, cPluginCallback Plugin)
         {
             _SapModel = SapModel;
@@ -171,11 +189,19 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             {
                 string selectedString = comBoxExistingDL.Text;
                 listBoxChoosenDL.Items.Add(selectedString);
+                string selectedNLXString = notionalxyList[0] + comBoxExistingDL.Text + "), " + textBoxNameNOTIONALFACTOR.Text;
+                listBoxChoosenNOTIONALDL.Items.Add(selectedNLXString);
+                string selectedNLYString = notionalxyList[1] + comBoxExistingDL.Text + "), " + textBoxNameNOTIONALFACTOR.Text;
+                listBoxChoosenNOTIONALDL.Items.Add(selectedNLYString);
             }
             else
             {
                 string selectedString = textBoxNameDL.Text;
                 listBoxChoosenDL.Items.Add(selectedString);
+                string selectedNLXString = notionalxyList[0] + textBoxNameDL.Text + "), " + textBoxNameNOTIONALFACTOR.Text;
+                listBoxChoosenNOTIONALDL.Items.Add(selectedNLXString);
+                string selectedNLYString = notionalxyList[1] + textBoxNameDL.Text + "), " + textBoxNameNOTIONALFACTOR.Text;
+                listBoxChoosenNOTIONALDL.Items.Add(selectedNLYString);
             }
         }
 
@@ -198,6 +224,8 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
         {
             if (listBoxChoosenDL.Items.Count != 0 && listBoxChoosenDL.SelectedIndex != -1)
             {
+                listBoxChoosenNOTIONALDL.Items.RemoveAt(listBoxChoosenDL.SelectedIndex * 2);
+                listBoxChoosenNOTIONALDL.Items.RemoveAt(listBoxChoosenDL.SelectedIndex * 2);
                 listBoxChoosenDL.Items.RemoveAt(listBoxChoosenDL.SelectedIndex);
             }
         }
@@ -230,11 +258,19 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             {
                 string selectedString = comBoxExistingSDL.Text;
                 listBoxChoosenSDL.Items.Add(selectedString);
+                string selectedNLXString = notionalxyList[0] + comBoxExistingSDL.Text + "), " + textBoxNameNOTIONALFACTOR.Text;
+                listBoxChoosenNOTIONALSDL.Items.Add(selectedNLXString);
+                string selectedNLYString = notionalxyList[1] + comBoxExistingSDL.Text + "), " + textBoxNameNOTIONALFACTOR.Text;
+                listBoxChoosenNOTIONALSDL.Items.Add(selectedNLYString);
             }
             else
             {
-                string selectedString = textBoxNameDL.Text;
+                string selectedString = textBoxNameSDL.Text;
                 listBoxChoosenSDL.Items.Add(selectedString);
+                string selectedNLXString = notionalxyList[0] + textBoxNameSDL.Text + "), " + textBoxNameNOTIONALFACTOR.Text;
+                listBoxChoosenNOTIONALSDL.Items.Add(selectedNLXString);
+                string selectedNLYString = notionalxyList[1] + textBoxNameSDL.Text + "), " + textBoxNameNOTIONALFACTOR.Text;
+                listBoxChoosenNOTIONALSDL.Items.Add(selectedNLYString);
             }
         }
 
@@ -247,6 +283,8 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
         {
             if (listBoxChoosenSDL.Items.Count != 0 && listBoxChoosenSDL.SelectedIndex != -1)
             {
+                listBoxChoosenNOTIONALSDL.Items.RemoveAt(listBoxChoosenSDL.SelectedIndex * 2);
+                listBoxChoosenNOTIONALSDL.Items.RemoveAt(listBoxChoosenSDL.SelectedIndex * 2);
                 listBoxChoosenSDL.Items.RemoveAt(listBoxChoosenSDL.SelectedIndex);
             }
         }
@@ -510,7 +548,12 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
         }
 
-        private void listBoxChoosenNOTIONAL_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void listBoxChoosenNOTIONALDL_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+        private void listBoxChoosenNOTIONALSDL_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
         }
@@ -542,9 +585,18 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
         }
 
-        private void Button_Click_9(object sender, RoutedEventArgs e)
+        private void Button_ADD_TEMP_Click(object sender, RoutedEventArgs e)
         {
-
+            if (checkBoxExistingTEMP.IsChecked == true)
+            {
+                string selectedString = comBoxExistingTEMP.Text + ", " + comBoxTEMP.Text;
+                listBoxChoosenTEMP.Items.Add(selectedString);
+            }
+            else
+            {
+                string selectedString = textBoxNameTEMP.Text + ", " + comBoxTEMP.Text;
+                listBoxChoosenTEMP.Items.Add(selectedString);
+            }
         }
 
         private void listBoxChoosenTEMP_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -552,9 +604,12 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
         }
 
-        private void Button_Click_10(object sender, RoutedEventArgs e)
+        private void Button_REMOVE_TEMP_Click(object sender, RoutedEventArgs e)
         {
-
+            if (listBoxChoosenTEMP.Items.Count != 0 && listBoxChoosenTEMP.SelectedIndex != -1)
+            {
+                listBoxChoosenTEMP.Items.RemoveAt(listBoxChoosenTEMP.SelectedIndex);
+            }
         }
 
         private void checkBoxExistingSEISMIC_Checked(object sender, RoutedEventArgs e)
@@ -572,9 +627,22 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
         }
 
-        private void Button_Click_11(object sender, RoutedEventArgs e)
+        private void Button_ADD_SEISMIC_Click(object sender, RoutedEventArgs e)
         {
-
+            if (checkBoxExistingSEISMIC.IsChecked == true)
+            {
+                string selectedString = comBoxExistingSEISMIC.Text;
+                listBoxChoosenSEISMIC.Items.Add(selectedString);
+            }
+            else
+            {
+                string selectedString = seismicList[0];
+                listBoxChoosenSEISMIC.Items.Add(selectedString);
+                string selectedString1 = seismicList[1];
+                listBoxChoosenSEISMIC.Items.Add(selectedString1);
+                string selectedString2 = seismicList[2];
+                listBoxChoosenSEISMIC.Items.Add(selectedString2);
+            }
         }
 
         private void listBoxChoosenSEISMIC_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -582,9 +650,12 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
         }
 
-        private void Button_Click_12(object sender, RoutedEventArgs e)
+        private void Button_REMOVE_SEISMIC_Click(object sender, RoutedEventArgs e)
         {
-
+            if (listBoxChoosenSEISMIC.Items.Count != 0 && listBoxChoosenSEISMIC.SelectedIndex != -1)
+            {
+                listBoxChoosenSEISMIC.Items.RemoveAt(listBoxChoosenSEISMIC.SelectedIndex);
+            }
         }
 
         private void checkBoxExistingAL_Checked(object sender, RoutedEventArgs e)
@@ -621,9 +692,28 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
         }
 
-        private void Button_Click_13(object sender, RoutedEventArgs e)
+        private void Button_ADD_AL_Click(object sender, RoutedEventArgs e)
         {
-
+            if (checkBoxExistingAL.IsChecked == true)
+            {
+                string selectedString = comBoxExistingAL.Text;
+                listBoxChoosenAL.Items.Add(selectedString);
+            }
+            else
+            {
+                if (checkBoxAL.IsChecked == true)
+                {
+                    string selectedString = textBoxNameAL.Text;
+                    listBoxChoosenAL.Items.Add(selectedString);
+                }
+                else
+                {
+                    string selectedString = textBoxNameAL.Text;
+                    listBoxChoosenAL.Items.Add(selectedString);
+                    string selectedString1 = textBoxNameAL.Text + "N";
+                    listBoxChoosenAL.Items.Add(selectedString1);
+                }
+            }
         }
 
         private void listBoxChoosenAL_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -631,9 +721,12 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
         }
 
-        private void Button_Click_14(object sender, RoutedEventArgs e)
+        private void Button_REMOVE_AL_Click(object sender, RoutedEventArgs e)
         {
-
+            if (listBoxChoosenAL.Items.Count != 0 && listBoxChoosenAL.SelectedIndex != -1)
+            {
+                listBoxChoosenAL.Items.RemoveAt(listBoxChoosenAL.SelectedIndex);
+            }
         }
 
         private void checkBoxExistingUPLIFT_Checked(object sender, RoutedEventArgs e)
@@ -651,9 +744,18 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
         }
 
-        private void Button_Click_15(object sender, RoutedEventArgs e)
+        private void Button_ADD_UPLIFT_Click(object sender, RoutedEventArgs e)
         {
-
+            if (checkBoxExistingUPLIFT.IsChecked == true)
+            {
+                string selectedString = comBoxExistingUPLIFT.Text;
+                listBoxChoosenUPLIFT.Items.Add(selectedString);
+            }
+            else
+            {
+                string selectedString = "UPLIFT";
+                listBoxChoosenUPLIFT.Items.Add(selectedString);
+            }
         }
 
         private void listBoxChoosenUPLIFT_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -661,9 +763,12 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
         }
 
-        private void Button_Click_16(object sender, RoutedEventArgs e)
+        private void Button_REMOVE_UPLIFT_Click(object sender, RoutedEventArgs e)
         {
-
+            if (listBoxChoosenUPLIFT.Items.Count != 0 && listBoxChoosenUPLIFT.SelectedIndex != -1)
+            {
+                listBoxChoosenUPLIFT.Items.RemoveAt(listBoxChoosenUPLIFT.SelectedIndex);
+            }
         }
 
         private void textBoxNameEHF_TextChanged(object sender, TextChangedEventArgs e)
@@ -671,7 +776,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
         }
 
-        private void Button_Click_17(object sender, RoutedEventArgs e)
+        private void Button_ADD_EHF_Click(object sender, RoutedEventArgs e)
         {
 
         }
@@ -681,9 +786,12 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
         }
 
-        private void Button_Click_18(object sender, RoutedEventArgs e)
+        private void Button_REMOVE_EHF_Click(object sender, RoutedEventArgs e)
         {
-
+            if (listBoxChoosenEHF.Items.Count != 0 && listBoxChoosenEHF.SelectedIndex != -1)
+            {
+                listBoxChoosenEHF.Items.RemoveAt(listBoxChoosenEHF.SelectedIndex);
+            }
         }
 
         private void buttonCancel_Click(object sender, RoutedEventArgs e)
