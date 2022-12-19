@@ -67,7 +67,8 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                 MessageBox.Show(ex.Message);
             }
             */
-
+            
+            
             //Casting file path
             string filePathFrom = filePath.Text;
 
@@ -90,7 +91,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
             //Call up copy property result window
             src.transfer_midas.WindowTransferMidasResult windowCopyPropResult = new src.transfer_midas.WindowTransferMidasResult(_SapModel, _Plugin, filePathFrom, selectedItems);
             IsEnabled = true;
-
+            
         }
 
         private void buttonModifyPath_Click(object sender, RoutedEventArgs e)

@@ -199,6 +199,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                                                     "Load Case Definitions - Nonlinear Staged Construction",
                                                     "Load Case Definitions - Nonlinear Static",
                                                     "Load Case Definitions - Response Spectrum",
+                                                    "Load Case Definitions - Summary",
                                                     "Load Case Definitions - Time History - Linear Direct Integration",
                                                     "Load Case Definitions - Time History - Linear Modal",
                                                     "Load Case Definitions - Time History - Nonlin Direct Integration",
@@ -380,6 +381,9 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
             //To save shell uniform load sets
             Dictionary<string, Dictionary<string, string>> uniformLoadSets = new Dictionary<string, Dictionary<string, string>>();
 
+            //To save load case name
+            Dictionary<string, string> loadCaseNameEtabsMidas = new Dictionary<string, string>();
+
             //Going through each checkbox and take note of table keys to save
             foreach (KeyValuePair<string, bool?> selectedDatabaseTable in selectedDatabaseTables)
             {
@@ -452,6 +456,16 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                             if (databaseTableKey.Key == "links")
                             {
                                 copyLinksToMidas(Sap, databaseTableKey.Value, textMgt, textWarning, nameIndexNode);
+                            }
+
+                            if (databaseTableKey.Key == "loadCase")
+                            {
+                                loadCaseNameEtabsMidas = copyLoadCaseToMidas(Sap, databaseTableKey.Value, textMgt, textWarning, loadPatternNameEtabsMidas);
+                            }
+
+                            if (databaseTableKey.Key == "loadCombination")
+                            {
+                                copyLoadCombinationToMidas(Sap, databaseTableKey.Value, textMgt, textWarning, loadCaseNameEtabsMidas);
                             }
 
                             /*
@@ -3129,6 +3143,161 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                         }
                     }
                 }
+                else if (databaseTable.TableKey == "Area Assignments - Edge Releases")
+                {
+                    //MGT Header
+                    textMgt.Add("*PLATE-RLS    ; Plate End Release");
+                    textMgt.Add("; ELEM_LIST, N1, N2, N3, N4, GROUP");
+
+                    //To save list of uniquename
+                    List<string> areasWithEdgeRelease = new List<string>();
+
+                    //To save releases
+                    Dictionary<string, List<string>> areasEdgeReleaseEdgeNumber = new Dictionary<string, List<string>>();
+
+                    List<Dictionary<string, string>> table = new List<Dictionary<string, string>>();
+
+                    table = databaseTable.TableInList;
+
+                    //Getting uniqueName list of shell that 
+                    foreach (Dictionary<string, string> row in table)
+                    {
+                        if (!areasWithEdgeRelease.Contains(row["UniqueName"]))
+                        {
+                            areasWithEdgeRelease.Add(row["UniqueName"]);
+                        }
+                    }
+
+                    //Getting list of releases
+                    foreach (string areaWithEdgeRelease in areasWithEdgeRelease)
+                    {
+                        List<string> edgeReleaseEdgeNumber = new List<string>();
+
+                        foreach (Dictionary<string, string> row in table)
+                        {
+                            if (row["UniqueName"] == areaWithEdgeRelease)
+                            {
+                                edgeReleaseEdgeNumber.Add(row["EdgeNumber"]);
+                            }
+                        }
+                        areasEdgeReleaseEdgeNumber.Add(areaWithEdgeRelease, edgeReleaseEdgeNumber);
+                    }
+
+                    foreach (KeyValuePair<string, List<string>> areaEndReleaseEdgeNumber in areasEdgeReleaseEdgeNumber)
+                    {
+                        //Check if have more than for releases
+                        if (areaEndReleaseEdgeNumber.Value.Count > 4)
+                        {
+
+                            //not valid!
+                        }
+                        else
+                        {
+                            string releaseN1 = "00000";
+                            string releaseN2 = "00000";
+                            string releaseN3 = "00000";
+                            string releaseN4 = "00000";
+
+                            string areaUniqueName = areaEndReleaseEdgeNumber.Key;
+
+                            foreach (Dictionary<string, string> row in table)
+                            {
+                                
+                                if (areaUniqueName == row["UniqueName"])
+                                {
+                                    //Indicator if valid release for midas or not
+                                    bool isValidPlateRelase = true;
+
+                                    string releaseInPlaneShear = row["RInShear"];
+                                    string releaseInDirectForce = row["RDirForce"];
+                                    string releaseOutPlaneShear = row["ROutShear"];
+                                    string releaseBending = row["RBending"];
+                                    string releaseTwisting = row["RTwisting"];
+
+                                    string springInPlaneShear = row["SInShear"];
+                                    string springInDirectForce = row["SDirForce"];
+                                    string springOutPlaneShear = row["SOutShear"];
+                                    string springBending = row["SBending"];
+                                    string springTwisting = row["STwisting"];
+
+                                    //Check if valid
+                                    if (releaseInPlaneShear != releaseInDirectForce || releaseBending != releaseTwisting)
+                                    {
+                                        isValidPlateRelase = false;
+                                    }
+
+                                    //Check if have spring
+                                    if (springInPlaneShear != "0" || springInDirectForce != "0" || springOutPlaneShear != null || springBending != "0" || springTwisting != "0")
+                                    {
+                                        isValidPlateRelase = false;
+                                    }
+
+                                    //If valid then continue
+                                    if (isValidPlateRelase)
+                                    {
+                                        string releaseFx = "0";
+                                        string releaseFy = "0";
+                                        string releaseFz = "0";
+                                        string releaseMx = "0";
+                                        string releaseMy = "0";
+
+                                        if (releaseInPlaneShear == "Yes" && releaseInDirectForce == "Yes")
+                                        {
+                                            releaseFx = "1";
+                                            releaseFy = "1";
+                                        }
+                                        if (releaseOutPlaneShear == "Yes")
+                                        {
+                                            releaseFz = "1";
+                                        }
+                                        if (releaseBending == "Yes" && releaseTwisting == "Yes")
+                                        {
+                                            releaseMx = "1";
+                                            releaseMy = "1";
+                                        }
+
+                                        //Releasing edge 1
+                                        //N4 and N1
+                                        if (row["EdgeNumber"] == "1")
+                                        {
+                                            string updatedReleaseN12 = releaseFx + releaseFy + releaseFz + releaseMx + releaseMy;
+
+                                            releaseN1 = checkIfPlateAlreadyRelease(updatedReleaseN12, releaseN1);
+                                            releaseN2 = checkIfPlateAlreadyRelease(updatedReleaseN12, releaseN2);
+                                        }
+                                        else if (row["EdgeNumber"] == "2")
+                                        {
+                                            string updatedReleaseN23 = releaseFx + releaseFy + releaseFz + releaseMx + releaseMy;
+
+                                            releaseN2 = checkIfPlateAlreadyRelease(updatedReleaseN23, releaseN2);
+                                            releaseN3 = checkIfPlateAlreadyRelease(updatedReleaseN23, releaseN3);
+                                        }
+                                        else if (row["EdgeNumber"] == "3")
+                                        {
+                                            string updatedReleaseN34 = releaseFx + releaseFy + releaseFz + releaseMx + releaseMy;
+
+                                            releaseN3 = checkIfPlateAlreadyRelease(updatedReleaseN34, releaseN3);
+                                            releaseN4 = checkIfPlateAlreadyRelease(updatedReleaseN34, releaseN4);
+                                        }
+                                        else if (row["EdgeNumber"] == "4")
+                                        {
+                                            string updatedReleaseN41 = releaseFx + releaseFy + releaseFz + releaseMx + releaseMy;
+
+                                            releaseN4 = checkIfPlateAlreadyRelease(updatedReleaseN41, releaseN4);
+                                            releaseN1 = checkIfPlateAlreadyRelease(updatedReleaseN41, releaseN1);
+                                        }
+                                    }
+                                }
+                            }
+
+                            //Getting area index in MIDAS
+                            string areaIndex = nameIndexArea[areaUniqueName];
+
+                            //MGT
+                            textMgt.Add($"{areaIndex}, {releaseN1}, {releaseN2}, {releaseN3}, {releaseN4}, ");
+                        }
+                    }
+                }
                 else
                 {
                     if (databaseTable.NumberRecords > 0)
@@ -3465,6 +3634,256 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                             $"{stiffnessRx}, {stiffnessRy}, {stiffnessRz}, NO, 0.5, 0.5, ");
 
                         index++;
+                    }
+                }
+            }
+        }
+
+        private static Dictionary<string, string> copyLoadCaseToMidas(cSapModel Sap, List<string> tableKeys, List<string> textMgt, List<string> textWarning, Dictionary<string, string> loadPatternNameEtabsMidas)
+        {
+            bool showWarning = false;
+            bool isError = false;
+
+            //List to save load case name etabs and midas
+            Dictionary<string, string> loadCaseNameEtabsMidas = new Dictionary<string, string>();
+
+            //List to save load case name
+            List<string> loadCasesName = new List<string>();
+
+            List<src.HelperEtabs.DatabaseTable> databaseTables = new List<src.HelperEtabs.DatabaseTable>();
+
+            (isError, databaseTables) = src.HelperEtabs.GetMultipleTableDisplay(Sap, tableKeys, showWarning);
+
+
+            //if (isError){return;}
+
+            //Getting all the load cases name first
+            foreach (src.HelperEtabs.DatabaseTable databaseTable in databaseTables)
+            {
+                if (databaseTable.TableKey == "Load Case Definitions - Summary")
+                {
+                    List<Dictionary<string, string>> table = new List<Dictionary<string, string>>();
+
+                    table = databaseTable.TableInList;
+
+                    foreach (Dictionary<string, string> row in table)
+                    {
+                        loadCasesName.Add(row["Name"]);
+                    };
+                }
+            }
+
+            //MGT Header
+            textMgt.Add("*LOADCOMB    ; Combinations");
+            textMgt.Add("; (NAME=name), (kind=GEN), (active=ACTIVE), (bES=0), (iType=0), (desc=''), (iSERVE-TYPE=0), (nLCOMTYPE=0), (nSEISTYPE=0)");
+            textMgt.Add("; (load type=ST), (LCNAME1), (FACTOR)");
+
+            //Go through each load case
+            foreach (string loadCaseName in loadCasesName)
+            {
+                foreach (src.HelperEtabs.DatabaseTable databaseTable in databaseTables)
+                {
+                    if (databaseTable.TableKey == "Load Case Definitions - Linear Static")
+                    {
+                        bool foundInsideStatic = false;
+
+                        List<Dictionary<string, string>> table = new List<Dictionary<string, string>>();
+
+                        table = databaseTable.TableInList;
+
+                        //Look if the load case is inside this particular table
+                        foreach (Dictionary<string, string> row in table)
+                        {
+                            if (loadCaseName == row["Name"])
+                            {
+                                foundInsideStatic = true;
+
+                                //MGT
+                                string loadCaseNameInMidas = loadCaseName;
+                                if (loadCaseNameInMidas.Length > 20 - 4)
+                                {
+                                    loadCaseNameInMidas = "LCa_" + loadCaseNameInMidas.Substring(0, 20-4);
+                                }
+                                else
+                                {
+                                    loadCaseNameInMidas = "LCa_" + loadCaseNameInMidas;
+                                }
+
+                                textMgt.Add($"NAME={loadCaseNameInMidas}, GEN, ACTIVE, 0, 0, , 0, 0, 0");
+
+                                loadCaseNameEtabsMidas.Add(loadCaseName, loadCaseNameInMidas);
+
+                                break;
+                            }
+                        };
+
+                        //If the load case is in this table
+                        if (foundInsideStatic)
+                        {
+                            //Looking for the correct 
+                            foreach (Dictionary<string, string> row in table)
+                            {
+                                if (loadCaseName == row["Name"])
+                                {
+                                    //Finding load pattern name in midas
+                                    string loadPatternNameInMidas = loadPatternNameEtabsMidas[row["LoadName"]];
+
+                                    textMgt.Add($"ST, {loadPatternNameInMidas}, {row["LoadSF"]}");
+                                }
+                            };
+                            break;
+                        }                            
+                    }
+                    else
+                    {
+                        //For other load case which is not static linear
+
+                        bool foundInsideNonStatic = false;
+
+                        if (databaseTable.NumberRecords > 0)
+                        {
+                            List<Dictionary<string, string>> table = new List<Dictionary<string, string>>();
+
+                            table = databaseTable.TableInList;
+
+                            //Look if the load case is inside this particular table
+                            foreach (Dictionary<string, string> row in table)
+                            {
+                                if (loadCaseName == row["Name"])
+                                {
+                                    foundInsideNonStatic = true;
+
+                                    //MGT
+                                    string loadCaseNameInMidas = loadCaseName;
+                                    if (loadCaseNameInMidas.Length > 20 - 10)
+                                    {
+                                        loadCaseNameInMidas = "LCa_" + loadCaseNameInMidas.Substring(0, 20 - 10) + "_CHECK";
+                                    }
+                                    else
+                                    {
+                                        loadCaseNameInMidas = "LCa_" + loadCaseNameInMidas + "_CHECK";
+                                    }
+                                    textMgt.Add($"NAME={loadCaseNameInMidas}, GEN, ACTIVE, 0, 0, , 0, 0, 0");
+
+                                    loadCaseNameEtabsMidas.Add(loadCaseName, loadCaseNameInMidas);
+
+                                    break;
+                                }
+                            };
+                            
+                            //If the load case is in this table
+                            if (foundInsideNonStatic)
+                            {
+                                //Show warning that the type cant be converted to midas
+                                string warning = $"{databaseTable.TableKey} not supported! Load case {loadCaseName} will be imported as as static load case with _CHECK behind its name and with load factor = 1!";
+                                MessageBox.Show(warning);
+                                textWarning.Add(warning);
+
+                                //Give the first load pattern name in midas
+                                string loadPatternNameInMidas = loadPatternNameEtabsMidas.FirstOrDefault().Value;
+
+                                textMgt.Add($"ST, {loadPatternNameInMidas}, 1");
+
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            return loadCaseNameEtabsMidas;
+        }
+
+        private static void copyLoadCombinationToMidas(cSapModel Sap, List<string> tableKeys, List<string> textMgt, List<string> textWarning, Dictionary<string, string> loadCaseNameEtabsMidas)
+        {
+            bool showWarning = false;
+            bool isError = false;
+
+            //List to save load combination name
+            List<string> loadCombinationsName = new List<string>();
+
+            //List to save load combination name that are envelope, envelope will not be included for now
+            List<string> loadCombinationsEnvelopeName = new List<string>();
+
+            List<src.HelperEtabs.DatabaseTable> databaseTables = new List<src.HelperEtabs.DatabaseTable>();
+
+            (isError, databaseTables) = src.HelperEtabs.GetMultipleTableDisplay(Sap, tableKeys, showWarning);
+
+            //if (isError){return;}
+
+            //Getting all the load combination which are in envelope name
+            foreach (src.HelperEtabs.DatabaseTable databaseTable in databaseTables)
+            {
+                if (databaseTable.TableKey == "Load Combination Definitions")
+                {
+                    List<Dictionary<string, string>> table = new List<Dictionary<string, string>>();
+
+                    table = databaseTable.TableInList;
+
+                    foreach (Dictionary<string, string> row in table)
+                    {
+                        //Envelope will not be included for now
+                        if (!loadCombinationsEnvelopeName.Contains(row["Name"]) && row["Type"] == "Envelope")
+                        {
+                            loadCombinationsEnvelopeName.Add(row["Name"]);
+                        }
+
+                    }
+                }
+            }
+
+            //Getting all the load combination name
+            foreach (src.HelperEtabs.DatabaseTable databaseTable in databaseTables)
+            {
+                if (databaseTable.TableKey == "Load Combination Definitions")
+                {
+                    List<Dictionary<string, string>> table = new List<Dictionary<string, string>>();
+
+                    table = databaseTable.TableInList;
+
+                    foreach (Dictionary<string, string> row in table)
+                    {
+                        //Envelope will not be included for now
+                        if (!loadCombinationsName.Contains(row["Name"]) && !loadCombinationsEnvelopeName.Contains(row["Name"]))
+                        {
+                            loadCombinationsName.Add(row["Name"]);
+                        }
+                    }
+                }
+            }
+
+            //Writing MGT for each load combination name
+            foreach(string loadCombinationName in loadCombinationsName)
+            {
+                //MGT
+                string loadCombinationNameInMidas = loadCombinationName;
+                if (loadCombinationNameInMidas.Length > 20 - 4)
+                {
+                    loadCombinationNameInMidas = "LCo_" + loadCombinationNameInMidas.Substring(0, 20 - 4);
+                }
+                else
+                {
+                    loadCombinationNameInMidas = "LCo_" + loadCombinationNameInMidas;
+                }
+                textMgt.Add($"NAME={loadCombinationNameInMidas}, GEN, ACTIVE, 0, 0, , 0, 0, 0");
+
+                foreach (src.HelperEtabs.DatabaseTable databaseTable in databaseTables)
+                {
+                    if (databaseTable.TableKey == "Load Combination Definitions")
+                    {
+                        List<Dictionary<string, string>> table = new List<Dictionary<string, string>>();
+
+                        table = databaseTable.TableInList;
+
+                        foreach (Dictionary<string, string> row in table)
+                        {
+                            if (loadCombinationName == row["Name"])
+                            {
+                                //Finding load case name in midas
+                                string loadCaseNameInMidas = loadCaseNameEtabsMidas[row["LoadName"]];
+
+                                textMgt.Add($"CB, {loadCaseNameInMidas}, {row["SF"]}");
+                            }
+                        }
                     }
                 }
             }
@@ -3948,6 +4367,28 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
 
             localAxis = angleFromGlobalX * -1; //Reverse of this
             return localAxis;
+        }
+
+        private static string checkIfPlateAlreadyRelease(string newPlateRelease, string oldPlateRelease)
+        {
+            string updatedNewPlateRelease = "";
+
+            //For each one that has been released, need to be kept released
+            int releaseIndex = 0;
+            foreach (char release in oldPlateRelease)
+            {
+                if (release == '1')
+                {
+                    updatedNewPlateRelease += '1';
+                }
+                else
+                {
+                    updatedNewPlateRelease += newPlateRelease[releaseIndex];
+                }
+                releaseIndex++;
+            }
+
+            return updatedNewPlateRelease;
         }
 
 
