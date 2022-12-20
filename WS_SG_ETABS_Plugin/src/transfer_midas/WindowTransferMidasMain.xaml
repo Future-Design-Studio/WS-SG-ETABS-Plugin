@@ -90,12 +90,15 @@
                    FontSize="10">Note:<LineBreak/>
                 1. Please understand the warning that is given! Refer to warning.txt generated if needed<LineBreak/>
                 2. Only steel and concrete material is transfered<LineBreak/>
-                3. fck and rebar used in property definition not transfered. It does not affect FEM analysis<LineBreak/>
+                3. fck and rebar used in property definition not transfered. It does not affect FEM analysis.<LineBreak/>
                 4. Null frame created using circular section diameter 0.1m<LineBreak/>
                 5. Null area created using slab thickness 0.1m<LineBreak/>
                 6. Shell uniform load sets will be transferred as normal uniform load<LineBreak/>
                 7. Only "uncoupled linear links" will be transferred<LineBreak/>
-                8. Press OK to proceed
+                8. Only user response specture will be transferred<LineBreak/>
+                9. Modal cases will NOT be transferred<LineBreak/>
+                10. Response spectrum load cases will NOT be transferred<LineBreak/>
+                11. Press OK to proceed
             </TextBlock>
 
             <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right">

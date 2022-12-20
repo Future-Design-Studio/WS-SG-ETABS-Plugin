@@ -131,8 +131,6 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                                                     "Link Property Definitions - Multilinear - Plastic",
                                                     "Link Property Definitions - Plastic Wen",
                                                      } },
-                {"massSource", new List<string>() {"Mass Source Definition" } },
-                {"pDelta", new List<string>() { "P-Delta Option Definition" } },
                 {"loadPattern", new List<string>() {"Load Pattern Definitions",
                                                     "Load Pattern Definitions - Auto Notional Loads",
                                                     "Load Pattern Definitions - Auto Seismic - AS 1170 2007",
@@ -189,6 +187,8 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                                                     "Load Pattern Definitions - Auto Wind - User Loads",
                                                     "Shell Uniform Load Sets",
                                                     } },
+                {"massSource", new List<string>() {"Mass Source Definition" } },
+                {"pDelta", new List<string>() { "P-Delta Option Definition" } },
                 {"responseSpectrum", new List<string>() {"Functions - Response Spectrum - User Defined" } },
                 {"loadCase", new List<string>() {   "Modal Case Definitions - Eigen",
                                                     "Modal Case Definitions - Ritz",
@@ -475,6 +475,18 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                             {
                                 copyGroupsToMidas(Sap, databaseTableKey.Value, textMgt, textWarning, nameIndexNode, nameIndexFrame, nameIndexArea, skippedAreas);
                             }
+
+                            if (databaseTableKey.Key == "pDelta")
+                            {
+                                copyPDeltaToMidas(Sap, databaseTableKey.Value, textMgt, textWarning, loadPatternNameEtabsMidas);
+                            }
+
+                            /*
+                            if (databaseTableKey.Key == "responseSpectrum")
+                            {
+                                copyRSFunctionToMidas(Sap, databaseTableKey.Value, textMgt, textWarning);
+                            }
+                            */
 
                             /*
                             //Going through each table key and save it as a flat list
@@ -3975,6 +3987,15 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                                     string nodeIndex = nameIndexNode[row["UniqueName"]];
                                     nodes += nodeIndex + " ";
                                 }
+                                /*
+                                else
+                                {
+                                    //Show warning if not line, area or point
+                                    string warning = $"{row["ObjectType"]} not supported in MIDAS group!";
+                                    MessageBox.Show(warning);
+                                    textWarning.Add(warning);
+                                }
+                                */
                             }
                         }
                         //After going through all row for 1 group, add MGT line
@@ -3982,12 +4003,154 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                     }
                 }
             }
-
         }
+
+
+        private static void copyPDeltaToMidas(cSapModel Sap, List<string> tableKeys, List<string> textMgt, List<string> textWarning, Dictionary<string, string> loadPatternNameEtabsMidas)
+        {
+            bool showWarning = false;
+            bool isError = false;
+
+            List<src.HelperEtabs.DatabaseTable> databaseTables = new List<src.HelperEtabs.DatabaseTable>();
+
+            (isError, databaseTables) = src.HelperEtabs.GetMultipleTableDisplay(Sap, tableKeys, showWarning);
+
+            //if (isError){return;}
+
+            //MGT Header
+            textMgt.Add("*PDEL-CTRL    ; P-Delta Analysis Control");
+            textMgt.Add("; (iteration=5), (tolerance=0.00001)");
+            textMgt.Add("; (load case name 1), (load factor 1), (load case name 2), (load factor 2), ...");
+
+            //First line
+            textMgt.Add("5, 0.00001");
+
+            string loadCaseAndFactor = "";
+
+            //Getting all the p delta load case
+            foreach (src.HelperEtabs.DatabaseTable databaseTable in databaseTables)
+            {
+                if (databaseTable.TableKey == "P-Delta Option Definition")
+                {
+                    List<Dictionary<string, string>> table = new List<Dictionary<string, string>>();
+
+                    table = databaseTable.TableInList;
+
+                    foreach (Dictionary<string, string> row in table)
+                    {
+                        string loadPatternNameInMidas = loadPatternNameEtabsMidas[row["LoadPattern"]];
+
+                        loadCaseAndFactor += loadPatternNameInMidas + ", " + row["ScaleFactor"] + ", ";
+                    }
+
+                    //Remove the last space and comma, 2 char
+                    loadCaseAndFactor = loadCaseAndFactor.Substring(0, loadCaseAndFactor.Length - 2);
+
+                    //After going through all rows add MGT
+                    textMgt.Add(loadCaseAndFactor);
+                }
+            }
+        }
+
+        /*
+        private static void copyRSFunctionToMidas(cSapModel Sap, List<string> tableKeys, List<string> textMgt, List<string> textWarning)
+        {
+            bool showWarning = false;
+            bool isError = false;
+
+            //List to save RS function name
+            List<string> rsFunctionsName = new List<string>();
+
+            List<src.HelperEtabs.DatabaseTable> databaseTables = new List<src.HelperEtabs.DatabaseTable>();
+
+            (isError, databaseTables) = src.HelperEtabs.GetMultipleTableDisplay(Sap, tableKeys, showWarning);
+
+            //if (isError){return;}
+
+            //MGT Header
+            textMgt.Add("*PDEL-CTRL    ; P-Delta Analysis Control");
+            textMgt.Add("; (iteration=5), (tolerance=0.00001)");
+            textMgt.Add("; (load case name 1), (load factor 1), (load case name 2), (load factor 2), ...");
+
+            //First line
+            textMgt.Add("5, 0.00001");
+
+            string loadCaseAndFactor = "";
+
+            //Getting all the rs function name
+            foreach (src.HelperEtabs.DatabaseTable databaseTable in databaseTables)
+            {
+                if (databaseTable.TableKey == "Functions - Response Spectrum - User Defined")
+                {
+                    List<Dictionary<string, string>> table = new List<Dictionary<string, string>>();
+
+                    table = databaseTable.TableInList;
+
+                    foreach (Dictionary<string, string> row in table)
+                    {
+                        if (!rsFunctionsName.Contains(row["Name"]))
+                        {
+                            rsFunctionsName.Add(row["Name"]);
+                        }
+
+                    }
+                }
+            }
+
+            //Getting all element and node inside each group
+            foreach (string groupName in groupsName)
+            {
+                //String for element
+                string elements = "";
+
+                //String for node
+                string nodes = "";
+
+                foreach (src.HelperEtabs.DatabaseTable databaseTable in databaseTables)
+                {
+                    if (databaseTable.TableKey == "Group Assignments")
+                    {
+                        List<Dictionary<string, string>> table = new List<Dictionary<string, string>>();
+
+                        table = databaseTable.TableInList;
+
+                        foreach (Dictionary<string, string> row in table)
+                        {
+                            if (groupName == row["GroupName"])
+                            {
+                                if (row["ObjectType"] == "Line")
+                                {
+                                    string elementIndex = nameIndexFrame[row["UniqueName"]];
+                                    elements += elementIndex + " ";
+                                }
+                                else if (row["ObjectType"] == "Area")
+                                {
+                                    //Only if area not contained in skipped area
+                                    if (!skippedAreas.Contains(row["UniqueName"]))
+                                    {
+                                        string elementIndex = nameIndexArea[row["UniqueName"]];
+                                        elements += elementIndex + " ";
+                                    }
+                                }
+                                else if (row["ObjectType"] == "Point")
+                                {
+                                    string nodeIndex = nameIndexNode[row["UniqueName"]];
+                                    nodes += nodeIndex + " ";
+                                }
+                            }
+                        }
+                        //After going through all row for 1 group, add MGT line
+                        textMgt.Add($"{groupName}, {nodes}, {elements}, 0");
+                    }
+                }
+            }
+        }
+        */
+
 
         #region Other methods
 
-                private static (string, string, double) parseLoadFrameDirectionEtabsToMidas (string directionEtabs)
+        private static (string, string, double) parseLoadFrameDirectionEtabsToMidas (string directionEtabs)
         {
             string directionMidas = "";
             string projected = "";
