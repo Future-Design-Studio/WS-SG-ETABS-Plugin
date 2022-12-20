@@ -335,6 +335,8 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                                                 //"Link Property Definitions - Plastic Wen",
                                                 //"Link Property Definitions - Summary",
                                                 } },
+                {"groups", new List<string>() {"Group Assignments"
+                                                } },
             };
 
             //add in temporary in selectedDatabaseTables
@@ -346,6 +348,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
             selectedDatabaseTables.Add("jointLoadsAssignments", true);
             selectedDatabaseTables.Add("areaLoadAssignments", true);
             selectedDatabaseTables.Add("links", true);
+            selectedDatabaseTables.Add("groups", true);
 
             //To save material index
             Dictionary<string, string> nameIndexMaterial = new Dictionary<string, string>();
@@ -466,6 +469,11 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                             if (databaseTableKey.Key == "loadCombination")
                             {
                                 copyLoadCombinationToMidas(Sap, databaseTableKey.Value, textMgt, textWarning, loadCaseNameEtabsMidas);
+                            }
+
+                            if (databaseTableKey.Key == "groups")
+                            {
+                                copyGroupsToMidas(Sap, databaseTableKey.Value, textMgt, textWarning, nameIndexNode, nameIndexFrame, nameIndexArea, skippedAreas);
                             }
 
                             /*
@@ -3889,9 +3897,97 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
             }
         }
 
+        private static void copyGroupsToMidas(cSapModel Sap, List<string> tableKeys, List<string> textMgt, List<string> textWarning, Dictionary<string, string> nameIndexNode,
+            Dictionary<string, string> nameIndexFrame, Dictionary<string, string> nameIndexArea, List<string> skippedAreas)
+        {
+            bool showWarning = false;
+            bool isError = false;
+
+            //List to save load combination name
+            List<string> groupsName = new List<string>();
+
+            List<src.HelperEtabs.DatabaseTable> databaseTables = new List<src.HelperEtabs.DatabaseTable>();
+
+            (isError, databaseTables) = src.HelperEtabs.GetMultipleTableDisplay(Sap, tableKeys, showWarning);
+
+            //if (isError){return;}
+
+            //MGT Header
+            textMgt.Add("*GROUP    ; Group");
+            textMgt.Add("; (group name), (node list), (element list), (plane type = 0)");
+
+            //Getting all the group name
+            foreach (src.HelperEtabs.DatabaseTable databaseTable in databaseTables)
+            {
+                if (databaseTable.TableKey == "Group Assignments")
+                {
+                    List<Dictionary<string, string>> table = new List<Dictionary<string, string>>();
+
+                    table = databaseTable.TableInList;
+
+                    foreach (Dictionary<string, string> row in table)
+                    {
+                        if (!groupsName.Contains(row["GroupName"]))
+                        {
+                            groupsName.Add(row["GroupName"]);
+                        }
+                    }
+                }
+            }
+
+            //Getting all element and node inside each group
+            foreach (string groupName in groupsName)
+            {
+                //String for element
+                string elements = "";
+
+                //String for node
+                string nodes = "";
+
+                foreach (src.HelperEtabs.DatabaseTable databaseTable in databaseTables)
+                {
+                    if (databaseTable.TableKey == "Group Assignments")
+                    {
+                        List<Dictionary<string, string>> table = new List<Dictionary<string, string>>();
+
+                        table = databaseTable.TableInList;
+
+                        foreach (Dictionary<string, string> row in table)
+                        {
+                            if (groupName == row["GroupName"])
+                            {
+                                if (row["ObjectType"] == "Line")
+                                {
+                                    string elementIndex = nameIndexFrame[row["UniqueName"]];
+                                    elements += elementIndex + " ";
+                                }
+                                else if (row["ObjectType"] == "Area")
+                                {
+                                    //Only if area not contained in skipped area
+                                    if (!skippedAreas.Contains(row["UniqueName"]))
+                                    {
+                                        string elementIndex = nameIndexArea[row["UniqueName"]];
+                                        elements += elementIndex + " ";
+                                    }
+                                }
+                                else if (row["ObjectType"] == "Point")
+                                {
+                                    string nodeIndex = nameIndexNode[row["UniqueName"]];
+                                    nodes += nodeIndex + " ";
+                                }
+                            }
+                        }
+                        //After going through all row for 1 group, add MGT line
+                        textMgt.Add($"{groupName}, {nodes}, {elements}, 0");
+                    }
+                }
+            }
+
+        }
+
         #region Other methods
 
-        private static (string, string, double) parseLoadFrameDirectionEtabsToMidas (string directionEtabs)
+                private static (string, string, double) parseLoadFrameDirectionEtabsToMidas (string directionEtabs)
         {
             string directionMidas = "";
             string projected = "";
@@ -4393,7 +4489,6 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
 
 
         #endregion
-
 
         private static void writeTextFile(cSapModel Sap, List<string> textLineByLine, string filename)
         {            
