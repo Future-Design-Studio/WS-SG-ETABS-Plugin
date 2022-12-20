@@ -36,7 +36,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
 
         private void buttonOk_Click(object sender, RoutedEventArgs e)
         {
-            /*
+            
             try
             {
                 //Casting file path
@@ -66,9 +66,9 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
             {
                 MessageBox.Show(ex.Message);
             }
-            */
             
             
+            /*
             //Casting file path
             string filePathFrom = filePath.Text;
 
@@ -80,8 +80,8 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                     {"areaSec", checkBoxAreaSec.IsChecked },
                     {"linkSec", checkBoxLinkSec.IsChecked },
                     {"massSource", checkBoxMassSource.IsChecked },
-                    {"pDelta", checkBoxPDelta.IsChecked },
                     {"loadPattern", checkBoxLoadPattern.IsChecked },
+                    {"pDelta", checkBoxPDelta.IsChecked },
                     {"responseSpectrum", checkBoxResponseSpectrum.IsChecked },
                     {"loadCase", checkBoxPDelta.IsChecked },
                     {"loadCombination", checkBoxPDelta.IsChecked },
@@ -91,6 +91,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
             //Call up copy property result window
             src.transfer_midas.WindowTransferMidasResult windowCopyPropResult = new src.transfer_midas.WindowTransferMidasResult(_SapModel, _Plugin, filePathFrom, selectedItems);
             IsEnabled = true;
+            */
             
         }
 
