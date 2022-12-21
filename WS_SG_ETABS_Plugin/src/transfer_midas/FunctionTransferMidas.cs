@@ -335,7 +335,10 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                                                 //"Link Property Definitions - Plastic Wen",
                                                 //"Link Property Definitions - Summary",
                                                 } },
-                {"groups", new List<string>() {"Group Assignments"
+                {"groups", new List<string>() {"Group Assignments",
+                                                } },
+                {"story", new List<string>() {  "Tower and Base Story Definitions",
+                                                "Story Definitions",
                                                 } },
             };
 
@@ -349,6 +352,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
             selectedDatabaseTables.Add("areaLoadAssignments", true);
             selectedDatabaseTables.Add("links", true);
             selectedDatabaseTables.Add("groups", true);
+            selectedDatabaseTables.Add("story", true);
 
             //To save material index
             Dictionary<string, string> nameIndexMaterial = new Dictionary<string, string>();
@@ -479,6 +483,11 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                             if (databaseTableKey.Key == "pDelta")
                             {
                                 copyPDeltaToMidas(Sap, databaseTableKey.Value, textMgt, textWarning, loadPatternNameEtabsMidas);
+                            }
+
+                            if (databaseTableKey.Key == "story")
+                            {
+                                copyStoryToMidas(Sap, databaseTableKey.Value, textMgt, textWarning);
                             }
 
                             /*
@@ -4048,6 +4057,84 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
 
                     //After going through all rows add MGT
                     textMgt.Add(loadCaseAndFactor);
+                }
+            }
+        }
+
+        private static void copyStoryToMidas(cSapModel Sap, List<string> tableKeys, List<string> textMgt, List<string> textWarning)
+        {
+            bool showWarning = false;
+            bool isError = false;
+
+            List<src.HelperEtabs.DatabaseTable> databaseTables = new List<src.HelperEtabs.DatabaseTable>();
+
+            (isError, databaseTables) = src.HelperEtabs.GetMultipleTableDisplay(Sap, tableKeys, showWarning);
+
+            //if (isError){return;}
+
+            //MGT Header
+            textMgt.Add("*STORY    ; Story");
+            textMgt.Add("; (NAME=name), (level in z), (bFLDIAP=YES), (WINDWX=0), (WINDWY=0), (WINDCX=0), (WINDCY=0), (ECCX=0), (ECCY=0), (IECCX=0), (IECCY=0), (TAFX=1), (TAFY=1)" +
+                ", (WTAFX=0), (WTAFY=0), (AreaPosNum=0)");
+
+            bool multipleTower = false;
+            double baseStoryElevation = 0;
+            string baseStoryName = "";
+
+            //Getting base story elevation
+            foreach (src.HelperEtabs.DatabaseTable databaseTable in databaseTables)
+            {
+                if (databaseTable.TableKey == "Tower and Base Story Definitions")
+                {
+                    List<Dictionary<string, string>> table = new List<Dictionary<string, string>>();
+
+                    table = databaseTable.TableInList;
+
+                    //If there are multiple towers then cancel transfer
+                    if (table.Count > 1)
+                    {
+                        multipleTower = true;
+
+                        //Show warning if have multiple towers
+                        string warning = $"Multiple towers detected! Cancel importing story data to MIDAS!";
+                        MessageBox.Show(warning);
+                        textWarning.Add(warning);
+                    }
+                    else
+                    {
+                        baseStoryElevation = Convert.ToDouble(table[0]["BSElev"]);
+                        baseStoryName = table[0]["BSName"];
+
+                        textMgt.Add($"NAME={baseStoryName}, {baseStoryElevation}, YES, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0");
+                    }
+                }
+            }
+
+            if (!multipleTower)
+            {
+                //Set first elevation as base elevation
+                double storyElevation = baseStoryElevation;
+
+                //Getting all other stories
+                foreach (src.HelperEtabs.DatabaseTable databaseTable in databaseTables)
+                {
+                    if (databaseTable.TableKey == "Story Definitions")
+                    {
+                        List<Dictionary<string, string>> table = new List<Dictionary<string, string>>();
+
+                        table = databaseTable.TableInList;
+
+                        //Reverse the list to start from lowest level
+                        table.Reverse();
+
+                        foreach (Dictionary<string, string> row in table)
+                        {
+                            string storyName = row["Story"];
+                            storyElevation += Convert.ToDouble(row["Height"]);
+
+                            textMgt.Add($"NAME={storyName}, {storyElevation}, YES, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0");
+                        }
+                    }
                 }
             }
         }
