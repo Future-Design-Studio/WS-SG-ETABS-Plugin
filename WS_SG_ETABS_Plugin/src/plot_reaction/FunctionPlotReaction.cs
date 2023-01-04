@@ -26,7 +26,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
         #endregion
 
         public static bool PlotReaction(cSapModel Sap, List<string> listChoosenGroup, string outputCase, string reactionDirection, 
-            WpfPlot ReactionPlot, double forceFactor, double bubbleScaleFactor, int textSize, string title, bool splitX, bool splitY,
+            WpfPlot ReactionPlot, double forceFactor, double bubbleScaleFactor, int textSize, int titleSize, int axisTitleSize, double gridSpacingX, double gridSpacingY, string title, bool splitX, bool splitY,
             int divisionX, int divisionY, double offsetX, double offsetY, int sumTextSizeX, int sumTextSizeY, double separationX, double separationY)
         {
             bool isError = false;
@@ -432,14 +432,14 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
 
 
             ReactionPlot.Plot.AxisScaleLock(true);
-            ReactionPlot.Plot.Title(title, true, null, 36, "Arial Narrow");
+            ReactionPlot.Plot.Title(title, true, null, titleSize, "Arial Narrow");
             ReactionPlot.Plot.AxisAuto(.2, .25); // zoom out to accommodate large bubbles
 
             //Axis
-            ReactionPlot.Plot.YAxis.Label("Y coordinate (m)", null, 28, true, "Arial Narrow");
-            ReactionPlot.Plot.XAxis.Label("X coordinate (m)", null, 28, true, "Arial Narrow");
-            ReactionPlot.Plot.YAxis.MinimumTickSpacing(50);
-            ReactionPlot.Plot.XAxis.MinimumTickSpacing(50);
+            ReactionPlot.Plot.YAxis.Label("Y coordinate (m)", null, axisTitleSize, true, "Arial Narrow");
+            ReactionPlot.Plot.XAxis.Label("X coordinate (m)", null, axisTitleSize, true, "Arial Narrow");
+            ReactionPlot.Plot.YAxis.ManualTickSpacing(gridSpacingY);
+            ReactionPlot.Plot.XAxis.ManualTickSpacing(gridSpacingX);
 
             ReactionPlot.Refresh();
 
