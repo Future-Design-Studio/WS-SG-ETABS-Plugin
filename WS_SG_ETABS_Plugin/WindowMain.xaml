@@ -28,6 +28,6 @@
         <Image Grid.Row="6" Source="/WS_SG_ETABS_Plugin;component/src/resources/logo-invert.PNG" />
 
 
-        <Label Grid.Row="7" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="8">version 0.0.4</Label>
+        <Label Grid.Row="7" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="8">version 0.0.5</Label>
     </Grid>
 </Window>
