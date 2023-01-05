@@ -93,8 +93,9 @@
                 <StackPanel Grid.Column="2">
                     <Label Content="Load Pattern Definition"></Label>
                     <CheckBox Name="checkBoxLoadPattern" Content="Load pattern" IsEnabled="False" IsChecked="True"></CheckBox>
+                    <!--
                     <CheckBox Name="checkBoxResponseSpectrum" Content="Response spectrum function" IsEnabled="False" IsChecked="False"></CheckBox>
-
+                    -->
                 </StackPanel>
 
                 <StackPanel Grid.Column="3">

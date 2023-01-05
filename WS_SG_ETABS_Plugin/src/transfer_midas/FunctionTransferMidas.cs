@@ -14,7 +14,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
 {
     internal class FunctionTransferMidas
     {
-        public static bool TransferToMidas(cSapModel Sap, string filePathFrom, Dictionary<string, bool?> selectedDatabaseTables)
+        public static (bool, int) TransferToMidas(cSapModel Sap, Dictionary<string, bool?> selectedDatabaseTables, string filePath, string fileName)
         {            
             //Text file line by line to be converted to MGT
             List<string> textMgt = new List<string>();
@@ -342,6 +342,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                                                 } },
             };
 
+            /*
             //add in temporary in selectedDatabaseTables
             selectedDatabaseTables.Add("objectConnectivity", true);
             selectedDatabaseTables.Add("frameAssignments", true);
@@ -353,6 +354,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
             selectedDatabaseTables.Add("links", true);
             selectedDatabaseTables.Add("groups", true);
             selectedDatabaseTables.Add("story", true);
+            */
 
             //To save material index
             Dictionary<string, string> nameIndexMaterial = new Dictionary<string, string>();
@@ -518,13 +520,15 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
             (isError, databaseTablesEtabsFrom) = src.HelperEtabs.GetMultipleTableDisplay(Sap, tableKeysToSave, true);
             */
 
-            writeTextFile(Sap, textMgt, "test.mgt");
-            writeTextFile(Sap, textWarning, "warning.txt");
+            writeTextFile(Sap, textMgt, filePath, $"{fileName}.mgt");
+            writeTextFile(Sap, textWarning, filePath, "warning.txt");
 
             //CreateExcelComparingEtabsMidas(Sap, nameIndexNode, nameIndexFrame, nameIndexArea);
-            CreateCsvComparingEtabsMidas(Sap, nameIndexNode, nameIndexFrame, nameIndexArea);
+            CreateCsvComparingEtabsMidas(Sap, nameIndexNode, nameIndexFrame, nameIndexArea, filePath);
 
-            return isError;
+            int numOfWarning = textWarning.Count;
+
+            return (isError, numOfWarning);
 
         }
 
@@ -4451,7 +4455,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
 
         }
 
-        public static void CreateCsvComparingEtabsMidas(cSapModel Sap, Dictionary<string, string> nameIndexNode, Dictionary<string, string> nameIndexFrame, Dictionary<string, string> nameIndexArea)
+        public static void CreateCsvComparingEtabsMidas(cSapModel Sap, Dictionary<string, string> nameIndexNode, Dictionary<string, string> nameIndexFrame, Dictionary<string, string> nameIndexArea, string filePath)
         {
             List<string> csvNode = new List<string>();
             csvNode.Add("Node");
@@ -4463,7 +4467,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
 
                 csvNode.Add(etabsUniqueName + "," + midasIndex);
             }
-            writeTextFile(Sap, csvNode, "csvNode.csv");
+            writeTextFile(Sap, csvNode, filePath, "csvNode.csv");
 
             List<string> csvFrame = new List<string>();
             csvFrame.Add("Frame");
@@ -4475,7 +4479,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
 
                 csvFrame.Add(etabsUniqueName + "," + midasIndex);
             }
-            writeTextFile(Sap, csvFrame, "csvFrame.csv");
+            writeTextFile(Sap, csvFrame, filePath, "csvFrame.csv");
 
             List<string> csvArea = new List<string>();
             csvArea.Add("Area");
@@ -4487,7 +4491,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
 
                 csvArea.Add(etabsUniqueName + "," + midasIndex);
             }
-            writeTextFile(Sap, csvArea, "csvArea.csv");
+            writeTextFile(Sap, csvArea, filePath, "csvArea.csv");
         }
 
         private static double adjustAreaLocalAxisBasedOnEtabs(src.HelperEtabs.Shell area, List<Dictionary<string, string>> tableNodeCoordinate)
@@ -4740,10 +4744,10 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
 
         #endregion
 
-        private static void writeTextFile(cSapModel Sap, List<string> textLineByLine, string filename)
+        private static void writeTextFile(cSapModel Sap, List<string> textLineByLine, string filePath, string fileName)
         {            
             //Text file properties
-            string modelPath = Sap.GetModelFilepath() + filename;
+            string modelPath = filePath + "\\" + fileName;
             //string fileName = @"C:\Temp\Mahesh.txt";
             FileStream stream = null;
             stream = new FileStream(modelPath, FileMode.Create);

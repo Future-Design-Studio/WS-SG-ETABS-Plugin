@@ -23,13 +23,13 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
     {
         cSapModel _SapModel;
         cPluginCallback _Plugin;
-        public WindowTransferMidasResult(cSapModel SapModel, cPluginCallback Plugin, string filePathFrom, Dictionary<string, bool?> selectedDatabaseTables)
+        public WindowTransferMidasResult(cSapModel SapModel, cPluginCallback Plugin, Dictionary<string, bool?> selectedDatabaseTables, string filePath, string fileName)
         {
             _SapModel = SapModel;
             _Plugin = Plugin;
 
             //Main logic
-            bool isError = src.transfer_midas.FunctionTransferMidas.TransferToMidas(_SapModel, filePathFrom, selectedDatabaseTables);
+            (bool isError, int numOfWarning) = src.transfer_midas.FunctionTransferMidas.TransferToMidas(_SapModel, selectedDatabaseTables, filePath, fileName);
 
             if (isError)
             {
@@ -37,6 +37,16 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
             }
 
             InitializeComponent();
+
+            //Fill in number of warning
+            labelNumOfWarning.Content = numOfWarning.ToString() + " ";
+
+            ShowDialog();
+        }
+
+        private void buttonOk_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
         }
     }
 }

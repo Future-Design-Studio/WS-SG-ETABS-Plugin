@@ -76,7 +76,8 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
             try
             {
                 //Casting file path
-                string filePathFrom = textBoxFilePath.Text;
+                string filePath = textBoxFilePath.Text;
+                string fileName = textBoxFileName.Text;
 
                 //Collect which boxes are selected
                 Dictionary<string, bool?> selectedItems = new Dictionary<string, bool?>()
@@ -87,7 +88,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                     {"massSource", checkBoxMassSource.IsChecked },
                     {"loadPattern", checkBoxLoadPattern.IsChecked },
                     {"pDelta", checkBoxPDelta.IsChecked },
-                    {"responseSpectrum", checkBoxResponseSpectrum.IsChecked },
+                    //{"responseSpectrum", checkBoxResponseSpectrum.IsChecked },
                     {"loadCase", checkBoxPDelta.IsChecked },
                     {"loadCombination", checkBoxPDelta.IsChecked },
                     {"objectConnectivity", checkBoxObjectConnectivity.IsChecked },
@@ -100,11 +101,12 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                     {"links", checkBoxLinks.IsChecked },
                     {"groups", checkBoxGroups.IsChecked },
                     {"story", checkBoxStory.IsChecked },
-            };
+                };
+
 
                 IsEnabled = false;
                 //Call up result window
-                src.transfer_midas.WindowTransferMidasResult windowCopyPropResult = new src.transfer_midas.WindowTransferMidasResult(_SapModel, _Plugin, filePathFrom, selectedItems);
+                src.transfer_midas.WindowTransferMidasResult windowCopyPropResult = new src.transfer_midas.WindowTransferMidasResult(_SapModel, _Plugin, selectedItems, filePath, fileName);
                 IsEnabled = true;
             }
             catch (Exception ex)
