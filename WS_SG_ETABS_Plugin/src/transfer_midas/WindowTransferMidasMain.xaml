@@ -33,7 +33,7 @@
 
                 <Label Grid.Column="0" Margin="10 0 10 0" Content="MGT file path:"></Label>
 
-                <TextBox x:Name="textBoxFilePath" Grid.Column="1"></TextBox>
+                <TextBox x:Name="textBoxFilePath" Grid.Column="1" IsEnabled="False"></TextBox>
 
             </Grid>
 
@@ -76,32 +76,31 @@
 
                 <StackPanel Grid.Column="0">
                     <Label Content="Property Definition"></Label>
-                    <CheckBox Name="checkBoxMaterial" Content="Materials" Checked="checkBoxMaterial_Checked" Unchecked="checkBoxMaterial_Unchecked"></CheckBox>
-                    <CheckBox Name="checkBoxFrameSec" Content="Frame section properties" IsEnabled="False"></CheckBox>
-                    <CheckBox Name="checkBoxAreaSec" Content="Area section properties" IsEnabled="False"></CheckBox>
-                    <CheckBox Name="checkBoxLinkSec" Content="Link section properties"></CheckBox>
+                    <CheckBox Name="checkBoxMaterial" Content="Materials" IsEnabled="False" IsChecked="True"></CheckBox>
+                    <CheckBox Name="checkBoxFrameSec" Content="Frame section properties" IsEnabled="False" IsChecked="True"></CheckBox>
+                    <CheckBox Name="checkBoxAreaSec" Content="Area section properties" IsEnabled="False" IsChecked="True"></CheckBox>
                 </StackPanel>
 
                 <StackPanel Grid.Column="1">
                     <Label Content="Miscellaneous"></Label>
-                    <CheckBox Name="checkBoxMassSource" Content="Mass source"></CheckBox>
-                    <CheckBox Name="checkBoxPDelta" Content="P-delta definition"></CheckBox>
-                    <CheckBox Name="checkBoxLinks" Content="Links"></CheckBox>
-                    <CheckBox Name="checkBoxGroups" Content="Groups"></CheckBox>
-                    <CheckBox Name="checkBoxStory" Content="Story"></CheckBox>
+                    <CheckBox Name="checkBoxMassSource" Content="Mass source" IsEnabled="False" IsChecked="True"></CheckBox>
+                    <CheckBox Name="checkBoxPDelta" Content="P-delta definition" IsEnabled="False" IsChecked="True"></CheckBox>
+                    <CheckBox Name="checkBoxLinks" Content="Links" IsEnabled="False" IsChecked="True"></CheckBox>
+                    <CheckBox Name="checkBoxGroups" Content="Groups" IsEnabled="False" IsChecked="True"></CheckBox>
+                    <CheckBox Name="checkBoxStory" Content="Story" IsEnabled="False" IsChecked="True"></CheckBox>
                 </StackPanel>
 
                 <StackPanel Grid.Column="2">
                     <Label Content="Load Pattern Definition"></Label>
-                    <CheckBox Name="checkBoxLoadPattern" Content="Load pattern" Checked="checkBoxLoadPattern_Checked" Unchecked="checkBoxLoadPattern_Unchecked"></CheckBox>
-                    <CheckBox Name="checkBoxResponseSpectrum" Content="Response spectrum function"></CheckBox>
+                    <CheckBox Name="checkBoxLoadPattern" Content="Load pattern" IsEnabled="False" IsChecked="True"></CheckBox>
+                    <CheckBox Name="checkBoxResponseSpectrum" Content="Response spectrum function" IsEnabled="False" IsChecked="False"></CheckBox>
 
                 </StackPanel>
 
                 <StackPanel Grid.Column="3">
                     <Label Content="Load Case Definition"></Label>
-                    <CheckBox Name="checkBoxLoadCase" Content="Load case" IsEnabled="False" Checked="checkBoxLoadCase_Checked" Unchecked="checkBoxLoadCase_Unchecked"></CheckBox>
-                    <CheckBox Name="checkBoxLoadCombination" Content="Load combination" IsEnabled="False"></CheckBox>
+                    <CheckBox Name="checkBoxLoadCase" Content="Load case" IsEnabled="False" IsChecked="True"></CheckBox>
+                    <CheckBox Name="checkBoxLoadCombination" Content="Load combination" IsEnabled="False" IsChecked="True"></CheckBox>
                 </StackPanel>
 
             </Grid>
@@ -116,17 +115,17 @@
 
                 <StackPanel Grid.Column="0">
                     <Label Content="Object Connectivity"></Label>
-                    <CheckBox Name="checkBoxObjectConnectivity" Content="Object connectivity" Checked="checkBoxMaterial_Checked" Unchecked="checkBoxMaterial_Unchecked"></CheckBox>
+                    <CheckBox Name="checkBoxObjectConnectivity" Content="Object connectivity" IsEnabled="False" IsChecked="True"></CheckBox>
                 </StackPanel>
 
                 <StackPanel Grid.Column="1">
                     <Label Content="Assignments"></Label>
-                    <CheckBox Name="checkBoxJointAssignments" Content="Joint assignments"></CheckBox>
-                    <CheckBox Name="checkBoxFrameAssignments" Content="Frame assignments"></CheckBox>
-                    <CheckBox Name="checkBoxAreaAssignments" Content="Area assignments"></CheckBox>
-                    <CheckBox Name="checkBoxJointLoadAssignments" Content="Joint load assignments"></CheckBox>
-                    <CheckBox Name="checkBoxFrameLoadAssignments" Content="Frame load assignments"></CheckBox>
-                    <CheckBox Name="checkBoxAreaLoadAssignments" Content="Area load assignments"></CheckBox>
+                    <CheckBox Name="checkBoxJointAssignments" Content="Joint assignments" IsEnabled="False" IsChecked="True"></CheckBox>
+                    <CheckBox Name="checkBoxFrameAssignments" Content="Frame assignments" IsEnabled="False" IsChecked="True"></CheckBox>
+                    <CheckBox Name="checkBoxAreaAssignments" Content="Area assignments" IsEnabled="False" IsChecked="True"></CheckBox>
+                    <CheckBox Name="checkBoxJointLoadsAssignments" Content="Joint load assignments" IsEnabled="False" IsChecked="True"></CheckBox>
+                    <CheckBox Name="checkBoxFrameLoadsAssignments" Content="Frame load assignments" IsEnabled="False" IsChecked="True"></CheckBox>
+                    <CheckBox Name="checkBoxAreaLoadsAssignments" Content="Area load assignments" IsEnabled="False" IsChecked="True"></CheckBox>
                 </StackPanel>
 
 
@@ -146,11 +145,13 @@
                 10. Response spectrum load cases will NOT be transferred<LineBreak/>
                 11. Press OK to proceed
             </TextBlock>
-
+            
+            <!--
             <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button x:Name="buttonUncheckAll" Content="Uncheck All" Width="100" Click="buttonUncheckAll_Click"/>
                 <Button x:Name="buttonCheckAll" Content="Check All" Width="100" Click="buttonCheckAll_Click"/>
             </StackPanel>
+            -->
 
         </Grid>
 

@@ -24,6 +24,9 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
         cSapModel _SapModel;
         cPluginCallback _Plugin;
 
+        string modelPath = "";
+        string modelName = "";
+
         public WindowTransferMidasMain(cSapModel SapModel, cPluginCallback Plugin)
         {
             _SapModel = SapModel;
@@ -31,7 +34,40 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
 
             InitializeComponent();
 
+            //Fill in model path (default path)
+            modelPath = SapModel.GetModelFilepath();
+            textBoxFilePath.Text = modelPath;
+
+            //Fill in model name (default path)
+            modelName = SapModel.GetModelFilename(false);
+            textBoxFileName.Text = modelName;
+
             ShowDialog();
+        }
+
+
+        private void buttonModifyPath_Click(object sender, RoutedEventArgs e)
+        {
+            var dialog = new System.Windows.Forms.FolderBrowserDialog();
+            dialog.SelectedPath = textBoxFilePath.Text;
+
+            System.Windows.Forms.DialogResult result = dialog.ShowDialog();
+
+            if (result == System.Windows.Forms.DialogResult.OK)
+            {
+                textBoxFilePath.Text = dialog.SelectedPath;
+            }
+
+        }
+
+        private void buttonResetPath_Click(object sender, RoutedEventArgs e)
+        {
+            //Fill in model path (default path)
+            textBoxFilePath.Text = modelPath;
+
+            //Fill in model name (default path)
+            textBoxFileName.Text = modelName;
+
         }
 
         private void buttonOk_Click(object sender, RoutedEventArgs e)
@@ -48,17 +84,26 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                     {"material", checkBoxMaterial.IsChecked },
                     {"frameSec", checkBoxFrameSec.IsChecked },
                     {"areaSec", checkBoxAreaSec.IsChecked },
-                    {"linkSec", checkBoxLinkSec.IsChecked },
                     {"massSource", checkBoxMassSource.IsChecked },
                     {"loadPattern", checkBoxLoadPattern.IsChecked },
                     {"pDelta", checkBoxPDelta.IsChecked },
                     {"responseSpectrum", checkBoxResponseSpectrum.IsChecked },
                     {"loadCase", checkBoxPDelta.IsChecked },
                     {"loadCombination", checkBoxPDelta.IsChecked },
-                };
+                    {"objectConnectivity", checkBoxObjectConnectivity.IsChecked },
+                    {"jointAssignments", checkBoxJointAssignments.IsChecked },
+                    {"frameAssignments", checkBoxFrameAssignments.IsChecked },
+                    {"areaAssignments", checkBoxAreaAssignments.IsChecked },
+                    {"jointLoadsAssignments", checkBoxJointLoadsAssignments.IsChecked },
+                    {"frameLoadsAssignments", checkBoxFrameLoadsAssignments.IsChecked },
+                    {"areaLoadsAssignments", checkBoxAreaLoadsAssignments.IsChecked },
+                    {"links", checkBoxLinks.IsChecked },
+                    {"groups", checkBoxGroups.IsChecked },
+                    {"story", checkBoxStory.IsChecked },
+            };
 
                 IsEnabled = false;
-                //Call up copy property result window
+                //Call up result window
                 src.transfer_midas.WindowTransferMidasResult windowCopyPropResult = new src.transfer_midas.WindowTransferMidasResult(_SapModel, _Plugin, filePathFrom, selectedItems);
                 IsEnabled = true;
             }
@@ -66,7 +111,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
             {
                 MessageBox.Show(ex.Message);
             }
-            
+           
             
             /*
             //Casting file path
@@ -95,16 +140,12 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
             
         }
 
-        private void buttonModifyPath_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-
         private void buttonCancel_Click(object sender, RoutedEventArgs e)
         {
-
+            Close();
         }
+
+        /*
 
         private void checkBoxMaterial_Checked(object sender, RoutedEventArgs e)
         {
@@ -176,5 +217,6 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
             checkBoxLoadCase.IsEnabled = false;
             checkBoxLoadCase.IsChecked = false;
         }
+        */
     }
 }
