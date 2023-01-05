@@ -40,7 +40,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
             try
             {
                 //Casting file path
-                string filePathFrom = filePath.Text;
+                string filePathFrom = textBoxFilePath.Text;
 
                 //Collect which boxes are selected
                 Dictionary<string, bool?> selectedItems = new Dictionary<string, bool?>()
