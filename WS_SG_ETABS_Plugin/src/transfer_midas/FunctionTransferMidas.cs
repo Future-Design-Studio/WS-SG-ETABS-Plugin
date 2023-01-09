@@ -404,6 +404,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                         {
                             //Going through each category to copy
                             //Copying material
+                            
                             if (databaseTableKey.Key == "material")
                             {
                                 nameIndexMaterial = copyMaterialToMidas(Sap, databaseTableKey.Value, textMgt, textWarning);
@@ -4048,6 +4049,18 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                     List<Dictionary<string, string>> table = new List<Dictionary<string, string>>();
 
                     table = databaseTable.TableInList;
+
+                    //Check if there is no p-delta set
+                    foreach (Dictionary<string, string> row in table)
+                    {
+                        string autoMethod = loadPatternNameEtabsMidas[row["AutoMethod"]];
+
+                        //If auto method = None, there is no p-delta set
+                        if (autoMethod == "None")
+                        {
+                            return;
+                        }
+                    }
 
                     foreach (Dictionary<string, string> row in table)
                     {
