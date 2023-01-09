@@ -99,8 +99,8 @@ namespace WS_SG_ETABS_Plugin.src.copy_properties
                 {"pDelta", checkBoxPDelta.IsChecked },
                 {"loadPattern", checkBoxLoadPattern.IsChecked },
                 {"responseSpectrum", checkBoxResponseSpectrum.IsChecked },
-                {"loadCase", checkBoxPDelta.IsChecked },
-                {"loadCombination", checkBoxPDelta.IsChecked },
+                {"loadCase", checkBoxLoadCase.IsChecked },
+                {"loadCombination", checkBoxLoadCombination.IsChecked },
             };
 
             IsEnabled = false;

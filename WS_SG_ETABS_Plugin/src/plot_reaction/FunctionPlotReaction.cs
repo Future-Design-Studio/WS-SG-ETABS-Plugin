@@ -90,7 +90,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
                 }
 
                 //Get joint reaction for 1 specific group
-                List<Dictionary<string, string>> jointReactionTable = new List<Dictionary<string, string>>();
+                src.HelperEtabs.DatabaseTable jointReactionTable = null;
 
                 List<string> groupList = new List<string>();
                 groupList.Add(groupName);
@@ -102,7 +102,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
                     return isError;
                 }
 
-                foreach(Dictionary<string, string>  jointReactionRow in jointReactionTable)
+                foreach(Dictionary<string, string>  jointReactionRow in jointReactionTable.TableInList)
                 {
                     if (jointReactionRow["OutputCase"] == outputCase)
                     {
