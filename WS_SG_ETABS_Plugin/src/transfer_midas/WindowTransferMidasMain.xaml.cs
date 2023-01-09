@@ -85,7 +85,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                     {"material", checkBoxMaterial.IsChecked },
                     {"frameSec", checkBoxFrameSec.IsChecked },
                     {"areaSec", checkBoxAreaSec.IsChecked },
-                    {"massSource", checkBoxMassSource.IsChecked },
+                    //{"massSource", checkBoxMassSource.IsChecked },
                     {"loadPattern", checkBoxLoadPattern.IsChecked },
                     {"pDelta", checkBoxPDelta.IsChecked },
                     //{"responseSpectrum", checkBoxResponseSpectrum.IsChecked },
