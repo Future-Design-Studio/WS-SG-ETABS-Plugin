@@ -83,7 +83,7 @@
 
                 <StackPanel Grid.Column="1">
                     <Label Content="Miscellaneous"></Label>
-                    <CheckBox Name="checkBoxMassSource" Content="Mass source" IsEnabled="False" IsChecked="True"></CheckBox>
+                    <!-- <CheckBox Name="checkBoxMassSource" Content="Mass source" IsEnabled="False" IsChecked="True"></CheckBox> -->
                     <CheckBox Name="checkBoxPDelta" Content="P-delta definition" IsEnabled="False" IsChecked="True"></CheckBox>
                     <CheckBox Name="checkBoxLinks" Content="Links" IsEnabled="False" IsChecked="True"></CheckBox>
                     <CheckBox Name="checkBoxGroups" Content="Groups" IsEnabled="False" IsChecked="True"></CheckBox>
