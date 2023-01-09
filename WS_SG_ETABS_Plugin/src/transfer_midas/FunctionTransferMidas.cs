@@ -4053,10 +4053,10 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                     //Check if there is no p-delta set
                     foreach (Dictionary<string, string> row in table)
                     {
-                        string autoMethod = loadPatternNameEtabsMidas[row["AutoMethod"]];
+                        string autoMethod = row["AutoMethod"];
 
                         //If auto method = None, there is no p-delta set
-                        if (autoMethod == "None")
+                        if (autoMethod == "None" || autoMethod == "Non-iterative Based on Mass")
                         {
                             return;
                         }
