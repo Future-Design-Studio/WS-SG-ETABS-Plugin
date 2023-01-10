@@ -32,7 +32,6 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
             string reactionDirection, double forceFactor, double bubbleScaleFactor, int textSize, int titleSize, int axisTitleSize, double gridSpacingX, double gridSpacingY, string title, bool splitX, bool splitY, 
             int divisionX, int divisionY, double offsetX, double offsetY, int sumTextSizeX, int sumTextSizeY, double separationX, double separationY)
         {
-
             _SapModel = SapModel;
             _Plugin = Plugin;
 
@@ -47,9 +46,15 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
             InitializeComponent();
 
             //Main logic
+            List<WpfPlot> reactionPlotList = new List<WpfPlot>();
+            WpfPlot reactionPlot1 = new WpfPlot();
+            reactionPlotList.Add(reactionPlot1);
+
             bool isError = src.plot_reaction.FunctionPlotReaction.PlotReaction(_SapModel, listChoosenGroup, 
                 outputCase, reactionDirection, ReactionPlot, forceFactor, bubbleScaleFactor, textSize, titleSize, axisTitleSize, gridSpacingX, gridSpacingY, title, splitX, splitY, divisionX, divisionY, offsetX, offsetY,
                 sumTextSizeX, sumTextSizeY, separationX, separationY);
+
+            //ReactionPlot.Content = reactionPlotList[0];
 
             if (isError)
             {

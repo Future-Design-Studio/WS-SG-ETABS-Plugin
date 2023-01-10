@@ -10,11 +10,11 @@ none
 false
 DEBUG;TRACE
 
-9-33194879
+11509980797
 
-221188654735
+25590556909
 30423727247
-src\carbon\WindowCarbonMain.xaml;src\carbon\WindowCarbonResult.xaml;src\copy_properties\WindowCopyPropMain.xaml;src\copy_properties\WindowCopyPropResult.xaml;src\plot_reaction\WindowPlotReactionMain.xaml;src\plot_reaction\WindowPlotReactionResult.xaml;src\shell_uni_orient\WindowShellUniMain.xaml;src\shell_uni_orient\WindowShellUniResult.xaml;WindowMain.xaml;
+src\carbon\WindowCarbonMain.xaml;src\carbon\WindowCarbonResult.xaml;src\copy_properties\WindowCopyPropMain.xaml;src\copy_properties\WindowCopyPropResult.xaml;src\plot_reaction\graph\WindowPlotReactionGraphMain.xaml;src\plot_reaction\graph\WindowPlotReactionGraphResult.xaml;src\plot_reaction\WindowPlotReactionMain.xaml;src\plot_reaction\WindowPlotReactionResult.xaml;src\shell_uni_orient\WindowShellUniMain.xaml;src\shell_uni_orient\WindowShellUniResult.xaml;WindowMain.xaml;
 
 True
 
