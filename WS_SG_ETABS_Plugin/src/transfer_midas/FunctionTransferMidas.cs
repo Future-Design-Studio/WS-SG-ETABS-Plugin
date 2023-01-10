@@ -1980,11 +1980,23 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                             else
                             {
                                 typeMidas = "USER";
-                                name = name + "_CHECK";
+
+                                if (name.Length > 40 - 6)
+                                {
+                                    name = name.Substring(0, 40 - 6) + "_CHECK";
+                                }
+                                else
+                                {
+                                    name = name + "_CHECK";
+                                }
 
                                 string warning = $"Load pattern {name} with type {typeEtabs} not supported in MIDAS. Will import as USER load with _CHECK behind its name!";
                                 MessageBox.Show(warning);
                                 textWarning.Add(warning);
+                            }
+                            if (name.Length > 40)
+                            {
+                                name = name.Substring(0, 40);
                             }
                             textMgt.Add($"{name}, {typeMidas},");
 
