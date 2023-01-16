@@ -3182,7 +3182,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                             nameModifierAreaAssignSingle.Add("myy", myyMod.ToString());
                             nameModifierAreaAssignSingle.Add("mxy", mxyMod.ToString());
                             nameModifierAreaAssignSingle.Add("vxx", vxxMod.ToString());
-                            nameModifierAreaAssignSingle.Add("vyy", myyMod.ToString());
+                            nameModifierAreaAssignSingle.Add("vyy", vyyMod.ToString());
                             nameModifierAreaAssignSingle.Add("weightMod", myyMod.ToString());
 
                             nameModifierAreaAssign.Add(nameModifierAreaAssignSingle);
