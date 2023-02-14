@@ -123,3 +123,8 @@ C:\Users\stefano\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws
 C:\Users\stefano\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\WS_SG_ETABS_Plugin.csproj.CopyComplete
 C:\Users\stefano\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\WS_SG_ETABS_Plugin.dll
 C:\Users\stefano\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\WS_SG_ETABS_Plugin.pdb
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\WS_SG_ETABS_Plugin.csproj.ResolveComReference.cache
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\transfer_midas\WindowTransferMidasMain.g.cs
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\transfer_midas\WindowTransferMidasResult.g.cs
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\transfer_midas\WindowTransferMidasMain.baml
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\transfer_midas\WindowTransferMidasResult.baml

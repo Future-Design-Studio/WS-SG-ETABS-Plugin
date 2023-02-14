@@ -97,7 +97,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                     {"areaAssignments", checkBoxAreaAssignments.IsChecked },
                     {"jointLoadsAssignments", checkBoxJointLoadsAssignments.IsChecked },
                     {"frameLoadsAssignments", checkBoxFrameLoadsAssignments.IsChecked },
-                    {"areaLoadsAssignments", checkBoxAreaLoadsAssignments.IsChecked },
+                    {"areaLoadAssignments", checkBoxAreaLoadAssignments.IsChecked },
                     {"links", checkBoxLinks.IsChecked },
                     {"groups", checkBoxGroups.IsChecked },
                     {"story", checkBoxStory.IsChecked },
@@ -146,6 +146,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
         {
             Close();
         }
+
 
         /*
 

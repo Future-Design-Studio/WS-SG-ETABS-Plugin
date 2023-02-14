@@ -126,7 +126,7 @@
                     <CheckBox Name="checkBoxAreaAssignments" Content="Area assignments" IsEnabled="False" IsChecked="True"></CheckBox>
                     <CheckBox Name="checkBoxJointLoadsAssignments" Content="Joint load assignments" IsEnabled="False" IsChecked="True"></CheckBox>
                     <CheckBox Name="checkBoxFrameLoadsAssignments" Content="Frame load assignments" IsEnabled="False" IsChecked="True"></CheckBox>
-                    <CheckBox Name="checkBoxAreaLoadsAssignments" Content="Area load assignments" IsEnabled="False" IsChecked="True"></CheckBox>
+                    <CheckBox Name="checkBoxAreaLoadAssignments" Content="Area load assignments" IsEnabled="False" IsChecked="True"></CheckBox>
                 </StackPanel>
 
 
