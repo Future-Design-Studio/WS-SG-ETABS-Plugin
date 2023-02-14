@@ -1,14 +1,10 @@
-﻿using System;
+﻿using ETABSv1;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using ETABSv1;
-using System.IO;
 using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
-using System.Reflection;
-using System.Security.Policy;
 
 namespace WS_SG_ETABS_Plugin.src.transfer_midas
 {
@@ -26,7 +22,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
             List<string> tableKeysToSave = new List<string>();
 
             //Change MIDAS unit to kN M C
-            changeUnitMidas(Sap, textMgt);
+            ChangeUnitMidas(Sap, textMgt);
 
             //Change ETABS unit to kN M C
             src.HelperEtabs.SetOutputUnit(Sap, eForce.kN, eLength.m, eTemperature.C);
@@ -407,90 +403,90 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                             
                             if (databaseTableKey.Key == "material")
                             {
-                                nameIndexMaterial = copyMaterialToMidas(Sap, databaseTableKey.Value, textMgt, textWarning);
+                                nameIndexMaterial = CopyMaterialToMidas(Sap, databaseTableKey.Value, textMgt, textWarning);
                             }
 
                             if (databaseTableKey.Key == "frameSec")
                             {
-                                (nameIndexSecProp, nameMatIndexSecProp) = copyFrameSecToMidas(Sap, databaseTableKey.Value, textMgt, textWarning, nameIndexMaterial);
+                                (nameIndexSecProp, nameMatIndexSecProp) = CopyFrameSecToMidas(Sap, databaseTableKey.Value, textMgt, textWarning, nameIndexMaterial);
                             }
 
                             if (databaseTableKey.Key == "areaSec")
                             {
-                                (nameIndexAreaProp, nameMatIndexAreaProp, nameThinThickAreaProp, nameModifierAreaProp) = copyAreaSecToMidas(Sap, databaseTableKey.Value, textMgt, textWarning, nameIndexMaterial);
+                                (nameIndexAreaProp, nameMatIndexAreaProp, nameThinThickAreaProp, nameModifierAreaProp) = CopyAreaSecToMidas(Sap, databaseTableKey.Value, textMgt, textWarning, nameIndexMaterial);
                             }
 
                             if (databaseTableKey.Key == "loadPattern")
                             {
-                                (loadPatternNameEtabsMidas, uniformLoadSets) = copyLoadPatternToMidas(Sap, databaseTableKey.Value, textMgt, textWarning);
+                                (loadPatternNameEtabsMidas, uniformLoadSets) = CopyLoadPatternToMidas(Sap, databaseTableKey.Value, textMgt, textWarning);
                             }
 
                             if (databaseTableKey.Key == "objectConnectivity")
                             {
-                                nameLocalAxisFrame = copyFrameAssignmentsLocalAxis(Sap);
-                                nameLocalAxisArea = copyAreaAssignmentsLocalAxis(Sap);
-                                (nameIndexNode, nameIndexFrame, nameIndexArea, skippedAreas, areaPropAssigned) = copyObjectConnectivityToMidas(Sap, databaseTableKey.Value, textMgt, textWarning, nameIndexSecProp, 
+                                nameLocalAxisFrame = CopyFrameAssignmentsLocalAxis(Sap);
+                                nameLocalAxisArea = CopyAreaAssignmentsLocalAxis(Sap);
+                                (nameIndexNode, nameIndexFrame, nameIndexArea, skippedAreas, areaPropAssigned) = CopyObjectConnectivityToMidas(Sap, databaseTableKey.Value, textMgt, textWarning, nameIndexSecProp, 
                                     nameMatIndexSecProp, nameIndexAreaProp, nameMatIndexAreaProp, nameThinThickAreaProp, nameLocalAxisFrame, nameLocalAxisArea);
                             }
 
                             if (databaseTableKey.Key == "frameAssignments")
                             {
-                                copyFrameAssignmentsToMidas(Sap, databaseTableKey.Value, textMgt, textWarning, nameIndexFrame);
+                                CopyFrameAssignmentsToMidas(Sap, databaseTableKey.Value, textMgt, textWarning, nameIndexFrame);
                             }
 
                             if (databaseTableKey.Key == "jointAssignments")
                             {
-                                copyJointAssignmentsToMidas(Sap, databaseTableKey.Value, textMgt, textWarning, nameIndexNode);
+                                CopyJointAssignmentsToMidas(Sap, databaseTableKey.Value, textMgt, textWarning, nameIndexNode);
                             }
                             
                             if (databaseTableKey.Key == "areaAssignments")
                             {
-                                copyAreaAssignmentsToMidas(Sap, databaseTableKey.Value, textMgt, textWarning, nameIndexArea, nameModifierAreaProp, areaPropAssigned);
+                                CopyAreaAssignmentsToMidas(Sap, databaseTableKey.Value, textMgt, textWarning, nameIndexArea, nameModifierAreaProp, areaPropAssigned);
                             }
                             
                             if (databaseTableKey.Key == "frameLoadsAssignments")
                             {
-                                copyFrameLoadsAssignmentsToMidas(Sap, databaseTableKey.Value, textMgt, textWarning, nameIndexFrame, loadPatternNameEtabsMidas);
+                                CopyFrameLoadsAssignmentsToMidas(Sap, databaseTableKey.Value, textMgt, textWarning, nameIndexFrame, loadPatternNameEtabsMidas);
                             }
 
                             if (databaseTableKey.Key == "jointLoadsAssignments")
                             {
-                                copyJointLoadsAssignmentsToMidas(Sap, databaseTableKey.Value, textMgt, textWarning, nameIndexNode, loadPatternNameEtabsMidas);
+                                CopyJointLoadsAssignmentsToMidas(Sap, databaseTableKey.Value, textMgt, textWarning, nameIndexNode, loadPatternNameEtabsMidas);
                             }
 
                             if (databaseTableKey.Key == "areaLoadAssignments")
                             {
-                                copyAreaLoadAssignmentsToMidas(Sap, databaseTableKey.Value, textMgt, textWarning, nameIndexArea, loadPatternNameEtabsMidas, skippedAreas, uniformLoadSets);
+                                CopyAreaLoadAssignmentsToMidas(Sap, databaseTableKey.Value, textMgt, textWarning, nameIndexArea, loadPatternNameEtabsMidas, skippedAreas, uniformLoadSets);
                             }
 
                             if (databaseTableKey.Key == "links")
                             {
-                                copyLinksToMidas(Sap, databaseTableKey.Value, textMgt, textWarning, nameIndexNode);
+                                CopyLinksToMidas(Sap, databaseTableKey.Value, textMgt, textWarning, nameIndexNode);
                             }
 
                             if (databaseTableKey.Key == "loadCase")
                             {
-                                loadCaseNameEtabsMidas = copyLoadCaseToMidas(Sap, databaseTableKey.Value, textMgt, textWarning, loadPatternNameEtabsMidas);
+                                loadCaseNameEtabsMidas = CopyLoadCaseToMidas(Sap, databaseTableKey.Value, textMgt, textWarning, loadPatternNameEtabsMidas);
                             }
 
                             if (databaseTableKey.Key == "loadCombination")
                             {
-                                copyLoadCombinationToMidas(Sap, databaseTableKey.Value, textMgt, textWarning, loadCaseNameEtabsMidas);
+                                CopyLoadCombinationToMidas(Sap, databaseTableKey.Value, textMgt, textWarning, loadCaseNameEtabsMidas);
                             }
 
                             if (databaseTableKey.Key == "groups")
                             {
-                                copyGroupsToMidas(Sap, databaseTableKey.Value, textMgt, textWarning, nameIndexNode, nameIndexFrame, nameIndexArea, skippedAreas);
+                                CopyGroupsToMidas(Sap, databaseTableKey.Value, textMgt, textWarning, nameIndexNode, nameIndexFrame, nameIndexArea, skippedAreas);
                             }
 
                             if (databaseTableKey.Key == "pDelta")
                             {
-                                copyPDeltaToMidas(Sap, databaseTableKey.Value, textMgt, textWarning, loadPatternNameEtabsMidas);
+                                CopyPDeltaToMidas(Sap, databaseTableKey.Value, textMgt, textWarning, loadPatternNameEtabsMidas);
                             }
 
                             if (databaseTableKey.Key == "story")
                             {
-                                copyStoryToMidas(Sap, databaseTableKey.Value, textMgt, textWarning);
+                                CopyStoryToMidas(Sap, databaseTableKey.Value, textMgt, textWarning);
                             }
 
                             /*
@@ -521,8 +517,8 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
             (isError, databaseTablesEtabsFrom) = src.HelperEtabs.GetMultipleTableDisplay(Sap, tableKeysToSave, true);
             */
 
-            writeTextFile(Sap, textMgt, filePath, $"{fileName}.mgt");
-            writeTextFile(Sap, textWarning, filePath, "warning.txt");
+            WriteTextFile(Sap, textMgt, filePath, $"{fileName}.mgt");
+            WriteTextFile(Sap, textWarning, filePath, "warning.txt");
 
             //CreateExcelComparingEtabsMidas(Sap, nameIndexNode, nameIndexFrame, nameIndexArea);
             CreateCsvComparingEtabsMidas(Sap, nameIndexNode, nameIndexFrame, nameIndexArea, filePath);
@@ -534,14 +530,14 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
         }
 
         //Change MGT unit to kN m and C
-        private static void changeUnitMidas(cSapModel Sap,  List<string> textLineByLine)
+        private static void ChangeUnitMidas(cSapModel Sap,  List<string> textLineByLine)
         {
             textLineByLine.Add("*UNIT");
             textLineByLine.Add("KN, M, BTU, C");
         }
 
         //Method to copy material to MIDAS
-        private static Dictionary<string, string> copyMaterialToMidas(cSapModel Sap, List<string> tableKeys, List<string> textMgt, List<string> textWarning)
+        private static Dictionary<string, string> CopyMaterialToMidas(cSapModel Sap, List<string> tableKeys, List<string> textMgt, List<string> textWarning)
         {
             //List to save name and index
             Dictionary<string, string> nameIndexMaterial = new Dictionary<string, string>();
@@ -605,6 +601,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                 if (rowTableGeneral["Type"] == "Concrete")
                 {
                     //Maximum character for material name is 16
+                    string materialNameEtabs = rowTableGeneral["Material"];
                     string materialName = rowTableGeneral["Material"];
                     if (materialName.Length > 16)
                     {
@@ -620,7 +617,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                     //Going through basic mech prop to find density, modulus and possion ratio
                     foreach (Dictionary<string, string> rowTableMechProp in tableMechProp)
                     {
-                        if (materialName == rowTableMechProp["Material"])
+                        if (materialNameEtabs == rowTableMechProp["Material"])
                         {
                             unitWeight = Convert.ToDouble(rowTableMechProp["UnitWeight"]);
                             unitMass = Convert.ToDouble(rowTableMechProp["UnitMass"]);
@@ -644,6 +641,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                 else if (rowTableGeneral["Type"] == "Steel")
                 {
                     //Maximum character for material name is 16
+                    string materialNameEtabs = rowTableGeneral["Material"];
                     string materialName = rowTableGeneral["Material"];
                     if (materialName.Length > 16)
                     {
@@ -659,7 +657,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                     //Going through basic mech prop to find density, modulus and possion ratio
                     foreach (Dictionary<string, string> rowTableMechProp in tableMechProp)
                     {
-                        if (materialName == rowTableMechProp["Material"])
+                        if (materialNameEtabs == rowTableMechProp["Material"])
                         {
                             unitWeight = Convert.ToDouble(rowTableMechProp["UnitWeight"]);
                             unitMass = Convert.ToDouble(rowTableMechProp["UnitMass"]);
@@ -713,7 +711,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                 {
                     string warning = $"Have material type other than concrete and steel. {rowTableGeneral["Material"]} with type {rowTableGeneral["Type"]} " +
                         $"will be imported as concrete with _CHECK behind its name!";
-                    MessageBox.Show(warning);
+                    //MessageBox.Show(warning);
                     textWarning.Add(warning);
 
                     //Import as concrete
@@ -746,7 +744,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
         }
 
         //Method to copy frame section to MIDAS
-        private static (Dictionary<string, string>, Dictionary<string, string>) copyFrameSecToMidas(cSapModel Sap, List<string> tableKeys, List<string> textMgt, List<string> textWarning, 
+        private static (Dictionary<string, string>, Dictionary<string, string>) CopyFrameSecToMidas(cSapModel Sap, List<string> tableKeys, List<string> textMgt, List<string> textWarning, 
             Dictionary<string, string> nameIndexMaterial)
         {
             //MGTHeader
@@ -1301,7 +1299,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                     {
                         //Show warning that the type cant be converted to midas
                         string warning = $"{databaseTable.TableKey} not supported! Will import as a rectangular section with _CHECK behind its name!";
-                        MessageBox.Show(warning);
+                        //MessageBox.Show(warning);
                         textWarning.Add(warning);
 
                         //Import as a rectangular section
@@ -1379,7 +1377,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                                 if (Convert.ToDouble(row["MMod"]) != Convert.ToDouble(row["WMod"]))
                                 {
                                     string warning = $"Different weight and mass modifier found in section property {row["Name"]}. Highest value will be used!";
-                                    MessageBox.Show(warning);
+                                    //MessageBox.Show(warning);
                                     textWarning.Add(warning);
 
                                     if (Convert.ToDouble(row["MMod"]) > Convert.ToDouble(row["WMod"]))
@@ -1426,7 +1424,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
         }
 
         //Method to copy area section to MIDAS
-        private static (Dictionary<string, string>, Dictionary<string, string>, Dictionary<string, string>, List<Dictionary<string, string>>) copyAreaSecToMidas(cSapModel Sap, List<string> tableKeys, 
+        private static (Dictionary<string, string>, Dictionary<string, string>, Dictionary<string, string>, List<Dictionary<string, string>>) CopyAreaSecToMidas(cSapModel Sap, List<string> tableKeys, 
             List<string> textMgt, List<string> textWarning, Dictionary<string, string> nameIndexMaterial)
         {
             //MGTHeader
@@ -1505,7 +1503,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                             if (!layeredWarningShown)
                             {
                                 string warning = "Layered type is not supported in MIDAS! Will import as normal slab with 0.1 thickness with _CHECK behind its name!";
-                                MessageBox.Show(warning);
+                                //MessageBox.Show(warning);
                                 textWarning.Add(warning);
                                 layeredWarningShown = true;
                             }
@@ -1537,7 +1535,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                             if (!membraneWarningShown && row["ModelType"] == "Membrane")
                             {
                                 string warning = "Membrane type is not supported in MIDAS! Will import as normal (analysis type thin) slab!";
-                                MessageBox.Show(warning);
+                                //MessageBox.Show(warning);
                                 textWarning.Add(warning);
                                 membraneWarningShown = true;
 
@@ -1545,7 +1543,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                                 if (!oneWayWarningShown && row["OneWayLoad"] == "Yes")
                                 {
                                     warning = "One way type is not supported in MIDAS! Will import as normal slab!";
-                                    MessageBox.Show(warning);
+                                    //MessageBox.Show(warning);
                                     textWarning.Add(warning);
                                     oneWayWarningShown = true;
                                 }
@@ -1557,7 +1555,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                                 if (!ribbedWarningShown)
                                 {
                                     string warning = "Ribbed type is not supported in MIDAS! Will import as normal slab with _CHECK behind its name!";
-                                    MessageBox.Show(warning);
+                                    //MessageBox.Show(warning);
                                     textWarning.Add(warning);
                                     ribbedWarningShown = true;
                                 }
@@ -1568,7 +1566,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                                 if (!waffleWarningShown)
                                 {
                                     string warning = "Waffle type is not supported in MIDAS! Will import as normal slab with _CHECK behind its name!";
-                                    MessageBox.Show(warning);
+                                    //MessageBox.Show(warning);
                                     textWarning.Add(warning);
                                     waffleWarningShown = true;
                                 }
@@ -1608,7 +1606,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                             if (!membraneWarningShown && row["ModelType"] == "Membrane")
                             {
                                 string warning = "Membrane type is not supported in MIDAS! Will import as normal (analysis type thin) slab!";
-                                MessageBox.Show(warning);
+                                //MessageBox.Show(warning);
                                 textWarning.Add(warning);
                                 membraneWarningShown = true;
 
@@ -1616,7 +1614,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                                 if (!oneWayWarningShown && row["OneWayLoad"] == "Yes")
                                 {
                                     warning = "One way type is not supported in MIDAS! Will import as normal slab!";
-                                    MessageBox.Show(warning);
+                                    //MessageBox.Show(warning);
                                     textWarning.Add(warning);
                                     oneWayWarningShown = true;
                                 }
@@ -1626,7 +1624,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                             if (!dropWarningShown && row["PropType"] == "Drop")
                             {
                                 string warning = "Drop type is not supported in MIDAS! Will import as normal slab! Might cause area overlap!";
-                                MessageBox.Show(warning);
+                                //MessageBox.Show(warning);
                                 textWarning.Add(warning);
                                 dropWarningShown = true;
                             }
@@ -1635,7 +1633,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                             if (!stiffWarningShown && row["PropType"] == "Stiff")
                             {
                                 string warning = "Stiff type is not supported in MIDAS! Will import as normal slab!";
-                                MessageBox.Show(warning);
+                                //MessageBox.Show(warning);
                                 textWarning.Add(warning);
                                 stiffWarningShown = true;
                             }
@@ -1644,7 +1642,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                             if (!matWarningShown && row["PropType"] == "Mat")
                             {
                                 string warning = "Mat type is not supported in MIDAS! Will import as normal slab!";
-                                MessageBox.Show(warning);
+                                //MessageBox.Show(warning);
                                 textWarning.Add(warning);
                                 matWarningShown = true;
                             }
@@ -1652,7 +1650,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                             if (!footingWarningShown && row["PropType"] == "Footing")
                             {
                                 string warning = "Footing type is not supported in MIDAS! Will import as normal slab!";
-                                MessageBox.Show(warning);
+                                //MessageBox.Show(warning);
                                 textWarning.Add(warning);
                                 footingWarningShown = true;
                             }
@@ -1868,7 +1866,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
             return (nameIndexAreaProp, nameMatIndexAreaProp, nameThinThickAreaProp, nameModifierAreaProp);
         }
 
-        private static (Dictionary<string, string>, Dictionary<string, Dictionary<string, string>>) copyLoadPatternToMidas(cSapModel Sap, List<string> tableKeys, List<string> textMgt, List<string> textWarning)
+        private static (Dictionary<string, string>, Dictionary<string, Dictionary<string, string>>) CopyLoadPatternToMidas(cSapModel Sap, List<string> tableKeys, List<string> textMgt, List<string> textWarning)
         {
             //MGTHeader
             textMgt.Add("*STLDCASE");
@@ -1901,7 +1899,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                     if (databaseTable.NumberRecords != 0)
                     {
                         string warning = "Shell uniform load sets not support! Will NOT be transferred!";
-                        MessageBox.Show(warning);
+                        //MessageBox.Show(warning);
                         textWarning.Add(warning);
                     }
                     */
@@ -1991,7 +1989,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                                 }
 
                                 string warning = $"Load pattern {name} with type {typeEtabs} not supported in MIDAS. Will import as USER load with _CHECK behind its name!";
-                                MessageBox.Show(warning);
+                                //MessageBox.Show(warning);
                                 textWarning.Add(warning);
                             }
                             if (name.Length > 40)
@@ -2023,7 +2021,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                     {
                         //Show warning that the type cant be converted to midas
                         string warning = $"{databaseTable.TableKey} not supported! Will NOT be imported!";
-                        MessageBox.Show(warning);
+                        //MessageBox.Show(warning);
                         textWarning.Add(warning);
                     }
                 }
@@ -2032,7 +2030,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
             return (loadPatternNameEtabsMidas, uniformLoadSets);
         }
 
-        private static Dictionary<string, string> copyFrameAssignmentsLocalAxis(cSapModel Sap)
+        private static Dictionary<string, string> CopyFrameAssignmentsLocalAxis(cSapModel Sap)
         {
             Dictionary<string, string>  nameLocalAxisFrame = new Dictionary<string, string>();
 
@@ -2054,7 +2052,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
             return nameLocalAxisFrame;
         }
 
-        private static Dictionary<string, string> copyAreaAssignmentsLocalAxis(cSapModel Sap)
+        private static Dictionary<string, string> CopyAreaAssignmentsLocalAxis(cSapModel Sap)
         {
             Dictionary<string, string> nameLocalAxisArea = new Dictionary<string, string>();
 
@@ -2076,7 +2074,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
             return nameLocalAxisArea;
         }
 
-        private static (Dictionary<string, string>, Dictionary<string, string>, Dictionary<string, string>, List<string>, Dictionary<string, string>) copyObjectConnectivityToMidas(cSapModel Sap, List<string> tableKeys, List<string> textMgt, 
+        private static (Dictionary<string, string>, Dictionary<string, string>, Dictionary<string, string>, List<string>, Dictionary<string, string>) CopyObjectConnectivityToMidas(cSapModel Sap, List<string> tableKeys, List<string> textMgt, 
             List<string> textWarning, Dictionary<string, string> nameIndexSecProp, Dictionary<string, string> nameMatIndexSecProp, Dictionary<string, string> nameIndexAreaProp, 
             Dictionary<string, string> nameMatIndexAreaProp, Dictionary<string, string> nameThinThickAreaProp, Dictionary<string, string> nameLocalAxisFrame, Dictionary<string, string>  nameLocalAxisArea)
         {
@@ -2285,7 +2283,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                             if (!moreThan4NodesWarningShown)
                             {
                                 warning = $"Area with > 4 nodes is found! Max node number in MIDAS is 4!";
-                                MessageBox.Show(warning);
+                                //MessageBox.Show(warning);
                                 moreThan4NodesWarningShown = true;
                             }
 
@@ -2316,7 +2314,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                         //Finding local axis angle
                         double localAxis = 0;
                         //For area need to adjust MIDAS local axis to ETABS local axis
-                        localAxis = adjustAreaLocalAxisBasedOnEtabs(area, tableNodeCoordinate);
+                        localAxis = AdjustAreaLocalAxisBasedOnEtabs(area, tableNodeCoordinate);
 
                         if (nameLocalAxisArea.ContainsKey(area.UniqueName))
                         {
@@ -2377,7 +2375,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                             if (!moreThan4NodesWarningShown)
                             {
                                 warning = $"Area with > 4 nodes is found! Max node number in MIDAS is 4!";
-                                MessageBox.Show(warning);
+                                //MessageBox.Show(warning);
                                 moreThan4NodesWarningShown = true;
                             }
 
@@ -2408,7 +2406,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                         //Finding local axis angle
                         double localAxis = 0;
                         //For area need to adjust MIDAS local axis to ETABS local axis
-                        localAxis = adjustAreaLocalAxisBasedOnEtabs(area, tableNodeCoordinate);
+                        localAxis = AdjustAreaLocalAxisBasedOnEtabs(area, tableNodeCoordinate);
 
                         if (nameLocalAxisArea.ContainsKey(area.UniqueName))
                         {
@@ -2454,7 +2452,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
             return (nameIndexNode, nameIndexFrame, nameIndexArea, skippedAreas, nameAreaPropAssigned);
         }
 
-        private static void copyFrameAssignmentsToMidas(cSapModel Sap, List<string> tableKeys, List<string> textMgt, List<string> textWarning, Dictionary<string, string> nameIndexFrame)
+        private static void CopyFrameAssignmentsToMidas(cSapModel Sap, List<string> tableKeys, List<string> textMgt, List<string> textWarning, Dictionary<string, string> nameIndexFrame)
         {
             bool showWarning = false;
             bool isError = false;
@@ -2484,12 +2482,12 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                     {
                         string indexFrame = nameIndexFrame[row["UniqueName"]];
 
-                        int releaseFxI = parseYesNoToBinary(row["PI"]);
-                        int releaseFyI = parseYesNoToBinary(row["V2I"]);
-                        int releaseFzI = parseYesNoToBinary(row["V3I"]);
-                        int releaseMxI = parseYesNoToBinary(row["TI"]);
-                        int releaseMyI = parseYesNoToBinary(row["M3I"]);
-                        int releaseMzI = parseYesNoToBinary(row["M2I"]);
+                        int releaseFxI = ParseYesNoToBinary(row["PI"]);
+                        int releaseFyI = ParseYesNoToBinary(row["V2I"]);
+                        int releaseFzI = ParseYesNoToBinary(row["V3I"]);
+                        int releaseMxI = ParseYesNoToBinary(row["TI"]);
+                        int releaseMyI = ParseYesNoToBinary(row["M3I"]);
+                        int releaseMzI = ParseYesNoToBinary(row["M2I"]);
 
                         double springFxI = 0;
                         double springFyI = 0;
@@ -2528,12 +2526,12 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                         string releaseBinaryI = releaseFxI.ToString() + releaseFyI.ToString() + releaseFzI.ToString() +
                             releaseMxI.ToString() + releaseMyI.ToString() + releaseMzI.ToString();
 
-                        int releaseFxJ = parseYesNoToBinary(row["PJ"]);
-                        int releaseFyJ = parseYesNoToBinary(row["V2J"]);
-                        int releaseFzJ = parseYesNoToBinary(row["V3J"]);
-                        int releaseMxJ = parseYesNoToBinary(row["TJ"]);
-                        int releaseMyJ = parseYesNoToBinary(row["M3J"]);
-                        int releaseMzJ = parseYesNoToBinary(row["M2J"]);
+                        int releaseFxJ = ParseYesNoToBinary(row["PJ"]);
+                        int releaseFyJ = ParseYesNoToBinary(row["V2J"]);
+                        int releaseFzJ = ParseYesNoToBinary(row["V3J"]);
+                        int releaseMxJ = ParseYesNoToBinary(row["TJ"]);
+                        int releaseMyJ = ParseYesNoToBinary(row["M3J"]);
+                        int releaseMzJ = ParseYesNoToBinary(row["M2J"]);
 
                         double springFxJ = 0;
                         double springFyJ = 0;
@@ -2640,14 +2638,14 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                     {
                         //Show warning that the type cant be converted to midas
                         string warning = $"{databaseTable.TableKey} not supported! Will NOT be imported!";
-                        MessageBox.Show(warning);
+                        //MessageBox.Show(warning);
                         textWarning.Add(warning);
                     }
                 }
             }
         }
 
-        private static void copyFrameLoadsAssignmentsToMidas(cSapModel Sap, List<string> tableKeys, List<string> textMgt, List<string> textWarning, Dictionary<string, string> nameIndexFrame, 
+        private static void CopyFrameLoadsAssignmentsToMidas(cSapModel Sap, List<string> tableKeys, List<string> textMgt, List<string> textWarning, Dictionary<string, string> nameIndexFrame, 
             Dictionary<string, string>  loadPatternNameEtabsMidas)
         {
             
@@ -2677,7 +2675,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                         string indexFrame = nameIndexFrame[row["UniqueName"]];
 
                         string directionEtabs = row["Dir"];
-                        (string directionMidas, string projected, double loadFactor) = parseLoadFrameDirectionEtabsToMidas(directionEtabs);
+                        (string directionMidas, string projected, double loadFactor) = ParseLoadFrameDirectionEtabsToMidas(directionEtabs);
 
                         string loadTypeEtabs = row["LoadType"];
                         string loadTypeMidas = "";
@@ -2730,7 +2728,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                         string indexFrame = nameIndexFrame[row["UniqueName"]];
 
                         string directionEtabs = row["Dir"];
-                        (string directionMidas, string projected, double loadFactor) = parseLoadFrameDirectionEtabsToMidas(directionEtabs);
+                        (string directionMidas, string projected, double loadFactor) = ParseLoadFrameDirectionEtabsToMidas(directionEtabs);
 
                         string loadTypeEtabs = row["LoadType"];
                         string loadTypeMidas = "";
@@ -2781,14 +2779,14 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                     {
                         //Show warning that the type cant be converted to midas
                         string warning = $"{databaseTable.TableKey} not supported! Will NOT be imported!";
-                        MessageBox.Show(warning);
+                        //MessageBox.Show(warning);
                         textWarning.Add(warning);
                     }
                 }
             }
         }
 
-        private static void copyJointAssignmentsToMidas(cSapModel Sap, List<string> tableKeys, List<string> textMgt, List<string> textWarning, Dictionary<string, string> nameIndexNode)
+        private static void CopyJointAssignmentsToMidas(cSapModel Sap, List<string> tableKeys, List<string> textMgt, List<string> textWarning, Dictionary<string, string> nameIndexNode)
         {
             bool showWarning = false;
             bool isError = false;
@@ -2817,12 +2815,12 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                     {
                         string indexNode = nameIndexNode[row["UniqueName"]];
 
-                        int dX = parseYesNoToBinary(row["UX"]);
-                        int dY = parseYesNoToBinary(row["UY"]);
-                        int dZ = parseYesNoToBinary(row["UZ"]);
-                        int rX = parseYesNoToBinary(row["RX"]);
-                        int rY = parseYesNoToBinary(row["RY"]);
-                        int rZ = parseYesNoToBinary(row["RZ"]);
+                        int dX = ParseYesNoToBinary(row["UX"]);
+                        int dY = ParseYesNoToBinary(row["UY"]);
+                        int dZ = ParseYesNoToBinary(row["UZ"]);
+                        int rX = ParseYesNoToBinary(row["RX"]);
+                        int rY = ParseYesNoToBinary(row["RY"]);
+                        int rZ = ParseYesNoToBinary(row["RZ"]);
 
                         string supportBinary = dX.ToString() + dY.ToString() + dZ.ToString() + rX.ToString() + rY.ToString() + rZ.ToString();
 
@@ -2835,14 +2833,14 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                     {
                         //Show warning that the type cant be converted to midas
                         string warning = $"{databaseTable.TableKey} not supported! Will NOT be imported!";
-                        MessageBox.Show(warning);
+                        //MessageBox.Show(warning);
                         textWarning.Add(warning);
                     }
                 }
             }
         }
 
-        private static void copyJointLoadsAssignmentsToMidas(cSapModel Sap, List<string> tableKeys, List<string> textMgt, List<string> textWarning, Dictionary<string, string> nameIndexNode,
+        private static void CopyJointLoadsAssignmentsToMidas(cSapModel Sap, List<string> tableKeys, List<string> textMgt, List<string> textWarning, Dictionary<string, string> nameIndexNode,
                                                             Dictionary<string, string> loadPatternNameEtabsMidas)
         {
 
@@ -2989,14 +2987,14 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                     {
                         //Show warning that the type cant be converted to midas
                         string warning = $"{databaseTable.TableKey} not supported! Will NOT be imported!";
-                        MessageBox.Show(warning);
+                        //MessageBox.Show(warning);
                         textWarning.Add(warning);
                     }
                 }
             }
         }
 
-        private static void copyAreaLoadAssignmentsToMidas(cSapModel Sap, List<string> tableKeys, List<string> textMgt, List<string> textWarning, Dictionary<string, string> nameIndexArea,
+        private static void CopyAreaLoadAssignmentsToMidas(cSapModel Sap, List<string> tableKeys, List<string> textMgt, List<string> textWarning, Dictionary<string, string> nameIndexArea,
                                                     Dictionary<string, string> loadPatternNameEtabsMidas, List<string> skippedAreas, Dictionary<string, Dictionary<string, string>> uniformLoadSets)
         {
 
@@ -3038,7 +3036,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                             string indexArea = nameIndexArea[row["UniqueName"]];
 
                             string directionEtabs = row["Dir"];
-                            (string directionMidas, string projected, double loadFactor) = parseLoadAreaDirectionEtabsToMidas(directionEtabs);
+                            (string directionMidas, string projected, double loadFactor) = ParseLoadAreaDirectionEtabsToMidas(directionEtabs);
 
                             double force = Convert.ToDouble(row["Load"]) * loadFactor;
 
@@ -3101,14 +3099,14 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                     {
                         //Show warning that the type cant be converted to midas
                         string warning = $"{databaseTable.TableKey} not supported! Will NOT be imported!";
-                        MessageBox.Show(warning);
+                        //MessageBox.Show(warning);
                         textWarning.Add(warning);
                     }
                 }
             }
         }
 
-        private static void copyAreaAssignmentsToMidas(cSapModel Sap, List<string> tableKeys, List<string> textMgt, List<string> textWarning, Dictionary<string, string> nameIndexArea,
+        private static void CopyAreaAssignmentsToMidas(cSapModel Sap, List<string> tableKeys, List<string> textMgt, List<string> textWarning, Dictionary<string, string> nameIndexArea,
             List<Dictionary<string, string>> nameModifierAreaProp, Dictionary<string, string> nameAreaPropAssigned)
         {
             bool showWarning = false;
@@ -3308,29 +3306,29 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                                         {
                                             string updatedReleaseN12 = releaseFx + releaseFy + releaseFz + releaseMx + releaseMy;
 
-                                            releaseN1 = checkIfPlateAlreadyRelease(updatedReleaseN12, releaseN1);
-                                            releaseN2 = checkIfPlateAlreadyRelease(updatedReleaseN12, releaseN2);
+                                            releaseN1 = CheckIfPlateAlreadyRelease(updatedReleaseN12, releaseN1);
+                                            releaseN2 = CheckIfPlateAlreadyRelease(updatedReleaseN12, releaseN2);
                                         }
                                         else if (row["EdgeNumber"] == "2")
                                         {
                                             string updatedReleaseN23 = releaseFx + releaseFy + releaseFz + releaseMx + releaseMy;
 
-                                            releaseN2 = checkIfPlateAlreadyRelease(updatedReleaseN23, releaseN2);
-                                            releaseN3 = checkIfPlateAlreadyRelease(updatedReleaseN23, releaseN3);
+                                            releaseN2 = CheckIfPlateAlreadyRelease(updatedReleaseN23, releaseN2);
+                                            releaseN3 = CheckIfPlateAlreadyRelease(updatedReleaseN23, releaseN3);
                                         }
                                         else if (row["EdgeNumber"] == "3")
                                         {
                                             string updatedReleaseN34 = releaseFx + releaseFy + releaseFz + releaseMx + releaseMy;
 
-                                            releaseN3 = checkIfPlateAlreadyRelease(updatedReleaseN34, releaseN3);
-                                            releaseN4 = checkIfPlateAlreadyRelease(updatedReleaseN34, releaseN4);
+                                            releaseN3 = CheckIfPlateAlreadyRelease(updatedReleaseN34, releaseN3);
+                                            releaseN4 = CheckIfPlateAlreadyRelease(updatedReleaseN34, releaseN4);
                                         }
                                         else if (row["EdgeNumber"] == "4")
                                         {
                                             string updatedReleaseN41 = releaseFx + releaseFy + releaseFz + releaseMx + releaseMy;
 
-                                            releaseN4 = checkIfPlateAlreadyRelease(updatedReleaseN41, releaseN4);
-                                            releaseN1 = checkIfPlateAlreadyRelease(updatedReleaseN41, releaseN1);
+                                            releaseN4 = CheckIfPlateAlreadyRelease(updatedReleaseN41, releaseN4);
+                                            releaseN1 = CheckIfPlateAlreadyRelease(updatedReleaseN41, releaseN1);
                                         }
                                     }
                                 }
@@ -3350,7 +3348,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                     {
                         //Show warning that the type cant be converted to midas
                         string warning = $"{databaseTable.TableKey} not supported! Will NOT be imported!";
-                        MessageBox.Show(warning);
+                        //MessageBox.Show(warning);
                         textWarning.Add(warning);
                     }
                 }
@@ -3459,7 +3457,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
             }
 
         }
-        private static void copyLinksToMidas(cSapModel Sap, List<string> tableKeys, List<string> textMgt, List<string> textWarning, Dictionary<string, string> nameIndexNode)
+        private static void CopyLinksToMidas(cSapModel Sap, List<string> tableKeys, List<string> textMgt, List<string> textWarning, Dictionary<string, string> nameIndexNode)
         {
             bool showWarning = false;
             bool isError = false;
@@ -3685,7 +3683,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
             }
         }
 
-        private static Dictionary<string, string> copyLoadCaseToMidas(cSapModel Sap, List<string> tableKeys, List<string> textMgt, List<string> textWarning, Dictionary<string, string> loadPatternNameEtabsMidas)
+        private static Dictionary<string, string> CopyLoadCaseToMidas(cSapModel Sap, List<string> tableKeys, List<string> textMgt, List<string> textWarning, Dictionary<string, string> loadPatternNameEtabsMidas)
         {
             bool showWarning = false;
             bool isError = false;
@@ -3822,7 +3820,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                             {
                                 //Show warning that the type cant be converted to midas
                                 string warning = $"{databaseTable.TableKey} not supported! Load case {loadCaseName} will be imported as as static load case with _CHECK behind its name and with load factor = 1!";
-                                MessageBox.Show(warning);
+                                //MessageBox.Show(warning);
                                 textWarning.Add(warning);
 
                                 //Give the first load pattern name in midas
@@ -3839,7 +3837,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
             return loadCaseNameEtabsMidas;
         }
 
-        private static void copyLoadCombinationToMidas(cSapModel Sap, List<string> tableKeys, List<string> textMgt, List<string> textWarning, Dictionary<string, string> loadCaseNameEtabsMidas)
+        private static void CopyLoadCombinationToMidas(cSapModel Sap, List<string> tableKeys, List<string> textMgt, List<string> textWarning, Dictionary<string, string> loadCaseNameEtabsMidas)
         {
             bool showWarning = false;
             bool isError = false;
@@ -3935,7 +3933,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
             }
         }
 
-        private static void copyGroupsToMidas(cSapModel Sap, List<string> tableKeys, List<string> textMgt, List<string> textWarning, Dictionary<string, string> nameIndexNode,
+        private static void CopyGroupsToMidas(cSapModel Sap, List<string> tableKeys, List<string> textMgt, List<string> textWarning, Dictionary<string, string> nameIndexNode,
             Dictionary<string, string> nameIndexFrame, Dictionary<string, string> nameIndexArea, List<string> skippedAreas)
         {
             bool showWarning = false;
@@ -4018,7 +4016,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                                 {
                                     //Show warning if not line, area or point
                                     string warning = $"{row["ObjectType"]} not supported in MIDAS group!";
-                                    MessageBox.Show(warning);
+                                    //MessageBox.Show(warning);
                                     textWarning.Add(warning);
                                 }
                                 */
@@ -4032,7 +4030,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
         }
 
 
-        private static void copyPDeltaToMidas(cSapModel Sap, List<string> tableKeys, List<string> textMgt, List<string> textWarning, Dictionary<string, string> loadPatternNameEtabsMidas)
+        private static void CopyPDeltaToMidas(cSapModel Sap, List<string> tableKeys, List<string> textMgt, List<string> textWarning, Dictionary<string, string> loadPatternNameEtabsMidas)
         {
             bool showWarning = false;
             bool isError = false;
@@ -4043,16 +4041,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
 
             //if (isError){return;}
 
-            //MGT Header
-            textMgt.Add("*PDEL-CTRL    ; P-Delta Analysis Control");
-            textMgt.Add("; (iteration=5), (tolerance=0.00001)");
-            textMgt.Add("; (load case name 1), (load factor 1), (load case name 2), (load factor 2), ...");
-
-            //First line
-            textMgt.Add("5, 0.00001");
-
             string loadCaseAndFactor = "";
-
             //Getting all the p delta load case
             foreach (src.HelperEtabs.DatabaseTable databaseTable in databaseTables)
             {
@@ -4074,6 +4063,14 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                         }
                     }
 
+                    //MGT Header
+                    textMgt.Add("*PDEL-CTRL    ; P-Delta Analysis Control");
+                    textMgt.Add("; (iteration=5), (tolerance=0.00001)");
+                    textMgt.Add("; (load case name 1), (load factor 1), (load case name 2), (load factor 2), ...");
+
+                    //First line
+                    textMgt.Add("5, 0.00001");
+
                     foreach (Dictionary<string, string> row in table)
                     {
                         string loadPatternNameInMidas = loadPatternNameEtabsMidas[row["LoadPattern"]];
@@ -4090,7 +4087,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
             }
         }
 
-        private static void copyStoryToMidas(cSapModel Sap, List<string> tableKeys, List<string> textMgt, List<string> textWarning)
+        private static void CopyStoryToMidas(cSapModel Sap, List<string> tableKeys, List<string> textMgt, List<string> textWarning)
         {
             bool showWarning = false;
             bool isError = false;
@@ -4126,7 +4123,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
 
                         //Show warning if have multiple towers
                         string warning = $"Multiple towers detected! Cancel importing story data to MIDAS!";
-                        MessageBox.Show(warning);
+                        //MessageBox.Show(warning);
                         textWarning.Add(warning);
                     }
                     else
@@ -4266,7 +4263,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
 
         #region Other methods
 
-        private static (string, string, double) parseLoadFrameDirectionEtabsToMidas (string directionEtabs)
+        private static (string, string, double) ParseLoadFrameDirectionEtabsToMidas (string directionEtabs)
         {
             string directionMidas = "";
             string projected = "";
@@ -4323,7 +4320,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
             return (directionMidas, projected, loadFactor);
         }
 
-        private static (string, string, double) parseLoadAreaDirectionEtabsToMidas(string directionEtabs)
+        private static (string, string, double) ParseLoadAreaDirectionEtabsToMidas(string directionEtabs)
         {
             string directionMidas = "";
             string projected = "";
@@ -4380,7 +4377,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
             return (directionMidas, projected, loadFactor);
         }
 
-        private static int parseYesNoToBinary(string yesNo)
+        private static int ParseYesNoToBinary(string yesNo)
         {
             if (yesNo == "Yes")
             {
@@ -4492,7 +4489,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
 
                 csvNode.Add(etabsUniqueName + "," + midasIndex);
             }
-            writeTextFile(Sap, csvNode, filePath, "csvNode.csv");
+            WriteTextFile(Sap, csvNode, filePath, "csvNode.csv");
 
             List<string> csvFrame = new List<string>();
             csvFrame.Add("Frame");
@@ -4504,7 +4501,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
 
                 csvFrame.Add(etabsUniqueName + "," + midasIndex);
             }
-            writeTextFile(Sap, csvFrame, filePath, "csvFrame.csv");
+            WriteTextFile(Sap, csvFrame, filePath, "csvFrame.csv");
 
             List<string> csvArea = new List<string>();
             csvArea.Add("Area");
@@ -4516,10 +4513,10 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
 
                 csvArea.Add(etabsUniqueName + "," + midasIndex);
             }
-            writeTextFile(Sap, csvArea, filePath, "csvArea.csv");
+            WriteTextFile(Sap, csvArea, filePath, "csvArea.csv");
         }
 
-        private static double adjustAreaLocalAxisBasedOnEtabs(src.HelperEtabs.Shell area, List<Dictionary<string, string>> tableNodeCoordinate)
+        private static double AdjustAreaLocalAxisBasedOnEtabs(src.HelperEtabs.Shell area, List<Dictionary<string, string>> tableNodeCoordinate)
         {
             double localAxis = 0;
             double angleFromGlobalX = 0;
@@ -4744,7 +4741,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
             return localAxis;
         }
 
-        private static string checkIfPlateAlreadyRelease(string newPlateRelease, string oldPlateRelease)
+        private static string CheckIfPlateAlreadyRelease(string newPlateRelease, string oldPlateRelease)
         {
             string updatedNewPlateRelease = "";
 
@@ -4769,7 +4766,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
 
         #endregion
 
-        private static void writeTextFile(cSapModel Sap, List<string> textLineByLine, string filePath, string fileName)
+        private static void WriteTextFile(cSapModel Sap, List<string> textLineByLine, string filePath, string fileName)
         {            
             //Text file properties
             string modelPath = filePath + "\\" + fileName;
