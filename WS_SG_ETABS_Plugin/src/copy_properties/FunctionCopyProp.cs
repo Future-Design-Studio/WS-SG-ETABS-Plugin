@@ -233,6 +233,9 @@ namespace WS_SG_ETABS_Plugin.src.copy_properties
                 return isError;
             }
 
+            //Turn on all load
+            src.HelperEtabs.OnAllLoadDatabase(SapModelFrom);
+
             /*
             //Get database unit in EtabsTo
             eForce forceUnit = new eForce();

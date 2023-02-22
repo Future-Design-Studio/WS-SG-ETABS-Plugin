@@ -2272,6 +2272,13 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                     textMgt.Add("*ELEMENT");
                     textMgt.Add("; i, PLATE, (index material), (index property), (index joint 1), (index joint 2), (index joint 3), (index joint 4), (subtype thick=1 thin=2), (local axis)");
 
+                    //Area copying takes the longest, thus need progress bar
+                    //For progress bar
+                    int totalNumArea = areaList.Count;
+                    int areaTransferred = 0;
+
+                    //src.transfer_midas.WindowTransferMidasProgress progressBar = new src.transfer_midas.WindowTransferMidasProgress(databaseTable.TableKey);
+
                     foreach (src.HelperEtabs.Shell area in areaList)
                     {
                         //Show warning if there are more than 4 points
@@ -2353,7 +2360,12 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                             skippedAreas.Add(area.UniqueName);
                         }
                         index++;
+                        areaTransferred++;
+
+                        //progressBar.UpdateProgress(areaTransferred/totalNumArea*100);
                     }
+
+                    //progressBar.Close();
                 }
                 else if (databaseTable.TableKey == "Null Area Object Connectivity")
                 {
@@ -3091,6 +3103,146 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                                 textMgt.Add($"{indexArea}, PRES, PLATE, FACE, {directionMidas}, 0, 0, 0, {projected}, {force}, 0, 0, 0, 0, ,0");
                             }
                         }
+                    }
+                }
+                else if (databaseTable.TableKey == "Area Load Assignments - Non-uniform")
+                {
+                    try
+                    {
+                        List<Dictionary<string, string>> table = new List<Dictionary<string, string>>();
+
+                        table = databaseTable.TableInList;
+
+                        //For arealist and pointlist from ETABS
+                        List<src.HelperEtabs.Shell> areaList = new List<src.HelperEtabs.Shell>();
+                        List<src.HelperEtabs.Point3D> pointList = new List<HelperEtabs.Point3D>();
+
+                        //If not empty, getting area list parsed as Shell type
+                        if (databaseTable.NumberRecords > 0)
+                        {
+                            //Get area list
+                            src.HelperEtabs.DatabaseTable floorObjConnectivity = new HelperEtabs.DatabaseTable();
+                            (isError, floorObjConnectivity) = src.HelperEtabs.GetTableDisplay(Sap, "Floor Object Connectivity", false);
+                            areaList = src.HelperEtabs.GetShellsPoints(floorObjConnectivity);
+
+                            src.HelperEtabs.DatabaseTable wallObjConnectivity = new HelperEtabs.DatabaseTable();
+                            (isError, wallObjConnectivity) = src.HelperEtabs.GetTableDisplay(Sap, "Wall Object Connectivity", false);
+                            areaList.AddRange(src.HelperEtabs.GetShellsPoints(wallObjConnectivity));
+
+                            src.HelperEtabs.DatabaseTable nullAreaObjConnectivity = new HelperEtabs.DatabaseTable();
+                            (isError, nullAreaObjConnectivity) = src.HelperEtabs.GetTableDisplay(Sap, "Null Area Object Connectivity", false);
+                            areaList.AddRange(src.HelperEtabs.GetShellsPoints(nullAreaObjConnectivity));
+
+                            //Get node coordinate
+                            src.HelperEtabs.DatabaseTable pointObjConnectivity = new HelperEtabs.DatabaseTable();
+                            (isError, pointObjConnectivity) = src.HelperEtabs.GetTableDisplay(Sap, "Point Object Connectivity", false);
+                            pointList = src.HelperEtabs.ConvertPointDatabaseToPoint3D(pointObjConnectivity);
+                        }
+
+                        foreach (Dictionary<string, string> row in table)
+                        {
+                            bool inSkippedAreas = false;
+                            foreach (string skippedArea in skippedAreas)
+                            {
+                                if (row["UniqueName"] == skippedArea)
+                                {
+                                    inSkippedAreas = true;
+                                    break;
+                                }
+                            }
+
+                            if (!inSkippedAreas)
+                            {
+
+                                List<string> areaPointUniqueNameList = new List<string>();
+
+                                //Finding corner points of the area
+                                foreach (src.HelperEtabs.Shell area in areaList)
+                                {
+                                    if (area.UniqueName == row["UniqueName"])
+                                    {
+                                        areaPointUniqueNameList = area.Points;
+                                        break;
+                                    }
+                                }
+
+                                string loadPattern = loadPatternNameEtabsMidas[row["LoadPattern"]];
+
+                                string indexArea = nameIndexArea[row["UniqueName"]];
+
+                                string directionEtabs = row["Dir"];
+                                (string directionMidas, string projected, double loadFactor) = ParseLoadAreaDirectionEtabsToMidas(directionEtabs);
+
+                                double a = Convert.ToDouble(row["A"]) * loadFactor;
+                                double b = Convert.ToDouble(row["B"]) * loadFactor;
+                                double c = Convert.ToDouble(row["C"]) * loadFactor;
+                                double d = Convert.ToDouble(row["D"]) * loadFactor;
+
+                                //Finding coordinate for each corner points
+                                List<double> forceAtEachCorner = new List<double>();
+                                foreach (string areaPointUniqueName in areaPointUniqueNameList)
+                                {
+                                    //Finding coordiante for each area point
+                                    foreach (src.HelperEtabs.Point3D point in pointList)
+                                    {
+                                        if (point.UniqueName == areaPointUniqueName)
+                                        {
+                                            double xCoord = point.XCoordinate;
+                                            double yCoord = point.YCoordinate;
+                                            double zCoord = point.ZCoordinate;
+
+                                            double force = a * xCoord + b * yCoord + c * zCoord + d;
+
+                                            forceAtEachCorner.Add(force);
+
+                                            break;
+                                        }
+                                    }
+                                }
+
+                                double P1 = forceAtEachCorner[0];
+                                double P2 = forceAtEachCorner[1];
+                                double P3 = forceAtEachCorner[2];
+                                double P4 = 0;
+
+                                if (forceAtEachCorner.Count == 4)
+                                {
+                                    P4 = forceAtEachCorner[3];
+                                }
+
+                                //MGTHeader
+                                textMgt.Add($"*USE-STLD, {loadPattern}");
+                                textMgt.Add("*PRESSURE   ;Pressure Loads");
+                                textMgt.Add("; (index element), (load classificiation=PRES), (elementtype=PLATE), (loadtype=FACE), (direction), (Vx=0), (Vy=0), (Vz=0)," +
+                                    "(projected yes/no), (load uniform=0), (P1), (P2), (P3), (P4), (group=''), (psltkey=0)");
+                                textMgt.Add($"{indexArea}, PRES, PLATE, FACE, {directionMidas}, 0, 0, 0, {projected}, 0, {P1}, {P2}, {P3}, {P4}, ,0");
+                            }
+
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+
+                    }
+
+                }
+                else if (databaseTable.TableKey == "Area Load Assignments - Temperature")
+                {
+                    List<Dictionary<string, string>> table = new List<Dictionary<string, string>>();
+
+                    table = databaseTable.TableInList;
+
+                    foreach (Dictionary<string, string> row in table)
+                    {
+                        string loadPattern = loadPatternNameEtabsMidas[row["LoadPattern"]];
+                        string indexArea = nameIndexArea[row["UniqueName"]];
+                        double temperature = Convert.ToDouble(row["TempChange"]);
+
+                        //MGTHeader
+                        textMgt.Add($"*USE-STLD, {loadPattern}");
+                        textMgt.Add("*ELTEMPER");
+                        textMgt.Add("; (index element), (temperature), (group)");
+                        textMgt.Add($"{indexArea}, {temperature}, ");
                     }
                 }
                 else
@@ -3844,6 +3996,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
 
             //List to save load combination name
             List<string> loadCombinationsName = new List<string>();
+            Dictionary<string, string> loadCombinationNameEtabsMidas = new Dictionary<string, string>();
 
             //List to save load combination name that are envelope, envelope will not be included for now
             List<string> loadCombinationsEnvelopeName = new List<string>();
@@ -3910,6 +4063,8 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                 }
                 textMgt.Add($"NAME={loadCombinationNameInMidas}, GEN, ACTIVE, 0, 0, , 0, 0, 0");
 
+                loadCombinationNameEtabsMidas.Add(loadCombinationName, loadCombinationNameInMidas);
+
                 foreach (src.HelperEtabs.DatabaseTable databaseTable in databaseTables)
                 {
                     if (databaseTable.TableKey == "Load Combination Definitions")
@@ -3922,10 +4077,28 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                         {
                             if (loadCombinationName == row["Name"])
                             {
-                                //Finding load case name in midas
-                                string loadCaseNameInMidas = loadCaseNameEtabsMidas[row["LoadName"]];
+                                try
+                                {
+                                    //Finding load case name in midas
+                                    if (loadCaseNameEtabsMidas.ContainsKey(row["LoadName"]))
+                                    {
+                                        string loadCaseNameInMidas = loadCaseNameEtabsMidas[row["LoadName"]];
 
-                                textMgt.Add($"CB, {loadCaseNameInMidas}, {row["SF"]}");
+                                        textMgt.Add($"CB, {loadCaseNameInMidas}, {row["SF"]}");
+                                    }
+                                    //If cannot find in load case, find in load combination (combination inside combination)
+                                    else
+                                    {
+                                        string existingLoadCombinationNameInMidas = loadCombinationNameEtabsMidas[row["LoadName"]];
+
+                                        textMgt.Add($"CB, {existingLoadCombinationNameInMidas}, {row["SF"]}");
+                                    }                                    
+                                }
+                                catch (Exception ex)
+                                {
+                                    MessageBox.Show(ex.Message);
+                                }
+
                             }
                         }
                     }

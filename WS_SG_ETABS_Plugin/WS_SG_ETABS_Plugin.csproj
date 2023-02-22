@@ -131,6 +131,9 @@
     <Compile Include="src\transfer_midas\WindowTransferMidasMain.xaml.cs">
       <DependentUpon>WindowTransferMidasMain.xaml</DependentUpon>
     </Compile>
+    <Compile Include="src\transfer_midas\WindowTransferMidasProgress.xaml.cs">
+      <DependentUpon>WindowTransferMidasProgress.xaml</DependentUpon>
+    </Compile>
     <Compile Include="src\transfer_midas\WindowTransferMidasResult.xaml.cs">
       <DependentUpon>WindowTransferMidasResult.xaml</DependentUpon>
     </Compile>
@@ -173,6 +176,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="src\transfer_midas\WindowTransferMidasMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\transfer_midas\WindowTransferMidasProgress.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
