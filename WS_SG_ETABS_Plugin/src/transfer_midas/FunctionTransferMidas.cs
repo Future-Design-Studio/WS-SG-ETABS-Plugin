@@ -110,6 +110,13 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                                                 "Wall Property Definitions - Layers",
                                                 "Wall Property Definitions - Specified",
                                                     } },
+                {"springSec", new List<string>() {"Spring Property Definitions - Area Springs",
+                                                "Spring Property Definitions - Area Springs",
+                                                "Spring Property Definitions - Isolated Column Footings",
+                                                "Spring Property Definitions - Line Springs",
+                                                "Spring Property Definitions - Point Springs",
+                                                "Spring Property Definitions - Soil Profiles",
+                                                    } },
                 {"linkSec", new List<string>() {"Link Property Definitions - Acceptance Criteria - Displacement",
                                                     "Link Property Definitions - Acceptance Criteria - Force",
                                                     "Link Property Definitions - Damper - Bilinear",
@@ -268,7 +275,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                                                         "Joint Assignments - Floor Meshing Option",
                                                         "Joint Assignments - Panel Zone",
                                                         "Joint Assignments - Restraints",
-                                                        "Joint Assignments - Springs",
+                                                        //"Joint Assignments - Springs", moved to spring function because MIDAS need the node number aswell
                                                         } },
                 {"areaAssignments", new List<string>() {"Area Assignments - Additional Mass",
                                                         "Area Assignments - Area Springs",
@@ -330,6 +337,14 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                                                 //"Link Property Definitions - Multilinear - Plastic",
                                                 //"Link Property Definitions - Plastic Wen",
                                                 //"Link Property Definitions - Summary",
+                                                } },
+                {"spring", new List<string>() { //"Spring Property Definitions - Area Springs",
+                                                //"Spring Property Definitions - Area Springs",
+                                                //"Spring Property Definitions - Isolated Column Footings",
+                                                //"Spring Property Definitions - Line Springs",
+                                                "Spring Property Definitions - Point Springs",
+                                                //"Spring Property Definitions - Soil Profiles",
+                                                "Joint Assignments - Springs",
                                                 } },
                 {"groups", new List<string>() {"Group Assignments",
                                                 } },
@@ -462,6 +477,11 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                             if (databaseTableKey.Key == "links")
                             {
                                 CopyLinksToMidas(Sap, databaseTableKey.Value, textMgt, textWarning, nameIndexNode);
+                            }
+
+                            if (databaseTableKey.Key == "spring")
+                            {
+                                CopySpringToMidas(Sap, databaseTableKey.Value, textMgt, textWarning, nameIndexNode);
                             }
 
                             if (databaseTableKey.Key == "loadCase")
@@ -1864,6 +1884,12 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                 }
             }
             return (nameIndexAreaProp, nameMatIndexAreaProp, nameThinThickAreaProp, nameModifierAreaProp);
+        }
+
+
+        private static void CopySpringSecToMidas(cSapModel Sap, List<string> tableKeys, List<string> textMgt, List<string> textWarning)
+        {
+
         }
 
         private static (Dictionary<string, string>, Dictionary<string, Dictionary<string, string>>) CopyLoadPatternToMidas(cSapModel Sap, List<string> tableKeys, List<string> textMgt, List<string> textWarning)
@@ -3809,27 +3835,126 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                         string indexPt2 = nameIndexNode[pt2];
 
                         string linkName = row["Name"];
+
                         string linkProperty = nameLinkProperty[linkName];
                         string linkLocalAxis = nameLinkLocalAxis[linkName];
 
-                        string rigidDx = linkProperties[linkProperty]["rigidDx"];
-                        string rigidDz = linkProperties[linkProperty]["rigidDz"];
-                        string rigidDy = linkProperties[linkProperty]["rigidDy"];
-                        string rigidRx = linkProperties[linkProperty]["rigidRx"];
-                        string rigidRz = linkProperties[linkProperty]["rigidRz"];
-                        string rigidRy = linkProperties[linkProperty]["rigidRy"];
+                        //Check if linkProperties contain linkProperty
+                        //If not maybe the link is not linear!
+                        if (linkProperties.ContainsKey(linkProperty))
+                        {
+                            string rigidDx = linkProperties[linkProperty]["rigidDx"];
+                            string rigidDz = linkProperties[linkProperty]["rigidDz"];
+                            string rigidDy = linkProperties[linkProperty]["rigidDy"];
+                            string rigidRx = linkProperties[linkProperty]["rigidRx"];
+                            string rigidRz = linkProperties[linkProperty]["rigidRz"];
+                            string rigidRy = linkProperties[linkProperty]["rigidRy"];
 
-                        string stiffnessDx = linkProperties[linkProperty]["stiffnessDx"];
-                        string stiffnessDz = linkProperties[linkProperty]["stiffnessDz"];
-                        string stiffnessDy = linkProperties[linkProperty]["stiffnessDy"];
-                        string stiffnessRx = linkProperties[linkProperty]["stiffnessRx"];
-                        string stiffnessRz = linkProperties[linkProperty]["stiffnessRz"];
-                        string stiffnessRy = linkProperties[linkProperty]["stiffnessRy"];
+                            string stiffnessDx = linkProperties[linkProperty]["stiffnessDx"];
+                            string stiffnessDz = linkProperties[linkProperty]["stiffnessDz"];
+                            string stiffnessDy = linkProperties[linkProperty]["stiffnessDy"];
+                            string stiffnessRx = linkProperties[linkProperty]["stiffnessRx"];
+                            string stiffnessRz = linkProperties[linkProperty]["stiffnessRz"];
+                            string stiffnessRy = linkProperties[linkProperty]["stiffnessRy"];
 
-                        textMgt.Add($"{index}, {indexPt1}, {indexPt2}, GEN, {linkLocalAxis}, {rigidDx}, {rigidDy}, {rigidDz}, {rigidRx}, {rigidRy}, {rigidRz}, {stiffnessDx}, {stiffnessDy}, {stiffnessDz}, " +
-                            $"{stiffnessRx}, {stiffnessRy}, {stiffnessRz}, NO, 0.5, 0.5, ");
+                            textMgt.Add($"{index}, {indexPt1}, {indexPt2}, GEN, {linkLocalAxis}, {rigidDx}, {rigidDy}, {rigidDz}, {rigidRx}, {rigidRy}, {rigidRz}, {stiffnessDx}, {stiffnessDy}, {stiffnessDz}, " +
+                                $"{stiffnessRx}, {stiffnessRy}, {stiffnessRz}, NO, 0.5, 0.5, ");
 
-                        index++;
+                            index++;
+                        }
+                        else
+                        {
+                            textWarning.Add($"Link property {linkProperty} not found! Maybe is not linear link!");
+                        }
+
+
+                    }
+                }
+            }
+        }
+
+        private static void CopySpringToMidas(cSapModel Sap, List<string> tableKeys, List<string> textMgt, List<string> textWarning, Dictionary<string, string> nameIndexNode)
+        {
+            bool showWarning = false;
+            bool isError = false;
+
+            //To save spring properties
+            Dictionary<string, Dictionary<string, string>> springProperties = new Dictionary<string, Dictionary<string, string>>();
+
+            List<src.HelperEtabs.DatabaseTable> databaseTables = new List<src.HelperEtabs.DatabaseTable>();
+
+            (isError, databaseTables) = src.HelperEtabs.GetMultipleTableDisplay(Sap, tableKeys, showWarning);
+
+            //if (isError){return;}
+
+            //MGT Header
+            textMgt.Add("*SPRING    ; Point spring");
+            textMgt.Add("; (NODE=node index), (TYPE=LINEAR), (fix global X=NO), (fix global Y=NO), (fix global z=NO), (fix rotation global x=NO), (fix rotation global y=NO), (fix rotation global z=NO)" +
+                "(stiffness global X), (stiffness global Y), (stiffness global Z), (rotation stiffness global X), (rotation stiffness global Y), (rotation stiffness global Z)" +
+                "(damping=NO), (cx=0), (cy=0), (cz=0), (crx=0), (cry=0), (crz=0), (group=), (effarea=0), (Kx=0), (Ky=0), (Kz=0)");
+
+            foreach (src.HelperEtabs.DatabaseTable databaseTable in databaseTables)
+            {
+                //Collect all spring properties
+                if (databaseTable.TableKey == "Spring Property Definitions - Point Springs")
+                {
+                    List<Dictionary<string, string>> table = new List<Dictionary<string, string>>();
+
+                    table = databaseTable.TableInList;
+
+                    foreach (Dictionary<string, string> row in table)
+                    {
+                        Dictionary<string, string> springPropertiesSingle = new Dictionary<string, string>();
+
+                        string name = row["Name"];
+                        string SDx = row["StiffUX"];
+                        string SDy = row["StiffUY"];
+                        string SDz = row["StiffUZ"];
+                        string SRx = row["StiffRX"];
+                        string SRy = row["StiffRY"];
+                        string SRz = row["StiffRZ"];
+
+                        springPropertiesSingle.Add("SDx", SDx);
+                        springPropertiesSingle.Add("SDy", SDy);
+                        springPropertiesSingle.Add("SDz", SDz);
+                        springPropertiesSingle.Add("SRx", SRx);
+                        springPropertiesSingle.Add("SRy", SRy);
+                        springPropertiesSingle.Add("SRz", SRz);
+
+                        springProperties.Add(name, springPropertiesSingle);
+                    }
+                }
+                
+                //Assign spring in midas MGT
+                if (databaseTable.TableKey == "Joint Assignments - Springs")
+                {
+                    List<Dictionary<string, string>> table = new List<Dictionary<string, string>>();
+
+                    table = databaseTable.TableInList;
+
+                    foreach (Dictionary<string, string> row in table)
+                    {
+                        string indexNode = nameIndexNode[row["UniqueName"]];
+                        string springProperty = row["SpringProp"];
+
+                        //Check if springProperties contain springProperty
+                        //If not maybe the link is not linear!
+                        if (springProperties.ContainsKey(springProperty))
+                        {
+                            string SDx = springProperties[springProperty]["SDx"];
+                            string SDy = springProperties[springProperty]["SDy"];
+                            string SDz = springProperties[springProperty]["SDz"];
+                            string SRx = springProperties[springProperty]["SRx"];
+                            string SRy = springProperties[springProperty]["SRy"];
+                            string SRz = springProperties[springProperty]["SRz"];
+
+                            textMgt.Add($"{indexNode}, LINEAR, NO, NO, NO, NO, NO, NO, {SDx}, {SDy}, {SDz}, {SRx}, {SRy}, {SRz}, NO, 0, 0, 0, 0, 0, 0, , 0, 0, 0, 0");
+                        }
+                        else
+                        {
+                            textWarning.Add($"Spring property {springProperty} not found! Maybe is not point spring!");
+                        }
+
                     }
                 }
             }

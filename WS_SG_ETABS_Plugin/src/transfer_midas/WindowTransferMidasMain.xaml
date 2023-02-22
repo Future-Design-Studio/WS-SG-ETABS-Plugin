@@ -85,7 +85,8 @@
                     <Label Content="Miscellaneous"></Label>
                     <!-- <CheckBox Name="checkBoxMassSource" Content="Mass source" IsEnabled="False" IsChecked="True"></CheckBox> -->
                     <CheckBox Name="checkBoxPDelta" Content="P-delta definition" IsEnabled="False" IsChecked="True"></CheckBox>
-                    <CheckBox Name="checkBoxLinks" Content="Links" IsEnabled="False" IsChecked="True"></CheckBox>
+                    <CheckBox Name="checkBoxLinks" Content="Links (only linear)" IsEnabled="False" IsChecked="True"></CheckBox>
+                    <CheckBox Name="checkBoxSpring" Content="Spring (only point)" IsEnabled="False" IsChecked="True"></CheckBox>
                     <CheckBox Name="checkBoxGroups" Content="Groups" IsEnabled="False" IsChecked="True"></CheckBox>
                     <CheckBox Name="checkBoxStory" Content="Story" IsEnabled="False" IsChecked="True"></CheckBox>
                 </StackPanel>
@@ -144,6 +145,7 @@
                 8. Only user response specture will be transferred<LineBreak/>
                 9. Modal cases will NOT be transferred<LineBreak/>
                 10. Response spectrum load cases will NOT be transferred<LineBreak/>
+                10. Spring point with link property is NOT supported<LineBreak/>
                 11. Press OK to proceed
             </TextBlock>
             

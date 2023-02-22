@@ -95,6 +95,7 @@ namespace WS_SG_ETABS_Plugin.src.copy_properties
                 {"frameSec", checkBoxFrameSec.IsChecked },
                 {"areaSec", checkBoxAreaSec.IsChecked },
                 {"linkSec", checkBoxLinkSec.IsChecked },
+                {"springSec", checkBoxSpringSec.IsChecked },
                 {"massSource", checkBoxMassSource.IsChecked },
                 {"pDelta", checkBoxPDelta.IsChecked },
                 {"loadPattern", checkBoxLoadPattern.IsChecked },
@@ -141,6 +142,7 @@ namespace WS_SG_ETABS_Plugin.src.copy_properties
             checkBoxFrameSec.IsChecked = false;
             checkBoxAreaSec.IsChecked = false;
             checkBoxLinkSec.IsChecked = false;
+            checkBoxSpringSec.IsChecked = false;
 
             checkBoxMassSource.IsChecked = false;
             checkBoxPDelta.IsChecked = false;
@@ -158,6 +160,7 @@ namespace WS_SG_ETABS_Plugin.src.copy_properties
             checkBoxFrameSec.IsChecked = true;
             checkBoxAreaSec.IsChecked = true;
             checkBoxLinkSec.IsChecked = true;
+            checkBoxSpringSec.IsChecked = true;
 
             checkBoxMassSource.IsChecked = true;
             checkBoxPDelta.IsChecked = true;

@@ -99,6 +99,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                     {"frameLoadsAssignments", checkBoxFrameLoadsAssignments.IsChecked },
                     {"areaLoadAssignments", checkBoxAreaLoadAssignments.IsChecked },
                     {"links", checkBoxLinks.IsChecked },
+                    {"spring", checkBoxSpring.IsChecked },
                     {"groups", checkBoxGroups.IsChecked },
                     {"story", checkBoxStory.IsChecked },
                 };
