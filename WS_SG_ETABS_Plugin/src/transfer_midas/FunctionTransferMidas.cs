@@ -3078,12 +3078,16 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
 
                             double force = Convert.ToDouble(row["Load"]) * loadFactor;
 
-                            //MGTHeader
-                            textMgt.Add($"*USE-STLD, {loadPattern}");
-                            textMgt.Add("*PRESSURE   ;Pressure Loads");
-                            textMgt.Add("; (index element), (load classificiation=PRES), (elementtype=PLATE), (loadtype=FACE), (direction), (Vx=0), (Vy=0), (Vz=0)," +
-                                "(projected yes/no), (load uniform), (P1=0), (P2=0), (P3=0), (P4=0), (group=''), (psltkey=0)");
-                            textMgt.Add($"{indexArea}, PRES, PLATE, FACE, {directionMidas}, 0, 0, 0, {projected}, {force}, 0, 0, 0, 0, ,0");
+                            if (force != 0)
+                            {
+                                //MGTHeader
+                                textMgt.Add($"*USE-STLD, {loadPattern}");
+                                textMgt.Add("*PRESSURE   ;Pressure Loads");
+                                textMgt.Add("; (index element), (load classificiation=PRES), (elementtype=PLATE), (loadtype=FACE), (direction), (Vx=0), (Vy=0), (Vz=0)," +
+                                    "(projected yes/no), (load uniform), (P1=0), (P2=0), (P3=0), (P4=0), (group=''), (psltkey=0)");
+                                textMgt.Add($"{indexArea}, PRES, PLATE, FACE, {directionMidas}, 0, 0, 0, {projected}, {force}, 0, 0, 0, 0, ,0");
+
+                            }                            
                         }
 
                     }
@@ -3121,12 +3125,16 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                                 string directionMidas = "Gz";
                                 string projected = "NO";
 
-                                //MGTHeader
-                                textMgt.Add($"*USE-STLD, {loadPattern}");
-                                textMgt.Add("*PRESSURE   ;Pressure Loads");
-                                textMgt.Add("; (index element), (load classificiation=PRES), (elementtype=PLATE), (loadtype=FACE), (direction), (Vx=0), (Vy=0), (Vz=0)," +
-                                    "(projected yes/no), (load uniform), (P1=0), (P2=0), (P3=0), (P4=0), (group=''), (psltkey=0)");
-                                textMgt.Add($"{indexArea}, PRES, PLATE, FACE, {directionMidas}, 0, 0, 0, {projected}, {force}, 0, 0, 0, 0, ,0");
+                                if (force != 0)
+                                {
+                                    //MGTHeader
+                                    textMgt.Add($"*USE-STLD, {loadPattern}");
+                                    textMgt.Add("*PRESSURE   ;Pressure Loads");
+                                    textMgt.Add("; (index element), (load classificiation=PRES), (elementtype=PLATE), (loadtype=FACE), (direction), (Vx=0), (Vy=0), (Vz=0)," +
+                                        "(projected yes/no), (load uniform), (P1=0), (P2=0), (P3=0), (P4=0), (group=''), (psltkey=0)");
+                                    textMgt.Add($"{indexArea}, PRES, PLATE, FACE, {directionMidas}, 0, 0, 0, {projected}, {force}, 0, 0, 0, 0, ,0");
+
+                                }
                             }
                         }
                     }
@@ -3236,12 +3244,16 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                                     P4 = forceAtEachCorner[3];
                                 }
 
-                                //MGTHeader
-                                textMgt.Add($"*USE-STLD, {loadPattern}");
-                                textMgt.Add("*PRESSURE   ;Pressure Loads");
-                                textMgt.Add("; (index element), (load classificiation=PRES), (elementtype=PLATE), (loadtype=FACE), (direction), (Vx=0), (Vy=0), (Vz=0)," +
-                                    "(projected yes/no), (load uniform=0), (P1), (P2), (P3), (P4), (group=''), (psltkey=0)");
-                                textMgt.Add($"{indexArea}, PRES, PLATE, FACE, {directionMidas}, 0, 0, 0, {projected}, 0, {P1}, {P2}, {P3}, {P4}, ,0");
+                                if (P1 != 0 || P2 != 0 || P3 != 0 || P4 != 0)
+                                {
+                                    //MGTHeader
+                                    textMgt.Add($"*USE-STLD, {loadPattern}");
+                                    textMgt.Add("*PRESSURE   ;Pressure Loads");
+                                    textMgt.Add("; (index element), (load classificiation=PRES), (elementtype=PLATE), (loadtype=FACE), (direction), (Vx=0), (Vy=0), (Vz=0)," +
+                                        "(projected yes/no), (load uniform=0), (P1), (P2), (P3), (P4), (group=''), (psltkey=0)");
+                                    textMgt.Add($"{indexArea}, PRES, PLATE, FACE, {directionMidas}, 0, 0, 0, {projected}, 0, {P1}, {P2}, {P3}, {P4}, ,0");
+                                }
+
                             }
 
                         }
