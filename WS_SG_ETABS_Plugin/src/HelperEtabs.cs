@@ -1323,6 +1323,21 @@ namespace WS_SG_ETABS_Plugin.src
 
         #endregion
 
+        #region Selected method
+
+        public static int CountSelected(cSapModel Sap)
+        {
+            int NumberItems = 0;
+            int[] ObjectType = null;
+            string[] ObjectName = null;
+
+            Ret = Sap.SelectObj.GetSelected(ref NumberItems, ref ObjectType, ref ObjectName);
+
+            return NumberItems;
+        }
+
+        #endregion
+
     }
 
 }

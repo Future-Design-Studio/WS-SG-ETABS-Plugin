@@ -120,6 +120,13 @@
     <Compile Include="src\plot_reaction\WindowPlotReactionResult.xaml.cs">
       <DependentUpon>WindowPlotReactionResult.xaml</DependentUpon>
     </Compile>
+    <Compile Include="src\select_uniquename\FunctionSelUniqueName.cs" />
+    <Compile Include="src\select_uniquename\WindowSelUniqueNameMain.xaml.cs">
+      <DependentUpon>WindowSelUniqueNameMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\select_uniquename\WindowSelUniqueNameResult.xaml.cs">
+      <DependentUpon>WindowSelUniqueNameResult.xaml</DependentUpon>
+    </Compile>
     <Compile Include="src\shell_uni_orient\FunctionShellUni.cs" />
     <Compile Include="src\shell_uni_orient\WindowShellUniMain.xaml.cs">
       <DependentUpon>WindowShellUniMain.xaml</DependentUpon>
@@ -164,6 +171,14 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="src\plot_reaction\WindowPlotReactionResult.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\select_uniquename\WindowSelUniqueNameMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\select_uniquename\WindowSelUniqueNameResult.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
