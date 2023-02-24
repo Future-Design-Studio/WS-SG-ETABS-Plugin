@@ -120,12 +120,29 @@
     <Compile Include="src\plot_reaction\WindowPlotReactionResult.xaml.cs">
       <DependentUpon>WindowPlotReactionResult.xaml</DependentUpon>
     </Compile>
+    <Compile Include="src\select_uniquename\FunctionSelUniqueName.cs" />
+    <Compile Include="src\select_uniquename\WindowSelUniqueNameMain.xaml.cs">
+      <DependentUpon>WindowSelUniqueNameMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\select_uniquename\WindowSelUniqueNameResult.xaml.cs">
+      <DependentUpon>WindowSelUniqueNameResult.xaml</DependentUpon>
+    </Compile>
     <Compile Include="src\shell_uni_orient\FunctionShellUni.cs" />
     <Compile Include="src\shell_uni_orient\WindowShellUniMain.xaml.cs">
       <DependentUpon>WindowShellUniMain.xaml</DependentUpon>
     </Compile>
     <Compile Include="src\shell_uni_orient\WindowShellUniResult.xaml.cs">
       <DependentUpon>WindowShellUniResult.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\transfer_midas\FunctionTransferMidas.cs" />
+    <Compile Include="src\transfer_midas\WindowTransferMidasMain.xaml.cs">
+      <DependentUpon>WindowTransferMidasMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\transfer_midas\WindowTransferMidasProgress.xaml.cs">
+      <DependentUpon>WindowTransferMidasProgress.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\transfer_midas\WindowTransferMidasResult.xaml.cs">
+      <DependentUpon>WindowTransferMidasResult.xaml</DependentUpon>
     </Compile>
     <Compile Include="test\Test.cs" />
     <Compile Include="WindowMain.xaml.cs">
@@ -157,11 +174,31 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="src\select_uniquename\WindowSelUniqueNameMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\select_uniquename\WindowSelUniqueNameResult.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="src\shell_uni_orient\WindowShellUniMain.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="src\shell_uni_orient\WindowShellUniResult.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\transfer_midas\WindowTransferMidasMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\transfer_midas\WindowTransferMidasProgress.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\transfer_midas\WindowTransferMidasResult.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -183,6 +220,35 @@
     <Resource Include="src\resources\logo.PNG">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="Microsoft.Office.Core">
+      <Guid>{2DF8D04C-5BFA-101B-BDE5-00AA0044DE52}</Guid>
+      <VersionMajor>2</VersionMajor>
+      <VersionMinor>8</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="Microsoft.Office.Interop.Excel1">
+      <Guid>{00020813-0000-0000-C000-000000000046}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>9</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="VBIDE">
+      <Guid>{0002E157-0000-0000-C000-000000000046}</Guid>
+      <VersionMajor>5</VersionMajor>
+      <VersionMinor>3</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

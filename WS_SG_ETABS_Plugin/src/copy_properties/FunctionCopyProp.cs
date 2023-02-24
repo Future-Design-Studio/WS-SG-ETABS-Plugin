@@ -114,6 +114,13 @@ namespace WS_SG_ETABS_Plugin.src.copy_properties
                                                     "Link Property Definitions - Multilinear - Plastic",
                                                     "Link Property Definitions - Plastic Wen",
                                                      } },
+                {"springSec", new List<string>() {"Spring Property Definitions - Area Springs",
+                                                "Spring Property Definitions - Area Springs",
+                                                "Spring Property Definitions - Isolated Column Footings",
+                                                "Spring Property Definitions - Line Springs",
+                                                "Spring Property Definitions - Point Springs",
+                                                "Spring Property Definitions - Soil Profiles",
+                                        } },
                 {"massSource", new List<string>() {"Mass Source Definition" } },
                 {"pDelta", new List<string>() { "P-Delta Option Definition" } },
                 {"loadPattern", new List<string>() {"Load Pattern Definitions",
@@ -232,6 +239,9 @@ namespace WS_SG_ETABS_Plugin.src.copy_properties
                 isError = true;
                 return isError;
             }
+
+            //Turn on all load
+            src.HelperEtabs.OnAllLoadDatabase(SapModelFrom);
 
             /*
             //Get database unit in EtabsTo
