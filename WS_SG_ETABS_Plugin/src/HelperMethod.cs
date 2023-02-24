@@ -81,12 +81,12 @@ namespace WS_SG_ETABS_Plugin.src
         /// <param name="columnKey">Column key to filter from</param>
         /// <param name="keywordInColumn">Keyword to find</param>
         /// <returns>Filtered table with the same data structure as input</returns>
-        public static List<Dictionary<string, string>> FilterEtabsDatabase(List<Dictionary<string, string>> tableInList, 
+        public static src.HelperEtabs.DatabaseTable FilterEtabsDatabase(src.HelperEtabs.DatabaseTable databaseTable, 
             string columnKey, string keywordInColumn)
         {
             List<Dictionary<string, string>> tableFiltered = new List<Dictionary<string, string>>();
 
-            foreach (Dictionary<string, string> row in tableInList)
+            foreach (Dictionary<string, string> row in databaseTable.TableInList)
             {
                 if (row[columnKey] == keywordInColumn)
                 {
@@ -94,7 +94,14 @@ namespace WS_SG_ETABS_Plugin.src
                 }
             }
 
-            return tableFiltered;          
+            string TableKey = databaseTable.TableKey;
+            string GroupName = databaseTable.GroupName;
+            int TableVersion = databaseTable.TableVersion;
+            string[] FieldsKeysIncluded = databaseTable.FieldsKeysIncluded;
+            int NumberRecords = databaseTable.NumberRecords;
+            src.HelperEtabs.DatabaseTable filteredDatabaseTable = new src.HelperEtabs.DatabaseTable(TableKey, GroupName, TableVersion, FieldsKeysIncluded, NumberRecords, tableFiltered);
+
+            return filteredDatabaseTable;          
 
         }
 
@@ -130,6 +137,73 @@ namespace WS_SG_ETABS_Plugin.src
 
 
         #endregion
+
+        #region Geometry Method
+        
+        public static bool IsAreaHorizontal (List<src.HelperEtabs.Point3D> pointList)
+        {
+            bool isHorizontal = true;
+            double zCoord = 0;
+            bool firstRun = true;
+
+            foreach (src.HelperEtabs.Point3D point in pointList)
+            {
+                if (firstRun)
+                {
+                    zCoord = point.ZCoordinate;
+                    firstRun = false;
+                }
+                else
+                {
+                    if (point.ZCoordinate != zCoord)
+                    {
+                        isHorizontal = false;
+                        return isHorizontal;
+                    }
+                }
+            }
+
+            return isHorizontal;
+        }
+
+        #endregion
+
+        /// <summary>
+        /// Finding min and max value in list of dictionary based on given key. Value must be number
+        /// </summary>
+        /// <param name="listOfDictionary"></param>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public static (double, double) GetMinMaxDictionary (List<Dictionary<string, object>> listOfDictionary, string key)
+        {
+            double min = 0;
+            double max = 0;
+            bool firstLoop = true;
+            //Looking for minimum maximum x and y
+            foreach (Dictionary<string, object> dictionary in listOfDictionary)
+            {
+                if (firstLoop)
+                {
+                    min = Convert.ToDouble(dictionary[key]);
+                    max = Convert.ToDouble(dictionary[key]);
+                    firstLoop = false;
+                }
+                else
+                {
+                    if (Convert.ToDouble(dictionary[key]) < min)
+                    {
+                        min = Convert.ToDouble(dictionary[key]);
+                    }
+                    if(Convert.ToDouble(dictionary[key]) > max)
+                    {
+                        max = Convert.ToDouble(dictionary[key]);
+                    }
+                }
+            }
+            return (min, max);
+        }
+
+
 
     }
 

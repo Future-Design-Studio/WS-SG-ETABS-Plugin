@@ -12,7 +12,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="0.8*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
-            <RowDefinition Height="2*"></RowDefinition>
+            <RowDefinition Height="2.5*"></RowDefinition>
             <RowDefinition Height="0.35*"></RowDefinition>
         </Grid.RowDefinitions>
 
@@ -32,7 +32,7 @@
                     <RowDefinition Height="*"></RowDefinition>
                 </Grid.RowDefinitions>
 
-                <TextBox x:Name="filePath" Grid.Row="0" IsEnabled="False" TextAlignment="Right"/>
+                <TextBox x:Name="filePath" Grid.Row="0" IsEnabled="False"/>
 
                 <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
                     <Button x:Name="buttonModifyPath" Content="Modify path" Width="100" Click="buttonModifyPath_Click"/>
@@ -63,6 +63,7 @@
                     <CheckBox Name="checkBoxFrameSec" Content="Frame section properties" IsEnabled="False"></CheckBox>
                     <CheckBox Name="checkBoxAreaSec" Content="Area section properties" IsEnabled="False"></CheckBox>
                     <CheckBox Name="checkBoxLinkSec" Content="Link section properties"></CheckBox>
+                    <CheckBox Name="checkBoxSpringSec" Content="Spring section properties"></CheckBox>
                 </StackPanel>
 
                 <StackPanel Grid.Column="1">

@@ -17,6 +17,9 @@ namespace WS_SG_ETABS_Plugin.src.copy_properties
             bool isError = false;
             List<string> tableKeysToSave = new List<string>();
 
+            //Turn on all load
+            src.HelperEtabs.OnAllLoadDatabase(Sap);
+
             Dictionary<string, List<string>> databaseTableKeys = new Dictionary<string, List<string>>()
             {
                 { "material", new List<string>(){"Material Properties - Acceptance Criteria",
@@ -111,6 +114,13 @@ namespace WS_SG_ETABS_Plugin.src.copy_properties
                                                     "Link Property Definitions - Multilinear - Plastic",
                                                     "Link Property Definitions - Plastic Wen",
                                                      } },
+                {"springSec", new List<string>() {"Spring Property Definitions - Area Springs",
+                                                "Spring Property Definitions - Area Springs",
+                                                "Spring Property Definitions - Isolated Column Footings",
+                                                "Spring Property Definitions - Line Springs",
+                                                "Spring Property Definitions - Point Springs",
+                                                "Spring Property Definitions - Soil Profiles",
+                                        } },
                 {"massSource", new List<string>() {"Mass Source Definition" } },
                 {"pDelta", new List<string>() { "P-Delta Option Definition" } },
                 {"loadPattern", new List<string>() {"Load Pattern Definitions",
@@ -224,11 +234,14 @@ namespace WS_SG_ETABS_Plugin.src.copy_properties
 
             if (modelFromLocked)
             {
-                MessageBox.Show("Reference ETABS file is locked! Please 'save as' the model to unlock it!");
                 myETABSObjectFrom.ApplicationExit(false);
+                MessageBox.Show("Reference ETABS file is locked! Please 'save as' the model to unlock it!");
                 isError = true;
                 return isError;
             }
+
+            //Turn on all load
+            src.HelperEtabs.OnAllLoadDatabase(SapModelFrom);
 
             /*
             //Get database unit in EtabsTo
