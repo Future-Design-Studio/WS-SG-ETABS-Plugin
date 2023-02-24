@@ -3899,12 +3899,6 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
 
             //if (isError){return;}
 
-            //MGT Header
-            textMgt.Add("*SPRING    ; Point spring");
-            textMgt.Add("; (NODE=node index), (TYPE=LINEAR), (fix global X=NO), (fix global Y=NO), (fix global z=NO), (fix rotation global x=NO), (fix rotation global y=NO), (fix rotation global z=NO)" +
-                "(stiffness global X), (stiffness global Y), (stiffness global Z), (rotation stiffness global X), (rotation stiffness global Y), (rotation stiffness global Z)" +
-                "(damping=NO), (cx=0), (cy=0), (cz=0), (crx=0), (cry=0), (crz=0), (group=), (effarea=0), (Kx=0), (Ky=0), (Kz=0)");
-
             foreach (src.HelperEtabs.DatabaseTable databaseTable in databaseTables)
             {
                 //Collect all spring properties
@@ -3936,7 +3930,17 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                         springProperties.Add(name, springPropertiesSingle);
                     }
                 }
-                
+
+                //Only add header when there is spring
+                if (springProperties.Count > 0)
+                {
+                    //MGT Header
+                    textMgt.Add("*SPRING    ; Point spring");
+                    textMgt.Add("; (NODE=node index), (TYPE=LINEAR), (fix global X=NO), (fix global Y=NO), (fix global z=NO), (fix rotation global x=NO), (fix rotation global y=NO), (fix rotation global z=NO)" +
+                        "(stiffness global X), (stiffness global Y), (stiffness global Z), (rotation stiffness global X), (rotation stiffness global Y), (rotation stiffness global Z)" +
+                        "(damping=NO), (cx=0), (cy=0), (cz=0), (crx=0), (cry=0), (crz=0), (group=), (effarea=0), (Kx=0), (Ky=0), (Kz=0)");
+                }
+
                 //Assign spring in midas MGT
                 if (databaseTable.TableKey == "Joint Assignments - Springs")
                 {
