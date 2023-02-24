@@ -81,5 +81,30 @@ namespace WS_SG_ETABS_Plugin
             IsEnabled = true;
         }
 
+
+        private void buttonPlotReaction_Click(object sender, RoutedEventArgs e)
+        {
+            IsEnabled = false;
+            //Call up shell uniform window
+            src.plot_reaction.WindowPlotReactionMain windowPlotReactionMain = new src.plot_reaction.WindowPlotReactionMain(_SapModel, _Plugin);
+            IsEnabled = true;
+
+        }
+
+        private void buttonTransferMidas_Click(object sender, RoutedEventArgs e)
+        {
+            IsEnabled = false;
+            //Call up transfer midas window
+            src.transfer_midas.WindowTransferMidasMain windowTransferMidasMain = new src.transfer_midas.WindowTransferMidasMain(_SapModel, _Plugin);
+            IsEnabled = true;
+        }
+
+        private void buttonSelUniqueName_Click(object sender, RoutedEventArgs e)
+        {
+            IsEnabled = false;
+            //Call up transfer midas window
+            src.select_uniquename.WindowSelUniqueNameMain windowSelUniqueName = new src.select_uniquename.WindowSelUniqueNameMain(_SapModel, _Plugin);
+            IsEnabled = true;
+        }
     }
 }
