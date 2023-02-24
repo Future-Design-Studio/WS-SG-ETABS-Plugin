@@ -65,12 +65,26 @@ namespace WS_SG_ETABS_Plugin.src
             public double LeftLength { get; set; }
             public double MidLength { get; set; }
             public double RightLength { get; set; }
+            public double LeftTopAs { get; set; }
             public string LeftTopRebar { get; set; }
+            public double MidTopAs { get; set; }
             public string MidTopRebar { get; set; }
+            public double RightTopAs { get; set; }
             public string RightTopRebar { get; set; }
+            public double LeftBottomAs { get; set; }
             public string LeftBottomRebar { get; set; }
+            public double MidBottomAs { get; set; }
             public string MidBottomRebar { get; set; }
+            public double RightBottomAs { get; set; }
             public string RightBottomRebar { get; set; }
+            public double LeftAv { get; set; }
+            public string LeftShearLinks { get; set; }
+            public double MidAv { get; set; }
+            public string MidShearLinks { get; set; }
+            public double RightAv { get; set; }
+            public string RightShearLinks { get; set; }
+            public double d { get; set; }
+            public double dCalculated { get; set; }
 
             public Frame(string name)
             {
@@ -1365,6 +1379,65 @@ namespace WS_SG_ETABS_Plugin.src
 
         #endregion
 
+        #region Frame method
+        /// <summary>
+        /// Get (width, depth) of rectangle section property
+        /// </summary>
+        /// <param name="Sap"></param>
+        /// <param name="sectionPropName"></param>
+        /// <returns></returns>
+        public static (double, double) GetDimensionRectangle (cSapModel Sap, string sectionPropName)
+        {
+            string FileName = "";
+	        string MatProp = "";
+            double T3 = 0;
+            double T2 = 0;
+            int Color = 0;
+            string Notes = "";
+            string GUID = "";
+
+            Ret = Sap.PropFrame.GetRectangle(sectionPropName, ref FileName, ref MatProp, ref T3, ref T2, ref Color, ref Notes, ref GUID);
+
+            if (Ret == 0)
+            {
+                return (T2, T3);
+            }
+            else
+            {
+                return (0, 0);
+            }
+        }
+
+        /// <summary>
+        /// Get (cover top, cover bottom) of beam section property
+        /// </summary>
+        /// <param name="Sap"></param>
+        /// <param name="sectionPropName"></param>
+        /// <returns></returns>
+        public static (double, double) GetRcBeamCover(cSapModel Sap, string sectionPropName)
+        {
+            string MatPropLong = "";
+            string MatPropConfine = "";
+            double CoverTop = 0;
+            double CoverBot = 0;
+            double TopLeftArea = 0;
+            double TopRightArea = 0;
+            double BotLeftArea = 0;
+            double BotRightArea = 0;
+
+            Ret = Sap.PropFrame.GetRebarBeam(sectionPropName, ref MatPropLong, ref MatPropConfine, ref CoverTop, ref CoverBot, ref TopLeftArea, ref TopRightArea, ref BotLeftArea, ref BotRightArea);
+
+            if (Ret == 0)
+            {
+                return (CoverTop, CoverTop);
+            }
+            else
+            {
+                return (0, 0);
+            }
+        }
+
+        #endregion
     }
 
 }
