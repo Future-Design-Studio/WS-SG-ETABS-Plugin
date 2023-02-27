@@ -56,12 +56,13 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
             //Get rebar required from etabs design
             GetRcBeamRebarArea(Sap, rcBeamDesignSummary, rcBeamList, leftLength, midLength, rightLength);
 
+            //Convert area to rebar
 
+            //Compile data to 2d array
+            var result = CompileResutRcBeamToArray(rcBeamList);
 
-
-
-
-
+            //Write to excel
+            WriteResultRcBeamToExcel(result, fileName, filePath);
 
             //Set back to original units
             src.HelperEtabs.SetOutputUnit(Sap, forceUnits, lengthUnits, temperatureUnits);
@@ -241,7 +242,7 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
                 {
                     if (row["UniqueName"] == rcBeam.UniqueName)
                     {
-                        if (Convert.ToDouble(row["Station"]) < leftStation)
+                        if (Convert.ToDouble(row["Station"]) <= leftStation)
                         {
                             if (firstLeft)
                             {
@@ -269,7 +270,7 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
                                 }
                             }
                         }
-                        else if (Convert.ToDouble(row["Station"]) > rightStation)
+                        else if (Convert.ToDouble(row["Station"]) >= rightStation)
                         {
                             if (firstRight)
                             {
@@ -336,17 +337,104 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
                 rcBeam.RightBottomAs = rightBottomAs;
                 rcBeam.RightTopAs = rightTopAs;
 
-                rcBeam.LeftAv = leftAv;
-                rcBeam.MidAv = midAv;
-                rcBeam.RightAv = rightAv;
+                rcBeam.LeftAv = leftAv * 1000; //mm2/m
+                rcBeam.MidAv = midAv * 1000; //mm2/m
+                rcBeam.RightAv = rightAv * 1000; //mm2/m
             }
 
         }
 
+        private static object[,] CompileResutRcBeamToArray(List<src.HelperEtabs.Frame> rcBeamList)
+        {
+            List<string> colTitles = new List<string>()
+            {
+                "UniqueName", "Width (mm)", "Height (mm)", "d (mm)", "Left Top As (mm2)", "Mid Top As (mm2)", "Right Top As (mm2)"
+                , "Left Bottom As (mm2)", "Mid Bottom As (mm2)", "Right Bottom As (mm2)", "Left Av (mm2/m)", "Mid Av (mm2/m)", "Right Av (mm2/m)"
+            };
+
+            int numOfRow = rcBeamList.Count();
+            int numOfCol = colTitles.Count();
+
+            object[,] result = new object[numOfRow + 1,numOfCol];
+
+            //First row
+            int j = 0;
+            foreach (string colTitle in colTitles)
+            {
+                result[0, j] = colTitle;
+                j++;
+            }
+
+            int i = 1;
+            foreach(src.HelperEtabs.Frame rcBeam in rcBeamList)
+            {
+                result[i, 0] = rcBeam.UniqueName;
+                result[i, 1] = rcBeam.Width;
+                result[i, 2] = rcBeam.Height;
+                result[i, 3] = rcBeam.d;
+                result[i, 4] = rcBeam.LeftTopAs;
+                result[i, 5] = rcBeam.MidTopAs;
+                result[i, 6] = rcBeam.RightTopAs;
+                result[i, 7] = rcBeam.LeftBottomAs;
+                result[i, 8] = rcBeam.MidBottomAs;
+                result[i, 9] = rcBeam.RightBottomAs;
+                result[i, 10] = rcBeam.LeftAv;
+                result[i, 11] = rcBeam.MidAv;
+                result[i, 12] = rcBeam.RightAv;
+
+                i++;
+            }
 
 
-
-
-
+            return result;
         }
+
+        public static void WriteResultRcBeamToExcel(object[,] result, string fileName, string filePath)
+        {
+            Microsoft.Office.Interop.Excel.Application xlApp = new Microsoft.Office.Interop.Excel.Application();
+
+            if (xlApp == null)
+            {
+                MessageBox.Show("Excel is not properly installed!!");
+                return;
+            }
+
+            Microsoft.Office.Interop.Excel.Workbook xlWorkBook;
+            Microsoft.Office.Interop.Excel.Worksheet xlWorkSheet;
+            object misValue = System.Reflection.Missing.Value;
+
+            xlWorkBook = xlApp.Workbooks.Add(misValue);
+            xlWorkSheet = (Microsoft.Office.Interop.Excel.Worksheet)xlWorkBook.Worksheets.get_Item(1);
+
+
+            string alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+
+            int numOfRow = result.GetLength(0);
+            int numOfCol = result.GetLength(1);
+
+            string lastCellRange = alphabet[numOfCol - 1] + Convert.ToString(numOfRow - 1 + 1);
+
+            Microsoft.Office.Interop.Excel.Range rng = xlWorkSheet.UsedRange.Range["A1", lastCellRange];
+
+            rng.Value2 = result;
+
+            //Here saving the file in xlsx
+            string excelPath = filePath + fileName + ".xlsx";
+
+            try
+            {
+                xlWorkBook.SaveAs(excelPath, Microsoft.Office.Interop.Excel.XlFileFormat.xlOpenXMLWorkbook);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            
+            xlWorkBook.Close(true, misValue, misValue);
+            xlApp.Quit();
+        }
+
+
+    }
 }
