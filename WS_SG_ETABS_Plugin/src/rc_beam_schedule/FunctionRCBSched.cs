@@ -53,6 +53,9 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
             //Get dimension
             GetRcBeamDimension(Sap, rcBeamDesignSummary, rcBeamList);
 
+            //Get beam offset
+            GetRcBeamOffset(Sap, rcBeamList);
+
             //Get rebar required from etabs design
             GetRcBeamRebarArea(Sap, rcBeamDesignSummary, rcBeamList, leftLength, midLength, rightLength);
 
@@ -184,6 +187,32 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
             }
         }
 
+        public static void GetRcBeamOffset(cSapModel Sap, List<src.HelperEtabs.Frame> rcBeamList)
+        {
+            src.HelperEtabs.DatabaseTable rcBeamOffset = new src.HelperEtabs.DatabaseTable();
+            bool isError;
+
+            string tableKey = "Frame Assignments - End Length Offsets";
+            (isError, rcBeamOffset) = src.HelperEtabs.GetTableDisplay(Sap, tableKey, false);
+
+            List<Dictionary<string, string>> rcBeamOffsetTable = rcBeamOffset.TableInList;
+
+            foreach(src.HelperEtabs.Frame rcBeam in rcBeamList)
+            {
+                //Going through table to find the same unique name
+                foreach (Dictionary<string, string> row in rcBeamOffsetTable)
+                {
+                    if (row["UniqueName"] == rcBeam.UniqueName)
+                    {
+                        rcBeam.OffsetI = Convert.ToDouble(row["OffsetI"]);
+                        rcBeam.OffsetJ = Convert.ToDouble(row["OffsetJ"]);
+
+                        break;
+                    }
+                }
+            }
+        }
+
         public static void GetRcBeamRebarArea(cSapModel Sap, src.HelperEtabs.DatabaseTable rcBeamDesignSummary, 
             List<src.HelperEtabs.Frame> rcBeamList, double leftLength, double midLength, double rightLength)
         {
@@ -220,8 +249,10 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
             //Getting rebar area for each beam
             foreach (src.HelperEtabs.Frame rcBeam in rcBeamList)
             {
-                double leftStation = rcBeam.Length * leftLength;
-                double rightStation = rcBeam.Length * (1-rightLength);
+                double effectiveLength = rcBeam.Length - rcBeam.OffsetI - rcBeam.OffsetJ;
+
+                double leftStation = effectiveLength * leftLength + rcBeam.OffsetI;
+                double rightStation = effectiveLength * (1-rightLength) + rcBeam.OffsetI;
 
                 double leftTopAs = 0;
                 double leftBottomAs = 0;
@@ -384,7 +415,6 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
 
                 i++;
             }
-
 
             return result;
         }

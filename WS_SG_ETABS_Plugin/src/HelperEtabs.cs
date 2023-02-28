@@ -62,6 +62,8 @@ namespace WS_SG_ETABS_Plugin.src
             public double Length { get; set; }
             public double Height { get; set; }
             public double Width { get; set; }
+            public double OffsetI { get; set; }
+            public double OffsetJ { get; set; }
             public double LeftLength { get; set; }
             public double MidLength { get; set; }
             public double RightLength { get; set; }
