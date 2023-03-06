@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WS_SG_ETABS_Plugin.src.rc_beam_schedule"
-             mc:Ignorable="d" Height="450" Width="800" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+             mc:Ignorable="d" Height="500" Width="600" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
 
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
@@ -13,7 +13,8 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
-            <RowDefinition Height="2*"></RowDefinition>
+            <RowDefinition Height="1.5*"></RowDefinition>
+            <RowDefinition Height="1.5*"></RowDefinition>
             <RowDefinition Height="2*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="0.5*"></RowDefinition>
@@ -38,9 +39,9 @@
                 <ColumnDefinition Width="4*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
-            <Label Grid.Column="0" Margin="10 0 10 0" Content="Excel file path"></Label>
+            <Label Grid.Column="0" Content="Excel file path"></Label>
 
-            <Grid Grid.Column="2" Margin="0 10 0 10">
+            <Grid Grid.Column="2">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"></RowDefinition>
                     <RowDefinition Height="*"></RowDefinition>
@@ -57,7 +58,7 @@
 
         </Grid>
         
-        <Grid Grid.Row="3" Grid.Column="0" Margin="0 10 0 10">
+        <Grid Grid.Row="3" Grid.Column="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
@@ -83,7 +84,30 @@
 
         </Grid>
 
-        <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Right">
+        <Grid Grid.Row="4">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <Label Grid.Row="0" Grid.Column="0" Content="Cover (outside to edge of shear links) (mm): "></Label>
+            <Label Grid.Row="1" Grid.Column="0" Content="Minimum center to center longitudinal rebar (mm): "></Label>
+            <Label Grid.Row="2" Grid.Column="0" Content="Maximum shear links spacing (mm): "></Label>
+            <Label Grid.Row="3" Grid.Column="0" Content="Minimum shear links spacing (mm): "></Label>
+
+            <TextBox x:Name="textBoxCover" Grid.Row="0" Grid.Column="1" Text="35"></TextBox>
+            <TextBox x:Name="textBoxMinCToCRebar" Grid.Row="1" Grid.Column="1" Text="80"></TextBox>
+            <TextBox x:Name="textBoxMaxShearLinksSpacing" Grid.Row="2" Grid.Column="1" Text="400"></TextBox>
+            <TextBox x:Name="textBoxMinShearLinksSpacing" Grid.Row="3" Grid.Column="1" Text="100"></TextBox>
+        </Grid>
+
+        <StackPanel Grid.Row="6" Orientation="Horizontal" HorizontalAlignment="Right">
             <Button x:Name="buttonCancel" Content="Cancel" Width="100" Click="buttonCancel_Click"/>
             <Button x:Name="buttonOk" Content="OK" Width="100" Click="buttonOk_Click"/>
         </StackPanel>

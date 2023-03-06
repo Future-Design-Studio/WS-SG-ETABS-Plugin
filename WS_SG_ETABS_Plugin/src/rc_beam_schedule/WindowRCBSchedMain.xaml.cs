@@ -92,6 +92,11 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
             double midLength = Convert.ToDouble(textBoxLengthMid.Text);
             double rightLength = Convert.ToDouble(textBoxLengthRight.Text);
 
+            double cover = Convert.ToDouble(textBoxCover.Text);
+            double minCToCRebar = Convert.ToDouble(textBoxMinCToCRebar.Text);
+            double maxShearLinksSpacing = Convert.ToDouble(textBoxMaxShearLinksSpacing.Text);
+            double minShearLinksSpacing = Convert.ToDouble(textBoxMinShearLinksSpacing.Text);
+
             //Check if total = 1, else will show warning
             double totalLength = leftLength + midLength + rightLength;
 
@@ -105,7 +110,7 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
                 IsEnabled = false;
                 //Call up carbon result window
                 src.rc_beam_schedule.WindowRCBSchedResult windowRCBSchedResult = new src.rc_beam_schedule.WindowRCBSchedResult(_SapModel, _Plugin, name, path, leftLength, 
-                                                                                 midLength, rightLength);
+                                                                                 midLength, rightLength, minCToCRebar, maxShearLinksSpacing, minShearLinksSpacing, cover);
                 IsEnabled = true;
             }
             
