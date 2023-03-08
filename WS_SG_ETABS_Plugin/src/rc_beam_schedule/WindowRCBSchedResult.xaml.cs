@@ -24,14 +24,15 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
         cSapModel _SapModel;
         cPluginCallback _Plugin;
 
-        public WindowRCBSchedResult(cSapModel SapModel, cPluginCallback Plugin, string fileName, string filePath, double leftLength,
-                                                                                 double midLength, double rightLength, double minCToCRebar, double maxShearLinksSpacing, double minShearLinksSpacing, double cover)
+        public WindowRCBSchedResult(cSapModel SapModel, cPluginCallback Plugin, string fileName, string filePath, double leftLength, double midLength, double rightLength, double rebarSpc, 
+            string rebarSpcPreference, double maxShearLinksSpacing, double minShearLinksSpacing, double cover, int[] rebarDiameterList, int[] shearLinksDiameterList)
         {
             _SapModel = SapModel;
             _Plugin = Plugin;
 
             //Main logic
-            bool isError = src.rc_beam_schedule.FunctionRCBSched.GetRCBeamSchedule(_SapModel, fileName, filePath, leftLength, midLength, rightLength, minCToCRebar, maxShearLinksSpacing, minShearLinksSpacing, cover);
+            bool isError = src.rc_beam_schedule.FunctionRCBSched.GetRCBeamSchedule(_SapModel, fileName, filePath, leftLength, midLength, rightLength, rebarSpc, rebarSpcPreference, maxShearLinksSpacing, minShearLinksSpacing, cover,
+                rebarDiameterList, shearLinksDiameterList);
 
             if (isError)
             {
