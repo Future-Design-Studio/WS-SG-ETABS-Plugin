@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WS_SG_ETABS_Plugin.src.rc_beam_schedule"
-             mc:Ignorable="d" Height="650" Width="600" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+             mc:Ignorable="d" Height="680" Width="600" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
 
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
@@ -13,11 +13,11 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="0.6*"></RowDefinition>
-            <RowDefinition Height="*"></RowDefinition>
-            <RowDefinition Height="*"></RowDefinition>
-            <RowDefinition Height="2.2*"></RowDefinition>
-            <RowDefinition Height="1.5*"></RowDefinition>
-            <RowDefinition Height="0.5*"></RowDefinition>
+            <RowDefinition Height="0.9*"></RowDefinition>
+            <RowDefinition Height="0.9*"></RowDefinition>
+            <RowDefinition Height="2.3*"></RowDefinition>
+            <RowDefinition Height="1.4*"></RowDefinition>
+            <RowDefinition Height="0.4*"></RowDefinition>
         </Grid.RowDefinitions>
 
         <Label Grid.Row="0" Grid.Column="0" Content="RC Beam Schedule" FontSize="28"/>
@@ -101,7 +101,7 @@
             <Label Grid.Row="0" Grid.Column="0" Content="Cover (outside to edge of shear links) (mm): "></Label>
             <Label Grid.Row="1" Grid.Column="0" Content="Maximum shear links spacing (mm): "></Label>
             <Label Grid.Row="2" Grid.Column="0" Content="Minimum shear links spacing (mm): "></Label>
-            <Label Grid.Row="3" Grid.Column="0" Content="Shear links spacing steps ( will run from max) (mm): "></Label>
+            <Label Grid.Row="3" Grid.Column="0" Content="Shear links spacing steps (will run from max) (mm): "></Label>
             <Label Grid.Row="4" Grid.Column="0" Content="List rebar diameter (comma seperated): "></Label>
             <Label Grid.Row="5" Grid.Column="0" Content="List shear links diameter (comma seperated): "></Label>
 

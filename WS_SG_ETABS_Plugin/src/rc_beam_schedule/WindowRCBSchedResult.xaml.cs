@@ -44,5 +44,10 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
             //Put ShowDialog at last after completing constructor
             ShowDialog();
         }
+
+        private void buttonOk_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
     }
 }
