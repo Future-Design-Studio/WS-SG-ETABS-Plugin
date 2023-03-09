@@ -82,6 +82,7 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
                 double cover = Convert.ToDouble(textBoxCover.Text);
                 double maxShearLinksSpacing = Convert.ToDouble(textBoxMaxShearLinksSpacing.Text);
                 double minShearLinksSpacing = Convert.ToDouble(textBoxMinShearLinksSpacing.Text);
+                double shearLinksSpacingStep = Convert.ToDouble(textBoxShearLinksSpacingStep.Text);
 
                 string[] rebarDiameterListInString = textBoxRebarDiameterList.Text.Split(',');
                 int[] rebarDiameterList = Array.ConvertAll(rebarDiameterListInString, int.Parse);
@@ -121,7 +122,7 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
                     IsEnabled = false;
                     //Call up carbon result window
                     src.rc_beam_schedule.WindowRCBSchedResult windowRCBSchedResult = new src.rc_beam_schedule.WindowRCBSchedResult(_SapModel, _Plugin, name, path, leftLength,
-                                                                                     midLength, rightLength, rebarSpc, rebarSpcPreference, maxShearLinksSpacing, minShearLinksSpacing, cover,
+                                                                                     midLength, rightLength, rebarSpc, rebarSpcPreference, maxShearLinksSpacing, minShearLinksSpacing, shearLinksSpacingStep, cover,
                                                                                      rebarDiameterList, shearLinksDiameterList);
                     IsEnabled = true;
                 }
