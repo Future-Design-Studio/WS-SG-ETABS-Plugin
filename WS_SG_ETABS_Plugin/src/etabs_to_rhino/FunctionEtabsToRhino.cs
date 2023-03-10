@@ -237,7 +237,7 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
             }
             
         }
-        public static void ExportEtabsToRhino(cSapModel Sap)
+        public static void ExportEtabsToRhino(cSapModel Sap, string filePath, string fileName)
         {
             //setup new rhino model instance
             Console.WriteLine("Setting up new Rhino model...");
@@ -327,9 +327,9 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
 
 
           
-            var etabsModelPath = Sap.GetModelFilepath();
-            var etabsModelName = Sap.GetModelFilename(false);
-            var rhinoModelPath = System.IO.Path.ChangeExtension(etabsModelPath, etabsModelName + ".3dm");
+            var outputModelPath = filePath;
+            var outputModelName = fileName;
+            var rhinoModelPath = System.IO.Path.Combine(outputModelPath, outputModelName + ".3dm");
 
             Console.WriteLine("Writing Rhino file...");
             WriteRhinoFile(newModel, rhinoModelPath);

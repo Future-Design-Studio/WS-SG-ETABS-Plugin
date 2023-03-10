@@ -26,12 +26,12 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
         cSapModel _SapModel;
         cPluginCallback _Plugin;
 
-        public WindowEtabsToRhinoResult(cSapModel SapModel, cPluginCallback Plugin)
+        public WindowEtabsToRhinoResult(cSapModel SapModel, cPluginCallback Plugin, string filePath, string fileName)
         {
             _SapModel = SapModel;
             _Plugin = Plugin;
 
-            src.etabs_to_rhino.FunctionEtabsToRhino.ExportEtabsToRhino(_SapModel);
+            src.etabs_to_rhino.FunctionEtabsToRhino.ExportEtabsToRhino(_SapModel, filePath, fileName);
 
             InitializeComponent();
 

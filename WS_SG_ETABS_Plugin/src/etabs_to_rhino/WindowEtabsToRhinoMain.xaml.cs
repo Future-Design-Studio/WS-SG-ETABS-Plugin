@@ -24,6 +24,11 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
         cSapModel _SapModel;
         cPluginCallback _Plugin;
 
+        string modelPath = "";
+        string modelName = "";
+
+        
+
         public WindowEtabsToRhinoMain(cSapModel SapModel, cPluginCallback Plugin)
         {
             _SapModel = SapModel;
@@ -31,10 +36,42 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
 
             InitializeComponent();
 
+            //Fill in model path (default path)
+            modelPath = SapModel.GetModelFilepath();
+            textBoxFilePath.Text = modelPath;
+
+            //Fill in model name (default path)
+            modelName = SapModel.GetModelFilename(false);
+            textBoxFileName.Text = modelName;
+
             ShowDialog();
         }
 
         #region Button Method
+
+        private void buttonModifyPath_Click(object sender, RoutedEventArgs e)
+        {
+            var dialog = new System.Windows.Forms.FolderBrowserDialog();
+            dialog.SelectedPath = textBoxFilePath.Text;
+
+            System.Windows.Forms.DialogResult result = dialog.ShowDialog();
+
+            if (result == System.Windows.Forms.DialogResult.OK)
+            {
+                textBoxFilePath.Text = dialog.SelectedPath;
+            }
+
+        }
+
+        private void buttonResetPath_Click(object sender, RoutedEventArgs e)
+        {
+            //Fill in model path (default path)
+            textBoxFilePath.Text = modelPath;
+
+            //Fill in model name (default path)
+            textBoxFileName.Text = modelName;
+
+        }
 
         private void buttonCancel_Click(object sender, RoutedEventArgs e)
         {
@@ -43,10 +80,15 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
 
         private void buttonOk_Click(object sender, RoutedEventArgs e)
         {
+
+            //Casting file path
+            string filePath = textBoxFilePath.Text;
+            string fileName = textBoxFileName.Text;
+
             IsEnabled = false;
 
             //Call up export result window
-            src.etabs_to_rhino.WindowEtabsToRhinoResult windowEtabsToRhinoResult = new src.etabs_to_rhino.WindowEtabsToRhinoResult(_SapModel, _Plugin);
+            src.etabs_to_rhino.WindowEtabsToRhinoResult windowEtabsToRhinoResult = new src.etabs_to_rhino.WindowEtabsToRhinoResult(_SapModel, _Plugin, filePath, fileName);
             
             IsEnabled = true;
         }
