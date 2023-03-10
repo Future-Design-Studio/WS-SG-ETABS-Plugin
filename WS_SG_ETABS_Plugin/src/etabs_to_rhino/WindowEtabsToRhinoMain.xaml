@@ -1,0 +1,27 @@
+﻿<Window x:Class="WS_SG_ETABS_Plugin.src.etabs_to_rhino.WindowEtabsToRhinoMain"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WS_SG_ETABS_Plugin.src.etabs_to_rhino"
+             mc:Ignorable="d" Height="400" Width="400" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+    <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.8*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="2.5*"></RowDefinition>
+            <RowDefinition Height="0.35*"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <Label Grid.Row="0" Grid.Column="0" Content="Export Rhino Model" FontSize="28"/>
+
+        <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button x:Name="buttonCancel" Content="Cancel" Width="100" Click="buttonCancel_Click"/>
+            <Button x:Name="buttonOk" Content="OK" Width="100" Click="buttonOk_Click"/>
+        </StackPanel>
+
+    </Grid>
+</Window>

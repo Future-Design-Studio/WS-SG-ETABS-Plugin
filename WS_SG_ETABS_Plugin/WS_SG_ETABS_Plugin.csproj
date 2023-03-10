@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Rhino3dm.7.15.0\build\net45\Rhino3dm.props" Condition="Exists('..\packages\Rhino3dm.7.15.0\build\net45\Rhino3dm.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -12,6 +13,8 @@
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -42,6 +45,9 @@
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="Rhino3dm, Version=7.15.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Rhino3dm.7.15.0\lib\net45\Rhino3dm.dll</HintPath>
+    </Reference>
     <Reference Include="ScottPlot, Version=4.1.59.0, Culture=neutral, PublicKeyToken=86698dc10387c39e, processorArchitecture=MSIL">
       <HintPath>..\packages\ScottPlot.4.1.59\lib\net462\ScottPlot.dll</HintPath>
     </Reference>
@@ -106,6 +112,16 @@
     <Compile Include="src\copy_properties\WindowCopyPropResult.xaml.cs">
       <DependentUpon>WindowCopyPropResult.xaml</DependentUpon>
     </Compile>
+    <Compile Include="src\etabs_to_rhino\AreaGeometry.cs" />
+    <Compile Include="src\etabs_to_rhino\FrameGeometry.cs" />
+    <Compile Include="src\etabs_to_rhino\FrameGeometryProp.cs" />
+    <Compile Include="src\etabs_to_rhino\FunctionEtabsToRhino.cs" />
+    <Compile Include="src\etabs_to_rhino\WindowEtabsToRhinoMain.xaml.cs">
+      <DependentUpon>WindowEtabsToRhinoMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\etabs_to_rhino\WindowEtabsToRhinoResult.xaml.cs">
+      <DependentUpon>WindowEtabsToRhinoResult.xaml</DependentUpon>
+    </Compile>
     <Compile Include="src\HelperMethod.cs" />
     <Compile Include="src\HelperEtabs.cs" />
     <Compile Include="src\carbon\FunctionCarbon.cs" />
@@ -163,6 +179,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="src\copy_properties\WindowCopyPropResult.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\etabs_to_rhino\WindowEtabsToRhinoMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\etabs_to_rhino\WindowEtabsToRhinoResult.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -251,4 +275,10 @@
     </COMReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Rhino3dm.7.15.0\build\net45\Rhino3dm.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Rhino3dm.7.15.0\build\net45\Rhino3dm.props'))" />
+  </Target>
 </Project>
