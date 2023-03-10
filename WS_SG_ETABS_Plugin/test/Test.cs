@@ -53,28 +53,28 @@ namespace WS_SG_ETABS_Plugin.test
         public static void PrintTableDisplay(cSapModel Sap, string tableKey)
         {
             bool isError = false;
-/*            //Check if the table going to print exist
-            List<string> tableKeys = new List<string>();
-            tableKeys.Add(tableKey);
+            /*            //Check if the table going to print exist
+                        List<string> tableKeys = new List<string>();
+                        tableKeys.Add(tableKey);
 
-            List<string> tableKeysNotExist = src.HelperEtabs.CheckIfTableExistForDisplay(Sap, tableKeys);
+                        List<string> tableKeysNotExist = src.HelperEtabs.CheckIfTableExistForDisplay(Sap, tableKeys);
 
-            if (tableKeysNotExist.Count > 0)
-            {
-                System.Diagnostics.Debug.WriteLine("Table " + tableKey + " doesnt exist");
-                return;
-            }*/
+                        if (tableKeysNotExist.Count > 0)
+                        {
+                            System.Diagnostics.Debug.WriteLine("Table " + tableKey + " doesnt exist");
+                            return;
+                        }*/
 
             //Table exist then proceed to print
-            List<Dictionary<string, string>> tableInList = null;
-            (isError, tableInList) = src.HelperEtabs.GetTableDisplay( Sap, tableKey, false);
+            src.HelperEtabs.DatabaseTable databaseTable = null;
+            (isError, databaseTable) = src.HelperEtabs.GetTableDisplay( Sap, tableKey, false);
 
             if (isError)
             {
                 return;
             }
 
-            foreach (var table in tableInList)
+            foreach (var table in databaseTable.TableInList)
             {
                 foreach (var row in table)
                 {

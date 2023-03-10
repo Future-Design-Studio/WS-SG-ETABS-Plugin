@@ -122,10 +122,10 @@ namespace WS_SG_ETABS_Plugin.src.carbon
             double wallRebarRatio = Convert.ToDouble(inputCarbon["Wall Rebar Ratio"]);
 
             //Open required tables
-            List<Dictionary<string, string>> materialListBySectProp = new List<Dictionary<string, string>>();
-            List<Dictionary<string, string>> frameSectProp = new List<Dictionary<string, string>>();
-            List<Dictionary<string, string>> areaSectProp = new List<Dictionary<string, string>>();
-            List<Dictionary<string, string>> materialProp = new List<Dictionary<string, string>>();
+            src.HelperEtabs.DatabaseTable materialListBySectProp = null;
+            src.HelperEtabs.DatabaseTable frameSectProp = null;
+            src.HelperEtabs.DatabaseTable areaSectProp = null;
+            src.HelperEtabs.DatabaseTable materialProp = null;
 
             string tableKey = "Material List by Section Property";
             (isError, materialListBySectProp) = src.HelperEtabs.GetTableDisplaySpecificGroup(Sap, tableKey, 
@@ -250,55 +250,55 @@ namespace WS_SG_ETABS_Plugin.src.carbon
         /// <param name="concreteEmission"></param>
         /// <param name="rebarRatio"></param>
         /// <returns>Total carbon for one object type</returns>
-        public static double CalculateSingleObjectTypeCarbon(List<Dictionary<string, string>> materialListBySectProp,
-            List<Dictionary<string, string>> frameSectProp, List<Dictionary<string, string>> areaSectProp, 
-            List<Dictionary<string, string>> materialProp, string objectType, double concreteEmission, double rebarRatio)
+        public static double CalculateSingleObjectTypeCarbon(src.HelperEtabs.DatabaseTable materialListBySectProp,
+            src.HelperEtabs.DatabaseTable frameSectProp, src.HelperEtabs.DatabaseTable areaSectProp, 
+            src.HelperEtabs.DatabaseTable materialProp, string objectType, double concreteEmission, double rebarRatio)
         {
             double totalCarbonSingle = 0;
 
             //Filter only specified object type to be evaluated
-            List<Dictionary<string, string>> filteredMaterialListBySectProp = src.HelperMethod.
+            src.HelperEtabs.DatabaseTable filteredMaterialListBySectProp = src.HelperMethod.
                 FilterEtabsDatabase(materialListBySectProp, "ObjectType", objectType);
 
             //Go through each row after filtering table
-            foreach (Dictionary<string, string> row in filteredMaterialListBySectProp)
+            foreach (Dictionary<string, string> row in filteredMaterialListBySectProp.TableInList)
             {
                 //Take weight in kg
                 double weight = Convert.ToDouble(row["Weight"]) * 1000 / 9.81;
 
                 //Take value of column section and use it to filter frame section property
-                List<Dictionary<string, string>> filteredFrameSectProp = src.HelperMethod.
+                src.HelperEtabs.DatabaseTable filteredFrameSectProp = src.HelperMethod.
                     FilterEtabsDatabase(frameSectProp, "Name", row["Section"]);
 
                 string section = "";
                 string materialName = "";
 
                 //Check if section property exist in frame section proerty
-                if (filteredFrameSectProp.Count > 0)
+                if (filteredFrameSectProp.TableInList.Count > 0)
                 {
                     //Take frame section and material name
-                    section = filteredFrameSectProp[0]["Name"];
-                    materialName = filteredFrameSectProp[0]["Material"];
+                    section = filteredFrameSectProp.TableInList[0]["Name"];
+                    materialName = filteredFrameSectProp.TableInList[0]["Material"];
                 }
                 //If property does not exist in frame section proerty, check in area section proerty
                 else
                 {
                     //Take value of column section and use it to filter frame section property
-                    List<Dictionary<string, string>> filteredAreaSectProp = src.HelperMethod.
+                    src.HelperEtabs.DatabaseTable filteredAreaSectProp = src.HelperMethod.
                         FilterEtabsDatabase(areaSectProp, "Name", row["Section"]);
 
                     //Take area section
-                    section = filteredAreaSectProp[0]["Name"];
-                    materialName = filteredAreaSectProp[0]["Material"];
+                    section = filteredAreaSectProp.TableInList[0]["Name"];
+                    materialName = filteredAreaSectProp.TableInList[0]["Material"];
                 }
 
 
                 //Take value of material (only 1 match) and use it to filter material property
-                List<Dictionary<string, string>> filteredMaterialProp = src.HelperMethod.
+                src.HelperEtabs.DatabaseTable filteredMaterialProp = src.HelperMethod.
                     FilterEtabsDatabase(materialProp, "Material", materialName);
 
                 //Take material type
-                string materialType = filteredMaterialProp[0]["Type"];
+                string materialType = filteredMaterialProp.TableInList[0]["Type"];
 
                 if (materialType == "Concrete")
                 {
