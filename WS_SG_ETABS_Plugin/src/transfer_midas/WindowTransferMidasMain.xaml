@@ -1,0 +1,168 @@
+﻿<Window x:Class="WS_SG_ETABS_Plugin.src.transfer_midas.WindowTransferMidasMain"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WS_SG_ETABS_Plugin.src.transfer_midas"
+             mc:Ignorable="d" Height="700" Width="800" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+    <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.2*"></RowDefinition>
+            <RowDefinition Height="0.35*"></RowDefinition>
+            <RowDefinition Height="2*"></RowDefinition>
+            <RowDefinition Height="0.15*"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <Label Grid.Row="0" Grid.Column="0" Content="Transfer ETABS to MIDAS" FontSize="28"/>
+
+        <Grid Grid.Row="1" Grid.Column="0" Margin="0 0 0 0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="5*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Column="0" Margin="10 0 10 0" Content="MGT file path:"></Label>
+
+                <TextBox x:Name="textBoxFilePath" Grid.Column="1" IsEnabled="False"></TextBox>
+
+            </Grid>
+
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="5*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Column="0" Margin="10 0 10 0" Content="MGT file name:"></Label>
+
+                <TextBox x:Name="textBoxFileName" Grid.Column="1"></TextBox>
+
+            </Grid>
+
+            <Grid Grid.Row="2">
+                <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button x:Name="buttonResetPath" Content="Reset path" Width="100" Click="buttonResetPath_Click"/>
+                    <Button x:Name="buttonModifyPath" Content="Modify path" Width="100" Click="buttonModifyPath_Click"/>
+                </StackPanel>
+            </Grid>
+
+        </Grid>
+
+        <Grid Grid.Row="2" Grid.Column="0" Margin="0 10 0 10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="2.5*"></RowDefinition>
+                <RowDefinition Height="2.5*"></RowDefinition>
+                <RowDefinition Height="4*"></RowDefinition>
+                <RowDefinition Height="0.8*"></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0">
+                    <Label Content="Property Definition"></Label>
+                    <CheckBox Name="checkBoxMaterial" Content="Materials" IsEnabled="False" IsChecked="True"></CheckBox>
+                    <CheckBox Name="checkBoxFrameSec" Content="Frame section properties" IsEnabled="False" IsChecked="True"></CheckBox>
+                    <CheckBox Name="checkBoxAreaSec" Content="Area section properties" IsEnabled="False" IsChecked="True"></CheckBox>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1">
+                    <Label Content="Miscellaneous"></Label>
+                    <!-- <CheckBox Name="checkBoxMassSource" Content="Mass source" IsEnabled="False" IsChecked="True"></CheckBox> -->
+                    <CheckBox Name="checkBoxPDelta" Content="P-delta definition" IsEnabled="False" IsChecked="True"></CheckBox>
+                    <CheckBox Name="checkBoxLinks" Content="Links (only linear)" IsEnabled="False" IsChecked="True"></CheckBox>
+                    <CheckBox Name="checkBoxSpring" Content="Spring (only point)" IsEnabled="False" IsChecked="True"></CheckBox>
+                    <CheckBox Name="checkBoxGroups" Content="Groups" IsEnabled="False" IsChecked="True"></CheckBox>
+                    <CheckBox Name="checkBoxStory" Content="Story" IsEnabled="False" IsChecked="True"></CheckBox>
+                </StackPanel>
+
+                <StackPanel Grid.Column="2">
+                    <Label Content="Load Pattern Definition"></Label>
+                    <CheckBox Name="checkBoxLoadPattern" Content="Load pattern" IsEnabled="False" IsChecked="True"></CheckBox>
+                    <!--
+                    <CheckBox Name="checkBoxResponseSpectrum" Content="Response spectrum function" IsEnabled="False" IsChecked="False"></CheckBox>
+                    -->
+                </StackPanel>
+
+                <StackPanel Grid.Column="3">
+                    <Label Content="Load Case Definition"></Label>
+                    <CheckBox Name="checkBoxLoadCase" Content="Load case" IsEnabled="False" IsChecked="True"></CheckBox>
+                    <CheckBox Name="checkBoxLoadCombination" Content="Load combination" IsEnabled="False" IsChecked="True"></CheckBox>
+                </StackPanel>
+
+            </Grid>
+
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0">
+                    <Label Content="Object Connectivity"></Label>
+                    <CheckBox Name="checkBoxObjectConnectivity" Content="Object connectivity" IsEnabled="False" IsChecked="True"></CheckBox>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1">
+                    <Label Content="Assignments"></Label>
+                    <CheckBox Name="checkBoxJointAssignments" Content="Joint assignments" IsEnabled="False" IsChecked="True"></CheckBox>
+                    <CheckBox Name="checkBoxFrameAssignments" Content="Frame assignments" IsEnabled="False" IsChecked="True"></CheckBox>
+                    <CheckBox Name="checkBoxAreaAssignments" Content="Area assignments" IsEnabled="False" IsChecked="True"></CheckBox>
+                    <CheckBox Name="checkBoxJointLoadsAssignments" Content="Joint load assignments" IsEnabled="False" IsChecked="True"></CheckBox>
+                    <CheckBox Name="checkBoxFrameLoadsAssignments" Content="Frame load assignments" IsEnabled="False" IsChecked="True"></CheckBox>
+                    <CheckBox Name="checkBoxAreaLoadAssignments" Content="Area load assignments" IsEnabled="False" IsChecked="True"></CheckBox>
+                </StackPanel>
+
+
+            </Grid>
+
+            <TextBlock Grid.Row="2" Grid.Column="0" TextWrapping="Wrap" TextAlignment="Justify"  
+                   FontSize="10">Note:<LineBreak/>
+                1. Please understand the warning that is given! Refer to warning.txt generated if needed<LineBreak/>
+                2. Only steel and concrete material is transfered<LineBreak/>
+                3. fck and rebar used in property definition not transfered. It does not affect FEM analysis.<LineBreak/>
+                4. Null frame created using circular section diameter 0.1m<LineBreak/>
+                5. Null area created using slab thickness 0.1m<LineBreak/>
+                6. Shell uniform load sets will be transferred as normal uniform load<LineBreak/>
+                7. Only "uncoupled linear links" will be transferred<LineBreak/>
+                8. Only user response specture will be transferred<LineBreak/>
+                9. Modal cases will NOT be transferred<LineBreak/>
+                10. Response spectrum load cases will NOT be transferred<LineBreak/>
+                10. Spring point with link property is NOT supported<LineBreak/>
+                11. Press OK to proceed
+            </TextBlock>
+            
+            <!--
+            <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button x:Name="buttonUncheckAll" Content="Uncheck All" Width="100" Click="buttonUncheckAll_Click"/>
+                <Button x:Name="buttonCheckAll" Content="Check All" Width="100" Click="buttonCheckAll_Click"/>
+            </StackPanel>
+            -->
+
+        </Grid>
+
+
+        <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button x:Name="buttonCancel" Content="Cancel" Width="100" Click="buttonCancel_Click"/>
+            <Button x:Name="buttonOk" Content="OK" Width="100" Click="buttonOk_Click"/>
+        </StackPanel>
+
+    </Grid>
+</Window>

@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WS_SG_ETABS_Plugin.src.plot_reaction"
             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-             mc:Ignorable="d" Height="900" Width="600" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+             mc:Ignorable="d" Height="950" Width="600" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
 
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
@@ -15,6 +15,10 @@
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="0.5*"></RowDefinition>
             <RowDefinition Height="5.5*"></RowDefinition>
+            <RowDefinition Height="0.5*"></RowDefinition>
+            <RowDefinition Height="0.5*"></RowDefinition>
+            <RowDefinition Height="0.5*"></RowDefinition>
+            <RowDefinition Height="0.5*"></RowDefinition>
             <RowDefinition Height="0.5*"></RowDefinition>
             <RowDefinition Height="0.5*"></RowDefinition>
             <RowDefinition Height="0.5*"></RowDefinition>
@@ -161,7 +165,48 @@
             <TextBox Grid.Column="1" x:Name="textBoxTextSize" Grid.Row="0" TextAlignment="Center" Text="12" InputScope="Number"/>
         </Grid>
 
-        <Grid Grid.Row="8" Margin="10 10 10 0">
+        <Grid Grid.Row="8" Margin="10 0 10 0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <Label Grid.Column="0" VerticalAlignment="Center" Grid.ColumnSpan="2">Title size:</Label>
+            <TextBox Grid.Column="1" x:Name="textBoxTitleSize" Grid.Row="0" TextAlignment="Center" Text="36" InputScope="Number"/>
+        </Grid>
+
+        <Grid Grid.Row="9" Margin="10 0 10 0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <Label Grid.Column="0" VerticalAlignment="Center" Grid.ColumnSpan="2">Axis title size:</Label>
+            <TextBox Grid.Column="1" x:Name="textBoxAxisTitleSize" Grid.Row="0" TextAlignment="Center" Text="28" InputScope="Number"/>
+        </Grid>
+
+        <Grid Grid.Row="10" Margin="10 0 10 0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <Label Grid.Column="0" VerticalAlignment="Center" Grid.ColumnSpan="2">Grid spacing x (m):</Label>
+            <TextBox Grid.Column="1" x:Name="textBoxGridSpacingX" Grid.Row="0" TextAlignment="Center" Text="50" InputScope="Digits"/>
+        </Grid>
+
+        <Grid Grid.Row="11" Margin="10 0 10 0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <Label Grid.Column="0" VerticalAlignment="Center" Grid.ColumnSpan="2">Grid spacing y (m):</Label>
+            <TextBox Grid.Column="1" x:Name="textBoxGridSpacingY" Grid.Row="0" TextAlignment="Center" Text="50" InputScope="Digits"/>
+        </Grid>
+
+
+        <Grid Grid.Row="12" Margin="10 10 10 0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
@@ -242,14 +287,14 @@
             </Grid>
         </Grid>
         
-        <TextBlock Grid.Row="9" Grid.Column="0" TextWrapping="Wrap" TextAlignment="Justify"  
+        <TextBlock Grid.Row="13" Grid.Column="0" TextWrapping="Wrap" TextAlignment="Justify"  
                        Margin="10 0 10 0" FontSize="10">Note:<LineBreak/>
                     1. Choose load case or load combination to include in plot<LineBreak/>
                     2. Choose group(s) to include in plot<LineBreak/>
                     3. Press OK to proceed
         </TextBlock>
 
-        <StackPanel Grid.Row="10" Orientation="Horizontal" HorizontalAlignment="Right">
+        <StackPanel Grid.Row="14" Orientation="Horizontal" HorizontalAlignment="Right">
             <Button x:Name="buttonCancel" Content="Cancel" Width="100" Click="buttonCancel_Click"/>
             <Button x:Name="buttonOk" Content="OK" Width="100" Click="buttonOk_Click"/>
         </StackPanel>

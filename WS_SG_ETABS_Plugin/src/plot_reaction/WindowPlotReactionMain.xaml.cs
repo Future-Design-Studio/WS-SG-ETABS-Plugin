@@ -79,7 +79,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
 
         private void buttonRemove_Click(object sender, RoutedEventArgs e)
         {
-            if (listBoxChoosenGroup.Items.Count != 0)
+            if (listBoxChoosenGroup.Items.Count != 0 && listBoxChoosenGroup.SelectedIndex != -1)
             {
                 listBoxChoosenGroup.Items.RemoveAt(listBoxChoosenGroup.SelectedIndex);
             }
@@ -128,6 +128,10 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
                 double forceFactor = Convert.ToDouble(textBoxForceFactor.Text);
                 double bubbleScaleFactor = Convert.ToDouble(textBoxBubbleScaleFactor.Text);
                 int textSize = Convert.ToInt32(textBoxTextSize.Text);
+                int titleSize = Convert.ToInt32(textBoxTitleSize.Text);
+                int axisTitleSize = Convert.ToInt32(textBoxAxisTitleSize.Text);
+                int gridSpacingX = Convert.ToInt32(textBoxGridSpacingX.Text);
+                int gridSpacingY = Convert.ToInt32(textBoxGridSpacingY.Text);
 
                 //Splitting x or y
                 bool splitX = new bool();
@@ -138,8 +142,8 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
                 double offsetY = Convert.ToDouble(textBoxOffsetY.Text);
                 int sumTextSizeX = Convert.ToInt32(textBoxSumTextSizeX.Text);
                 int sumTextSizeY = Convert.ToInt32(textBoxSumTextSizeY.Text);
-                int separationX = Convert.ToInt32(textBoxSeparationX.Text);
-                int separationY = Convert.ToInt32(textBoxSeparationY.Text);
+                double separationX = Convert.ToInt32(textBoxSeparationX.Text);
+                double separationY = Convert.ToInt32(textBoxSeparationY.Text);
                 if (radioButtonSplitX.IsChecked == true)
                 {
                     splitX = true;
@@ -155,11 +159,11 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
                     splitX = false;
                     splitY = false;
                 }
-                
+
                 IsEnabled = false;
                 //Call up copy property result window
                 src.plot_reaction.WindowPlotReactionResult windowPlotReactionResult = new src.plot_reaction.WindowPlotReactionResult(_SapModel, _Plugin, listChoosenGroup,
-                    outputCase, reactionDirection, forceFactor, bubbleScaleFactor, textSize, title, splitX, splitY, divisionX, divisionY, offsetX, offsetY,
+                    outputCase, reactionDirection, forceFactor, bubbleScaleFactor, textSize, titleSize, axisTitleSize, gridSpacingX, gridSpacingY, title, splitX, splitY, divisionX, divisionY, offsetX, offsetY,
                     sumTextSizeX, sumTextSizeY, separationX, separationY);
                 IsEnabled = true;
             }

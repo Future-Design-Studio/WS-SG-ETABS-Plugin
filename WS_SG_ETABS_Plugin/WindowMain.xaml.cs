@@ -82,6 +82,22 @@ namespace WS_SG_ETABS_Plugin
 
         }
 
+        private void buttonTransferMidas_Click(object sender, RoutedEventArgs e)
+        {
+            IsEnabled = false;
+            //Call up transfer midas window
+            src.transfer_midas.WindowTransferMidasMain windowTransferMidasMain = new src.transfer_midas.WindowTransferMidasMain(_SapModel, _Plugin);
+            IsEnabled = true;
+        }
+
+        private void buttonSelUniqueName_Click(object sender, RoutedEventArgs e)
+        {
+            IsEnabled = false;
+            //Call up transfer midas window
+            src.select_uniquename.WindowSelUniqueNameMain windowSelUniqueName = new src.select_uniquename.WindowSelUniqueNameMain(_SapModel, _Plugin);
+            IsEnabled = true;
+        }
+
         private void buttonLoadCombo_Click(object sender, RoutedEventArgs e)
         {
             IsEnabled = false;
