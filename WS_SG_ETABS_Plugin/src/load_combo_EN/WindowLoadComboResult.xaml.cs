@@ -24,16 +24,28 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
         cSapModel _SapModel;
         cPluginCallback _Plugin;
 
-        public WindowLoadComboResult(cSapModel SapModel, cPluginCallback Plugin, List<src.load_combo_EN.ClassLoadCombo.DeadLoad> deadLoadList)
+        public WindowLoadComboResult(cSapModel SapModel, cPluginCallback Plugin, 
+            List<src.load_combo_EN.ClassLoadCombo.DeadLoad> deadLoadList, 
+            List<src.load_combo_EN.ClassLoadCombo.SDLLoad> SDLoadList, 
+            List<src.load_combo_EN.ClassLoadCombo.LiveLoad> LiveLoadList, 
+            List<src.load_combo_EN.ClassLoadCombo.WindLoad> WindLoadList,
+            List<src.load_combo_EN.ClassLoadCombo.NotionalLoad> NotionalDLoadList,
+            List<src.load_combo_EN.ClassLoadCombo.NotionalLoad> NotionalSDLoadList,
+            List<src.load_combo_EN.ClassLoadCombo.TemperatureLoad> TemperatureLoadList,
+            List<src.load_combo_EN.ClassLoadCombo.SeismicLoad> SeismicLoadList,
+            List<src.load_combo_EN.ClassLoadCombo.AccidentalLoad> AccidentalLoadList,
+            List<src.load_combo_EN.ClassLoadCombo.UpliftLoad> UpliftLoadList,
+            List<src.load_combo_EN.ClassLoadCombo.EHFLoad> EHFLoadList)
         {
             _SapModel = SapModel;
             _Plugin = Plugin;
 
             //Mainlogic
-            bool isError = src.load_combo_EN.FunctionLoadCombo.CreateLoadPatternAndCombo(_SapModel, _Plugin, deadLoadList);
+            bool isError = src.load_combo_EN.FunctionLoadCombo.CreateLoadPatternAndCase(_SapModel, _Plugin, deadLoadList, SDLoadList, LiveLoadList, WindLoadList, NotionalDLoadList, NotionalSDLoadList, TemperatureLoadList, SeismicLoadList, AccidentalLoadList, UpliftLoadList, EHFLoadList);
 
             if (isError)
             {
+                MessageBox.Show("Error please contact Mani");
                 return;
             }
 

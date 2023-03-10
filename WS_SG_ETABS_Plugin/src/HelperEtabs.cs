@@ -1161,7 +1161,7 @@ namespace WS_SG_ETABS_Plugin.src
         /// </summary>
         /// <param name="Sap"></param>
         /// <returns></returns>
-        public static void AddLoadPattern(cSapModel Sap, string name, double selfWeightMultipiler, string type, bool isExisting)
+        public static bool AddLoadPattern(cSapModel Sap, string name, double selfWeightMultipiler, string type, bool isExisting)
         {
 
             string Name = name;
@@ -1174,61 +1174,68 @@ namespace WS_SG_ETABS_Plugin.src
                 Ret = Sap.LoadPatterns.Add(Name, MyType, SelfWTMultiplier, AddAnalysisCase);
             }
 
-            if (type == "SuperDead" && !isExisting)
+            else if (type == "SuperDead" && !isExisting)
             {
                 eLoadPatternType MyType = eLoadPatternType.SuperDead;
                 Ret = Sap.LoadPatterns.Add(Name, MyType, SelfWTMultiplier, AddAnalysisCase);
             }
 
-            if (type == "Live" && !isExisting)
+            else if (type == "Live" && !isExisting)
             {
                 eLoadPatternType MyType = eLoadPatternType.Live;
                 Ret = Sap.LoadPatterns.Add(Name, MyType, SelfWTMultiplier, AddAnalysisCase);
             }
 
-            if (type == "Wind" && !isExisting)
+            else if (type == "Wind" && !isExisting)
             {
                 eLoadPatternType MyType = eLoadPatternType.Wind;
                 Ret = Sap.LoadPatterns.Add(Name, MyType, SelfWTMultiplier, AddAnalysisCase);
             }
 
-            if (type == "Notional" && !isExisting)
+            else if (type == "Notional" && !isExisting)
             {
                 eLoadPatternType MyType = eLoadPatternType.Notional;
                 Ret = Sap.LoadPatterns.Add(Name, MyType, SelfWTMultiplier, AddAnalysisCase);
             }
 
-            if (type == "Temperature" && !isExisting)
+            else if (type == "Temperature" && !isExisting)
             {
                 eLoadPatternType MyType = eLoadPatternType.Temperature;
                 Ret = Sap.LoadPatterns.Add(Name, MyType, SelfWTMultiplier, AddAnalysisCase);
             }
 
-            if (type == "Seismic" && !isExisting)
+            else if (type == "Seismic" && !isExisting)
             {
                 eLoadPatternType MyType = eLoadPatternType.Quake;
                 Ret = Sap.LoadPatterns.Add(Name, MyType, SelfWTMultiplier, AddAnalysisCase);
             }
 
-            if (type == "Accidental" && !isExisting)
+            else if (type == "Accidental" && !isExisting)
             {
                 eLoadPatternType MyType = eLoadPatternType.Other;
                 Ret = Sap.LoadPatterns.Add(Name, MyType, SelfWTMultiplier, AddAnalysisCase);
             }
 
-            if (type == "Uplift" && !isExisting)
+            else if (type == "Uplift" && !isExisting)
             {
                 eLoadPatternType MyType = eLoadPatternType.Other;
                 Ret = Sap.LoadPatterns.Add(Name, MyType, SelfWTMultiplier, AddAnalysisCase);
             }
 
-            if (type == "EHF" && !isExisting)
+            else if (type == "EHF" && !isExisting)
             {
                 eLoadPatternType MyType = eLoadPatternType.Notional;
                 Ret = Sap.LoadPatterns.Add(Name, MyType, SelfWTMultiplier, AddAnalysisCase);
             }
 
-
+            if (Ret ==0)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
         }
 
         #endregion

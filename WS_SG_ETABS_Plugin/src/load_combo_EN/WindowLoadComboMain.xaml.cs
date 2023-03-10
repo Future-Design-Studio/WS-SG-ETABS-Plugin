@@ -171,9 +171,32 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
         #endregion
 
+        #region Data source EHF
+
+        List<string> ehfList = new List<string>()
+        {
+            "EHFx", "EHFy"
+        };
+
+        #endregion
+
         #region Data source loadlists
 
         List<ClassLoadCombo.DeadLoad> deadLoadList = new List<ClassLoadCombo.DeadLoad>();
+        List<ClassLoadCombo.SDLLoad> SDLoadList = new List<ClassLoadCombo.SDLLoad>();
+        List<ClassLoadCombo.LiveLoad> LiveLoadList = new List<ClassLoadCombo.LiveLoad>();
+        List<ClassLoadCombo.WindLoad> WindLoadList = new List<ClassLoadCombo.WindLoad>();
+        List<ClassLoadCombo.NotionalLoad> NotionalDLoadList = new List<ClassLoadCombo.NotionalLoad>();
+        List<ClassLoadCombo.NotionalLoad> NotionalSDLoadList = new List<ClassLoadCombo.NotionalLoad>();
+        List<ClassLoadCombo.TemperatureLoad> TemperatureLoadList = new List<ClassLoadCombo.TemperatureLoad>();
+        List<ClassLoadCombo.SeismicLoad> SeismicLoadList = new List<ClassLoadCombo.SeismicLoad>();
+        List<ClassLoadCombo.AccidentalLoad> AccidentalLoadList = new List<ClassLoadCombo.AccidentalLoad>();
+        List<ClassLoadCombo.UpliftLoad> UpliftLoadList = new List<ClassLoadCombo.UpliftLoad>();
+        List<ClassLoadCombo.EHFLoad> EHFLoadList = new List<ClassLoadCombo.EHFLoad>();
+
+        List<string> ehfDLList = new List<string>();
+        List<string> ehfSDLList = new List<string>();
+        List<string> ehfLLList = new List<string>();
 
         #endregion
 
@@ -268,6 +291,14 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                 ClassLoadCombo.DeadLoad eachDeadLoad = new ClassLoadCombo.DeadLoad(selectedString, true);
                 deadLoadList.Add(eachDeadLoad);
+
+                ClassLoadCombo.NotionalLoad eachnotionalx = new ClassLoadCombo.NotionalLoad(notionalxyList[0] + comBoxExistingDL.Text + ")", double.Parse(textBoxNameNOTIONALFACTOR.Text));
+                NotionalDLoadList.Add(eachnotionalx);
+                ClassLoadCombo.NotionalLoad eachnotionaly = new ClassLoadCombo.NotionalLoad(notionalxyList[1] + comBoxExistingDL.Text + ")", double.Parse(textBoxNameNOTIONALFACTOR.Text));
+                NotionalDLoadList.Add(eachnotionaly);
+
+                ehfDLList.Add(ehfList[0] + " (" + selectedString + ")");
+                ehfDLList.Add(ehfList[1] + " (" + selectedString + ")");
             }
             else
             {
@@ -280,6 +311,14 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                 ClassLoadCombo.DeadLoad eachDeadLoad = new ClassLoadCombo.DeadLoad(selectedString, false);
                 deadLoadList.Add(eachDeadLoad);
+
+                ClassLoadCombo.NotionalLoad eachnotionalx = new ClassLoadCombo.NotionalLoad(notionalxyList[0] + textBoxNameDL.Text + ")", double.Parse(textBoxNameNOTIONALFACTOR.Text));
+                NotionalDLoadList.Add(eachnotionalx);
+                ClassLoadCombo.NotionalLoad eachnotionaly = new ClassLoadCombo.NotionalLoad(notionalxyList[1] + textBoxNameDL.Text + ")", double.Parse(textBoxNameNOTIONALFACTOR.Text));
+                NotionalDLoadList.Add(eachnotionaly);
+
+                ehfDLList.Add(ehfList[0] + " (" + selectedString + ")");
+                ehfDLList.Add(ehfList[1] + " (" + selectedString + ")");
             }
         }
 
@@ -302,9 +341,19 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
         {
             if (listBoxChoosenDL.Items.Count != 0 && listBoxChoosenDL.SelectedIndex != -1)
             {
-                listBoxChoosenNOTIONALDL.Items.RemoveAt(listBoxChoosenDL.SelectedIndex * 2);
-                listBoxChoosenNOTIONALDL.Items.RemoveAt(listBoxChoosenDL.SelectedIndex * 2);
-                listBoxChoosenDL.Items.RemoveAt(listBoxChoosenDL.SelectedIndex);
+                int selectedIndex = listBoxChoosenDL.SelectedIndex;
+                
+                listBoxChoosenNOTIONALDL.Items.RemoveAt(selectedIndex * 2);
+                listBoxChoosenNOTIONALDL.Items.RemoveAt(selectedIndex * 2);
+                listBoxChoosenDL.Items.RemoveAt(selectedIndex);
+                
+                deadLoadList.RemoveAt(selectedIndex);
+
+                NotionalDLoadList.RemoveAt(selectedIndex * 2);
+                NotionalDLoadList.RemoveAt(selectedIndex * 2);
+
+                ehfDLList.RemoveAt(selectedIndex * 2);
+                ehfDLList.RemoveAt(selectedIndex * 2);
             }
         }
 
@@ -340,6 +389,17 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 listBoxChoosenNOTIONALSDL.Items.Add(selectedNLXString);
                 string selectedNLYString = notionalxyList[1] + comBoxExistingSDL.Text + "), " + textBoxNameNOTIONALFACTOR.Text;
                 listBoxChoosenNOTIONALSDL.Items.Add(selectedNLYString);
+
+                ClassLoadCombo.SDLLoad eachSDeadLoad = new ClassLoadCombo.SDLLoad(selectedString, true);
+                SDLoadList.Add(eachSDeadLoad);
+
+                ClassLoadCombo.NotionalLoad eachnotionalx = new ClassLoadCombo.NotionalLoad(notionalxyList[0] + comBoxExistingSDL.Text + ")", double.Parse(textBoxNameNOTIONALFACTOR.Text));
+                NotionalSDLoadList.Add(eachnotionalx);
+                ClassLoadCombo.NotionalLoad eachnotionaly = new ClassLoadCombo.NotionalLoad(notionalxyList[1] + comBoxExistingSDL.Text + ")", double.Parse(textBoxNameNOTIONALFACTOR.Text));
+                NotionalSDLoadList.Add(eachnotionaly);
+
+                ehfSDLList.Add(ehfList[0] + " (" + selectedString + ")");
+                ehfSDLList.Add(ehfList[1] + " (" + selectedString + ")");
             }
             else
             {
@@ -349,6 +409,17 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 listBoxChoosenNOTIONALSDL.Items.Add(selectedNLXString);
                 string selectedNLYString = notionalxyList[1] + textBoxNameSDL.Text + "), " + textBoxNameNOTIONALFACTOR.Text;
                 listBoxChoosenNOTIONALSDL.Items.Add(selectedNLYString);
+
+                ClassLoadCombo.SDLLoad eachSDeadLoad = new ClassLoadCombo.SDLLoad(selectedString, false);
+                SDLoadList.Add(eachSDeadLoad);
+
+                ClassLoadCombo.NotionalLoad eachnotionalx = new ClassLoadCombo.NotionalLoad(notionalxyList[0] + textBoxNameSDL.Text + ")", double.Parse(textBoxNameNOTIONALFACTOR.Text));
+                NotionalSDLoadList.Add(eachnotionalx);
+                ClassLoadCombo.NotionalLoad eachnotionaly = new ClassLoadCombo.NotionalLoad(notionalxyList[1] + textBoxNameSDL.Text + ")", double.Parse(textBoxNameNOTIONALFACTOR.Text));
+                NotionalSDLoadList.Add(eachnotionaly);
+
+                ehfSDLList.Add(ehfList[0] + " (" + selectedString + ")");
+                ehfSDLList.Add(ehfList[1] + " (" + selectedString + ")");
             }
         }
 
@@ -361,9 +432,19 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
         {
             if (listBoxChoosenSDL.Items.Count != 0 && listBoxChoosenSDL.SelectedIndex != -1)
             {
-                listBoxChoosenNOTIONALSDL.Items.RemoveAt(listBoxChoosenSDL.SelectedIndex * 2);
-                listBoxChoosenNOTIONALSDL.Items.RemoveAt(listBoxChoosenSDL.SelectedIndex * 2);
-                listBoxChoosenSDL.Items.RemoveAt(listBoxChoosenSDL.SelectedIndex);
+                int selectedIndex = listBoxChoosenSDL.SelectedIndex;
+                
+                listBoxChoosenNOTIONALSDL.Items.RemoveAt(selectedIndex * 2);
+                listBoxChoosenNOTIONALSDL.Items.RemoveAt(selectedIndex * 2);
+                listBoxChoosenSDL.Items.RemoveAt(selectedIndex);
+                
+                SDLoadList.RemoveAt(selectedIndex);
+
+                NotionalSDLoadList.RemoveAt(selectedIndex * 2);
+                NotionalSDLoadList.RemoveAt(selectedIndex * 2);
+
+                ehfSDLList.RemoveAt(selectedIndex * 2);
+                ehfSDLList.RemoveAt(selectedIndex * 2);
             }
         }
 
@@ -400,11 +481,23 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             {
                 string selectedString = comBoxExistingLL.Text + ", " + comBoxLL.Text;
                 listBoxChoosenLL.Items.Add(selectedString);
+
+                ClassLoadCombo.LiveLoad eachLiveLoad = new ClassLoadCombo.LiveLoad(comBoxExistingLL.Text, true, comBoxLL.Text);
+                LiveLoadList.Add(eachLiveLoad);
+
+                ehfLLList.Add(ehfList[0] + " (" + comBoxExistingLL.Text + ")");
+                ehfLLList.Add(ehfList[1] + " (" + comBoxExistingLL.Text + ")");
             }
             else
             {
                 string selectedString = textBoxNameLL.Text + ", " + comBoxLL.Text;
                 listBoxChoosenLL.Items.Add(selectedString);
+
+                ClassLoadCombo.LiveLoad eachLiveLoad = new ClassLoadCombo.LiveLoad(textBoxNameLL.Text, false, comBoxLL.Text);
+                LiveLoadList.Add(eachLiveLoad);
+
+                ehfLLList.Add(ehfList[0] + " (" + textBoxNameLL.Text + ")");
+                ehfLLList.Add(ehfList[1] + " (" + textBoxNameLL.Text + ")");
             }
         }
 
@@ -417,7 +510,14 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
         {
             if (listBoxChoosenLL.Items.Count != 0 && listBoxChoosenLL.SelectedIndex != -1)
             {
-                listBoxChoosenLL.Items.RemoveAt(listBoxChoosenLL.SelectedIndex);
+                int selectedIndex = listBoxChoosenLL.SelectedIndex;
+
+                listBoxChoosenLL.Items.RemoveAt(selectedIndex);
+
+                LiveLoadList.RemoveAt(selectedIndex);
+
+                ehfLLList.RemoveAt(selectedIndex * 2);
+                ehfLLList.RemoveAt(selectedIndex * 2);
             }
         }
 
@@ -521,6 +621,9 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             {
                 string selectedString = comBoxExistingWIND.Text + ", " + comBoxWIND.Text;
                 listBoxChoosenWIND.Items.Add(selectedString);
+
+                ClassLoadCombo.WindLoad eachWindLoad = new ClassLoadCombo.WindLoad(comBoxExistingWIND.Text, true, comBoxWIND.Text);
+                WindLoadList.Add(eachWindLoad);
             }
             else
             {
@@ -528,6 +631,9 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 {
                     string selectedString = comBoxNameWIND.Text + ", " + comBoxWIND.Text;
                     listBoxChoosenWIND.Items.Add(selectedString);
+
+                    ClassLoadCombo.WindLoad eachWindLoad = new ClassLoadCombo.WindLoad(comBoxNameWIND.Text, false, comBoxWIND.Text);
+                    WindLoadList.Add(eachWindLoad);
                 }
                 else
                 {
@@ -539,6 +645,11 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                             listBoxChoosenWIND.Items.Add(selectedString);
                             string selectedString2 = wind48noplusminusdirectionList[1] + ", " + comBoxWIND.Text;
                             listBoxChoosenWIND.Items.Add(selectedString2);
+
+                            ClassLoadCombo.WindLoad eachWindLoad1 = new ClassLoadCombo.WindLoad(wind48noplusminusdirectionList[0], false, comBoxWIND.Text);
+                            WindLoadList.Add(eachWindLoad1);
+                            ClassLoadCombo.WindLoad eachWindLoad2 = new ClassLoadCombo.WindLoad(wind48noplusminusdirectionList[1], false, comBoxWIND.Text);
+                            WindLoadList.Add(eachWindLoad2);
                         }
                         else
                         {
@@ -546,6 +657,11 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                             listBoxChoosenWIND.Items.Add(selectedString);
                             string selectedString2 = wind48noplusminusdirectionList[3] + ", " + comBoxWIND.Text;
                             listBoxChoosenWIND.Items.Add(selectedString2);
+
+                            ClassLoadCombo.WindLoad eachWindLoad1 = new ClassLoadCombo.WindLoad(wind48noplusminusdirectionList[2], false, comBoxWIND.Text);
+                            WindLoadList.Add(eachWindLoad1);
+                            ClassLoadCombo.WindLoad eachWindLoad2 = new ClassLoadCombo.WindLoad(wind48noplusminusdirectionList[3], false, comBoxWIND.Text);
+                            WindLoadList.Add(eachWindLoad2);
                         }                        
                     }
                     else
@@ -556,6 +672,11 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                             listBoxChoosenWIND.Items.Add(selectedString);
                             string selectedString2 = wind48noplusminusdirectionList[5] + ", " + comBoxWIND.Text;
                             listBoxChoosenWIND.Items.Add(selectedString2);
+
+                            ClassLoadCombo.WindLoad eachWindLoad1 = new ClassLoadCombo.WindLoad(wind48noplusminusdirectionList[4], false, comBoxWIND.Text);
+                            WindLoadList.Add(eachWindLoad1);
+                            ClassLoadCombo.WindLoad eachWindLoad2 = new ClassLoadCombo.WindLoad(wind48noplusminusdirectionList[5], false, comBoxWIND.Text);
+                            WindLoadList.Add(eachWindLoad2);
                         }
                         if (comBoxNameWIND.SelectedIndex == 1)
                         {
@@ -563,6 +684,11 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                             listBoxChoosenWIND.Items.Add(selectedString);
                             string selectedString2 = wind48noplusminusdirectionList[7] + ", " + comBoxWIND.Text;
                             listBoxChoosenWIND.Items.Add(selectedString2);
+
+                            ClassLoadCombo.WindLoad eachWindLoad1 = new ClassLoadCombo.WindLoad(wind48noplusminusdirectionList[6], false, comBoxWIND.Text);
+                            WindLoadList.Add(eachWindLoad1);
+                            ClassLoadCombo.WindLoad eachWindLoad2 = new ClassLoadCombo.WindLoad(wind48noplusminusdirectionList[7], false, comBoxWIND.Text);
+                            WindLoadList.Add(eachWindLoad2);
                         }
                         if (comBoxNameWIND.SelectedIndex == 2)
                         {
@@ -570,6 +696,11 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                             listBoxChoosenWIND.Items.Add(selectedString);
                             string selectedString2 = wind48noplusminusdirectionList[9] + ", " + comBoxWIND.Text;
                             listBoxChoosenWIND.Items.Add(selectedString2);
+
+                            ClassLoadCombo.WindLoad eachWindLoad1 = new ClassLoadCombo.WindLoad(wind48noplusminusdirectionList[8], false, comBoxWIND.Text);
+                            WindLoadList.Add(eachWindLoad1);
+                            ClassLoadCombo.WindLoad eachWindLoad2 = new ClassLoadCombo.WindLoad(wind48noplusminusdirectionList[9], false, comBoxWIND.Text);
+                            WindLoadList.Add(eachWindLoad2);
                         }
                         if (comBoxNameWIND.SelectedIndex == 3)
                         {
@@ -577,6 +708,11 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                             listBoxChoosenWIND.Items.Add(selectedString);
                             string selectedString2 = wind48noplusminusdirectionList[11] + ", " + comBoxWIND.Text;
                             listBoxChoosenWIND.Items.Add(selectedString2);
+
+                            ClassLoadCombo.WindLoad eachWindLoad1 = new ClassLoadCombo.WindLoad(wind48noplusminusdirectionList[10], false, comBoxWIND.Text);
+                            WindLoadList.Add(eachWindLoad1);
+                            ClassLoadCombo.WindLoad eachWindLoad2 = new ClassLoadCombo.WindLoad(wind48noplusminusdirectionList[11], false, comBoxWIND.Text);
+                            WindLoadList.Add(eachWindLoad2);
                         }
                     }
                         
@@ -590,6 +726,9 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             {
                 string selectedString = comBoxExistingWINDVERTICAL.Text + ", " + comBoxWINDVERTICAL.Text;
                 listBoxChoosenWIND.Items.Add(selectedString);
+
+                ClassLoadCombo.WindLoad eachWindLoad = new ClassLoadCombo.WindLoad(comBoxExistingWINDVERTICAL.Text, true, comBoxWINDVERTICAL.Text);
+                WindLoadList.Add(eachWindLoad);
             }
             else
             {
@@ -597,6 +736,9 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 {
                     string selectedString = comBoxNameWINDVERTICAL.Text + ", " + comBoxWINDVERTICAL.Text;
                     listBoxChoosenWIND.Items.Add(selectedString);
+
+                    ClassLoadCombo.WindLoad eachWindLoad = new ClassLoadCombo.WindLoad(comBoxNameWINDVERTICAL.Text, false, comBoxWINDVERTICAL.Text);
+                    WindLoadList.Add(eachWindLoad);
                 }
                 else
                 {
@@ -604,6 +746,11 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     listBoxChoosenWIND.Items.Add(selectedString);
                     string selectedString2 = windvertnoplusminusdirectionList[1] + ", " + comBoxWINDVERTICAL.Text;
                     listBoxChoosenWIND.Items.Add(selectedString2);
+
+                    ClassLoadCombo.WindLoad eachWindLoad1 = new ClassLoadCombo.WindLoad(windvertnoplusminusdirectionList[0], false, comBoxWINDVERTICAL.Text);
+                    WindLoadList.Add(eachWindLoad1);
+                    ClassLoadCombo.WindLoad eachWindLoad2 = new ClassLoadCombo.WindLoad(windvertnoplusminusdirectionList[1], false, comBoxWINDVERTICAL.Text);
+                    WindLoadList.Add(eachWindLoad2);
                 }
             }
         }
@@ -617,7 +764,11 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
         {
             if (listBoxChoosenWIND.Items.Count != 0 && listBoxChoosenWIND.SelectedIndex != -1)
             {
-                listBoxChoosenWIND.Items.RemoveAt(listBoxChoosenWIND.SelectedIndex);
+                int selectedIndex = listBoxChoosenWIND.SelectedIndex;
+
+                listBoxChoosenWIND.Items.RemoveAt(selectedIndex);
+
+                WindLoadList.RemoveAt(selectedIndex);
             }
         }
 
@@ -669,11 +820,17 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             {
                 string selectedString = comBoxExistingTEMP.Text + ", " + comBoxTEMP.Text;
                 listBoxChoosenTEMP.Items.Add(selectedString);
+
+                ClassLoadCombo.TemperatureLoad eachTempLoad = new ClassLoadCombo.TemperatureLoad(comBoxExistingTEMP.Text, true, comBoxTEMP.Text);
+                TemperatureLoadList.Add(eachTempLoad);
             }
             else
             {
                 string selectedString = textBoxNameTEMP.Text + ", " + comBoxTEMP.Text;
                 listBoxChoosenTEMP.Items.Add(selectedString);
+
+                ClassLoadCombo.TemperatureLoad eachTempLoad = new ClassLoadCombo.TemperatureLoad(textBoxNameTEMP.Text, false, comBoxTEMP.Text);
+                TemperatureLoadList.Add(eachTempLoad);
             }
         }
 
@@ -686,7 +843,11 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
         {
             if (listBoxChoosenTEMP.Items.Count != 0 && listBoxChoosenTEMP.SelectedIndex != -1)
             {
-                listBoxChoosenTEMP.Items.RemoveAt(listBoxChoosenTEMP.SelectedIndex);
+                int selectedIndex = listBoxChoosenTEMP.SelectedIndex;
+
+                listBoxChoosenTEMP.Items.RemoveAt(selectedIndex);
+
+                TemperatureLoadList.RemoveAt(selectedIndex);
             }
         }
 
@@ -711,6 +872,9 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             {
                 string selectedString = comBoxExistingSEISMIC.Text;
                 listBoxChoosenSEISMIC.Items.Add(selectedString);
+
+                ClassLoadCombo.SeismicLoad eachSeismicLoad = new ClassLoadCombo.SeismicLoad(comBoxExistingSEISMIC.Text, true);
+                SeismicLoadList.Add(eachSeismicLoad);
             }
             else
             {
@@ -720,6 +884,13 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 listBoxChoosenSEISMIC.Items.Add(selectedString1);
                 string selectedString2 = seismicList[2];
                 listBoxChoosenSEISMIC.Items.Add(selectedString2);
+
+                ClassLoadCombo.SeismicLoad eachSeismicLoad = new ClassLoadCombo.SeismicLoad(selectedString, false);
+                SeismicLoadList.Add(eachSeismicLoad);
+                ClassLoadCombo.SeismicLoad eachSeismicLoad1 = new ClassLoadCombo.SeismicLoad(selectedString1, false);
+                SeismicLoadList.Add(eachSeismicLoad1);
+                ClassLoadCombo.SeismicLoad eachSeismicLoad2 = new ClassLoadCombo.SeismicLoad(selectedString2, false);
+                SeismicLoadList.Add(eachSeismicLoad2);
             }
         }
 
@@ -732,7 +903,11 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
         {
             if (listBoxChoosenSEISMIC.Items.Count != 0 && listBoxChoosenSEISMIC.SelectedIndex != -1)
             {
-                listBoxChoosenSEISMIC.Items.RemoveAt(listBoxChoosenSEISMIC.SelectedIndex);
+                int selectedIndex = listBoxChoosenSEISMIC.SelectedIndex;
+
+                listBoxChoosenSEISMIC.Items.RemoveAt(selectedIndex);
+
+                SeismicLoadList.RemoveAt(selectedIndex);
             }
         }
 
@@ -776,6 +951,9 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             {
                 string selectedString = comBoxExistingAL.Text;
                 listBoxChoosenAL.Items.Add(selectedString);
+
+                ClassLoadCombo.AccidentalLoad eachAccidentalLoad = new ClassLoadCombo.AccidentalLoad(comBoxExistingAL.Text, true);
+                AccidentalLoadList.Add(eachAccidentalLoad);
             }
             else
             {
@@ -783,6 +961,9 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 {
                     string selectedString = textBoxNameAL.Text;
                     listBoxChoosenAL.Items.Add(selectedString);
+
+                    ClassLoadCombo.AccidentalLoad eachAccidentalLoad = new ClassLoadCombo.AccidentalLoad(selectedString, false);
+                    AccidentalLoadList.Add(eachAccidentalLoad);
                 }
                 else
                 {
@@ -790,6 +971,11 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     listBoxChoosenAL.Items.Add(selectedString);
                     string selectedString1 = textBoxNameAL.Text + "N";
                     listBoxChoosenAL.Items.Add(selectedString1);
+
+                    ClassLoadCombo.AccidentalLoad eachAccidentalLoad = new ClassLoadCombo.AccidentalLoad(selectedString, false);
+                    AccidentalLoadList.Add(eachAccidentalLoad);
+                    ClassLoadCombo.AccidentalLoad eachAccidentalLoad1 = new ClassLoadCombo.AccidentalLoad(selectedString1, false);
+                    AccidentalLoadList.Add(eachAccidentalLoad1);
                 }
             }
         }
@@ -803,7 +989,11 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
         {
             if (listBoxChoosenAL.Items.Count != 0 && listBoxChoosenAL.SelectedIndex != -1)
             {
-                listBoxChoosenAL.Items.RemoveAt(listBoxChoosenAL.SelectedIndex);
+                int selectedIndex = listBoxChoosenAL.SelectedIndex;
+
+                listBoxChoosenAL.Items.RemoveAt(selectedIndex);
+
+                AccidentalLoadList.RemoveAt(selectedIndex);
             }
         }
 
@@ -828,11 +1018,17 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             {
                 string selectedString = comBoxExistingUPLIFT.Text;
                 listBoxChoosenUPLIFT.Items.Add(selectedString);
+
+                ClassLoadCombo.UpliftLoad eachUpliftLoad = new ClassLoadCombo.UpliftLoad(selectedString, true);
+                UpliftLoadList.Add(eachUpliftLoad);
             }
             else
             {
                 string selectedString = "UPLIFT";
                 listBoxChoosenUPLIFT.Items.Add(selectedString);
+
+                ClassLoadCombo.UpliftLoad eachUpliftLoad = new ClassLoadCombo.UpliftLoad(selectedString, false);
+                UpliftLoadList.Add(eachUpliftLoad);
             }
         }
 
@@ -845,7 +1041,11 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
         {
             if (listBoxChoosenUPLIFT.Items.Count != 0 && listBoxChoosenUPLIFT.SelectedIndex != -1)
             {
-                listBoxChoosenUPLIFT.Items.RemoveAt(listBoxChoosenUPLIFT.SelectedIndex);
+                int selectedIndex = listBoxChoosenUPLIFT.SelectedIndex;
+
+                listBoxChoosenUPLIFT.Items.RemoveAt(selectedIndex);
+
+                UpliftLoadList.RemoveAt(selectedIndex);
             }
         }
 
@@ -856,7 +1056,30 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
         private void Button_ADD_EHF_Click(object sender, RoutedEventArgs e)
         {
+            foreach (string ehfdl in ehfDLList)
+            {
+                string selectedString = ehfdl + textBoxNameEHF.Text;
+                listBoxChoosenEHF.Items.Add(selectedString);
 
+                ClassLoadCombo.EHFLoad eachehfLoad = new ClassLoadCombo.EHFLoad(ehfdl, double.Parse(textBoxNameEHF.Text));
+                EHFLoadList.Add(eachehfLoad);
+            }
+            foreach (string ehfsdl in ehfSDLList)
+            {
+                string selectedString = ehfsdl + textBoxNameEHF.Text;
+                listBoxChoosenEHF.Items.Add(selectedString);
+
+                ClassLoadCombo.EHFLoad eachehfLoad = new ClassLoadCombo.EHFLoad(ehfsdl, double.Parse(textBoxNameEHF.Text));
+                EHFLoadList.Add(eachehfLoad);
+            }
+            foreach (string ehfll in ehfLLList)
+            {
+                string selectedString = ehfll + textBoxNameEHF.Text;
+                listBoxChoosenEHF.Items.Add(selectedString);
+
+                ClassLoadCombo.EHFLoad eachehfLoad = new ClassLoadCombo.EHFLoad(ehfll, double.Parse(textBoxNameEHF.Text));
+                EHFLoadList.Add(eachehfLoad);
+            }
         }
 
         private void listBoxChoosenEHF_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -868,7 +1091,11 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
         {
             if (listBoxChoosenEHF.Items.Count != 0 && listBoxChoosenEHF.SelectedIndex != -1)
             {
-                listBoxChoosenEHF.Items.RemoveAt(listBoxChoosenEHF.SelectedIndex);
+                int selectedIndex = listBoxChoosenEHF.SelectedIndex;
+
+                listBoxChoosenEHF.Items.RemoveAt(selectedIndex);
+
+                EHFLoadList.RemoveAt(selectedIndex);
             }
         }
 
@@ -881,7 +1108,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
         {
             IsEnabled = false;
             //Call up result window
-            src.load_combo_EN.WindowLoadComboResult windowLoadComboResult = new src.load_combo_EN.WindowLoadComboResult(_SapModel, _Plugin, deadLoadList);
+            src.load_combo_EN.WindowLoadComboResult windowLoadComboResult = new src.load_combo_EN.WindowLoadComboResult(_SapModel, _Plugin, deadLoadList, SDLoadList, LiveLoadList, WindLoadList, NotionalDLoadList, NotionalSDLoadList, TemperatureLoadList, SeismicLoadList, AccidentalLoadList, UpliftLoadList, EHFLoadList);
             IsEnabled = true;
         }
     }

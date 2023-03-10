@@ -242,7 +242,7 @@
             <ComboBox  Grid.Row="1" Grid.Column="4" x:Name="comBoxNameWIND" 
                        VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
                        Text="0.5" SelectionChanged="comBoxNameWIND_SelectionChanged" IsEnabled="False"></ComboBox>
-            
+
             <CheckBox x:Name="checkBoxExistingWINDVERTICAL" Grid.Row="2" Grid.Column="2"  Grid.ColumnSpan="1"
                       Checked="checkBoxExistingWINDVERTICAL_Checked" Unchecked="checkBoxExistingWINDVERTICAL_Unchecked" 
                       VerticalAlignment="Center" HorizontalAlignment="Center">
@@ -321,7 +321,7 @@
                      d:ItemsSource="{d:SampleData ItemCount=10}" SelectionMode="Single"
                      Margin="0 0 0 0" SelectionChanged="listBoxChoosenNOTIONALSDL_SelectionChanged">
             </ListBox>
-            
+
 
 
         </Grid>
@@ -557,9 +557,9 @@
 
             <Button Grid.Row="1" Grid.Column="2" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_ADD_EHF_Click" ></Button>
 
-            <ListBox x:Name="listBoxChoosenEHF" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="5" 
+            <ListBox x:Name="listBoxChoosenEHF" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3" 
                      d:ItemsSource="{d:SampleData ItemCount=30}" SelectionMode="Single"
-                     Margin="0 0 0 0" SelectionChanged="listBoxChoosenEHF_SelectionChanged">
+                     Margin="0,0,0,31" SelectionChanged="listBoxChoosenEHF_SelectionChanged" Height="80" Grid.RowSpan="3" VerticalAlignment="Bottom">
             </ListBox>
 
             <Button Grid.Row="3" Grid.Column="2" Content="Remove" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_REMOVE_EHF_Click" ></Button>
