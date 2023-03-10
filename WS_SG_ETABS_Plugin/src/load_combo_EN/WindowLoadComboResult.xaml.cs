@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using ETABSv1;
 
 namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 {
@@ -20,9 +21,25 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
     /// </summary>
     public partial class WindowLoadComboResult : Window
     {
-        public WindowLoadComboResult()
+        cSapModel _SapModel;
+        cPluginCallback _Plugin;
+
+        public WindowLoadComboResult(cSapModel SapModel, cPluginCallback Plugin, List<src.load_combo_EN.ClassLoadCombo.DeadLoad> deadLoadList)
         {
+            _SapModel = SapModel;
+            _Plugin = Plugin;
+
+            //Mainlogic
+            bool isError = src.load_combo_EN.FunctionLoadCombo.CreateLoadPatternAndCombo(_SapModel, _Plugin, deadLoadList);
+
+            if (isError)
+            {
+                return;
+            }
+
             InitializeComponent();
+
+            ShowDialog();
         }
     }
 }

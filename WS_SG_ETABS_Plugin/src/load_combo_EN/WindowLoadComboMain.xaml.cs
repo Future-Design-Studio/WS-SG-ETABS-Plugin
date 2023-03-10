@@ -24,84 +24,156 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
         cSapModel _SapModel;
         cPluginCallback _Plugin;
 
-        #region Data source
+        #region Data source quasi permenant stuff
 
-        public static List<string> quasiPermanentCategoryList = new List<string>()
+        List<string> quasiPermanentCategoryList = new List<string>()
         {
             "A: dometic,residential areas", "B: office areas", "C: congregation areas", "D: shopping areas", "E: storage areas", "F: traffic area, vw<30kN", "G: traffic area, 30kN<vw<160kN", "H: roofs", "Wind load", "Temperature"
         };
 
+        Dictionary<string, List<double>> quasiPermanentDict = new Dictionary<string, List<double>>()
+       {
+           { "A: dometic,residential areas", new List<double>(){0.7, 0.5, 0.3 } },
+           { "B: office areas", new List<double>(){0.7, 0.5, 0.3 } },
+           { "C: congregation areas", new List<double>(){0.7, 0.7, 0.6 } },
+           { "D: shopping areas", new List<double>(){0.7, 0.7, 0.6 } },
+           { "E: storage areas", new List<double>(){1.0, 0.9, 0.8 } },
+           { "F: traffic area, vw<30kN", new List<double>(){0.7, 0.7, 0.6 } },
+           { "G: traffic area, 30kN<vw<160kN", new List<double>(){0.7, 0.5, 0.3 } },
+           { "H: roofs", new List<double>(){0.7, 0, 0 } },
+           { "Wind load", new List<double>(){0.5, 0.2, 0 } },
+           { "Temperature", new List<double>(){0.6, 0.5, 0 } },
+       };
+
+        
+        Dictionary<string, double> quasiPermanentADict = new Dictionary<string, double>
+        {
+            {"phi0", 0.7},
+            {"phi1", 0.5}, 
+            {"phi2", 0.3}
+        };
+        
+
+        Dictionary<string, double> quasiPermanentBDict = new Dictionary<string, double>
+        {
+            {"phi0", 0.7},
+            {"phi1", 0.5},
+            {"phi2", 0.3}
+        };
+
+        Dictionary<string, double> quasiPermanentCDict = new Dictionary<string, double>
+        {
+            {"phi0", 0.7},
+            {"phi1", 0.7},
+            {"phi2", 0.6}
+        };
+
+        Dictionary<string, double> quasiPermanentDDict = new Dictionary<string, double>
+        {
+            {"phi0", 0.7},
+            {"phi1", 0.7},
+            {"phi2", 0.6}
+        };
+
+        Dictionary<string, double> quasiPermanentEDict = new Dictionary<string, double>
+        {
+            {"phi0", 1.0},
+            {"phi1", 0.9},
+            {"phi2", 0.8}
+        };
+
+        Dictionary<string, double> quasiPermanentFDict = new Dictionary<string, double>
+        {
+            {"phi0", 0.7},
+            {"phi1", 0.7},
+            {"phi2", 0.6}
+        };
+
+        Dictionary<string, double> quasiPermanentGDict = new Dictionary<string, double>
+        {
+            {"phi0", 0.7},
+            {"phi1", 0.5},
+            {"phi2", 0.3}
+        };
+
+        Dictionary<string, double> quasiPermanentHDict = new Dictionary<string, double>
+        {
+            {"phi0", 0.7},
+            {"phi1", 0},
+            {"phi2", 0}
+        };
+
+        Dictionary<string, double> quasiPermanentWINDDict = new Dictionary<string, double>
+        {
+            {"phi0", 0.5},
+            {"phi1", 0.2},
+            {"phi2", 0}
+        };
+
+        Dictionary<string, double> quasiPermanentTEMPERATUREDict = new Dictionary<string, double>
+        {
+            {"phi0", 0.6},
+            {"phi1", 0.5},
+            {"phi2", 0}
+        };
+
         #endregion
 
-        #region Data source
+        #region Data source wind
 
-        public static List<string> windLoadDirectionList = new List<string>()
+        List<string> windLoadDirectionList = new List<string>()
         {
             "4", "8"
         };
 
-        #endregion
-
-        #region Data source
-
-        public static List<string> wind4directionList = new List<string>()
+        List<string> wind4directionList = new List<string>()
         {
             "WX", "WY"
         };
 
-        #endregion
-
-        #region Data source
-
-        public static List<string> wind8directionList = new List<string>()
+        List<string> wind8directionList = new List<string>()
         {
             "W0", "W90", "W45", "W135"
         };
 
-        #endregion
-
-        #region Data source
-
-        public static List<string> windvertdirectionList = new List<string>()
+        List<string> windvertdirectionList = new List<string>()
         {
             "WZ"
         };
 
-        #endregion
-
-        #region Data source
-
-        public static List<string> wind48noplusminusdirectionList = new List<string>()
+        List<string> wind48noplusminusdirectionList = new List<string>()
         {
             "WX", "WXN", "WY", "WYN", "W0", "W180", "W90", "W270", "W45", "W225", "W135", "W315"
         };
 
-        #endregion
-
-        #region Data source
-
-        public static List<string> windvertnoplusminusdirectionList = new List<string>()
+        List<string> windvertnoplusminusdirectionList = new List<string>()
         {
             "WZ", "WZN"
         };
 
         #endregion
 
-        #region Data source
+        #region Data source notional
 
-        public static List<string> notionalxyList = new List<string>()
+        List<string> notionalxyList = new List<string>()
         {
             "Nx (", "Ny ("
         };
 
         #endregion
 
-        #region Data source
+        #region Data source seismic
 
-        public static List<string> seismicList = new List<string>()
+        List<string> seismicList = new List<string>()
         {
             "RSA", "EQx", "EQy"
         };
+
+        #endregion
+
+        #region Data source loadlists
+
+        List<ClassLoadCombo.DeadLoad> deadLoadList = new List<ClassLoadCombo.DeadLoad>();
 
         #endregion
 
@@ -109,7 +181,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
         {
             _SapModel = SapModel;
             _Plugin = Plugin;
-
+            
             InitializeComponent();
 
             checkBoxExistingDL.IsChecked = true;
@@ -193,6 +265,9 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 listBoxChoosenNOTIONALDL.Items.Add(selectedNLXString);
                 string selectedNLYString = notionalxyList[1] + comBoxExistingDL.Text + "), " + textBoxNameNOTIONALFACTOR.Text;
                 listBoxChoosenNOTIONALDL.Items.Add(selectedNLYString);
+
+                ClassLoadCombo.DeadLoad eachDeadLoad = new ClassLoadCombo.DeadLoad(selectedString, true);
+                deadLoadList.Add(eachDeadLoad);
             }
             else
             {
@@ -202,6 +277,9 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 listBoxChoosenNOTIONALDL.Items.Add(selectedNLXString);
                 string selectedNLYString = notionalxyList[1] + textBoxNameDL.Text + "), " + textBoxNameNOTIONALFACTOR.Text;
                 listBoxChoosenNOTIONALDL.Items.Add(selectedNLYString);
+
+                ClassLoadCombo.DeadLoad eachDeadLoad = new ClassLoadCombo.DeadLoad(selectedString, false);
+                deadLoadList.Add(eachDeadLoad);
             }
         }
 
@@ -801,7 +879,10 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
         private void buttonOk_Click(object sender, RoutedEventArgs e)
         {
-
+            IsEnabled = false;
+            //Call up result window
+            src.load_combo_EN.WindowLoadComboResult windowLoadComboResult = new src.load_combo_EN.WindowLoadComboResult(_SapModel, _Plugin, deadLoadList);
+            IsEnabled = true;
         }
     }
 }
