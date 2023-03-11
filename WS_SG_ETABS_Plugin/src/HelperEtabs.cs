@@ -1365,12 +1365,12 @@ namespace WS_SG_ETABS_Plugin.src
         /// </summary>
         /// <param name="Sap"></param>
         /// <returns></returns>
-        public static bool AddLoadPattern(cSapModel Sap, string name, double selfWeightMultipiler, string type, bool isExisting)
+        public static bool AddLoadPattern(cSapModel Sap, string name, double selfWeightMultipiler, string type, bool isExisting, bool addAnalysisCase)
         {
 
             string Name = name;
             double SelfWTMultiplier = selfWeightMultipiler;
-            bool AddAnalysisCase = true;
+            bool AddAnalysisCase = addAnalysisCase;
 
             if (type == "Dead" && !isExisting)
             {

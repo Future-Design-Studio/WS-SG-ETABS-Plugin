@@ -45,13 +45,19 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
             if (isError)
             {
-                MessageBox.Show("Error please contact Mani");
+                MessageBox.Show("Error, please let Mani know what happened");
                 return;
             }
 
             InitializeComponent();
 
             ShowDialog();
+
+        }
+        private void buttonOk_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
         }
     }
 }
+

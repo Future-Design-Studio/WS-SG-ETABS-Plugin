@@ -24,21 +24,42 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             List<src.load_combo_EN.ClassLoadCombo.EHFLoad> EHFLoadList)
         {
             bool isError = false;
+            bool addAnalysisCase = new bool();
 
+            int i = 0;
             foreach (var deadLoad in deadLoadList)
             {
-                isError = src.HelperEtabs.AddLoadPattern(SapModel, deadLoad.Name, 1, "Dead", deadLoad.IsExisting);
-                MessageBox.Show("Finished DL");
+                if (i == 0)
+                {
+                    addAnalysisCase = true;
+                }
+                else
+                {
+                    addAnalysisCase = false;
+                }
+                    
+                isError = src.HelperEtabs.AddLoadPattern(SapModel, deadLoad.Name, 1, "Dead", deadLoad.IsExisting, addAnalysisCase);
+                i++;
             }
             if (isError)
             {
                 return true;
             }
 
+            i = 0;
             foreach (var superdeadLoad in SDLoadList)
             {
-                isError = src.HelperEtabs.AddLoadPattern(SapModel, superdeadLoad.Name, 0, "SuperDead", superdeadLoad.IsExisting);
-                MessageBox.Show("Finished SDL");
+                if (i == 0)
+                {
+                    addAnalysisCase = true;
+                }
+                else
+                {
+                    addAnalysisCase = false;
+                }
+
+                isError = src.HelperEtabs.AddLoadPattern(SapModel, superdeadLoad.Name, 0, "SuperDead", superdeadLoad.IsExisting, addAnalysisCase);
+                i++;
             }
             if (isError)
             {
@@ -47,8 +68,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
             foreach (var liveLoad in LiveLoadList)
             {
-                isError = src.HelperEtabs.AddLoadPattern(SapModel, liveLoad.Name, 0, "Live", liveLoad.IsExisting);
-                MessageBox.Show("Finished LL");
+                isError = src.HelperEtabs.AddLoadPattern(SapModel, liveLoad.Name, 0, "Live", liveLoad.IsExisting, true);
             }
             if (isError)
             {
@@ -57,8 +77,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
             foreach (var windLoad in WindLoadList)
             {
-                isError = src.HelperEtabs.AddLoadPattern(SapModel, windLoad.Name, 0, "Wind", windLoad.IsExisting);
-                MessageBox.Show("Finished Wind Load");
+                isError = src.HelperEtabs.AddLoadPattern(SapModel, windLoad.Name, 0, "Wind", windLoad.IsExisting, true);
             }
             if (isError)
             {
@@ -67,8 +86,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
             foreach (var notionalDLoad in NotionalDLoadList)
             {
-                isError = src.HelperEtabs.AddLoadPattern(SapModel, notionalDLoad.Name, 0, "Notional", false);
-                MessageBox.Show("Finished Notional DLoad");
+                isError = src.HelperEtabs.AddLoadPattern(SapModel, notionalDLoad.Name, 0, "Notional", false, false);
             }
             if (isError)
             {
@@ -77,8 +95,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
             foreach (var notionalSDLoad in NotionalSDLoadList)
             {
-                isError = src.HelperEtabs.AddLoadPattern(SapModel, notionalSDLoad.Name, 0, "Notional", false);
-                MessageBox.Show("Finished Notional SDLoad");
+                isError = src.HelperEtabs.AddLoadPattern(SapModel, notionalSDLoad.Name, 0, "Notional", false, false);
             }
             if (isError)
             {
@@ -87,8 +104,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
             foreach (var temperatureLoad in TemperatureLoadList)
             {
-                isError = src.HelperEtabs.AddLoadPattern(SapModel, temperatureLoad.Name, 0, "Temperature", temperatureLoad.IsExisting);
-                MessageBox.Show("Finished Temperature Load");
+                isError = src.HelperEtabs.AddLoadPattern(SapModel, temperatureLoad.Name, 0, "Temperature", temperatureLoad.IsExisting, true);
             }
             if (isError)
             {
@@ -97,8 +113,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
             foreach (var seismicLoad in SeismicLoadList)
             {
-                isError = src.HelperEtabs.AddLoadPattern(SapModel, seismicLoad.Name, 0, "Seismic", seismicLoad.IsExisting);
-                MessageBox.Show("Finished Seismic Load");
+                isError = src.HelperEtabs.AddLoadPattern(SapModel, seismicLoad.Name, 0, "Seismic", seismicLoad.IsExisting, true);
             }
             if (isError)
             {
@@ -107,8 +122,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
             foreach (var accidentalLoad in AccidentalLoadList)
             {
-                isError = src.HelperEtabs.AddLoadPattern(SapModel, accidentalLoad.Name, 0, "Accidental", accidentalLoad.IsExisting);
-                MessageBox.Show("Finished Accidental Load");
+                isError = src.HelperEtabs.AddLoadPattern(SapModel, accidentalLoad.Name, 0, "Accidental", accidentalLoad.IsExisting, true);
             }
             if (isError)
             {
@@ -117,18 +131,27 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
             foreach (var upliftLoad in UpliftLoadList)
             {
-                isError = src.HelperEtabs.AddLoadPattern(SapModel, upliftLoad.Name, 0, "Uplift", upliftLoad.IsExisting);
-                MessageBox.Show("Finished Uplift Load");
+                isError = src.HelperEtabs.AddLoadPattern(SapModel, upliftLoad.Name, 0, "Uplift", upliftLoad.IsExisting, true);
             }
             if (isError)
             {
                 return true;
             }
 
+            i = 0;
             foreach (var ehfLoad in EHFLoadList)
             {
-                isError = src.HelperEtabs.AddLoadPattern(SapModel, ehfLoad.Name, 0, "EHF", false);
-                MessageBox.Show("Finished EHF Load");
+                if (i == 0)
+                {
+                    addAnalysisCase = true;
+                }
+                else
+                {
+                    addAnalysisCase = false;
+                }
+
+                isError = src.HelperEtabs.AddLoadPattern(SapModel, ehfLoad.Name, 0, "EHF", false, addAnalysisCase);
+                i++;
             }
             if (isError)
             {

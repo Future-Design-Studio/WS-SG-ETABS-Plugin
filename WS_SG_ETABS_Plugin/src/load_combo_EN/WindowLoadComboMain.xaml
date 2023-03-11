@@ -1,10 +1,11 @@
-﻿<Window x:Class="WS_SG_ETABS_Plugin.src.load_combo_EN.WindowLoadComboMain"
+﻿<Window
+    x:Class="WS_SG_ETABS_Plugin.src.load_combo_EN.WindowLoadComboMain"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WS_SG_ETABS_Plugin.src.load_combo_EN"
-             mc:Ignorable="d" Height="1100" Width="2400" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+             mc:Ignorable="d" Height="1100" Width="2400" ResizeMode="CanResizeWithGrip" WindowStartupLocation="CenterScreen">
 
     <Grid Margin="10">
 

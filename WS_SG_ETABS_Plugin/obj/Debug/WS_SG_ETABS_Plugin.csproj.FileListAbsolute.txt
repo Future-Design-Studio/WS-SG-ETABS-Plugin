@@ -182,3 +182,14 @@ C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ET
 C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\WS_SG_ETABS_Plugin.g.resources
 C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\WS_SG_ETABS_Plugin.csproj.CoreCompileInputs.cache
 C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\WS_SG_ETABS_Plugin.csproj.CopyComplete
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\WS_SG_ETABS_Plugin.csproj.ResolveComReference.cache
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\select_uniquename\WindowSelUniqueNameMain.g.cs
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\select_uniquename\WindowSelUniqueNameResult.g.cs
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\transfer_midas\WindowTransferMidasMain.g.cs
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\transfer_midas\WindowTransferMidasProgress.g.cs
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\transfer_midas\WindowTransferMidasResult.g.cs
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\select_uniquename\WindowSelUniqueNameMain.baml
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\select_uniquename\WindowSelUniqueNameResult.baml
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\transfer_midas\WindowTransferMidasMain.baml
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\transfer_midas\WindowTransferMidasProgress.baml
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\transfer_midas\WindowTransferMidasResult.baml
