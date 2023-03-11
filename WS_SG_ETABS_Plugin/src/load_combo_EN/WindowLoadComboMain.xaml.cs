@@ -186,17 +186,27 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
         List<ClassLoadCombo.SDLLoad> SDLoadList = new List<ClassLoadCombo.SDLLoad>();
         List<ClassLoadCombo.LiveLoad> LiveLoadList = new List<ClassLoadCombo.LiveLoad>();
         List<ClassLoadCombo.WindLoad> WindLoadList = new List<ClassLoadCombo.WindLoad>();
-        List<ClassLoadCombo.NotionalLoad> NotionalDLoadList = new List<ClassLoadCombo.NotionalLoad>();
-        List<ClassLoadCombo.NotionalLoad> NotionalSDLoadList = new List<ClassLoadCombo.NotionalLoad>();
+        List<ClassLoadCombo.NotionalLoad> NotionalDXLoadList = new List<ClassLoadCombo.NotionalLoad>();
+        List<ClassLoadCombo.NotionalLoad> NotionalDYLoadList = new List<ClassLoadCombo.NotionalLoad>();
+        List<ClassLoadCombo.NotionalLoad> NotionalSDXLoadList = new List<ClassLoadCombo.NotionalLoad>();
+        List<ClassLoadCombo.NotionalLoad> NotionalSDYLoadList = new List<ClassLoadCombo.NotionalLoad>();
         List<ClassLoadCombo.TemperatureLoad> TemperatureLoadList = new List<ClassLoadCombo.TemperatureLoad>();
         List<ClassLoadCombo.SeismicLoad> SeismicLoadList = new List<ClassLoadCombo.SeismicLoad>();
         List<ClassLoadCombo.AccidentalLoad> AccidentalLoadList = new List<ClassLoadCombo.AccidentalLoad>();
         List<ClassLoadCombo.UpliftLoad> UpliftLoadList = new List<ClassLoadCombo.UpliftLoad>();
-        List<ClassLoadCombo.EHFLoad> EHFLoadList = new List<ClassLoadCombo.EHFLoad>();
+        List<ClassLoadCombo.EHFLoad> EHFDLXLoadList = new List<ClassLoadCombo.EHFLoad>();
+        List<ClassLoadCombo.EHFLoad> EHFDLYLoadList = new List<ClassLoadCombo.EHFLoad>();
+        List<ClassLoadCombo.EHFLoad> EHFSDLXLoadList = new List<ClassLoadCombo.EHFLoad>();
+        List<ClassLoadCombo.EHFLoad> EHFSDLYLoadList = new List<ClassLoadCombo.EHFLoad>();
+        List<ClassLoadCombo.EHFLoad> EHFLLXLoadList = new List<ClassLoadCombo.EHFLoad>();
+        List<ClassLoadCombo.EHFLoad> EHFLLYLoadList = new List<ClassLoadCombo.EHFLoad>();
 
-        List<string> ehfDLList = new List<string>();
-        List<string> ehfSDLList = new List<string>();
-        List<string> ehfLLList = new List<string>();
+        List<string> ehfDLXList = new List<string>();
+        List<string> ehfSDLXList = new List<string>();
+        List<string> ehfLLXList = new List<string>();
+        List<string> ehfDLYList = new List<string>();
+        List<string> ehfSDLYList = new List<string>();
+        List<string> ehfLLYList = new List<string>();
 
         #endregion
 
@@ -293,12 +303,12 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 deadLoadList.Add(eachDeadLoad);
 
                 ClassLoadCombo.NotionalLoad eachnotionalx = new ClassLoadCombo.NotionalLoad(notionalxyList[0] + comBoxExistingDL.Text + ")", double.Parse(textBoxNameNOTIONALFACTOR.Text));
-                NotionalDLoadList.Add(eachnotionalx);
+                NotionalDXLoadList.Add(eachnotionalx);
                 ClassLoadCombo.NotionalLoad eachnotionaly = new ClassLoadCombo.NotionalLoad(notionalxyList[1] + comBoxExistingDL.Text + ")", double.Parse(textBoxNameNOTIONALFACTOR.Text));
-                NotionalDLoadList.Add(eachnotionaly);
+                NotionalDYLoadList.Add(eachnotionaly);
 
-                ehfDLList.Add(ehfList[0] + " (" + selectedString + ")");
-                ehfDLList.Add(ehfList[1] + " (" + selectedString + ")");
+                ehfDLXList.Add(ehfList[0] + " (" + selectedString + ")");
+                ehfDLYList.Add(ehfList[1] + " (" + selectedString + ")");
             }
             else
             {
@@ -313,12 +323,12 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 deadLoadList.Add(eachDeadLoad);
 
                 ClassLoadCombo.NotionalLoad eachnotionalx = new ClassLoadCombo.NotionalLoad(notionalxyList[0] + textBoxNameDL.Text + ")", double.Parse(textBoxNameNOTIONALFACTOR.Text));
-                NotionalDLoadList.Add(eachnotionalx);
+                NotionalDXLoadList.Add(eachnotionalx);
                 ClassLoadCombo.NotionalLoad eachnotionaly = new ClassLoadCombo.NotionalLoad(notionalxyList[1] + textBoxNameDL.Text + ")", double.Parse(textBoxNameNOTIONALFACTOR.Text));
-                NotionalDLoadList.Add(eachnotionaly);
+                NotionalDYLoadList.Add(eachnotionaly);
 
-                ehfDLList.Add(ehfList[0] + " (" + selectedString + ")");
-                ehfDLList.Add(ehfList[1] + " (" + selectedString + ")");
+                ehfDLXList.Add(ehfList[0] + " (" + selectedString + ")");
+                ehfDLYList.Add(ehfList[1] + " (" + selectedString + ")");
             }
         }
 
@@ -349,11 +359,11 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 
                 deadLoadList.RemoveAt(selectedIndex);
 
-                NotionalDLoadList.RemoveAt(selectedIndex * 2);
-                NotionalDLoadList.RemoveAt(selectedIndex * 2);
+                NotionalDXLoadList.RemoveAt(selectedIndex);
+                NotionalDYLoadList.RemoveAt(selectedIndex);
 
-                ehfDLList.RemoveAt(selectedIndex * 2);
-                ehfDLList.RemoveAt(selectedIndex * 2);
+                ehfDLXList.RemoveAt(selectedIndex);
+                ehfDLYList.RemoveAt(selectedIndex);
             }
         }
 
@@ -394,12 +404,12 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 SDLoadList.Add(eachSDeadLoad);
 
                 ClassLoadCombo.NotionalLoad eachnotionalx = new ClassLoadCombo.NotionalLoad(notionalxyList[0] + comBoxExistingSDL.Text + ")", double.Parse(textBoxNameNOTIONALFACTOR.Text));
-                NotionalSDLoadList.Add(eachnotionalx);
+                NotionalSDXLoadList.Add(eachnotionalx);
                 ClassLoadCombo.NotionalLoad eachnotionaly = new ClassLoadCombo.NotionalLoad(notionalxyList[1] + comBoxExistingSDL.Text + ")", double.Parse(textBoxNameNOTIONALFACTOR.Text));
-                NotionalSDLoadList.Add(eachnotionaly);
+                NotionalSDYLoadList.Add(eachnotionaly);
 
-                ehfSDLList.Add(ehfList[0] + " (" + selectedString + ")");
-                ehfSDLList.Add(ehfList[1] + " (" + selectedString + ")");
+                ehfSDLXList.Add(ehfList[0] + " (" + selectedString + ")");
+                ehfSDLYList.Add(ehfList[1] + " (" + selectedString + ")");
             }
             else
             {
@@ -414,12 +424,12 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 SDLoadList.Add(eachSDeadLoad);
 
                 ClassLoadCombo.NotionalLoad eachnotionalx = new ClassLoadCombo.NotionalLoad(notionalxyList[0] + textBoxNameSDL.Text + ")", double.Parse(textBoxNameNOTIONALFACTOR.Text));
-                NotionalSDLoadList.Add(eachnotionalx);
+                NotionalSDXLoadList.Add(eachnotionalx);
                 ClassLoadCombo.NotionalLoad eachnotionaly = new ClassLoadCombo.NotionalLoad(notionalxyList[1] + textBoxNameSDL.Text + ")", double.Parse(textBoxNameNOTIONALFACTOR.Text));
-                NotionalSDLoadList.Add(eachnotionaly);
+                NotionalSDYLoadList.Add(eachnotionaly);
 
-                ehfSDLList.Add(ehfList[0] + " (" + selectedString + ")");
-                ehfSDLList.Add(ehfList[1] + " (" + selectedString + ")");
+                ehfSDLXList.Add(ehfList[0] + " (" + selectedString + ")");
+                ehfSDLYList.Add(ehfList[1] + " (" + selectedString + ")");
             }
         }
 
@@ -440,11 +450,11 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 
                 SDLoadList.RemoveAt(selectedIndex);
 
-                NotionalSDLoadList.RemoveAt(selectedIndex * 2);
-                NotionalSDLoadList.RemoveAt(selectedIndex * 2);
+                NotionalSDXLoadList.RemoveAt(selectedIndex);
+                NotionalSDYLoadList.RemoveAt(selectedIndex);
 
-                ehfSDLList.RemoveAt(selectedIndex * 2);
-                ehfSDLList.RemoveAt(selectedIndex * 2);
+                ehfSDLXList.RemoveAt(selectedIndex);
+                ehfSDLYList.RemoveAt(selectedIndex);
             }
         }
 
@@ -485,8 +495,8 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 ClassLoadCombo.LiveLoad eachLiveLoad = new ClassLoadCombo.LiveLoad(comBoxExistingLL.Text, true, comBoxLL.Text);
                 LiveLoadList.Add(eachLiveLoad);
 
-                ehfLLList.Add(ehfList[0] + " (" + comBoxExistingLL.Text + ")");
-                ehfLLList.Add(ehfList[1] + " (" + comBoxExistingLL.Text + ")");
+                ehfLLXList.Add(ehfList[0] + " (" + comBoxExistingLL.Text + ")");
+                ehfLLYList.Add(ehfList[1] + " (" + comBoxExistingLL.Text + ")");
             }
             else
             {
@@ -496,8 +506,8 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 ClassLoadCombo.LiveLoad eachLiveLoad = new ClassLoadCombo.LiveLoad(textBoxNameLL.Text, false, comBoxLL.Text);
                 LiveLoadList.Add(eachLiveLoad);
 
-                ehfLLList.Add(ehfList[0] + " (" + textBoxNameLL.Text + ")");
-                ehfLLList.Add(ehfList[1] + " (" + textBoxNameLL.Text + ")");
+                ehfLLXList.Add(ehfList[0] + " (" + textBoxNameLL.Text + ")");
+                ehfLLYList.Add(ehfList[1] + " (" + textBoxNameLL.Text + ")");
             }
         }
 
@@ -516,8 +526,8 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                 LiveLoadList.RemoveAt(selectedIndex);
 
-                ehfLLList.RemoveAt(selectedIndex * 2);
-                ehfLLList.RemoveAt(selectedIndex * 2);
+                ehfLLXList.RemoveAt(selectedIndex);
+                ehfLLYList.RemoveAt(selectedIndex);
             }
         }
 
@@ -1056,29 +1066,53 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
         private void Button_ADD_EHF_Click(object sender, RoutedEventArgs e)
         {
-            foreach (string ehfdl in ehfDLList)
+            foreach (string ehfdl in ehfDLXList)
             {
                 string selectedString = ehfdl + textBoxNameEHF.Text;
                 listBoxChoosenEHF.Items.Add(selectedString);
 
                 ClassLoadCombo.EHFLoad eachehfLoad = new ClassLoadCombo.EHFLoad(ehfdl, double.Parse(textBoxNameEHF.Text));
-                EHFLoadList.Add(eachehfLoad);
+                EHFDLXLoadList.Add(eachehfLoad);
             }
-            foreach (string ehfsdl in ehfSDLList)
+            foreach (string ehfdl in ehfDLYList)
+            {
+                string selectedString = ehfdl + textBoxNameEHF.Text;
+                listBoxChoosenEHF.Items.Add(selectedString);
+
+                ClassLoadCombo.EHFLoad eachehfLoad = new ClassLoadCombo.EHFLoad(ehfdl, double.Parse(textBoxNameEHF.Text));
+                EHFDLYLoadList.Add(eachehfLoad);
+            }
+            foreach (string ehfsdl in ehfSDLXList)
             {
                 string selectedString = ehfsdl + textBoxNameEHF.Text;
                 listBoxChoosenEHF.Items.Add(selectedString);
 
                 ClassLoadCombo.EHFLoad eachehfLoad = new ClassLoadCombo.EHFLoad(ehfsdl, double.Parse(textBoxNameEHF.Text));
-                EHFLoadList.Add(eachehfLoad);
+                EHFSDLXLoadList.Add(eachehfLoad);
             }
-            foreach (string ehfll in ehfLLList)
+            foreach (string ehfsdl in ehfSDLYList)
+            {
+                string selectedString = ehfsdl + textBoxNameEHF.Text;
+                listBoxChoosenEHF.Items.Add(selectedString);
+
+                ClassLoadCombo.EHFLoad eachehfLoad = new ClassLoadCombo.EHFLoad(ehfsdl, double.Parse(textBoxNameEHF.Text));
+                EHFSDLYLoadList.Add(eachehfLoad);
+            }
+            foreach (string ehfll in ehfLLXList)
             {
                 string selectedString = ehfll + textBoxNameEHF.Text;
                 listBoxChoosenEHF.Items.Add(selectedString);
 
                 ClassLoadCombo.EHFLoad eachehfLoad = new ClassLoadCombo.EHFLoad(ehfll, double.Parse(textBoxNameEHF.Text));
-                EHFLoadList.Add(eachehfLoad);
+                EHFLLXLoadList.Add(eachehfLoad);
+            }
+            foreach (string ehfll in ehfLLYList)
+            {
+                string selectedString = ehfll + textBoxNameEHF.Text;
+                listBoxChoosenEHF.Items.Add(selectedString);
+
+                ClassLoadCombo.EHFLoad eachehfLoad = new ClassLoadCombo.EHFLoad(ehfll, double.Parse(textBoxNameEHF.Text));
+                EHFLLYLoadList.Add(eachehfLoad);
             }
         }
 
@@ -1091,11 +1125,14 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
         {
             if (listBoxChoosenEHF.Items.Count != 0 && listBoxChoosenEHF.SelectedIndex != -1)
             {
-                int selectedIndex = listBoxChoosenEHF.SelectedIndex;
+                listBoxChoosenEHF.Items.Clear();
 
-                listBoxChoosenEHF.Items.RemoveAt(selectedIndex);
-
-                EHFLoadList.RemoveAt(selectedIndex);
+                EHFDLXLoadList.Clear();
+                EHFDLYLoadList.Clear();
+                EHFSDLXLoadList.Clear();
+                EHFSDLYLoadList.Clear();
+                EHFLLXLoadList.Clear();
+                EHFLLYLoadList.Clear();
             }
         }
 
@@ -1108,7 +1145,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
         {
             IsEnabled = false;
             //Call up result window
-            src.load_combo_EN.WindowLoadComboResult windowLoadComboResult = new src.load_combo_EN.WindowLoadComboResult(_SapModel, _Plugin, deadLoadList, SDLoadList, LiveLoadList, WindLoadList, NotionalDLoadList, NotionalSDLoadList, TemperatureLoadList, SeismicLoadList, AccidentalLoadList, UpliftLoadList, EHFLoadList);
+            src.load_combo_EN.WindowLoadComboResult windowLoadComboResult = new src.load_combo_EN.WindowLoadComboResult(_SapModel, _Plugin, deadLoadList, SDLoadList, LiveLoadList, WindLoadList, NotionalDXLoadList, NotionalDYLoadList, NotionalSDXLoadList, NotionalSDYLoadList, TemperatureLoadList, SeismicLoadList, AccidentalLoadList, UpliftLoadList, EHFDLXLoadList, EHFDLYLoadList, EHFSDLXLoadList, EHFSDLYLoadList, EHFLLXLoadList, EHFLLYLoadList);
             IsEnabled = true;
         }
     }

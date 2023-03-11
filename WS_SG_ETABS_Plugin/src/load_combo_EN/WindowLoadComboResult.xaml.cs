@@ -29,19 +29,26 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             List<src.load_combo_EN.ClassLoadCombo.SDLLoad> SDLoadList, 
             List<src.load_combo_EN.ClassLoadCombo.LiveLoad> LiveLoadList, 
             List<src.load_combo_EN.ClassLoadCombo.WindLoad> WindLoadList,
-            List<src.load_combo_EN.ClassLoadCombo.NotionalLoad> NotionalDLoadList,
-            List<src.load_combo_EN.ClassLoadCombo.NotionalLoad> NotionalSDLoadList,
+            List<src.load_combo_EN.ClassLoadCombo.NotionalLoad> NotionalDXLoadList,
+            List<src.load_combo_EN.ClassLoadCombo.NotionalLoad> NotionalDYLoadList,
+            List<src.load_combo_EN.ClassLoadCombo.NotionalLoad> NotionalSDXLoadList,
+            List<src.load_combo_EN.ClassLoadCombo.NotionalLoad> NotionalSDYLoadList,
             List<src.load_combo_EN.ClassLoadCombo.TemperatureLoad> TemperatureLoadList,
             List<src.load_combo_EN.ClassLoadCombo.SeismicLoad> SeismicLoadList,
             List<src.load_combo_EN.ClassLoadCombo.AccidentalLoad> AccidentalLoadList,
             List<src.load_combo_EN.ClassLoadCombo.UpliftLoad> UpliftLoadList,
-            List<src.load_combo_EN.ClassLoadCombo.EHFLoad> EHFLoadList)
+            List<src.load_combo_EN.ClassLoadCombo.EHFLoad> EHFDLXLoadList,
+            List<src.load_combo_EN.ClassLoadCombo.EHFLoad> EHFDLYLoadList,
+            List<src.load_combo_EN.ClassLoadCombo.EHFLoad> EHFSDLXLoadList,
+            List<src.load_combo_EN.ClassLoadCombo.EHFLoad> EHFSDLYLoadList,
+            List<src.load_combo_EN.ClassLoadCombo.EHFLoad> EHFLLXLoadList,
+            List<src.load_combo_EN.ClassLoadCombo.EHFLoad> EHFLLYLoadList)
         {
             _SapModel = SapModel;
             _Plugin = Plugin;
 
             //Mainlogic
-            bool isError = src.load_combo_EN.FunctionLoadCombo.CreateLoadPatternAndCase(_SapModel, _Plugin, deadLoadList, SDLoadList, LiveLoadList, WindLoadList, NotionalDLoadList, NotionalSDLoadList, TemperatureLoadList, SeismicLoadList, AccidentalLoadList, UpliftLoadList, EHFLoadList);
+            bool isError = src.load_combo_EN.FunctionLoadCombo.CreateLoadPatternAndCase(_SapModel, _Plugin, deadLoadList, SDLoadList, LiveLoadList, WindLoadList, NotionalDXLoadList, NotionalDYLoadList, NotionalSDXLoadList, NotionalSDYLoadList, TemperatureLoadList, SeismicLoadList, AccidentalLoadList, UpliftLoadList, EHFDLXLoadList, EHFDLYLoadList, EHFSDLXLoadList, EHFSDLYLoadList, EHFLLXLoadList, EHFLLYLoadList);
 
             if (isError)
             {
