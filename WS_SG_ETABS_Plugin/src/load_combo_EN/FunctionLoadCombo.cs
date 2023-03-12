@@ -33,19 +33,36 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             bool isError = false;
             bool addAnalysisCase = new bool();
 
+            foreach (var deadLoad in deadLoadList)
+            {                    
+                isError = src.HelperEtabs.AddLoadPattern(SapModel, deadLoad.Name, 1, "Dead", deadLoad.IsExisting, addAnalysisCase);
+            }
+            if (isError)
+            {
+                return true;
+            }
+
+            foreach (var deadLoad in deadLoadList)
+            {
+                string DeadLoadName = "PDead";
+                isError = src.HelperEtabs.Addnewloadcase(SapModel, DeadLoadName);
+            }
+            if (isError)
+            {
+                return true;
+            }
+
+            string[] LoadType = new string[20];
+            string[] LoadName = new string[20];
+            double[] SF = new double[20];
             int i = 0;
             foreach (var deadLoad in deadLoadList)
             {
-                if (i == 0)
-                {
-                    addAnalysisCase = true;
-                }
-                else
-                {
-                    addAnalysisCase = false;
-                }
-                    
-                isError = src.HelperEtabs.AddLoadPattern(SapModel, deadLoad.Name, 1, "Dead", deadLoad.IsExisting, addAnalysisCase);
+                LoadType[i] = "Load";
+                LoadName[i] = deadLoad.Name;
+                int NumberLoads = i + 1;
+                SF[i] = 1.00;
+                isError = src.HelperEtabs.Updateloadcase(SapModel, "PDead", NumberLoads, LoadType, LoadName, SF);
                 i++;
             }
             if (isError)
@@ -53,7 +70,6 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 return true;
             }
 
-            i = 0;
             foreach (var superdeadLoad in SDLoadList)
             {
                 if (i == 0)

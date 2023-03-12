@@ -1441,8 +1441,43 @@ namespace WS_SG_ETABS_Plugin.src
                 return true;
             }
         }
+             
+        #endregion
+
+        #region Update load case
+        public static bool Updateloadcase(cSapModel Sap, string name, int numberLoads, string[] Loadtype, string[] Loadname, double[] Scalefactor)
+        {
+            Ret = Sap.LoadCases.StaticLinear.SetLoads(name, numberLoads, ref Loadtype, ref Loadname, ref Scalefactor);
+
+            if (Ret == 0)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
 
         #endregion
+
+        #region Add new load case
+        public static bool Addnewloadcase(cSapModel Sap, string name)
+        {
+            Ret = Sap.LoadCases.StaticLinear.SetCase(name);
+
+            if (Ret == 0)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        #endregion
+
     }
 
 }
