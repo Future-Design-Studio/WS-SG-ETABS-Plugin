@@ -11,9 +11,26 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
 
         private static int Ret;
 
-        public static bool GetRCBeamSchedule(cSapModel Sap, string fileName, string filePath, double leftLength, double midLength, double rightLength, double rebarSpc, string rebarSpcPreference, double maxShearLinksSpacing, 
-            double minShearLinksSpacing, double shearLinksSpacingStep, double cover, int[] rebarDiameterList, int[] shearLinksDiameterList)
+        public static bool GetRCBeamSchedule(cSapModel Sap, string fileName, string filePath, double leftLength, double midLength, double rightLength, double cantileverLeftLength, double cantileverRightLength,
+            double rebarSpc, string rebarSpcPreference, double maxShearLinksSpacing, double minShearLinksSpacing, double shearLinksSpacingStep, double cover, int[] rebarDiameterList, int[] shearLinksDiameterList, List<string> listChoosenGroup)
         {
+            //Casting List<string> content to List<dictionary>
+            List<Dictionary<string, string>> listChoosenGroupParsed = new List<Dictionary<string, string>>();
+            foreach (string group in listChoosenGroup)
+            {
+                //Split the string using comma ','
+                string[] splitted = group.Split(',');
+
+                Dictionary<string, string> groupDict = new Dictionary<string, string>()
+                    {
+                        {"groupName", splitted[0]},
+                        {"beamType", splitted[1]},
+                    };
+
+                listChoosenGroupParsed.Add(groupDict);
+            }
+
+
             //Get current unit
             eForce forceUnits = new eForce();
             eLength lengthUnits = new eLength();
@@ -33,18 +50,17 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
                 return isError;
             }
 
-            //Get RC design result table
+            //Get RC beam design result
             src.HelperEtabs.DatabaseTable rcBeamDesignSummary = new src.HelperEtabs.DatabaseTable();
-            (isError, rcBeamDesignSummary) = GetRcBeamDesignResult(Sap);
+            (isError, rcBeamDesignSummary) = GetAllRcBeamDesignResult(Sap);
 
-            if (isError)
-            {
-                return isError;
-            }
+            if (isError) { return isError; }
 
             //Get list of beams
-            List<src.HelperEtabs.Frame> rcBeamList = new List<src.HelperEtabs.Frame>();
-            rcBeamList = GetRcBeamList(rcBeamDesignSummary);
+            List<src.HelperEtabs.RcBeam> rcBeamList = new List<src.HelperEtabs.RcBeam>();
+            (isError, rcBeamList) = GetRcBeamListSpecificGroup(Sap, listChoosenGroupParsed);
+
+            if (isError) {return isError;}
 
             //Get dimension
             GetRcBeamDimension(Sap, rcBeamDesignSummary, rcBeamList, cover);
@@ -100,7 +116,7 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
             return true;
         }
 
-        public static (bool, src.HelperEtabs.DatabaseTable) GetRcBeamDesignResult(cSapModel Sap)
+        public static (bool, src.HelperEtabs.DatabaseTable) GetAllRcBeamDesignResult(cSapModel Sap)
         {
             //Get RC design result table
             src.HelperEtabs.DatabaseTable rcBeamDesignSummary = new src.HelperEtabs.DatabaseTable();
@@ -123,12 +139,59 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
             return (isError, rcBeamDesignSummary);
         }
 
-        public static List<src.HelperEtabs.Frame> GetRcBeamList(src.HelperEtabs.DatabaseTable rcBeamDesignSummary)
+        public static (bool, List<src.HelperEtabs.RcBeam>) GetRcBeamListSpecificGroup(cSapModel Sap, List<Dictionary<string, string>> listChoosenGroupParsed)
+        {
+            //Get RC design result table
+            src.HelperEtabs.DatabaseTable rcBeamDesignSummary = new src.HelperEtabs.DatabaseTable();
+            bool isError = false;
+
+            //To return
+            List<src.HelperEtabs.RcBeam> rcBeamList = new List<HelperEtabs.RcBeam>();
+
+            string designCode = "";
+            Ret = Sap.DesignConcrete.GetCode(ref designCode);
+
+            if (designCode != "Eurocode 2-2004")
+            {
+                isError = true;
+                MessageBox.Show("Only support Eurocode 2-2004!");
+                return (isError, rcBeamList);
+            }
+
+            string tableKey = "Concrete Beam Design Summary - " + designCode;
+
+            foreach (Dictionary<string, string> groupWithBeamType in listChoosenGroupParsed)
+            {
+                string groupName = groupWithBeamType["groupName"];
+                string beamType = groupWithBeamType["beamType"];
+
+                List<string> groupList = new List<string> { groupName };
+                (isError, rcBeamDesignSummary) = src.HelperEtabs.GetTableDisplaySpecificGroup(Sap, tableKey, groupList, false);
+
+                if (isError)
+                {
+                    return (isError, rcBeamList);
+                }
+
+                List<src.HelperEtabs.RcBeam> rcBeamListEachGroup = GetRcBeamList(rcBeamDesignSummary);
+
+                foreach (src.HelperEtabs.RcBeam frame in rcBeamListEachGroup)
+                {
+                    frame.BeamType = beamType;
+                }
+
+                rcBeamList.AddRange(rcBeamListEachGroup);
+            }
+
+            return (isError, rcBeamList);
+        }
+
+        public static List<src.HelperEtabs.RcBeam> GetRcBeamList(src.HelperEtabs.DatabaseTable rcBeamDesignSummary)
         {
             //Get table
              List<Dictionary<string, string>> rcBeamDesignSummaryTable = rcBeamDesignSummary.TableInList;
 
-            List<src.HelperEtabs.Frame> rcBeamList = new List<HelperEtabs.Frame>();
+            List<src.HelperEtabs.RcBeam> rcBeamList = new List<HelperEtabs.RcBeam>();
 
             //Get list of unique name
             List<string> uniqueNameAllList = new List<string>();
@@ -142,19 +205,18 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
             //Create frame list
             foreach (string uniqueName in uniqueNameList)
             {
-                rcBeamList.Add(new src.HelperEtabs.Frame(uniqueName));
+                rcBeamList.Add(new src.HelperEtabs.RcBeam(uniqueName));
             }
 
             return rcBeamList;
-
         }
 
-        public static void GetRcBeamDimension(cSapModel Sap, src.HelperEtabs.DatabaseTable rcBeamDesignSummary ,List<src.HelperEtabs.Frame> rcBeamList, double cover)
+        public static void GetRcBeamDimension(cSapModel Sap, src.HelperEtabs.DatabaseTable rcBeamDesignSummary ,List<src.HelperEtabs.RcBeam> rcBeamList, double cover)
         {
             //Get table
             List<Dictionary<string , string>> rcBeamDesignSummaryTable = rcBeamDesignSummary.TableInList;
 
-            foreach(src.HelperEtabs.Frame rcBeam in rcBeamList)
+            foreach(src.HelperEtabs.RcBeam rcBeam in rcBeamList)
             {
                 foreach(Dictionary<string, string> row in rcBeamDesignSummaryTable)
                 {
@@ -188,7 +250,7 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
             }
         }
 
-        public static void GetRcBeamOffset(cSapModel Sap, List<src.HelperEtabs.Frame> rcBeamList)
+        public static void GetRcBeamOffset(cSapModel Sap, List<src.HelperEtabs.RcBeam> rcBeamList)
         {
             src.HelperEtabs.DatabaseTable rcBeamOffset = new src.HelperEtabs.DatabaseTable();
             bool isError;
@@ -198,7 +260,7 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
 
             List<Dictionary<string, string>> rcBeamOffsetTable = rcBeamOffset.TableInList;
 
-            foreach(src.HelperEtabs.Frame rcBeam in rcBeamList)
+            foreach(src.HelperEtabs.RcBeam rcBeam in rcBeamList)
             {
                 //Going through table to find the same unique name
                 foreach (Dictionary<string, string> row in rcBeamOffsetTable)
@@ -215,13 +277,13 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
         }
 
         public static void GetRcBeamRebarArea(cSapModel Sap, src.HelperEtabs.DatabaseTable rcBeamDesignSummary, 
-            List<src.HelperEtabs.Frame> rcBeamList, double leftLength, double midLength, double rightLength)
+            List<src.HelperEtabs.RcBeam> rcBeamList, double leftLength, double midLength, double rightLength)
         {
             //Get table
             List<Dictionary<string, string>> rcBeamDesignSummaryTable = rcBeamDesignSummary.TableInList;
 
             //Getting length for each beam
-            foreach (src.HelperEtabs.Frame rcBeam in rcBeamList)
+            foreach (src.HelperEtabs.RcBeam rcBeam in rcBeamList)
             {
                 bool firstRun = true;
                 double length = 0;
@@ -248,7 +310,7 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
             }
 
             //Getting rebar area for each beam
-            foreach (src.HelperEtabs.Frame rcBeam in rcBeamList)
+            foreach (src.HelperEtabs.RcBeam rcBeam in rcBeamList)
             {
                 double effectiveLength = rcBeam.Length - rcBeam.OffsetI - rcBeam.OffsetJ;
 
@@ -397,10 +459,10 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
 
         }
 
-        public static void DesignRcBeamRebar(List<src.HelperEtabs.Frame> rcBeamList, double rebarSpc, string rebarSpcPreference, double maxShearLinksSpacing, double minShearLinksSpacing, double shearLinksSpacingStep,
+        public static void DesignRcBeamRebar(List<src.HelperEtabs.RcBeam> rcBeamList, double rebarSpc, string rebarSpcPreference, double maxShearLinksSpacing, double minShearLinksSpacing, double shearLinksSpacingStep,
             int[] rebarDiameterList, int[] shearLinksDiameterList)
         {
-            foreach(src.HelperEtabs.Frame rcBeam in rcBeamList)
+            foreach(src.HelperEtabs.RcBeam rcBeam in rcBeamList)
             {
                 double cover = Math.Max(rcBeam.CoverTop, rcBeam.CoverBottom);
 
@@ -844,7 +906,7 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
             }
         }
 
-        private static object[,] CompileResutRcBeamToArray(List<src.HelperEtabs.Frame> rcBeamList)
+        private static object[,] CompileResutRcBeamToArray(List<src.HelperEtabs.RcBeam> rcBeamList)
         {
             List<string> colTitles = new List<string>()
             {
@@ -868,7 +930,7 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
             }
 
             int i = 1;
-            foreach(src.HelperEtabs.Frame rcBeam in rcBeamList)
+            foreach(src.HelperEtabs.RcBeam rcBeam in rcBeamList)
             {
                 result[i, 0] = rcBeam.UniqueName;
                 result[i, 1] = rcBeam.Width;

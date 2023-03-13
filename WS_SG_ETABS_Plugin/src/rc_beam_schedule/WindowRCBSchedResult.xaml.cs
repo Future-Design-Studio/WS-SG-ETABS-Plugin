@@ -24,15 +24,15 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
         cSapModel _SapModel;
         cPluginCallback _Plugin;
 
-        public WindowRCBSchedResult(cSapModel SapModel, cPluginCallback Plugin, string fileName, string filePath, double leftLength, double midLength, double rightLength, double rebarSpc, 
-            string rebarSpcPreference, double maxShearLinksSpacing, double minShearLinksSpacing, double shearLinksSpacingStep, double cover, int[] rebarDiameterList, int[] shearLinksDiameterList)
+        public WindowRCBSchedResult(cSapModel SapModel, cPluginCallback Plugin, string fileName, string filePath, double leftLength, double midLength, double rightLength, double cantileverLeftLength, double cantileverRightLength,
+            double rebarSpc, string rebarSpcPreference, double maxShearLinksSpacing, double minShearLinksSpacing, double shearLinksSpacingStep, double cover, int[] rebarDiameterList, int[] shearLinksDiameterList, List<string> listChoosenGroup)
         {
             _SapModel = SapModel;
             _Plugin = Plugin;
 
             //Main logic
-            bool isError = src.rc_beam_schedule.FunctionRCBSched.GetRCBeamSchedule(_SapModel, fileName, filePath, leftLength, midLength, rightLength, rebarSpc, rebarSpcPreference, maxShearLinksSpacing, minShearLinksSpacing, shearLinksSpacingStep, 
-                cover, rebarDiameterList, shearLinksDiameterList);
+            bool isError = src.rc_beam_schedule.FunctionRCBSched.GetRCBeamSchedule(_SapModel, fileName, filePath, leftLength, midLength, rightLength, cantileverLeftLength, cantileverRightLength, 
+                rebarSpc, rebarSpcPreference, maxShearLinksSpacing, minShearLinksSpacing, shearLinksSpacingStep, cover, rebarDiameterList, shearLinksDiameterList, listChoosenGroup);
 
             if (isError)
             {

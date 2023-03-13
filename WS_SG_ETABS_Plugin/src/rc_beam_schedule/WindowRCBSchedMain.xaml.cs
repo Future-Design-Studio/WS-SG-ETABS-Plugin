@@ -41,6 +41,14 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
             modelPath = SapModel.GetModelFilepath();
             filePath.Text = modelPath;
 
+            //Fill in combobox for available groups
+            src.HelperUI.PopulateComboBoxAvailGroup(_SapModel, comBoxGroup);
+
+            //Fill in combobox for beam type
+            List<string> beamTypes = new List<string> { "Simply supported", "Cantilever" };
+            comBoxBeamType.ItemsSource = beamTypes;
+            comBoxBeamType.SelectedIndex = 0;
+
             //Default check the rebar preference
             radioButtonSpcAuto.IsChecked = true;
 
@@ -79,6 +87,9 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
                 double midLength = Convert.ToDouble(textBoxLengthMid.Text);
                 double rightLength = Convert.ToDouble(textBoxLengthRight.Text);
 
+                double cantileverLeftLength = Convert.ToDouble(textBoxLengthLeft.Text);
+                double cantileverRightLength = Convert.ToDouble(textBoxLengthRight.Text);
+
                 double cover = Convert.ToDouble(textBoxCover.Text);
                 double maxShearLinksSpacing = Convert.ToDouble(textBoxMaxShearLinksSpacing.Text);
                 double minShearLinksSpacing = Convert.ToDouble(textBoxMinShearLinksSpacing.Text);
@@ -109,21 +120,30 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
                     rebarSpcPreference = "auto";
                 }
 
+                //Casting listbox content to list
+                List<string> listChoosenGroup = listBoxChoosenGroup.Items.OfType<string>().ToList();
+
                 //Check if total = 1, else will show warning
                 double totalLength = leftLength + midLength + rightLength;
+                double totalCantileverLength = cantileverLeftLength + cantileverRightLength;
 
                 if (totalLength != 1)
                 {
                     System.Diagnostics.Debug.WriteLine("Total division of length must be 1!, currently " + totalLength);
-                    MessageBox.Show("Total division of length must be 1!, currently " + totalLength);
+                    MessageBox.Show("Total division of length must be 1!, currently " + totalCantileverLength);
+                }
+                else if(totalCantileverLength != 1)
+                {
+                    System.Diagnostics.Debug.WriteLine("Total division of cantilever length must be 1!, currently " + totalCantileverLength);
+                    MessageBox.Show("Total division of cantilever length must be 1!, currently " + totalCantileverLength);
                 }
                 else
                 {
                     IsEnabled = false;
                     //Call up carbon result window
-                    src.rc_beam_schedule.WindowRCBSchedResult windowRCBSchedResult = new src.rc_beam_schedule.WindowRCBSchedResult(_SapModel, _Plugin, name, path, leftLength,
-                                                                                     midLength, rightLength, rebarSpc, rebarSpcPreference, maxShearLinksSpacing, minShearLinksSpacing, shearLinksSpacingStep, cover,
-                                                                                     rebarDiameterList, shearLinksDiameterList);
+                    src.rc_beam_schedule.WindowRCBSchedResult windowRCBSchedResult = new src.rc_beam_schedule.WindowRCBSchedResult(_SapModel, _Plugin, name, path, leftLength, midLength, rightLength, cantileverLeftLength, cantileverRightLength,
+                        rebarSpc, rebarSpcPreference, maxShearLinksSpacing, minShearLinksSpacing, shearLinksSpacingStep, cover,
+                                                                                     rebarDiameterList, shearLinksDiameterList, listChoosenGroup);
                     IsEnabled = true;
                 }
             }
@@ -151,5 +171,18 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
             textBoxSpcClearSpc.IsEnabled = false;
         }
 
+        private void buttonAdd_Click(object sender, RoutedEventArgs e)
+        {
+            string selectedString = comBoxGroup.Text + "," + comBoxBeamType.Text;
+            listBoxChoosenGroup.Items.Add(selectedString);
+        }
+
+        private void buttonRemove_Click(object sender, RoutedEventArgs e)
+        {
+            if (listBoxChoosenGroup.Items.Count != 0 && listBoxChoosenGroup.SelectedIndex != -1)
+            {
+                listBoxChoosenGroup.Items.RemoveAt(listBoxChoosenGroup.SelectedIndex);
+            }
+        }
     }
 }

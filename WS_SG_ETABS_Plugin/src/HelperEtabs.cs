@@ -56,7 +56,7 @@ namespace WS_SG_ETABS_Plugin.src
             }
         }
 
-        public class Frame
+        public class RcBeam
         {
             public string UniqueName { get; set; }
             public double Length { get; set; }
@@ -89,8 +89,9 @@ namespace WS_SG_ETABS_Plugin.src
             public string RightShearLinks { get; set; }
             public double d { get; set; }
             public double dCalculated { get; set; }
+            public string BeamType { get; set; }
 
-            public Frame(string name)
+            public RcBeam(string name)
             {
                 UniqueName = name;
             }
