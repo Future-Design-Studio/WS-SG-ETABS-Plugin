@@ -27,6 +27,8 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
         cPluginCallback _Plugin;
         string modelPath;
 
+        List<Dictionary<string, string>> groupAndBeamType = new List<Dictionary<string, string>>();
+
         public WindowRCBSchedMain(cSapModel SapModel, cPluginCallback Plugin)
         {
             _SapModel = SapModel;
@@ -143,7 +145,7 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
                     //Call up carbon result window
                     src.rc_beam_schedule.WindowRCBSchedResult windowRCBSchedResult = new src.rc_beam_schedule.WindowRCBSchedResult(_SapModel, _Plugin, name, path, leftLength, midLength, rightLength, cantileverLeftLength, cantileverRightLength,
                         rebarSpc, rebarSpcPreference, maxShearLinksSpacing, minShearLinksSpacing, shearLinksSpacingStep, cover,
-                                                                                     rebarDiameterList, shearLinksDiameterList, listChoosenGroup);
+                                                                                     rebarDiameterList, shearLinksDiameterList, groupAndBeamType);
                     IsEnabled = true;
                 }
             }
@@ -175,13 +177,23 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
         {
             string selectedString = comBoxGroup.Text + "," + comBoxBeamType.Text;
             listBoxChoosenGroup.Items.Add(selectedString);
+
+            Dictionary<string, string> eachGroupAndBeamType = new Dictionary<string, string>
+            {
+                {"groupName", comBoxGroup.Text},
+                {"beamType", comBoxBeamType.Text }
+            };
+            groupAndBeamType.Add(eachGroupAndBeamType);
         }
 
         private void buttonRemove_Click(object sender, RoutedEventArgs e)
         {
-            if (listBoxChoosenGroup.Items.Count != 0 && listBoxChoosenGroup.SelectedIndex != -1)
+            int selectedIndex = listBoxChoosenGroup.SelectedIndex;
+
+            if (listBoxChoosenGroup.Items.Count != 0 && selectedIndex != -1)
             {
-                listBoxChoosenGroup.Items.RemoveAt(listBoxChoosenGroup.SelectedIndex);
+                listBoxChoosenGroup.Items.RemoveAt(selectedIndex);
+                groupAndBeamType.RemoveAt(selectedIndex);
             }
         }
     }
