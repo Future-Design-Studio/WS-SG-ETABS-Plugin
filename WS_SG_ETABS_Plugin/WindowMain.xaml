@@ -16,6 +16,7 @@
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="0.6*"></RowDefinition>
         </Grid.RowDefinitions>
 
@@ -28,10 +29,11 @@
         <Button Grid.Row="5" x:Name="buttonPlotReaction" Content="Plot Reaction" FontSize="16" Click="buttonPlotReaction_Click"/>
         <Button Grid.Row="6" x:Name="buttonTransferMidas" Content="Transfer To Midas" FontSize="16" Click="buttonTransferMidas_Click"/>
         <Button Grid.Row="7" x:Name="buttonSelUniqueName" Content="Select by Unique Name" FontSize="16" Click="buttonSelUniqueName_Click"/>
+        <Button Grid.Row="8" x:Name="buttonEtabsToRhino" Content="Export To Rhino" FontSize="16" Click="buttonEtabsToRhino_Click"/>
         
-        <Image Grid.Row="8" Source="/WS_SG_ETABS_Plugin;component/src/resources/logo-invert.PNG" />
+        <Image Grid.Row="9" Source="/WS_SG_ETABS_Plugin;component/src/resources/logo-invert.PNG" />
 
 
-        <Label Grid.Row="9" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="8">version 0.0.6</Label>
+        <Label Grid.Row="10" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="8">version 0.0.6</Label>
     </Grid>
 </Window>
