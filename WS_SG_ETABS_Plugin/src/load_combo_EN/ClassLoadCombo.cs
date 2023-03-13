@@ -51,12 +51,10 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
         public class WindLoad
         {
             public string Name { get; set; }
-            public string CategoryPhi { get; set; }
 
-            public WindLoad(string name, string categoryPhi)
+            public WindLoad(string name)
             {
                 Name = name;
-                CategoryPhi = categoryPhi;
             }
         }
 

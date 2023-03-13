@@ -536,96 +536,75 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
         private void Button_ADD_WIND_Click(object sender, RoutedEventArgs e)
         {
 
-            if (checkBoxWIND.IsChecked == true)
+            if (checkBoxWIND.IsChecked == true && comBoxWINDDIRECTION.SelectedIndex == 0)
             {
-                string selectedString = comBoxNameWIND.Text + ", " + comBoxWIND.Text;
-                listBoxChoosenWIND.Items.Add(selectedString);
+                listBoxChoosenWIND.Items.Add(wind4directionList[0]);
+                listBoxChoosenWIND.Items.Add(wind4directionList[1]);
 
-                ClassLoadCombo.WindLoad eachWindLoad = new ClassLoadCombo.WindLoad(comBoxNameWIND.Text, comBoxWIND.Text);
+                ClassLoadCombo.WindLoad eachWindLoad = new ClassLoadCombo.WindLoad(wind4directionList[0]);
                 WindLoadList.Add(eachWindLoad);
+                ClassLoadCombo.WindLoad eachWindLoad1 = new ClassLoadCombo.WindLoad(wind4directionList[1]);
+                WindLoadList.Add(eachWindLoad1);
             }
-            else
+            else if (checkBoxWIND.IsChecked == true && comBoxWINDDIRECTION.SelectedIndex == 1)
             {
-                if (comBoxWINDDIRECTION.SelectedIndex == 0)
-                {
-                    if (comBoxNameWIND.SelectedIndex == 0)
-                    {
-                        string selectedString = wind48noplusminusdirectionList[0] + ", " + comBoxWIND.Text;
-                        listBoxChoosenWIND.Items.Add(selectedString);
-                        string selectedString2 = wind48noplusminusdirectionList[1] + ", " + comBoxWIND.Text;
-                        listBoxChoosenWIND.Items.Add(selectedString2);
+                listBoxChoosenWIND.Items.Add(wind8directionList[0]);
+                listBoxChoosenWIND.Items.Add(wind8directionList[1]);
+                listBoxChoosenWIND.Items.Add(wind8directionList[2]);
+                listBoxChoosenWIND.Items.Add(wind8directionList[3]);
 
-                        ClassLoadCombo.WindLoad eachWindLoad1 = new ClassLoadCombo.WindLoad(wind48noplusminusdirectionList[0], comBoxWIND.Text);
-                        WindLoadList.Add(eachWindLoad1);
-                        ClassLoadCombo.WindLoad eachWindLoad2 = new ClassLoadCombo.WindLoad(wind48noplusminusdirectionList[1], comBoxWIND.Text);
-                        WindLoadList.Add(eachWindLoad2);
-                    }
-                    else
-                    {
-                        string selectedString = wind48noplusminusdirectionList[2] + ", " + comBoxWIND.Text;
-                        listBoxChoosenWIND.Items.Add(selectedString);
-                        string selectedString2 = wind48noplusminusdirectionList[3] + ", " + comBoxWIND.Text;
-                        listBoxChoosenWIND.Items.Add(selectedString2);
+                ClassLoadCombo.WindLoad eachWindLoad = new ClassLoadCombo.WindLoad(wind8directionList[0]);
+                WindLoadList.Add(eachWindLoad);
+                ClassLoadCombo.WindLoad eachWindLoad1 = new ClassLoadCombo.WindLoad(wind8directionList[1]);
+                WindLoadList.Add(eachWindLoad1);
+                ClassLoadCombo.WindLoad eachWindLoad2 = new ClassLoadCombo.WindLoad(wind8directionList[2]);
+                WindLoadList.Add(eachWindLoad2);
+                ClassLoadCombo.WindLoad eachWindLoad3 = new ClassLoadCombo.WindLoad(wind8directionList[3]);
+                WindLoadList.Add(eachWindLoad3);
+            }
+            else if (checkBoxWIND.IsChecked == false && comBoxWINDDIRECTION.SelectedIndex == 0)
+            {
+                listBoxChoosenWIND.Items.Add(wind48noplusminusdirectionList[0]);
+                listBoxChoosenWIND.Items.Add(wind48noplusminusdirectionList[1]);
+                listBoxChoosenWIND.Items.Add(wind48noplusminusdirectionList[2]);
+                listBoxChoosenWIND.Items.Add(wind48noplusminusdirectionList[3]);
 
-                        ClassLoadCombo.WindLoad eachWindLoad1 = new ClassLoadCombo.WindLoad(wind48noplusminusdirectionList[2], comBoxWIND.Text);
-                        WindLoadList.Add(eachWindLoad1);
-                        ClassLoadCombo.WindLoad eachWindLoad2 = new ClassLoadCombo.WindLoad(wind48noplusminusdirectionList[3], comBoxWIND.Text);
-                        WindLoadList.Add(eachWindLoad2);
-                    }                        
-                }
-                else
-                {
-                    if (comBoxNameWIND.SelectedIndex == 0)
-                    {
-                        string selectedString = wind48noplusminusdirectionList[4] + ", " + comBoxWIND.Text;
-                        listBoxChoosenWIND.Items.Add(selectedString);
-                        string selectedString2 = wind48noplusminusdirectionList[5] + ", " + comBoxWIND.Text;
-                        listBoxChoosenWIND.Items.Add(selectedString2);
+                ClassLoadCombo.WindLoad eachWindLoad = new ClassLoadCombo.WindLoad(wind48noplusminusdirectionList[0]);
+                WindLoadList.Add(eachWindLoad);
+                ClassLoadCombo.WindLoad eachWindLoad1 = new ClassLoadCombo.WindLoad(wind48noplusminusdirectionList[1]);
+                WindLoadList.Add(eachWindLoad1);
+                ClassLoadCombo.WindLoad eachWindLoad2 = new ClassLoadCombo.WindLoad(wind48noplusminusdirectionList[2]);
+                WindLoadList.Add(eachWindLoad2);
+                ClassLoadCombo.WindLoad eachWindLoad3 = new ClassLoadCombo.WindLoad(wind48noplusminusdirectionList[3]);
+                WindLoadList.Add(eachWindLoad3);
+            }
+            else if (checkBoxWIND.IsChecked == false && comBoxWINDDIRECTION.SelectedIndex == 1)
+            {
+                listBoxChoosenWIND.Items.Add(wind48noplusminusdirectionList[4]);
+                listBoxChoosenWIND.Items.Add(wind48noplusminusdirectionList[5]);
+                listBoxChoosenWIND.Items.Add(wind48noplusminusdirectionList[6]);
+                listBoxChoosenWIND.Items.Add(wind48noplusminusdirectionList[7]);
+                listBoxChoosenWIND.Items.Add(wind48noplusminusdirectionList[8]);
+                listBoxChoosenWIND.Items.Add(wind48noplusminusdirectionList[9]);
+                listBoxChoosenWIND.Items.Add(wind48noplusminusdirectionList[10]);
+                listBoxChoosenWIND.Items.Add(wind48noplusminusdirectionList[11]);
 
-                        ClassLoadCombo.WindLoad eachWindLoad1 = new ClassLoadCombo.WindLoad(wind48noplusminusdirectionList[4], comBoxWIND.Text);
-                        WindLoadList.Add(eachWindLoad1);
-                        ClassLoadCombo.WindLoad eachWindLoad2 = new ClassLoadCombo.WindLoad(wind48noplusminusdirectionList[5], comBoxWIND.Text);
-                        WindLoadList.Add(eachWindLoad2);
-                    }
-                    else if (comBoxNameWIND.SelectedIndex == 1)
-                    {
-                        string selectedString = wind48noplusminusdirectionList[6] + ", " + comBoxWIND.Text;
-                        listBoxChoosenWIND.Items.Add(selectedString);
-                        string selectedString2 = wind48noplusminusdirectionList[7] + ", " + comBoxWIND.Text;
-                        listBoxChoosenWIND.Items.Add(selectedString2);
-
-                        ClassLoadCombo.WindLoad eachWindLoad1 = new ClassLoadCombo.WindLoad(wind48noplusminusdirectionList[6], comBoxWIND.Text);
-                        WindLoadList.Add(eachWindLoad1);
-                        ClassLoadCombo.WindLoad eachWindLoad2 = new ClassLoadCombo.WindLoad(wind48noplusminusdirectionList[7], comBoxWIND.Text);
-                        WindLoadList.Add(eachWindLoad2);
-                    }
-                    else if (comBoxNameWIND.SelectedIndex == 2)
-                    {
-                        string selectedString = wind48noplusminusdirectionList[8] + ", " + comBoxWIND.Text;
-                        listBoxChoosenWIND.Items.Add(selectedString);
-                        string selectedString2 = wind48noplusminusdirectionList[9] + ", " + comBoxWIND.Text;
-                        listBoxChoosenWIND.Items.Add(selectedString2);
-
-                        ClassLoadCombo.WindLoad eachWindLoad1 = new ClassLoadCombo.WindLoad(wind48noplusminusdirectionList[8], comBoxWIND.Text);
-                        WindLoadList.Add(eachWindLoad1);
-                        ClassLoadCombo.WindLoad eachWindLoad2 = new ClassLoadCombo.WindLoad(wind48noplusminusdirectionList[9], comBoxWIND.Text);
-                        WindLoadList.Add(eachWindLoad2);
-                    }
-                    else if (comBoxNameWIND.SelectedIndex == 3)
-                    {
-                        string selectedString = wind48noplusminusdirectionList[10] + ", " + comBoxWIND.Text;
-                        listBoxChoosenWIND.Items.Add(selectedString);
-                        string selectedString2 = wind48noplusminusdirectionList[11] + ", " + comBoxWIND.Text;
-                        listBoxChoosenWIND.Items.Add(selectedString2);
-
-                        ClassLoadCombo.WindLoad eachWindLoad1 = new ClassLoadCombo.WindLoad(wind48noplusminusdirectionList[10], comBoxWIND.Text);
-                        WindLoadList.Add(eachWindLoad1);
-                        ClassLoadCombo.WindLoad eachWindLoad2 = new ClassLoadCombo.WindLoad(wind48noplusminusdirectionList[11], comBoxWIND.Text);
-                        WindLoadList.Add(eachWindLoad2);
-                    }
-                }
-                        
-                
+                ClassLoadCombo.WindLoad eachWindLoad4 = new ClassLoadCombo.WindLoad(wind48noplusminusdirectionList[4]);
+                WindLoadList.Add(eachWindLoad4);
+                ClassLoadCombo.WindLoad eachWindLoad5 = new ClassLoadCombo.WindLoad(wind48noplusminusdirectionList[5]);
+                WindLoadList.Add(eachWindLoad5);
+                ClassLoadCombo.WindLoad eachWindLoad6 = new ClassLoadCombo.WindLoad(wind48noplusminusdirectionList[6]);
+                WindLoadList.Add(eachWindLoad6);
+                ClassLoadCombo.WindLoad eachWindLoad7 = new ClassLoadCombo.WindLoad(wind48noplusminusdirectionList[7]);
+                WindLoadList.Add(eachWindLoad7);
+                ClassLoadCombo.WindLoad eachWindLoad8 = new ClassLoadCombo.WindLoad(wind48noplusminusdirectionList[8]);
+                WindLoadList.Add(eachWindLoad8);
+                ClassLoadCombo.WindLoad eachWindLoad9 = new ClassLoadCombo.WindLoad(wind48noplusminusdirectionList[9]);
+                WindLoadList.Add(eachWindLoad9);
+                ClassLoadCombo.WindLoad eachWindLoad10 = new ClassLoadCombo.WindLoad(wind48noplusminusdirectionList[10]);
+                WindLoadList.Add(eachWindLoad10);
+                ClassLoadCombo.WindLoad eachWindLoad11 = new ClassLoadCombo.WindLoad(wind48noplusminusdirectionList[11]);
+                WindLoadList.Add(eachWindLoad11);
             }
         }
 
@@ -634,23 +613,20 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             
             if (checkBoxWINDVERTICAL.IsChecked ==true)
             {
-                string selectedString = comBoxNameWINDVERTICAL.Text + ", " + comBoxWINDVERTICAL.Text;
-                listBoxChoosenWIND.Items.Add(selectedString);
+                listBoxChoosenWIND.Items.Add(windvertdirectionList[0]);
 
-                ClassLoadCombo.WindLoad eachWindLoad = new ClassLoadCombo.WindLoad(comBoxNameWINDVERTICAL.Text, comBoxWINDVERTICAL.Text);
+                ClassLoadCombo.WindLoad eachWindLoad = new ClassLoadCombo.WindLoad(windvertdirectionList[0]);
                 WindLoadList.Add(eachWindLoad);
             }
             else
             {
-                string selectedString = windvertnoplusminusdirectionList[0] + ", " + comBoxWINDVERTICAL.Text;
-                listBoxChoosenWIND.Items.Add(selectedString);
-                string selectedString2 = windvertnoplusminusdirectionList[1] + ", " + comBoxWINDVERTICAL.Text;
-                listBoxChoosenWIND.Items.Add(selectedString2);
+                listBoxChoosenWIND.Items.Add(windvertnoplusminusdirectionList[0]);
+                listBoxChoosenWIND.Items.Add(windvertnoplusminusdirectionList[1]);
 
-                ClassLoadCombo.WindLoad eachWindLoad1 = new ClassLoadCombo.WindLoad(windvertnoplusminusdirectionList[0], comBoxWINDVERTICAL.Text);
+                ClassLoadCombo.WindLoad eachWindLoad = new ClassLoadCombo.WindLoad(windvertnoplusminusdirectionList[0]);
+                WindLoadList.Add(eachWindLoad);
+                ClassLoadCombo.WindLoad eachWindLoad1 = new ClassLoadCombo.WindLoad(windvertnoplusminusdirectionList[1]);
                 WindLoadList.Add(eachWindLoad1);
-                ClassLoadCombo.WindLoad eachWindLoad2 = new ClassLoadCombo.WindLoad(windvertnoplusminusdirectionList[1], comBoxWINDVERTICAL.Text);
-                WindLoadList.Add(eachWindLoad2);
             }
             
         }
@@ -662,13 +638,11 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
         private void Button_REMOVE_WINDS_Click(object sender, RoutedEventArgs e)
         {
-            if (listBoxChoosenWIND.Items.Count != 0 && listBoxChoosenWIND.SelectedIndex != -1)
+            if (listBoxChoosenWIND.Items.Count != 0)
             {
-                int selectedIndex = listBoxChoosenWIND.SelectedIndex;
+                listBoxChoosenWIND.Items.Clear();
 
-                listBoxChoosenWIND.Items.RemoveAt(selectedIndex);
-
-                WindLoadList.RemoveAt(selectedIndex);
+                WindLoadList.Clear();
             }
         }
 
