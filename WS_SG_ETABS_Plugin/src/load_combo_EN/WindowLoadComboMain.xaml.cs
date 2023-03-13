@@ -31,92 +31,6 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             "A: dometic,residential areas", "B: office areas", "C: congregation areas", "D: shopping areas", "E: storage areas", "F: traffic area, vw<30kN", "G: traffic area, 30kN<vw<160kN", "H: roofs", "Wind load", "Temperature"
         };
 
-        Dictionary<string, List<double>> quasiPermanentDict = new Dictionary<string, List<double>>()
-       {
-           { "A: dometic,residential areas", new List<double>(){0.7, 0.5, 0.3 } },
-           { "B: office areas", new List<double>(){0.7, 0.5, 0.3 } },
-           { "C: congregation areas", new List<double>(){0.7, 0.7, 0.6 } },
-           { "D: shopping areas", new List<double>(){0.7, 0.7, 0.6 } },
-           { "E: storage areas", new List<double>(){1.0, 0.9, 0.8 } },
-           { "F: traffic area, vw<30kN", new List<double>(){0.7, 0.7, 0.6 } },
-           { "G: traffic area, 30kN<vw<160kN", new List<double>(){0.7, 0.5, 0.3 } },
-           { "H: roofs", new List<double>(){0.7, 0, 0 } },
-           { "Wind load", new List<double>(){0.5, 0.2, 0 } },
-           { "Temperature", new List<double>(){0.6, 0.5, 0 } },
-       };
-
-        
-        Dictionary<string, double> quasiPermanentADict = new Dictionary<string, double>
-        {
-            {"phi0", 0.7},
-            {"phi1", 0.5}, 
-            {"phi2", 0.3}
-        };
-        
-
-        Dictionary<string, double> quasiPermanentBDict = new Dictionary<string, double>
-        {
-            {"phi0", 0.7},
-            {"phi1", 0.5},
-            {"phi2", 0.3}
-        };
-
-        Dictionary<string, double> quasiPermanentCDict = new Dictionary<string, double>
-        {
-            {"phi0", 0.7},
-            {"phi1", 0.7},
-            {"phi2", 0.6}
-        };
-
-        Dictionary<string, double> quasiPermanentDDict = new Dictionary<string, double>
-        {
-            {"phi0", 0.7},
-            {"phi1", 0.7},
-            {"phi2", 0.6}
-        };
-
-        Dictionary<string, double> quasiPermanentEDict = new Dictionary<string, double>
-        {
-            {"phi0", 1.0},
-            {"phi1", 0.9},
-            {"phi2", 0.8}
-        };
-
-        Dictionary<string, double> quasiPermanentFDict = new Dictionary<string, double>
-        {
-            {"phi0", 0.7},
-            {"phi1", 0.7},
-            {"phi2", 0.6}
-        };
-
-        Dictionary<string, double> quasiPermanentGDict = new Dictionary<string, double>
-        {
-            {"phi0", 0.7},
-            {"phi1", 0.5},
-            {"phi2", 0.3}
-        };
-
-        Dictionary<string, double> quasiPermanentHDict = new Dictionary<string, double>
-        {
-            {"phi0", 0.7},
-            {"phi1", 0},
-            {"phi2", 0}
-        };
-
-        Dictionary<string, double> quasiPermanentWINDDict = new Dictionary<string, double>
-        {
-            {"phi0", 0.5},
-            {"phi1", 0.2},
-            {"phi2", 0}
-        };
-
-        Dictionary<string, double> quasiPermanentTEMPERATUREDict = new Dictionary<string, double>
-        {
-            {"phi0", 0.6},
-            {"phi1", 0.5},
-            {"phi2", 0}
-        };
-
         #endregion
 
         #region Data source wind
@@ -597,6 +511,8 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
         }
 
+
+        int notionaldirectionFactor = 2;
         private void comBoxWINDDIRECTION_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (comBoxWINDDIRECTION.SelectedIndex == 0)
@@ -605,6 +521,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 comBoxNameWIND.SelectedIndex = 0;
                 listBoxChoosenWIND.Items.Clear();
                 WindLoadList.Clear();
+                notionaldirectionFactor = 2;
             }    
             else
             {
@@ -612,6 +529,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 comBoxNameWIND.SelectedIndex = 0;
                 listBoxChoosenWIND.Items.Clear();
                 WindLoadList.Clear();
+                notionaldirectionFactor = 4;
             }
         }
 
@@ -1129,7 +1047,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
         {
             IsEnabled = false;
             //Call up result window
-            src.load_combo_EN.WindowLoadComboResult windowLoadComboResult = new src.load_combo_EN.WindowLoadComboResult(_SapModel, _Plugin, deadLoadList, SDLoadList, LiveLoadList, WindLoadList, NotionalDXLoadList, NotionalDYLoadList, NotionalSDXLoadList, NotionalSDYLoadList, TemperatureLoadList, SeismicLoadList, AccidentalLoadList, UpliftLoadList, EHFDLXLoadList, EHFDLYLoadList, EHFSDLXLoadList, EHFSDLYLoadList, EHFLLXLoadList, EHFLLYLoadList);
+            src.load_combo_EN.WindowLoadComboResult windowLoadComboResult = new src.load_combo_EN.WindowLoadComboResult(_SapModel, _Plugin, deadLoadList, SDLoadList, LiveLoadList, WindLoadList, NotionalDXLoadList, NotionalDYLoadList, NotionalSDXLoadList, NotionalSDYLoadList, TemperatureLoadList, SeismicLoadList, AccidentalLoadList, UpliftLoadList, EHFDLXLoadList, EHFDLYLoadList, EHFSDLXLoadList, EHFSDLYLoadList, EHFLLXLoadList, EHFLLYLoadList, notionaldirectionFactor);
             IsEnabled = true;
         }
     }

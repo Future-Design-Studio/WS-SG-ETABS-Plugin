@@ -28,14 +28,31 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             List<src.load_combo_EN.ClassLoadCombo.EHFLoad> EHFSDLXLoadList,
             List<src.load_combo_EN.ClassLoadCombo.EHFLoad> EHFSDLYLoadList,
             List<src.load_combo_EN.ClassLoadCombo.EHFLoad> EHFLLXLoadList,
-            List<src.load_combo_EN.ClassLoadCombo.EHFLoad> EHFLLYLoadList)
+            List<src.load_combo_EN.ClassLoadCombo.EHFLoad> EHFLLYLoadList,
+            int NotionalDirectionFactor)
         {
-            List<string> DLCase = new List<string>();
-            List<string> SDLCase = new List<string>();
-            List<string> LLCase = new List<string>();
+            Dictionary<string, string> llcaseDict = new Dictionary<string, string>();
+            Dictionary<string, string> windcaseDict = new Dictionary<string, string>();
+            List<string> tempcaselist = new List<string>();
+            List<string> seismiccaselist = new List<string>();
+            List<string> alcaselist = new List<string>();
+            List<string> upliftcaselist = new List<string>();
+            Dictionary<string, string> ehfllxcaseDict = new Dictionary<string, string>();
+            Dictionary<string, string> ehfllycaseDict = new Dictionary<string, string>();
 
-
-
+            Dictionary<string, List<double>> quasiPermanentDict = new Dictionary<string, List<double>>()
+            {
+                { "A: dometic,residential areas", new List<double>(){0.7, 0.5, 0.3 } },
+                { "B: office areas", new List<double>(){0.7, 0.5, 0.3 } },
+                { "C: congregation areas", new List<double>(){0.7, 0.7, 0.6 } },
+                { "D: shopping areas", new List<double>(){0.7, 0.7, 0.6 } },
+                { "E: storage areas", new List<double>(){1.0, 0.9, 0.8 } },
+                { "F: traffic area, vw<30kN", new List<double>(){0.7, 0.7, 0.6 } },
+                { "G: traffic area, 30kN<vw<160kN", new List<double>(){0.7, 0.5, 0.3 } },
+                { "H: roofs", new List<double>(){0.7, 0, 0 } },
+                { "Wind load", new List<double>(){0.5, 0.2, 0 } },
+                { "Temperature", new List<double>(){0.6, 0.5, 0 } },
+            };
 
             bool isError = false;
             bool addAnalysisCase = false;
@@ -163,6 +180,11 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             foreach (var liveLoad in LiveLoadList)
             {
                 string LiveLoadCaseName = "P_Live(" + liveLoad.Name + ")";
+
+
+                llcaseDict.Add(LiveLoadCaseName, liveLoad.CategoryPhi);
+
+
                 isError = src.HelperEtabs.Addnewloadcase(SapModel, LiveLoadCaseName);
                 if (isError)
                 {
@@ -207,6 +229,11 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             foreach (var windLoad in WindLoadList)
             {
                 string WindLoadCaseName = "P_Wind(" + windLoad.Name + ")";
+
+
+                windcaseDict.Add(WindLoadCaseName, windLoad.Name);
+
+
                 isError = src.HelperEtabs.Addnewloadcase(SapModel, WindLoadCaseName);
                 if (isError)
                 {
@@ -277,179 +304,262 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             }
             
 
-            if (NotionalDXLoadList.Count > 0 || NotionalDYLoadList.Count > 0 || NotionalSDXLoadList.Count > 0 || NotionalSDYLoadList.Count > 0)
-            {
-                i = 0;
-                List<string> notionalloadcaseName = new List<string> { "P_N0", "P_N90", "P_N45", "P_N135" };
-                while (i < 4)
+            if (NotionalDirectionFactor == 4)
+            { 
+                if (NotionalDXLoadList.Count > 0 || NotionalDYLoadList.Count > 0 || NotionalSDXLoadList.Count > 0 || NotionalSDYLoadList.Count > 0)
                 {
-                    string notionalLoadCaseName = notionalloadcaseName[i];
-                    isError = src.HelperEtabs.Addnewloadcase(SapModel, notionalLoadCaseName);
+                    i = 0;
+                    List<string> notionalloadcaseName = new List<string> { "P_N0", "P_N90", "P_N45", "P_N135" };
+                    while (i < 4)
+                    {
+                        string notionalLoadCaseName = notionalloadcaseName[i];
+                        isError = src.HelperEtabs.Addnewloadcase(SapModel, notionalLoadCaseName);
+                        if (isError)
+                        {
+                            return true;
+                        }
+                        i++;
+                    }
+                
+                }
+
+
+                LoadType = new string[50];
+                LoadName = new string[50];
+                SF = new double[50];
+                i = 0;
+                NumberLoads = i;
+                foreach (var notionalDLoad in NotionalDXLoadList)
+                {
+                    LoadType[i] = "Load";
+                    LoadName[i] = notionalDLoad.Name;
+                    NumberLoads++;
+                    SF[i] = 1.00;
+                    i++;
+                }
+                foreach (var notionalSDLoad in NotionalSDXLoadList)
+                {
+                    LoadType[i] = "Load";
+                    LoadName[i] = notionalSDLoad.Name;
+                    NumberLoads = i + 1;
+                    SF[i] = 1.00;
+                    i++;
+                }
+                if (i>0)
+                {
+                    isError = src.HelperEtabs.Updateloadcase(SapModel, "P_N0", NumberLoads, LoadType, LoadName, SF);
                     if (isError)
                     {
                         return true;
                     }
+                }
+            
+
+                LoadType = new string[50];
+                LoadName = new string[50];
+                SF = new double[50];
+                i = 0;
+                NumberLoads = i;
+                foreach (var notionalDLoad in NotionalDYLoadList)
+                {
+                    LoadType[i] = "Load";
+                    LoadName[i] = notionalDLoad.Name;
+                    NumberLoads++;
+                    SF[i] = 1.00;
                     i++;
                 }
-                
-            }
+                foreach (var notionalSDLoad in NotionalSDYLoadList)
+                {
+                    LoadType[i] = "Load";
+                    LoadName[i] = notionalSDLoad.Name;
+                    NumberLoads++;
+                    SF[i] = 1.00;
+                    i++;
+                }
+                if (i > 0)
+                {
+                    isError = src.HelperEtabs.Updateloadcase(SapModel, "P_N90", NumberLoads, LoadType, LoadName, SF);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                }
             
 
-            LoadType = new string[50];
-            LoadName = new string[50];
-            SF = new double[50];
-            i = 0;
-            NumberLoads = i;
-            foreach (var notionalDLoad in NotionalDXLoadList)
-            {
-                LoadType[i] = "Load";
-                LoadName[i] = notionalDLoad.Name;
-                NumberLoads++;
-                SF[i] = 1.00;
-                i++;
-            }
-            foreach (var notionalSDLoad in NotionalSDXLoadList)
-            {
-                LoadType[i] = "Load";
-                LoadName[i] = notionalSDLoad.Name;
-                NumberLoads = i + 1;
-                SF[i] = 1.00;
-                i++;
-            }
-            if (i>0)
-            {
-                isError = src.HelperEtabs.Updateloadcase(SapModel, "P_N0", NumberLoads, LoadType, LoadName, SF);
-                if (isError)
+                LoadType = new string[50];
+                LoadName = new string[50];
+                SF = new double[50];
+                i = 0;
+                NumberLoads = i;
+                foreach (var notionalDLoad in NotionalDXLoadList)
                 {
-                    return true;
+                    LoadType[i] = "Load";
+                    LoadName[i] = notionalDLoad.Name;
+                    NumberLoads++;
+                    SF[i] = 0.707;
+                    i++;
                 }
-            }
+                foreach (var notionalSDLoad in NotionalSDXLoadList)
+                {
+                    LoadType[i] = "Load";
+                    LoadName[i] = notionalSDLoad.Name;
+                    NumberLoads++;
+                    SF[i] = 0.707;
+                    i++;
+                }
+                foreach (var notionalDLoad in NotionalDYLoadList)
+                {
+                    LoadType[i] = "Load";
+                    LoadName[i] = notionalDLoad.Name;
+                    NumberLoads++;
+                    SF[i] = 0.707;
+                    i++;
+                }
+                foreach (var notionalSDLoad in NotionalSDYLoadList)
+                {
+                    LoadType[i] = "Load";
+                    LoadName[i] = notionalSDLoad.Name;
+                    NumberLoads++;
+                    SF[i] = 0.707;
+                    i++;
+                }
+                if (i > 0)
+                {
+                    isError = src.HelperEtabs.Updateloadcase(SapModel, "P_N45", NumberLoads, LoadType, LoadName, SF);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                }
             
 
-            LoadType = new string[50];
-            LoadName = new string[50];
-            SF = new double[50];
-            i = 0;
-            NumberLoads = i;
-            foreach (var notionalDLoad in NotionalDYLoadList)
-            {
-                LoadType[i] = "Load";
-                LoadName[i] = notionalDLoad.Name;
-                NumberLoads++;
-                SF[i] = 1.00;
-                i++;
-            }
-            foreach (var notionalSDLoad in NotionalSDYLoadList)
-            {
-                LoadType[i] = "Load";
-                LoadName[i] = notionalSDLoad.Name;
-                NumberLoads++;
-                SF[i] = 1.00;
-                i++;
-            }
-            if (i > 0)
-            {
-                isError = src.HelperEtabs.Updateloadcase(SapModel, "P_N90", NumberLoads, LoadType, LoadName, SF);
-                if (isError)
+                LoadType = new string[50];
+                LoadName = new string[50];
+                SF = new double[50];
+                i = 0;
+                NumberLoads = i;
+                foreach (var notionalDLoad in NotionalDXLoadList)
                 {
-                    return true;
+                    LoadType[i] = "Load";
+                    LoadName[i] = notionalDLoad.Name;
+                    NumberLoads++;
+                    SF[i] = -0.707;
+                    i++;
+                }
+                foreach (var notionalSDLoad in NotionalSDXLoadList)
+                {
+                    LoadType[i] = "Load";
+                    LoadName[i] = notionalSDLoad.Name;
+                    NumberLoads++;
+                    SF[i] = -0.707;
+                    i++;
+                }
+                foreach (var notionalDLoad in NotionalDYLoadList)
+                {
+                    LoadType[i] = "Load";
+                    LoadName[i] = notionalDLoad.Name;
+                    NumberLoads++;
+                    SF[i] = 0.707;
+                    i++;
+                }
+                foreach (var notionalSDLoad in NotionalSDYLoadList)
+                {
+                    LoadType[i] = "Load";
+                    LoadName[i] = notionalSDLoad.Name;
+                    NumberLoads++;
+                    SF[i] = 0.707;
+                    i++;
+                }
+                if (i > 0)
+                {
+                    isError = src.HelperEtabs.Updateloadcase(SapModel, "P_N135", NumberLoads, LoadType, LoadName, SF);
+                    if (isError)
+                    {
+                        return true;
+                    }
                 }
             }
-            
+            else
+            {
+                if (NotionalDXLoadList.Count > 0 || NotionalDYLoadList.Count > 0 || NotionalSDXLoadList.Count > 0 || NotionalSDYLoadList.Count > 0)
+                {
+                    i = 0;
+                    List<string> notionalloadcaseName = new List<string> { "P_NX", "P_NY"};
+                    while (i < 2)
+                    {
+                        string notionalLoadCaseName = notionalloadcaseName[i];
+                        isError = src.HelperEtabs.Addnewloadcase(SapModel, notionalLoadCaseName);
+                        if (isError)
+                        {
+                            return true;
+                        }
+                        i++;
+                    }
 
-            LoadType = new string[50];
-            LoadName = new string[50];
-            SF = new double[50];
-            i = 0;
-            NumberLoads = i;
-            foreach (var notionalDLoad in NotionalDXLoadList)
-            {
-                LoadType[i] = "Load";
-                LoadName[i] = notionalDLoad.Name;
-                NumberLoads++;
-                SF[i] = 0.707;
-                i++;
-            }
-            foreach (var notionalSDLoad in NotionalSDXLoadList)
-            {
-                LoadType[i] = "Load";
-                LoadName[i] = notionalSDLoad.Name;
-                NumberLoads++;
-                SF[i] = 0.707;
-                i++;
-            }
-            foreach (var notionalDLoad in NotionalDYLoadList)
-            {
-                LoadType[i] = "Load";
-                LoadName[i] = notionalDLoad.Name;
-                NumberLoads++;
-                SF[i] = 0.707;
-                i++;
-            }
-            foreach (var notionalSDLoad in NotionalSDYLoadList)
-            {
-                LoadType[i] = "Load";
-                LoadName[i] = notionalSDLoad.Name;
-                NumberLoads++;
-                SF[i] = 0.707;
-                i++;
-            }
-            if (i > 0)
-            {
-                isError = src.HelperEtabs.Updateloadcase(SapModel, "P_N45", NumberLoads, LoadType, LoadName, SF);
-                if (isError)
-                {
-                    return true;
                 }
-            }
-            
 
-            LoadType = new string[50];
-            LoadName = new string[50];
-            SF = new double[50];
-            i = 0;
-            NumberLoads = i;
-            foreach (var notionalDLoad in NotionalDXLoadList)
-            {
-                LoadType[i] = "Load";
-                LoadName[i] = notionalDLoad.Name;
-                NumberLoads++;
-                SF[i] = -0.707;
-                i++;
-            }
-            foreach (var notionalSDLoad in NotionalSDXLoadList)
-            {
-                LoadType[i] = "Load";
-                LoadName[i] = notionalSDLoad.Name;
-                NumberLoads++;
-                SF[i] = -0.707;
-                i++;
-            }
-            foreach (var notionalDLoad in NotionalDYLoadList)
-            {
-                LoadType[i] = "Load";
-                LoadName[i] = notionalDLoad.Name;
-                NumberLoads++;
-                SF[i] = 0.707;
-                i++;
-            }
-            foreach (var notionalSDLoad in NotionalSDYLoadList)
-            {
-                LoadType[i] = "Load";
-                LoadName[i] = notionalSDLoad.Name;
-                NumberLoads++;
-                SF[i] = 0.707;
-                i++;
-            }
-            if (i > 0)
-            {
-                isError = src.HelperEtabs.Updateloadcase(SapModel, "P_N135", NumberLoads, LoadType, LoadName, SF);
-                if (isError)
+
+                LoadType = new string[50];
+                LoadName = new string[50];
+                SF = new double[50];
+                i = 0;
+                NumberLoads = i;
+                foreach (var notionalDLoad in NotionalDXLoadList)
                 {
-                    return true;
+                    LoadType[i] = "Load";
+                    LoadName[i] = notionalDLoad.Name;
+                    NumberLoads++;
+                    SF[i] = 1.00;
+                    i++;
+                }
+                foreach (var notionalSDLoad in NotionalSDXLoadList)
+                {
+                    LoadType[i] = "Load";
+                    LoadName[i] = notionalSDLoad.Name;
+                    NumberLoads = i + 1;
+                    SF[i] = 1.00;
+                    i++;
+                }
+                if (i > 0)
+                {
+                    isError = src.HelperEtabs.Updateloadcase(SapModel, "P_NX", NumberLoads, LoadType, LoadName, SF);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                }
+
+
+                LoadType = new string[50];
+                LoadName = new string[50];
+                SF = new double[50];
+                i = 0;
+                NumberLoads = i;
+                foreach (var notionalDLoad in NotionalDYLoadList)
+                {
+                    LoadType[i] = "Load";
+                    LoadName[i] = notionalDLoad.Name;
+                    NumberLoads++;
+                    SF[i] = 1.00;
+                    i++;
+                }
+                foreach (var notionalSDLoad in NotionalSDYLoadList)
+                {
+                    LoadType[i] = "Load";
+                    LoadName[i] = notionalSDLoad.Name;
+                    NumberLoads++;
+                    SF[i] = 1.00;
+                    i++;
+                }
+                if (i > 0)
+                {
+                    isError = src.HelperEtabs.Updateloadcase(SapModel, "P_NY", NumberLoads, LoadType, LoadName, SF);
+                    if (isError)
+                    {
+                        return true;
+                    }
                 }
             }
-            
 
 
 
@@ -469,6 +579,9 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             foreach (var temperatureLoad in TemperatureLoadList)
             {
                 string TemperatureLoadCaseName = "P_Temp(" + temperatureLoad.Name + ")";
+
+                tempcaselist.Add(TemperatureLoadCaseName);
+
                 isError = src.HelperEtabs.Addnewloadcase(SapModel, TemperatureLoadCaseName);
                 if (isError)
                 {
@@ -512,6 +625,9 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             foreach (var seismicLoad in SeismicLoadList)
             {
                 string SeismicLoadCaseName = "P_Seismic(" + seismicLoad.Name + ")";
+
+                seismiccaselist.Add(SeismicLoadCaseName);
+
                 isError = src.HelperEtabs.Addnewloadcase(SapModel, SeismicLoadCaseName);
                 if (isError)
                 {
@@ -555,6 +671,9 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             foreach (var accidentalLoad in AccidentalLoadList)
             {
                 string AccidentalLoadCaseName = "P_AL(" + accidentalLoad.Name + ")";
+
+                alcaselist.Add(AccidentalLoadCaseName);
+
                 isError = src.HelperEtabs.Addnewloadcase(SapModel, AccidentalLoadCaseName);
                 if (isError)
                 {
@@ -598,6 +717,9 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             foreach (var upliftLoad in UpliftLoadList)
             {
                 string UpliftLoadCaseName = "P_UPLIFT(" + upliftLoad.Name + ")";
+
+                upliftcaselist.Add(UpliftLoadCaseName);
+
                 isError = src.HelperEtabs.Addnewloadcase(SapModel, UpliftLoadCaseName);
                 if (isError)
                 {
@@ -857,6 +979,9 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             foreach (var ehfLoad in EHFLLXLoadList)
             {
                 string EFHLLXLoadCaseName = "P_EHFx (LL_" + ehfLoad.BaseLoadPatternName + ")";
+
+                ehfllxcaseDict.Add(EFHLLXLoadCaseName, ehfLoad.BaseLoadPatternName);
+
                 isError = src.HelperEtabs.Addnewloadcase(SapModel, EFHLLXLoadCaseName);
                 if (isError)
                 {
@@ -900,6 +1025,9 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             foreach (var ehfLoad in EHFLLYLoadList)
             {
                 string EHFLLYLoadCaseName = "P_EHFy (LL_" + ehfLoad.BaseLoadPatternName + ")";
+
+                ehfllycaseDict.Add(EHFLLYLoadCaseName, ehfLoad.BaseLoadPatternName);
+
                 isError = src.HelperEtabs.Addnewloadcase(SapModel, EHFLLYLoadCaseName);
                 if (isError)
                 {
