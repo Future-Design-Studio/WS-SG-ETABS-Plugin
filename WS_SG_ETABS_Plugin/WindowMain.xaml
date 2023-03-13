@@ -31,9 +31,9 @@
         <Button Grid.Row="7" x:Name="buttonSelUniqueName" Content="Select by Unique Name" FontSize="16" Click="buttonSelUniqueName_Click"/>
         <Button Grid.Row="8" x:Name="buttonEtabsToRhino" Content="Export To Rhino" FontSize="16" Click="buttonEtabsToRhino_Click"/>
         
-        <Image Grid.Row="9" Source="/WS_SG_ETABS_Plugin;component/src/resources/logo-invert.PNG" />
+        <Image Grid.Row="9" Margin="5" Source="/WS_SG_ETABS_Plugin;component/src/resources/RambollFDSLogo.PNG" />
 
 
-        <Label Grid.Row="10" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="8">version 0.0.6</Label>
+        <Label Grid.Row="10" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="8">version 1.0.0</Label>
     </Grid>
 </Window>
