@@ -51,13 +51,11 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
         public class WindLoad
         {
             public string Name { get; set; }
-            public bool IsExisting { get; set; }
             public string CategoryPhi { get; set; }
 
-            public WindLoad(string name, bool isExisting, string categoryPhi)
+            public WindLoad(string name, string categoryPhi)
             {
                 Name = name;
-                IsExisting = isExisting;
                 CategoryPhi = categoryPhi;
             }
         }
@@ -66,11 +64,13 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
         {
             public string Name { get; set; }
             public double Factor { get; set; }
+            public string BaseLoadPatternName { get; set; }
 
-            public NotionalLoad(string name, double factor)
+            public NotionalLoad(string name, double factor, string baseLoadPatternName)
             {
                 Name = name;
                 Factor = factor;
+                BaseLoadPatternName = baseLoadPatternName;
             }
         }
 
@@ -128,11 +128,13 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
         {
             public string Name { get; set; }
             public double Factor { get; set; }
+            public string BaseLoadPatternName { get; set; }
 
-            public EHFLoad(string name, double factor)
+            public EHFLoad(string name, double factor, string baseLoadPatternName)
             {
                 Name = name;
                 Factor = factor;
+                BaseLoadPatternName = baseLoadPatternName;
             }
         }
 

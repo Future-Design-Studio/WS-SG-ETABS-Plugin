@@ -30,6 +30,13 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             List<src.load_combo_EN.ClassLoadCombo.EHFLoad> EHFLLXLoadList,
             List<src.load_combo_EN.ClassLoadCombo.EHFLoad> EHFLLYLoadList)
         {
+            List<string> DLCase = new List<string>();
+            List<string> SDLCase = new List<string>();
+            List<string> LLCase = new List<string>();
+
+
+
+
             bool isError = false;
             bool addAnalysisCase = false;
 
@@ -189,7 +196,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
             foreach (var windLoad in WindLoadList)
             {
-                isError = src.HelperEtabs.AddLoadPattern(SapModel, windLoad.Name, 0, "Wind", windLoad.IsExisting, addAnalysisCase);
+                isError = src.HelperEtabs.AddLoadPattern(SapModel, windLoad.Name, 0, "Wind", false, addAnalysisCase);
                 if (isError)
                 {
                     return true;
@@ -849,8 +856,8 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
             foreach (var ehfLoad in EHFLLXLoadList)
             {
-                string UpliftLoadCaseName = "P_EHFx (LL_" + ehfLoad.Name + ")";
-                isError = src.HelperEtabs.Addnewloadcase(SapModel, UpliftLoadCaseName);
+                string EFHLLXLoadCaseName = "P_EHFx (LL_" + ehfLoad.BaseLoadPatternName + ")";
+                isError = src.HelperEtabs.Addnewloadcase(SapModel, EFHLLXLoadCaseName);
                 if (isError)
                 {
                     return true;
@@ -868,7 +875,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 LoadType[i] = "Load";
                 LoadName[i] = ehfLoad.Name;
                 SF[i] = 1.00;
-                isError = src.HelperEtabs.Updateloadcase(SapModel, "P_EHFx (LL_" + ehfLoad.Name + ")", NumberLoads, LoadType, LoadName, SF);
+                isError = src.HelperEtabs.Updateloadcase(SapModel, "P_EHFx (LL_" + ehfLoad.BaseLoadPatternName + ")", NumberLoads, LoadType, LoadName, SF);
                 if (isError)
                 {
                     return true;
@@ -892,15 +899,15 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
             foreach (var ehfLoad in EHFLLYLoadList)
             {
-                string UpliftLoadCaseName = "P_EHFy (LL_" + ehfLoad.Name + ")";
-                isError = src.HelperEtabs.Addnewloadcase(SapModel, UpliftLoadCaseName);
+                string EHFLLYLoadCaseName = "P_EHFy (LL_" + ehfLoad.BaseLoadPatternName + ")";
+                isError = src.HelperEtabs.Addnewloadcase(SapModel, EHFLLYLoadCaseName);
                 if (isError)
                 {
                     return true;
                 }
             }
 
-
+            
             LoadType = new string[50];
             LoadName = new string[50];
             SF = new double[50];
@@ -911,7 +918,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 LoadType[i] = "Load";
                 LoadName[i] = ehfLoad.Name;
                 SF[i] = 1.00;
-                isError = src.HelperEtabs.Updateloadcase(SapModel, "P_EHFy (LL_" + ehfLoad.Name + ")", NumberLoads, LoadType, LoadName, SF);
+                isError = src.HelperEtabs.Updateloadcase(SapModel, "P_EHFy (LL_" + ehfLoad.BaseLoadPatternName + ")", NumberLoads, LoadType, LoadName, SF);
                 if (isError)
                 {
                     return true;
@@ -919,6 +926,153 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             }
 
 
+
+
+
+
+            src.HelperEtabs.DatabaseTable databaseTableAutoNotional = new src.HelperEtabs.DatabaseTable();
+            databaseTableAutoNotional = src.HelperEtabs.GetTableEdit(SapModel, "Load Pattern Definitions - Auto Notional Loads");
+                        
+            foreach (var notionalDx in NotionalDXLoadList)
+            {
+                Dictionary<string, string> row = new Dictionary<string, string>()
+                {
+                    {"LoadPattern", notionalDx.Name},
+                    {"BasePattern", notionalDx.BaseLoadPatternName},
+                    {"LoadRatio", Convert.ToString(notionalDx.Factor)},
+                    {"LoadDir", "X"},
+                };
+
+                databaseTableAutoNotional.TableInList.Add(row);
+            }
+
+            foreach (var notionalDy in NotionalDYLoadList)
+            {
+                Dictionary<string, string> row = new Dictionary<string, string>()
+                {
+                    {"LoadPattern", notionalDy.Name},
+                    {"BasePattern", notionalDy.BaseLoadPatternName},
+                    {"LoadRatio", Convert.ToString(notionalDy.Factor)},
+                    {"LoadDir", "Y"},
+                };
+
+                databaseTableAutoNotional.TableInList.Add(row);
+            }
+
+            foreach (var notionalSDx in NotionalSDXLoadList)
+            {
+                Dictionary<string, string> row = new Dictionary<string, string>()
+                {
+                    {"LoadPattern", notionalSDx.Name},
+                    {"BasePattern", notionalSDx.BaseLoadPatternName},
+                    {"LoadRatio", Convert.ToString(notionalSDx.Factor)},
+                    {"LoadDir", "X"},
+                };
+
+                databaseTableAutoNotional.TableInList.Add(row);
+            }
+
+            foreach (var notionalSDy in NotionalSDYLoadList)
+            {
+                Dictionary<string, string> row = new Dictionary<string, string>()
+                {
+                    {"LoadPattern", notionalSDy.Name},
+                    {"BasePattern", notionalSDy.BaseLoadPatternName},
+                    {"LoadRatio", Convert.ToString(notionalSDy.Factor)},
+                    {"LoadDir", "Y"},
+                };
+
+                databaseTableAutoNotional.TableInList.Add(row);
+            }
+
+            foreach (var ehfDx in EHFDLXLoadList)
+            {
+                Dictionary<string, string> row = new Dictionary<string, string>()
+                {
+                    {"LoadPattern", ehfDx.Name},
+                    {"BasePattern", ehfDx.BaseLoadPatternName},
+                    {"LoadRatio", Convert.ToString(ehfDx.Factor)},
+                    {"LoadDir", "X"},
+                };
+
+                databaseTableAutoNotional.TableInList.Add(row);
+            }
+
+            foreach (var ehfDy in EHFDLYLoadList)
+            {
+                Dictionary<string, string> row = new Dictionary<string, string>()
+                {
+                    {"LoadPattern", ehfDy.Name},
+                    {"BasePattern", ehfDy.BaseLoadPatternName},
+                    {"LoadRatio", Convert.ToString(ehfDy.Factor)},
+                    {"LoadDir", "Y"},
+                };
+
+                databaseTableAutoNotional.TableInList.Add(row);
+            }
+
+            foreach (var ehfSDx in EHFSDLXLoadList)
+            {
+                Dictionary<string, string> row = new Dictionary<string, string>()
+                {
+                    {"LoadPattern", ehfSDx.Name},
+                    {"BasePattern", ehfSDx.BaseLoadPatternName},
+                    {"LoadRatio", Convert.ToString(ehfSDx.Factor)},
+                    {"LoadDir", "X"},
+                };
+
+                databaseTableAutoNotional.TableInList.Add(row);
+            }
+
+            foreach (var ehfSDy in EHFSDLYLoadList)
+            {
+                Dictionary<string, string> row = new Dictionary<string, string>()
+                {
+                    {"LoadPattern", ehfSDy.Name},
+                    {"BasePattern", ehfSDy.BaseLoadPatternName},
+                    {"LoadRatio", Convert.ToString(ehfSDy.Factor)},
+                    {"LoadDir", "Y"},
+                };
+
+                databaseTableAutoNotional.TableInList.Add(row);
+            }
+
+            foreach (var ehfLLx in EHFLLXLoadList)
+            {
+                Dictionary<string, string> row = new Dictionary<string, string>()
+                {
+                    {"LoadPattern", ehfLLx.Name},
+                    {"BasePattern", ehfLLx.BaseLoadPatternName},
+                    {"LoadRatio", Convert.ToString(ehfLLx.Factor)},
+                    {"LoadDir", "X"},
+                };
+
+                databaseTableAutoNotional.TableInList.Add(row);
+            }
+
+            foreach (var ehfLLy in EHFLLYLoadList)
+            {
+                Dictionary<string, string> row = new Dictionary<string, string>()
+                {
+                    {"LoadPattern", ehfLLy.Name},
+                    {"BasePattern", ehfLLy.BaseLoadPatternName},
+                    {"LoadRatio", Convert.ToString(ehfLLy.Factor)},
+                    {"LoadDir", "Y"},
+                };
+
+                databaseTableAutoNotional.TableInList.Add(row);
+            }
+
+
+
+
+
+            isError = src.HelperEtabs.ApplyEtabsTable(SapModel, databaseTableAutoNotional);
+
+            if (isError)
+            {
+                return true;
+            }
 
 
 

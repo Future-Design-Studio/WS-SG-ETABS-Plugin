@@ -208,6 +208,13 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
         List<string> ehfSDLYList = new List<string>();
         List<string> ehfLLYList = new List<string>();
 
+        List<string> ehfDLXblpList = new List<string>();
+        List<string> ehfSDLXblpList = new List<string>();
+        List<string> ehfLLXblpList = new List<string>();
+        List<string> ehfDLYblpList = new List<string>();
+        List<string> ehfSDLYblpList = new List<string>();
+        List<string> ehfLLYblpList = new List<string>();
+
         #endregion
 
         public WindowLoadComboMain(cSapModel SapModel, cPluginCallback Plugin)
@@ -220,8 +227,6 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             checkBoxExistingDL.IsChecked = true;
             checkBoxExistingSDL.IsChecked = true;
             checkBoxExistingLL.IsChecked = true;
-            checkBoxExistingWIND.IsChecked = true;
-            checkBoxExistingWINDVERTICAL.IsChecked = true;
             checkBoxExistingTEMP.IsChecked = true;
             checkBoxExistingSEISMIC.IsChecked = true;
             checkBoxExistingAL.IsChecked = true;
@@ -237,12 +242,6 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
             comBoxExistingLL.ItemsSource = outputCasesList;
             comBoxExistingLL.SelectedIndex = 0;
-
-            comBoxExistingWIND.ItemsSource = outputCasesList;
-            comBoxExistingWIND.SelectedIndex = 0;
-
-            comBoxExistingWINDVERTICAL.ItemsSource = outputCasesList;
-            comBoxExistingWINDVERTICAL.SelectedIndex = 0;
 
             comBoxExistingTEMP.ItemsSource = outputCasesList;
             comBoxExistingTEMP.SelectedIndex = 0;
@@ -263,13 +262,13 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             comBoxLL.SelectedIndex = 0;
 
             comBoxWIND.ItemsSource = quasiPermanentCategoryList;
-            comBoxWIND.SelectedIndex = 0;
+            comBoxWIND.SelectedIndex = 8;
 
             comBoxWINDVERTICAL.ItemsSource = quasiPermanentCategoryList;
-            comBoxWINDVERTICAL.SelectedIndex = 0;
+            comBoxWINDVERTICAL.SelectedIndex = 8;
 
             comBoxTEMP.ItemsSource = quasiPermanentCategoryList;
-            comBoxTEMP.SelectedIndex = 0;
+            comBoxTEMP.SelectedIndex = 9;
 
             comBoxNameWINDVERTICAL.ItemsSource = windvertdirectionList;
             comBoxNameWINDVERTICAL.SelectedIndex = 0;
@@ -302,13 +301,16 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 ClassLoadCombo.DeadLoad eachDeadLoad = new ClassLoadCombo.DeadLoad(selectedString, true);
                 deadLoadList.Add(eachDeadLoad);
 
-                ClassLoadCombo.NotionalLoad eachnotionalx = new ClassLoadCombo.NotionalLoad(notionalxyList[0] + comBoxExistingDL.Text + ")", double.Parse(textBoxNameNOTIONALFACTOR.Text));
+                ClassLoadCombo.NotionalLoad eachnotionalx = new ClassLoadCombo.NotionalLoad(notionalxyList[0] + comBoxExistingDL.Text + ")", double.Parse(textBoxNameNOTIONALFACTOR.Text), comBoxExistingDL.Text);
                 NotionalDXLoadList.Add(eachnotionalx);
-                ClassLoadCombo.NotionalLoad eachnotionaly = new ClassLoadCombo.NotionalLoad(notionalxyList[1] + comBoxExistingDL.Text + ")", double.Parse(textBoxNameNOTIONALFACTOR.Text));
+                ClassLoadCombo.NotionalLoad eachnotionaly = new ClassLoadCombo.NotionalLoad(notionalxyList[1] + comBoxExistingDL.Text + ")", double.Parse(textBoxNameNOTIONALFACTOR.Text), comBoxExistingDL.Text);
                 NotionalDYLoadList.Add(eachnotionaly);
 
                 ehfDLXList.Add(ehfList[0] + " (" + selectedString + ")");
                 ehfDLYList.Add(ehfList[1] + " (" + selectedString + ")");
+
+                ehfDLXblpList.Add(comBoxExistingDL.Text);
+                ehfDLYblpList.Add(comBoxExistingDL.Text);
             }
             else
             {
@@ -322,13 +324,16 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 ClassLoadCombo.DeadLoad eachDeadLoad = new ClassLoadCombo.DeadLoad(selectedString, false);
                 deadLoadList.Add(eachDeadLoad);
 
-                ClassLoadCombo.NotionalLoad eachnotionalx = new ClassLoadCombo.NotionalLoad(notionalxyList[0] + textBoxNameDL.Text + ")", double.Parse(textBoxNameNOTIONALFACTOR.Text));
+                ClassLoadCombo.NotionalLoad eachnotionalx = new ClassLoadCombo.NotionalLoad(notionalxyList[0] + textBoxNameDL.Text + ")", double.Parse(textBoxNameNOTIONALFACTOR.Text), textBoxNameDL.Text);
                 NotionalDXLoadList.Add(eachnotionalx);
-                ClassLoadCombo.NotionalLoad eachnotionaly = new ClassLoadCombo.NotionalLoad(notionalxyList[1] + textBoxNameDL.Text + ")", double.Parse(textBoxNameNOTIONALFACTOR.Text));
+                ClassLoadCombo.NotionalLoad eachnotionaly = new ClassLoadCombo.NotionalLoad(notionalxyList[1] + textBoxNameDL.Text + ")", double.Parse(textBoxNameNOTIONALFACTOR.Text), textBoxNameDL.Text);
                 NotionalDYLoadList.Add(eachnotionaly);
 
                 ehfDLXList.Add(ehfList[0] + " (" + selectedString + ")");
                 ehfDLYList.Add(ehfList[1] + " (" + selectedString + ")");
+
+                ehfDLXblpList.Add(textBoxNameDL.Text);
+                ehfDLYblpList.Add(textBoxNameDL.Text);
             }
         }
 
@@ -364,6 +369,9 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                 ehfDLXList.RemoveAt(selectedIndex);
                 ehfDLYList.RemoveAt(selectedIndex);
+
+                ehfDLXblpList.RemoveAt(selectedIndex);
+                ehfDLYblpList.RemoveAt(selectedIndex);
             }
         }
 
@@ -403,13 +411,16 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 ClassLoadCombo.SDLLoad eachSDeadLoad = new ClassLoadCombo.SDLLoad(selectedString, true);
                 SDLoadList.Add(eachSDeadLoad);
 
-                ClassLoadCombo.NotionalLoad eachnotionalx = new ClassLoadCombo.NotionalLoad(notionalxyList[0] + comBoxExistingSDL.Text + ")", double.Parse(textBoxNameNOTIONALFACTOR.Text));
+                ClassLoadCombo.NotionalLoad eachnotionalx = new ClassLoadCombo.NotionalLoad(notionalxyList[0] + comBoxExistingSDL.Text + ")", double.Parse(textBoxNameNOTIONALFACTOR.Text), comBoxExistingSDL.Text);
                 NotionalSDXLoadList.Add(eachnotionalx);
-                ClassLoadCombo.NotionalLoad eachnotionaly = new ClassLoadCombo.NotionalLoad(notionalxyList[1] + comBoxExistingSDL.Text + ")", double.Parse(textBoxNameNOTIONALFACTOR.Text));
+                ClassLoadCombo.NotionalLoad eachnotionaly = new ClassLoadCombo.NotionalLoad(notionalxyList[1] + comBoxExistingSDL.Text + ")", double.Parse(textBoxNameNOTIONALFACTOR.Text), comBoxExistingSDL.Text);
                 NotionalSDYLoadList.Add(eachnotionaly);
 
                 ehfSDLXList.Add(ehfList[0] + " (" + selectedString + ")");
                 ehfSDLYList.Add(ehfList[1] + " (" + selectedString + ")");
+
+                ehfSDLXblpList.Add(comBoxExistingSDL.Text);
+                ehfSDLYblpList.Add(comBoxExistingSDL.Text);
             }
             else
             {
@@ -423,13 +434,16 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 ClassLoadCombo.SDLLoad eachSDeadLoad = new ClassLoadCombo.SDLLoad(selectedString, false);
                 SDLoadList.Add(eachSDeadLoad);
 
-                ClassLoadCombo.NotionalLoad eachnotionalx = new ClassLoadCombo.NotionalLoad(notionalxyList[0] + textBoxNameSDL.Text + ")", double.Parse(textBoxNameNOTIONALFACTOR.Text));
+                ClassLoadCombo.NotionalLoad eachnotionalx = new ClassLoadCombo.NotionalLoad(notionalxyList[0] + textBoxNameSDL.Text + ")", double.Parse(textBoxNameNOTIONALFACTOR.Text), textBoxNameSDL.Text);
                 NotionalSDXLoadList.Add(eachnotionalx);
-                ClassLoadCombo.NotionalLoad eachnotionaly = new ClassLoadCombo.NotionalLoad(notionalxyList[1] + textBoxNameSDL.Text + ")", double.Parse(textBoxNameNOTIONALFACTOR.Text));
+                ClassLoadCombo.NotionalLoad eachnotionaly = new ClassLoadCombo.NotionalLoad(notionalxyList[1] + textBoxNameSDL.Text + ")", double.Parse(textBoxNameNOTIONALFACTOR.Text), textBoxNameSDL.Text);
                 NotionalSDYLoadList.Add(eachnotionaly);
 
                 ehfSDLXList.Add(ehfList[0] + " (" + selectedString + ")");
                 ehfSDLYList.Add(ehfList[1] + " (" + selectedString + ")");
+
+                ehfSDLXblpList.Add(textBoxNameSDL.Text);
+                ehfSDLYblpList.Add(textBoxNameSDL.Text);
             }
         }
 
@@ -455,6 +469,9 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                 ehfSDLXList.RemoveAt(selectedIndex);
                 ehfSDLYList.RemoveAt(selectedIndex);
+
+                ehfSDLXblpList.RemoveAt(selectedIndex);
+                ehfSDLYblpList.RemoveAt(selectedIndex);
             }
         }
 
@@ -497,6 +514,9 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                 ehfLLXList.Add(ehfList[0] + " (" + comBoxExistingLL.Text + ")");
                 ehfLLYList.Add(ehfList[1] + " (" + comBoxExistingLL.Text + ")");
+
+                ehfLLXblpList.Add(comBoxExistingLL.Text);
+                ehfLLYblpList.Add(comBoxExistingLL.Text);
             }
             else
             {
@@ -508,6 +528,9 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                 ehfLLXList.Add(ehfList[0] + " (" + textBoxNameLL.Text + ")");
                 ehfLLYList.Add(ehfList[1] + " (" + textBoxNameLL.Text + ")");
+
+                ehfLLXblpList.Add(textBoxNameLL.Text);
+                ehfLLYblpList.Add(textBoxNameLL.Text);
             }
         }
 
@@ -528,47 +551,10 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                 ehfLLXList.RemoveAt(selectedIndex);
                 ehfLLYList.RemoveAt(selectedIndex);
+
+                ehfLLXblpList.RemoveAt(selectedIndex);
+                ehfLLYblpList.RemoveAt(selectedIndex);
             }
-        }
-
-        private void checkBoxExistingWIND_Checked(object sender, RoutedEventArgs e)
-        {
-            comBoxExistingWIND.IsEnabled = true;
-            comBoxNameWIND.IsEnabled = false;
-            checkBoxWIND.IsEnabled = false;
-            comBoxWINDDIRECTION.IsEnabled = false;
-        }
-
-        private void checkBoxExistingWIND_Unchecked(object sender, RoutedEventArgs e)
-        {
-            comBoxExistingWIND.IsEnabled = false;
-            comBoxNameWIND.IsEnabled = true;
-            checkBoxWIND.IsEnabled = true;
-            comBoxWINDDIRECTION.IsEnabled = true;
-        }
-
-        private void checkBoxExistingWINDVERTICAL_Checked(object sender, RoutedEventArgs e)
-        {
-            comBoxExistingWINDVERTICAL.IsEnabled = true;
-            comBoxNameWINDVERTICAL.IsEnabled = false;
-            checkBoxWINDVERTICAL.IsEnabled = false;
-        }
-
-        private void checkBoxExistingWINDVERTICAL_Unchecked(object sender, RoutedEventArgs e)
-        {
-            comBoxExistingWINDVERTICAL.IsEnabled = false;
-            comBoxNameWINDVERTICAL.IsEnabled = true;
-            checkBoxWINDVERTICAL.IsEnabled = true;
-        }
-
-        private void comBoxExistingWIND_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
-
-        private void comBoxExistingWINDVERTICAL_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
         }
 
         private void comBoxNameWIND_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -617,152 +603,138 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             {
                 comBoxNameWIND.ItemsSource = wind4directionList;
                 comBoxNameWIND.SelectedIndex = 0;
+                listBoxChoosenWIND.Items.Clear();
+                WindLoadList.Clear();
             }    
             else
             {
                 comBoxNameWIND.ItemsSource = wind8directionList;
                 comBoxNameWIND.SelectedIndex = 0;
+                listBoxChoosenWIND.Items.Clear();
+                WindLoadList.Clear();
             }
         }
 
         private void Button_ADD_WIND_Click(object sender, RoutedEventArgs e)
         {
-            if (checkBoxExistingWIND.IsChecked == true)
+
+            if (checkBoxWIND.IsChecked == true)
             {
-                string selectedString = comBoxExistingWIND.Text + ", " + comBoxWIND.Text;
+                string selectedString = comBoxNameWIND.Text + ", " + comBoxWIND.Text;
                 listBoxChoosenWIND.Items.Add(selectedString);
 
-                ClassLoadCombo.WindLoad eachWindLoad = new ClassLoadCombo.WindLoad(comBoxExistingWIND.Text, true, comBoxWIND.Text);
+                ClassLoadCombo.WindLoad eachWindLoad = new ClassLoadCombo.WindLoad(comBoxNameWIND.Text, comBoxWIND.Text);
                 WindLoadList.Add(eachWindLoad);
             }
             else
             {
-                if (checkBoxWIND.IsChecked == true)
+                if (comBoxWINDDIRECTION.SelectedIndex == 0)
                 {
-                    string selectedString = comBoxNameWIND.Text + ", " + comBoxWIND.Text;
-                    listBoxChoosenWIND.Items.Add(selectedString);
-
-                    ClassLoadCombo.WindLoad eachWindLoad = new ClassLoadCombo.WindLoad(comBoxNameWIND.Text, false, comBoxWIND.Text);
-                    WindLoadList.Add(eachWindLoad);
-                }
-                else
-                {
-                    if (comBoxWINDDIRECTION.SelectedIndex == 0)
+                    if (comBoxNameWIND.SelectedIndex == 0)
                     {
-                        if (comBoxNameWIND.SelectedIndex == 0)
-                        {
-                            string selectedString = wind48noplusminusdirectionList[0] + ", " + comBoxWIND.Text;
-                            listBoxChoosenWIND.Items.Add(selectedString);
-                            string selectedString2 = wind48noplusminusdirectionList[1] + ", " + comBoxWIND.Text;
-                            listBoxChoosenWIND.Items.Add(selectedString2);
+                        string selectedString = wind48noplusminusdirectionList[0] + ", " + comBoxWIND.Text;
+                        listBoxChoosenWIND.Items.Add(selectedString);
+                        string selectedString2 = wind48noplusminusdirectionList[1] + ", " + comBoxWIND.Text;
+                        listBoxChoosenWIND.Items.Add(selectedString2);
 
-                            ClassLoadCombo.WindLoad eachWindLoad1 = new ClassLoadCombo.WindLoad(wind48noplusminusdirectionList[0], false, comBoxWIND.Text);
-                            WindLoadList.Add(eachWindLoad1);
-                            ClassLoadCombo.WindLoad eachWindLoad2 = new ClassLoadCombo.WindLoad(wind48noplusminusdirectionList[1], false, comBoxWIND.Text);
-                            WindLoadList.Add(eachWindLoad2);
-                        }
-                        else
-                        {
-                            string selectedString = wind48noplusminusdirectionList[2] + ", " + comBoxWIND.Text;
-                            listBoxChoosenWIND.Items.Add(selectedString);
-                            string selectedString2 = wind48noplusminusdirectionList[3] + ", " + comBoxWIND.Text;
-                            listBoxChoosenWIND.Items.Add(selectedString2);
-
-                            ClassLoadCombo.WindLoad eachWindLoad1 = new ClassLoadCombo.WindLoad(wind48noplusminusdirectionList[2], false, comBoxWIND.Text);
-                            WindLoadList.Add(eachWindLoad1);
-                            ClassLoadCombo.WindLoad eachWindLoad2 = new ClassLoadCombo.WindLoad(wind48noplusminusdirectionList[3], false, comBoxWIND.Text);
-                            WindLoadList.Add(eachWindLoad2);
-                        }                        
+                        ClassLoadCombo.WindLoad eachWindLoad1 = new ClassLoadCombo.WindLoad(wind48noplusminusdirectionList[0], comBoxWIND.Text);
+                        WindLoadList.Add(eachWindLoad1);
+                        ClassLoadCombo.WindLoad eachWindLoad2 = new ClassLoadCombo.WindLoad(wind48noplusminusdirectionList[1], comBoxWIND.Text);
+                        WindLoadList.Add(eachWindLoad2);
                     }
                     else
                     {
-                        if (comBoxNameWIND.SelectedIndex == 0)
-                        {
-                            string selectedString = wind48noplusminusdirectionList[4] + ", " + comBoxWIND.Text;
-                            listBoxChoosenWIND.Items.Add(selectedString);
-                            string selectedString2 = wind48noplusminusdirectionList[5] + ", " + comBoxWIND.Text;
-                            listBoxChoosenWIND.Items.Add(selectedString2);
+                        string selectedString = wind48noplusminusdirectionList[2] + ", " + comBoxWIND.Text;
+                        listBoxChoosenWIND.Items.Add(selectedString);
+                        string selectedString2 = wind48noplusminusdirectionList[3] + ", " + comBoxWIND.Text;
+                        listBoxChoosenWIND.Items.Add(selectedString2);
 
-                            ClassLoadCombo.WindLoad eachWindLoad1 = new ClassLoadCombo.WindLoad(wind48noplusminusdirectionList[4], false, comBoxWIND.Text);
-                            WindLoadList.Add(eachWindLoad1);
-                            ClassLoadCombo.WindLoad eachWindLoad2 = new ClassLoadCombo.WindLoad(wind48noplusminusdirectionList[5], false, comBoxWIND.Text);
-                            WindLoadList.Add(eachWindLoad2);
-                        }
-                        if (comBoxNameWIND.SelectedIndex == 1)
-                        {
-                            string selectedString = wind48noplusminusdirectionList[6] + ", " + comBoxWIND.Text;
-                            listBoxChoosenWIND.Items.Add(selectedString);
-                            string selectedString2 = wind48noplusminusdirectionList[7] + ", " + comBoxWIND.Text;
-                            listBoxChoosenWIND.Items.Add(selectedString2);
-
-                            ClassLoadCombo.WindLoad eachWindLoad1 = new ClassLoadCombo.WindLoad(wind48noplusminusdirectionList[6], false, comBoxWIND.Text);
-                            WindLoadList.Add(eachWindLoad1);
-                            ClassLoadCombo.WindLoad eachWindLoad2 = new ClassLoadCombo.WindLoad(wind48noplusminusdirectionList[7], false, comBoxWIND.Text);
-                            WindLoadList.Add(eachWindLoad2);
-                        }
-                        if (comBoxNameWIND.SelectedIndex == 2)
-                        {
-                            string selectedString = wind48noplusminusdirectionList[8] + ", " + comBoxWIND.Text;
-                            listBoxChoosenWIND.Items.Add(selectedString);
-                            string selectedString2 = wind48noplusminusdirectionList[9] + ", " + comBoxWIND.Text;
-                            listBoxChoosenWIND.Items.Add(selectedString2);
-
-                            ClassLoadCombo.WindLoad eachWindLoad1 = new ClassLoadCombo.WindLoad(wind48noplusminusdirectionList[8], false, comBoxWIND.Text);
-                            WindLoadList.Add(eachWindLoad1);
-                            ClassLoadCombo.WindLoad eachWindLoad2 = new ClassLoadCombo.WindLoad(wind48noplusminusdirectionList[9], false, comBoxWIND.Text);
-                            WindLoadList.Add(eachWindLoad2);
-                        }
-                        if (comBoxNameWIND.SelectedIndex == 3)
-                        {
-                            string selectedString = wind48noplusminusdirectionList[10] + ", " + comBoxWIND.Text;
-                            listBoxChoosenWIND.Items.Add(selectedString);
-                            string selectedString2 = wind48noplusminusdirectionList[11] + ", " + comBoxWIND.Text;
-                            listBoxChoosenWIND.Items.Add(selectedString2);
-
-                            ClassLoadCombo.WindLoad eachWindLoad1 = new ClassLoadCombo.WindLoad(wind48noplusminusdirectionList[10], false, comBoxWIND.Text);
-                            WindLoadList.Add(eachWindLoad1);
-                            ClassLoadCombo.WindLoad eachWindLoad2 = new ClassLoadCombo.WindLoad(wind48noplusminusdirectionList[11], false, comBoxWIND.Text);
-                            WindLoadList.Add(eachWindLoad2);
-                        }
-                    }
-                        
+                        ClassLoadCombo.WindLoad eachWindLoad1 = new ClassLoadCombo.WindLoad(wind48noplusminusdirectionList[2], comBoxWIND.Text);
+                        WindLoadList.Add(eachWindLoad1);
+                        ClassLoadCombo.WindLoad eachWindLoad2 = new ClassLoadCombo.WindLoad(wind48noplusminusdirectionList[3], comBoxWIND.Text);
+                        WindLoadList.Add(eachWindLoad2);
+                    }                        
                 }
+                else
+                {
+                    if (comBoxNameWIND.SelectedIndex == 0)
+                    {
+                        string selectedString = wind48noplusminusdirectionList[4] + ", " + comBoxWIND.Text;
+                        listBoxChoosenWIND.Items.Add(selectedString);
+                        string selectedString2 = wind48noplusminusdirectionList[5] + ", " + comBoxWIND.Text;
+                        listBoxChoosenWIND.Items.Add(selectedString2);
+
+                        ClassLoadCombo.WindLoad eachWindLoad1 = new ClassLoadCombo.WindLoad(wind48noplusminusdirectionList[4], comBoxWIND.Text);
+                        WindLoadList.Add(eachWindLoad1);
+                        ClassLoadCombo.WindLoad eachWindLoad2 = new ClassLoadCombo.WindLoad(wind48noplusminusdirectionList[5], comBoxWIND.Text);
+                        WindLoadList.Add(eachWindLoad2);
+                    }
+                    else if (comBoxNameWIND.SelectedIndex == 1)
+                    {
+                        string selectedString = wind48noplusminusdirectionList[6] + ", " + comBoxWIND.Text;
+                        listBoxChoosenWIND.Items.Add(selectedString);
+                        string selectedString2 = wind48noplusminusdirectionList[7] + ", " + comBoxWIND.Text;
+                        listBoxChoosenWIND.Items.Add(selectedString2);
+
+                        ClassLoadCombo.WindLoad eachWindLoad1 = new ClassLoadCombo.WindLoad(wind48noplusminusdirectionList[6], comBoxWIND.Text);
+                        WindLoadList.Add(eachWindLoad1);
+                        ClassLoadCombo.WindLoad eachWindLoad2 = new ClassLoadCombo.WindLoad(wind48noplusminusdirectionList[7], comBoxWIND.Text);
+                        WindLoadList.Add(eachWindLoad2);
+                    }
+                    else if (comBoxNameWIND.SelectedIndex == 2)
+                    {
+                        string selectedString = wind48noplusminusdirectionList[8] + ", " + comBoxWIND.Text;
+                        listBoxChoosenWIND.Items.Add(selectedString);
+                        string selectedString2 = wind48noplusminusdirectionList[9] + ", " + comBoxWIND.Text;
+                        listBoxChoosenWIND.Items.Add(selectedString2);
+
+                        ClassLoadCombo.WindLoad eachWindLoad1 = new ClassLoadCombo.WindLoad(wind48noplusminusdirectionList[8], comBoxWIND.Text);
+                        WindLoadList.Add(eachWindLoad1);
+                        ClassLoadCombo.WindLoad eachWindLoad2 = new ClassLoadCombo.WindLoad(wind48noplusminusdirectionList[9], comBoxWIND.Text);
+                        WindLoadList.Add(eachWindLoad2);
+                    }
+                    else if (comBoxNameWIND.SelectedIndex == 3)
+                    {
+                        string selectedString = wind48noplusminusdirectionList[10] + ", " + comBoxWIND.Text;
+                        listBoxChoosenWIND.Items.Add(selectedString);
+                        string selectedString2 = wind48noplusminusdirectionList[11] + ", " + comBoxWIND.Text;
+                        listBoxChoosenWIND.Items.Add(selectedString2);
+
+                        ClassLoadCombo.WindLoad eachWindLoad1 = new ClassLoadCombo.WindLoad(wind48noplusminusdirectionList[10], comBoxWIND.Text);
+                        WindLoadList.Add(eachWindLoad1);
+                        ClassLoadCombo.WindLoad eachWindLoad2 = new ClassLoadCombo.WindLoad(wind48noplusminusdirectionList[11], comBoxWIND.Text);
+                        WindLoadList.Add(eachWindLoad2);
+                    }
+                }
+                        
+                
             }
         }
 
         private void Button_ADD_WINDVERTICAL_Click(object sender, RoutedEventArgs e)
         {
-            if (checkBoxExistingWINDVERTICAL.IsChecked == true)
+            
+            if (checkBoxWINDVERTICAL.IsChecked ==true)
             {
-                string selectedString = comBoxExistingWINDVERTICAL.Text + ", " + comBoxWINDVERTICAL.Text;
+                string selectedString = comBoxNameWINDVERTICAL.Text + ", " + comBoxWINDVERTICAL.Text;
                 listBoxChoosenWIND.Items.Add(selectedString);
 
-                ClassLoadCombo.WindLoad eachWindLoad = new ClassLoadCombo.WindLoad(comBoxExistingWINDVERTICAL.Text, true, comBoxWINDVERTICAL.Text);
+                ClassLoadCombo.WindLoad eachWindLoad = new ClassLoadCombo.WindLoad(comBoxNameWINDVERTICAL.Text, comBoxWINDVERTICAL.Text);
                 WindLoadList.Add(eachWindLoad);
             }
             else
             {
-                if (checkBoxWINDVERTICAL.IsChecked ==true)
-                {
-                    string selectedString = comBoxNameWINDVERTICAL.Text + ", " + comBoxWINDVERTICAL.Text;
-                    listBoxChoosenWIND.Items.Add(selectedString);
+                string selectedString = windvertnoplusminusdirectionList[0] + ", " + comBoxWINDVERTICAL.Text;
+                listBoxChoosenWIND.Items.Add(selectedString);
+                string selectedString2 = windvertnoplusminusdirectionList[1] + ", " + comBoxWINDVERTICAL.Text;
+                listBoxChoosenWIND.Items.Add(selectedString2);
 
-                    ClassLoadCombo.WindLoad eachWindLoad = new ClassLoadCombo.WindLoad(comBoxNameWINDVERTICAL.Text, false, comBoxWINDVERTICAL.Text);
-                    WindLoadList.Add(eachWindLoad);
-                }
-                else
-                {
-                    string selectedString = windvertnoplusminusdirectionList[0] + ", " + comBoxWINDVERTICAL.Text;
-                    listBoxChoosenWIND.Items.Add(selectedString);
-                    string selectedString2 = windvertnoplusminusdirectionList[1] + ", " + comBoxWINDVERTICAL.Text;
-                    listBoxChoosenWIND.Items.Add(selectedString2);
-
-                    ClassLoadCombo.WindLoad eachWindLoad1 = new ClassLoadCombo.WindLoad(windvertnoplusminusdirectionList[0], false, comBoxWINDVERTICAL.Text);
-                    WindLoadList.Add(eachWindLoad1);
-                    ClassLoadCombo.WindLoad eachWindLoad2 = new ClassLoadCombo.WindLoad(windvertnoplusminusdirectionList[1], false, comBoxWINDVERTICAL.Text);
-                    WindLoadList.Add(eachWindLoad2);
-                }
+                ClassLoadCombo.WindLoad eachWindLoad1 = new ClassLoadCombo.WindLoad(windvertnoplusminusdirectionList[0], comBoxWINDVERTICAL.Text);
+                WindLoadList.Add(eachWindLoad1);
+                ClassLoadCombo.WindLoad eachWindLoad2 = new ClassLoadCombo.WindLoad(windvertnoplusminusdirectionList[1], comBoxWINDVERTICAL.Text);
+                WindLoadList.Add(eachWindLoad2);
             }
+            
         }
 
         private void listBoxChoosenWIND_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -1066,53 +1038,65 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
         private void Button_ADD_EHF_Click(object sender, RoutedEventArgs e)
         {
+            int i = 0;
             foreach (string ehfdl in ehfDLXList)
             {
                 string selectedString = ehfdl + textBoxNameEHF.Text;
                 listBoxChoosenEHF.Items.Add(selectedString);
 
-                ClassLoadCombo.EHFLoad eachehfLoad = new ClassLoadCombo.EHFLoad(ehfdl, double.Parse(textBoxNameEHF.Text));
+                ClassLoadCombo.EHFLoad eachehfLoad = new ClassLoadCombo.EHFLoad(ehfdl, double.Parse(textBoxNameEHF.Text), ehfDLXblpList[i]);
                 EHFDLXLoadList.Add(eachehfLoad);
+                i++;
             }
+            i = 0;
             foreach (string ehfdl in ehfDLYList)
             {
                 string selectedString = ehfdl + textBoxNameEHF.Text;
                 listBoxChoosenEHF.Items.Add(selectedString);
 
-                ClassLoadCombo.EHFLoad eachehfLoad = new ClassLoadCombo.EHFLoad(ehfdl, double.Parse(textBoxNameEHF.Text));
+                ClassLoadCombo.EHFLoad eachehfLoad = new ClassLoadCombo.EHFLoad(ehfdl, double.Parse(textBoxNameEHF.Text), ehfDLYblpList[i]);
                 EHFDLYLoadList.Add(eachehfLoad);
+                i++;
             }
+            i = 0;
             foreach (string ehfsdl in ehfSDLXList)
             {
                 string selectedString = ehfsdl + textBoxNameEHF.Text;
                 listBoxChoosenEHF.Items.Add(selectedString);
 
-                ClassLoadCombo.EHFLoad eachehfLoad = new ClassLoadCombo.EHFLoad(ehfsdl, double.Parse(textBoxNameEHF.Text));
+                ClassLoadCombo.EHFLoad eachehfLoad = new ClassLoadCombo.EHFLoad(ehfsdl, double.Parse(textBoxNameEHF.Text), ehfSDLXblpList[i]);
                 EHFSDLXLoadList.Add(eachehfLoad);
+                i++;
             }
+            i = 0;
             foreach (string ehfsdl in ehfSDLYList)
             {
                 string selectedString = ehfsdl + textBoxNameEHF.Text;
                 listBoxChoosenEHF.Items.Add(selectedString);
 
-                ClassLoadCombo.EHFLoad eachehfLoad = new ClassLoadCombo.EHFLoad(ehfsdl, double.Parse(textBoxNameEHF.Text));
+                ClassLoadCombo.EHFLoad eachehfLoad = new ClassLoadCombo.EHFLoad(ehfsdl, double.Parse(textBoxNameEHF.Text), ehfSDLYblpList[i]);
                 EHFSDLYLoadList.Add(eachehfLoad);
+                i++;
             }
+            i = 0;
             foreach (string ehfll in ehfLLXList)
             {
                 string selectedString = ehfll + textBoxNameEHF.Text;
                 listBoxChoosenEHF.Items.Add(selectedString);
 
-                ClassLoadCombo.EHFLoad eachehfLoad = new ClassLoadCombo.EHFLoad(ehfll, double.Parse(textBoxNameEHF.Text));
+                ClassLoadCombo.EHFLoad eachehfLoad = new ClassLoadCombo.EHFLoad(ehfll, double.Parse(textBoxNameEHF.Text), ehfLLXblpList[i]);
                 EHFLLXLoadList.Add(eachehfLoad);
+                i++;
             }
+            i = 0;
             foreach (string ehfll in ehfLLYList)
             {
                 string selectedString = ehfll + textBoxNameEHF.Text;
                 listBoxChoosenEHF.Items.Add(selectedString);
 
-                ClassLoadCombo.EHFLoad eachehfLoad = new ClassLoadCombo.EHFLoad(ehfll, double.Parse(textBoxNameEHF.Text));
+                ClassLoadCombo.EHFLoad eachehfLoad = new ClassLoadCombo.EHFLoad(ehfll, double.Parse(textBoxNameEHF.Text), ehfLLYblpList[i]);
                 EHFLLYLoadList.Add(eachehfLoad);
+                i++;
             }
         }
 
@@ -1123,7 +1107,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
         private void Button_REMOVE_EHF_Click(object sender, RoutedEventArgs e)
         {
-            if (listBoxChoosenEHF.Items.Count != 0 && listBoxChoosenEHF.SelectedIndex != -1)
+            if (listBoxChoosenEHF.Items.Count != 0)
             {
                 listBoxChoosenEHF.Items.Clear();
 

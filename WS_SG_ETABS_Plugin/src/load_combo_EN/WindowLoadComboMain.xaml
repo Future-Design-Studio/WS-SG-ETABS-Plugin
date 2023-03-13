@@ -210,8 +210,6 @@
                 <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
-                <ColumnDefinition Width="*"></ColumnDefinition>
-                <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
             <Grid.RowDefinitions>
@@ -223,67 +221,52 @@
             </Grid.RowDefinitions>
 
             <Label Grid.Column="0" Content="Load Pattern Type" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="2"/>
-            <Label Grid.Column="2" Content="Use Existing Load Pattern?" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1"/>
-            <Label Grid.Column="3" Content="Load Pattern Name" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="2"/>
-            <Label Grid.Column="5" Content="Category for ψ factor" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-            <Label Grid.Column="6" Content="Consider +/- ?" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-            <Label Grid.Column="7" Content="Number of Directions" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <Label Grid.Column="2" Content="Load Pattern Name" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1"/>
+            <Label Grid.Column="3" Content="Category for ψ factor" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <Label Grid.Column="4" Content="Consider +/- ?" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <Label Grid.Column="5" Content="Number of Directions" VerticalAlignment="Center" HorizontalAlignment="Center"/>
 
             <Label Grid.Row="1" Content="Qk" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.RowSpan="2"/>
             <Label Grid.Row="1" Grid.Column="1" Content="Wind Load" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             <Label Grid.Row="2" Grid.Column="1" Content="Wind Vertical Load" VerticalAlignment="Center" HorizontalAlignment="Center"/>
 
-            <CheckBox x:Name="checkBoxExistingWIND" Grid.Row="1" Grid.Column="2"  Grid.ColumnSpan="1"
-                      Checked="checkBoxExistingWIND_Checked" Unchecked="checkBoxExistingWIND_Unchecked" 
-                      VerticalAlignment="Center" HorizontalAlignment="Center">
-            </CheckBox>
-            <ComboBox  Grid.Row="1" Grid.Column="3" x:Name="comBoxExistingWIND" 
+            <ComboBox  Grid.Row="1" Grid.Column="2" x:Name="comBoxNameWIND" 
                        VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
-                       Text="0.5" SelectionChanged="comBoxExistingWIND_SelectionChanged"></ComboBox>
-            <ComboBox  Grid.Row="1" Grid.Column="4" x:Name="comBoxNameWIND" 
-                       VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
-                       Text="0.5" SelectionChanged="comBoxNameWIND_SelectionChanged" IsEnabled="False"></ComboBox>
+                       Text="0.5" SelectionChanged="comBoxNameWIND_SelectionChanged" IsEnabled="True"></ComboBox>
 
-            <CheckBox x:Name="checkBoxExistingWINDVERTICAL" Grid.Row="2" Grid.Column="2"  Grid.ColumnSpan="1"
-                      Checked="checkBoxExistingWINDVERTICAL_Checked" Unchecked="checkBoxExistingWINDVERTICAL_Unchecked" 
-                      VerticalAlignment="Center" HorizontalAlignment="Center">
-            </CheckBox>
-            <ComboBox  Grid.Row="2" Grid.Column="3" x:Name="comBoxExistingWINDVERTICAL" 
+            <ComboBox  Grid.Row="2" Grid.Column="2" x:Name="comBoxNameWINDVERTICAL" 
                        VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
-                       Text="0.5" SelectionChanged="comBoxExistingWINDVERTICAL_SelectionChanged"></ComboBox>
-            <ComboBox  Grid.Row="2" Grid.Column="4" x:Name="comBoxNameWINDVERTICAL" 
-                       VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
-                       Text="0.5" SelectionChanged="comBoxNameWINDVERTICAL_SelectionChanged" IsEnabled="False"></ComboBox>
+                       Text="0.5" SelectionChanged="comBoxNameWINDVERTICAL_SelectionChanged" IsEnabled="True"></ComboBox>
 
-            <ComboBox  Grid.Row="1" Grid.Column="5" x:Name="comBoxWIND" 
+            <ComboBox  Grid.Row="1" Grid.Column="3" x:Name="comBoxWIND" 
                        VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
                        Text="0.5" SelectionChanged="comBoxWIND_SelectionChanged"></ComboBox>
-            <ComboBox  Grid.Row="2" Grid.Column="5" x:Name="comBoxWINDVERTICAL" 
+            <ComboBox  Grid.Row="2" Grid.Column="3" x:Name="comBoxWINDVERTICAL" 
                        VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
                        Text="0.5" SelectionChanged="comBoxWINDVERTICAL_SelectionChanged"></ComboBox>
 
-            <CheckBox x:Name="checkBoxWIND" Grid.Row="1" Grid.Column="6"  Grid.ColumnSpan="1"
+            <CheckBox x:Name="checkBoxWIND" Grid.Row="1" Grid.Column="4"  Grid.ColumnSpan="1"
                       Checked="checkBoxWIND_Checked" Unchecked="checkBoxWIND_Unchecked" 
-                      VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="False" IsEnabled="False">
+                      VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="False" IsEnabled="True">
             </CheckBox>
-            <CheckBox x:Name="checkBoxWINDVERTICAL" Grid.Row="2" Grid.Column="6"  Grid.ColumnSpan="1"
+            <CheckBox x:Name="checkBoxWINDVERTICAL" Grid.Row="2" Grid.Column="4"  Grid.ColumnSpan="1"
                       Checked="checkBoxWINDVERTICAL_Checked" Unchecked="checkBoxWINDVERTICAL_Unchecked" 
-                      VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="False" IsEnabled="False">
+                      VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="False" IsEnabled="True">
             </CheckBox>
 
-            <ComboBox  Grid.Row="1" Grid.Column="7" x:Name="comBoxWINDDIRECTION" 
+            <ComboBox  Grid.Row="1" Grid.Column="5" x:Name="comBoxWINDDIRECTION" 
                        VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
                        Text="0.5" SelectionChanged="comBoxWINDDIRECTION_SelectionChanged"></ComboBox>
 
-            <Button Grid.Row="1" Grid.Column="8" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_ADD_WIND_Click" ></Button>
-            <Button Grid.Row="2" Grid.Column="8" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_ADD_WINDVERTICAL_Click" ></Button>
+            <Button Grid.Row="1" Grid.Column="6" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_ADD_WIND_Click" ></Button>
+            <Button Grid.Row="2" Grid.Column="6" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_ADD_WINDVERTICAL_Click" ></Button>
 
-            <ListBox x:Name="listBoxChoosenWIND" Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="9" 
+            <ListBox x:Name="listBoxChoosenWIND" Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="7" 
                      d:ItemsSource="{d:SampleData ItemCount=10}" SelectionMode="Single"
                      Margin="0 0 0 0" SelectionChanged="listBoxChoosenWIND_SelectionChanged">
             </ListBox>
 
-            <Button Grid.Row="4" Grid.Column="8" Content="Remove" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_REMOVE_WINDS_Click" ></Button>
+            <Button Grid.Row="4" Grid.Column="6" Content="Remove" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_REMOVE_WINDS_Click" ></Button>
 
         </Grid>
 
