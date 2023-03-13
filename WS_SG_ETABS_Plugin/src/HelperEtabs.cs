@@ -592,7 +592,7 @@ namespace WS_SG_ETABS_Plugin.src
         /// <param name="Sap">Refer to specified SAP model</param>
         /// <param name="tableKey">Table key that we want to extract</param>
         /// <returns>
-        /// Return tupple (isError, tableInList)
+        /// Return tupple (isError, databaseTable)
         /// </returns>
         public static (bool, DatabaseTable) GetTableDisplay(cSapModel Sap, string tableKey, bool showWarning)
         {
@@ -1141,7 +1141,9 @@ namespace WS_SG_ETABS_Plugin.src
         /// <param name="databaseTableToFilter"></param>
         /// <param name="groupDatabaseTable"></param>
         /// <param name="groupName"></param>
-        /// <returns></returns>
+        /// <returns>
+        /// Return (isError, databaseTableFiltered)
+        /// </returns>
         public static (bool, DatabaseTable) FilterDatabaseTableUniqueNameByGroup(DatabaseTable databaseTableToFilter, DatabaseTable groupDatabaseTable, string groupName)
         {
             bool isError = false;

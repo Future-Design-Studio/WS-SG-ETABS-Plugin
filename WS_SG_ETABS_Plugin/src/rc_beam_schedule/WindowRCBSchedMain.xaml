@@ -14,7 +14,7 @@
             <RowDefinition Height="0.5*"></RowDefinition>
             <RowDefinition Height="0.6*"></RowDefinition>
             <RowDefinition Height="0.9*"></RowDefinition>
-            <RowDefinition Height="3*"></RowDefinition>
+            <RowDefinition Height="3.2*"></RowDefinition>
             <RowDefinition Height="1.8*"></RowDefinition>
             <RowDefinition Height="2.3*"></RowDefinition>
             <RowDefinition Height="1.4*"></RowDefinition>

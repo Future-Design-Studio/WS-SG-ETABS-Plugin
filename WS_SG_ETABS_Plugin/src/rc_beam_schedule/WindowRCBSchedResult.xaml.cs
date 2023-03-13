@@ -30,6 +30,14 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
             _SapModel = SapModel;
             _Plugin = Plugin;
 
+            //Check if any group is choosen
+            bool requiredGroupListExist = src.HelperUI.CheckGroupListExist(_SapModel, listChoosenGroup);
+
+            if (!requiredGroupListExist)
+            {
+                return;
+            }
+
             //Main logic
             bool isError = src.rc_beam_schedule.FunctionRCBSched.GetRCBeamSchedule(_SapModel, fileName, filePath, leftLength, midLength, rightLength, cantileverLeftLength, cantileverRightLength, 
                 rebarSpc, rebarSpcPreference, maxShearLinksSpacing, minShearLinksSpacing, shearLinksSpacingStep, cover, rebarDiameterList, shearLinksDiameterList, listChoosenGroup);

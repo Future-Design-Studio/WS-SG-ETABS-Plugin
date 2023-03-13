@@ -87,8 +87,8 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
                 double midLength = Convert.ToDouble(textBoxLengthMid.Text);
                 double rightLength = Convert.ToDouble(textBoxLengthRight.Text);
 
-                double cantileverLeftLength = Convert.ToDouble(textBoxLengthLeft.Text);
-                double cantileverRightLength = Convert.ToDouble(textBoxLengthRight.Text);
+                double cantileverLeftLength = Convert.ToDouble(textBoxCantileverLengthLeft.Text);
+                double cantileverRightLength = Convert.ToDouble(textBoxCantileverLengthLeft.Text);
 
                 double cover = Convert.ToDouble(textBoxCover.Text);
                 double maxShearLinksSpacing = Convert.ToDouble(textBoxMaxShearLinksSpacing.Text);
