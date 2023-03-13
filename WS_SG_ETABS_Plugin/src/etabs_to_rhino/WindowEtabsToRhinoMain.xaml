@@ -71,11 +71,23 @@
                 2. A new .3dm file will be created in the given file path.<LineBreak/>
         </TextBlock>
 
+        <Grid Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
 
-        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button x:Name="buttonCancel" Content="Cancel" Width="100" Click="buttonCancel_Click"/>
-            <Button x:Name="buttonOk" Content="Export" Width="100" Click="buttonOk_Click"/>
-        </StackPanel>
+            <Grid Grid.Column="0">
+                <Image Source="/WS_SG_ETABS_Plugin;component/src/resources/RambollFDSLogo.PNG" HorizontalAlignment="Left"/>
+            </Grid>
 
+            <Grid Grid.Column="1">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button x:Name="buttonCancel" Content="Cancel" Width="100" Click="buttonCancel_Click"/>
+                    <Button x:Name="buttonOk" Content="Export" Width="100" Click="buttonOk_Click"/>
+                </StackPanel>
+            </Grid>
+        </Grid>
+        
     </Grid>
 </Window>
