@@ -30,9 +30,8 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
 
         public WindowPlotReactionResult(cSapModel SapModel, cPluginCallback Plugin, List<string> listChoosenGroup, string outputCase, 
             string reactionDirection, double forceFactor, double bubbleScaleFactor, int textSize, int titleSize, int axisTitleSize, double gridSpacingX, double gridSpacingY, string title, bool splitX, bool splitY, 
-            int divisionX, int divisionY, double offsetX, double offsetY, int sumTextSizeX, int sumTextSizeY, double separationX, double separationY)
+            int divisionX, int divisionY, double offsetX, double offsetY, int sumTextSizeX, int sumTextSizeY, double separationX, double separationY, List<src.HelperEtabs.DatabaseTable> databaseTableList)
         {
-
             _SapModel = SapModel;
             _Plugin = Plugin;
 
@@ -47,9 +46,24 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
             InitializeComponent();
 
             //Main logic
-            bool isError = src.plot_reaction.FunctionPlotReaction.PlotReaction(_SapModel, listChoosenGroup, 
-                outputCase, reactionDirection, ReactionPlot, forceFactor, bubbleScaleFactor, textSize, titleSize, axisTitleSize, gridSpacingX, gridSpacingY, title, splitX, splitY, divisionX, divisionY, offsetX, offsetY,
-                sumTextSizeX, sumTextSizeY, separationX, separationY);
+            List<WpfPlot> reactionPlotList = new List<WpfPlot>();
+            WpfPlot reactionPlot1 = new WpfPlot();
+            reactionPlotList.Add(reactionPlot1);
+
+            bool isError = false;
+            double baseReaction = 0;
+            double totalReactionInPlot = 0;
+                
+            (isError, baseReaction, totalReactionInPlot) = src.plot_reaction.FunctionPlotReaction.PlotReaction(_SapModel, listChoosenGroup, 
+            outputCase, reactionDirection, ReactionPlot, forceFactor, bubbleScaleFactor, textSize, titleSize, axisTitleSize, gridSpacingX, gridSpacingY, title, splitX, splitY, divisionX, divisionY, offsetX, offsetY,
+            sumTextSizeX, sumTextSizeY, separationX, separationY, databaseTableList);
+
+            //Show comparison of base reaction to total reaction in plot
+            IsEnabled = false;
+            src.plot_reaction.WindowPlotReactionBaseReaction windowPlotReactionBaseReaction = new src.plot_reaction.WindowPlotReactionBaseReaction(baseReaction, totalReactionInPlot);
+            IsEnabled = true;
+
+            //ReactionPlot.Content = reactionPlotList[0];
 
             if (isError)
             {

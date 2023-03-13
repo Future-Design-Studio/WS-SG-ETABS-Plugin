@@ -24,6 +24,8 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
         cSapModel _SapModel;
         cPluginCallback _Plugin;
 
+        src.HelperEtabs.DatabaseTable jointReactionTable = new src.HelperEtabs.DatabaseTable();
+
         public WindowPlotReactionGraphMain(cSapModel SapModel, cPluginCallback Plugin)
         {
             _SapModel = SapModel;
@@ -45,6 +47,11 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
             //Fill in combobox for direction
             comBoxReactionDirection.ItemsSource = src.plot_reaction.FunctionPlotReaction.reactionDirectionList;
             comBoxReactionDirection.SelectedIndex = 2;
+
+            //Get joint reaction database table
+            bool isError = false;
+            src.HelperEtabs.DatabaseTable jointReactionTable = new src.HelperEtabs.DatabaseTable();
+            (isError, jointReactionTable) = src.HelperEtabs.GetTableDisplay(SapModel, "Joint Reactions", false);
 
             ShowDialog();
         }
@@ -162,7 +169,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
                 //Call up copy property result window
                 src.plot_reaction.graph.WindowPlotReactionGraphResult windowPlotReactionResult = new src.plot_reaction.graph.WindowPlotReactionGraphResult(_SapModel, _Plugin, listChoosenGroup,
                     outputCase, reactionDirection, forceFactor, bubbleScaleFactor, textSize, titleSize, axisTitleSize, gridSpacingX, gridSpacingY, title, splitX, splitY, divisionX, divisionY, offsetX, offsetY,
-                    sumTextSizeX, sumTextSizeY, separationX, separationY);
+                    sumTextSizeX, sumTextSizeY, separationX, separationY, jointReactionTable);
                 IsEnabled = true;
             }
 

@@ -26,6 +26,9 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
         cSapModel _SapModel;
         cPluginCallback _Plugin;
 
+        //List of tables to save joint reaction and grouping table
+        List<src.HelperEtabs.DatabaseTable> databaseTableList = new List<HelperEtabs.DatabaseTable>();
+
         public WindowPlotReactionMain(cSapModel SapModel, cPluginCallback Plugin)
         {
             _SapModel = SapModel;
@@ -47,6 +50,14 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
             //Fill in combobox for direction
             comBoxReactionDirection.ItemsSource = src.plot_reaction.FunctionPlotReaction.reactionDirectionList;
             comBoxReactionDirection.SelectedIndex = 2;
+
+            //Turn on all load
+            src.HelperEtabs.OnAllLoadDatabase(SapModel);
+
+            //Get joint reaction database table
+            bool isError = false;
+            List<string> tableKeys = new List<string>{ "Joint Reactions", "Group Assignments", "Base Reactions" };
+            (isError, databaseTableList) = src.HelperEtabs.GetMultipleTableDisplay(SapModel, tableKeys, true);
 
             ShowDialog();
         }
@@ -164,7 +175,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
                 //Call up copy property result window
                 src.plot_reaction.WindowPlotReactionResult windowPlotReactionResult = new src.plot_reaction.WindowPlotReactionResult(_SapModel, _Plugin, listChoosenGroup,
                     outputCase, reactionDirection, forceFactor, bubbleScaleFactor, textSize, titleSize, axisTitleSize, gridSpacingX, gridSpacingY, title, splitX, splitY, divisionX, divisionY, offsetX, offsetY,
-                    sumTextSizeX, sumTextSizeY, separationX, separationY);
+                    sumTextSizeX, sumTextSizeY, separationX, separationY, databaseTableList);
                 IsEnabled = true;
             }
 
