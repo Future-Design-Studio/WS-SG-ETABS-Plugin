@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace WS_SG_ETABS_Plugin.src.plot_reaction
+namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
 {
     /// <summary>
-    /// Interaction logic for WindowPlotReactionBaseReaction.xaml
+    /// Interaction logic for WindowPlotReactionGraphBaseReaction.xaml
     /// </summary>
-    public partial class WindowPlotReactionBaseReaction : Window
+    public partial class WindowPlotReactionGraphBaseReaction : Window
     {
-        public WindowPlotReactionBaseReaction(double baseReaction, double totalReactionInPlot)
+        public WindowPlotReactionGraphBaseReaction(double baseReaction, double totalReactionInPlot)
         {
             InitializeComponent();
 

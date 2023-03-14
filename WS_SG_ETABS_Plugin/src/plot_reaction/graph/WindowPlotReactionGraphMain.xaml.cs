@@ -24,7 +24,8 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
         cSapModel _SapModel;
         cPluginCallback _Plugin;
 
-        src.HelperEtabs.DatabaseTable jointReactionTable = new src.HelperEtabs.DatabaseTable();
+        //List of tables to save joint reaction and grouping table
+        List<src.HelperEtabs.DatabaseTable> databaseTableList = new List<HelperEtabs.DatabaseTable>();
 
         public WindowPlotReactionGraphMain(cSapModel SapModel, cPluginCallback Plugin)
         {
@@ -48,10 +49,13 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
             comBoxReactionDirection.ItemsSource = src.plot_reaction.FunctionPlotReaction.reactionDirectionList;
             comBoxReactionDirection.SelectedIndex = 2;
 
+            //Turn on all load
+            src.HelperEtabs.OnAllLoadDatabase(SapModel);
+
             //Get joint reaction database table
             bool isError = false;
-            src.HelperEtabs.DatabaseTable jointReactionTable = new src.HelperEtabs.DatabaseTable();
-            (isError, jointReactionTable) = src.HelperEtabs.GetTableDisplay(SapModel, "Joint Reactions", false);
+            List<string> tableKeys = new List<string> { "Joint Reactions", "Group Assignments", "Base Reactions" };
+            (isError, databaseTableList) = src.HelperEtabs.GetMultipleTableDisplay(SapModel, tableKeys, true);
 
             ShowDialog();
         }
@@ -169,7 +173,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
                 //Call up copy property result window
                 src.plot_reaction.graph.WindowPlotReactionGraphResult windowPlotReactionResult = new src.plot_reaction.graph.WindowPlotReactionGraphResult(_SapModel, _Plugin, listChoosenGroup,
                     outputCase, reactionDirection, forceFactor, bubbleScaleFactor, textSize, titleSize, axisTitleSize, gridSpacingX, gridSpacingY, title, splitX, splitY, divisionX, divisionY, offsetX, offsetY,
-                    sumTextSizeX, sumTextSizeY, separationX, separationY, jointReactionTable);
+                    sumTextSizeX, sumTextSizeY, separationX, separationY, databaseTableList);
                 IsEnabled = true;
             }
 
@@ -242,6 +246,10 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
             textBoxSumTextSizeY.IsEnabled = false;
             textBoxSeparationY.IsEnabled = false;
         }
+
+
+
+
         #endregion
     }
 }
