@@ -106,5 +106,13 @@ namespace WS_SG_ETABS_Plugin
             src.select_uniquename.WindowSelUniqueNameMain windowSelUniqueName = new src.select_uniquename.WindowSelUniqueNameMain(_SapModel, _Plugin);
             IsEnabled = true;
         }
+
+        private void buttonEtabsToRhino_Click(object sender, RoutedEventArgs e)
+        {
+            IsEnabled = false;
+            //Call up transfer midas window
+            src.etabs_to_rhino.WindowEtabsToRhinoMain windowEtabsToRhinoMain = new src.etabs_to_rhino.WindowEtabsToRhinoMain(_SapModel, _Plugin);
+            IsEnabled = true;
+        }
     }
 }
