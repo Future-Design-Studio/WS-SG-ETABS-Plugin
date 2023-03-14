@@ -105,5 +105,13 @@ namespace WS_SG_ETABS_Plugin
             src.load_combo_EN.WindowLoadComboMain windowLoadComboMain = new src.load_combo_EN.WindowLoadComboMain(_SapModel, _Plugin);
             IsEnabled = true;
         }
+
+        private void buttonWindCoeff_Click(object sender, RoutedEventArgs e)
+        {
+            IsEnabled = false;
+            //Call up Wind Coefficient Application window
+            src.wind_coeff.WindowWindCoeffMain windowWindCoeffMain = new src.wind_coeff.WindowWindCoeffMain(_SapModel, _Plugin);
+            IsEnabled = true;
+        }
     }
 }

@@ -152,6 +152,14 @@
     <Compile Include="src\transfer_midas\WindowTransferMidasResult.xaml.cs">
       <DependentUpon>WindowTransferMidasResult.xaml</DependentUpon>
     </Compile>
+    <Compile Include="src\wind_coeff\ClassWindCoeff.cs" />
+    <Compile Include="src\wind_coeff\FunctionWindCoeff.cs" />
+    <Compile Include="src\wind_coeff\WindowWindCoeffMain.xaml.cs">
+      <DependentUpon>WindowWindCoeffMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\wind_coeff\WindowWindCoeffResult.xaml.cs">
+      <DependentUpon>WindowWindCoeffResult.xaml</DependentUpon>
+    </Compile>
     <Compile Include="test\Test.cs" />
     <Compile Include="WindowMain.xaml.cs">
       <DependentUpon>WindowMain.xaml</DependentUpon>
@@ -215,6 +223,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="src\transfer_midas\WindowTransferMidasResult.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\wind_coeff\WindowWindCoeffMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\wind_coeff\WindowWindCoeffResult.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
