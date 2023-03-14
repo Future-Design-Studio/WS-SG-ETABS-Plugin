@@ -1445,7 +1445,7 @@ namespace WS_SG_ETABS_Plugin.src
         #endregion
 
         #region Update load case
-        public static bool Updateloadcase(cSapModel Sap, string name, int numberLoads, string[] Loadtype, string[] Loadname, double[] Scalefactor)
+        public static bool UpdateLoadCase(cSapModel Sap, string name, int numberLoads, string[] Loadtype, string[] Loadname, double[] Scalefactor)
         {
             Ret = Sap.LoadCases.StaticLinear.SetLoads(name, numberLoads, ref Loadtype, ref Loadname, ref Scalefactor);
 
@@ -1468,7 +1468,7 @@ namespace WS_SG_ETABS_Plugin.src
         /// <param name="Sap"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static bool Addnewloadcase(cSapModel Sap, string name)
+        public static bool AddNewLoadCase(cSapModel Sap, string name)
         {
             Ret = Sap.LoadCases.StaticLinear.SetCase(name);
 
@@ -1484,7 +1484,7 @@ namespace WS_SG_ETABS_Plugin.src
 
         #endregion
 
-        #region Add new load case
+        #region Assign wind pressure coefficients
         /// <summary>
         /// 
         /// </summary>
@@ -1494,7 +1494,7 @@ namespace WS_SG_ETABS_Plugin.src
         /// <param name="direction"></param>
         /// <param name="cP"></param>
         /// <returns></returns>
-        public static bool Assignwindloads(cSapModel Sap, string groupName, string loadPattern, int direction, double cP)
+        public static bool AssignWindLoads(cSapModel Sap, string groupName, string loadPattern, int direction, double cP)
         {
             eItemType ItemType = eItemType.Group;
 
@@ -1508,6 +1508,90 @@ namespace WS_SG_ETABS_Plugin.src
             {
                 return true;
             }
+        }
+
+        #endregion
+
+
+        #region Add new load combination Linear
+        /// <summary>
+        /// Adds a new linear additive load combination
+        /// </summary>
+        /// <param name="Sap"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static bool AddNewLoadCombiLinear(cSapModel Sap, string nameLoadCombi)
+        {
+
+            Ret = Sap.RespCombo.Add(nameLoadCombi, 0);
+
+            if (Ret == 0)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        #endregion
+
+        #region Add new load combination envelope
+        /// <summary>
+        /// Adds a new envelope load combination
+        /// </summary>
+        /// <param name="Sap"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static bool AddNewLoadCombiEnvelope(cSapModel Sap, string nameLoadCombi)
+        {
+
+            Ret = Sap.RespCombo.Add(nameLoadCombi, 1);
+
+            if (Ret == 0)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        #endregion
+
+        #region Update load combination
+        /// <summary>
+        /// Adds a new envelope load combination
+        /// </summary>
+        /// <param name="Sap"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static bool UpdateLoadCombi(cSapModel Sap, string nameLoadCombi, int caseType, string nameLoadCaseOrCombi, double scaleFactor)
+        {
+            eCNameType ItemType = new eCNameType();
+            if (caseType ==0)
+            {
+                ItemType = eCNameType.LoadCase;
+            }
+            else
+            {
+                ItemType = eCNameType.LoadCase;
+            }
+
+            Ret = Sap.RespCombo.SetCaseList(nameLoadCombi, ref ItemType, nameLoadCaseOrCombi, scaleFactor);
+
+            if (Ret == 0)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+
+
         }
 
         #endregion

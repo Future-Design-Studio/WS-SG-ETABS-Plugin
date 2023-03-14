@@ -16,7 +16,7 @@ namespace WS_SG_ETABS_Plugin.src.wind_coeff
 
             foreach (var windLoad in windLoadList)
             {
-                isError = src.HelperEtabs.Assignwindloads(SapModel, windLoad.GroupName, windLoad.LoadPattern, windLoad.Direction, windLoad.CP);
+                isError = src.HelperEtabs.AssignWindLoads(SapModel, windLoad.GroupName, windLoad.LoadPattern, windLoad.Direction, windLoad.CP);
                 if (isError)
                 {
                     return true;
