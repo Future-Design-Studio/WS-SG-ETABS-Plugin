@@ -27,6 +27,8 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
         //List of tables to save joint reaction and grouping table
         List<src.HelperEtabs.DatabaseTable> databaseTableList = new List<HelperEtabs.DatabaseTable>();
 
+        List<Dictionary<string, string>> groupAndColor = new List<Dictionary<string, string>>();
+
         public WindowPlotReactionGraphMain(cSapModel SapModel, cPluginCallback Plugin)
         {
             _SapModel = SapModel;
@@ -69,6 +71,15 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
             {
                 string selectedString = comBoxGroup.Text + "," + "Auto";
                 listBoxChoosenGroup.Items.Add(selectedString);
+
+                //Add into dictionary
+                Dictionary<string, string> eachGroupAndColor = new Dictionary<string, string>
+                    {
+                        {"groupName",  comBoxGroup.Text},
+                        {"color", "Auto"}
+                    };
+
+                groupAndColor.Add(eachGroupAndColor);
             }
             else
             {
@@ -82,18 +93,30 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
                 {
                     string selectedString = comBoxGroup.Text + "," + selectedColor;
                     listBoxChoosenGroup.Items.Add(selectedString);
+
+                    //Add into dictionary
+                    Dictionary<string, string> eachGroupAndColor = new Dictionary<string, string>
+                    {
+                        {"groupName",  comBoxGroup.Text},
+                        {"color", selectedColor}
+                    };
+
+                    groupAndColor.Add(eachGroupAndColor);
                 }
+
             }
         }
 
         private void buttonRemove_Click(object sender, RoutedEventArgs e)
         {
-            if (listBoxChoosenGroup.Items.Count != 0 && listBoxChoosenGroup.SelectedIndex != -1)
-            {
-                listBoxChoosenGroup.Items.RemoveAt(listBoxChoosenGroup.SelectedIndex);
-            }
-            //src.HelperUI.MoveItemsFromListBox(listBoxChoosenGroup, listBoxAvailGroup);
+            int selectedIndex = listBoxChoosenGroup.SelectedIndex;
 
+            if (listBoxChoosenGroup.Items.Count != 0 && selectedIndex != -1)
+            {
+                listBoxChoosenGroup.Items.RemoveAt(selectedIndex);
+            }
+
+            groupAndColor.RemoveAt(selectedIndex);
         }
 
         private void buttonCancel_Click(object sender, RoutedEventArgs e)
@@ -107,10 +130,11 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
 
             try
             {
+                /*
                 //Casting listbox content to list
                 List<string> listChoosenGroup = listBoxChoosenGroup.Items.OfType<string>().ToList();
 
-                /*
+                
                 //Casting listbox content to list of dictionary
                 List<object> listChoosenGroup = new List<object>(); 
                 
@@ -171,7 +195,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
 
                 IsEnabled = false;
                 //Call up copy property result window
-                src.plot_reaction.graph.WindowPlotReactionGraphResult windowPlotReactionResult = new src.plot_reaction.graph.WindowPlotReactionGraphResult(_SapModel, _Plugin, listChoosenGroup,
+                src.plot_reaction.graph.WindowPlotReactionGraphResult windowPlotReactionResult = new src.plot_reaction.graph.WindowPlotReactionGraphResult(_SapModel, _Plugin, groupAndColor,
                     outputCase, reactionDirection, forceFactor, bubbleScaleFactor, textSize, titleSize, axisTitleSize, gridSpacingX, gridSpacingY, title, splitX, splitY, divisionX, divisionY, offsetX, offsetY,
                     sumTextSizeX, sumTextSizeY, separationX, separationY, databaseTableList);
                 IsEnabled = true;
@@ -251,5 +275,6 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
 
 
         #endregion
+
     }
 }

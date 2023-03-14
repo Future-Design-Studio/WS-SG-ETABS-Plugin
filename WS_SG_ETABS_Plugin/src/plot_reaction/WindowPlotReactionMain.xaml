@@ -5,12 +5,12 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WS_SG_ETABS_Plugin.src.plot_reaction"
             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-             mc:Ignorable="d" Height="200" Width="400" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+             mc:Ignorable="d" Height="150" Width="400" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
 
     <Grid Margin="10">
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="0.8*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
@@ -18,7 +18,7 @@
         <Label Grid.Row="0" Grid.Column="0" Content="Plot Reaction" FontSize="18" VerticalAlignment="Center" HorizontalAlignment="Center"/>
 
         <Button Grid.Row="1" x:Name="buttonPlotReaction" Content="Plot Reaction Bubble Chart" Click="buttonPlotReaction_Click" FontSize="16"/>
-        <Button Grid.Row="2" x:Name="buttonCreateExcel" Content="Create Reaction Excel And Position Plot" Click="buttonCreateExcel_Click" FontSize="16"/>
+        <Button Grid.Row="2" x:Name="buttonCreateExcel" Content="Create Reaction Excel And Support Position Plot" Click="buttonCreateExcel_Click" FontSize="16"/>
 
     </Grid>
 

@@ -107,6 +107,7 @@
     <Compile Include="src\copy_properties\WindowCopyPropResult.xaml.cs">
       <DependentUpon>WindowCopyPropResult.xaml</DependentUpon>
     </Compile>
+    <Compile Include="src\HelperExcel.cs" />
     <Compile Include="src\HelperMethod.cs" />
     <Compile Include="src\HelperEtabs.cs" />
     <Compile Include="src\carbon\FunctionCarbon.cs" />
@@ -115,6 +116,7 @@
     <Compile Include="src\HelperPlot.cs" />
     <Compile Include="src\HelperUI.cs" />
     <Compile Include="src\plot_reaction\FunctionPlotReaction.cs" />
+    <Compile Include="src\plot_reaction\graph\FunctionPlotReactionGraph.cs" />
     <Compile Include="src\plot_reaction\graph\WindowPlotReactionGraphBaseReaction.xaml.cs">
       <DependentUpon>WindowPlotReactionGraphBaseReaction.xaml</DependentUpon>
     </Compile>
@@ -124,8 +126,12 @@
     <Compile Include="src\plot_reaction\graph\WindowPlotReactionGraphResult.xaml.cs">
       <DependentUpon>WindowPlotReactionGraphResult.xaml</DependentUpon>
     </Compile>
+    <Compile Include="src\plot_reaction\table\FunctionPlotReactionTable.cs" />
     <Compile Include="src\plot_reaction\table\WindowPlotReactionTableMain.xaml.cs">
       <DependentUpon>WindowPlotReactionTableMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\plot_reaction\table\WindowPlotReactionTableResult.xaml.cs">
+      <DependentUpon>WindowPlotReactionTableResult.xaml</DependentUpon>
     </Compile>
     <Compile Include="src\plot_reaction\WindowPlotReactionMain.xaml.cs">
       <DependentUpon>WindowPlotReactionMain.xaml</DependentUpon>
@@ -196,6 +202,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="src\plot_reaction\table\WindowPlotReactionTableMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\plot_reaction\table\WindowPlotReactionTableResult.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

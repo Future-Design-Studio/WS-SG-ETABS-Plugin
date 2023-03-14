@@ -113,5 +113,21 @@ namespace WS_SG_ETABS_Plugin.src
                     comBoxColumnConcreteGrade.SelectedIndex = 0;
                 }*/
 
+
+        /// <summary>
+        /// Populate listBox with available load cases
+        /// </summary>
+        /// <param name="SapModel"></param>
+        /// <param name="listBox"></param>
+        public static void PopulateListBoxAvailLoadCase(cSapModel SapModel, ListBox listBox)
+        {
+            List<string> loadCaseList = src.HelperEtabs.GetLoadCaseAndComboList(SapModel);
+
+            foreach (string loadCase in loadCaseList)
+            {
+                listBox.Items.Add(loadCase);
+            }
+        }
+
     }
 }
