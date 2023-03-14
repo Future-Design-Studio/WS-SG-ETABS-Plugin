@@ -54,7 +54,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
             if (isError)
             {
-                MessageBox.Show("Error creating patterns and cases, please let Mani know what happened");
+                MessageBox.Show("Error, please let Mani know what happened");
                 return;
             }
 
