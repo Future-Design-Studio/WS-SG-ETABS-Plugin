@@ -73,6 +73,15 @@ namespace WS_SG_ETABS_Plugin
             IsEnabled = true;
         }
 
+        private void buttonRCBeamSchedule_Click(object sender, RoutedEventArgs e)
+        {
+            IsEnabled = false;
+            //Call up shell uniform window
+            src.rc_beam_schedule.WindowRCBSchedMain windowShellUniMain = new src.rc_beam_schedule.WindowRCBSchedMain(_SapModel, _Plugin);
+            IsEnabled = true;
+        }
+
+
         private void buttonPlotReaction_Click(object sender, RoutedEventArgs e)
         {
             IsEnabled = false;
