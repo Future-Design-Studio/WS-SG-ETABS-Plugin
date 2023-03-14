@@ -1200,6 +1200,9 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             }
 
 
+
+
+            //from here start creating load combinations
             int numberBloadcombi = 1;
             string baseBcombiname = "U_Comb_B-";
             if (NotionalDirectionFactor == 2 && WindLoadList.Count != 0 && TemperatureLoadList.Count != 0 && WindVertLoadList.Count != 0)
