@@ -28,7 +28,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
         cSapModel _SapModel;
         cPluginCallback _Plugin;
 
-        public WindowPlotReactionGraphResult(cSapModel SapModel, cPluginCallback Plugin, List<string> listChoosenGroup, string outputCase,
+        public WindowPlotReactionGraphResult(cSapModel SapModel, cPluginCallback Plugin, List<Dictionary<string, string>> groupAndColor, string outputCase,
             string reactionDirection, double forceFactor, double bubbleScaleFactor, int textSize, int titleSize, int axisTitleSize, double gridSpacingX, double gridSpacingY, string title, bool splitX, bool splitY,
             int divisionX, int divisionY, double offsetX, double offsetY, int sumTextSizeX, int sumTextSizeY, double separationX, double separationY, List<src.HelperEtabs.DatabaseTable> databaseTableList)
         {
@@ -36,7 +36,15 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
             _Plugin = Plugin;
 
             //Check if any group is choosen
-            bool requiredGroupListExist = src.HelperUI.CheckGroupListExist(_SapModel, listChoosenGroup);
+            List<string> listChoosenGroupName = new List<string>();
+            foreach (Dictionary<string, string> group in groupAndColor)
+            {
+                listChoosenGroupName.Add(group["groupName"]);
+            }
+
+
+            //Check if any group is choosen
+            bool requiredGroupListExist = src.HelperUI.CheckGroupListExist(_SapModel, listChoosenGroupName);
 
             if (!requiredGroupListExist)
             {
@@ -54,7 +62,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
             double baseReaction = 0;
             double totalReactionInPlot = 0;
 
-            (isError, baseReaction, totalReactionInPlot) = src.plot_reaction.FunctionPlotReaction.PlotReaction(_SapModel, listChoosenGroup,
+            (isError, baseReaction, totalReactionInPlot) = src.plot_reaction.graph.FunctionPlotReactionGraph.PlotReaction(_SapModel, groupAndColor,
             outputCase, reactionDirection, ReactionPlot, forceFactor, bubbleScaleFactor, textSize, titleSize, axisTitleSize, gridSpacingX, gridSpacingY, title, splitX, splitY, divisionX, divisionY, offsetX, offsetY,
             sumTextSizeX, sumTextSizeY, separationX, separationY, databaseTableList);
 

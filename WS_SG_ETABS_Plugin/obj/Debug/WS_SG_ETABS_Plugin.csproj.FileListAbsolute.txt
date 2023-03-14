@@ -98,7 +98,6 @@ C:\Users\stefano\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws
 C:\Users\stefano\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\copy_properties\WindowCopyPropMain.g.cs
 C:\Users\stefano\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\copy_properties\WindowCopyPropResult.g.cs
 C:\Users\stefano\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\plot_reaction\WindowPlotReactionMain.g.cs
-C:\Users\stefano\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\plot_reaction\WindowPlotReactionResult.g.cs
 C:\Users\stefano\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\shell_uni_orient\WindowShellUniMain.g.cs
 C:\Users\stefano\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\shell_uni_orient\WindowShellUniResult.g.cs
 C:\Users\stefano\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\transfer_midas\WindowTransferMidasMain.g.cs
@@ -111,7 +110,6 @@ C:\Users\stefano\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws
 C:\Users\stefano\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\copy_properties\WindowCopyPropMain.baml
 C:\Users\stefano\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\copy_properties\WindowCopyPropResult.baml
 C:\Users\stefano\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\plot_reaction\WindowPlotReactionMain.baml
-C:\Users\stefano\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\plot_reaction\WindowPlotReactionResult.baml
 C:\Users\stefano\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\shell_uni_orient\WindowShellUniMain.baml
 C:\Users\stefano\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\shell_uni_orient\WindowShellUniResult.baml
 C:\Users\stefano\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\transfer_midas\WindowTransferMidasMain.baml
@@ -139,7 +137,11 @@ C:\Users\stefano\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws
 C:\Users\stefano\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\rc_beam_schedule\WindowRCBSchedResult.baml
 C:\Users\stefano\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\plot_reaction\graph\WindowPlotReactionGraphMain.g.cs
 C:\Users\stefano\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\plot_reaction\graph\WindowPlotReactionGraphResult.g.cs
-C:\Users\stefano\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\plot_reaction\WindowPlotReactionBaseReaction.g.cs
 C:\Users\stefano\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\plot_reaction\graph\WindowPlotReactionGraphMain.baml
 C:\Users\stefano\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\plot_reaction\graph\WindowPlotReactionGraphResult.baml
-C:\Users\stefano\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\plot_reaction\WindowPlotReactionBaseReaction.baml
+C:\Users\stefano\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\plot_reaction\graph\WindowPlotReactionGraphBaseReaction.g.cs
+C:\Users\stefano\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\plot_reaction\table\WindowPlotReactionTableMain.g.cs
+C:\Users\stefano\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\plot_reaction\graph\WindowPlotReactionGraphBaseReaction.baml
+C:\Users\stefano\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\plot_reaction\table\WindowPlotReactionTableMain.baml
+C:\Users\stefano\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\plot_reaction\table\WindowPlotReactionTableResult.g.cs
+C:\Users\stefano\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\plot_reaction\table\WindowPlotReactionTableResult.baml

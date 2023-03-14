@@ -25,7 +25,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
 
         #endregion
 
-        public static (bool, double, double) PlotReaction(cSapModel Sap, List<string> listChoosenGroup, string outputCase, string reactionDirection, 
+        public static (bool, double, double) PlotReaction(cSapModel Sap, List<Dictionary<string, string>> groupAndColor, string outputCase, string reactionDirection, 
             WpfPlot ReactionPlot, double forceFactor, double bubbleScaleFactor, int textSize, int titleSize, int axisTitleSize, double gridSpacingX, double gridSpacingY, string title, bool splitX, bool splitY,
             int divisionX, int divisionY, double offsetX, double offsetY, int sumTextSizeX, int sumTextSizeY, double separationX, double separationY, List<src.HelperEtabs.DatabaseTable> databaseTableList)
         {
@@ -53,33 +53,9 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
             (isError, baseReactionsTable) = src.HelperEtabs.CallDatabaseTableByTableKey(databaseTableList, "Base Reactions");
             if (isError) { return (isError, 0, 0); }
 
-            /*
-            src.HelperEtabs.DatabaseTable pointObjectConnectivityTable = new HelperEtabs.DatabaseTable();
-            (isError, pointObjectConnectivityTable) = src.HelperEtabs.CallDatabaseTableByTableKey(databaseTableList, "Point Object Connectivity");
-            if (isError) { return isError; }
-            
-            //Convert point connectivity to point3D
-            List<src.HelperEtabs.Point3D> pointList = src.HelperEtabs.ConvertPointDatabaseToPoint3D(pointObjectConnectivityTable);
-            */
-
-            //Casting List<string> content to List<dictionary>
-            List<object> listChoosenGroupParsed = new List<object>();
-            foreach (string group in listChoosenGroup)
-            {
-                //Split the string using comma ','
-                string[] splitted = group.Split(',');
-
-                Dictionary<string, string> groupDict = new Dictionary<string, string>()
-                    {
-                        {"groupName", splitted[0]},
-                        {"color", splitted[1]},
-                    };
-
-                listChoosenGroupParsed.Add(groupDict);
-            }
 
             int groupIndex = 0;
-            foreach (Dictionary<string, string> group in listChoosenGroupParsed)
+            foreach (Dictionary<string, string> group in groupAndColor)
             {
                 string groupName = group["groupName"];
                 string color = group["color"];
@@ -89,9 +65,9 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
                 if (color == "Auto")
                 {
 
-                    if (listChoosenGroup.Count > 1)
+                    if (groupAndColor.Count > 1)
                     {
-                        double colorMapFraction = Convert.ToDouble(groupIndex) / (Convert.ToDouble(listChoosenGroup.Count) - 1);
+                        double colorMapFraction = Convert.ToDouble(groupIndex) / (Convert.ToDouble(groupAndColor.Count) - 1);
                         bubbleColor = ScottPlot.Drawing.Colormap.Jet.GetColor(colorMapFraction, .5);
                     }
                     else
@@ -218,7 +194,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
 
                             //Inside each divison total reaction for each group
                             int groupSumIndex = 0;
-                            foreach (Dictionary<string, string> group in listChoosenGroupParsed)
+                            foreach (Dictionary<string, string> group in groupAndColor)
                             {
                                 string groupName = group["groupName"];
                                 string color = group["color"];
@@ -227,9 +203,9 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
                                 System.Drawing.Color textColor = new System.Drawing.Color();
                                 if (color == "Auto")
                                 {
-                                    if (listChoosenGroup.Count > 1)
+                                    if (groupAndColor.Count > 1)
                                     {
-                                        double colorMapFraction = Convert.ToDouble(groupSumIndex) / (Convert.ToDouble(listChoosenGroup.Count) - 1);
+                                        double colorMapFraction = Convert.ToDouble(groupSumIndex) / (Convert.ToDouble(groupAndColor.Count) - 1);
                                         textColor = ScottPlot.Drawing.Colormap.Jet.GetColor(colorMapFraction, 1);
                                     }
                                     else
@@ -353,7 +329,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
 
                             //Inside each divison total reaction for each group
                             int groupSumIndex = 0;
-                            foreach (Dictionary<string, string> group in listChoosenGroupParsed)
+                            foreach (Dictionary<string, string> group in groupAndColor)
                             {
                                 string groupName = group["groupName"];
                                 string color = group["color"];
@@ -362,9 +338,9 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
                                 System.Drawing.Color textColor = new System.Drawing.Color();
                                 if (color == "Auto")
                                 {
-                                    if (listChoosenGroup.Count > 1)
+                                    if (groupAndColor.Count > 1)
                                     {
-                                        double colorMapFraction = Convert.ToDouble(groupSumIndex) / (Convert.ToDouble(listChoosenGroup.Count) - 1);
+                                        double colorMapFraction = Convert.ToDouble(groupSumIndex) / (Convert.ToDouble(groupAndColor.Count) - 1);
                                         textColor = ScottPlot.Drawing.Colormap.Jet.GetColor(colorMapFraction, 1);
                                     }
                                     else

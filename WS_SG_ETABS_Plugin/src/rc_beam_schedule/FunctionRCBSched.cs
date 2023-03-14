@@ -1059,14 +1059,14 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
             xlWorkBook = xlApp.Workbooks.Add(misValue);
             xlWorkSheet = (Microsoft.Office.Interop.Excel.Worksheet)xlWorkBook.Worksheets.get_Item(1);
 
-
-            string alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
-
             int numOfRow = result.GetLength(0);
             int numOfCol = result.GetLength(1);
 
-            string lastCellRange = alphabet[numOfCol - 1] + Convert.ToString(numOfRow - 1 + 1);
+            string alphabetOfCol = src.HelperExcel.GetExcelColumnName(numOfCol);
+            //char aplhabethOfColFromManual = alphabet[numOfCol - 1];
+
+            //string lastCellRange = alphabet[numOfCol - 1] + Convert.ToString(numOfRow - 1 + 1);
+            string lastCellRange = alphabetOfCol + Convert.ToString(numOfRow - 1 + 1);
 
             Microsoft.Office.Interop.Excel.Range rng = xlWorkSheet.UsedRange.Range["A1", lastCellRange];
 
