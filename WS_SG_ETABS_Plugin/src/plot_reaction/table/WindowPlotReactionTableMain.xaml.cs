@@ -25,12 +25,10 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
         cPluginCallback _Plugin;
         string modelPath;
 
-        //List of tables to save joint reaction and grouping table
-        List<src.HelperEtabs.DatabaseTable> databaseTableList = new List<HelperEtabs.DatabaseTable>();
-
+        List<src.HelperEtabs.DatabaseTable> databaseTableListGlobal = new List<src.HelperEtabs.DatabaseTable>();
         List<Dictionary<string, string>> groupAndColor = new List<Dictionary<string, string>>();
 
-        public WindowPlotReactionTableMain(cSapModel SapModel, cPluginCallback Plugin)
+        public WindowPlotReactionTableMain(cSapModel SapModel, cPluginCallback Plugin, List<src.HelperEtabs.DatabaseTable> databaseTableList)
         {
             _SapModel = SapModel;
             _Plugin = Plugin;
@@ -50,13 +48,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
             //Fill in load case list box
             src.HelperUI.PopulateListBoxAvailLoadCase(_SapModel, listBoxAvailLoadCase);
 
-            //Turn on all load
-            src.HelperEtabs.OnAllLoadDatabase(SapModel);
-
-            //Get joint reaction database table
-            bool isError = false;
-            List<string> tableKeys = new List<string> { "Joint Reactions", "Group Assignments", "Base Reactions" };
-            (isError, databaseTableList) = src.HelperEtabs.GetMultipleTableDisplay(SapModel, tableKeys, true);
+            databaseTableListGlobal = databaseTableList;
 
             ShowDialog();
         }
@@ -186,7 +178,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
 
                 //Call up copy result window
                 src.plot_reaction.table.WindowPlotReactionTableResult windowPlotReactionTableResult = new src.plot_reaction.table.WindowPlotReactionTableResult(_SapModel, _Plugin, groupAndColor, listChoosenLoadCase,
-                    plotTitle, bubbleScaleFactor, textSize, titleSize, axisTitleSize, gridSpacingX, gridSpacingY, showRenumber, databaseTableList, fileName, filePath);
+                    plotTitle, bubbleScaleFactor, textSize, titleSize, axisTitleSize, gridSpacingX, gridSpacingY, showRenumber, databaseTableListGlobal, fileName, filePath);
             }
 
             catch (Exception ex)

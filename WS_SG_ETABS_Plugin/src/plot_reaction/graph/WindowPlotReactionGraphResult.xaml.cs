@@ -44,9 +44,9 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
 
 
             //Check if any group is choosen
-            bool requiredGroupListExist = src.HelperUI.CheckGroupListExist(_SapModel, listChoosenGroupName);
+            bool anyGroupChoosen = src.HelperUI.CheckGroupListExist(_SapModel, listChoosenGroupName);
 
-            if (!requiredGroupListExist)
+            if (!anyGroupChoosen)
             {
                 return;
             }

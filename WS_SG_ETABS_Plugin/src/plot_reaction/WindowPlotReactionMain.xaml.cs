@@ -36,6 +36,13 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
 
             InitializeComponent();
 
+            //Turn on all load
+            src.HelperEtabs.OnAllLoadDatabase(SapModel);
+
+            //Get joint reaction database table
+            bool isError = false;
+            List<string> tableKeys = new List<string> { "Joint Reactions", "Group Assignments", "Base Reactions" };
+            (isError, databaseTableList) = src.HelperEtabs.GetMultipleTableDisplay(SapModel, tableKeys, true);
 
             ShowDialog();
         }
@@ -43,14 +50,14 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
         private void buttonPlotReaction_Click(object sender, RoutedEventArgs e)
         {
             IsEnabled = false;
-            src.plot_reaction.graph.WindowPlotReactionGraphMain windowPlotReactionGraphMain = new graph.WindowPlotReactionGraphMain(_SapModel, _Plugin);
+            src.plot_reaction.graph.WindowPlotReactionGraphMain windowPlotReactionGraphMain = new graph.WindowPlotReactionGraphMain(_SapModel, _Plugin, databaseTableList);
             IsEnabled = true;
         }
 
         private void buttonCreateExcel_Click(object sender, RoutedEventArgs e)
         {
             IsEnabled = false;
-            src.plot_reaction.table.WindowPlotReactionTableMain windowPlotReactionTableMain = new table.WindowPlotReactionTableMain(_SapModel, _Plugin);
+            src.plot_reaction.table.WindowPlotReactionTableMain windowPlotReactionTableMain = new table.WindowPlotReactionTableMain(_SapModel, _Plugin, databaseTableList);
             IsEnabled = true;
         }
     }

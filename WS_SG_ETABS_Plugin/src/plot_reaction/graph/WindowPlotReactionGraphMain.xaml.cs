@@ -24,12 +24,10 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
         cSapModel _SapModel;
         cPluginCallback _Plugin;
 
-        //List of tables to save joint reaction and grouping table
-        List<src.HelperEtabs.DatabaseTable> databaseTableList = new List<HelperEtabs.DatabaseTable>();
-
+        List<src.HelperEtabs.DatabaseTable> databaseTableListGlobal = new List<src.HelperEtabs.DatabaseTable>();
         List<Dictionary<string, string>> groupAndColor = new List<Dictionary<string, string>>();
 
-        public WindowPlotReactionGraphMain(cSapModel SapModel, cPluginCallback Plugin)
+        public WindowPlotReactionGraphMain(cSapModel SapModel, cPluginCallback Plugin, List<src.HelperEtabs.DatabaseTable> databaseTableList)
         {
             _SapModel = SapModel;
             _Plugin = Plugin;
@@ -48,16 +46,10 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
             comBoxOutputCase.SelectedIndex = 0;
 
             //Fill in combobox for direction
-            comBoxReactionDirection.ItemsSource = src.plot_reaction.FunctionPlotReaction.reactionDirectionList;
+            comBoxReactionDirection.ItemsSource = src.plot_reaction.graph.FunctionPlotReactionGraph.reactionDirectionList;
             comBoxReactionDirection.SelectedIndex = 2;
 
-            //Turn on all load
-            src.HelperEtabs.OnAllLoadDatabase(SapModel);
-
-            //Get joint reaction database table
-            bool isError = false;
-            List<string> tableKeys = new List<string> { "Joint Reactions", "Group Assignments", "Base Reactions" };
-            (isError, databaseTableList) = src.HelperEtabs.GetMultipleTableDisplay(SapModel, tableKeys, true);
+            databaseTableListGlobal = databaseTableList;
 
             ShowDialog();
         }
@@ -197,7 +189,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
                 //Call up copy property result window
                 src.plot_reaction.graph.WindowPlotReactionGraphResult windowPlotReactionResult = new src.plot_reaction.graph.WindowPlotReactionGraphResult(_SapModel, _Plugin, groupAndColor,
                     outputCase, reactionDirection, forceFactor, bubbleScaleFactor, textSize, titleSize, axisTitleSize, gridSpacingX, gridSpacingY, title, splitX, splitY, divisionX, divisionY, offsetX, offsetY,
-                    sumTextSizeX, sumTextSizeY, separationX, separationY, databaseTableList);
+                    sumTextSizeX, sumTextSizeY, separationX, separationY, databaseTableListGlobal);
                 IsEnabled = true;
             }
 

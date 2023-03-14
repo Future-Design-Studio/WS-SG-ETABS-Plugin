@@ -39,12 +39,21 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
 
 
             //Check if any group is choosen
-            bool requiredGroupListExist = src.HelperUI.CheckGroupListExist(_SapModel, listChoosenGroupName);
+            bool anyChoosenGroup = src.HelperUI.CheckGroupListExist(_SapModel, listChoosenGroupName);
 
-            if (!requiredGroupListExist)
+            if (!anyChoosenGroup)
             {
                 return;
             }
+
+            //Check if any load case is choosen
+            bool anyChoosenLoadCase = src.HelperUI.CheckLoadCaseListExist(_SapModel, listBoxChoosenLoadCase);
+
+            if (!anyChoosenLoadCase)
+            {
+                return;
+            }
+
 
             InitializeComponent();
 
