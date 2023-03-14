@@ -175,17 +175,8 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             comBoxLL.ItemsSource = quasiPermanentCategoryList;
             comBoxLL.SelectedIndex = 0;
 
-            comBoxWIND.ItemsSource = quasiPermanentCategoryList;
-            comBoxWIND.SelectedIndex = 8;
-
-            comBoxWINDVERTICAL.ItemsSource = quasiPermanentCategoryList;
-            comBoxWINDVERTICAL.SelectedIndex = 8;
-
             comBoxTEMP.ItemsSource = quasiPermanentCategoryList;
             comBoxTEMP.SelectedIndex = 9;
-
-            comBoxNameWINDVERTICAL.ItemsSource = windvertdirectionList;
-            comBoxNameWINDVERTICAL.SelectedIndex = 0;
 
             ShowDialog();
         }
@@ -471,26 +462,6 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             }
         }
 
-        private void comBoxNameWIND_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
-
-        private void comBoxNameWINDVERTICAL_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
-
-        private void comBoxWIND_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
-
-        private void comBoxWINDVERTICAL_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
-
         private void checkBoxWIND_Checked(object sender, RoutedEventArgs e)
         {
 
@@ -517,16 +488,12 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
         {
             if (comBoxWINDDIRECTION.SelectedIndex == 0)
             {
-                comBoxNameWIND.ItemsSource = wind4directionList;
-                comBoxNameWIND.SelectedIndex = 0;
                 listBoxChoosenWIND.Items.Clear();
                 WindLoadList.Clear();
                 notionaldirectionFactor = 2;
             }    
             else
             {
-                comBoxNameWIND.ItemsSource = wind8directionList;
-                comBoxNameWIND.SelectedIndex = 0;
                 listBoxChoosenWIND.Items.Clear();
                 WindLoadList.Clear();
                 notionaldirectionFactor = 4;
