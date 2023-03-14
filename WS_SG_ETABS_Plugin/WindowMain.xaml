@@ -23,7 +23,7 @@
 
         <Button Grid.Row="1" x:Name="buttonCarbon" Content="Carbon Calulator" Click="buttonCarbon_Click" FontSize="16"/>
         <Button Grid.Row="2" x:Name="buttonShellUni" Content="Shell Orientation (Local-3) Uniform" FontSize="16" Click="buttonShellUni_Click"/>
-        <Button Grid.Row="3" x:Name="button3" Content="Function 3 - In Development" FontSize="16" IsEnabled="False"/>
+        <Button Grid.Row="3" x:Name="buttonRCBeamSchedule" Content="RC Beam Schedule" FontSize="16" Click="buttonRCBeamSchedule_Click"/>
         <Button Grid.Row="4" x:Name="buttonCopyProperties" Content="Copy Properties From Other File" FontSize="16" Click="buttonCopyProperties_Click"/>
         <Button Grid.Row="5" x:Name="buttonPlotReaction" Content="Plot Reaction" FontSize="16" Click="buttonPlotReaction_Click"/>
         <Button Grid.Row="6" x:Name="buttonTransferMidas" Content="Transfer To Midas" FontSize="16" Click="buttonTransferMidas_Click"/>
