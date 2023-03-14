@@ -193,3 +193,7 @@ C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ET
 C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\transfer_midas\WindowTransferMidasMain.baml
 C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\transfer_midas\WindowTransferMidasProgress.baml
 C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\transfer_midas\WindowTransferMidasResult.baml
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\wind_coeff\WindowWindCoeffMain.g.cs
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\wind_coeff\WindowWindCoeffResult.g.cs
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\wind_coeff\WindowWindCoeffMain.baml
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\wind_coeff\WindowWindCoeffResult.baml

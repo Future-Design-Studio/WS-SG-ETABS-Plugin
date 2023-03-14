@@ -1462,9 +1462,43 @@ namespace WS_SG_ETABS_Plugin.src
         #endregion
 
         #region Add new load case
+        /// <summary>
+        /// Add new load case to etabs
+        /// </summary>
+        /// <param name="Sap"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public static bool Addnewloadcase(cSapModel Sap, string name)
         {
             Ret = Sap.LoadCases.StaticLinear.SetCase(name);
+
+            if (Ret == 0)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        #endregion
+
+        #region Add new load case
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="Sap"></param>
+        /// <param name="groupName"></param>
+        /// <param name="loadPattern"></param>
+        /// <param name="direction"></param>
+        /// <param name="cP"></param>
+        /// <returns></returns>
+        public static bool Assignwindloads(cSapModel Sap, string groupName, string loadPattern, int direction, double cP)
+        {
+            eItemType ItemType = eItemType.Group;
+
+            Ret = Sap.AreaObj.SetLoadWindPressure(groupName, loadPattern, direction, cP, ItemType);
 
             if (Ret == 0)
             {
