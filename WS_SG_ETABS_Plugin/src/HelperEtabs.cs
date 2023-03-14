@@ -1577,7 +1577,7 @@ namespace WS_SG_ETABS_Plugin.src
             }
             else
             {
-                ItemType = eCNameType.LoadCase;
+                ItemType = eCNameType.LoadCombo;
             }
 
             Ret = Sap.RespCombo.SetCaseList(nameLoadCombi, ref ItemType, nameLoadCaseOrCombi, scaleFactor);

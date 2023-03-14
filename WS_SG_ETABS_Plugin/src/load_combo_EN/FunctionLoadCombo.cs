@@ -1218,6 +1218,62 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     numberBloadcombi++;
                 }
 
+                //load combination adding where all loads dont take into account +/-
+                if (WindLoadList.Count == 4 && TemperatureLoadList.Count == 2 && WindVertLoadList.Count == 2)
+                {
+                    for (int combi1 = 1; combi1 <= 32; combi1++)
+                    {
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, "P_Dead", 1.35);
+                        if (isError)
+                        {
+                            return true;
+                        }
+
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, "P_SuperDead", 1.35);
+                        if (isError)
+                        {
+                            return true;
+                        }
+
+                        /*foreach (Dictionary<string, string> llquasi  in llcaseDict)
+                            {
+
+                            }*/
+                    }
+                }
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
             }
             else if (NotionalDirectionFactor == 2 && WindLoadList.Count != 0 && TemperatureLoadList.Count != 0 && WindVertLoadList.Count == 0)
@@ -1331,6 +1387,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             }
             else
             {
+                MessageBox.Show("Error, 8 direction wind load support have not been added into this plugin");
                 return true;
             }
 
