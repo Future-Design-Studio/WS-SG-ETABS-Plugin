@@ -29,7 +29,8 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             List<src.load_combo_EN.ClassLoadCombo.EHFLoad> EHFSDLYLoadList,
             List<src.load_combo_EN.ClassLoadCombo.EHFLoad> EHFLLXLoadList,
             List<src.load_combo_EN.ClassLoadCombo.EHFLoad> EHFLLYLoadList,
-            int NotionalDirectionFactor, int windVertical)
+            int NotionalDirectionFactor,
+            List<src.load_combo_EN.ClassLoadCombo.WindLoad> WindVertLoadList)
         {
             Dictionary<string, string> llcaseDict = new Dictionary<string, string>();
             Dictionary<string, string> windcaseDict = new Dictionary<string, string>();
@@ -1201,7 +1202,22 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
             int numberBloadcombi = 1;
             string baseBcombiname = "U_Comb_B-";
-            if (NotionalDirectionFactor == 2 && WindLoadList.Count != 0 && TemperatureLoadList.Count != 0 && windVertical == 0)
+            if (NotionalDirectionFactor == 2 && WindLoadList.Count != 0 && TemperatureLoadList.Count != 0 && WindVertLoadList.Count != 0)
+            {
+                int numberOfCombi = (16 * 2 * 6) + (16 * 4) + (16 * 2 * 4) + (2 * 4 * 4) + (1 * 2 * 4) + (16 * 2) + (2 * 2 * 4) + (1 * 2 * 4);
+                while (numberBloadcombi <= numberOfCombi)
+                {
+                    isError = src.HelperEtabs.AddNewLoadCombiLinear(SapModel, baseBcombiname + numberBloadcombi);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    numberBloadcombi++;
+                }
+
+
+            }
+            else if (NotionalDirectionFactor == 2 && WindLoadList.Count != 0 && TemperatureLoadList.Count != 0 && WindVertLoadList.Count == 0)
             {
                 int numberOfCombi = (8 * 2 * 6) + (8 * 4) + (8 * 2 * 4) + (2 * 4 * 4) + (1 * 2 * 4) + (8 * 2) + (2 * 2 * 4) + (1 * 2 * 4);
                 
@@ -1217,7 +1233,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
 
             }
-            else if (NotionalDirectionFactor == 2 && WindLoadList.Count != 0 && TemperatureLoadList.Count == 0 && windVertical == 0)
+            else if (NotionalDirectionFactor == 2 && WindLoadList.Count != 0 && TemperatureLoadList.Count == 0 && WindVertLoadList.Count == 0)
             {
                 int numberOfCombi = (8 * 4) + (4 * 2) + (8 * 2) + (4 * 2);
 
@@ -1233,22 +1249,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
 
             }
-            else if (NotionalDirectionFactor == 2 && WindLoadList.Count != 0 && TemperatureLoadList.Count != 0 && windVertical == 1)
-            {
-                int numberOfCombi = (16 * 2 * 6) + (16 * 4) + (16 * 2 * 4) + (2 * 4 * 4) + (1 * 2 * 4) + (16 * 2) + (2 * 2 * 4) + (1 * 2 * 4);
-                while (numberBloadcombi <= numberOfCombi)
-                {
-                    isError = src.HelperEtabs.AddNewLoadCombiLinear(SapModel, baseBcombiname + numberBloadcombi);
-                    if (isError)
-                    {
-                        return true;
-                    }
-                    numberBloadcombi++;
-                }
-
-
-            }
-            else if (NotionalDirectionFactor == 2 && WindLoadList.Count != 0 && TemperatureLoadList.Count == 0 && windVertical == 1)
+            else if (NotionalDirectionFactor == 2 && WindLoadList.Count != 0 && TemperatureLoadList.Count == 0 && WindVertLoadList.Count != 0)
             {
                 int numberOfCombi = (16 * 4) + (4 * 2) + (16 * 2) + (4 * 2);
                 while (numberBloadcombi <= numberOfCombi)
@@ -1263,7 +1264,23 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
 
             }
-            else if (NotionalDirectionFactor == 2 && WindLoadList.Count == 0 && TemperatureLoadList.Count != 0)
+            ///check with kahjun, excel maybe problem
+            else if (NotionalDirectionFactor == 2 && WindLoadList.Count == 0 && TemperatureLoadList.Count != 0 && WindVertLoadList.Count != 0)
+            {
+                int numberOfCombi = (8 * 2 * 6) + (8 * 4) + (8 * 2 * 4) + (2 * 4 * 4) + (1 * 2 * 4) + (8 * 2) + (2 * 2 * 4) + (1 * 2 * 4);
+                while (numberBloadcombi <= numberOfCombi)
+                {
+                    isError = src.HelperEtabs.AddNewLoadCombiLinear(SapModel, baseBcombiname + numberBloadcombi);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    numberBloadcombi++;
+                }
+
+
+            }
+            else if (NotionalDirectionFactor == 2 && WindLoadList.Count == 0 && TemperatureLoadList.Count != 0 && WindVertLoadList.Count == 0)
             {
                 int numberOfCombi = (2 * 4 * 4) + (4 * 2) + (2 * 4 * 2) + (4 * 2);
                 while (numberBloadcombi <= numberOfCombi)
@@ -1278,7 +1295,23 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
 
             }
-            else if (NotionalDirectionFactor == 2 && WindLoadList.Count == 0 && TemperatureLoadList.Count == 0)
+            ///check with kahjun, excel maybe problem
+            else if (NotionalDirectionFactor == 2 && WindLoadList.Count == 0 && TemperatureLoadList.Count == 0 && WindVertLoadList.Count != 0)
+            {
+                int numberOfCombi = (8 * 4) + (4 * 2) + (8 * 2) + (4 * 2);
+                while (numberBloadcombi <= numberOfCombi)
+                {
+                    isError = src.HelperEtabs.AddNewLoadCombiLinear(SapModel, baseBcombiname + numberBloadcombi);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    numberBloadcombi++;
+                }
+
+
+            }
+            else if (NotionalDirectionFactor == 2 && WindLoadList.Count == 0 && TemperatureLoadList.Count == 0 && WindVertLoadList.Count == 0)
             {
                 int numberOfCombi = (4 * 2) + (4 * 2);
                 while (numberBloadcombi <= numberOfCombi)

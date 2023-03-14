@@ -100,6 +100,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
         List<ClassLoadCombo.SDLLoad> SDLoadList = new List<ClassLoadCombo.SDLLoad>();
         List<ClassLoadCombo.LiveLoad> LiveLoadList = new List<ClassLoadCombo.LiveLoad>();
         List<ClassLoadCombo.WindLoad> WindLoadList = new List<ClassLoadCombo.WindLoad>();
+        List<ClassLoadCombo.WindLoad> WindVertLoadList = new List<ClassLoadCombo.WindLoad>();
         List<ClassLoadCombo.NotionalLoad> NotionalDXLoadList = new List<ClassLoadCombo.NotionalLoad>();
         List<ClassLoadCombo.NotionalLoad> NotionalDYLoadList = new List<ClassLoadCombo.NotionalLoad>();
         List<ClassLoadCombo.NotionalLoad> NotionalSDXLoadList = new List<ClassLoadCombo.NotionalLoad>();
@@ -576,16 +577,14 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             }
         }
 
-        int windVertical = 0;
         private void Button_ADD_WINDVERTICAL_Click(object sender, RoutedEventArgs e)
         {
-            windVertical = 1;
             if (checkBoxWINDVERTICAL.IsChecked ==true)
             {
                 listBoxChoosenWIND.Items.Add(windvertdirectionList[0]);
 
                 ClassLoadCombo.WindLoad eachWindLoad = new ClassLoadCombo.WindLoad(windvertdirectionList[0]);
-                WindLoadList.Add(eachWindLoad);
+                WindVertLoadList.Add(eachWindLoad);
 
                 Button_ADD_WINDVERTICAL.IsEnabled = false;
             }
@@ -595,9 +594,9 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 listBoxChoosenWIND.Items.Add(windvertnoplusminusdirectionList[1]);
 
                 ClassLoadCombo.WindLoad eachWindLoad = new ClassLoadCombo.WindLoad(windvertnoplusminusdirectionList[0]);
-                WindLoadList.Add(eachWindLoad);
+                WindVertLoadList.Add(eachWindLoad);
                 ClassLoadCombo.WindLoad eachWindLoad1 = new ClassLoadCombo.WindLoad(windvertnoplusminusdirectionList[1]);
-                WindLoadList.Add(eachWindLoad1);
+                WindVertLoadList.Add(eachWindLoad1);
 
                 Button_ADD_WINDVERTICAL.IsEnabled = false;
             }
@@ -615,7 +614,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             listBoxChoosenWIND.Items.Clear();
 
             WindLoadList.Clear();
-            windVertical = 0;
+            WindVertLoadList.Clear();
 
             Button_ADD_WIND.IsEnabled = true;
             Button_ADD_WINDVERTICAL.IsEnabled = true;
@@ -1015,7 +1014,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
         {
             IsEnabled = false;
             //Call up result window
-            src.load_combo_EN.WindowLoadComboResult windowLoadComboResult = new src.load_combo_EN.WindowLoadComboResult(_SapModel, _Plugin, deadLoadList, SDLoadList, LiveLoadList, WindLoadList, NotionalDXLoadList, NotionalDYLoadList, NotionalSDXLoadList, NotionalSDYLoadList, TemperatureLoadList, SeismicLoadList, AccidentalLoadList, UpliftLoadList, EHFDLXLoadList, EHFDLYLoadList, EHFSDLXLoadList, EHFSDLYLoadList, EHFLLXLoadList, EHFLLYLoadList, notionaldirectionFactor, windVertical);
+            src.load_combo_EN.WindowLoadComboResult windowLoadComboResult = new src.load_combo_EN.WindowLoadComboResult(_SapModel, _Plugin, deadLoadList, SDLoadList, LiveLoadList, WindLoadList, NotionalDXLoadList, NotionalDYLoadList, NotionalSDXLoadList, NotionalSDYLoadList, TemperatureLoadList, SeismicLoadList, AccidentalLoadList, UpliftLoadList, EHFDLXLoadList, EHFDLYLoadList, EHFSDLXLoadList, EHFSDLYLoadList, EHFLLXLoadList, EHFLLYLoadList, notionaldirectionFactor, WindVertLoadList);
             IsEnabled = true;
         }
     }

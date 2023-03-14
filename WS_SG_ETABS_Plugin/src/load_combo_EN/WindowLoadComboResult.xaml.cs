@@ -43,13 +43,14 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             List<src.load_combo_EN.ClassLoadCombo.EHFLoad> EHFSDLYLoadList,
             List<src.load_combo_EN.ClassLoadCombo.EHFLoad> EHFLLXLoadList,
             List<src.load_combo_EN.ClassLoadCombo.EHFLoad> EHFLLYLoadList,
-            int notionaldirectionFactor, int windVertical)
+            int notionaldirectionFactor,
+            List<src.load_combo_EN.ClassLoadCombo.WindLoad> WindVertLoadList)
         {
             _SapModel = SapModel;
             _Plugin = Plugin;
 
             //Mainlogic
-            bool isError = src.load_combo_EN.FunctionLoadCombo.CreateLoadPatternAndCase(_SapModel, _Plugin, deadLoadList, SDLoadList, LiveLoadList, WindLoadList, NotionalDXLoadList, NotionalDYLoadList, NotionalSDXLoadList, NotionalSDYLoadList, TemperatureLoadList, SeismicLoadList, AccidentalLoadList, UpliftLoadList, EHFDLXLoadList, EHFDLYLoadList, EHFSDLXLoadList, EHFSDLYLoadList, EHFLLXLoadList, EHFLLYLoadList, notionaldirectionFactor, windVertical);
+            bool isError = src.load_combo_EN.FunctionLoadCombo.CreateLoadPatternAndCase(_SapModel, _Plugin, deadLoadList, SDLoadList, LiveLoadList, WindLoadList, NotionalDXLoadList, NotionalDYLoadList, NotionalSDXLoadList, NotionalSDYLoadList, TemperatureLoadList, SeismicLoadList, AccidentalLoadList, UpliftLoadList, EHFDLXLoadList, EHFDLYLoadList, EHFSDLXLoadList, EHFSDLYLoadList, EHFLLXLoadList, EHFLLYLoadList, notionaldirectionFactor, WindVertLoadList);
 
             if (isError)
             {
