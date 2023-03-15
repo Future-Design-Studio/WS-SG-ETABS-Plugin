@@ -33,7 +33,8 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             List<src.load_combo_EN.ClassLoadCombo.WindLoad> WindVertLoadList)
         {
             Dictionary<string, string> llcaseDict = new Dictionary<string, string>();
-            Dictionary<string, string> windcaseDict = new Dictionary<string, string>();
+            List<string> windcaseList = new List<string>();
+            List<string> windvertcaseList = new List<string>();
             List<string> tempcaselist = new List<string>();
             List<string> seismiccaselist = new List<string>();
             List<string> alcaselist = new List<string>();
@@ -72,7 +73,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             string DeadLoadCaseName = null;
             foreach (var deadLoad in deadLoadList)
             {
-                DeadLoadCaseName = "P_Dead";
+                DeadLoadCaseName = "P_DL";
                 i++;
             }
             if (i > 0)
@@ -127,7 +128,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             string SuperDeadLoadCaseName = null;
             foreach (var superdeadLoad in SDLoadList)
             {
-                SuperDeadLoadCaseName = "P_SuperDead";
+                SuperDeadLoadCaseName = "P_SDL";
                 i++; 
             }
             if (i > 0)
@@ -180,7 +181,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
             foreach (var liveLoad in LiveLoadList)
             {
-                string LiveLoadCaseName = "P_Live(" + liveLoad.Name + ")";
+                string LiveLoadCaseName = "P_LL (" + liveLoad.Name + ")";
 
 
                 llcaseDict.Add(LiveLoadCaseName, liveLoad.CategoryPhi);
@@ -204,7 +205,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 LoadType[i] = "Load";
                 LoadName[i] = liveLoad.Name;
                 SF[i] = 1.00;
-                isError = src.HelperEtabs.UpdateLoadCase(SapModel, "P_Live(" + liveLoad.Name + ")", NumberLoads, LoadType, LoadName, SF);
+                isError = src.HelperEtabs.UpdateLoadCase(SapModel, "P_LL (" + liveLoad.Name + ")", NumberLoads, LoadType, LoadName, SF);
                 if (isError)
                 {
                     return true;
@@ -229,10 +230,10 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
             foreach (var windLoad in WindLoadList)
             {
-                string WindLoadCaseName = "P_Wind(" + windLoad.Name + ")";
+                string WindLoadCaseName = "P_" + windLoad.Name;
 
 
-                windcaseDict.Add(WindLoadCaseName, windLoad.Name);
+                windcaseList.Add(WindLoadCaseName);
 
 
                 isError = src.HelperEtabs.AddNewLoadCase(SapModel, WindLoadCaseName);
@@ -252,18 +253,66 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 LoadType[i] = "Load";
                 LoadName[i] = windLoad.Name;
                 SF[i] = 1.00;
-                isError = src.HelperEtabs.UpdateLoadCase(SapModel, "P_Wind(" + windLoad.Name + ")", NumberLoads, LoadType, LoadName, SF);
+                isError = src.HelperEtabs.UpdateLoadCase(SapModel, "P_" + windLoad.Name, NumberLoads, LoadType, LoadName, SF);
                 if (isError)
                 {
                     return true;
                 }
             }
-            
 
 
 
 
-            
+
+
+
+            foreach (var windvertLoad in WindVertLoadList)
+            {
+                isError = src.HelperEtabs.AddLoadPattern(SapModel, windvertLoad.Name, 0, "Wind", false, addAnalysisCase);
+                if (isError)
+                {
+                    return true;
+                }
+            }
+
+
+            foreach (var windvertLoad in WindVertLoadList)
+            {
+                string WindLoadCaseName = "P_" + windvertLoad.Name;
+
+
+                windvertcaseList.Add(WindLoadCaseName);
+
+
+                isError = src.HelperEtabs.AddNewLoadCase(SapModel, WindLoadCaseName);
+                if (isError)
+                {
+                    return true;
+                }
+            }
+
+            LoadType = new string[50];
+            LoadName = new string[50];
+            SF = new double[50];
+            i = 0;
+            NumberLoads = 1;
+            foreach (var windvertLoad in WindVertLoadList)
+            {
+                LoadType[i] = "Load";
+                LoadName[i] = windvertLoad.Name;
+                SF[i] = 1.00;
+                isError = src.HelperEtabs.UpdateLoadCase(SapModel, "P_" + windvertLoad.Name, NumberLoads, LoadType, LoadName, SF);
+                if (isError)
+                {
+                    return true;
+                }
+            }
+
+
+
+
+
+
 
             foreach (var notionalDLoad in NotionalDXLoadList)
             {
@@ -579,7 +628,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
             foreach (var temperatureLoad in TemperatureLoadList)
             {
-                string TemperatureLoadCaseName = "P_Temp(" + temperatureLoad.Name + ")";
+                string TemperatureLoadCaseName = "P_Temp (" + temperatureLoad.Name + ")";
 
                 tempcaselist.Add(TemperatureLoadCaseName);
 
@@ -601,7 +650,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 LoadType[i] = "Load";
                 LoadName[i] = temperatureLoad.Name;
                 SF[i] = 1.00;
-                isError = src.HelperEtabs.UpdateLoadCase(SapModel, "P_Temp(" + temperatureLoad.Name + ")", NumberLoads, LoadType, LoadName, SF);
+                isError = src.HelperEtabs.UpdateLoadCase(SapModel, "P_Temp (" + temperatureLoad.Name + ")", NumberLoads, LoadType, LoadName, SF);
                 if (isError)
                 {
                     return true;
@@ -625,7 +674,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
             foreach (var seismicLoad in SeismicLoadList)
             {
-                string SeismicLoadCaseName = "P_Seismic(" + seismicLoad.Name + ")";
+                string SeismicLoadCaseName = "P_Seismic (" + seismicLoad.Name + ")";
 
                 seismiccaselist.Add(SeismicLoadCaseName);
 
@@ -647,7 +696,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 LoadType[i] = "Load";
                 LoadName[i] = seismicLoad.Name;
                 SF[i] = 1.00;
-                isError = src.HelperEtabs.UpdateLoadCase(SapModel, "P_Seismic(" + seismicLoad.Name + ")", NumberLoads, LoadType, LoadName, SF);
+                isError = src.HelperEtabs.UpdateLoadCase(SapModel, "P_Seismic (" + seismicLoad.Name + ")", NumberLoads, LoadType, LoadName, SF);
                 if (isError)
                 {
                     return true;
@@ -671,7 +720,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
             foreach (var accidentalLoad in AccidentalLoadList)
             {
-                string AccidentalLoadCaseName = "P_AL(" + accidentalLoad.Name + ")";
+                string AccidentalLoadCaseName = "P_AL (" + accidentalLoad.Name + ")";
 
                 alcaselist.Add(AccidentalLoadCaseName);
 
@@ -693,7 +742,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 LoadType[i] = "Load";
                 LoadName[i] = accidentalLoad.Name;
                 SF[i] = 1.00;
-                isError = src.HelperEtabs.UpdateLoadCase(SapModel, "P_AL(" + accidentalLoad.Name + ")", NumberLoads, LoadType, LoadName, SF);
+                isError = src.HelperEtabs.UpdateLoadCase(SapModel, "P_AL (" + accidentalLoad.Name + ")", NumberLoads, LoadType, LoadName, SF);
                 if (isError)
                 {
                     return true;
@@ -717,7 +766,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
             foreach (var upliftLoad in UpliftLoadList)
             {
-                string UpliftLoadCaseName = "P_UPLIFT(" + upliftLoad.Name + ")";
+                string UpliftLoadCaseName = "P_UPLIFT (" + upliftLoad.Name + ")";
 
                 upliftcaselist.Add(UpliftLoadCaseName);
 
@@ -739,7 +788,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 LoadType[i] = "Load";
                 LoadName[i] = upliftLoad.Name;
                 SF[i] = 1.00;
-                isError = src.HelperEtabs.UpdateLoadCase(SapModel, "P_UPLIFT(" + upliftLoad.Name + ")", NumberLoads, LoadType, LoadName, SF);
+                isError = src.HelperEtabs.UpdateLoadCase(SapModel, "P_UPLIFT (" + upliftLoad.Name + ")", NumberLoads, LoadType, LoadName, SF);
                 if (isError)
                 {
                     return true;
@@ -1218,29 +1267,64 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     numberBloadcombi++;
                 }
 
-                //load combination adding where all loads dont take into account +/-
-                if (WindLoadList.Count == 4 && TemperatureLoadList.Count == 2 && WindVertLoadList.Count == 2)
+                //first 32 load combis out of 480
+                for (int combi1 = 1; combi1 <= 32; combi1++)
                 {
-                    for (int combi1 = 1; combi1 <= 32; combi1++)
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, "P_DL", 1.35);
+                    if (isError)
                     {
-                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, "P_Dead", 1.35);
+                        return true;
+                    }
+
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, "P_SDL", 1.35);
+                    if (isError)
+                    {
+                        return true;
+                    }
+
+                    foreach (KeyValuePair<string, string> llDetails  in llcaseDict)
+                    {
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, llDetails.Key, 1.5);
                         if (isError)
                         {
                             return true;
                         }
-
-                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, "P_SuperDead", 1.35);
-                        if (isError)
-                        {
-                            return true;
-                        }
-
-                        /*foreach (Dictionary<string, string> llquasi  in llcaseDict)
-                            {
-
-                            }*/
                     }
                 }
+
+                //add first 4 wind load combis
+                if (WindLoadList.Count == 4)
+                {
+                    int windcaselistIndex = 0;
+                    for (int combi1 = 1; combi1 <= 4; combi1++)
+                    {
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windcaseList[windcaselistIndex], 0.75);
+                        windcaselistIndex++;
+                        if (isError)
+                        {
+                            return true;
+                        }
+                    }
+                }
+                else
+                {
+                    int windcaselistIndex = 0;
+                    for (int combi1 = 1; combi1 <= 4; combi1 = combi1 + 2)
+                    {
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windcaseList[windcaselistIndex], 0.75);
+                        if (isError)
+                        {
+                            return true;
+                        }
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1+1, 0, windcaseList[windcaselistIndex], -0.75);
+                        if (isError)
+                        {
+                            return true;
+                        }
+                        windcaselistIndex++;
+                    }
+                }
+                
                     
 
 
@@ -1323,7 +1407,6 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
 
             }
-            ///check with kahjun, excel maybe problem
             else if (NotionalDirectionFactor == 2 && WindLoadList.Count == 0 && TemperatureLoadList.Count != 0 && WindVertLoadList.Count != 0)
             {
                 int numberOfCombi = (8 * 2 * 6) + (8 * 4) + (8 * 2 * 4) + (2 * 4 * 4) + (1 * 2 * 4) + (8 * 2) + (2 * 2 * 4) + (1 * 2 * 4);
@@ -1354,7 +1437,6 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
 
             }
-            ///check with kahjun, excel maybe problem
             else if (NotionalDirectionFactor == 2 && WindLoadList.Count == 0 && TemperatureLoadList.Count == 0 && WindVertLoadList.Count != 0)
             {
                 int numberOfCombi = (8 * 4) + (4 * 2) + (8 * 2) + (4 * 2);
@@ -1387,7 +1469,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             }
             else
             {
-                MessageBox.Show("Error, 8 direction wind load support have not been added into this plugin");
+                MessageBox.Show("Error, 8 direction wind load support not available in free version");
                 return true;
             }
 

@@ -116,6 +116,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
         List<ClassLoadCombo.EHFLoad> EHFLLXLoadList = new List<ClassLoadCombo.EHFLoad>();
         List<ClassLoadCombo.EHFLoad> EHFLLYLoadList = new List<ClassLoadCombo.EHFLoad>();
 
+        /*
         List<string> ehfDLXList = new List<string>();
         List<string> ehfSDLXList = new List<string>();
         List<string> ehfLLXList = new List<string>();
@@ -129,6 +130,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
         List<string> ehfDLYblpList = new List<string>();
         List<string> ehfSDLYblpList = new List<string>();
         List<string> ehfLLYblpList = new List<string>();
+        */
 
         #endregion
 
@@ -230,6 +232,11 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                 ehfDLXList.Add(ehfList[0] + " (" + selectedString + ")");
                 ehfDLYList.Add(ehfList[1] + " (" + selectedString + ")");
+
+                string selectedStringehfdl = ehfList[0] + " (" + selectedString + ")" + textBoxNameEHF.Text;
+                listBoxChoosenEHF.Items.Add(selectedStringehfdl);
+                ClassLoadCombo.EHFLoad eachehfLoad = new ClassLoadCombo.EHFLoad(ehfdl, double.Parse(textBoxNameEHF.Text), ehfDLXblpList[i]);
+                EHFDLXLoadList.Add(eachehfLoad);
 
                 ehfDLXblpList.Add(textBoxNameDL.Text);
                 ehfDLYblpList.Add(textBoxNameDL.Text);
@@ -1012,6 +1019,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
         private void buttonOk_Click(object sender, RoutedEventArgs e)
         {
+            Button_REMOVE_EHF_Click
             IsEnabled = false;
             //Call up result window
             src.load_combo_EN.WindowLoadComboResult windowLoadComboResult = new src.load_combo_EN.WindowLoadComboResult(_SapModel, _Plugin, deadLoadList, SDLoadList, LiveLoadList, WindLoadList, NotionalDXLoadList, NotionalDYLoadList, NotionalSDXLoadList, NotionalSDYLoadList, TemperatureLoadList, SeismicLoadList, AccidentalLoadList, UpliftLoadList, EHFDLXLoadList, EHFDLYLoadList, EHFSDLXLoadList, EHFSDLYLoadList, EHFLLXLoadList, EHFLLYLoadList, notionaldirectionFactor, WindVertLoadList);
