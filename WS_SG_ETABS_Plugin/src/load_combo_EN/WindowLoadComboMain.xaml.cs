@@ -116,22 +116,6 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
         List<ClassLoadCombo.EHFLoad> EHFLLXLoadList = new List<ClassLoadCombo.EHFLoad>();
         List<ClassLoadCombo.EHFLoad> EHFLLYLoadList = new List<ClassLoadCombo.EHFLoad>();
 
-        /*
-        List<string> ehfDLXList = new List<string>();
-        List<string> ehfSDLXList = new List<string>();
-        List<string> ehfLLXList = new List<string>();
-        List<string> ehfDLYList = new List<string>();
-        List<string> ehfSDLYList = new List<string>();
-        List<string> ehfLLYList = new List<string>();
-
-        List<string> ehfDLXblpList = new List<string>();
-        List<string> ehfSDLXblpList = new List<string>();
-        List<string> ehfLLXblpList = new List<string>();
-        List<string> ehfDLYblpList = new List<string>();
-        List<string> ehfSDLYblpList = new List<string>();
-        List<string> ehfLLYblpList = new List<string>();
-        */
-
         #endregion
 
         public WindowLoadComboMain(cSapModel SapModel, cPluginCallback Plugin)
@@ -209,12 +193,12 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                 string selectedStringehfxdl = ehfList[0] + " (" + selectedString + ")" + textBoxNameEHF.Text;
                 listBoxChoosenEHFDL.Items.Add(selectedStringehfxdl);
-                ClassLoadCombo.EHFLoad eachehfLoad = new ClassLoadCombo.EHFLoad(ehfList[0] + " (" + selectedString + ")", double.Parse(textBoxNameEHF.Text), selectedString);
+                ClassLoadCombo.EHFLoad eachehfLoad = new ClassLoadCombo.EHFLoad(ehfList[0] + " (" + selectedString + ")", double.Parse(textBoxNameEHF.Text), selectedString, "");
                 EHFDLXLoadList.Add(eachehfLoad);
 
                 string selectedStringehfydl = ehfList[1] + " (" + selectedString + ")" + textBoxNameEHF.Text;
                 listBoxChoosenEHFDL.Items.Add(selectedStringehfydl);
-                ClassLoadCombo.EHFLoad eachehfLoad1 = new ClassLoadCombo.EHFLoad(ehfList[1] + " (" + selectedString + ")", double.Parse(textBoxNameEHF.Text), selectedString);
+                ClassLoadCombo.EHFLoad eachehfLoad1 = new ClassLoadCombo.EHFLoad(ehfList[1] + " (" + selectedString + ")", double.Parse(textBoxNameEHF.Text), selectedString, "");
                 EHFDLYLoadList.Add(eachehfLoad1);
             }
             else
@@ -236,12 +220,12 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                 string selectedStringehfxdl = ehfList[0] + " (" + selectedString + ")" + textBoxNameEHF.Text;
                 listBoxChoosenEHFDL.Items.Add(selectedStringehfxdl);
-                ClassLoadCombo.EHFLoad eachehfLoad = new ClassLoadCombo.EHFLoad(ehfList[0] + " (" + selectedString + ")", double.Parse(textBoxNameEHF.Text), selectedString);
+                ClassLoadCombo.EHFLoad eachehfLoad = new ClassLoadCombo.EHFLoad(ehfList[0] + " (" + selectedString + ")", double.Parse(textBoxNameEHF.Text), selectedString, "");
                 EHFDLXLoadList.Add(eachehfLoad);
 
                 string selectedStringehfydl = ehfList[1] + " (" + selectedString + ")" + textBoxNameEHF.Text;
                 listBoxChoosenEHFDL.Items.Add(selectedStringehfydl);
-                ClassLoadCombo.EHFLoad eachehfLoad1 = new ClassLoadCombo.EHFLoad(ehfList[1] + " (" + selectedString + ")", double.Parse(textBoxNameEHF.Text), selectedString);
+                ClassLoadCombo.EHFLoad eachehfLoad1 = new ClassLoadCombo.EHFLoad(ehfList[1] + " (" + selectedString + ")", double.Parse(textBoxNameEHF.Text), selectedString, "");
                 EHFDLYLoadList.Add(eachehfLoad1);
             }
         }
@@ -326,12 +310,12 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                 string selectedStringehfxsdl = ehfList[0] + " (" + selectedString + ")" + textBoxNameEHF.Text;
                 listBoxChoosenEHFSDL.Items.Add(selectedStringehfxsdl);
-                ClassLoadCombo.EHFLoad eachehfLoad = new ClassLoadCombo.EHFLoad(ehfList[0] + " (" + selectedString + ")", double.Parse(textBoxNameEHF.Text), selectedString);
+                ClassLoadCombo.EHFLoad eachehfLoad = new ClassLoadCombo.EHFLoad(ehfList[0] + " (" + selectedString + ")", double.Parse(textBoxNameEHF.Text), selectedString, "");
                 EHFSDLXLoadList.Add(eachehfLoad);
 
                 string selectedStringehfysdl = ehfList[1] + " (" + selectedString + ")" + textBoxNameEHF.Text;
                 listBoxChoosenEHFSDL.Items.Add(selectedStringehfysdl);
-                ClassLoadCombo.EHFLoad eachehfLoad1 = new ClassLoadCombo.EHFLoad(ehfList[1] + " (" + selectedString + ")", double.Parse(textBoxNameEHF.Text), selectedString);
+                ClassLoadCombo.EHFLoad eachehfLoad1 = new ClassLoadCombo.EHFLoad(ehfList[1] + " (" + selectedString + ")", double.Parse(textBoxNameEHF.Text), selectedString, "");
                 EHFSDLYLoadList.Add(eachehfLoad1);
             }
             else
@@ -353,12 +337,12 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                 string selectedStringehfxsdl = ehfList[0] + " (" + selectedString + ")" + textBoxNameEHF.Text;
                 listBoxChoosenEHFSDL.Items.Add(selectedStringehfxsdl);
-                ClassLoadCombo.EHFLoad eachehfLoad = new ClassLoadCombo.EHFLoad(ehfList[0] + " (" + selectedString + ")", double.Parse(textBoxNameEHF.Text), selectedString);
+                ClassLoadCombo.EHFLoad eachehfLoad = new ClassLoadCombo.EHFLoad(ehfList[0] + " (" + selectedString + ")", double.Parse(textBoxNameEHF.Text), selectedString, "");
                 EHFSDLXLoadList.Add(eachehfLoad);
 
                 string selectedStringehfysdl = ehfList[1] + " (" + selectedString + ")" + textBoxNameEHF.Text;
                 listBoxChoosenEHFSDL.Items.Add(selectedStringehfysdl);
-                ClassLoadCombo.EHFLoad eachehfLoad1 = new ClassLoadCombo.EHFLoad(ehfList[1] + " (" + selectedString + ")", double.Parse(textBoxNameEHF.Text), selectedString);
+                ClassLoadCombo.EHFLoad eachehfLoad1 = new ClassLoadCombo.EHFLoad(ehfList[1] + " (" + selectedString + ")", double.Parse(textBoxNameEHF.Text), selectedString, "");
                 EHFSDLYLoadList.Add(eachehfLoad1);
             }
         }
@@ -429,12 +413,12 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                 string selectedStringehfxll = ehfList[0] + " (" + comBoxExistingLL.Text + ")" + textBoxNameEHF.Text;
                 listBoxChoosenEHFLL.Items.Add(selectedStringehfxll);
-                ClassLoadCombo.EHFLoad eachehfLoad = new ClassLoadCombo.EHFLoad(ehfList[0] + " (" + comBoxExistingLL.Text + ")", double.Parse(textBoxNameEHF.Text), comBoxExistingLL.Text);
+                ClassLoadCombo.EHFLoad eachehfLoad = new ClassLoadCombo.EHFLoad(ehfList[0] + " (" + comBoxExistingLL.Text + ")", double.Parse(textBoxNameEHF.Text), comBoxExistingLL.Text, comBoxLL.Text);
                 EHFLLXLoadList.Add(eachehfLoad);
 
                 string selectedStringehfyll = ehfList[1] + " (" + comBoxExistingLL.Text + ")" + textBoxNameEHF.Text;
                 listBoxChoosenEHFLL.Items.Add(selectedStringehfyll);
-                ClassLoadCombo.EHFLoad eachehfLoad1 = new ClassLoadCombo.EHFLoad(ehfList[1] + " (" + comBoxExistingLL.Text + ")", double.Parse(textBoxNameEHF.Text), comBoxExistingLL.Text);
+                ClassLoadCombo.EHFLoad eachehfLoad1 = new ClassLoadCombo.EHFLoad(ehfList[1] + " (" + comBoxExistingLL.Text + ")", double.Parse(textBoxNameEHF.Text), comBoxExistingLL.Text, comBoxLL.Text);
                 EHFLLYLoadList.Add(eachehfLoad1);
             }
             else
@@ -447,12 +431,12 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                 string selectedStringehfxll = ehfList[0] + " (" + textBoxNameLL.Text + ")" + textBoxNameEHF.Text;
                 listBoxChoosenEHFLL.Items.Add(selectedStringehfxll);
-                ClassLoadCombo.EHFLoad eachehfLoad = new ClassLoadCombo.EHFLoad(ehfList[0] + " (" + textBoxNameLL.Text + ")", double.Parse(textBoxNameEHF.Text), textBoxNameLL.Text);
+                ClassLoadCombo.EHFLoad eachehfLoad = new ClassLoadCombo.EHFLoad(ehfList[0] + " (" + textBoxNameLL.Text + ")", double.Parse(textBoxNameEHF.Text), textBoxNameLL.Text, comBoxLL.Text);
                 EHFLLXLoadList.Add(eachehfLoad);
 
                 string selectedStringehfyll = ehfList[1] + " (" + textBoxNameLL.Text + ")" + textBoxNameEHF.Text;
                 listBoxChoosenEHFLL.Items.Add(selectedStringehfyll);
-                ClassLoadCombo.EHFLoad eachehfLoad1 = new ClassLoadCombo.EHFLoad(ehfList[1] + " (" + textBoxNameLL.Text + ")", double.Parse(textBoxNameEHF.Text), textBoxNameLL.Text);
+                ClassLoadCombo.EHFLoad eachehfLoad1 = new ClassLoadCombo.EHFLoad(ehfList[1] + " (" + textBoxNameLL.Text + ")", double.Parse(textBoxNameEHF.Text), textBoxNameLL.Text, comBoxLL.Text);
                 EHFLLYLoadList.Add(eachehfLoad1);
             }
         }

@@ -125,12 +125,14 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             public string Name { get; set; }
             public double Factor { get; set; }
             public string BaseLoadPatternName { get; set; }
+            public string QuasiPermenantChosen { get; set; }
 
-            public EHFLoad(string name, double factor, string baseLoadPatternName)
+            public EHFLoad(string name, double factor, string baseLoadPatternName, string quasiPermenantChosen)
             {
                 Name = name;
                 Factor = factor;
                 BaseLoadPatternName = baseLoadPatternName;
+                QuasiPermenantChosen = quasiPermenantChosen;
             }
         }
 
