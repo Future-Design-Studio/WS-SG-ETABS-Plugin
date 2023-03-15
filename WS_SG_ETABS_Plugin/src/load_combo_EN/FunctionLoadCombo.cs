@@ -1255,6 +1255,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             //from here start creating load combinations
             int numberBloadcombi = 1;
             string baseBcombiname = "U_Comb_B-";
+
             if (NotionalDirectionFactor == 2 && WindLoadList.Count != 0 && TemperatureLoadList.Count != 0 && WindVertLoadList.Count != 0)
             {
                 int numberOfCombi = (16 * 2 * 6) + (16 * 4) + (16 * 2 * 4) + (2 * 4 * 4) + (1 * 2 * 4) + (16 * 2) + (2 * 2 * 4) + (1 * 2 * 4);
@@ -1285,16 +1286,23 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                 #region First 32 load combis for case1 ------------------------- COMBI 1-32
 
+                double dlFactor = 1.35;
+                double sdlFactor = 1.35;
+                double llFactor = 1.5;
+                double wlFactor = 0.75;
+                double tlFactor = 0.9;
+                double nlFactor = 1;
+
                 //first 32 load combis DL SDL LL TEMP ------------------------- COMBI 1-32
                 for (int combi1 = 1; combi1 <= 32; combi1++)
                 {
-                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, "P_DL", 1.35);
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, "P_DL", dlFactor);
                     if (isError)
                     {
                         return true;
                     }
 
-                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, "P_SDL", 1.35);
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, "P_SDL", sdlFactor);
                     if (isError)
                     {
                         return true;
@@ -1302,7 +1310,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                     foreach (KeyValuePair<string, string> llDetails  in llcaseDict)
                     {
-                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, llDetails.Key, 1.5);
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, llDetails.Key, llFactor);
                         if (isError)
                         {
                             return true;
@@ -1311,7 +1319,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                     if (combi1 <=16)
                     {
-                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, tempcaselist[0], 0.9);
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, tempcaselist[0], tlFactor);
                         if (isError)
                         {
                             return true;
@@ -1319,7 +1327,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     }
                     else if (combi1 > 16 && tempcaselist.Count == 2)
                     {
-                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, tempcaselist[1], 0.9);
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, tempcaselist[1], tlFactor);
                         if (isError)
                         {
                             return true;
@@ -1327,7 +1335,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     }
                     else if (combi1 > 16 && tempcaselist.Count == 1)
                     {
-                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, tempcaselist[0], -0.9);
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, tempcaselist[0], -tlFactor);
                         if (isError)
                         {
                             return true;
@@ -1338,39 +1346,19 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 //add 32 ehf loads ------------------------- COMBI 1-32
                 for (int combi1 = 1; combi1 <= 32; combi1++)
                 {
-                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, "P_EHFx (DL)", 1.35);
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, "P_EHFx (DL)", dlFactor);
                     if (isError)
                     {
                         return true;
                     }
-                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, "P_EHFx (SDL)", 1.35);
-                    if (isError)
-                    {
-                        return true;
-                    }
-                    foreach (KeyValuePair<string, string> ehfxLL in ehfllxcaseDict)
-                    {
-                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, ehfxLL.Key, 1.5);
-                        if (isError)
-                        {
-                            return true;
-                        }
-                    }
-                    combi1++;
-
-                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, "P_EHFx (DL)", -1.35);
-                    if (isError)
-                    {
-                        return true;
-                    }
-                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, "P_EHFx (SDL)", -1.35);
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, "P_EHFx (SDL)", sdlFactor);
                     if (isError)
                     {
                         return true;
                     }
                     foreach (KeyValuePair<string, string> ehfxLL in ehfllxcaseDict)
                     {
-                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, ehfxLL.Key, -1.5);
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, ehfxLL.Key, llFactor);
                         if (isError)
                         {
                             return true;
@@ -1378,19 +1366,19 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     }
                     combi1++;
 
-                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, "P_EHFy (DL)", 1.35);
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, "P_EHFx (DL)", -dlFactor);
                     if (isError)
                     {
                         return true;
                     }
-                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, "P_EHFy (SDL)", 1.35);
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, "P_EHFx (SDL)", -sdlFactor);
                     if (isError)
                     {
                         return true;
                     }
-                    foreach (KeyValuePair<string, string> ehfyLL in ehfllycaseDict)
+                    foreach (KeyValuePair<string, string> ehfxLL in ehfllxcaseDict)
                     {
-                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, ehfyLL.Key, 1.5);
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, ehfxLL.Key, -llFactor);
                         if (isError)
                         {
                             return true;
@@ -1398,19 +1386,39 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     }
                     combi1++;
 
-                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, "P_EHFy (DL)", -1.35);
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, "P_EHFy (DL)", dlFactor);
                     if (isError)
                     {
                         return true;
                     }
-                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, "P_EHFy (SDL)", -1.35);
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, "P_EHFy (SDL)", sdlFactor);
                     if (isError)
                     {
                         return true;
                     }
                     foreach (KeyValuePair<string, string> ehfyLL in ehfllycaseDict)
                     {
-                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, ehfyLL.Key, -1.5);
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, ehfyLL.Key, llFactor);
+                        if (isError)
+                        {
+                            return true;
+                        }
+                    }
+                    combi1++;
+
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, "P_EHFy (DL)", -dlFactor);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, "P_EHFy (SDL)", -sdlFactor);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    foreach (KeyValuePair<string, string> ehfyLL in ehfllycaseDict)
+                    {
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, ehfyLL.Key, -llFactor);
                         if (isError)
                         {
                             return true;
@@ -1424,7 +1432,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     int windcaselistIndex = 0;
                     for (int combi1 = 1; combi1 <= 4; combi1++)
                     {
-                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windcaseList[windcaselistIndex], 0.75);
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windcaseList[windcaselistIndex], wlFactor);
                         windcaselistIndex++;
                         if (isError)
                         {
@@ -1437,13 +1445,13 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     int windcaselistIndex = 0;
                     for (int combi1 = 1; combi1 <= 3; combi1++)
                     {
-                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windcaseList[windcaselistIndex], 0.75);
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windcaseList[windcaselistIndex], wlFactor);
                         if (isError)
                         {
                             return true;
                         }
                         combi1++;
-                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windcaseList[windcaselistIndex], -0.75);
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windcaseList[windcaselistIndex], -wlFactor);
                         if (isError)
                         {
                             return true;
@@ -1457,7 +1465,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 {
                     if (combi1 <= 8)
                     {
-                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windvertcaseList[0], 0.75);
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windvertcaseList[0], wlFactor);
                         if (isError)
                         {
                             return true;
@@ -1465,7 +1473,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     }
                     else if (combi1 >8 && WindVertLoadList.Count == 2)
                     {
-                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windvertcaseList[1], 0.75);
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windvertcaseList[1], wlFactor);
                         if (isError)
                         {
                             return true;
@@ -1473,7 +1481,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     }
                     else if (combi1 > 8 && WindVertLoadList.Count == 1)
                     {
-                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windvertcaseList[0], -0.75);
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windvertcaseList[0], -wlFactor);
                         if (isError)
                         {
                             return true;
@@ -1485,13 +1493,13 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 int notionalcaselistIndex = 0;
                 for (int combi1 = 13; combi1 <= 16; combi1++)
                 {
-                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, notional2caseList[notionalcaselistIndex], 1);
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, notional2caseList[notionalcaselistIndex], nlFactor);
                     if (isError)
                     {
                         return true;
                     }
                     combi1++;
-                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, notional2caseList[notionalcaselistIndex], -1);
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, notional2caseList[notionalcaselistIndex], -nlFactor);
                     if (isError)
                     {
                         return true;
@@ -1505,7 +1513,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     int windcaselistIndex = 0;
                     for (int combi1 = 17; combi1 <= 20; combi1++)
                     {
-                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windcaseList[windcaselistIndex], 0.75);
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windcaseList[windcaselistIndex], wlFactor);
                         windcaselistIndex++;
                         if (isError)
                         {
@@ -1518,13 +1526,13 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     int windcaselistIndex = 0;
                     for (int combi1 = 17; combi1 <= 19; combi1++)
                     {
-                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windcaseList[windcaselistIndex], 0.75);
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windcaseList[windcaselistIndex], wlFactor);
                         if (isError)
                         {
                             return true;
                         }
                         combi1++;
-                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windcaseList[windcaselistIndex], -0.75);
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windcaseList[windcaselistIndex], -wlFactor);
                         if (isError)
                         {
                             return true;
@@ -1538,7 +1546,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 {
                     if (combi1 <= 24)
                     {
-                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windvertcaseList[0], 0.75);
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windvertcaseList[0], wlFactor);
                         if (isError)
                         {
                             return true;
@@ -1546,7 +1554,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     }
                     else if (combi1 > 24 && WindVertLoadList.Count == 2)
                     {
-                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windvertcaseList[1], 0.75);
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windvertcaseList[1], wlFactor);
                         if (isError)
                         {
                             return true;
@@ -1554,7 +1562,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     }
                     else if (combi1 > 24 && WindVertLoadList.Count == 1)
                     {
-                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windvertcaseList[0], -0.75);
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windvertcaseList[0], -wlFactor);
                         if (isError)
                         {
                             return true;
@@ -1566,13 +1574,13 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 notionalcaselistIndex = 0;
                 for (int combi1 = 29; combi1 <= 32; combi1++)
                 {
-                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, notional2caseList[notionalcaselistIndex], 1);
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, notional2caseList[notionalcaselistIndex], nlFactor);
                     if (isError)
                     {
                         return true;
                     }
                     combi1++;
-                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, notional2caseList[notionalcaselistIndex], -1);
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, notional2caseList[notionalcaselistIndex], -nlFactor);
                     if (isError)
                     {
                         return true;
@@ -1584,10 +1592,16 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                 #region Next 32 load combis for case2 ------------------------- COMBI 33-64
 
+                dlFactor = 1;
+                llFactor = 1.5;
+                wlFactor = 0.75;
+                tlFactor = 0.9;
+                nlFactor = 1;
+
                 //first 32 load combis DL LL TEMP ------------------------- COMBI 33-64
                 for (int combi1 = 33; combi1 <= 64; combi1++)
                 {
-                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, "P_DL", 1);
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, "P_DL", dlFactor);
                     if (isError)
                     {
                         return true;
@@ -1595,7 +1609,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                     foreach (KeyValuePair<string, string> llDetails in llcaseDict)
                     {
-                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, llDetails.Key, 1.5);
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, llDetails.Key, llFactor);
                         if (isError)
                         {
                             return true;
@@ -1604,7 +1618,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                     if (combi1 <= 48)
                     {
-                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, tempcaselist[0], 0.9);
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, tempcaselist[0], tlFactor);
                         if (isError)
                         {
                             return true;
@@ -1612,7 +1626,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     }
                     else if (combi1 > 48 && tempcaselist.Count == 2)
                     {
-                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, tempcaselist[1], 0.9);
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, tempcaselist[1], tlFactor);
                         if (isError)
                         {
                             return true;
@@ -1620,7 +1634,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     }
                     else if (combi1 > 48 && tempcaselist.Count == 1)
                     {
-                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, tempcaselist[0], -0.9);
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, tempcaselist[0], -tlFactor);
                         if (isError)
                         {
                             return true;
@@ -1631,14 +1645,14 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 //add 32 ehf loads ------------------------- COMBI 33-64
                 for (int combi1 = 33; combi1 <= 64; combi1++)
                 {
-                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, "P_EHFx (DL)", 1);
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, "P_EHFx (DL)", dlFactor);
                     if (isError)
                     {
                         return true;
                     }
                     foreach (KeyValuePair<string, string> ehfxLL in ehfllxcaseDict)
                     {
-                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, ehfxLL.Key, 1.5);
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, ehfxLL.Key, llFactor);
                         if (isError)
                         {
                             return true;
@@ -1646,14 +1660,14 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     }
                     combi1++;
 
-                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, "P_EHFx (DL)", -1);
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, "P_EHFx (DL)", -dlFactor);
                     if (isError)
                     {
                         return true;
                     }
                     foreach (KeyValuePair<string, string> ehfxLL in ehfllxcaseDict)
                     {
-                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, ehfxLL.Key, -1.5);
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, ehfxLL.Key, -llFactor);
                         if (isError)
                         {
                             return true;
@@ -1661,14 +1675,14 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     }
                     combi1++;
 
-                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, "P_EHFy (DL)", 1);
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, "P_EHFy (DL)", dlFactor);
                     if (isError)
                     {
                         return true;
                     }
                     foreach (KeyValuePair<string, string> ehfyLL in ehfllycaseDict)
                     {
-                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, ehfyLL.Key, 1.5);
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, ehfyLL.Key, llFactor);
                         if (isError)
                         {
                             return true;
@@ -1676,14 +1690,14 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     }
                     combi1++;
 
-                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, "P_EHFy (DL)", -1);
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, "P_EHFy (DL)", -dlFactor);
                     if (isError)
                     {
                         return true;
                     }
                     foreach (KeyValuePair<string, string> ehfyLL in ehfllycaseDict)
                     {
-                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, ehfyLL.Key, -1.5);
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, ehfyLL.Key, -llFactor);
                         if (isError)
                         {
                             return true;
@@ -1697,7 +1711,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     int windcaselistIndex = 0;
                     for (int combi1 = 33; combi1 <= 36; combi1++)
                     {
-                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windcaseList[windcaselistIndex], 0.75);
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windcaseList[windcaselistIndex], wlFactor);
                         windcaselistIndex++;
                         if (isError)
                         {
@@ -1710,13 +1724,13 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     int windcaselistIndex = 0;
                     for (int combi1 = 33; combi1 <= 36; combi1++)
                     {
-                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windcaseList[windcaselistIndex], 0.75);
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windcaseList[windcaselistIndex], wlFactor);
                         if (isError)
                         {
                             return true;
                         }
                         combi1++;
-                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windcaseList[windcaselistIndex], -0.75);
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windcaseList[windcaselistIndex], -wlFactor);
                         if (isError)
                         {
                             return true;
@@ -1730,7 +1744,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 {
                     if (combi1 <= 40)
                     {
-                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windvertcaseList[0], 0.75);
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windvertcaseList[0], wlFactor);
                         if (isError)
                         {
                             return true;
@@ -1738,7 +1752,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     }
                     else if (combi1 > 40 && WindVertLoadList.Count == 2)
                     {
-                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windvertcaseList[1], 0.75);
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windvertcaseList[1], wlFactor);
                         if (isError)
                         {
                             return true;
@@ -1746,7 +1760,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     }
                     else if (combi1 > 40 && WindVertLoadList.Count == 1)
                     {
-                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windvertcaseList[0], -0.75);
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windvertcaseList[0], -wlFactor);
                         if (isError)
                         {
                             return true;
@@ -1758,13 +1772,13 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 notionalcaselistIndex = 0;
                 for (int combi1 = 45; combi1 <= 48; combi1++)
                 {
-                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, notional2caseList[notionalcaselistIndex], 1);
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, notional2caseList[notionalcaselistIndex], nlFactor);
                     if (isError)
                     {
                         return true;
                     }
                     combi1++;
-                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, notional2caseList[notionalcaselistIndex], -1);
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, notional2caseList[notionalcaselistIndex], -nlFactor);
                     if (isError)
                     {
                         return true;
@@ -1778,7 +1792,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     int windcaselistIndex = 0;
                     for (int combi1 = 49; combi1 <= 52; combi1++)
                     {
-                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windcaseList[windcaselistIndex], 0.75);
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windcaseList[windcaselistIndex], wlFactor);
                         windcaselistIndex++;
                         if (isError)
                         {
@@ -1791,13 +1805,13 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     int windcaselistIndex = 0;
                     for (int combi1 = 49; combi1 <= 52; combi1++)
                     {
-                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windcaseList[windcaselistIndex], 0.75);
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windcaseList[windcaselistIndex], wlFactor);
                         if (isError)
                         {
                             return true;
                         }
                         combi1++;
-                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windcaseList[windcaselistIndex], -0.75);
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windcaseList[windcaselistIndex], -wlFactor);
                         if (isError)
                         {
                             return true;
@@ -1811,7 +1825,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 {
                     if (combi1 <= 56)
                     {
-                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windvertcaseList[0], 0.75);
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windvertcaseList[0], wlFactor);
                         if (isError)
                         {
                             return true;
@@ -1819,7 +1833,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     }
                     else if (combi1 > 56 && WindVertLoadList.Count == 2)
                     {
-                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windvertcaseList[1], 0.75);
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windvertcaseList[1], wlFactor);
                         if (isError)
                         {
                             return true;
@@ -1827,7 +1841,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     }
                     else if (combi1 > 56 && WindVertLoadList.Count == 1)
                     {
-                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windvertcaseList[0], -0.75);
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windvertcaseList[0], -wlFactor);
                         if (isError)
                         {
                             return true;
@@ -1839,13 +1853,13 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 notionalcaselistIndex = 0;
                 for (int combi1 = 61; combi1 <= 64; combi1++)
                 {
-                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, notional2caseList[notionalcaselistIndex], 1);
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, notional2caseList[notionalcaselistIndex], nlFactor);
                     if (isError)
                     {
                         return true;
                     }
                     combi1++;
-                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, notional2caseList[notionalcaselistIndex], -1);
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, notional2caseList[notionalcaselistIndex], -nlFactor);
                     if (isError)
                     {
                         return true;
@@ -1857,16 +1871,23 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                 #region Next 32 load combis for case3 ------------------------- COMBI 65-96
 
+                dlFactor = 1.35;
+                sdlFactor = 1.35;
+                llFactor = 1.5;
+                wlFactor = 1.5;
+                tlFactor = 0.9;
+                nlFactor = 1;
+
                 //first 32 load combis DL SDL LL TEMP ------------------------- COMBI 65-96
                 for (int combi1 = 65; combi1 <= 96; combi1++)
                 {
-                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, "P_DL", 1.35);
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, "P_DL", dlFactor);
                     if (isError)
                     {
                         return true;
                     }
 
-                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, "P_SDL", 1.35);
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, "P_SDL", sdlFactor);
                     if (isError)
                     {
                         return true;
@@ -1874,7 +1895,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                     foreach (KeyValuePair<string, string> llDetails in llcaseDict)
                     {
-                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, llDetails.Key, (1.5 * quasiPermanentDict[llDetails.Value][0]));
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, llDetails.Key, (llFactor * quasiPermanentDict[llDetails.Value][0]));
                         if (isError)
                         {
                             return true;
@@ -1883,7 +1904,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                     if (combi1 <= 80)
                     {
-                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, tempcaselist[0], 0.9);
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, tempcaselist[0], tlFactor);
                         if (isError)
                         {
                             return true;
@@ -1891,7 +1912,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     }
                     else if (combi1 > 80 && tempcaselist.Count == 2)
                     {
-                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, tempcaselist[1], 0.9);
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, tempcaselist[1], tlFactor);
                         if (isError)
                         {
                             return true;
@@ -1899,7 +1920,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     }
                     else if (combi1 > 80 && tempcaselist.Count == 1)
                     {
-                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, tempcaselist[0], -0.9);
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, tempcaselist[0], -tlFactor);
                         if (isError)
                         {
                             return true;
@@ -1910,39 +1931,19 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 //add 32 ehf loads ------------------------- COMBI 65-96
                 for (int combi1 = 65; combi1 <= 96; combi1++)
                 {
-                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, "P_EHFx (DL)", 1.35);
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, "P_EHFx (DL)", dlFactor);
                     if (isError)
                     {
                         return true;
                     }
-                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, "P_EHFx (SDL)", 1.35);
-                    if (isError)
-                    {
-                        return true;
-                    }
-                    foreach (KeyValuePair<string, string> ehfxLL in ehfllxcaseDict)
-                    {
-                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, ehfxLL.Key, (1.5 * quasiPermanentDict[ehfxLL.Value][0]));
-                        if (isError)
-                        {
-                            return true;
-                        }
-                    }
-                    combi1++;
-
-                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, "P_EHFx (DL)", -1.35);
-                    if (isError)
-                    {
-                        return true;
-                    }
-                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, "P_EHFx (SDL)", -1.35);
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, "P_EHFx (SDL)", sdlFactor);
                     if (isError)
                     {
                         return true;
                     }
                     foreach (KeyValuePair<string, string> ehfxLL in ehfllxcaseDict)
                     {
-                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, ehfxLL.Key, (-1.5 * quasiPermanentDict[ehfxLL.Value][0]));
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, ehfxLL.Key, (llFactor * quasiPermanentDict[ehfxLL.Value][0]));
                         if (isError)
                         {
                             return true;
@@ -1950,19 +1951,19 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     }
                     combi1++;
 
-                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, "P_EHFy (DL)", 1.35);
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, "P_EHFx (DL)", -dlFactor);
                     if (isError)
                     {
                         return true;
                     }
-                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, "P_EHFy (SDL)", 1.35);
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, "P_EHFx (SDL)", -sdlFactor);
                     if (isError)
                     {
                         return true;
                     }
-                    foreach (KeyValuePair<string, string> ehfyLL in ehfllycaseDict)
+                    foreach (KeyValuePair<string, string> ehfxLL in ehfllxcaseDict)
                     {
-                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, ehfyLL.Key, (1.5 * quasiPermanentDict[ehfyLL.Value][0]));
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, ehfxLL.Key, (-llFactor * quasiPermanentDict[ehfxLL.Value][0]));
                         if (isError)
                         {
                             return true;
@@ -1970,19 +1971,39 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     }
                     combi1++;
 
-                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, "P_EHFy (DL)", -1.35);
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, "P_EHFy (DL)", dlFactor);
                     if (isError)
                     {
                         return true;
                     }
-                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, "P_EHFy (SDL)", -1.35);
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, "P_EHFy (SDL)", sdlFactor);
                     if (isError)
                     {
                         return true;
                     }
                     foreach (KeyValuePair<string, string> ehfyLL in ehfllycaseDict)
                     {
-                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, ehfyLL.Key, (-1.5 * quasiPermanentDict[ehfyLL.Value][0]));
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, ehfyLL.Key, (llFactor * quasiPermanentDict[ehfyLL.Value][0]));
+                        if (isError)
+                        {
+                            return true;
+                        }
+                    }
+                    combi1++;
+
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, "P_EHFy (DL)", -dlFactor);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, "P_EHFy (SDL)", -sdlFactor);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    foreach (KeyValuePair<string, string> ehfyLL in ehfllycaseDict)
+                    {
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, ehfyLL.Key, (-llFactor * quasiPermanentDict[ehfyLL.Value][0]));
                         if (isError)
                         {
                             return true;
@@ -1996,7 +2017,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     int windcaselistIndex = 0;
                     for (int combi1 = 65; combi1 <= 68; combi1++)
                     {
-                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windcaseList[windcaselistIndex], 1.5);
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windcaseList[windcaselistIndex], wlFactor);
                         windcaselistIndex++;
                         if (isError)
                         {
@@ -2009,13 +2030,13 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     int windcaselistIndex = 0;
                     for (int combi1 = 65; combi1 <= 67; combi1++)
                     {
-                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windcaseList[windcaselistIndex], 1.5);
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windcaseList[windcaselistIndex], wlFactor);
                         if (isError)
                         {
                             return true;
                         }
                         combi1++;
-                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windcaseList[windcaselistIndex], -1.5);
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windcaseList[windcaselistIndex], -wlFactor);
                         if (isError)
                         {
                             return true;
@@ -2029,7 +2050,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 {
                     if (combi1 <= 72)
                     {
-                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windvertcaseList[0], 1.5);
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windvertcaseList[0], wlFactor);
                         if (isError)
                         {
                             return true;
@@ -2037,7 +2058,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     }
                     else if (combi1 > 72 && WindVertLoadList.Count == 2)
                     {
-                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windvertcaseList[1], 1.5);
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windvertcaseList[1], wlFactor);
                         if (isError)
                         {
                             return true;
@@ -2045,7 +2066,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     }
                     else if (combi1 > 72 && WindVertLoadList.Count == 1)
                     {
-                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windvertcaseList[0], -1.5);
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windvertcaseList[0], -wlFactor);
                         if (isError)
                         {
                             return true;
@@ -2057,13 +2078,13 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 notionalcaselistIndex = 0;
                 for (int combi1 = 77; combi1 <= 80; combi1++)
                 {
-                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, notional2caseList[notionalcaselistIndex], 1);
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, notional2caseList[notionalcaselistIndex], nlFactor);
                     if (isError)
                     {
                         return true;
                     }
                     combi1++;
-                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, notional2caseList[notionalcaselistIndex], -1);
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, notional2caseList[notionalcaselistIndex], -nlFactor);
                     if (isError)
                     {
                         return true;
@@ -2077,7 +2098,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     int windcaselistIndex = 0;
                     for (int combi1 = 81; combi1 <= 84; combi1++)
                     {
-                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windcaseList[windcaselistIndex], 1.5);
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windcaseList[windcaselistIndex], wlFactor);
                         windcaselistIndex++;
                         if (isError)
                         {
@@ -2090,13 +2111,13 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     int windcaselistIndex = 0;
                     for (int combi1 = 81; combi1 <= 83; combi1++)
                     {
-                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windcaseList[windcaselistIndex], 1.5);
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windcaseList[windcaselistIndex], wlFactor);
                         if (isError)
                         {
                             return true;
                         }
                         combi1++;
-                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windcaseList[windcaselistIndex], -1.5);
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windcaseList[windcaselistIndex], -wlFactor);
                         if (isError)
                         {
                             return true;
@@ -2110,7 +2131,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 {
                     if (combi1 <= 88)
                     {
-                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windvertcaseList[0], 1.5);
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windvertcaseList[0], wlFactor);
                         if (isError)
                         {
                             return true;
@@ -2118,7 +2139,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     }
                     else if (combi1 > 88 && WindVertLoadList.Count == 2)
                     {
-                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windvertcaseList[1], 1.5);
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windvertcaseList[1], wlFactor);
                         if (isError)
                         {
                             return true;
@@ -2126,7 +2147,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     }
                     else if (combi1 > 88 && WindVertLoadList.Count == 1)
                     {
-                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windvertcaseList[0], -1.5);
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windvertcaseList[0], -wlFactor);
                         if (isError)
                         {
                             return true;
@@ -2138,13 +2159,13 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 notionalcaselistIndex = 0;
                 for (int combi1 = 93; combi1 <= 96; combi1++)
                 {
-                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, notional2caseList[notionalcaselistIndex], 1);
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, notional2caseList[notionalcaselistIndex], nlFactor);
                     if (isError)
                     {
                         return true;
                     }
                     combi1++;
-                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, notional2caseList[notionalcaselistIndex], -1);
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, notional2caseList[notionalcaselistIndex], -nlFactor);
                     if (isError)
                     {
                         return true;
@@ -2156,10 +2177,16 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                 #region Next 32 load combis for case4 ------------------------- COMBI 97-128
 
+                dlFactor = 1;
+                llFactor = 1.5;
+                wlFactor = 1.5;
+                tlFactor = 0.9;
+                nlFactor = 1;
+
                 //first 32 load combis DL LL TEMP ------------------------- COMBI 97-128
                 for (int combi1 = 97; combi1 <= 128; combi1++)
                 {
-                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, "P_DL", 1);
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, "P_DL", dlFactor);
                     if (isError)
                     {
                         return true;
@@ -2167,7 +2194,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                     foreach (KeyValuePair<string, string> llDetails in llcaseDict)
                     {
-                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, llDetails.Key, (1.5 * quasiPermanentDict[llDetails.Value][0]));
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, llDetails.Key, (llFactor * quasiPermanentDict[llDetails.Value][0]));
                         if (isError)
                         {
                             return true;
@@ -2176,7 +2203,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                     if (combi1 <= 112)
                     {
-                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, tempcaselist[0], 0.9);
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, tempcaselist[0], tlFactor);
                         if (isError)
                         {
                             return true;
@@ -2184,7 +2211,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     }
                     else if (combi1 > 112 && tempcaselist.Count == 2)
                     {
-                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, tempcaselist[1], 0.9);
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, tempcaselist[1], tlFactor);
                         if (isError)
                         {
                             return true;
@@ -2192,7 +2219,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     }
                     else if (combi1 > 112 && tempcaselist.Count == 1)
                     {
-                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, tempcaselist[0], -0.9);
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, tempcaselist[0], -tlFactor);
                         if (isError)
                         {
                             return true;
@@ -2203,14 +2230,14 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 //add 32 ehf loads ------------------------- COMBI 97-128
                 for (int combi1 = 97; combi1 <= 128; combi1++)
                 {
-                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, "P_EHFx (DL)", 1);
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, "P_EHFx (DL)", dlFactor);
                     if (isError)
                     {
                         return true;
                     }
                     foreach (KeyValuePair<string, string> ehfxLL in ehfllxcaseDict)
                     {
-                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, ehfxLL.Key, (1.5 * quasiPermanentDict[ehfxLL.Value][0]));
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, ehfxLL.Key, (llFactor * quasiPermanentDict[ehfxLL.Value][0]));
                         if (isError)
                         {
                             return true;
@@ -2218,14 +2245,14 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     }
                     combi1++;
 
-                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, "P_EHFx (DL)", -1);
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, "P_EHFx (DL)", -dlFactor);
                     if (isError)
                     {
                         return true;
                     }
                     foreach (KeyValuePair<string, string> ehfxLL in ehfllxcaseDict)
                     {
-                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, ehfxLL.Key, (-1.5 * quasiPermanentDict[ehfxLL.Value][0]));
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, ehfxLL.Key, (-llFactor * quasiPermanentDict[ehfxLL.Value][0]));
                         if (isError)
                         {
                             return true;
@@ -2233,14 +2260,14 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     }
                     combi1++;
 
-                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, "P_EHFy (DL)", 1);
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, "P_EHFy (DL)", dlFactor);
                     if (isError)
                     {
                         return true;
                     }
                     foreach (KeyValuePair<string, string> ehfyLL in ehfllycaseDict)
                     {
-                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, ehfyLL.Key, (1.5 * quasiPermanentDict[ehfyLL.Value][0]));
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, ehfyLL.Key, (llFactor * quasiPermanentDict[ehfyLL.Value][0]));
                         if (isError)
                         {
                             return true;
@@ -2248,14 +2275,14 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     }
                     combi1++;
 
-                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, "P_EHFy (DL)", -1);
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, "P_EHFy (DL)", -dlFactor);
                     if (isError)
                     {
                         return true;
                     }
                     foreach (KeyValuePair<string, string> ehfyLL in ehfllycaseDict)
                     {
-                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, ehfyLL.Key, (-1.5 * quasiPermanentDict[ehfyLL.Value][0]));
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, ehfyLL.Key, (-llFactor * quasiPermanentDict[ehfyLL.Value][0]));
                         if (isError)
                         {
                             return true;
@@ -2269,7 +2296,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     int windcaselistIndex = 0;
                     for (int combi1 = 97; combi1 <= 100; combi1++)
                     {
-                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windcaseList[windcaselistIndex], 1.5);
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windcaseList[windcaselistIndex], wlFactor);
                         windcaselistIndex++;
                         if (isError)
                         {
@@ -2282,13 +2309,13 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     int windcaselistIndex = 0;
                     for (int combi1 = 97; combi1 <= 99; combi1++)
                     {
-                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windcaseList[windcaselistIndex], 1.5);
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windcaseList[windcaselistIndex], wlFactor);
                         if (isError)
                         {
                             return true;
                         }
                         combi1++;
-                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windcaseList[windcaselistIndex], -1.5);
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windcaseList[windcaselistIndex], -wlFactor);
                         if (isError)
                         {
                             return true;
@@ -2302,7 +2329,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 {
                     if (combi1 <= 104)
                     {
-                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windvertcaseList[0], 1.5);
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windvertcaseList[0], wlFactor);
                         if (isError)
                         {
                             return true;
@@ -2310,7 +2337,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     }
                     else if (combi1 > 104 && WindVertLoadList.Count == 2)
                     {
-                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windvertcaseList[1], 1.5);
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windvertcaseList[1], wlFactor);
                         if (isError)
                         {
                             return true;
@@ -2318,7 +2345,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     }
                     else if (combi1 > 104 && WindVertLoadList.Count == 1)
                     {
-                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windvertcaseList[0], -1.5);
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windvertcaseList[0], -wlFactor);
                         if (isError)
                         {
                             return true;
@@ -2330,13 +2357,13 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 notionalcaselistIndex = 0;
                 for (int combi1 = 109; combi1 <= 112; combi1++)
                 {
-                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, notional2caseList[notionalcaselistIndex], 1);
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, notional2caseList[notionalcaselistIndex], nlFactor);
                     if (isError)
                     {
                         return true;
                     }
                     combi1++;
-                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, notional2caseList[notionalcaselistIndex], -1);
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, notional2caseList[notionalcaselistIndex], -nlFactor);
                     if (isError)
                     {
                         return true;
@@ -2350,7 +2377,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     int windcaselistIndex = 0;
                     for (int combi1 = 113; combi1 <= 116; combi1++)
                     {
-                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windcaseList[windcaselistIndex], 1.5);
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windcaseList[windcaselistIndex], wlFactor);
                         windcaselistIndex++;
                         if (isError)
                         {
@@ -2363,13 +2390,13 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     int windcaselistIndex = 0;
                     for (int combi1 = 113; combi1 <= 115; combi1++)
                     {
-                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windcaseList[windcaselistIndex], 1.5);
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windcaseList[windcaselistIndex], wlFactor);
                         if (isError)
                         {
                             return true;
                         }
                         combi1++;
-                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windcaseList[windcaselistIndex], -1.5);
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windcaseList[windcaselistIndex], -wlFactor);
                         if (isError)
                         {
                             return true;
@@ -2383,7 +2410,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 {
                     if (combi1 <= 120)
                     {
-                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windvertcaseList[0], 1.5);
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windvertcaseList[0], wlFactor);
                         if (isError)
                         {
                             return true;
@@ -2391,7 +2418,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     }
                     else if (combi1 > 120 && WindVertLoadList.Count == 2)
                     {
-                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windvertcaseList[1], 1.5);
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windvertcaseList[1], wlFactor);
                         if (isError)
                         {
                             return true;
@@ -2399,7 +2426,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     }
                     else if (combi1 > 120 && WindVertLoadList.Count == 1)
                     {
-                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windvertcaseList[0], -1.5);
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windvertcaseList[0], -wlFactor);
                         if (isError)
                         {
                             return true;
@@ -2411,13 +2438,598 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 notionalcaselistIndex = 0;
                 for (int combi1 = 125; combi1 <= 128; combi1++)
                 {
-                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, notional2caseList[notionalcaselistIndex], 1);
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, notional2caseList[notionalcaselistIndex], nlFactor);
                     if (isError)
                     {
                         return true;
                     }
                     combi1++;
-                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, notional2caseList[notionalcaselistIndex], -1);
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, notional2caseList[notionalcaselistIndex], -nlFactor);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    notionalcaselistIndex++;
+                }
+
+                #endregion
+
+                #region Next 32 load combis for case5 ------------------------- COMBI 129-160
+
+                dlFactor = 1.35;
+                sdlFactor = 1.35;
+                llFactor = 1.5;
+                wlFactor = 0.75;
+                tlFactor = 1.5;
+                nlFactor = 1;
+
+                //first 32 load combis DL SDL LL TEMP ------------------------- COMBI 129-160
+                for (int combi1 = 129; combi1 <= 160; combi1++)
+                {
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, "P_DL", dlFactor);
+                    if (isError)
+                    {
+                        return true;
+                    }
+
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, "P_SDL", sdlFactor);
+                    if (isError)
+                    {
+                        return true;
+                    }
+
+                    foreach (KeyValuePair<string, string> llDetails in llcaseDict)
+                    {
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, llDetails.Key, (llFactor * quasiPermanentDict[llDetails.Value][0]));
+                        if (isError)
+                        {
+                            return true;
+                        }
+                    }
+
+                    if (combi1 <= 144)
+                    {
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, tempcaselist[0], tlFactor);
+                        if (isError)
+                        {
+                            return true;
+                        }
+                    }
+                    else if (combi1 > 144 && tempcaselist.Count == 2)
+                    {
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, tempcaselist[1], tlFactor);
+                        if (isError)
+                        {
+                            return true;
+                        }
+                    }
+                    else if (combi1 > 144 && tempcaselist.Count == 1)
+                    {
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, tempcaselist[0], -tlFactor);
+                        if (isError)
+                        {
+                            return true;
+                        }
+                    }
+                }
+
+                //add 32 ehf loads ------------------------- COMBI 129-160
+                for (int combi1 = 129; combi1 <= 160; combi1++)
+                {
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, "P_EHFx (DL)", dlFactor);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, "P_EHFx (SDL)", sdlFactor);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    foreach (KeyValuePair<string, string> ehfxLL in ehfllxcaseDict)
+                    {
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, ehfxLL.Key, (llFactor * quasiPermanentDict[ehfxLL.Value][0]));
+                        if (isError)
+                        {
+                            return true;
+                        }
+                    }
+                    combi1++;
+
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, "P_EHFx (DL)", -dlFactor);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, "P_EHFx (SDL)", -sdlFactor);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    foreach (KeyValuePair<string, string> ehfxLL in ehfllxcaseDict)
+                    {
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, ehfxLL.Key, (-llFactor * quasiPermanentDict[ehfxLL.Value][0]));
+                        if (isError)
+                        {
+                            return true;
+                        }
+                    }
+                    combi1++;
+
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, "P_EHFy (DL)", dlFactor);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, "P_EHFy (SDL)", sdlFactor);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    foreach (KeyValuePair<string, string> ehfyLL in ehfllycaseDict)
+                    {
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, ehfyLL.Key, (llFactor * quasiPermanentDict[ehfyLL.Value][0]));
+                        if (isError)
+                        {
+                            return true;
+                        }
+                    }
+                    combi1++;
+
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, "P_EHFy (DL)", -dlFactor);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, "P_EHFy (SDL)", -sdlFactor);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    foreach (KeyValuePair<string, string> ehfyLL in ehfllycaseDict)
+                    {
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, ehfyLL.Key, (-llFactor * quasiPermanentDict[ehfyLL.Value][0]));
+                        if (isError)
+                        {
+                            return true;
+                        }
+                    }
+                }
+
+                //add first 4 wind load combis ------------------------- COMBI 129-132
+                if (WindLoadList.Count == 4)
+                {
+                    int windcaselistIndex = 0;
+                    for (int combi1 = 129; combi1 <= 132; combi1++)
+                    {
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windcaseList[windcaselistIndex], wlFactor);
+                        windcaselistIndex++;
+                        if (isError)
+                        {
+                            return true;
+                        }
+                    }
+                }
+                else
+                {
+                    int windcaselistIndex = 0;
+                    for (int combi1 = 129; combi1 <= 131; combi1++)
+                    {
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windcaseList[windcaselistIndex], wlFactor);
+                        if (isError)
+                        {
+                            return true;
+                        }
+                        combi1++;
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windcaseList[windcaselistIndex], -wlFactor);
+                        if (isError)
+                        {
+                            return true;
+                        }
+                        windcaselistIndex++;
+                    }
+                }
+
+                //add windz load combis x 8 ------------------------- COMBI 133-140
+                for (int combi1 = 133; combi1 <= 140; combi1++)
+                {
+                    if (combi1 <= 136)
+                    {
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windvertcaseList[0], wlFactor);
+                        if (isError)
+                        {
+                            return true;
+                        }
+                    }
+                    else if (combi1 > 136 && WindVertLoadList.Count == 2)
+                    {
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windvertcaseList[1], wlFactor);
+                        if (isError)
+                        {
+                            return true;
+                        }
+                    }
+                    else if (combi1 > 136 && WindVertLoadList.Count == 1)
+                    {
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windvertcaseList[0], -wlFactor);
+                        if (isError)
+                        {
+                            return true;
+                        }
+                    }
+                }
+
+                //add next 4 notional loads ------------------------- COMBI 141-144
+                notionalcaselistIndex = 0;
+                for (int combi1 = 141; combi1 <= 144; combi1++)
+                {
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, notional2caseList[notionalcaselistIndex], nlFactor);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    combi1++;
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, notional2caseList[notionalcaselistIndex], -nlFactor);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    notionalcaselistIndex++;
+                }
+
+                //add first 4 wind load combis ------------------------- COMBI 145-148
+                if (WindLoadList.Count == 4)
+                {
+                    int windcaselistIndex = 0;
+                    for (int combi1 = 145; combi1 <= 148; combi1++)
+                    {
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windcaseList[windcaselistIndex], wlFactor);
+                        windcaselistIndex++;
+                        if (isError)
+                        {
+                            return true;
+                        }
+                    }
+                }
+                else
+                {
+                    int windcaselistIndex = 0;
+                    for (int combi1 = 145; combi1 <= 147; combi1++)
+                    {
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windcaseList[windcaselistIndex], wlFactor);
+                        if (isError)
+                        {
+                            return true;
+                        }
+                        combi1++;
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windcaseList[windcaselistIndex], -wlFactor);
+                        if (isError)
+                        {
+                            return true;
+                        }
+                        windcaselistIndex++;
+                    }
+                }
+
+                //add windz load combis x 8 ------------------------- COMBI 149-156
+                for (int combi1 = 149; combi1 <= 156; combi1++)
+                {
+                    if (combi1 <= 152)
+                    {
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windvertcaseList[0], wlFactor);
+                        if (isError)
+                        {
+                            return true;
+                        }
+                    }
+                    else if (combi1 > 152 && WindVertLoadList.Count == 2)
+                    {
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windvertcaseList[1], wlFactor);
+                        if (isError)
+                        {
+                            return true;
+                        }
+                    }
+                    else if (combi1 > 152 && WindVertLoadList.Count == 1)
+                    {
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windvertcaseList[0], -wlFactor);
+                        if (isError)
+                        {
+                            return true;
+                        }
+                    }
+                }
+
+                //add next 4 notional loads ------------------------- COMBI 157-160
+                notionalcaselistIndex = 0;
+                for (int combi1 = 157; combi1 <= 160; combi1++)
+                {
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, notional2caseList[notionalcaselistIndex], nlFactor);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    combi1++;
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, notional2caseList[notionalcaselistIndex], -nlFactor);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    notionalcaselistIndex++;
+                }
+
+                #endregion
+
+                #region Next 32 load combis for case6 ------------------------- COMBI 161-192
+
+                dlFactor = 1;
+                llFactor = 1.5;
+                wlFactor = 0.75;
+                tlFactor = 1.5;
+                nlFactor = 1;
+
+                //first 32 load combis DL LL TEMP ------------------------- COMBI 161-192
+                for (int combi1 = 161; combi1 <= 192; combi1++)
+                {
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, "P_DL", dlFactor);
+                    if (isError)
+                    {
+                        return true;
+                    }
+
+                    foreach (KeyValuePair<string, string> llDetails in llcaseDict)
+                    {
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, llDetails.Key, (llFactor * quasiPermanentDict[llDetails.Value][0]));
+                        if (isError)
+                        {
+                            return true;
+                        }
+                    }
+
+                    if (combi1 <= 176)
+                    {
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, tempcaselist[0], tlFactor);
+                        if (isError)
+                        {
+                            return true;
+                        }
+                    }
+                    else if (combi1 > 176 && tempcaselist.Count == 2)
+                    {
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, tempcaselist[1], tlFactor);
+                        if (isError)
+                        {
+                            return true;
+                        }
+                    }
+                    else if (combi1 > 176 && tempcaselist.Count == 1)
+                    {
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, tempcaselist[0], -tlFactor);
+                        if (isError)
+                        {
+                            return true;
+                        }
+                    }
+                }
+
+                //add 32 ehf loads ------------------------- COMBI 161-192
+                for (int combi1 = 161; combi1 <= 192; combi1++)
+                {
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, "P_EHFx (DL)", dlFactor);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    foreach (KeyValuePair<string, string> ehfxLL in ehfllxcaseDict)
+                    {
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, ehfxLL.Key, (llFactor * quasiPermanentDict[ehfxLL.Value][0]));
+                        if (isError)
+                        {
+                            return true;
+                        }
+                    }
+                    combi1++;
+
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, "P_EHFx (DL)", -dlFactor);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    foreach (KeyValuePair<string, string> ehfxLL in ehfllxcaseDict)
+                    {
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, ehfxLL.Key, (-llFactor * quasiPermanentDict[ehfxLL.Value][0]));
+                        if (isError)
+                        {
+                            return true;
+                        }
+                    }
+                    combi1++;
+
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, "P_EHFy (DL)", dlFactor);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    foreach (KeyValuePair<string, string> ehfyLL in ehfllycaseDict)
+                    {
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, ehfyLL.Key, (llFactor * quasiPermanentDict[ehfyLL.Value][0]));
+                        if (isError)
+                        {
+                            return true;
+                        }
+                    }
+                    combi1++;
+
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, "P_EHFy (DL)", -dlFactor);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    foreach (KeyValuePair<string, string> ehfyLL in ehfllycaseDict)
+                    {
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, ehfyLL.Key, (-llFactor * quasiPermanentDict[ehfyLL.Value][0]));
+                        if (isError)
+                        {
+                            return true;
+                        }
+                    }
+                }
+
+                //add first 4 wind load combis ------------------------- COMBI 161-164
+                if (WindLoadList.Count == 4)
+                {
+                    int windcaselistIndex = 0;
+                    for (int combi1 = 161; combi1 <= 164; combi1++)
+                    {
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windcaseList[windcaselistIndex], wlFactor);
+                        windcaselistIndex++;
+                        if (isError)
+                        {
+                            return true;
+                        }
+                    }
+                }
+                else
+                {
+                    int windcaselistIndex = 0;
+                    for (int combi1 = 161; combi1 <= 163; combi1++)
+                    {
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windcaseList[windcaselistIndex], wlFactor);
+                        if (isError)
+                        {
+                            return true;
+                        }
+                        combi1++;
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windcaseList[windcaselistIndex], -wlFactor);
+                        if (isError)
+                        {
+                            return true;
+                        }
+                        windcaselistIndex++;
+                    }
+                }
+
+                //add windz load combis x 8 ------------------------- COMBI 165-172
+                for (int combi1 = 165; combi1 <= 172; combi1++)
+                {
+                    if (combi1 <= 168)
+                    {
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windvertcaseList[0], wlFactor);
+                        if (isError)
+                        {
+                            return true;
+                        }
+                    }
+                    else if (combi1 > 168 && WindVertLoadList.Count == 2)
+                    {
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windvertcaseList[1], wlFactor);
+                        if (isError)
+                        {
+                            return true;
+                        }
+                    }
+                    else if (combi1 > 168 && WindVertLoadList.Count == 1)
+                    {
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windvertcaseList[0], -wlFactor);
+                        if (isError)
+                        {
+                            return true;
+                        }
+                    }
+                }
+
+                //add next 4 notional loads ------------------------- COMBI 173-176
+                notionalcaselistIndex = 0;
+                for (int combi1 = 173; combi1 <= 176; combi1++)
+                {
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, notional2caseList[notionalcaselistIndex], nlFactor);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    combi1++;
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, notional2caseList[notionalcaselistIndex], -nlFactor);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    notionalcaselistIndex++;
+                }
+
+                //add first 4 wind load combis ------------------------- COMBI 177-180
+                if (WindLoadList.Count == 4)
+                {
+                    int windcaselistIndex = 0;
+                    for (int combi1 = 177; combi1 <= 180; combi1++)
+                    {
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windcaseList[windcaselistIndex], wlFactor);
+                        windcaselistIndex++;
+                        if (isError)
+                        {
+                            return true;
+                        }
+                    }
+                }
+                else
+                {
+                    int windcaselistIndex = 0;
+                    for (int combi1 = 177; combi1 <= 179; combi1++)
+                    {
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windcaseList[windcaselistIndex], wlFactor);
+                        if (isError)
+                        {
+                            return true;
+                        }
+                        combi1++;
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windcaseList[windcaselistIndex], -wlFactor);
+                        if (isError)
+                        {
+                            return true;
+                        }
+                        windcaselistIndex++;
+                    }
+                }
+
+                //add windz load combis x 8 ------------------------- COMBI 181-188
+                for (int combi1 = 181; combi1 <= 188; combi1++)
+                {
+                    if (combi1 <= 184)
+                    {
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windvertcaseList[0], wlFactor);
+                        if (isError)
+                        {
+                            return true;
+                        }
+                    }
+                    else if (combi1 > 184 && WindVertLoadList.Count == 2)
+                    {
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windvertcaseList[1], wlFactor);
+                        if (isError)
+                        {
+                            return true;
+                        }
+                    }
+                    else if (combi1 > 184 && WindVertLoadList.Count == 1)
+                    {
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, windvertcaseList[0], -wlFactor);
+                        if (isError)
+                        {
+                            return true;
+                        }
+                    }
+                }
+
+                //add next 4 notional loads ------------------------- COMBI 189-192
+                notionalcaselistIndex = 0;
+                for (int combi1 = 189; combi1 <= 192; combi1++)
+                {
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, notional2caseList[notionalcaselistIndex], nlFactor);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    combi1++;
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, "U_Comb_B-" + combi1, 0, notional2caseList[notionalcaselistIndex], -nlFactor);
                     if (isError)
                     {
                         return true;
@@ -2478,6 +3090,8 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     }
                     numberBloadcombi++;
                 }
+                MessageBox.Show("Error, combinations for missing vert wind or temp or lateral wind not available in free version");
+                return true;
 
 
             }
@@ -2494,6 +3108,8 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     }
                     numberBloadcombi++;
                 }
+                MessageBox.Show("Error, combinations for missing vert wind or temp or lateral wind not available in free version");
+                return true;
 
 
             }
@@ -2509,6 +3125,8 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     }
                     numberBloadcombi++;
                 }
+                MessageBox.Show("Error, combinations for missing vert wind or temp or lateral wind not available in free version");
+                return true;
 
 
             }
@@ -2524,6 +3142,8 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     }
                     numberBloadcombi++;
                 }
+                MessageBox.Show("Error, combinations for missing vert wind or temp or lateral wind not available in free version");
+                return true;
 
 
             }
@@ -2539,6 +3159,8 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     }
                     numberBloadcombi++;
                 }
+                MessageBox.Show("Error, combinations for missing vert wind or temp or lateral wind not available in free version");
+                return true;
 
 
             }
@@ -2554,6 +3176,8 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     }
                     numberBloadcombi++;
                 }
+                MessageBox.Show("Error, combinations for missing vert wind or temp or lateral wind not available in free version");
+                return true;
 
 
             }
@@ -2569,12 +3193,14 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     }
                     numberBloadcombi++;
                 }
+                MessageBox.Show("Error, combinations for missing vert wind or temp or lateral wind not available in free version");
+                return true;
 
 
             }
             else
             {
-                MessageBox.Show("Error, 8 direction wind load support not available in free version");
+                MessageBox.Show("Error, combinations for 8 direction wind load support not available in free version");
                 return true;
             }
 
