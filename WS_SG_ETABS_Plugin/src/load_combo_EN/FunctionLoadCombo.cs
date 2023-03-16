@@ -61,6 +61,12 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             bool isError = false;
             bool addAnalysisCase = false;
 
+            if (deadLoadList.Count == 0 || SDLoadList.Count == 0 || LiveLoadList.Count == 0)
+            {
+                MessageBox.Show("Please add Dead Load, Super Dead Load, Live Load before continueing.");
+                return true;
+            }
+
             #region Dead load pattern and case
 
             foreach (var deadLoad in deadLoadList)
@@ -1257,8 +1263,9 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
             if (NotionalDirectionFactor == 2)
             {
-                
-                
+
+                #region Add load combi B
+
                 //Adding Load combination B
                 isError = src.load_combo_EN.FunctionLoadComboB.AddLoadCombinationB(
                     SapModel,
@@ -1301,6 +1308,10 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     MessageBox.Show("Error adding load combination set B, please let Mani know what happened");
                     return true;
                 }
+
+                #endregion
+
+                #region Add load combi C
 
                 //Adding Load combination C
                 isError = src.load_combo_EN.FunctionLoadComboC.AddLoadCombinationC(
@@ -1345,6 +1356,10 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     return true;
                 }
 
+                #endregion
+
+                #region Add load combi SLS
+
                 //Adding Load combination SLS
                 isError = src.load_combo_EN.FunctionLoadComboSLS.AddLoadCombinationSLS(
                     SapModel,
@@ -1388,6 +1403,54 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     return true;
                 }
 
+                #endregion
+
+                #region Add load combi Seismic
+
+                //Adding Load combination Seismic
+                isError = src.load_combo_EN.FunctionLoadComboSeismic.AddLoadCombinationSeismic(
+                    SapModel,
+                    Plugin,
+                    deadLoadList,
+                    SDLoadList,
+                    LiveLoadList,
+                    WindLoadList,
+                    NotionalDXLoadList,
+                    NotionalDYLoadList,
+                    NotionalSDXLoadList,
+                    NotionalSDYLoadList,
+                    TemperatureLoadList,
+                    SeismicLoadList,
+                    AccidentalLoadList,
+                    UpliftLoadList,
+                    EHFDLXLoadList,
+                    EHFDLYLoadList,
+                    EHFSDLXLoadList,
+                    EHFSDLYLoadList,
+                    EHFLLXLoadList,
+                    EHFLLYLoadList,
+                    NotionalDirectionFactor,
+                    WindVertLoadList,
+                    llcaseDict,
+                    windcaseList,
+                    notional2caseList,
+                    windvertcaseList,
+                    tempcaselist,
+                    seismiccaselist,
+                    alcaselist,
+                    upliftcaselist,
+                    ehfllxcaseDict,
+                    ehfllycaseDict,
+                    quasiPermanentDict);
+
+
+                if (isError)
+                {
+                    MessageBox.Show("Error adding load combination set Seismic, please let Mani know what happened");
+                    return true;
+                }
+
+                #endregion
 
             }
 
@@ -1397,8 +1460,8 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
             else
             {
-                MessageBox.Show("Error, combinations for 8 direction wind load support not available in free version");
-                return true;
+                MessageBox.Show("Error, combinations for 8 direction wind load support not available in Version 1 release. Only load patterns and cases have been added.");
+                return false;
             }
 
             #endregion

@@ -358,21 +358,11 @@
                 <RowDefinition Height="0.4*"></RowDefinition>
             </Grid.RowDefinitions>
 
-            <Label Grid.Column="0" Content="Load Pattern Type" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1"/>
-            <Label Grid.Column="1" Content="Use Existing Load Pattern?" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1"/>
-            <Label Grid.Column="2" Content="Load Pattern Name" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1"/>
+            <Label Grid.Column="1" Content="Load Pattern Type" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="2"/>
+            
+            <Label Grid.Row="1" Grid.Column="1" Content="Seismic Load" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="2"/>
 
-            <Label Grid.Row="1" Grid.Column="0" Content="Seismic Load" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-
-            <CheckBox x:Name="checkBoxExistingSEISMIC" Grid.Row="1" Grid.Column="1"  Grid.ColumnSpan="1"
-                      Checked="checkBoxExistingSEISMIC_Checked" Unchecked="checkBoxExistingSEISMIC_Unchecked" 
-                      VerticalAlignment="Center" HorizontalAlignment="Center">
-            </CheckBox>
-            <ComboBox  Grid.Row="1" Grid.Column="2" x:Name="comBoxExistingSEISMIC" 
-                       VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
-                       Text="0.5" SelectionChanged="comBoxExistingSEISMIC_SelectionChanged"></ComboBox>
-
-            <Button Grid.Row="1" Grid.Column="3" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_ADD_SEISMIC_Click" ></Button>
+            <Button Grid.Row="1" Grid.Column="3" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_ADD_SEISMIC_Click" Name="Button_ADD_SEISMIC"></Button>
 
             <ListBox x:Name="listBoxChoosenSEISMIC" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="4" 
                      d:ItemsSource="{d:SampleData ItemCount=3}" SelectionMode="Single"

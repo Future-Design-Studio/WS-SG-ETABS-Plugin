@@ -128,7 +128,6 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             checkBoxExistingDL.IsChecked = true;
             checkBoxExistingSDL.IsChecked = true;
             checkBoxExistingLL.IsChecked = true;
-            checkBoxExistingSEISMIC.IsChecked = true;
             checkBoxExistingAL.IsChecked = true;
             checkBoxExistingUPLIFT.IsChecked = true;
 
@@ -142,9 +141,6 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
             comBoxExistingLL.ItemsSource = outputCasesList;
             comBoxExistingLL.SelectedIndex = 0;
-
-            comBoxExistingSEISMIC.ItemsSource = outputCasesList;
-            comBoxExistingSEISMIC.SelectedIndex = 0;
 
             comBoxExistingAL.ItemsSource = outputCasesList;
             comBoxExistingAL.SelectedIndex = 0;
@@ -716,47 +712,26 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             
         }
 
-        private void checkBoxExistingSEISMIC_Checked(object sender, RoutedEventArgs e)
-        {
-            comBoxExistingSEISMIC.IsEnabled = true;
-        }
-
-        private void checkBoxExistingSEISMIC_Unchecked(object sender, RoutedEventArgs e)
-        {
-            comBoxExistingSEISMIC.IsEnabled = false;
-        }
-
-        private void comBoxExistingSEISMIC_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
-
         private void Button_ADD_SEISMIC_Click(object sender, RoutedEventArgs e)
         {
-            if (checkBoxExistingSEISMIC.IsChecked == true)
-            {
-                string selectedString = comBoxExistingSEISMIC.Text;
-                listBoxChoosenSEISMIC.Items.Add(selectedString);
+            
+            string selectedString = seismicList[0];
+            listBoxChoosenSEISMIC.Items.Add(selectedString);
+            string selectedString1 = seismicList[1];
+            listBoxChoosenSEISMIC.Items.Add(selectedString1);
+            string selectedString2 = seismicList[2];
+            listBoxChoosenSEISMIC.Items.Add(selectedString2);
 
-                ClassLoadCombo.SeismicLoad eachSeismicLoad = new ClassLoadCombo.SeismicLoad(comBoxExistingSEISMIC.Text, true);
-                SeismicLoadList.Add(eachSeismicLoad);
-            }
-            else
-            {
-                string selectedString = seismicList[0];
-                listBoxChoosenSEISMIC.Items.Add(selectedString);
-                string selectedString1 = seismicList[1];
-                listBoxChoosenSEISMIC.Items.Add(selectedString1);
-                string selectedString2 = seismicList[2];
-                listBoxChoosenSEISMIC.Items.Add(selectedString2);
+            ClassLoadCombo.SeismicLoad eachSeismicLoad = new ClassLoadCombo.SeismicLoad(selectedString, false);
+            SeismicLoadList.Add(eachSeismicLoad);
+            ClassLoadCombo.SeismicLoad eachSeismicLoad1 = new ClassLoadCombo.SeismicLoad(selectedString1, false);
+            SeismicLoadList.Add(eachSeismicLoad1);
+            ClassLoadCombo.SeismicLoad eachSeismicLoad2 = new ClassLoadCombo.SeismicLoad(selectedString2, false);
+            SeismicLoadList.Add(eachSeismicLoad2);
 
-                ClassLoadCombo.SeismicLoad eachSeismicLoad = new ClassLoadCombo.SeismicLoad(selectedString, false);
-                SeismicLoadList.Add(eachSeismicLoad);
-                ClassLoadCombo.SeismicLoad eachSeismicLoad1 = new ClassLoadCombo.SeismicLoad(selectedString1, false);
-                SeismicLoadList.Add(eachSeismicLoad1);
-                ClassLoadCombo.SeismicLoad eachSeismicLoad2 = new ClassLoadCombo.SeismicLoad(selectedString2, false);
-                SeismicLoadList.Add(eachSeismicLoad2);
-            }
+            Button_ADD_SEISMIC.IsEnabled = false;
+
+
         }
 
         private void listBoxChoosenSEISMIC_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -766,13 +741,14 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
         private void Button_REMOVE_SEISMIC_Click(object sender, RoutedEventArgs e)
         {
-            if (listBoxChoosenSEISMIC.Items.Count != 0 && listBoxChoosenSEISMIC.SelectedIndex != -1)
+            if (listBoxChoosenSEISMIC.Items.Count != 0)
             {
-                int selectedIndex = listBoxChoosenSEISMIC.SelectedIndex;
+                listBoxChoosenSEISMIC.Items.Clear();
 
-                listBoxChoosenSEISMIC.Items.RemoveAt(selectedIndex);
+                SeismicLoadList.Clear();
 
-                SeismicLoadList.RemoveAt(selectedIndex);
+
+                Button_ADD_SEISMIC.IsEnabled = true;
             }
         }
 
