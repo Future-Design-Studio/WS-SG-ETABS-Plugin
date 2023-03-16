@@ -28,7 +28,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
         List<string> quasiPermanentCategoryList = new List<string>()
         {
-            "A: dometic,residential areas", "B: office areas", "C: congregation areas", "D: shopping areas", "E: storage areas", "F: traffic area, vw<30kN", "G: traffic area, 30kN<vw<160kN", "H: roofs", "Wind load", "Temperature"
+            "A: dometic,residential areas", "B: office areas", "C: congregation areas", "D: shopping areas", "E: storage areas", "F: traffic area, vw<30kN", "G: traffic area, 30kN<vw<160kN", "H: roofs"
         };
 
         #endregion
