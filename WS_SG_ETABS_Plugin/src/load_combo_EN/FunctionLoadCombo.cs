@@ -30,7 +30,8 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             List<src.load_combo_EN.ClassLoadCombo.EHFLoad> EHFLLXLoadList,
             List<src.load_combo_EN.ClassLoadCombo.EHFLoad> EHFLLYLoadList,
             int NotionalDirectionFactor,
-            List<src.load_combo_EN.ClassLoadCombo.WindLoad> WindVertLoadList)
+            List<src.load_combo_EN.ClassLoadCombo.WindLoad> WindVertLoadList,
+            int ALneedtimes2)
         {
             Dictionary<string, string> llcaseDict = new Dictionary<string, string>();
             List<string> windcaseList = new List<string>();
@@ -88,7 +89,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             }
             if (i > 0)
             { 
-                isError = src.HelperEtabs.AddNewLoadCase(SapModel, DeadLoadCaseName);
+                isError = src.HelperEtabs.AddNewLinearLoadCase(SapModel, DeadLoadCaseName);
                 if (isError)
                 {
                     return true;
@@ -143,7 +144,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             }
             if (i > 0)
             {
-                isError = src.HelperEtabs.AddNewLoadCase(SapModel, SuperDeadLoadCaseName);
+                isError = src.HelperEtabs.AddNewLinearLoadCase(SapModel, SuperDeadLoadCaseName);
                 if (isError)
                 {
                     return true;
@@ -197,7 +198,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 llcaseDict.Add(LiveLoadCaseName, liveLoad.CategoryPhi);
 
 
-                isError = src.HelperEtabs.AddNewLoadCase(SapModel, LiveLoadCaseName);
+                isError = src.HelperEtabs.AddNewLinearLoadCase(SapModel, LiveLoadCaseName);
                 if (isError)
                 {
                     return true;
@@ -246,7 +247,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 windcaseList.Add(WindLoadCaseName);
 
 
-                isError = src.HelperEtabs.AddNewLoadCase(SapModel, WindLoadCaseName);
+                isError = src.HelperEtabs.AddNewLinearLoadCase(SapModel, WindLoadCaseName);
                 if (isError)
                 {
                     return true;
@@ -294,7 +295,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 windvertcaseList.Add(WindLoadCaseName);
 
 
-                isError = src.HelperEtabs.AddNewLoadCase(SapModel, WindLoadCaseName);
+                isError = src.HelperEtabs.AddNewLinearLoadCase(SapModel, WindLoadCaseName);
                 if (isError)
                 {
                     return true;
@@ -373,7 +374,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     while (i < 4)
                     {
                         string notionalLoadCaseName = notionalloadcaseName[i];
-                        isError = src.HelperEtabs.AddNewLoadCase(SapModel, notionalLoadCaseName);
+                        isError = src.HelperEtabs.AddNewLinearLoadCase(SapModel, notionalLoadCaseName);
                         if (isError)
                         {
                             return true;
@@ -548,7 +549,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     while (i < 2)
                     {
                         string notionalLoadCaseName = notionalloadcaseName[i];
-                        isError = src.HelperEtabs.AddNewLoadCase(SapModel, notionalLoadCaseName);
+                        isError = src.HelperEtabs.AddNewLinearLoadCase(SapModel, notionalLoadCaseName);
                         if (isError)
                         {
                             return true;
@@ -641,7 +642,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                 tempcaselist.Add(TemperatureLoadCaseName);
 
-                isError = src.HelperEtabs.AddNewLoadCase(SapModel, TemperatureLoadCaseName);
+                isError = src.HelperEtabs.AddNewLinearLoadCase(SapModel, TemperatureLoadCaseName);
                 if (isError)
                 {
                     return true;
@@ -670,7 +671,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
             #region Seismic load pattern and case
 
-
+            /*
             foreach (var seismicLoad in SeismicLoadList)
             {
                 isError = src.HelperEtabs.AddLoadPattern(SapModel, seismicLoad.Name, 0, "Seismic", seismicLoad.IsExisting, addAnalysisCase);
@@ -679,7 +680,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     return true;
                 }
             }
-
+            */
 
             foreach (var seismicLoad in SeismicLoadList)
             {
@@ -687,14 +688,14 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                 seismiccaselist.Add(SeismicLoadCaseName);
 
-                isError = src.HelperEtabs.AddNewLoadCase(SapModel, SeismicLoadCaseName);
+                isError = src.HelperEtabs.AddNewRSALoadCase(SapModel, SeismicLoadCaseName);
                 if (isError)
                 {
                     return true;
                 }
             }
 
-
+            /*
             LoadType = new string[50];
             LoadName = new string[50];
             SF = new double[50];
@@ -711,7 +712,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     return true;
                 }
             }
-
+            */
             #endregion
 
             #region Accidental load pattern and case
@@ -733,7 +734,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                 alcaselist.Add(AccidentalLoadCaseName);
 
-                isError = src.HelperEtabs.AddNewLoadCase(SapModel, AccidentalLoadCaseName);
+                isError = src.HelperEtabs.AddNewLinearLoadCase(SapModel, AccidentalLoadCaseName);
                 if (isError)
                 {
                     return true;
@@ -779,7 +780,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                 upliftcaselist.Add(UpliftLoadCaseName);
 
-                isError = src.HelperEtabs.AddNewLoadCase(SapModel, UpliftLoadCaseName);
+                isError = src.HelperEtabs.AddNewLinearLoadCase(SapModel, UpliftLoadCaseName);
                 if (isError)
                 {
                     return true;
@@ -827,7 +828,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             }
             if (i > 0)
             {
-                isError = src.HelperEtabs.AddNewLoadCase(SapModel, EHFXDLCaseName);
+                isError = src.HelperEtabs.AddNewLinearLoadCase(SapModel, EHFXDLCaseName);
                 if (isError)
                 {
                     return true;
@@ -881,7 +882,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             }
             if (i > 0)
             {
-                isError = src.HelperEtabs.AddNewLoadCase(SapModel, EHFYDLCaseName);
+                isError = src.HelperEtabs.AddNewLinearLoadCase(SapModel, EHFYDLCaseName);
                 if (isError)
                 {
                     return true;
@@ -935,7 +936,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             }
             if (i > 0)
             {
-                isError = src.HelperEtabs.AddNewLoadCase(SapModel, EHFXSDLCaseName);
+                isError = src.HelperEtabs.AddNewLinearLoadCase(SapModel, EHFXSDLCaseName);
                 if (isError)
                 {
                     return true;
@@ -989,7 +990,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             }
             if (i > 0)
             {
-                isError = src.HelperEtabs.AddNewLoadCase(SapModel, EHFYSDLCaseName);
+                isError = src.HelperEtabs.AddNewLinearLoadCase(SapModel, EHFYSDLCaseName);
                 if (isError)
                 {
                     return true;
@@ -1041,7 +1042,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                 ehfllxcaseDict.Add(EFHLLXLoadCaseName, ehfLoad.QuasiPermenantChosen);
 
-                isError = src.HelperEtabs.AddNewLoadCase(SapModel, EFHLLXLoadCaseName);
+                isError = src.HelperEtabs.AddNewLinearLoadCase(SapModel, EFHLLXLoadCaseName);
                 if (isError)
                 {
                     return true;
@@ -1087,7 +1088,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                 ehfllycaseDict.Add(EHFLLYLoadCaseName, ehfLoad.QuasiPermenantChosen);
 
-                isError = src.HelperEtabs.AddNewLoadCase(SapModel, EHFLLYLoadCaseName);
+                isError = src.HelperEtabs.AddNewLinearLoadCase(SapModel, EHFLLYLoadCaseName);
                 if (isError)
                 {
                     return true;
@@ -1447,6 +1448,54 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 if (isError)
                 {
                     MessageBox.Show("Error adding load combination set Seismic, please let Mani know what happened");
+                    return true;
+                }
+
+                #endregion
+
+                #region Add load combi Accidental
+
+                //Adding Load combination Seismic
+                isError = src.load_combo_EN.FunctionLoadComboAccidental.AddLoadCombinationAccidental(
+                    SapModel,
+                    Plugin,
+                    deadLoadList,
+                    SDLoadList,
+                    LiveLoadList,
+                    WindLoadList,
+                    NotionalDXLoadList,
+                    NotionalDYLoadList,
+                    NotionalSDXLoadList,
+                    NotionalSDYLoadList,
+                    TemperatureLoadList,
+                    SeismicLoadList,
+                    AccidentalLoadList,
+                    UpliftLoadList,
+                    EHFDLXLoadList,
+                    EHFDLYLoadList,
+                    EHFSDLXLoadList,
+                    EHFSDLYLoadList,
+                    EHFLLXLoadList,
+                    EHFLLYLoadList,
+                    NotionalDirectionFactor,
+                    WindVertLoadList,
+                    llcaseDict,
+                    windcaseList,
+                    notional2caseList,
+                    windvertcaseList,
+                    tempcaselist,
+                    seismiccaselist,
+                    alcaselist,
+                    upliftcaselist,
+                    ehfllxcaseDict,
+                    ehfllycaseDict,
+                    quasiPermanentDict,
+                    ALneedtimes2);
+
+
+                if (isError)
+                {
+                    MessageBox.Show("Error adding load combination set Accidental, please let Mani know what happened");
                     return true;
                 }
 

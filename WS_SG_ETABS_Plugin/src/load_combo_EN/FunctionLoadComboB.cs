@@ -44,6 +44,9 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             Dictionary<string, List<double>> quasiPermanentDict)
 
         {
+
+            MessageBox.Show("Starting Load Combination ULS Set B");
+
             #region Load Combination B
 
             //from here start creating load combinations B
@@ -58,6 +61,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             int notionalcaselistIndex = new int();
             bool isError = false;
             bool addAnalysisCase = false;
+
 
             #region Have wind vertical, have wind horizontal, have temperature
 
@@ -17726,6 +17730,8 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
 
             #endregion 
+
+            MessageBox.Show("Finished creating Load Combination ULS Set B");
 
             return false;
         }

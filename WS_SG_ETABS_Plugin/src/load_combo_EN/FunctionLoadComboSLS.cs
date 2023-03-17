@@ -57,6 +57,8 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             bool isError = false;
             bool addAnalysisCase = false;
 
+            MessageBox.Show("Starting Load Combination SLS");
+
             #region Load Combination SLS
 
             //from here start creating load combinations SLS
@@ -17935,6 +17937,8 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
 
             #endregion
+
+            MessageBox.Show("Finished creating Load Combination SLS");
 
             return false;
         }
