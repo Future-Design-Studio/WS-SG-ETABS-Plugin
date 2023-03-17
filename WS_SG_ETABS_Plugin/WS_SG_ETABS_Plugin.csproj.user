@@ -5,6 +5,6 @@
     <StartProgram>C:\Program Files\Computers and Structures\ETABS 20\ETABS.exe</StartProgram>
   </PropertyGroup>
   <PropertyGroup>
-    <ProjectView>ShowAllFiles</ProjectView>
+    <ProjectView>ProjectFiles</ProjectView>
   </PropertyGroup>
 </Project>

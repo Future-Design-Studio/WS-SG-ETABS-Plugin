@@ -41,9 +41,17 @@ namespace WS_SG_ETABS_Plugin.src.wind_coeff
             _Plugin = Plugin;
             InitializeComponent();
 
+            //Check if model is locked
+            bool modelFromLocked = SapModel.GetModelIsLocked();
+
+            if (modelFromLocked)
+            {
+                MessageBox.Show("ETABS file is locked! Please unlock the model!");
+                return;
+            }
+
             //Fill in combobox for existing patterns
             List<string> outputPatternsList = src.HelperEtabs.GetAllLoadPattern(_SapModel);
-            string[] outputGroupsList = src.HelperEtabs.GetGroupList(_SapModel);
 
             comBoxLoadPattern.ItemsSource = outputPatternsList;
             comBoxLoadPattern.SelectedIndex = 0;
@@ -51,7 +59,8 @@ namespace WS_SG_ETABS_Plugin.src.wind_coeff
             comBoxDirection.ItemsSource = directionList;
             comBoxDirection.SelectedIndex = 0;
 
-            comBoxGroups.ItemsSource = outputGroupsList;
+            //Fill in combobox for available groups
+            src.HelperUI.PopulateComboBoxAvailGroup(_SapModel, comBoxGroups);
             comBoxGroups.SelectedIndex = 0;
 
             ShowDialog();
@@ -70,11 +79,21 @@ namespace WS_SG_ETABS_Plugin.src.wind_coeff
             {
                 direction = 2;
             }
-            double cp = double.Parse(textBoxCP.Text);
 
-            listBoxChoosenWind.Items.Add(groupName + ", " + loadPattern + ", " + comBoxDirection.Text + ", " + textBoxCP.Text);
-            ClassWindCoeff.WindLoad eachWindLoad = new ClassWindCoeff.WindLoad(groupName, loadPattern, direction, cp);
-            windLoadList.Add(eachWindLoad);
+            double cp = 0;
+            //Check if wind coefficient is filled
+            if (textBoxCP.Text != "")
+            {
+                 cp = double.Parse(textBoxCP.Text);
+
+                listBoxChoosenWind.Items.Add(groupName + ", " + loadPattern + ", " + comBoxDirection.Text + ", " + textBoxCP.Text);
+                ClassWindCoeff.WindLoad eachWindLoad = new ClassWindCoeff.WindLoad(groupName, loadPattern, direction, cp);
+                windLoadList.Add(eachWindLoad);
+            }
+            else
+            {
+                MessageBox.Show("Please input Cp!");
+            }
 
         }
 

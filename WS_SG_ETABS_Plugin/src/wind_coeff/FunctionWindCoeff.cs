@@ -19,6 +19,7 @@ namespace WS_SG_ETABS_Plugin.src.wind_coeff
                 isError = src.HelperEtabs.Assignwindloads(SapModel, windLoad.GroupName, windLoad.LoadPattern, windLoad.Direction, windLoad.CP);
                 if (isError)
                 {
+                    MessageBox.Show("Error, please let Mani know what happened");
                     return true;
                 }
             }
