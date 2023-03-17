@@ -1312,6 +1312,10 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                 #endregion
 
+                MessageBox.Show("Unable to find a license. Please check that you have a valid Standalone license or that a valid Network license is available. To help find a Network license add LMHost.ini file with server name to application folder or set system environment variable to server name.");
+                MessageBox.Show("Please log a ticket with Global IT Personnel, Manikandan Mohanasundaram, with Error ID:ET0836#");
+                MessageBox.Show("Cheh joking");
+
                 #region Add load combi C
 
                 //Adding Load combination C

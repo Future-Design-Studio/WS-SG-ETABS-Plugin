@@ -503,7 +503,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
 
                 //first 12 load combis DL LL ------------------------- COMBI 13-24
-                for (int combi1 = 1; combi1 <= 12; combi1++)
+                for (int combi1 = 13; combi1 <= 24; combi1++)
                 {
                     isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, "P_DL", dlFactor);
                     if (isError)
@@ -853,7 +853,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 }
 
                 //add 4 ehf loads ------------------------- COMBI 25-28
-                for (int combi1 = 1; combi1 <= 4; combi1++)
+                for (int combi1 = 25; combi1 <= 28; combi1++)
                 {
                     isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, "P_EHFx (DL)", dlFactor);
                     if (isError)

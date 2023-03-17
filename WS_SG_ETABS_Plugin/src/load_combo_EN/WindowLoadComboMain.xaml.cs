@@ -807,8 +807,6 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                     ClassLoadCombo.AccidentalLoad eachAccidentalLoad = new ClassLoadCombo.AccidentalLoad(selectedString, false);
                     AccidentalLoadList.Add(eachAccidentalLoad);
-
-                    Button_ADD_AL.IsEnabled = false;
                 }
                 else
                 {
@@ -821,8 +819,6 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     AccidentalLoadList.Add(eachAccidentalLoad);
                     ClassLoadCombo.AccidentalLoad eachAccidentalLoad1 = new ClassLoadCombo.AccidentalLoad(selectedString1, false);
                     AccidentalLoadList.Add(eachAccidentalLoad1);
-
-                    Button_ADD_AL.IsEnabled=false;
                 }
             }
         }
@@ -838,8 +834,6 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             listBoxChoosenAL.Items.Clear();
 
             AccidentalLoadList.Clear();
-
-            Button_ADD_AL.IsEnabled = true;
             
         }
 
