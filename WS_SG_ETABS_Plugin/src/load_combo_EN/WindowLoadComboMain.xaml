@@ -76,7 +76,7 @@
             <ComboBox  Grid.Row="1" Grid.Column="3" x:Name="comBoxExistingDL" 
                        VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
                        Text="0.5" SelectionChanged="comBoxExistingDL_SelectionChanged"></ComboBox>
-            <TextBox Grid.Column="4" x:Name="textBoxNameDL" Grid.Row="1" IsEnabled="False" TextChanged="textBoxNameDL_TextChanged"></TextBox>
+            <TextBox Grid.Column="4" x:Name="textBoxNameDL" Grid.Row="1" IsEnabled="False" TextChanged="textBoxNameDL_TextChanged" VerticalContentAlignment="Center"></TextBox>
 
             <Button Grid.Row="1" Grid.Column="5" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_ADD_DL_Click" ></Button>
 
@@ -126,7 +126,7 @@
             <ComboBox  Grid.Row="1" Grid.Column="3" x:Name="comBoxExistingSDL" 
                        VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
                        Text="0.5" SelectionChanged="comBoxExistingSDL_SelectionChanged"></ComboBox>
-            <TextBox Grid.Column="4" x:Name="textBoxNameSDL" Grid.Row="1" IsEnabled="False" TextChanged="textBoxNameSDL_TextChanged"></TextBox>
+            <TextBox Grid.Column="4" x:Name="textBoxNameSDL" Grid.Row="1" IsEnabled="False" TextChanged="textBoxNameSDL_TextChanged" VerticalContentAlignment="Center"></TextBox>
 
             <Button Grid.Row="1" Grid.Column="5" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_ADD_SDL_Click" ></Button>
 
@@ -178,7 +178,7 @@
             <ComboBox  Grid.Row="1" Grid.Column="3" x:Name="comBoxExistingLL" 
                        VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
                        Text="0.5" SelectionChanged="comBoxExistingLL_SelectionChanged"></ComboBox>
-            <TextBox Grid.Column="4" x:Name="textBoxNameLL" Grid.Row="1" IsEnabled="False" TextChanged="textBoxNameLL_TextChanged"></TextBox>
+            <TextBox Grid.Column="4" x:Name="textBoxNameLL" Grid.Row="1" IsEnabled="False" TextChanged="textBoxNameLL_TextChanged" VerticalContentAlignment="Center"></TextBox>
 
             <ComboBox  Grid.Row="1" Grid.Column="5" x:Name="comBoxLL" 
                        VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
@@ -324,7 +324,7 @@
                       Checked="checkBoxConsiderplusminus_Checked" Unchecked="checkBoxConsiderplusminus_Unchecked" 
                       VerticalAlignment="Center" HorizontalAlignment="Center">
             </CheckBox>
-            <TextBox Grid.Column="3" x:Name="textBoxNameTEMP" Grid.Row="1" IsEnabled="True" TextChanged="textBoxNameTEMP_TextChanged"></TextBox>
+            <TextBox Grid.Column="3" x:Name="textBoxNameTEMP" Grid.Row="1" IsEnabled="True" TextChanged="textBoxNameTEMP_TextChanged" VerticalContentAlignment="Center"></TextBox>
 
             <Button Grid.Row="1" Grid.Column="6" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_ADD_TEMP_Click" Name ="Button_ADD_TEMP"></Button>
 
@@ -410,7 +410,7 @@
             <ComboBox  Grid.Row="1" Grid.Column="2" x:Name="comBoxExistingAL" 
                        VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
                        Text="0.5" SelectionChanged="comBoxExistingAL_SelectionChanged"></ComboBox>
-            <TextBox Grid.Column="3" x:Name="textBoxNameAL" Grid.Row="1" IsEnabled="False" TextChanged="textBoxNameAL_TextChanged"></TextBox>
+            <TextBox Grid.Column="3" x:Name="textBoxNameAL" Grid.Row="1" IsEnabled="False" TextChanged="textBoxNameAL_TextChanged" VerticalContentAlignment="Center"></TextBox>
 
             <CheckBox x:Name="checkBoxAL" Grid.Row="1" Grid.Column="4"  Grid.ColumnSpan="1"
                       Checked="checkBoxAL_Checked" Unchecked="checkBoxAL_Unchecked" 

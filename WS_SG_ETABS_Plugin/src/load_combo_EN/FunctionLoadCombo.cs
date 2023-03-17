@@ -1264,7 +1264,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
             if (NotionalDirectionFactor == 2)
             {
-
+                
                 #region Add load combi B
 
                 //Adding Load combination B
@@ -1358,7 +1358,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 }
 
                 #endregion
-
+                
                 #region Add load combi SLS
 
                 //Adding Load combination SLS
@@ -1405,7 +1405,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 }
 
                 #endregion
-
+                
                 #region Add load combi Seismic
 
                 //Adding Load combination Seismic
@@ -1452,7 +1452,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 }
 
                 #endregion
-
+                
                 #region Add load combi Accidental
 
                 //Adding Load combination Seismic
@@ -1500,7 +1500,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 }
 
                 #endregion
-
+                
             }
 
             #endregion

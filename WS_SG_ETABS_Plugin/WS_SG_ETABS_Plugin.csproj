@@ -115,6 +115,7 @@
     <Compile Include="src\HelperUI.cs" />
     <Compile Include="src\load_combo_EN\ClassLoadCombo.cs" />
     <Compile Include="src\load_combo_EN\FunctionLoadCombo.cs" />
+    <Compile Include="src\load_combo_EN\FunctionLoadComboAccidental.cs" />
     <Compile Include="src\load_combo_EN\FunctionLoadComboB.cs" />
     <Compile Include="src\load_combo_EN\FunctionLoadComboC.cs" />
     <Compile Include="src\load_combo_EN\FunctionLoadComboSeismic.cs" />
