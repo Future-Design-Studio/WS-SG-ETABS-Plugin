@@ -49,6 +49,10 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
             (isError, groupAssignmentTable) = src.HelperEtabs.CallDatabaseTableByTableKey(databaseTableList, "Group Assignments");
             if (isError) { return (isError, 0, 0); }
 
+            //Filter group to only include points, to improve performance
+            (isError, groupAssignmentTable) = src.HelperEtabs.FilterDatabaseTable(groupAssignmentTable, "ObjectType", "Point");
+            if (isError) { return (isError, 0, 0); }
+
             src.HelperEtabs.DatabaseTable baseReactionsTable = new HelperEtabs.DatabaseTable();
             (isError, baseReactionsTable) = src.HelperEtabs.CallDatabaseTableByTableKey(databaseTableList, "Base Reactions");
             if (isError) { return (isError, 0, 0); }

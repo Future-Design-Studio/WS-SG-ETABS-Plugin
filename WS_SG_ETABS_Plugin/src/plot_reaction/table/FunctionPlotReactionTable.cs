@@ -10,6 +10,7 @@ using System.Windows.Markup;
 using System.Windows.Media.Media3D;
 using System.Windows.Media.TextFormatting;
 using System.Windows.Forms;
+using static WS_SG_ETABS_Plugin.src.HelperEtabs;
 
 namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
 {
@@ -23,21 +24,15 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
             public double YCoordinate { get; set; }
             public double ZCoordinate { get; set; }
             public List<ReactionForce> ReactionForceList { get; set; }
+            public int Label { get; set; }
 
-            public jointReaction(string uniqueName, double x, double y, double z)
+            public jointReaction(string uniqueName, double x, double y, double z, int label, List<ReactionForce> reactionForceList)
             {
                 UniqueName = uniqueName;
                 XCoordinate = x;
                 YCoordinate = y;
                 ZCoordinate = z;
-            }
-
-            public jointReaction(string uniqueName, double x, double y, double z, List<ReactionForce> reactionForceList)
-            {
-                UniqueName = uniqueName;
-                XCoordinate = x;
-                YCoordinate = y;
-                ZCoordinate = z;
+                Label = label;
                 ReactionForceList = reactionForceList;
             }
         }
@@ -91,6 +86,10 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
 
             src.HelperEtabs.DatabaseTable groupAssignmentTable = new HelperEtabs.DatabaseTable();
             (isError, groupAssignmentTable) = src.HelperEtabs.CallDatabaseTableByTableKey(databaseTableList, "Group Assignments");
+            if (isError) { return isError; }
+
+            //Filter group to only include points, to improve performance
+            (isError, groupAssignmentTable) = src.HelperEtabs.FilterDatabaseTable(groupAssignmentTable, "ObjectType", "Point");
             if (isError) { return isError; }
 
             src.HelperEtabs.DatabaseTable baseReactionsTable = new HelperEtabs.DatabaseTable();
@@ -166,9 +165,13 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
                         }
 
                         //If have not been recorded before
-                        else if (!uniqueJointRecorded.Contains(jointReactionRow["UniqueName"]) && !uniqueJointRecorded.Contains(jointReactionRow["UniqueName"]))
+                        else if (jointReactionRow["OutputCase"] == loadCase && !uniqueJointRecorded.Contains(jointReactionRow["UniqueName"]))
                         {
                             string uniqueName = jointReactionRow["UniqueName"];
+
+                            uniqueJointRecorded.Add(uniqueName);
+
+                            int label = uniqueJointRecorded.IndexOf(jointReactionRow["UniqueName"]); //index inside the list
                             double xCoord = new double();
                             double yCoord = new double();
                             double zCoord = new double();
@@ -188,12 +191,10 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
                             ReactionForce eachReactionForce = new ReactionForce(loadCase, fX, fY, fZ, mX, mY, mZ);
                             reactionForceList.Add(eachReactionForce);
 
-                            jointReaction jointReaction = new jointReaction(uniqueName, xCoord, yCoord, zCoord, reactionForceList);
+                            jointReaction jointReaction = new jointReaction(uniqueName, xCoord, yCoord, zCoord, label, reactionForceList);
                             jointReactionList.Add(jointReaction);
 
                             //Plotting
-                            uniqueJointRecorded.Add(jointReactionRow["UniqueName"]);
-
                             //Bubble size and text
                             //double reaction = Convert.ToDouble(jointReactionRow[reactionDirection]);
                             double reactionPlot = 1;
@@ -203,12 +204,12 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
                             if (showRenumberCasting)
                             {
                                 //Use the index in uniqueJoint
-                                bubbleText = Convert.ToString(uniqueJointRecorded.IndexOf(jointReactionRow["UniqueName"]));
+                                bubbleText = Convert.ToString(label);
                             }
                             else
                             {
                                 //Use the unique name
-                                bubbleText = Convert.ToString(jointReactionRow["UniqueName"]);
+                                bubbleText = Convert.ToString(uniqueName);
                             }
 
                             src.HelperPlot.BubblePlotter(ReactionPlot, bubbleSize, bubbleText, textSize, bubbleColor, xCoord, yCoord);
@@ -228,7 +229,6 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
             ReactionPlot.Plot.XAxis.ManualTickSpacing(gridSpacingX);
 
             ReactionPlot.Refresh();
-
 
             //Create excel
             var resultFx = CompileReactionToArrayFx(jointReactionList);
@@ -271,7 +271,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
             int i = 1;
             foreach (jointReaction eachJointReaction in jointReactionList)
             {
-                result[i, 0] = i;
+                result[i, 0] = eachJointReaction.Label;
                 result[i, 1] = eachJointReaction.UniqueName;
                 result[i, 2] = eachJointReaction.XCoordinate;
                 result[i, 3] = eachJointReaction.YCoordinate;
@@ -320,7 +320,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
             int i = 1;
             foreach (jointReaction eachJointReaction in jointReactionList)
             {
-                result[i, 0] = i;
+                result[i, 0] = eachJointReaction.Label;
                 result[i, 1] = eachJointReaction.UniqueName;
                 result[i, 2] = eachJointReaction.XCoordinate;
                 result[i, 3] = eachJointReaction.YCoordinate;
@@ -369,7 +369,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
             int i = 1;
             foreach (jointReaction eachJointReaction in jointReactionList)
             {
-                result[i, 0] = i;
+                result[i, 0] = eachJointReaction.Label;
                 result[i, 1] = eachJointReaction.UniqueName;
                 result[i, 2] = eachJointReaction.XCoordinate;
                 result[i, 3] = eachJointReaction.YCoordinate;

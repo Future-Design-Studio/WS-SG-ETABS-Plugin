@@ -94,6 +94,16 @@ namespace WS_SG_ETABS_Plugin.src
             return true;
         }
 
+        public static bool CheckLoadCaseListExist(cSapModel Sap, List<string> listChoosenLoadCase)
+        {
+            if (listChoosenLoadCase.Count == 0)
+            {
+                MessageBox.Show("Please choose atleast 1 load case");
+                return false;
+            }
+            return true;
+        }
+
         /*        public static void PopulateComboBox(ComboBox comboBox, List<T> data, string DisplayMemberPath, )
                 {
                     comboBox.ItemsSource = data;
