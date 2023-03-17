@@ -1504,7 +1504,54 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 }
 
                 #endregion
-                
+
+                #region Add load combi UPLIFT C1
+
+                //Adding Load combination C
+                isError = src.load_combo_EN.FunctionLoadComboUpliftC1.AddLoadCombinationUpliftC1(
+                    SapModel,
+                    Plugin,
+                    deadLoadList,
+                    SDLoadList,
+                    LiveLoadList,
+                    WindLoadList,
+                    NotionalDXLoadList,
+                    NotionalDYLoadList,
+                    NotionalSDXLoadList,
+                    NotionalSDYLoadList,
+                    TemperatureLoadList,
+                    SeismicLoadList,
+                    AccidentalLoadList,
+                    UpliftLoadList,
+                    EHFDLXLoadList,
+                    EHFDLYLoadList,
+                    EHFSDLXLoadList,
+                    EHFSDLYLoadList,
+                    EHFLLXLoadList,
+                    EHFLLYLoadList,
+                    NotionalDirectionFactor,
+                    WindVertLoadList,
+                    llcaseDict,
+                    windcaseList,
+                    notional2caseList,
+                    windvertcaseList,
+                    tempcaselist,
+                    seismiccaselist,
+                    alcaselist,
+                    upliftcaselist,
+                    ehfllxcaseDict,
+                    ehfllycaseDict,
+                    quasiPermanentDict);
+
+
+                if (isError)
+                {
+                    MessageBox.Show("Error adding load combination set Uplift C1, please let Mani know what happened");
+                    return true;
+                }
+
+                #endregion
+
             }
 
             #endregion

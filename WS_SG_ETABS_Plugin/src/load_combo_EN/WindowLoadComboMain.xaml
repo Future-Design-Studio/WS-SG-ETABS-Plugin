@@ -316,7 +316,7 @@
             <Label Grid.Column="0" Content="Load Pattern Type" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="2"/>
             <Label Grid.Column="2" Content="Consider +/-" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1"/>
             <Label Grid.Column="3" Content="Load Pattern Name" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1"/>
-            
+
             <Label Grid.Row="1" Grid.Column="1" Content="Temperature Load" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             <Label Grid.Row="1" Grid.Column="0" Content="Qk" VerticalAlignment="Center" HorizontalAlignment="Center"/>
 
@@ -359,7 +359,7 @@
             </Grid.RowDefinitions>
 
             <Label Grid.Column="1" Content="Load Pattern Type" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="2"/>
-            
+
             <Label Grid.Row="1" Grid.Column="1" Content="Seismic Load" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="2"/>
 
             <Button Grid.Row="1" Grid.Column="3" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_ADD_SEISMIC_Click" Name="Button_ADD_SEISMIC"></Button>
@@ -463,7 +463,7 @@
                        VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
                        Text="0.5" SelectionChanged="comBoxExistingUPLIFT_SelectionChanged"></ComboBox>
 
-            <Button Grid.Row="1" Grid.Column="3" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_ADD_UPLIFT_Click" Name="Button_ADD_UPLIFT"></Button>
+            <Button Grid.Row="1" Grid.Column="3" Content="ADD" VerticalAlignment="Bottom" HorizontalAlignment="Left" Grid.ColumnSpan="1" Margin="144,0,0,5" Click="Button_ADD_UPLIFT_Click" Name="Button_ADD_UPLIFT"></Button>
 
             <ListBox x:Name="listBoxChoosenUPLIFT" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="4" 
                      d:ItemsSource="{d:SampleData ItemCount=1}" SelectionMode="Single"
