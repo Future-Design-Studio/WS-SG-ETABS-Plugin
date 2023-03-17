@@ -17,6 +17,8 @@
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="0.6*"></RowDefinition>
         </Grid.RowDefinitions>
 
@@ -30,10 +32,12 @@
         <Button Grid.Row="6" x:Name="buttonTransferMidas" Content="Transfer To Midas" FontSize="16" Click="buttonTransferMidas_Click"/>
         <Button Grid.Row="7" x:Name="buttonSelUniqueName" Content="Select by Unique Name" FontSize="16" Click="buttonSelUniqueName_Click"/>
         <Button Grid.Row="8" x:Name="buttonEtabsToRhino" Content="Export To Rhino" FontSize="16" Click="buttonEtabsToRhino_Click"/>
+        <Button Grid.Row="9" x:Name="buttonLoadCombo" Content="Load Combination EN" FontSize="16" Click="buttonLoadCombo_Click"/>
+        <Button Grid.Row="10" x:Name="buttonWindCoeff" Content="Wind Coefficient Applications" FontSize="16" Click="buttonWindCoeff_Click"/>
+        
+        <Image Grid.Row="11" Margin="5" Source="/WS_SG_ETABS_Plugin;component/src/resources/RambollFDSLogo.PNG"/>
 
-        <Image Grid.Row="9" Margin="5" Source="/WS_SG_ETABS_Plugin;component/src/resources/RambollFDSLogo.PNG"/>
 
-
-        <Label Grid.Row="10" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="8">version 1.0.0</Label>
+        <Label Grid.Row="12" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="8">version 1.0.0</Label>
     </Grid>
 </Window>
