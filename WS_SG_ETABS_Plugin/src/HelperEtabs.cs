@@ -1194,7 +1194,6 @@ namespace WS_SG_ETABS_Plugin.src
         public static (bool, DatabaseTable) FilterDatabaseTable(DatabaseTable databaseTableToFilter, string columnKeyToFilter, string valueToFind)
         {
             bool isError = false;
-            List<string> uniqueNameInsideGroup = new List<string>();
             DatabaseTable databaseTableFiltered = new DatabaseTable();
 
             //Check if table to filter contains column key

@@ -10,6 +10,7 @@ using System.Windows.Markup;
 using System.Windows.Media.Media3D;
 using System.Windows.Media.TextFormatting;
 using System.Windows.Forms;
+using static WS_SG_ETABS_Plugin.src.HelperEtabs;
 
 namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
 {
@@ -85,6 +86,10 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
 
             src.HelperEtabs.DatabaseTable groupAssignmentTable = new HelperEtabs.DatabaseTable();
             (isError, groupAssignmentTable) = src.HelperEtabs.CallDatabaseTableByTableKey(databaseTableList, "Group Assignments");
+            if (isError) { return isError; }
+
+            //Filter group to only include points, to improve performance
+            (isError, groupAssignmentTable) = src.HelperEtabs.FilterDatabaseTable(groupAssignmentTable, "ObjectType", "Point");
             if (isError) { return isError; }
 
             src.HelperEtabs.DatabaseTable baseReactionsTable = new HelperEtabs.DatabaseTable();
@@ -224,7 +229,6 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
             ReactionPlot.Plot.XAxis.ManualTickSpacing(gridSpacingX);
 
             ReactionPlot.Refresh();
-
 
             //Create excel
             var resultFx = CompileReactionToArrayFx(jointReactionList);
