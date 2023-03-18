@@ -57,7 +57,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             bool isError = false;
             bool addAnalysisCase = false;
 
-            MessageBox.Show("Starting Load Combination SLS");
+            MessageBox.Show("Starting Load Combination Service Design");
 
             #region Load Combination SLS
 
@@ -17938,7 +17938,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
             #endregion
 
-            MessageBox.Show("Finished creating Load Combination SLS");
+            MessageBox.Show("Finished creating Load Combination Service Design");
 
             return false;
         }

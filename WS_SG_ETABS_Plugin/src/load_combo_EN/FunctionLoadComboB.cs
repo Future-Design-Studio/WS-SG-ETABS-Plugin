@@ -45,7 +45,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
         {
 
-            MessageBox.Show("Starting Load Combination ULS Set B");
+            MessageBox.Show("Starting Load Combination ULS Design (ULS B)");
 
             #region Load Combination B
 
@@ -17731,7 +17731,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
             #endregion 
 
-            MessageBox.Show("Finished creating Load Combination ULS Set B");
+            MessageBox.Show("Finished creating Load Combination ULS Design (ULS B)");
 
             return false;
         }

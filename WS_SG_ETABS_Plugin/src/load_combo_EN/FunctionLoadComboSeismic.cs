@@ -75,7 +75,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             if (SeismicLoadList.Count != 0)
             {
 
-                MessageBox.Show("Starting Load Combination set for Seismic loads");
+                MessageBox.Show("Starting Load Combination set Seismic Design");
 
                 int numberOfCombi = (1 * 12) + (1 * 12) + (1 * 12) + (1 * 12);
 
@@ -1322,7 +1322,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 }
                 #endregion
 
-                MessageBox.Show("Finished creating Load Combination set for Seismic loads");
+                MessageBox.Show("Finished creating Load Combination set Seismic Design");
 
             }
             else

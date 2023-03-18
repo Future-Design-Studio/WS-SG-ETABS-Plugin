@@ -74,7 +74,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             if (AccidentalLoadList.Count != 0)
             {
 
-                MessageBox.Show("Starting Load Combination set for Accidental loads");
+                MessageBox.Show("Starting Load Combination set Accidental Load Design");
 
                 #region Have wind vertical, have wind horizontal, have temperature
 
@@ -16040,7 +16040,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                 #endregion
 
-                MessageBox.Show("Finished creating Load Combination set for Accidental loads");
+                MessageBox.Show("Finished creating Load Combination set Accidental Load Design");
             }
                             
             else

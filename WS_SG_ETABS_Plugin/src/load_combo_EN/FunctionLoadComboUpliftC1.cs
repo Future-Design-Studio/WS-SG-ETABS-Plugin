@@ -60,7 +60,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
             if (UpliftLoadList.Count != 0)
             {
-                MessageBox.Show("Starting Load Combination Set UpliftC1");
+                MessageBox.Show("Starting Load Combination Set Uplift ULS (Uplift C1)");
 
                 #region Load Combination UpliftC1
 
@@ -17847,7 +17847,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                 #endregion
 
-                MessageBox.Show("Finished creating Load Combination Set UpliftC1");
+                MessageBox.Show("Finished creating Load Combination Set Uplift ULS (Uplift C1)");
             }
             else
             {

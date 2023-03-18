@@ -31,7 +31,15 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             List<src.load_combo_EN.ClassLoadCombo.EHFLoad> EHFLLYLoadList,
             int NotionalDirectionFactor,
             List<src.load_combo_EN.ClassLoadCombo.WindLoad> WindVertLoadList,
-            int ALneedtimes2)
+            int ALneedtimes2,
+            bool createULSB,
+            bool createULSC,
+            bool createAccidental,
+            bool createSeismic,
+            bool createSLS,
+            bool createSLSSteel,
+            bool createUPLC1,
+            bool createUPLC2)
         {
             Dictionary<string, string> llcaseDict = new Dictionary<string, string>();
             List<string> windcaseList = new List<string>();
@@ -1260,319 +1268,327 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
             #endregion
 
-            bool accidentalYesOrNo = true;
-            bool seismicYesOrNo = true;
-            bool upliftYesOrNo = true;
-
-            if (AccidentalLoadList.Count == 0)
-            {
-                accidentalYesOrNo = false;
-            }
-            if (SeismicLoadList.Count == 0)
-            {
-                seismicYesOrNo = false;
-            }
-            if (UpliftLoadList.Count == 0)
-            {
-                upliftYesOrNo = false;
-            }
-
-            //Call up load combo choosing window
-            src.load_combo_EN.WindowChooseLoadCombiToGenerate windowChooseLoadCombiToGenerate = new src.load_combo_EN.WindowChooseLoadCombiToGenerate(SapModel, Plugin, accidentalYesOrNo, seismicYesOrNo, upliftYesOrNo);
-
-
-
             #region Wind 4 directions
 
             if (NotionalDirectionFactor == 2)
             {
                 
-                #region Add load combi B
-
-                //Adding Load combination B
-                isError = src.load_combo_EN.FunctionLoadComboB.AddLoadCombinationB(
-                    SapModel,
-                    Plugin,
-                    deadLoadList,
-                    SDLoadList,
-                    LiveLoadList,
-                    WindLoadList,
-                    NotionalDXLoadList,
-                    NotionalDYLoadList,
-                    NotionalSDXLoadList,
-                    NotionalSDYLoadList,
-                    TemperatureLoadList,
-                    SeismicLoadList,
-                    AccidentalLoadList,
-                    UpliftLoadList,
-                    EHFDLXLoadList,
-                    EHFDLYLoadList,
-                    EHFSDLXLoadList,
-                    EHFSDLYLoadList,
-                    EHFLLXLoadList,
-                    EHFLLYLoadList,
-                    NotionalDirectionFactor,
-                    WindVertLoadList,
-                    llcaseDict,
-                    windcaseList,
-                    notional2caseList,
-                    windvertcaseList,
-                    tempcaselist,
-                    seismiccaselist,
-                    alcaselist,
-                    upliftcaselist,
-                    ehfllxcaseDict,
-                    ehfllycaseDict,
-                    quasiPermanentDict);
-
-
-                if (isError)
+                if (createULSB)
                 {
-                    MessageBox.Show("Error adding load combination set B, please let Mani know what happened");
-                    return true;
+                    #region Add load combi B
+
+                    //Adding Load combination B
+                    isError = src.load_combo_EN.FunctionLoadComboB.AddLoadCombinationB(
+                        SapModel,
+                        Plugin,
+                        deadLoadList,
+                        SDLoadList,
+                        LiveLoadList,
+                        WindLoadList,
+                        NotionalDXLoadList,
+                        NotionalDYLoadList,
+                        NotionalSDXLoadList,
+                        NotionalSDYLoadList,
+                        TemperatureLoadList,
+                        SeismicLoadList,
+                        AccidentalLoadList,
+                        UpliftLoadList,
+                        EHFDLXLoadList,
+                        EHFDLYLoadList,
+                        EHFSDLXLoadList,
+                        EHFSDLYLoadList,
+                        EHFLLXLoadList,
+                        EHFLLYLoadList,
+                        NotionalDirectionFactor,
+                        WindVertLoadList,
+                        llcaseDict,
+                        windcaseList,
+                        notional2caseList,
+                        windvertcaseList,
+                        tempcaselist,
+                        seismiccaselist,
+                        alcaselist,
+                        upliftcaselist,
+                        ehfllxcaseDict,
+                        ehfllycaseDict,
+                        quasiPermanentDict);
+
+
+                    if (isError)
+                    {
+                        MessageBox.Show("Error adding load combination set ULS Design (ULS B), please let Mani know what happened");
+                        return true;
+                    }
+
+                    #endregion
                 }
 
-                #endregion
-
-                MessageBox.Show("Unable to find a license. Please check that you have a valid Standalone license or that a valid Network license is available. To help find a Network license add LMHost.ini file with server name to application folder or set system environment variable to server name.");
-                MessageBox.Show("Please log a ticket with Global IT Personnel, Manikandan Mohanasundaram, with Error ID:ET0836#");
-                MessageBox.Show("Cheh joking");
-
-                #region Add load combi C
-
-                //Adding Load combination C
-                isError = src.load_combo_EN.FunctionLoadComboC.AddLoadCombinationC(
-                    SapModel,
-                    Plugin,
-                    deadLoadList,
-                    SDLoadList,
-                    LiveLoadList,
-                    WindLoadList,
-                    NotionalDXLoadList,
-                    NotionalDYLoadList,
-                    NotionalSDXLoadList,
-                    NotionalSDYLoadList,
-                    TemperatureLoadList,
-                    SeismicLoadList,
-                    AccidentalLoadList,
-                    UpliftLoadList,
-                    EHFDLXLoadList,
-                    EHFDLYLoadList,
-                    EHFSDLXLoadList,
-                    EHFSDLYLoadList,
-                    EHFLLXLoadList,
-                    EHFLLYLoadList,
-                    NotionalDirectionFactor,
-                    WindVertLoadList,
-                    llcaseDict,
-                    windcaseList,
-                    notional2caseList,
-                    windvertcaseList,
-                    tempcaselist,
-                    seismiccaselist,
-                    alcaselist,
-                    upliftcaselist,
-                    ehfllxcaseDict,
-                    ehfllycaseDict,
-                    quasiPermanentDict);
-
-
-                if (isError)
+                if (createULSC)
                 {
-                    MessageBox.Show("Error adding load combination set C, please let Mani know what happened");
-                    return true;
+                    #region Add load combi C
+
+                    //Adding Load combination C
+                    isError = src.load_combo_EN.FunctionLoadComboC.AddLoadCombinationC(
+                        SapModel,
+                        Plugin,
+                        deadLoadList,
+                        SDLoadList,
+                        LiveLoadList,
+                        WindLoadList,
+                        NotionalDXLoadList,
+                        NotionalDYLoadList,
+                        NotionalSDXLoadList,
+                        NotionalSDYLoadList,
+                        TemperatureLoadList,
+                        SeismicLoadList,
+                        AccidentalLoadList,
+                        UpliftLoadList,
+                        EHFDLXLoadList,
+                        EHFDLYLoadList,
+                        EHFSDLXLoadList,
+                        EHFSDLYLoadList,
+                        EHFLLXLoadList,
+                        EHFLLYLoadList,
+                        NotionalDirectionFactor,
+                        WindVertLoadList,
+                        llcaseDict,
+                        windcaseList,
+                        notional2caseList,
+                        windvertcaseList,
+                        tempcaselist,
+                        seismiccaselist,
+                        alcaselist,
+                        upliftcaselist,
+                        ehfllxcaseDict,
+                        ehfllycaseDict,
+                        quasiPermanentDict);
+
+
+                    if (isError)
+                    {
+                        MessageBox.Show("Error adding load combination set Pile Design (ULS C), please let Mani know what happened");
+                        return true;
+                    }
+
+                    #endregion
                 }
 
-                #endregion
-                
-                #region Add load combi SLS
-
-                //Adding Load combination SLS
-                isError = src.load_combo_EN.FunctionLoadComboSLS.AddLoadCombinationSLS(
-                    SapModel,
-                    Plugin,
-                    deadLoadList,
-                    SDLoadList,
-                    LiveLoadList,
-                    WindLoadList,
-                    NotionalDXLoadList,
-                    NotionalDYLoadList,
-                    NotionalSDXLoadList,
-                    NotionalSDYLoadList,
-                    TemperatureLoadList,
-                    SeismicLoadList,
-                    AccidentalLoadList,
-                    UpliftLoadList,
-                    EHFDLXLoadList,
-                    EHFDLYLoadList,
-                    EHFSDLXLoadList,
-                    EHFSDLYLoadList,
-                    EHFLLXLoadList,
-                    EHFLLYLoadList,
-                    NotionalDirectionFactor,
-                    WindVertLoadList,
-                    llcaseDict,
-                    windcaseList,
-                    notional2caseList,
-                    windvertcaseList,
-                    tempcaselist,
-                    seismiccaselist,
-                    alcaselist,
-                    upliftcaselist,
-                    ehfllxcaseDict,
-                    ehfllycaseDict,
-                    quasiPermanentDict);
-
-
-                if (isError)
+                if (createSLS)
                 {
-                    MessageBox.Show("Error adding load combination set SLS, please let Mani know what happened");
-                    return true;
+                    #region Add load combi SLS
+
+                    //Adding Load combination SLS
+                    isError = src.load_combo_EN.FunctionLoadComboSLS.AddLoadCombinationSLS(
+                        SapModel,
+                        Plugin,
+                        deadLoadList,
+                        SDLoadList,
+                        LiveLoadList,
+                        WindLoadList,
+                        NotionalDXLoadList,
+                        NotionalDYLoadList,
+                        NotionalSDXLoadList,
+                        NotionalSDYLoadList,
+                        TemperatureLoadList,
+                        SeismicLoadList,
+                        AccidentalLoadList,
+                        UpliftLoadList,
+                        EHFDLXLoadList,
+                        EHFDLYLoadList,
+                        EHFSDLXLoadList,
+                        EHFSDLYLoadList,
+                        EHFLLXLoadList,
+                        EHFLLYLoadList,
+                        NotionalDirectionFactor,
+                        WindVertLoadList,
+                        llcaseDict,
+                        windcaseList,
+                        notional2caseList,
+                        windvertcaseList,
+                        tempcaselist,
+                        seismiccaselist,
+                        alcaselist,
+                        upliftcaselist,
+                        ehfllxcaseDict,
+                        ehfllycaseDict,
+                        quasiPermanentDict);
+
+
+                    if (isError)
+                    {
+                        MessageBox.Show("Error adding load combination set Service Design, please let Mani know what happened");
+                        return true;
+                    }
+
+                    #endregion
                 }
 
-                #endregion
-                
-                #region Add load combi Seismic
-
-                //Adding Load combination Seismic
-                isError = src.load_combo_EN.FunctionLoadComboSeismic.AddLoadCombinationSeismic(
-                    SapModel,
-                    Plugin,
-                    deadLoadList,
-                    SDLoadList,
-                    LiveLoadList,
-                    WindLoadList,
-                    NotionalDXLoadList,
-                    NotionalDYLoadList,
-                    NotionalSDXLoadList,
-                    NotionalSDYLoadList,
-                    TemperatureLoadList,
-                    SeismicLoadList,
-                    AccidentalLoadList,
-                    UpliftLoadList,
-                    EHFDLXLoadList,
-                    EHFDLYLoadList,
-                    EHFSDLXLoadList,
-                    EHFSDLYLoadList,
-                    EHFLLXLoadList,
-                    EHFLLYLoadList,
-                    NotionalDirectionFactor,
-                    WindVertLoadList,
-                    llcaseDict,
-                    windcaseList,
-                    notional2caseList,
-                    windvertcaseList,
-                    tempcaselist,
-                    seismiccaselist,
-                    alcaselist,
-                    upliftcaselist,
-                    ehfllxcaseDict,
-                    ehfllycaseDict,
-                    quasiPermanentDict);
-
-
-                if (isError)
+                if (createSeismic)
                 {
-                    MessageBox.Show("Error adding load combination set Seismic, please let Mani know what happened");
-                    return true;
+                    #region Add load combi Seismic
+
+                    //Adding Load combination Seismic
+                    isError = src.load_combo_EN.FunctionLoadComboSeismic.AddLoadCombinationSeismic(
+                        SapModel,
+                        Plugin,
+                        deadLoadList,
+                        SDLoadList,
+                        LiveLoadList,
+                        WindLoadList,
+                        NotionalDXLoadList,
+                        NotionalDYLoadList,
+                        NotionalSDXLoadList,
+                        NotionalSDYLoadList,
+                        TemperatureLoadList,
+                        SeismicLoadList,
+                        AccidentalLoadList,
+                        UpliftLoadList,
+                        EHFDLXLoadList,
+                        EHFDLYLoadList,
+                        EHFSDLXLoadList,
+                        EHFSDLYLoadList,
+                        EHFLLXLoadList,
+                        EHFLLYLoadList,
+                        NotionalDirectionFactor,
+                        WindVertLoadList,
+                        llcaseDict,
+                        windcaseList,
+                        notional2caseList,
+                        windvertcaseList,
+                        tempcaselist,
+                        seismiccaselist,
+                        alcaselist,
+                        upliftcaselist,
+                        ehfllxcaseDict,
+                        ehfllycaseDict,
+                        quasiPermanentDict);
+
+
+                    if (isError)
+                    {
+                        MessageBox.Show("Error adding load combination set Seismic Design, please let Mani know what happened");
+                        return true;
+                    }
+
+                    #endregion
                 }
 
-                #endregion
-                
-                #region Add load combi Accidental
-
-                //Adding Load combination Seismic
-                isError = src.load_combo_EN.FunctionLoadComboAccidental.AddLoadCombinationAccidental(
-                    SapModel,
-                    Plugin,
-                    deadLoadList,
-                    SDLoadList,
-                    LiveLoadList,
-                    WindLoadList,
-                    NotionalDXLoadList,
-                    NotionalDYLoadList,
-                    NotionalSDXLoadList,
-                    NotionalSDYLoadList,
-                    TemperatureLoadList,
-                    SeismicLoadList,
-                    AccidentalLoadList,
-                    UpliftLoadList,
-                    EHFDLXLoadList,
-                    EHFDLYLoadList,
-                    EHFSDLXLoadList,
-                    EHFSDLYLoadList,
-                    EHFLLXLoadList,
-                    EHFLLYLoadList,
-                    NotionalDirectionFactor,
-                    WindVertLoadList,
-                    llcaseDict,
-                    windcaseList,
-                    notional2caseList,
-                    windvertcaseList,
-                    tempcaselist,
-                    seismiccaselist,
-                    alcaselist,
-                    upliftcaselist,
-                    ehfllxcaseDict,
-                    ehfllycaseDict,
-                    quasiPermanentDict,
-                    ALneedtimes2);
-
-
-                if (isError)
+                if (createAccidental)
                 {
-                    MessageBox.Show("Error adding load combination set Accidental, please let Mani know what happened");
-                    return true;
+                    #region Add load combi Accidental
+
+                    //Adding Load combination Seismic
+                    isError = src.load_combo_EN.FunctionLoadComboAccidental.AddLoadCombinationAccidental(
+                        SapModel,
+                        Plugin,
+                        deadLoadList,
+                        SDLoadList,
+                        LiveLoadList,
+                        WindLoadList,
+                        NotionalDXLoadList,
+                        NotionalDYLoadList,
+                        NotionalSDXLoadList,
+                        NotionalSDYLoadList,
+                        TemperatureLoadList,
+                        SeismicLoadList,
+                        AccidentalLoadList,
+                        UpliftLoadList,
+                        EHFDLXLoadList,
+                        EHFDLYLoadList,
+                        EHFSDLXLoadList,
+                        EHFSDLYLoadList,
+                        EHFLLXLoadList,
+                        EHFLLYLoadList,
+                        NotionalDirectionFactor,
+                        WindVertLoadList,
+                        llcaseDict,
+                        windcaseList,
+                        notional2caseList,
+                        windvertcaseList,
+                        tempcaselist,
+                        seismiccaselist,
+                        alcaselist,
+                        upliftcaselist,
+                        ehfllxcaseDict,
+                        ehfllycaseDict,
+                        quasiPermanentDict,
+                        ALneedtimes2);
+
+
+                    if (isError)
+                    {
+                        MessageBox.Show("Error adding load combination set Accidental Load Design, please let Mani know what happened");
+                        return true;
+                    }
+
+                    #endregion
                 }
 
-                #endregion
-
-                #region Add load combi UPLIFT C1
-
-                //Adding Load combination C
-                isError = src.load_combo_EN.FunctionLoadComboUpliftC1.AddLoadCombinationUpliftC1(
-                    SapModel,
-                    Plugin,
-                    deadLoadList,
-                    SDLoadList,
-                    LiveLoadList,
-                    WindLoadList,
-                    NotionalDXLoadList,
-                    NotionalDYLoadList,
-                    NotionalSDXLoadList,
-                    NotionalSDYLoadList,
-                    TemperatureLoadList,
-                    SeismicLoadList,
-                    AccidentalLoadList,
-                    UpliftLoadList,
-                    EHFDLXLoadList,
-                    EHFDLYLoadList,
-                    EHFSDLXLoadList,
-                    EHFSDLYLoadList,
-                    EHFLLXLoadList,
-                    EHFLLYLoadList,
-                    NotionalDirectionFactor,
-                    WindVertLoadList,
-                    llcaseDict,
-                    windcaseList,
-                    notional2caseList,
-                    windvertcaseList,
-                    tempcaselist,
-                    seismiccaselist,
-                    alcaselist,
-                    upliftcaselist,
-                    ehfllxcaseDict,
-                    ehfllycaseDict,
-                    quasiPermanentDict);
-
-
-                if (isError)
+                if (createUPLC1)
                 {
-                    MessageBox.Show("Error adding load combination set Uplift C1, please let Mani know what happened");
-                    return true;
+                    #region Add load combi UPLIFT C1
+
+                    //Adding Load combination C
+                    isError = src.load_combo_EN.FunctionLoadComboUpliftC1.AddLoadCombinationUpliftC1(
+                        SapModel,
+                        Plugin,
+                        deadLoadList,
+                        SDLoadList,
+                        LiveLoadList,
+                        WindLoadList,
+                        NotionalDXLoadList,
+                        NotionalDYLoadList,
+                        NotionalSDXLoadList,
+                        NotionalSDYLoadList,
+                        TemperatureLoadList,
+                        SeismicLoadList,
+                        AccidentalLoadList,
+                        UpliftLoadList,
+                        EHFDLXLoadList,
+                        EHFDLYLoadList,
+                        EHFSDLXLoadList,
+                        EHFSDLYLoadList,
+                        EHFLLXLoadList,
+                        EHFLLYLoadList,
+                        NotionalDirectionFactor,
+                        WindVertLoadList,
+                        llcaseDict,
+                        windcaseList,
+                        notional2caseList,
+                        windvertcaseList,
+                        tempcaselist,
+                        seismiccaselist,
+                        alcaselist,
+                        upliftcaselist,
+                        ehfllxcaseDict,
+                        ehfllycaseDict,
+                        quasiPermanentDict);
+
+
+                    if (isError)
+                    {
+                        MessageBox.Show("Error adding load combination set Uplift ULS (Uplift C1), please let Mani know what happened");
+                        return true;
+                    }
+
+                    #endregion
                 }
 
-                #endregion
+                if (createUPLC2)
+                {
+                    MessageBox.Show("Error, combinations for Uplift Pile Design (Uplift C2) not available yet.") ;
+
+                }
+
+                if (createSLSSteel)
+                {
+                    MessageBox.Show("Error, combinations for Service Design with Precamber not available yet.");
+                }
+
+
+
+
+
 
             }
 

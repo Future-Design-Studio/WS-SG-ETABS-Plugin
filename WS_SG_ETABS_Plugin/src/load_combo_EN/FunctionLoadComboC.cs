@@ -57,7 +57,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             bool isError = false;
             bool addAnalysisCase = false;
 
-            MessageBox.Show("Starting Load Combination ULS Set C");
+            MessageBox.Show("Starting Load Combination Pile Design (ULS C)");
 
             #region Load Combination C
 
@@ -17829,7 +17829,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
             #endregion
 
-            MessageBox.Show("Finished creating Load Combination ULS Set C");
+            MessageBox.Show("Finished creating Load Combination Pile Design (ULS C)");
 
             return false;
         }

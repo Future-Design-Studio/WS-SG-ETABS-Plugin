@@ -121,6 +121,9 @@
     <Compile Include="src\load_combo_EN\FunctionLoadComboSeismic.cs" />
     <Compile Include="src\load_combo_EN\FunctionLoadComboSLS.cs" />
     <Compile Include="src\load_combo_EN\FunctionLoadComboUpliftC1.cs" />
+    <Compile Include="src\load_combo_EN\WindowChooseLoadCombiToGenerate.xaml.cs">
+      <DependentUpon>WindowChooseLoadCombiToGenerate.xaml</DependentUpon>
+    </Compile>
     <Compile Include="src\load_combo_EN\WindowLoadComboMain.xaml.cs">
       <DependentUpon>WindowLoadComboMain.xaml</DependentUpon>
     </Compile>
@@ -185,6 +188,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="src\copy_properties\WindowCopyPropResult.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\load_combo_EN\WindowChooseLoadCombiToGenerate.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

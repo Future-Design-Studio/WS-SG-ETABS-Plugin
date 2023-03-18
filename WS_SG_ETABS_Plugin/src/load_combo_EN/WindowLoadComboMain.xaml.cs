@@ -918,8 +918,26 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
         private void buttonOk_Click(object sender, RoutedEventArgs e)
         {
             IsEnabled = false;
-            //Call up result window
-            src.load_combo_EN.WindowLoadComboResult windowLoadComboResult = new src.load_combo_EN.WindowLoadComboResult(_SapModel, _Plugin, deadLoadList, SDLoadList, LiveLoadList, WindLoadList, NotionalDXLoadList, NotionalDYLoadList, NotionalSDXLoadList, NotionalSDYLoadList, TemperatureLoadList, SeismicLoadList, AccidentalLoadList, UpliftLoadList, EHFDLXLoadList, EHFDLYLoadList, EHFSDLXLoadList, EHFSDLYLoadList, EHFLLXLoadList, EHFLLYLoadList, notionaldirectionFactor, WindVertLoadList, ALneedtimes2);
+
+            bool accidentalYesOrNo = true;
+            bool seismicYesOrNo = true;
+            bool upliftYesOrNo = true;
+
+            if (AccidentalLoadList.Count == 0)
+            {
+                accidentalYesOrNo = false;
+            }
+            if (SeismicLoadList.Count == 0)
+            {
+                seismicYesOrNo = false;
+            }
+            if (UpliftLoadList.Count == 0)
+            {
+                upliftYesOrNo = false;
+            }
+
+            //Call up load combo choosing window
+            src.load_combo_EN.WindowChooseLoadCombiToGenerate windowChooseLoadCombiToGenerate = new src.load_combo_EN.WindowChooseLoadCombiToGenerate(_SapModel, _Plugin, accidentalYesOrNo, seismicYesOrNo, upliftYesOrNo, deadLoadList, SDLoadList, LiveLoadList, WindLoadList, NotionalDXLoadList, NotionalDYLoadList, NotionalSDXLoadList, NotionalSDYLoadList, TemperatureLoadList, SeismicLoadList, AccidentalLoadList, UpliftLoadList, EHFDLXLoadList, EHFDLYLoadList, EHFSDLXLoadList, EHFSDLYLoadList, EHFLLXLoadList, EHFLLYLoadList, notionaldirectionFactor, WindVertLoadList, ALneedtimes2);
             IsEnabled = true;
         }
     }
