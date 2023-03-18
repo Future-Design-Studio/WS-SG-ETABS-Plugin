@@ -4,11 +4,11 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WS_SG_ETABS_Plugin.src.load_combo_EN"
-             mc:Ignorable="d" Height="120" Width="300" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+             mc:Ignorable="d" Height="220" Width="500" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"></RowDefinition>
-            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="0.4*"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
             <Label VerticalAlignment="Center" HorizontalAlignment="Center">Plugin "Load Combination EN" completed successfully.</Label>
