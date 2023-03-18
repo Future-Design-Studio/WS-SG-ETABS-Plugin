@@ -1576,13 +1576,102 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                 if (createUPLC2)
                 {
-                    MessageBox.Show("Error, combinations for Uplift Pile Design (Uplift C2) not available yet.") ;
+                    #region Add load combi UPLIFT C2
 
+                    //Adding Load combination C
+                    isError = src.load_combo_EN.FunctionLoadComboUpliftC2.AddLoadCombinationUpliftC2(
+                        SapModel,
+                        Plugin,
+                        deadLoadList,
+                        SDLoadList,
+                        LiveLoadList,
+                        WindLoadList,
+                        NotionalDXLoadList,
+                        NotionalDYLoadList,
+                        NotionalSDXLoadList,
+                        NotionalSDYLoadList,
+                        TemperatureLoadList,
+                        SeismicLoadList,
+                        AccidentalLoadList,
+                        UpliftLoadList,
+                        EHFDLXLoadList,
+                        EHFDLYLoadList,
+                        EHFSDLXLoadList,
+                        EHFSDLYLoadList,
+                        EHFLLXLoadList,
+                        EHFLLYLoadList,
+                        NotionalDirectionFactor,
+                        WindVertLoadList,
+                        llcaseDict,
+                        windcaseList,
+                        notional2caseList,
+                        windvertcaseList,
+                        tempcaselist,
+                        seismiccaselist,
+                        alcaselist,
+                        upliftcaselist,
+                        ehfllxcaseDict,
+                        ehfllycaseDict,
+                        quasiPermanentDict);
+
+
+                    if (isError)
+                    {
+                        MessageBox.Show("Error adding load combination set Uplift Pile Design (Uplift C2), please let Mani know what happened");
+                        return true;
+                    }
+
+                    #endregion
                 }
 
                 if (createSLSSteel)
                 {
-                    MessageBox.Show("Error, combinations for Service Design with Precamber not available yet.");
+                    #region Add load combi SLS Steel
+
+                    //Adding Load combination SLS Steel
+                    isError = src.load_combo_EN.FunctionLoadComboSLSSteel.AddLoadCombinationSLSSteel(
+                        SapModel,
+                        Plugin,
+                        deadLoadList,
+                        SDLoadList,
+                        LiveLoadList,
+                        WindLoadList,
+                        NotionalDXLoadList,
+                        NotionalDYLoadList,
+                        NotionalSDXLoadList,
+                        NotionalSDYLoadList,
+                        TemperatureLoadList,
+                        SeismicLoadList,
+                        AccidentalLoadList,
+                        UpliftLoadList,
+                        EHFDLXLoadList,
+                        EHFDLYLoadList,
+                        EHFSDLXLoadList,
+                        EHFSDLYLoadList,
+                        EHFLLXLoadList,
+                        EHFLLYLoadList,
+                        NotionalDirectionFactor,
+                        WindVertLoadList,
+                        llcaseDict,
+                        windcaseList,
+                        notional2caseList,
+                        windvertcaseList,
+                        tempcaselist,
+                        seismiccaselist,
+                        alcaselist,
+                        upliftcaselist,
+                        ehfllxcaseDict,
+                        ehfllycaseDict,
+                        quasiPermanentDict);
+
+
+                    if (isError)
+                    {
+                        MessageBox.Show("Error adding load combination set Service Design with Precamber, please let Mani know what happened");
+                        return true;
+                    }
+
+                    #endregion
                 }
 
 

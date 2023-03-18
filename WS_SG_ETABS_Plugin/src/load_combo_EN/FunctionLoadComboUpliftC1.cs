@@ -5136,10 +5136,11 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                     dlFactor = 1;
                     sdlFactor = 1;
-                    llFactor = 1.3;
-                    wlFactor = 0.65;
-                    tlFactor = 0.78;
+                    llFactor = 1.5;
+                    wlFactor = 0.75;
+                    tlFactor = 0.9;
                     nlFactor = 1;
+
 
 
                     //first 16 load combis DL SDL LL TEMP ------------------------- COMBI 1-16
@@ -5390,10 +5391,11 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     #region Next 16 load combis for case2 ------------------------- COMBI 17-32
 
                     dlFactor = 1;
-                    llFactor = 1.3;
-                    wlFactor = 0.65;
-                    tlFactor = 0.78;
+                    llFactor = 1.5;
+                    wlFactor = 0.75;
+                    tlFactor = 0.9;
                     nlFactor = 1;
+
 
 
                     //first 16 load combis DL LL TEMP ------------------------- COMBI 17-32
@@ -5619,10 +5621,11 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                     dlFactor = 1;
                     sdlFactor = 1;
-                    llFactor = 1.3;
-                    wlFactor = 1.3;
-                    tlFactor = 0.78;
+                    llFactor = 1.5;
+                    wlFactor = 1.5;
+                    tlFactor = 0.9;
                     nlFactor = 1;
+
 
 
                     //first 16 load combis DL SDL LL TEMP ------------------------- COMBI 33-48
@@ -5873,10 +5876,11 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     #region Next 16 load combis for case4 ------------------------- COMBI 49-64
 
                     dlFactor = 1;
-                    llFactor = 1.3;
-                    wlFactor = 1.3;
-                    tlFactor = 0.78;
+                    llFactor = 1.5;
+                    wlFactor = 1.5;
+                    tlFactor = 0.9;
                     nlFactor = 1;
+
 
 
                     //first 16 load combis DL LL TEMP ------------------------- COMBI 49-64
@@ -6102,10 +6106,11 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                     dlFactor = 1;
                     sdlFactor = 1;
-                    llFactor = 1.3;
-                    wlFactor = 0.65;
-                    tlFactor = 1.3;
+                    llFactor = 1.5;
+                    wlFactor = 0.75;
+                    tlFactor = 1.5;
                     nlFactor = 1;
+
 
 
                     //first 16 load combis DL SDL LL TEMP ------------------------- COMBI 65-80
@@ -6356,10 +6361,11 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     #region Next 16 load combis for case6 ------------------------- COMBI 81-96
 
                     dlFactor = 1;
-                    llFactor = 1.3;
-                    wlFactor = 0.65;
-                    tlFactor = 1.3;
+                    llFactor = 1.5;
+                    wlFactor = 0.75;
+                    tlFactor = 1.5;
                     nlFactor = 1;
+
 
 
                     //first 16 load combis DL LL TEMP ------------------------- COMBI 81-96
@@ -6590,9 +6596,10 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                     dlFactor = 1;
                     sdlFactor = 1;
-                    llFactor = 1.3;
-                    wlFactor = 0.65;
+                    llFactor = 1.5;
+                    wlFactor = 0.75;
                     nlFactor = 1;
+
 
 
                     //first 8 load combis DL SDL LL ------------------------- COMBI 97-104
@@ -6766,8 +6773,8 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     #region Next 8 load combis for case8 ------------------------- COMBI 105-112
 
                     dlFactor = 1;
-                    llFactor = 1.3;
-                    wlFactor = 0.65;
+                    llFactor = 1.5;
+                    wlFactor = 0.75;
                     nlFactor = 1;
 
 
@@ -6917,8 +6924,8 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                     dlFactor = 1;
                     sdlFactor = 1;
-                    llFactor = 1.3;
-                    wlFactor = 1.3;
+                    llFactor = 1.5;
+                    wlFactor = 1.5;
                     nlFactor = 1;
 
 
@@ -7093,8 +7100,8 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     #region Next 8 load combis for case10 ------------------------- COMBI 121-128
 
                     dlFactor = 1;
-                    llFactor = 1.3;
-                    wlFactor = 1.3;
+                    llFactor = 1.5;
+                    wlFactor = 1.5;
                     nlFactor = 1;
 
 
@@ -7249,8 +7256,8 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                     dlFactor = 1;
                     sdlFactor = 1;
-                    wlFactor = 1.3;
-                    tlFactor = 0.78;
+                    wlFactor = 1.5;
+                    tlFactor = 0.9;
                     nlFactor = 1;
 
 
@@ -7461,8 +7468,8 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     #region Next 16 load combis for case12 ------------------------- COMBI 145-160
 
                     dlFactor = 1;
-                    wlFactor = 1.3;
-                    tlFactor = 0.78;
+                    wlFactor = 1.5;
+                    tlFactor = 0.9;
                     nlFactor = 1;
 
 
@@ -7648,8 +7655,8 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                     dlFactor = 1;
                     sdlFactor = 1;
-                    wlFactor = 0.65;
-                    tlFactor = 1.3;
+                    wlFactor = 0.75;
+                    tlFactor = 1.5;
                     nlFactor = 1;
 
 
@@ -7860,8 +7867,8 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     #region Next 16 load combis for case14 ------------------------- COMBI 177-192
 
                     dlFactor = 1;
-                    wlFactor = 0.65;
-                    tlFactor = 1.3;
+                    wlFactor = 0.75;
+                    tlFactor = 1.5;
                     nlFactor = 1;
 
 
@@ -8052,8 +8059,8 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                     dlFactor = 1;
                     sdlFactor = 1;
-                    llFactor = 1.3;
-                    tlFactor = 0.78;
+                    llFactor = 1.5;
+                    tlFactor = 0.9;
 
 
                     //first 8 load combis DL SDL LL TEMP ------------------------- COMBI 193-200
@@ -8200,8 +8207,8 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     #region Next 8 load combis for case16 ------------------------- COMBI 201-208
 
                     dlFactor = 1;
-                    llFactor = 1.3;
-                    tlFactor = 0.78;
+                    llFactor = 1.5;
+                    tlFactor = 0.9;
 
 
                     //first 8 load combis DL LL TEMP ------------------------- COMBI 201-208
@@ -8323,8 +8330,8 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                     dlFactor = 1;
                     sdlFactor = 1;
-                    llFactor = 1.3;
-                    tlFactor = 1.3;
+                    llFactor = 1.5;
+                    tlFactor = 1.5;
 
 
                     //first 8 load combis DL SDL LL TEMP ------------------------- COMBI 209-216
@@ -8471,8 +8478,8 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     #region Next 8 load combis for case18 ------------------------- COMBI 217-224
 
                     dlFactor = 1;
-                    llFactor = 1.3;
-                    tlFactor = 1.3;
+                    llFactor = 1.5;
+                    tlFactor = 1.5;
 
 
                     //first 8 load combis DL LL TEMP ------------------------- COMBI 217-224
@@ -8599,7 +8606,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                     dlFactor = 1;
                     sdlFactor = 1;
-                    llFactor = 1.3;
+                    llFactor = 1.5;
 
 
                     //first 4 load combis DL SDL LL ------------------------- COMBI 225-228
@@ -8721,7 +8728,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     #region Next 4 load combis for case20 ------------------------- COMBI 229-232
 
                     dlFactor = 1;
-                    llFactor = 1.3;
+                    llFactor = 1.5;
 
 
                     //first 4 load combis DL LL ------------------------- COMBI 229-232
@@ -8823,7 +8830,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                     dlFactor = 1;
                     sdlFactor = 1;
-                    wlFactor = 1.3;
+                    wlFactor = 1.5;
                     nlFactor = 1;
 
 
@@ -8957,7 +8964,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     #region Next 8 load combis for case22 ------------------------- COMBI 241-248
 
                     dlFactor = 1;
-                    wlFactor = 1.3;
+                    wlFactor = 1.5;
                     nlFactor = 1;
 
 
@@ -9071,7 +9078,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                     dlFactor = 1;
                     sdlFactor = 1;
-                    tlFactor = 1.3;
+                    tlFactor = 1.5;
 
 
                     //first 8 load combis DL SDL TEMP ------------------------- COMBI 249-256
@@ -9177,7 +9184,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     #region Next 8 load combis for case24 ------------------------- COMBI 257-264
 
                     dlFactor = 1;
-                    tlFactor = 1.3;
+                    tlFactor = 1.5;
 
 
                     //first 8 load combis DL TEMP ------------------------- COMBI 257-264
@@ -9433,8 +9440,8 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                     dlFactor = 1;
                     sdlFactor = 1;
-                    llFactor = 1.3;
-                    wlFactor = 0.65;
+                    llFactor = 1.5;
+                    wlFactor = 0.75;
                     nlFactor = 1;
 
 
@@ -9609,8 +9616,8 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     #region Next 8 load combis for case8 ------------------------- COMBI 9-16
 
                     dlFactor = 1;
-                    llFactor = 1.3;
-                    wlFactor = 0.65;
+                    llFactor = 1.5;
+                    wlFactor = 0.75;
                     nlFactor = 1;
 
 
@@ -9760,8 +9767,8 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                     dlFactor = 1;
                     sdlFactor = 1;
-                    llFactor = 1.3;
-                    wlFactor = 1.3;
+                    llFactor = 1.5;
+                    wlFactor = 1.5;
                     nlFactor = 1;
 
 
@@ -9936,8 +9943,8 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     #region Next 8 load combis for case10 ------------------------- COMBI 25-32
 
                     dlFactor = 1;
-                    llFactor = 1.3;
-                    wlFactor = 1.3;
+                    llFactor = 1.5;
+                    wlFactor = 1.5;
                     nlFactor = 1;
 
 
@@ -10092,7 +10099,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                     dlFactor = 1;
                     sdlFactor = 1;
-                    llFactor = 1.3;
+                    llFactor = 1.5;
 
 
                     //first 4 load combis DL SDL LL ------------------------- COMBI 33-36
@@ -10214,7 +10221,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     #region Next 4 load combis for case20 ------------------------- COMBI 37-40
 
                     dlFactor = 1;
-                    llFactor = 1.3;
+                    llFactor = 1.5;
 
 
                     //first 4 load combis DL LL ------------------------- COMBI 37-40
@@ -10316,7 +10323,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                     dlFactor = 1;
                     sdlFactor = 1;
-                    wlFactor = 1.3;
+                    wlFactor = 1.5;
                     nlFactor = 1;
 
 
@@ -10450,7 +10457,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     #region Next 8 load combis for case22 ------------------------- COMBI 49-56
 
                     dlFactor = 1;
-                    wlFactor = 1.3;
+                    wlFactor = 1.5;
                     nlFactor = 1;
 
 
@@ -10734,8 +10741,8 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                     dlFactor = 1;
                     sdlFactor = 1;
-                    llFactor = 1.3;
-                    tlFactor = 0.78;
+                    llFactor = 1.5;
+                    tlFactor = 0.9;
 
 
                     //first 8 load combis DL SDL LL TEMP ------------------------- COMBI 193-200
@@ -10882,8 +10889,8 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     #region Next 8 load combis for case16 ------------------------- COMBI 9-16
 
                     dlFactor = 1;
-                    llFactor = 1.3;
-                    tlFactor = 0.78;
+                    llFactor = 1.5;
+                    tlFactor = 0.9;
 
 
                     //first 8 load combis DL LL TEMP ------------------------- COMBI 9-16
@@ -11005,8 +11012,8 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                     dlFactor = 1;
                     sdlFactor = 1;
-                    llFactor = 1.3;
-                    tlFactor = 1.3;
+                    llFactor = 1.5;
+                    tlFactor = 1.5;
 
 
                     //first 8 load combis DL SDL LL TEMP ------------------------- COMBI 17-24
@@ -11153,8 +11160,8 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     #region Next 8 load combis for case18 ------------------------- COMBI 25-32
 
                     dlFactor = 1;
-                    llFactor = 1.3;
-                    tlFactor = 1.3;
+                    llFactor = 1.5;
+                    tlFactor = 1.5;
 
 
                     //first 8 load combis DL LL TEMP ------------------------- COMBI 25-32
@@ -11281,7 +11288,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                     dlFactor = 1;
                     sdlFactor = 1;
-                    llFactor = 1.3;
+                    llFactor = 1.5;
 
 
                     //first 4 load combis DL SDL LL ------------------------- COMBI 33-36
@@ -11403,7 +11410,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     #region Next 4 load combis for case20 ------------------------- COMBI 37-40
 
                     dlFactor = 1;
-                    llFactor = 1.3;
+                    llFactor = 1.5;
 
 
                     //first 4 load combis DL LL ------------------------- COMBI 37-40
@@ -11505,7 +11512,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                     dlFactor = 1;
                     sdlFactor = 1;
-                    tlFactor = 1.3;
+                    tlFactor = 1.5;
 
 
                     //first 8 load combis DL SDL TEMP ------------------------- COMBI 41-48
@@ -11611,7 +11618,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     #region Next 8 load combis for case24 ------------------------- COMBI 49-56
 
                     dlFactor = 1;
-                    tlFactor = 1.3;
+                    tlFactor = 1.5;
 
 
                     //first 8 load combis DL TEMP ------------------------- COMBI 49-56
@@ -11867,7 +11874,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                     dlFactor = 1;
                     sdlFactor = 1;
-                    llFactor = 1.3;
+                    llFactor = 1.5;
 
 
                     //first 4 load combis DL SDL LL ------------------------- COMBI 1-4
@@ -11989,7 +11996,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     #region Next 4 load combis for case20 ------------------------- COMBI 5-8
 
                     dlFactor = 1;
-                    llFactor = 1.3;
+                    llFactor = 1.5;
 
 
                     //first 4 load combis DL LL ------------------------- COMBI 5-8
@@ -12261,8 +12268,8 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                     dlFactor = 1;
                     sdlFactor = 1;
-                    llFactor = 1.3;
-                    wlFactor = 0.65;
+                    llFactor = 1.5;
+                    wlFactor = 0.75;
                     nlFactor = 1;
 
 
@@ -12466,8 +12473,8 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     #region Next 16 load combis for case8 ------------------------- COMBI 17-32
 
                     dlFactor = 1;
-                    llFactor = 1.3;
-                    wlFactor = 0.65;
+                    llFactor = 1.5;
+                    wlFactor = 0.75;
                     nlFactor = 1;
 
 
@@ -12646,8 +12653,8 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                     dlFactor = 1;
                     sdlFactor = 1;
-                    llFactor = 1.3;
-                    wlFactor = 1.3;
+                    llFactor = 1.5;
+                    wlFactor = 1.5;
                     nlFactor = 1;
 
 
@@ -12851,8 +12858,8 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     #region Next 16 load combis for case10 ------------------------- COMBI 49-64
 
                     dlFactor = 1;
-                    llFactor = 1.3;
-                    wlFactor = 1.3;
+                    llFactor = 1.5;
+                    wlFactor = 1.5;
                     nlFactor = 1;
 
 
@@ -13036,7 +13043,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                     dlFactor = 1;
                     sdlFactor = 1;
-                    llFactor = 1.3;
+                    llFactor = 1.5;
 
 
                     //first 4 load combis DL SDL LL ------------------------- COMBI 65-68
@@ -13158,7 +13165,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     #region Next 4 load combis for case20 ------------------------- COMBI 69-72
 
                     dlFactor = 1;
-                    llFactor = 1.3;
+                    llFactor = 1.5;
 
 
                     //first 4 load combis DL LL ------------------------- COMBI 69-72
@@ -13260,7 +13267,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                     dlFactor = 1;
                     sdlFactor = 1;
-                    wlFactor = 1.3;
+                    wlFactor = 1.5;
                     nlFactor = 1;
 
 
@@ -13423,7 +13430,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     #region Next 16 load combis for case22 ------------------------- COMBI 89-104
 
                     dlFactor = 1;
-                    wlFactor = 1.3;
+                    wlFactor = 1.5;
                     nlFactor = 1;
 
 
@@ -13736,9 +13743,9 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                     dlFactor = 1;
                     sdlFactor = 1;
-                    llFactor = 1.3;
-                    wlFactor = 0.65;
-                    tlFactor = 0.78;
+                    llFactor = 1.5;
+                    wlFactor = 0.75;
+                    tlFactor = 0.9;
                     nlFactor = 1;
 
 
@@ -13944,9 +13951,9 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     #region Next 16 load combis for case2 ------------------------- COMBI 17-32
 
                     dlFactor = 1;
-                    llFactor = 1.3;
-                    wlFactor = 0.65;
-                    tlFactor = 0.78;
+                    llFactor = 1.5;
+                    wlFactor = 0.75;
+                    tlFactor = 0.9;
                     nlFactor = 1;
 
 
@@ -14127,9 +14134,9 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                     dlFactor = 1;
                     sdlFactor = 1;
-                    llFactor = 1.3;
-                    wlFactor = 1.3;
-                    tlFactor = 0.78;
+                    llFactor = 1.5;
+                    wlFactor = 1.5;
+                    tlFactor = 0.9;
                     nlFactor = 1;
 
 
@@ -14335,9 +14342,9 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     #region Next 16 load combis for case4 ------------------------- COMBI 49-64
 
                     dlFactor = 1;
-                    llFactor = 1.3;
-                    wlFactor = 1.3;
-                    tlFactor = 0.78;
+                    llFactor = 1.5;
+                    wlFactor = 1.5;
+                    tlFactor = 0.9;
                     nlFactor = 1;
 
 
@@ -14518,9 +14525,9 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                     dlFactor = 1;
                     sdlFactor = 1;
-                    llFactor = 1.3;
-                    wlFactor = 0.65;
-                    tlFactor = 1.3;
+                    llFactor = 1.5;
+                    wlFactor = 0.75;
+                    tlFactor = 1.5;
                     nlFactor = 1;
 
 
@@ -14726,9 +14733,9 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     #region Next 16 load combis for case6 ------------------------- COMBI 81-96
 
                     dlFactor = 1;
-                    llFactor = 1.3;
-                    wlFactor = 0.65;
-                    tlFactor = 1.3;
+                    llFactor = 1.5;
+                    wlFactor = 0.75;
+                    tlFactor = 1.5;
                     nlFactor = 1;
 
 
@@ -14914,8 +14921,8 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                     dlFactor = 1;
                     sdlFactor = 1;
-                    llFactor = 1.3;
-                    wlFactor = 0.65;
+                    llFactor = 1.5;
+                    wlFactor = 0.75;
                     nlFactor = 1;
 
 
@@ -15067,8 +15074,8 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     #region Next 8 load combis for case8 ------------------------- COMBI 105-112
 
                     dlFactor = 1;
-                    llFactor = 1.3;
-                    wlFactor = 0.65;
+                    llFactor = 1.5;
+                    wlFactor = 0.75;
                     nlFactor = 1;
 
 
@@ -15195,8 +15202,8 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                     dlFactor = 1;
                     sdlFactor = 1;
-                    llFactor = 1.3;
-                    wlFactor = 1.3;
+                    llFactor = 1.5;
+                    wlFactor = 1.5;
                     nlFactor = 1;
 
 
@@ -15348,8 +15355,8 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     #region Next 8 load combis for case10 ------------------------- COMBI 121-128
 
                     dlFactor = 1;
-                    llFactor = 1.3;
-                    wlFactor = 1.3;
+                    llFactor = 1.5;
+                    wlFactor = 1.5;
                     nlFactor = 1;
 
 
@@ -15481,8 +15488,8 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                     dlFactor = 1;
                     sdlFactor = 1;
-                    wlFactor = 1.3;
-                    tlFactor = 0.78;
+                    wlFactor = 1.5;
+                    tlFactor = 0.9;
                     nlFactor = 1;
 
 
@@ -15647,8 +15654,8 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     #region Next 16 load combis for case12 ------------------------- COMBI 145-160
 
                     dlFactor = 1;
-                    wlFactor = 1.3;
-                    tlFactor = 0.78;
+                    wlFactor = 1.5;
+                    tlFactor = 0.9;
                     nlFactor = 1;
 
 
@@ -15788,8 +15795,8 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                     dlFactor = 1;
                     sdlFactor = 1;
-                    wlFactor = 0.65;
-                    tlFactor = 1.3;
+                    wlFactor = 0.75;
+                    tlFactor = 1.5;
                     nlFactor = 1;
 
 
@@ -15954,8 +15961,8 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     #region Next 16 load combis for case14 ------------------------- COMBI 177-192
 
                     dlFactor = 1;
-                    wlFactor = 0.65;
-                    tlFactor = 1.3;
+                    wlFactor = 0.75;
+                    tlFactor = 1.5;
                     nlFactor = 1;
 
 
@@ -16100,8 +16107,8 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                     dlFactor = 1;
                     sdlFactor = 1;
-                    llFactor = 1.3;
-                    tlFactor = 0.78;
+                    llFactor = 1.5;
+                    tlFactor = 0.9;
 
 
                     //first 8 load combis DL SDL LL TEMP ------------------------- COMBI 193-200
@@ -16248,8 +16255,8 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     #region Next 8 load combis for case16 ------------------------- COMBI 201-208
 
                     dlFactor = 1;
-                    llFactor = 1.3;
-                    tlFactor = 0.78;
+                    llFactor = 1.5;
+                    tlFactor = 0.9;
 
 
                     //first 8 load combis DL LL TEMP ------------------------- COMBI 201-208
@@ -16371,8 +16378,8 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                     dlFactor = 1;
                     sdlFactor = 1;
-                    llFactor = 1.3;
-                    tlFactor = 1.3;
+                    llFactor = 1.5;
+                    tlFactor = 1.5;
 
 
                     //first 8 load combis DL SDL LL TEMP ------------------------- COMBI 209-216
@@ -16519,8 +16526,8 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     #region Next 8 load combis for case18 ------------------------- COMBI 217-224
 
                     dlFactor = 1;
-                    llFactor = 1.3;
-                    tlFactor = 1.3;
+                    llFactor = 1.5;
+                    tlFactor = 1.5;
 
 
                     //first 8 load combis DL LL TEMP ------------------------- COMBI 217-224
@@ -16647,7 +16654,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                     dlFactor = 1;
                     sdlFactor = 1;
-                    llFactor = 1.3;
+                    llFactor = 1.5;
 
 
                     //first 4 load combis DL SDL LL ------------------------- COMBI 225-228
@@ -16769,7 +16776,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     #region Next 4 load combis for case20 ------------------------- COMBI 229-232
 
                     dlFactor = 1;
-                    llFactor = 1.3;
+                    llFactor = 1.5;
 
 
                     //first 4 load combis DL LL ------------------------- COMBI 229-232
@@ -16871,7 +16878,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                     dlFactor = 1;
                     sdlFactor = 1;
-                    wlFactor = 1.3;
+                    wlFactor = 1.5;
                     nlFactor = 1;
 
 
@@ -16982,7 +16989,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     #region Next 8 load combis for case22 ------------------------- COMBI 241-248
 
                     dlFactor = 1;
-                    wlFactor = 1.3;
+                    wlFactor = 1.5;
                     nlFactor = 1;
 
 
@@ -17073,7 +17080,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                     dlFactor = 1;
                     sdlFactor = 1;
-                    tlFactor = 1.3;
+                    tlFactor = 1.5;
 
 
                     //first 8 load combis DL SDL TEMP ------------------------- COMBI 249-256
@@ -17179,7 +17186,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     #region Next 8 load combis for case24 ------------------------- COMBI 257-264
 
                     dlFactor = 1;
-                    tlFactor = 1.3;
+                    tlFactor = 1.5;
 
 
                     //first 8 load combis DL LL TEMP ------------------------- COMBI 257-264
@@ -17435,8 +17442,8 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                     dlFactor = 1;
                     sdlFactor = 1;
-                    llFactor = 1.3;
-                    wlFactor = 0.65;
+                    llFactor = 1.5;
+                    wlFactor = 0.75;
                     nlFactor = 1;
 
 
@@ -17588,8 +17595,8 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     #region Next 8 load combis for case8 ------------------------- COMBI 9-16
 
                     dlFactor = 1;
-                    llFactor = 1.3;
-                    wlFactor = 0.65;
+                    llFactor = 1.5;
+                    wlFactor = 0.75;
                     nlFactor = 1;
 
 
@@ -17716,8 +17723,8 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                     dlFactor = 1;
                     sdlFactor = 1;
-                    llFactor = 1.3;
-                    wlFactor = 1.3;
+                    llFactor = 1.5;
+                    wlFactor = 1.5;
                     nlFactor = 1;
 
 
@@ -17869,8 +17876,8 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     #region Next 8 load combis for case10 ------------------------- COMBI 25-32
 
                     dlFactor = 1;
-                    llFactor = 1.3;
-                    wlFactor = 1.3;
+                    llFactor = 1.5;
+                    wlFactor = 1.5;
                     nlFactor = 1;
 
 
@@ -18002,7 +18009,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                     dlFactor = 1;
                     sdlFactor = 1;
-                    llFactor = 1.3;
+                    llFactor = 1.5;
 
 
                     //first 4 load combis DL SDL LL ------------------------- COMBI 33-36
@@ -18124,7 +18131,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     #region Next 4 load combis for case20 ------------------------- COMBI 37-40
 
                     dlFactor = 1;
-                    llFactor = 1.3;
+                    llFactor = 1.5;
 
 
                     //first 4 load combis DL LL ------------------------- COMBI 37-40
@@ -18226,7 +18233,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                     dlFactor = 1;
                     sdlFactor = 1;
-                    wlFactor = 1.3;
+                    wlFactor = 1.5;
                     nlFactor = 1;
 
 
@@ -18337,7 +18344,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     #region Next 8 load combis for case22 ------------------------- COMBI 49-56
 
                     dlFactor = 1;
-                    wlFactor = 1.3;
+                    wlFactor = 1.5;
                     nlFactor = 1;
 
 
