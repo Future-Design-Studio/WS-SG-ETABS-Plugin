@@ -3185,13 +3185,13 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     }
 
                     #endregion
-                    //here havent update load factor
+                    
                     #region Next 32 load combis for case13 ------------------------- COMBI 321-352
 
                     dlFactor = 1;
                     sdlFactor = 1;
-                    wlFactor = 0.65;
-                    tlFactor = 1.3;
+                    wlFactor = 0.75;
+                    tlFactor = 1.5;
                     nlFactor = 1;
 
                     //first 32 load combis DL SDL TEMP ------------------------- COMBI 321-352
@@ -3459,8 +3459,8 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     #region Next 32 load combis for case14 ------------------------- COMBI 353-384
 
                     dlFactor = 1;
-                    wlFactor = 0.65;
-                    tlFactor = 1.3;
+                    wlFactor = 0.75;
+                    tlFactor = 1.5;
                     nlFactor = 1;
 
                     //first 32 load combis DL TEMP ------------------------- COMBI 353-384
@@ -3708,8 +3708,8 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                     dlFactor = 1;
                     sdlFactor = 1;
-                    llFactor = 1.3;
-                    tlFactor = 0.78;
+                    llFactor = 1.5;
+                    tlFactor = 0.9;
 
                     //first 8 load combis DL SDL LL TEMP ------------------------- COMBI 385-392
                     for (int combi1 = 385; combi1 <= 392; combi1++)
@@ -3855,8 +3855,8 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     #region Next 8 load combis for case16 ------------------------- COMBI 393-400
 
                     dlFactor = 1;
-                    llFactor = 1.3;
-                    tlFactor = 0.78;
+                    llFactor = 1.5;
+                    tlFactor = 0.9;
 
                     //first 8 load combis DL LL TEMP ------------------------- COMBI 393-400
                     for (int combi1 = 393; combi1 <= 400; combi1++)
@@ -3977,8 +3977,8 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                     dlFactor = 1;
                     sdlFactor = 1;
-                    llFactor = 1.3;
-                    tlFactor = 1.3;
+                    llFactor = 1.5;
+                    tlFactor = 1.5;
 
                     //first 8 load combis DL SDL LL TEMP ------------------------- COMBI 401-408
                     for (int combi1 = 401; combi1 <= 408; combi1++)
@@ -4124,8 +4124,8 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     #region Next 8 load combis for case18 ------------------------- COMBI 409-416
 
                     dlFactor = 1;
-                    llFactor = 1.3;
-                    tlFactor = 1.3;
+                    llFactor = 1.5;
+                    tlFactor = 1.5;
 
                     //first 8 load combis DL LL TEMP ------------------------- COMBI 409-416
                     for (int combi1 = 409; combi1 <= 416; combi1++)
@@ -4251,7 +4251,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                     dlFactor = 1;
                     sdlFactor = 1;
-                    llFactor = 1.3;
+                    llFactor = 1.5;
 
                     //first 4 load combis DL SDL LL ------------------------- COMBI 417-420
                     for (int combi1 = 417; combi1 <= 420; combi1++)
@@ -4372,7 +4372,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     #region Next 4 load combis for case20 ------------------------- COMBI 421-424
 
                     dlFactor = 1;
-                    llFactor = 1.3;
+                    llFactor = 1.5;
 
                     //first 4 load combis DL LL ------------------------- COMBI 421-424
                     for (int combi1 = 421; combi1 <= 424; combi1++)
@@ -4473,7 +4473,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                     dlFactor = 1;
                     sdlFactor = 1;
-                    wlFactor = 1.3;
+                    wlFactor = 1.5;
                     nlFactor = 1;
 
                     //first 16 load combis DL SDL ------------------------- COMBI 425-440
@@ -4635,7 +4635,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     #region Next 16 load combis for case22 ------------------------- COMBI 441-456
 
                     dlFactor = 1;
-                    wlFactor = 1.3;
+                    wlFactor = 1.5;
                     nlFactor = 1;
 
                     //first 16 load combis DL ------------------------- COMBI 441-456
@@ -4777,7 +4777,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                     dlFactor = 1;
                     sdlFactor = 1;
-                    tlFactor = 1.3;
+                    tlFactor = 1.5;
 
                     //first 8 load combis DL SDL TEMP ------------------------- COMBI 457-464
                     for (int combi1 = 457; combi1 <= 464; combi1++)
@@ -4882,7 +4882,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     #region Next 8 load combis for case24 ------------------------- COMBI 465-472
 
                     dlFactor = 1;
-                    tlFactor = 1.3;
+                    tlFactor = 1.5;
 
                     //first 8 load combis DL LL TEMP ------------------------- COMBI 465-472
                     for (int combi1 = 465; combi1 <= 472; combi1++)
