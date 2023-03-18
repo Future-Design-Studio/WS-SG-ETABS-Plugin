@@ -83,6 +83,8 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
         {
             InitializeComponent();
 
+            _SapModel = SapModel;
+            _Plugin = Plugin;
             deadLoadList = DeadLoadList;
             SDLoadList = sDLoadList;
             LiveLoadList = liveLoadList;
@@ -118,6 +120,8 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 checkboxUpliftC1.IsEnabled = false;
                 checkboxUpliftC2.IsEnabled = false;
             }
+
+            ShowDialog();
         }
 
         
