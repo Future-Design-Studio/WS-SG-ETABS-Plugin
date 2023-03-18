@@ -1260,6 +1260,28 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
             #endregion
 
+            bool accidentalYesOrNo = true;
+            bool seismicYesOrNo = true;
+            bool upliftYesOrNo = true;
+
+            if (AccidentalLoadList.Count == 0)
+            {
+                accidentalYesOrNo = false;
+            }
+            if (SeismicLoadList.Count == 0)
+            {
+                seismicYesOrNo = false;
+            }
+            if (UpliftLoadList.Count == 0)
+            {
+                upliftYesOrNo = false;
+            }
+
+            //Call up load combo choosing window
+            src.load_combo_EN.WindowChooseLoadCombiToGenerate windowChooseLoadCombiToGenerate = new src.load_combo_EN.WindowChooseLoadCombiToGenerate(SapModel, Plugin, accidentalYesOrNo, seismicYesOrNo, upliftYesOrNo);
+
+
+
             #region Wind 4 directions
 
             if (NotionalDirectionFactor == 2)
