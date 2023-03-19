@@ -10,7 +10,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 {
     internal class FunctionLoadComboSLSSteel
     {
-        public static bool AddLoadCombinationSLS(cSapModel SapModel, cPluginCallback Plugin,
+        public static bool AddLoadCombinationSLSSteel(cSapModel SapModel, cPluginCallback Plugin,
             List<src.load_combo_EN.ClassLoadCombo.DeadLoad> deadLoadList,
             List<src.load_combo_EN.ClassLoadCombo.SDLLoad> SDLoadList,
             List<src.load_combo_EN.ClassLoadCombo.LiveLoad> LiveLoadList,
@@ -1762,7 +1762,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 }
 
                 //add 4 ehf loads ------------------------- COMBI 209-212
-                for (int combi1 = 421; combi1 <= 424; combi1++)
+                for (int combi1 = 209; combi1 <= 212; combi1++)
                 {
                     foreach (KeyValuePair<string, string> ehfxLL in ehfllxcaseDict)
                     {

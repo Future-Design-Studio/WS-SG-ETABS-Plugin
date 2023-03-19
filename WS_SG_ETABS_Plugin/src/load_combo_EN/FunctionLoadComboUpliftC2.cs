@@ -10,7 +10,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 {
     internal class FunctionLoadComboUpliftC2
     {
-        public static bool AddLoadCombinationUpliftC1(cSapModel SapModel, cPluginCallback Plugin,
+        public static bool AddLoadCombinationUpliftC2(cSapModel SapModel, cPluginCallback Plugin,
             List<src.load_combo_EN.ClassLoadCombo.DeadLoad> deadLoadList,
             List<src.load_combo_EN.ClassLoadCombo.SDLLoad> SDLoadList,
             List<src.load_combo_EN.ClassLoadCombo.LiveLoad> LiveLoadList,
