@@ -120,7 +120,9 @@
     <Compile Include="src\load_combo_EN\FunctionLoadComboC.cs" />
     <Compile Include="src\load_combo_EN\FunctionLoadComboSeismic.cs" />
     <Compile Include="src\load_combo_EN\FunctionLoadComboSLS.cs" />
+    <Compile Include="src\load_combo_EN\FunctionLoadComboSLSSteel.cs" />
     <Compile Include="src\load_combo_EN\FunctionLoadComboUpliftC1.cs" />
+    <Compile Include="src\load_combo_EN\FunctionLoadComboUpliftC2.cs" />
     <Compile Include="src\load_combo_EN\WindowChooseLoadCombiToGenerate.xaml.cs">
       <DependentUpon>WindowChooseLoadCombiToGenerate.xaml</DependentUpon>
     </Compile>
