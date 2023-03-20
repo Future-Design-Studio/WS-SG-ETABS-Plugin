@@ -1679,16 +1679,39 @@ namespace WS_SG_ETABS_Plugin.src
 
         #endregion
 
-        #region Add new load case
+        #region Add new load case linear
         /// <summary>
         /// Add new load case to etabs
         /// </summary>
         /// <param name="Sap"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static bool AddNewLoadCase(cSapModel Sap, string name)
+        public static bool AddNewLinearLoadCase(cSapModel Sap, string name)
         {
             Ret = Sap.LoadCases.StaticLinear.SetCase(name);
+
+            if (Ret == 0)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        #endregion
+
+        #region Add new load case ResponseSpectrum
+        /// <summary>
+        /// Add new load case to etabs
+        /// </summary>
+        /// <param name="Sap"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static bool AddNewRSALoadCase(cSapModel Sap, string name)
+        {
+            Ret = Sap.LoadCases.ResponseSpectrum.SetCase(name);
 
             if (Ret == 0)
             {
@@ -1795,7 +1818,7 @@ namespace WS_SG_ETABS_Plugin.src
             }
             else
             {
-                ItemType = eCNameType.LoadCase;
+                ItemType = eCNameType.LoadCombo;
             }
 
             Ret = Sap.RespCombo.SetCaseList(nameLoadCombi, ref ItemType, nameLoadCaseOrCombi, scaleFactor);

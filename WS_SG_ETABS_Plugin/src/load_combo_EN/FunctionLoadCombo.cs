@@ -30,10 +30,21 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             List<src.load_combo_EN.ClassLoadCombo.EHFLoad> EHFLLXLoadList,
             List<src.load_combo_EN.ClassLoadCombo.EHFLoad> EHFLLYLoadList,
             int NotionalDirectionFactor,
-            List<src.load_combo_EN.ClassLoadCombo.WindLoad> WindVertLoadList)
+            List<src.load_combo_EN.ClassLoadCombo.WindLoad> WindVertLoadList,
+            int ALneedtimes2,
+            bool createULSB,
+            bool createULSC,
+            bool createAccidental,
+            bool createSeismic,
+            bool createSLS,
+            bool createSLSSteel,
+            bool createUPLC1,
+            bool createUPLC2)
         {
             Dictionary<string, string> llcaseDict = new Dictionary<string, string>();
-            Dictionary<string, string> windcaseDict = new Dictionary<string, string>();
+            List<string> windcaseList = new List<string>();
+            List<string> notional2caseList = new List<string>() { "P_NX", "P_NY" };
+            List<string> windvertcaseList = new List<string>();
             List<string> tempcaselist = new List<string>();
             List<string> seismiccaselist = new List<string>();
             List<string> alcaselist = new List<string>();
@@ -55,8 +66,17 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 { "Temperature", new List<double>(){0.6, 0.5, 0 } },
             };
 
+
             bool isError = false;
             bool addAnalysisCase = false;
+
+            if (deadLoadList.Count == 0 || SDLoadList.Count == 0 || LiveLoadList.Count == 0)
+            {
+                MessageBox.Show("Please add Dead Load, Super Dead Load, Live Load before continueing.");
+                return true;
+            }
+
+            #region Dead load pattern and case
 
             foreach (var deadLoad in deadLoadList)
             {
@@ -72,12 +92,12 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             string DeadLoadCaseName = null;
             foreach (var deadLoad in deadLoadList)
             {
-                DeadLoadCaseName = "P_Dead";
+                DeadLoadCaseName = "P_DL";
                 i++;
             }
             if (i > 0)
             { 
-                isError = src.HelperEtabs.AddNewLoadCase(SapModel, DeadLoadCaseName);
+                isError = src.HelperEtabs.AddNewLinearLoadCase(SapModel, DeadLoadCaseName);
                 if (isError)
                 {
                     return true;
@@ -106,13 +126,13 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     return true;
                 }
             }
-            
 
 
 
+            #endregion
 
+            #region Super Dead load pattern and case
 
-            
             foreach (var superdeadLoad in SDLoadList)
             {
                 isError = src.HelperEtabs.AddLoadPattern(SapModel, superdeadLoad.Name, 0, "SuperDead", superdeadLoad.IsExisting, addAnalysisCase);
@@ -127,12 +147,12 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             string SuperDeadLoadCaseName = null;
             foreach (var superdeadLoad in SDLoadList)
             {
-                SuperDeadLoadCaseName = "P_SuperDead";
+                SuperDeadLoadCaseName = "P_SDL";
                 i++; 
             }
             if (i > 0)
             {
-                isError = src.HelperEtabs.AddNewLoadCase(SapModel, SuperDeadLoadCaseName);
+                isError = src.HelperEtabs.AddNewLinearLoadCase(SapModel, SuperDeadLoadCaseName);
                 if (isError)
                 {
                     return true;
@@ -161,12 +181,12 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     return true;
                 }
             }
-            
 
 
 
+            #endregion
 
-
+            #region Live load pattern and case
 
             foreach (var liveLoad in LiveLoadList)
             {
@@ -180,13 +200,13 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
             foreach (var liveLoad in LiveLoadList)
             {
-                string LiveLoadCaseName = "P_Live(" + liveLoad.Name + ")";
+                string LiveLoadCaseName = "P_LL (" + liveLoad.Name + ")";
 
 
                 llcaseDict.Add(LiveLoadCaseName, liveLoad.CategoryPhi);
 
 
-                isError = src.HelperEtabs.AddNewLoadCase(SapModel, LiveLoadCaseName);
+                isError = src.HelperEtabs.AddNewLinearLoadCase(SapModel, LiveLoadCaseName);
                 if (isError)
                 {
                     return true;
@@ -204,18 +224,18 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 LoadType[i] = "Load";
                 LoadName[i] = liveLoad.Name;
                 SF[i] = 1.00;
-                isError = src.HelperEtabs.UpdateLoadCase(SapModel, "P_Live(" + liveLoad.Name + ")", NumberLoads, LoadType, LoadName, SF);
+                isError = src.HelperEtabs.UpdateLoadCase(SapModel, "P_LL (" + liveLoad.Name + ")", NumberLoads, LoadType, LoadName, SF);
                 if (isError)
                 {
                     return true;
                 }
             }
-            
 
 
 
+            #endregion
 
-
+            #region Wind Horizontal load pattern and case
 
             foreach (var windLoad in WindLoadList)
             {
@@ -229,13 +249,13 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
             foreach (var windLoad in WindLoadList)
             {
-                string WindLoadCaseName = "P_Wind(" + windLoad.Name + ")";
+                string WindLoadCaseName = "P_" + windLoad.Name;
 
 
-                windcaseDict.Add(WindLoadCaseName, windLoad.Name);
+                windcaseList.Add(WindLoadCaseName);
 
 
-                isError = src.HelperEtabs.AddNewLoadCase(SapModel, WindLoadCaseName);
+                isError = src.HelperEtabs.AddNewLinearLoadCase(SapModel, WindLoadCaseName);
                 if (isError)
                 {
                     return true;
@@ -252,18 +272,66 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 LoadType[i] = "Load";
                 LoadName[i] = windLoad.Name;
                 SF[i] = 1.00;
-                isError = src.HelperEtabs.UpdateLoadCase(SapModel, "P_Wind(" + windLoad.Name + ")", NumberLoads, LoadType, LoadName, SF);
+                isError = src.HelperEtabs.UpdateLoadCase(SapModel, "P_" + windLoad.Name, NumberLoads, LoadType, LoadName, SF);
                 if (isError)
                 {
                     return true;
                 }
             }
-            
 
 
 
+            #endregion
 
-            
+            #region Wind Vertical load pattern and case
+
+            foreach (var windvertLoad in WindVertLoadList)
+            {
+                isError = src.HelperEtabs.AddLoadPattern(SapModel, windvertLoad.Name, 0, "Wind", false, addAnalysisCase);
+                if (isError)
+                {
+                    return true;
+                }
+            }
+
+
+            foreach (var windvertLoad in WindVertLoadList)
+            {
+                string WindLoadCaseName = "P_" + windvertLoad.Name;
+
+
+                windvertcaseList.Add(WindLoadCaseName);
+
+
+                isError = src.HelperEtabs.AddNewLinearLoadCase(SapModel, WindLoadCaseName);
+                if (isError)
+                {
+                    return true;
+                }
+            }
+
+            LoadType = new string[50];
+            LoadName = new string[50];
+            SF = new double[50];
+            i = 0;
+            NumberLoads = 1;
+            foreach (var windvertLoad in WindVertLoadList)
+            {
+                LoadType[i] = "Load";
+                LoadName[i] = windvertLoad.Name;
+                SF[i] = 1.00;
+                isError = src.HelperEtabs.UpdateLoadCase(SapModel, "P_" + windvertLoad.Name, NumberLoads, LoadType, LoadName, SF);
+                if (isError)
+                {
+                    return true;
+                }
+            }
+
+
+
+            #endregion
+
+            #region Notional load pattern and case
 
             foreach (var notionalDLoad in NotionalDXLoadList)
             {
@@ -314,7 +382,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     while (i < 4)
                     {
                         string notionalLoadCaseName = notionalloadcaseName[i];
-                        isError = src.HelperEtabs.AddNewLoadCase(SapModel, notionalLoadCaseName);
+                        isError = src.HelperEtabs.AddNewLinearLoadCase(SapModel, notionalLoadCaseName);
                         if (isError)
                         {
                             return true;
@@ -489,7 +557,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     while (i < 2)
                     {
                         string notionalLoadCaseName = notionalloadcaseName[i];
-                        isError = src.HelperEtabs.AddNewLoadCase(SapModel, notionalLoadCaseName);
+                        isError = src.HelperEtabs.AddNewLinearLoadCase(SapModel, notionalLoadCaseName);
                         if (isError)
                         {
                             return true;
@@ -562,10 +630,9 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 }
             }
 
+            #endregion
 
-
-
-
+            #region Temperature load pattern and case
 
             foreach (var temperatureLoad in TemperatureLoadList)
             {
@@ -579,11 +646,11 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
             foreach (var temperatureLoad in TemperatureLoadList)
             {
-                string TemperatureLoadCaseName = "P_Temp(" + temperatureLoad.Name + ")";
+                string TemperatureLoadCaseName = "P_Temp (" + temperatureLoad.Name + ")";
 
                 tempcaselist.Add(TemperatureLoadCaseName);
 
-                isError = src.HelperEtabs.AddNewLoadCase(SapModel, TemperatureLoadCaseName);
+                isError = src.HelperEtabs.AddNewLinearLoadCase(SapModel, TemperatureLoadCaseName);
                 if (isError)
                 {
                     return true;
@@ -601,18 +668,18 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 LoadType[i] = "Load";
                 LoadName[i] = temperatureLoad.Name;
                 SF[i] = 1.00;
-                isError = src.HelperEtabs.UpdateLoadCase(SapModel, "P_Temp(" + temperatureLoad.Name + ")", NumberLoads, LoadType, LoadName, SF);
+                isError = src.HelperEtabs.UpdateLoadCase(SapModel, "P_Temp (" + temperatureLoad.Name + ")", NumberLoads, LoadType, LoadName, SF);
                 if (isError)
                 {
                     return true;
                 }
             }
 
+            #endregion
 
+            #region Seismic load pattern and case
 
-
-
-
+            /*
             foreach (var seismicLoad in SeismicLoadList)
             {
                 isError = src.HelperEtabs.AddLoadPattern(SapModel, seismicLoad.Name, 0, "Seismic", seismicLoad.IsExisting, addAnalysisCase);
@@ -621,22 +688,22 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     return true;
                 }
             }
-
+            */
 
             foreach (var seismicLoad in SeismicLoadList)
             {
-                string SeismicLoadCaseName = "P_Seismic(" + seismicLoad.Name + ")";
+                string SeismicLoadCaseName = "P_Seismic (" + seismicLoad.Name + ")";
 
                 seismiccaselist.Add(SeismicLoadCaseName);
 
-                isError = src.HelperEtabs.AddNewLoadCase(SapModel, SeismicLoadCaseName);
+                isError = src.HelperEtabs.AddNewRSALoadCase(SapModel, SeismicLoadCaseName);
                 if (isError)
                 {
                     return true;
                 }
             }
 
-
+            /*
             LoadType = new string[50];
             LoadName = new string[50];
             SF = new double[50];
@@ -647,16 +714,16 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 LoadType[i] = "Load";
                 LoadName[i] = seismicLoad.Name;
                 SF[i] = 1.00;
-                isError = src.HelperEtabs.UpdateLoadCase(SapModel, "P_Seismic(" + seismicLoad.Name + ")", NumberLoads, LoadType, LoadName, SF);
+                isError = src.HelperEtabs.UpdateLoadCase(SapModel, "P_Seismic (" + seismicLoad.Name + ")", NumberLoads, LoadType, LoadName, SF);
                 if (isError)
                 {
                     return true;
                 }
             }
+            */
+            #endregion
 
-
-
-
+            #region Accidental load pattern and case
 
 
             foreach (var accidentalLoad in AccidentalLoadList)
@@ -671,11 +738,11 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
             foreach (var accidentalLoad in AccidentalLoadList)
             {
-                string AccidentalLoadCaseName = "P_AL(" + accidentalLoad.Name + ")";
+                string AccidentalLoadCaseName = "P_AL (" + accidentalLoad.Name + ")";
 
                 alcaselist.Add(AccidentalLoadCaseName);
 
-                isError = src.HelperEtabs.AddNewLoadCase(SapModel, AccidentalLoadCaseName);
+                isError = src.HelperEtabs.AddNewLinearLoadCase(SapModel, AccidentalLoadCaseName);
                 if (isError)
                 {
                     return true;
@@ -693,16 +760,16 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 LoadType[i] = "Load";
                 LoadName[i] = accidentalLoad.Name;
                 SF[i] = 1.00;
-                isError = src.HelperEtabs.UpdateLoadCase(SapModel, "P_AL(" + accidentalLoad.Name + ")", NumberLoads, LoadType, LoadName, SF);
+                isError = src.HelperEtabs.UpdateLoadCase(SapModel, "P_AL (" + accidentalLoad.Name + ")", NumberLoads, LoadType, LoadName, SF);
                 if (isError)
                 {
                     return true;
                 }
             }
 
+            #endregion
 
-
-
+            #region Uplift load pattern and case
 
 
             foreach (var upliftLoad in UpliftLoadList)
@@ -717,11 +784,11 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
             foreach (var upliftLoad in UpliftLoadList)
             {
-                string UpliftLoadCaseName = "P_UPLIFT(" + upliftLoad.Name + ")";
+                string UpliftLoadCaseName = "P_UPLIFT (" + upliftLoad.Name + ")";
 
                 upliftcaselist.Add(UpliftLoadCaseName);
 
-                isError = src.HelperEtabs.AddNewLoadCase(SapModel, UpliftLoadCaseName);
+                isError = src.HelperEtabs.AddNewLinearLoadCase(SapModel, UpliftLoadCaseName);
                 if (isError)
                 {
                     return true;
@@ -739,16 +806,16 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 LoadType[i] = "Load";
                 LoadName[i] = upliftLoad.Name;
                 SF[i] = 1.00;
-                isError = src.HelperEtabs.UpdateLoadCase(SapModel, "P_UPLIFT(" + upliftLoad.Name + ")", NumberLoads, LoadType, LoadName, SF);
+                isError = src.HelperEtabs.UpdateLoadCase(SapModel, "P_UPLIFT (" + upliftLoad.Name + ")", NumberLoads, LoadType, LoadName, SF);
                 if (isError)
                 {
                     return true;
                 }
             }
 
+            #endregion
 
-
-
+            #region EHF Load pattern and case
 
 
             foreach (var ehfLoad in EHFDLXLoadList)
@@ -769,7 +836,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             }
             if (i > 0)
             {
-                isError = src.HelperEtabs.AddNewLoadCase(SapModel, EHFXDLCaseName);
+                isError = src.HelperEtabs.AddNewLinearLoadCase(SapModel, EHFXDLCaseName);
                 if (isError)
                 {
                     return true;
@@ -823,7 +890,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             }
             if (i > 0)
             {
-                isError = src.HelperEtabs.AddNewLoadCase(SapModel, EHFYDLCaseName);
+                isError = src.HelperEtabs.AddNewLinearLoadCase(SapModel, EHFYDLCaseName);
                 if (isError)
                 {
                     return true;
@@ -877,7 +944,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             }
             if (i > 0)
             {
-                isError = src.HelperEtabs.AddNewLoadCase(SapModel, EHFXSDLCaseName);
+                isError = src.HelperEtabs.AddNewLinearLoadCase(SapModel, EHFXSDLCaseName);
                 if (isError)
                 {
                     return true;
@@ -931,7 +998,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             }
             if (i > 0)
             {
-                isError = src.HelperEtabs.AddNewLoadCase(SapModel, EHFYSDLCaseName);
+                isError = src.HelperEtabs.AddNewLinearLoadCase(SapModel, EHFYSDLCaseName);
                 if (isError)
                 {
                     return true;
@@ -981,9 +1048,9 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             {
                 string EFHLLXLoadCaseName = "P_EHFx (LL_" + ehfLoad.BaseLoadPatternName + ")";
 
-                ehfllxcaseDict.Add(EFHLLXLoadCaseName, ehfLoad.BaseLoadPatternName);
+                ehfllxcaseDict.Add(EFHLLXLoadCaseName, ehfLoad.QuasiPermenantChosen);
 
-                isError = src.HelperEtabs.AddNewLoadCase(SapModel, EFHLLXLoadCaseName);
+                isError = src.HelperEtabs.AddNewLinearLoadCase(SapModel, EFHLLXLoadCaseName);
                 if (isError)
                 {
                     return true;
@@ -1027,9 +1094,9 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             {
                 string EHFLLYLoadCaseName = "P_EHFy (LL_" + ehfLoad.BaseLoadPatternName + ")";
 
-                ehfllycaseDict.Add(EHFLLYLoadCaseName, ehfLoad.BaseLoadPatternName);
+                ehfllycaseDict.Add(EHFLLYLoadCaseName, ehfLoad.QuasiPermenantChosen);
 
-                isError = src.HelperEtabs.AddNewLoadCase(SapModel, EHFLLYLoadCaseName);
+                isError = src.HelperEtabs.AddNewLinearLoadCase(SapModel, EHFLLYLoadCaseName);
                 if (isError)
                 {
                     return true;
@@ -1054,10 +1121,10 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 }
             }
 
+            #endregion
 
 
-
-
+            #region Notional & EHF auto lateral load setting
 
             src.HelperEtabs.DatabaseTable databaseTableAutoNotional = new src.HelperEtabs.DatabaseTable();
             databaseTableAutoNotional = src.HelperEtabs.GetTableEdit(SapModel, "Load Pattern Definitions - Auto Notional Loads");
@@ -1199,147 +1266,432 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 return true;
             }
 
+            #endregion
 
+            #region Wind 4 directions
 
-
-            //from here start creating load combinations
-            int numberBloadcombi = 1;
-            string baseBcombiname = "U_Comb_B-";
-            if (NotionalDirectionFactor == 2 && WindLoadList.Count != 0 && TemperatureLoadList.Count != 0 && WindVertLoadList.Count != 0)
+            if (NotionalDirectionFactor == 2)
             {
-                int numberOfCombi = (16 * 2 * 6) + (16 * 4) + (16 * 2 * 4) + (2 * 4 * 4) + (1 * 2 * 4) + (16 * 2) + (2 * 2 * 4) + (1 * 2 * 4);
-                while (numberBloadcombi <= numberOfCombi)
-                {
-                    isError = src.HelperEtabs.AddNewLoadCombiLinear(SapModel, baseBcombiname + numberBloadcombi);
-                    if (isError)
-                    {
-                        return true;
-                    }
-                    numberBloadcombi++;
-                }
-
-
-            }
-            else if (NotionalDirectionFactor == 2 && WindLoadList.Count != 0 && TemperatureLoadList.Count != 0 && WindVertLoadList.Count == 0)
-            {
-                int numberOfCombi = (8 * 2 * 6) + (8 * 4) + (8 * 2 * 4) + (2 * 4 * 4) + (1 * 2 * 4) + (8 * 2) + (2 * 2 * 4) + (1 * 2 * 4);
                 
-                while (numberBloadcombi <= numberOfCombi)
+                if (createULSB)
                 {
-                    isError = src.HelperEtabs.AddNewLoadCombiLinear(SapModel, baseBcombiname + numberBloadcombi);
+                    #region Add load combi B
+
+                    //Adding Load combination B
+                    isError = src.load_combo_EN.FunctionLoadComboB.AddLoadCombinationB(
+                        SapModel,
+                        Plugin,
+                        deadLoadList,
+                        SDLoadList,
+                        LiveLoadList,
+                        WindLoadList,
+                        NotionalDXLoadList,
+                        NotionalDYLoadList,
+                        NotionalSDXLoadList,
+                        NotionalSDYLoadList,
+                        TemperatureLoadList,
+                        SeismicLoadList,
+                        AccidentalLoadList,
+                        UpliftLoadList,
+                        EHFDLXLoadList,
+                        EHFDLYLoadList,
+                        EHFSDLXLoadList,
+                        EHFSDLYLoadList,
+                        EHFLLXLoadList,
+                        EHFLLYLoadList,
+                        NotionalDirectionFactor,
+                        WindVertLoadList,
+                        llcaseDict,
+                        windcaseList,
+                        notional2caseList,
+                        windvertcaseList,
+                        tempcaselist,
+                        seismiccaselist,
+                        alcaselist,
+                        upliftcaselist,
+                        ehfllxcaseDict,
+                        ehfllycaseDict,
+                        quasiPermanentDict);
+
+
                     if (isError)
                     {
+                        MessageBox.Show("Error adding load combination set ULS Design (ULS B), please let Mani know what happened");
                         return true;
                     }
-                    numberBloadcombi++;
+
+                    #endregion
+                }
+
+                if (createULSC)
+                {
+                    #region Add load combi C
+
+                    //Adding Load combination C
+                    isError = src.load_combo_EN.FunctionLoadComboC.AddLoadCombinationC(
+                        SapModel,
+                        Plugin,
+                        deadLoadList,
+                        SDLoadList,
+                        LiveLoadList,
+                        WindLoadList,
+                        NotionalDXLoadList,
+                        NotionalDYLoadList,
+                        NotionalSDXLoadList,
+                        NotionalSDYLoadList,
+                        TemperatureLoadList,
+                        SeismicLoadList,
+                        AccidentalLoadList,
+                        UpliftLoadList,
+                        EHFDLXLoadList,
+                        EHFDLYLoadList,
+                        EHFSDLXLoadList,
+                        EHFSDLYLoadList,
+                        EHFLLXLoadList,
+                        EHFLLYLoadList,
+                        NotionalDirectionFactor,
+                        WindVertLoadList,
+                        llcaseDict,
+                        windcaseList,
+                        notional2caseList,
+                        windvertcaseList,
+                        tempcaselist,
+                        seismiccaselist,
+                        alcaselist,
+                        upliftcaselist,
+                        ehfllxcaseDict,
+                        ehfllycaseDict,
+                        quasiPermanentDict);
+
+
+                    if (isError)
+                    {
+                        MessageBox.Show("Error adding load combination set Pile Design (ULS C), please let Mani know what happened");
+                        return true;
+                    }
+
+                    #endregion
+                }
+
+                if (createSLS)
+                {
+                    #region Add load combi SLS
+
+                    //Adding Load combination SLS
+                    isError = src.load_combo_EN.FunctionLoadComboSLS.AddLoadCombinationSLS(
+                        SapModel,
+                        Plugin,
+                        deadLoadList,
+                        SDLoadList,
+                        LiveLoadList,
+                        WindLoadList,
+                        NotionalDXLoadList,
+                        NotionalDYLoadList,
+                        NotionalSDXLoadList,
+                        NotionalSDYLoadList,
+                        TemperatureLoadList,
+                        SeismicLoadList,
+                        AccidentalLoadList,
+                        UpliftLoadList,
+                        EHFDLXLoadList,
+                        EHFDLYLoadList,
+                        EHFSDLXLoadList,
+                        EHFSDLYLoadList,
+                        EHFLLXLoadList,
+                        EHFLLYLoadList,
+                        NotionalDirectionFactor,
+                        WindVertLoadList,
+                        llcaseDict,
+                        windcaseList,
+                        notional2caseList,
+                        windvertcaseList,
+                        tempcaselist,
+                        seismiccaselist,
+                        alcaselist,
+                        upliftcaselist,
+                        ehfllxcaseDict,
+                        ehfllycaseDict,
+                        quasiPermanentDict);
+
+
+                    if (isError)
+                    {
+                        MessageBox.Show("Error adding load combination set Service Design, please let Mani know what happened");
+                        return true;
+                    }
+
+                    #endregion
+                }
+
+                if (createSeismic)
+                {
+                    #region Add load combi Seismic
+
+                    //Adding Load combination Seismic
+                    isError = src.load_combo_EN.FunctionLoadComboSeismic.AddLoadCombinationSeismic(
+                        SapModel,
+                        Plugin,
+                        deadLoadList,
+                        SDLoadList,
+                        LiveLoadList,
+                        WindLoadList,
+                        NotionalDXLoadList,
+                        NotionalDYLoadList,
+                        NotionalSDXLoadList,
+                        NotionalSDYLoadList,
+                        TemperatureLoadList,
+                        SeismicLoadList,
+                        AccidentalLoadList,
+                        UpliftLoadList,
+                        EHFDLXLoadList,
+                        EHFDLYLoadList,
+                        EHFSDLXLoadList,
+                        EHFSDLYLoadList,
+                        EHFLLXLoadList,
+                        EHFLLYLoadList,
+                        NotionalDirectionFactor,
+                        WindVertLoadList,
+                        llcaseDict,
+                        windcaseList,
+                        notional2caseList,
+                        windvertcaseList,
+                        tempcaselist,
+                        seismiccaselist,
+                        alcaselist,
+                        upliftcaselist,
+                        ehfllxcaseDict,
+                        ehfllycaseDict,
+                        quasiPermanentDict);
+
+
+                    if (isError)
+                    {
+                        MessageBox.Show("Error adding load combination set Seismic Design, please let Mani know what happened");
+                        return true;
+                    }
+
+                    #endregion
+                }
+
+                if (createAccidental)
+                {
+                    #region Add load combi Accidental
+
+                    //Adding Load combination Seismic
+                    isError = src.load_combo_EN.FunctionLoadComboAccidental.AddLoadCombinationAccidental(
+                        SapModel,
+                        Plugin,
+                        deadLoadList,
+                        SDLoadList,
+                        LiveLoadList,
+                        WindLoadList,
+                        NotionalDXLoadList,
+                        NotionalDYLoadList,
+                        NotionalSDXLoadList,
+                        NotionalSDYLoadList,
+                        TemperatureLoadList,
+                        SeismicLoadList,
+                        AccidentalLoadList,
+                        UpliftLoadList,
+                        EHFDLXLoadList,
+                        EHFDLYLoadList,
+                        EHFSDLXLoadList,
+                        EHFSDLYLoadList,
+                        EHFLLXLoadList,
+                        EHFLLYLoadList,
+                        NotionalDirectionFactor,
+                        WindVertLoadList,
+                        llcaseDict,
+                        windcaseList,
+                        notional2caseList,
+                        windvertcaseList,
+                        tempcaselist,
+                        seismiccaselist,
+                        alcaselist,
+                        upliftcaselist,
+                        ehfllxcaseDict,
+                        ehfllycaseDict,
+                        quasiPermanentDict,
+                        ALneedtimes2);
+
+
+                    if (isError)
+                    {
+                        MessageBox.Show("Error adding load combination set Accidental Load Design, please let Mani know what happened");
+                        return true;
+                    }
+
+                    #endregion
+                }
+
+                if (createUPLC1)
+                {
+                    #region Add load combi UPLIFT C1
+
+                    //Adding Load combination C
+                    isError = src.load_combo_EN.FunctionLoadComboUpliftC1.AddLoadCombinationUpliftC1(
+                        SapModel,
+                        Plugin,
+                        deadLoadList,
+                        SDLoadList,
+                        LiveLoadList,
+                        WindLoadList,
+                        NotionalDXLoadList,
+                        NotionalDYLoadList,
+                        NotionalSDXLoadList,
+                        NotionalSDYLoadList,
+                        TemperatureLoadList,
+                        SeismicLoadList,
+                        AccidentalLoadList,
+                        UpliftLoadList,
+                        EHFDLXLoadList,
+                        EHFDLYLoadList,
+                        EHFSDLXLoadList,
+                        EHFSDLYLoadList,
+                        EHFLLXLoadList,
+                        EHFLLYLoadList,
+                        NotionalDirectionFactor,
+                        WindVertLoadList,
+                        llcaseDict,
+                        windcaseList,
+                        notional2caseList,
+                        windvertcaseList,
+                        tempcaselist,
+                        seismiccaselist,
+                        alcaselist,
+                        upliftcaselist,
+                        ehfllxcaseDict,
+                        ehfllycaseDict,
+                        quasiPermanentDict);
+
+
+                    if (isError)
+                    {
+                        MessageBox.Show("Error adding load combination set Uplift ULS (Uplift C1), please let Mani know what happened");
+                        return true;
+                    }
+
+                    #endregion
+                }
+
+                if (createUPLC2)
+                {
+                    #region Add load combi UPLIFT C2
+
+                    //Adding Load combination C
+                    isError = src.load_combo_EN.FunctionLoadComboUpliftC2.AddLoadCombinationUpliftC2(
+                        SapModel,
+                        Plugin,
+                        deadLoadList,
+                        SDLoadList,
+                        LiveLoadList,
+                        WindLoadList,
+                        NotionalDXLoadList,
+                        NotionalDYLoadList,
+                        NotionalSDXLoadList,
+                        NotionalSDYLoadList,
+                        TemperatureLoadList,
+                        SeismicLoadList,
+                        AccidentalLoadList,
+                        UpliftLoadList,
+                        EHFDLXLoadList,
+                        EHFDLYLoadList,
+                        EHFSDLXLoadList,
+                        EHFSDLYLoadList,
+                        EHFLLXLoadList,
+                        EHFLLYLoadList,
+                        NotionalDirectionFactor,
+                        WindVertLoadList,
+                        llcaseDict,
+                        windcaseList,
+                        notional2caseList,
+                        windvertcaseList,
+                        tempcaselist,
+                        seismiccaselist,
+                        alcaselist,
+                        upliftcaselist,
+                        ehfllxcaseDict,
+                        ehfllycaseDict,
+                        quasiPermanentDict);
+
+
+                    if (isError)
+                    {
+                        MessageBox.Show("Error adding load combination set Uplift Pile Design (Uplift C2), please let Mani know what happened");
+                        return true;
+                    }
+
+                    #endregion
+                }
+
+                if (createSLSSteel)
+                {
+                    #region Add load combi SLS Steel
+
+                    //Adding Load combination SLS Steel
+                    isError = src.load_combo_EN.FunctionLoadComboSLSSteel.AddLoadCombinationSLSSteel(
+                        SapModel,
+                        Plugin,
+                        deadLoadList,
+                        SDLoadList,
+                        LiveLoadList,
+                        WindLoadList,
+                        NotionalDXLoadList,
+                        NotionalDYLoadList,
+                        NotionalSDXLoadList,
+                        NotionalSDYLoadList,
+                        TemperatureLoadList,
+                        SeismicLoadList,
+                        AccidentalLoadList,
+                        UpliftLoadList,
+                        EHFDLXLoadList,
+                        EHFDLYLoadList,
+                        EHFSDLXLoadList,
+                        EHFSDLYLoadList,
+                        EHFLLXLoadList,
+                        EHFLLYLoadList,
+                        NotionalDirectionFactor,
+                        WindVertLoadList,
+                        llcaseDict,
+                        windcaseList,
+                        notional2caseList,
+                        windvertcaseList,
+                        tempcaselist,
+                        seismiccaselist,
+                        alcaselist,
+                        upliftcaselist,
+                        ehfllxcaseDict,
+                        ehfllycaseDict,
+                        quasiPermanentDict);
+
+
+                    if (isError)
+                    {
+                        MessageBox.Show("Error adding load combination set Service Design with Precamber, please let Mani know what happened");
+                        return true;
+                    }
+
+                    #endregion
                 }
 
 
-            }
-            else if (NotionalDirectionFactor == 2 && WindLoadList.Count != 0 && TemperatureLoadList.Count == 0 && WindVertLoadList.Count == 0)
-            {
-                int numberOfCombi = (8 * 4) + (4 * 2) + (8 * 2) + (4 * 2);
 
-                while (numberBloadcombi <= numberOfCombi)
-                {
-                    isError = src.HelperEtabs.AddNewLoadCombiLinear(SapModel, baseBcombiname + numberBloadcombi);
-                    if (isError)
-                    {
-                        return true;
-                    }
-                    numberBloadcombi++;
-                }
+
 
 
             }
-            else if (NotionalDirectionFactor == 2 && WindLoadList.Count != 0 && TemperatureLoadList.Count == 0 && WindVertLoadList.Count != 0)
-            {
-                int numberOfCombi = (16 * 4) + (4 * 2) + (16 * 2) + (4 * 2);
-                while (numberBloadcombi <= numberOfCombi)
-                {
-                    isError = src.HelperEtabs.AddNewLoadCombiLinear(SapModel, baseBcombiname + numberBloadcombi);
-                    if (isError)
-                    {
-                        return true;
-                    }
-                    numberBloadcombi++;
-                }
 
+            #endregion
 
-            }
-            ///check with kahjun, excel maybe problem
-            else if (NotionalDirectionFactor == 2 && WindLoadList.Count == 0 && TemperatureLoadList.Count != 0 && WindVertLoadList.Count != 0)
-            {
-                int numberOfCombi = (8 * 2 * 6) + (8 * 4) + (8 * 2 * 4) + (2 * 4 * 4) + (1 * 2 * 4) + (8 * 2) + (2 * 2 * 4) + (1 * 2 * 4);
-                while (numberBloadcombi <= numberOfCombi)
-                {
-                    isError = src.HelperEtabs.AddNewLoadCombiLinear(SapModel, baseBcombiname + numberBloadcombi);
-                    if (isError)
-                    {
-                        return true;
-                    }
-                    numberBloadcombi++;
-                }
+            #region Wind 8 directions
 
-
-            }
-            else if (NotionalDirectionFactor == 2 && WindLoadList.Count == 0 && TemperatureLoadList.Count != 0 && WindVertLoadList.Count == 0)
-            {
-                int numberOfCombi = (2 * 4 * 4) + (4 * 2) + (2 * 4 * 2) + (4 * 2);
-                while (numberBloadcombi <= numberOfCombi)
-                {
-                    isError = src.HelperEtabs.AddNewLoadCombiLinear(SapModel, baseBcombiname + numberBloadcombi);
-                    if (isError)
-                    {
-                        return true;
-                    }
-                    numberBloadcombi++;
-                }
-
-
-            }
-            ///check with kahjun, excel maybe problem
-            else if (NotionalDirectionFactor == 2 && WindLoadList.Count == 0 && TemperatureLoadList.Count == 0 && WindVertLoadList.Count != 0)
-            {
-                int numberOfCombi = (8 * 4) + (4 * 2) + (8 * 2) + (4 * 2);
-                while (numberBloadcombi <= numberOfCombi)
-                {
-                    isError = src.HelperEtabs.AddNewLoadCombiLinear(SapModel, baseBcombiname + numberBloadcombi);
-                    if (isError)
-                    {
-                        return true;
-                    }
-                    numberBloadcombi++;
-                }
-
-
-            }
-            else if (NotionalDirectionFactor == 2 && WindLoadList.Count == 0 && TemperatureLoadList.Count == 0 && WindVertLoadList.Count == 0)
-            {
-                int numberOfCombi = (4 * 2) + (4 * 2);
-                while (numberBloadcombi <= numberOfCombi)
-                {
-                    isError = src.HelperEtabs.AddNewLoadCombiLinear(SapModel, baseBcombiname + numberBloadcombi);
-                    if (isError)
-                    {
-                        return true;
-                    }
-                    numberBloadcombi++;
-                }
-
-
-            }
             else
             {
-                return true;
+                MessageBox.Show("Error, combinations for 8 direction wind load support not available in Version 1 release. Only load patterns and cases have been added.");
+                return false;
             }
 
-
-
-
-
-
-
+            #endregion
 
             return false;
         }
