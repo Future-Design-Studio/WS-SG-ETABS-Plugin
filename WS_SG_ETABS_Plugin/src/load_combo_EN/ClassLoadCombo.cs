@@ -76,13 +76,11 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
         {
             public string Name { get; set; }
             public bool IsExisting { get; set; }
-            public string CategoryPhi { get; set; }
 
-            public TemperatureLoad(string name, bool isExisting, string categoryPhi)
+            public TemperatureLoad(string name, bool isExisting)
             {
                 Name = name;
                 IsExisting = isExisting;
-                CategoryPhi = categoryPhi;
             }
         }
 
