@@ -132,6 +132,17 @@
     <Compile Include="src\HelperUI.cs" />
     <Compile Include="src\load_combo_EN\ClassLoadCombo.cs" />
     <Compile Include="src\load_combo_EN\FunctionLoadCombo.cs" />
+    <Compile Include="src\load_combo_EN\FunctionLoadComboAccidental.cs" />
+    <Compile Include="src\load_combo_EN\FunctionLoadComboB.cs" />
+    <Compile Include="src\load_combo_EN\FunctionLoadComboC.cs" />
+    <Compile Include="src\load_combo_EN\FunctionLoadComboSeismic.cs" />
+    <Compile Include="src\load_combo_EN\FunctionLoadComboSLS.cs" />
+    <Compile Include="src\load_combo_EN\FunctionLoadComboSLSSteel.cs" />
+    <Compile Include="src\load_combo_EN\FunctionLoadComboUpliftC1.cs" />
+    <Compile Include="src\load_combo_EN\FunctionLoadComboUpliftC2.cs" />
+    <Compile Include="src\load_combo_EN\WindowChooseLoadCombiToGenerate.xaml.cs">
+      <DependentUpon>WindowChooseLoadCombiToGenerate.xaml</DependentUpon>
+    </Compile>
     <Compile Include="src\load_combo_EN\WindowLoadComboMain.xaml.cs">
       <DependentUpon>WindowLoadComboMain.xaml</DependentUpon>
     </Compile>
@@ -224,6 +235,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="src\etabs_to_rhino\WindowEtabsToRhinoResult.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="src\load_combo_EN\WindowChooseLoadCombiToGenerate.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
