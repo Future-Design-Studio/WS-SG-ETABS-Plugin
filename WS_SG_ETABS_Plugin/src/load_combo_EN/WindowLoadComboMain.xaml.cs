@@ -197,7 +197,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 ClassLoadCombo.EHFLoad eachehfLoad1 = new ClassLoadCombo.EHFLoad(ehfList[1] + " (" + selectedString + ")", double.Parse(textBoxNameEHF.Text), selectedString, "");
                 EHFDLYLoadList.Add(eachehfLoad1);
             }
-            else
+            else if (!string.IsNullOrEmpty(textBoxNameDL.Text))
             {
                 string selectedString = textBoxNameDL.Text;
                 listBoxChoosenDL.Items.Add(selectedString);
@@ -314,7 +314,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 ClassLoadCombo.EHFLoad eachehfLoad1 = new ClassLoadCombo.EHFLoad(ehfList[1] + " (" + selectedString + ")", double.Parse(textBoxNameEHF.Text), selectedString, "");
                 EHFSDLYLoadList.Add(eachehfLoad1);
             }
-            else
+            else if (!string.IsNullOrEmpty(textBoxNameSDL.Text))
             {
                 string selectedString = textBoxNameSDL.Text;
                 listBoxChoosenSDL.Items.Add(selectedString);
@@ -417,7 +417,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 ClassLoadCombo.EHFLoad eachehfLoad1 = new ClassLoadCombo.EHFLoad(ehfList[1] + " (" + comBoxExistingLL.Text + ")", double.Parse(textBoxNameEHF.Text), comBoxExistingLL.Text, comBoxLL.Text);
                 EHFLLYLoadList.Add(eachehfLoad1);
             }
-            else
+            else if (!string.IsNullOrEmpty(textBoxNameLL.Text))
             {
                 string selectedString = textBoxNameLL.Text + ", " + comBoxLL.Text;
                 listBoxChoosenLL.Items.Add(selectedString);
@@ -677,7 +677,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 textBoxNameTEMP.IsEnabled = false;
                 Button_ADD_TEMP.IsEnabled = false;
             }
-            else
+            else if (!string.IsNullOrEmpty(textBoxNameTEMP.Text))
             {
                 string selectedString = textBoxNameTEMP.Text;
                 listBoxChoosenTEMP.Items.Add(selectedString);
@@ -798,7 +798,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 ClassLoadCombo.AccidentalLoad eachAccidentalLoad = new ClassLoadCombo.AccidentalLoad(comBoxExistingAL.Text, true);
                 AccidentalLoadList.Add(eachAccidentalLoad);
             }
-            else
+            else if (!string.IsNullOrEmpty(textBoxNameAL.Text))
             {
                 if (checkBoxAL.IsChecked == true)
                 {

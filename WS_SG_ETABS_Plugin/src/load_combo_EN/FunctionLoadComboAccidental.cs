@@ -9224,7 +9224,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                 #region No wind vertical, no wind horizontal, no temperature
 
-                if (WindLoadList.Count == 0 && TemperatureLoadList.Count != 0 && WindVertLoadList.Count == 0)
+                if (WindLoadList.Count == 0 && TemperatureLoadList.Count == 0 && WindVertLoadList.Count == 0)
                 {
                     int numberOfCombi = ((4 * 2) + (4 * 2)) * ALneedtimes2 * alcaselist.Count;
 
@@ -9782,7 +9782,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                 #region Have wind vertical, have wind horizontal, no temperature
 
-                if (WindLoadList.Count != 0 && TemperatureLoadList.Count != 0 && WindVertLoadList.Count != 0)
+                if (WindLoadList.Count != 0 && TemperatureLoadList.Count == 0 && WindVertLoadList.Count != 0)
                 {
                     int numberOfCombi = ((4 * 2) + (16 * 2) + (16 * 2) + (4 * 2)) * ALneedtimes2 * alcaselist.Count;
 
@@ -12158,7 +12158,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                 #region Have wind vertical, no wind horizontal, have temperature
 
-                if (WindLoadList.Count != 0 && TemperatureLoadList.Count != 0 && WindVertLoadList.Count != 0)
+                if (WindLoadList.Count == 0 && TemperatureLoadList.Count != 0 && WindVertLoadList.Count != 0)
                 {
                     int numberOfCombi = ((4 * 2) + (8 * 2) + (8 * 2) + (8 * 2) + (8 * 2) + (4 * 2)) * ALneedtimes2 * alcaselist.Count;
 
@@ -14552,7 +14552,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                 #region Have wind vertical, no wind horizontal, no temperature
 
-                if (WindLoadList.Count != 0 && TemperatureLoadList.Count != 0 && WindVertLoadList.Count != 0)
+                if (WindLoadList.Count == 0 && TemperatureLoadList.Count == 0 && WindVertLoadList.Count != 0)
                 {
                     int numberOfCombi = ((4 * 2) + (8 * 2) + (8 * 2) + (4 * 2)) * ALneedtimes2 * alcaselist.Count;
 
