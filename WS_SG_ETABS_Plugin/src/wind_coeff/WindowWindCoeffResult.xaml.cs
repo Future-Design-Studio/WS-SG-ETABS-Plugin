@@ -32,11 +32,13 @@ namespace WS_SG_ETABS_Plugin.src.wind_coeff
             //Mainlogic
             bool isError = src.wind_coeff.FunctionWindCoeff.AssignWindLoads(_SapModel, _Plugin, windLoadList);
 
+            /*
             if (isError)
             {
                 MessageBox.Show("Error, please let Mani know what happened");
                 return;
             }
+            */
 
             InitializeComponent();
 

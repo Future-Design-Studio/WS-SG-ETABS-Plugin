@@ -28,7 +28,7 @@
             <RowDefinition Height="0.5*"></RowDefinition>
         </Grid.RowDefinitions>
 
-        <Label Grid.Row="0" Grid.Column="0" Content="Plot Reaction" FontSize="28"/>
+        <Label Grid.Row="0" Grid.Column="0" Content="Plot Reaction Bubble Chart" FontSize="28"/>
 
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
@@ -121,7 +121,7 @@
             </Grid.ColumnDefinitions>
 
             <Label Grid.Column="0" VerticalAlignment="Center">Load case or load combination to plot:</Label>
-            <ComboBox Grid.Column="1" x:Name="comBoxOutputCase" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"></ComboBox>
+            <ComboBox Grid.Column="1" x:Name="comBoxOutputCase" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" ></ComboBox>
         </Grid>
 
         <Grid Grid.Row="4" Margin="10 0 10 0">
@@ -190,7 +190,7 @@
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
-            <Label Grid.Column="0" VerticalAlignment="Center" Grid.ColumnSpan="2">Grid spacing x (m):</Label>
+            <Label Grid.Column="0" VerticalAlignment="Center" Grid.ColumnSpan="2">Plot grid spacing x (m):</Label>
             <TextBox Grid.Column="1" x:Name="textBoxGridSpacingX" Grid.Row="0" TextAlignment="Center" Text="50" InputScope="Digits"/>
         </Grid>
 
@@ -200,7 +200,7 @@
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
-            <Label Grid.Column="0" VerticalAlignment="Center" Grid.ColumnSpan="2">Grid spacing y (m):</Label>
+            <Label Grid.Column="0" VerticalAlignment="Center" Grid.ColumnSpan="2">Plot grid spacing y (m):</Label>
             <TextBox Grid.Column="1" x:Name="textBoxGridSpacingY" Grid.Row="0" TextAlignment="Center" Text="50" InputScope="Digits"/>
         </Grid>
 
@@ -212,7 +212,7 @@
                 <RowDefinition Height="4*"></RowDefinition>
             </Grid.RowDefinitions>
 
-            <CheckBox x:Name="checkBoxSum" Checked="checkBoxSum_Checked" Unchecked="checkBoxSum_Unchecked">Show sum of reactions</CheckBox>
+            <CheckBox x:Name="checkBoxSum" Checked="checkBoxSum_Checked" Unchecked="checkBoxSum_Unchecked">Show total of reactions every X or Y spacing</CheckBox>
 
             <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
@@ -249,7 +249,7 @@
 
                     <Label Grid.Column="0" Grid.Row="0" Content="Division of X axis:"></Label>
                     <Label Grid.Column="0" Grid.Row="1" Content="Offset of sum label in Y (m):"></Label>
-                    <Label Grid.Column="0" Grid.Row="2" Content="Total text size:"></Label>
+                    <Label Grid.Column="0" Grid.Row="2" Content="Text size (to show total):"></Label>
                     <Label Grid.Column="0" Grid.Row="3" Content="Separation each group label in Y (m):"></Label>
 
                     <TextBox x:Name="textBoxDivisionX" Grid.Column="1" Grid.Row="0" IsEnabled="False" InputScope="Number" Text="4"></TextBox>
@@ -274,7 +274,7 @@
 
                     <Label Grid.Column="0" Grid.Row="0" Content="Division of Y axis:"></Label>
                     <Label Grid.Column="0" Grid.Row="1" Content="Offset of sum label in X (m):"></Label>
-                    <Label Grid.Column="0" Grid.Row="2" Content="Total text size:"></Label>
+                    <Label Grid.Column="0" Grid.Row="2" Content="Text size (to show total):"></Label>
                     <Label Grid.Column="0" Grid.Row="3" Content="Separation each group label in Y (m):"></Label>
 
                     <TextBox x:Name="textBoxDivisionY" Grid.Column="1" Grid.Row="0" IsEnabled="False" InputScope="Number" Text="4"></TextBox>
@@ -293,10 +293,20 @@
                     3. Press OK to proceed
         </TextBlock>
 
-        <StackPanel Grid.Row="14" Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button x:Name="buttonCancel" Content="Cancel" Width="100" Click="buttonCancel_Click"/>
-            <Button x:Name="buttonOk" Content="OK" Width="100" Click="buttonOk_Click"/>
-        </StackPanel>
+        <Grid Grid.Row="14">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <Image HorizontalAlignment="Left" Source="/WS_SG_ETABS_Plugin;component/src/resources/RambollFDSLogo.PNG" />
+
+            <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button x:Name="buttonCancel" Content="Cancel" Width="100" Click="buttonCancel_Click"/>
+                <Button x:Name="buttonOk" Content="OK" Width="100" Click="buttonOk_Click"/>
+            </StackPanel>
+
+        </Grid>
 
     </Grid>
 </Window>

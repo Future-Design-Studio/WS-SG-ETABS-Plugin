@@ -20,7 +20,7 @@ namespace WS_SG_ETABS_Plugin.src
     /// <summary>
     /// Contains all helper methods for ETABS API
     /// </summary>
-    internal class HelperEtabs
+    public class HelperEtabs
     {
         private static int Ret;
 
@@ -53,6 +53,47 @@ namespace WS_SG_ETABS_Plugin.src
             {
                 UniqueName = name;
                 Points = pointsList;
+            }
+        }
+
+        public class RcBeam
+        {
+            public string UniqueName { get; set; }
+            public double Length { get; set; }
+            public double Height { get; set; }
+            public double Width { get; set; }
+            public double CoverTop { get; set; }
+            public double CoverBottom { get; set; }
+            public double OffsetI { get; set; }
+            public double OffsetJ { get; set; }
+            public double LeftLength { get; set; }
+            public double MidLength { get; set; }
+            public double RightLength { get; set; }
+            public double LeftTopAs { get; set; }
+            public string LeftTopRebar { get; set; }
+            public double MidTopAs { get; set; }
+            public string MidTopRebar { get; set; }
+            public double RightTopAs { get; set; }
+            public string RightTopRebar { get; set; }
+            public double LeftBottomAs { get; set; }
+            public string LeftBottomRebar { get; set; }
+            public double MidBottomAs { get; set; }
+            public string MidBottomRebar { get; set; }
+            public double RightBottomAs { get; set; }
+            public string RightBottomRebar { get; set; }
+            public double LeftAv { get; set; }
+            public string LeftShearLinks { get; set; }
+            public double MidAv { get; set; }
+            public string MidShearLinks { get; set; }
+            public double RightAv { get; set; }
+            public string RightShearLinks { get; set; }
+            public double d { get; set; }
+            public double dCalculated { get; set; }
+            public string BeamType { get; set; }
+
+            public RcBeam(string name)
+            {
+                UniqueName = name;
             }
         }
 
@@ -392,6 +433,11 @@ namespace WS_SG_ETABS_Plugin.src
             Ret = Sap.SetPresentUnits_2(eForce.kN, eLength.m, eTemperature.C);
         }
 
+        public static void SetOutputUnitTo_kN_mm_C(cSapModel Sap)
+        {
+            Ret = Sap.SetPresentUnits_2(eForce.kN, eLength.mm, eTemperature.C);
+        }
+
         /// <summary>
         /// Set output unit to specific unit
         /// </summary>
@@ -546,7 +592,7 @@ namespace WS_SG_ETABS_Plugin.src
         /// <param name="Sap">Refer to specified SAP model</param>
         /// <param name="tableKey">Table key that we want to extract</param>
         /// <returns>
-        /// Return tupple (isError, tableInList)
+        /// Return tupple (isError, databaseTable)
         /// </returns>
         public static (bool, DatabaseTable) GetTableDisplay(cSapModel Sap, string tableKey, bool showWarning)
         {
@@ -1063,6 +1109,119 @@ namespace WS_SG_ETABS_Plugin.src
             return areaList;
         }
 
+        /// <summary>
+        /// Call database table based on given table key
+        /// </summary>
+        /// <param name="databaseTableList"></param>
+        /// <param name="tableKey"></param>
+        /// <returns></returns>
+        public static (bool, DatabaseTable) CallDatabaseTableByTableKey(List<DatabaseTable> databaseTableList, string tableKey)
+        {
+            bool isError = false;
+
+            foreach(DatabaseTable databaseTable in databaseTableList)
+            {
+                if (databaseTable.TableKey == tableKey)
+                {
+                    return (isError, databaseTable);
+                }
+            }
+
+            DatabaseTable emptyDatabaseTable = new DatabaseTable();
+            isError = true;
+
+            MessageBox.Show($"Table {tableKey} not found!");
+
+            return (isError, emptyDatabaseTable);
+        }
+
+        /// <summary>
+        /// To filter database table based on group
+        /// </summary>
+        /// <param name="databaseTableToFilter"></param>
+        /// <param name="groupDatabaseTable"></param>
+        /// <param name="groupName"></param>
+        /// <returns>
+        /// Return (isError, databaseTableFiltered)
+        /// </returns>
+        public static (bool, DatabaseTable) FilterDatabaseTableUniqueNameByGroup(DatabaseTable databaseTableToFilter, DatabaseTable groupDatabaseTable, string groupName)
+        {
+            bool isError = false;
+            List<string> uniqueNameInsideGroup = new List<string>();
+            DatabaseTable databaseTableFiltered = new DatabaseTable();
+
+            List<Dictionary<string, string>> tableInListGroup = groupDatabaseTable.TableInList;
+
+            //Go through group database to get list of unique name which is part of the group
+            foreach (Dictionary<string, string> row in tableInListGroup)
+            {
+                if (row["GroupName"] == groupName)
+                {
+                    uniqueNameInsideGroup.Add(row["UniqueName"]);
+                }
+            }
+
+            List<Dictionary<string, string>> tableInListToFilter = databaseTableToFilter.TableInList;
+
+            //Check if table to filter contains key UniqueName
+            //First row only
+            if (!tableInListToFilter[0].ContainsKey("UniqueName"))
+            {
+                MessageBox.Show($"Table {databaseTableToFilter.TableKey} does not contain UniqueName!");
+                DatabaseTable emptyDatabaseTable = new DatabaseTable();
+                isError = true;
+                return (isError, emptyDatabaseTable);
+            }
+
+            List<Dictionary<string, string>> tableInListFiltered = new List<Dictionary<string, string>>();
+            foreach (string eachUniqueName in uniqueNameInsideGroup)
+            {
+                foreach (Dictionary<string, string> row in tableInListToFilter)
+                {
+                    if (row["UniqueName"] == eachUniqueName)
+                    {
+                        tableInListFiltered.Add(row);
+                    }
+                }
+            }
+
+            //Save table in list to DatabaseTable
+            databaseTableFiltered.TableInList = tableInListFiltered;
+
+            return (isError, databaseTableFiltered);
+        }
+
+        public static (bool, DatabaseTable) FilterDatabaseTable(DatabaseTable databaseTableToFilter, string columnKeyToFilter, string valueToFind)
+        {
+            bool isError = false;
+            DatabaseTable databaseTableFiltered = new DatabaseTable();
+
+            //Check if table to filter contains column key
+            //First row only
+            List<Dictionary<string, string>> tableInListToFilter = databaseTableToFilter.TableInList;
+            if (!tableInListToFilter[0].ContainsKey(columnKeyToFilter))
+            {
+                MessageBox.Show($"Table {databaseTableToFilter.TableKey} does not contain {columnKeyToFilter}!");
+                DatabaseTable emptyDatabaseTable = new DatabaseTable();
+                isError = true;
+                return (isError, emptyDatabaseTable);
+            }
+
+            List<Dictionary<string, string>> tableInListFiltered = new List<Dictionary<string, string>>();
+            foreach (Dictionary<string, string> row in tableInListToFilter)
+            {
+                if (row[columnKeyToFilter] == valueToFind)
+                {
+                    tableInListFiltered.Add(row);
+                }
+            }
+
+            //Save table in list to DatabaseTable
+            databaseTableFiltered.TableInList = tableInListFiltered;
+
+            return (isError, databaseTableFiltered);
+        }
+
 
         #endregion
 
@@ -1357,6 +1516,65 @@ namespace WS_SG_ETABS_Plugin.src
 
         #endregion
 
+        #region Frame method
+        /// <summary>
+        /// Get (width, depth) of rectangle section property
+        /// </summary>
+        /// <param name="Sap"></param>
+        /// <param name="sectionPropName"></param>
+        /// <returns></returns>
+        public static (double, double) GetDimensionRectangle (cSapModel Sap, string sectionPropName)
+        {
+            string FileName = "";
+	        string MatProp = "";
+            double T3 = 0;
+            double T2 = 0;
+            int Color = 0;
+            string Notes = "";
+            string GUID = "";
+
+            Ret = Sap.PropFrame.GetRectangle(sectionPropName, ref FileName, ref MatProp, ref T3, ref T2, ref Color, ref Notes, ref GUID);
+
+            if (Ret == 0)
+            {
+                return (T2, T3);
+            }
+            else
+            {
+                return (0, 0);
+            }
+        }
+
+        /// <summary>
+        /// Get (cover top, cover bottom) of beam section property
+        /// </summary>
+        /// <param name="Sap"></param>
+        /// <param name="sectionPropName"></param>
+        /// <returns></returns>
+        public static (double, double) GetRcBeamCover(cSapModel Sap, string sectionPropName)
+        {
+            string MatPropLong = "";
+            string MatPropConfine = "";
+            double CoverTop = 0;
+            double CoverBot = 0;
+            double TopLeftArea = 0;
+            double TopRightArea = 0;
+            double BotLeftArea = 0;
+            double BotRightArea = 0;
+
+            Ret = Sap.PropFrame.GetRebarBeam(sectionPropName, ref MatPropLong, ref MatPropConfine, ref CoverTop, ref CoverBot, ref TopLeftArea, ref TopRightArea, ref BotLeftArea, ref BotRightArea);
+
+            if (Ret == 0)
+            {
+                return (CoverTop, CoverTop);
+            }
+            else
+            {
+                return (0, 0);
+            }
+        }
+
+        #endregion
 
         #region Add load pattern
 

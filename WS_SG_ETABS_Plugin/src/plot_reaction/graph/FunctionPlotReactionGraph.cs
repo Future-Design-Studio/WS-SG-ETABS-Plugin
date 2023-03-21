@@ -10,9 +10,9 @@ using System.Windows.Markup;
 using System.Windows.Media.Media3D;
 using System.Windows.Media.TextFormatting;
 
-namespace WS_SG_ETABS_Plugin.src.plot_reaction
+namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
 {
-    internal class FunctionPlotReaction
+    internal class FunctionPlotReactionGraph
     {
         private static int Ret;
 
@@ -25,44 +25,41 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
 
         #endregion
 
-        public static bool PlotReaction(cSapModel Sap, List<string> listChoosenGroup, string outputCase, string reactionDirection, 
+        public static (bool, double, double) PlotReaction(cSapModel Sap, List<Dictionary<string, string>> groupAndColor, string outputCase, string reactionDirection,
             WpfPlot ReactionPlot, double forceFactor, double bubbleScaleFactor, int textSize, int titleSize, int axisTitleSize, double gridSpacingX, double gridSpacingY, string title, bool splitX, bool splitY,
-            int divisionX, int divisionY, double offsetX, double offsetY, int sumTextSizeX, int sumTextSizeY, double separationX, double separationY)
+            int divisionX, int divisionY, double offsetX, double offsetY, int sumTextSizeX, int sumTextSizeY, double separationX, double separationY, List<src.HelperEtabs.DatabaseTable> databaseTableList)
         {
             bool isError = false;
             bool showWarning = true;
             List<Dictionary<string, object>> compiledReactionData = new List<Dictionary<string, object>>();
 
-            //Turn on all load
-            src.HelperEtabs.OnAllLoadDatabase(Sap);
+            //To save total reaction in plot
+            double totalReactionInPlot = 0;
 
             //Get required table
             //List<Dictionary<string, string>> pointConnectivityTable = new List<Dictionary<string, string>>();
             //(isError, pointConnectivityTable) = src.HelperEtabs.GetTableDisplaySpecificGroup(Sap, "Point Object Connectivity", listChoosenGroup, showWarning);
 
-            if (isError)
-            {
-                return isError;
-            }
+            //Get the table
+            src.HelperEtabs.DatabaseTable jointReactionTable = new HelperEtabs.DatabaseTable();
+            (isError, jointReactionTable) = src.HelperEtabs.CallDatabaseTableByTableKey(databaseTableList, "Joint Reactions");
+            if (isError) { return (isError, 0, 0); }
 
-            //Casting List<string> content to List<dictionary>
-            List<object> listChoosenGroupParsed = new List<object>();
-            foreach (string group in listChoosenGroup)
-            {
-                //Split the string using comma ','
-                string[] splitted = group.Split(',');
+            src.HelperEtabs.DatabaseTable groupAssignmentTable = new HelperEtabs.DatabaseTable();
+            (isError, groupAssignmentTable) = src.HelperEtabs.CallDatabaseTableByTableKey(databaseTableList, "Group Assignments");
+            if (isError) { return (isError, 0, 0); }
 
-                Dictionary<string, string> groupDict = new Dictionary<string, string>()
-                    {
-                        {"groupName", splitted[0]},
-                        {"color", splitted[1]},
-                    };
+            //Filter group to only include points, to improve performance
+            (isError, groupAssignmentTable) = src.HelperEtabs.FilterDatabaseTable(groupAssignmentTable, "ObjectType", "Point");
+            if (isError) { return (isError, 0, 0); }
 
-                listChoosenGroupParsed.Add(groupDict);
-            }
+            src.HelperEtabs.DatabaseTable baseReactionsTable = new HelperEtabs.DatabaseTable();
+            (isError, baseReactionsTable) = src.HelperEtabs.CallDatabaseTableByTableKey(databaseTableList, "Base Reactions");
+            if (isError) { return (isError, 0, 0); }
+
 
             int groupIndex = 0;
-            foreach (Dictionary<string, string> group in listChoosenGroupParsed)
+            foreach (Dictionary<string, string> group in groupAndColor)
             {
                 string groupName = group["groupName"];
                 string color = group["color"];
@@ -72,9 +69,9 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
                 if (color == "Auto")
                 {
 
-                    if (listChoosenGroup.Count > 1)
+                    if (groupAndColor.Count > 1)
                     {
-                        double colorMapFraction = Convert.ToDouble(groupIndex) / (Convert.ToDouble(listChoosenGroup.Count) - 1);
+                        double colorMapFraction = Convert.ToDouble(groupIndex) / (Convert.ToDouble(groupAndColor.Count) - 1);
                         bubbleColor = ScottPlot.Drawing.Colormap.Jet.GetColor(colorMapFraction, .5);
                     }
                     else
@@ -89,6 +86,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
                     bubbleColor = System.Drawing.ColorTranslator.FromHtml(colorHex);
                 }
 
+                /*
                 //Get joint reaction for 1 specific group
                 src.HelperEtabs.DatabaseTable jointReactionTable = null;
 
@@ -101,14 +99,32 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
                 {
                     return isError;
                 }
+                */
 
-                foreach(Dictionary<string, string>  jointReactionRow in jointReactionTable.TableInList)
+                //Filter joint reactions based on group
+                src.HelperEtabs.DatabaseTable jointReactionTableFiltered = new HelperEtabs.DatabaseTable();
+                (isError, jointReactionTableFiltered) = src.HelperEtabs.FilterDatabaseTableUniqueNameByGroup(jointReactionTable, groupAssignmentTable, groupName);
+                if (isError) { return (isError, 0, 0); }
+
+                foreach (Dictionary<string, string> jointReactionRow in jointReactionTableFiltered.TableInList)
                 {
                     if (jointReactionRow["OutputCase"] == outputCase)
                     {
                         double xCoord = new double();
                         double yCoord = new double();
                         double zCoord = new double();
+
+                        /*
+                        foreach (src.HelperEtabs.Point3D point in pointList)
+                        {
+                            if (jointReactionRow["UniqueName"] == point.UniqueName)
+                            {
+                                xCoord = point.XCoordinate;
+                                yCoord = point.YCoordinate;
+                                zCoord = point.ZCoordinate;
+                            }
+                        }
+                        */
 
                         /*
                         //Find coordinate of the joint
@@ -126,8 +142,10 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
                         //Find coordinate of the joint
                         Ret = Sap.PointObj.GetCoordCartesian(jointReactionRow["UniqueName"], ref xCoord, ref yCoord, ref zCoord);
 
+
                         //Bubble size and text
                         double reaction = Convert.ToDouble(jointReactionRow[reactionDirection]);
+                        totalReactionInPlot += reaction;
                         double bubbleSize = Math.Abs(reaction) * bubbleScaleFactor * forceFactor;
                         string bubbleText = Convert.ToString(Convert.ToInt32(reaction * forceFactor));
 
@@ -180,7 +198,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
 
                             //Inside each divison total reaction for each group
                             int groupSumIndex = 0;
-                            foreach (Dictionary<string, string> group in listChoosenGroupParsed)
+                            foreach (Dictionary<string, string> group in groupAndColor)
                             {
                                 string groupName = group["groupName"];
                                 string color = group["color"];
@@ -189,9 +207,9 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
                                 System.Drawing.Color textColor = new System.Drawing.Color();
                                 if (color == "Auto")
                                 {
-                                    if (listChoosenGroup.Count > 1)
+                                    if (groupAndColor.Count > 1)
                                     {
-                                        double colorMapFraction = Convert.ToDouble(groupSumIndex) / (Convert.ToDouble(listChoosenGroup.Count) - 1);
+                                        double colorMapFraction = Convert.ToDouble(groupSumIndex) / (Convert.ToDouble(groupAndColor.Count) - 1);
                                         textColor = ScottPlot.Drawing.Colormap.Jet.GetColor(colorMapFraction, 1);
                                     }
                                     else
@@ -209,7 +227,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
                                     colorHexArray[1] = 'F';
                                     colorHexArray[2] = 'F';
                                     colorHex = new string(colorHexArray);
-                                    
+
                                     textColor = System.Drawing.ColorTranslator.FromHtml(colorHex);
                                 }
 
@@ -223,7 +241,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
 
                                     //If it is last diviion x and not last division y
                                     if (divisionXIndex == divisionX - 1 && divisionYIndex != 1)
-                                    {   
+                                    {
                                         //If the point is within grid, then add into reactionSum
                                         if ((yCoord >= lowY) && (yCoord < highY) && (xCoord >= lowX) && (xCoord <= highX)
                                             && (Convert.ToString(reactionData["groupName"]) == groupName))
@@ -269,7 +287,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
                                 {
                                     double textXCoord = (lowX + highX) / 2;
                                     double textYCoord = (lowY + highY) / 2 - offsetX - groupSumIndex * separationX;
-                                    
+
                                     var txt = ReactionPlot.Plot.AddText(Convert.ToString(Convert.ToInt32(reactionSum)), textXCoord, textYCoord, sumTextSizeX, textColor);
                                     txt.Alignment = Alignment.MiddleCenter;
                                     txt.FontBold = true;
@@ -315,7 +333,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
 
                             //Inside each divison total reaction for each group
                             int groupSumIndex = 0;
-                            foreach (Dictionary<string, string> group in listChoosenGroupParsed)
+                            foreach (Dictionary<string, string> group in groupAndColor)
                             {
                                 string groupName = group["groupName"];
                                 string color = group["color"];
@@ -324,9 +342,9 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
                                 System.Drawing.Color textColor = new System.Drawing.Color();
                                 if (color == "Auto")
                                 {
-                                    if (listChoosenGroup.Count > 1)
+                                    if (groupAndColor.Count > 1)
                                     {
-                                        double colorMapFraction = Convert.ToDouble(groupSumIndex) / (Convert.ToDouble(listChoosenGroup.Count) - 1);
+                                        double colorMapFraction = Convert.ToDouble(groupSumIndex) / (Convert.ToDouble(groupAndColor.Count) - 1);
                                         textColor = ScottPlot.Drawing.Colormap.Jet.GetColor(colorMapFraction, 1);
                                     }
                                     else
@@ -414,7 +432,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
                                     double textXCoord = (lowX + highX) / 2 + offsetY;
                                     double textYCoord = (lowY + highY) / 2 - groupSumIndex * separationY;
 
-                                    var txt = ReactionPlot.Plot.AddText(Convert.ToString(Convert.ToInt32(reactionSum)), textXCoord, textYCoord, sumTextSizeY, textColor); 
+                                    var txt = ReactionPlot.Plot.AddText(Convert.ToString(Convert.ToInt32(reactionSum)), textXCoord, textYCoord, sumTextSizeY, textColor);
                                     txt.Alignment = Alignment.MiddleCenter;
                                     txt.FontBold = true;
                                 }
@@ -430,6 +448,17 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
 
             }
 
+            //Get and show base reaction compared to reaction in plot
+            double baseReaction = 0;
+            List<Dictionary<string, string>> baseReactionsTableInList = baseReactionsTable.TableInList;
+            foreach (Dictionary<string, string> row in baseReactionsTableInList)
+            {
+                if (row["OutputCase"] == outputCase)
+                {
+                    baseReaction = Convert.ToDouble(row[reactionDirection]);
+                    break;
+                }
+            }
 
             ReactionPlot.Plot.AxisScaleLock(true);
             ReactionPlot.Plot.Title(title, true, null, titleSize, "Arial Narrow");
@@ -443,10 +472,8 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
 
             ReactionPlot.Refresh();
 
-            return isError;
+            return (isError, baseReaction, totalReactionInPlot);
         }
-        
-
 
     }
 }

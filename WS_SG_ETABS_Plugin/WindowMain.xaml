@@ -4,9 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WS_SG_ETABS_Plugin.src"
-             mc:Ignorable="d" Height="400" Width="300" Closed="WindowMain_Closed" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+             mc:Ignorable="d" Height="450" Width="300" Closed="WindowMain_Closed" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <Grid Margin="10 0 10 0">
         <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
@@ -25,17 +26,18 @@
 
         <Button Grid.Row="1" x:Name="buttonCarbon" Content="Carbon Calulator" Click="buttonCarbon_Click" FontSize="16"/>
         <Button Grid.Row="2" x:Name="buttonShellUni" Content="Shell Orientation (Local-3) Uniform" FontSize="16" Click="buttonShellUni_Click"/>
-        <Button Grid.Row="3" x:Name="button3" Content="Function 3 - In Development" FontSize="16" IsEnabled="False"/>
+        <Button Grid.Row="3" x:Name="buttonRCBeamSchedule" Content="RC Beam Schedule" FontSize="16" Click="buttonRCBeamSchedule_Click"/>
         <Button Grid.Row="4" x:Name="buttonCopyProperties" Content="Copy Properties From Other File" FontSize="16" Click="buttonCopyProperties_Click"/>
         <Button Grid.Row="5" x:Name="buttonPlotReaction" Content="Plot Reaction" FontSize="16" Click="buttonPlotReaction_Click"/>
         <Button Grid.Row="6" x:Name="buttonTransferMidas" Content="Transfer To Midas" FontSize="16" Click="buttonTransferMidas_Click"/>
         <Button Grid.Row="7" x:Name="buttonSelUniqueName" Content="Select by Unique Name" FontSize="16" Click="buttonSelUniqueName_Click"/>
-        <Button Grid.Row="8" x:Name="buttonLoadCombo" Content="Load Combination EN" FontSize="16" Click="buttonLoadCombo_Click"/>
-        <Button Grid.Row="9" x:Name="buttonWindCoeff" Content="Wind Coefficient Applications" FontSize="16" Click="buttonWindCoeff_Click"/>
+        <Button Grid.Row="8" x:Name="buttonEtabsToRhino" Content="Export To Rhino" FontSize="16" Click="buttonEtabsToRhino_Click"/>
+        <Button Grid.Row="9" x:Name="buttonLoadCombo" Content="Load Combination EN" FontSize="16" Click="buttonLoadCombo_Click"/>
+        <Button Grid.Row="10" x:Name="buttonWindCoeff" Content="Wind Coefficient Applications" FontSize="16" Click="buttonWindCoeff_Click"/>
         
-        <Image Grid.Row="10" Source="/WS_SG_ETABS_Plugin;component/src/resources/logo-invert.PNG" />
+        <Image Grid.Row="11" Margin="5" Source="/WS_SG_ETABS_Plugin;component/src/resources/RambollFDSLogo.PNG"/>
 
 
-        <Label Grid.Row="10" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="8">version 0.0.6</Label>
+        <Label Grid.Row="12" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="8">version 1.0.0</Label>
     </Grid>
 </Window>
