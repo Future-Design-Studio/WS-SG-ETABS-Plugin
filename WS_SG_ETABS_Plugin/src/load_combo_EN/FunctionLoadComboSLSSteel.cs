@@ -1942,7 +1942,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
             else if (WindLoadList.Count != 0 && TemperatureLoadList.Count != 0 && WindVertLoadList.Count == 0)
             {
-                int numberOfCombi = (8 * 2 * 3) + (8 * 2) + (8 * 2 * 1) + (2 * 4 * 2) + (1 * 2 * 2) + (8 * 1) + (2 * 2 * 2);
+                int numberOfCombi = 126;
 
                 //add envelope combi for all B
                 isError = src.HelperEtabs.AddNewLoadCombiEnvelope(SapModel, basecombiname + "ENV");
@@ -3290,7 +3290,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 }
 
                 //add 4 ehf loads ------------------------- COMBI 113-116
-                for (int combi1 = 229; combi1 <= 232; combi1++)
+                for (int combi1 = 113; combi1 <= 116; combi1++)
                 {
                     foreach (KeyValuePair<string, string> ehfxLL in ehfllxcaseDict)
                     {
@@ -3398,17 +3398,17 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                 #endregion
 
-                #region Next 8 load combis for case24 ------------------------- COMBI 125-132
+                #region Next 2 load combis for case24 ------------------------- COMBI 125-126
 
                 dlFactor = 1;
                 tlFactor = 1;
 
 
 
-                //first 8 load combis DL TEMP ------------------------- COMBI 125-132
-                for (int combi1 = 125; combi1 <= 132; combi1++)
+                //first 8 load combis DL TEMP ------------------------- COMBI 125-126
+                for (int combi1 = 125; combi1 <= 126; combi1++)
                 {
-                    if (combi1 <= 128)
+                    if (combi1 <= 125)
                     {
                         isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, tempcaselist[0], tlFactor);
                         if (isError)
@@ -3416,7 +3416,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                             return true;
                         }
                     }
-                    else if (combi1 > 128 && tempcaselist.Count == 2)
+                    else if (combi1 > 125 && tempcaselist.Count == 2)
                     {
                         isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, tempcaselist[1], tlFactor);
                         if (isError)
@@ -3424,7 +3424,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                             return true;
                         }
                     }
-                    else if (combi1 > 128 && tempcaselist.Count == 1)
+                    else if (combi1 > 125 && tempcaselist.Count == 1)
                     {
                         isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, tempcaselist[0], -tlFactor);
                         if (isError)
@@ -4067,7 +4067,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
 
                 //first 4 load combis DL LL ------------------------- COMBI 17-20
-                for (int combi1 = 37; combi1 <= 40; combi1++)
+                for (int combi1 = 17; combi1 <= 20; combi1++)
                 {
                     foreach (KeyValuePair<string, string> llDetails in llcaseDict)
                     {
@@ -4080,7 +4080,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 }
 
                 //add 4 ehf loads ------------------------- COMBI 17-20
-                for (int combi1 = 37; combi1 <= 40; combi1++)
+                for (int combi1 = 17; combi1 <= 20; combi1++)
                 {
                     foreach (KeyValuePair<string, string> ehfxLL in ehfllxcaseDict)
                     {
@@ -6115,7 +6115,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 }
 
                 //add 8 ehf loads ------------------------- COMBI 9-16
-                for (int combi1 = 25; combi1 <= 32; combi1++)
+                for (int combi1 = 9; combi1 <= 16; combi1++)
                 {
                     foreach (KeyValuePair<string, string> ehfxLL in ehfllxcaseDict)
                     {
