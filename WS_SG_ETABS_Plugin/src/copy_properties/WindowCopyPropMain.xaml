@@ -12,7 +12,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="0.8*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
-            <RowDefinition Height="2*"></RowDefinition>
+            <RowDefinition Height="2.5*"></RowDefinition>
             <RowDefinition Height="0.35*"></RowDefinition>
         </Grid.RowDefinitions>
 
@@ -32,7 +32,7 @@
                     <RowDefinition Height="*"></RowDefinition>
                 </Grid.RowDefinitions>
 
-                <TextBox x:Name="filePath" Grid.Row="0" IsEnabled="False" TextAlignment="Right"/>
+                <TextBox x:Name="filePath" Grid.Row="0" IsEnabled="False"/>
 
                 <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
                     <Button x:Name="buttonModifyPath" Content="Modify path" Width="100" Click="buttonModifyPath_Click"/>
@@ -61,8 +61,9 @@
                     <Label Content="Property Definition"></Label>
                     <CheckBox Name="checkBoxMaterial" Content="Materials" Checked="checkBoxMaterial_Checked" Unchecked="checkBoxMaterial_Unchecked"></CheckBox>
                     <CheckBox Name="checkBoxFrameSec" Content="Frame section properties" IsEnabled="False"></CheckBox>
-                    <CheckBox Name="checkBoxAreaSec" Content="Area section properties" IsEnabled="False"></CheckBox>
+                    <CheckBox Name="checkBoxAreaSec" Content="Area section properties" IsEnabled="False" Checked="checkBoxAreaSec_Checked"></CheckBox>
                     <CheckBox Name="checkBoxLinkSec" Content="Link section properties"></CheckBox>
+                    <CheckBox Name="checkBoxSpringSec" Content="Spring section properties"></CheckBox>
                 </StackPanel>
 
                 <StackPanel Grid.Column="1">
@@ -96,10 +97,20 @@
         </Grid>
 
 
-        <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button x:Name="buttonCancel" Content="Cancel" Width="100" Click="buttonCancel_Click"/>
-            <Button x:Name="buttonOk" Content="OK" Width="100" Click="buttonOk_Click"/>
-        </StackPanel>
+        <Grid Grid.Row="6">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <Image HorizontalAlignment="Left" Source="/WS_SG_ETABS_Plugin;component/src/resources/RambollFDSLogo.PNG" />
+
+            <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button x:Name="buttonCancel" Content="Cancel" Width="100" Click="buttonCancel_Click"/>
+                <Button x:Name="buttonOk" Content="OK" Width="100" Click="buttonOk_Click"/>
+            </StackPanel>
+
+        </Grid>
 
     </Grid>
 </Window>
