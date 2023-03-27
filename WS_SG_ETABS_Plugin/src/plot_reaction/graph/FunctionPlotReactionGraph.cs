@@ -25,7 +25,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
 
         #endregion
 
-        public static (bool, double, double) PlotReaction(cSapModel Sap, List<Dictionary<string, string>> groupAndColor, string outputCase, string reactionDirection,
+        public static (bool, double, double, List<src.plot_reaction.graph.ClassPlotGraph.SumReactionPerGroup>) PlotReaction(cSapModel Sap, List<Dictionary<string, string>> groupAndColor, string outputCase, string reactionDirection,
             WpfPlot ReactionPlot, double forceFactor, double bubbleScaleFactor, int textSize, int titleSize, int axisTitleSize, double gridSpacingX, double gridSpacingY, string title, bool splitX, bool splitY,
             int divisionX, int divisionY, double offsetX, double offsetY, int sumTextSizeX, int sumTextSizeY, double separationX, double separationY, List<src.HelperEtabs.DatabaseTable> databaseTableList)
         {
@@ -43,24 +43,28 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
             //Get the table
             src.HelperEtabs.DatabaseTable jointReactionTable = new HelperEtabs.DatabaseTable();
             (isError, jointReactionTable) = src.HelperEtabs.CallDatabaseTableByTableKey(databaseTableList, "Joint Reactions");
-            if (isError) { return (isError, 0, 0); }
+            if (isError) { return (isError, 0, 0, null); }
 
             src.HelperEtabs.DatabaseTable groupAssignmentTable = new HelperEtabs.DatabaseTable();
             (isError, groupAssignmentTable) = src.HelperEtabs.CallDatabaseTableByTableKey(databaseTableList, "Group Assignments");
-            if (isError) { return (isError, 0, 0); }
+            if (isError) { return (isError, 0, 0, null); }
 
             //Filter group to only include points, to improve performance
             (isError, groupAssignmentTable) = src.HelperEtabs.FilterDatabaseTable(groupAssignmentTable, "ObjectType", "Point");
-            if (isError) { return (isError, 0, 0); }
+            if (isError) { return (isError, 0, 0, null); }
 
             src.HelperEtabs.DatabaseTable baseReactionsTable = new HelperEtabs.DatabaseTable();
             (isError, baseReactionsTable) = src.HelperEtabs.CallDatabaseTableByTableKey(databaseTableList, "Base Reactions");
-            if (isError) { return (isError, 0, 0); }
+            if (isError) { return (isError, 0, 0, null); }
 
+            List<src.plot_reaction.graph.ClassPlotGraph.SumReactionPerGroup> sumReactionPerGroupList = new List<src.plot_reaction.graph.ClassPlotGraph.SumReactionPerGroup>();
 
             int groupIndex = 0;
+
             foreach (Dictionary<string, string> group in groupAndColor)
             {
+                double sumReaction = 0;
+
                 string groupName = group["groupName"];
                 string color = group["color"];
 
@@ -104,7 +108,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
                 //Filter joint reactions based on group
                 src.HelperEtabs.DatabaseTable jointReactionTableFiltered = new HelperEtabs.DatabaseTable();
                 (isError, jointReactionTableFiltered) = src.HelperEtabs.FilterDatabaseTableUniqueNameByGroup(jointReactionTable, groupAssignmentTable, groupName);
-                if (isError) { return (isError, 0, 0); }
+                if (isError) { return (isError, 0, 0, null); }
 
                 foreach (Dictionary<string, string> jointReactionRow in jointReactionTableFiltered.TableInList)
                 {
@@ -162,9 +166,14 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
 
                         src.HelperPlot.BubblePlotter(ReactionPlot, bubbleSize, bubbleText, textSize, bubbleColor, xCoord, yCoord);
 
+                        //Sum of reactions per group
+                        sumReaction += reaction;
                     }
 
                 }
+
+                src.plot_reaction.graph.ClassPlotGraph.SumReactionPerGroup sumReactionPerGroup = new src.plot_reaction.graph.ClassPlotGraph.SumReactionPerGroup(groupName, bubbleColor, sumReaction);
+                sumReactionPerGroupList.Add(sumReactionPerGroup);
 
                 groupIndex++;
             }
@@ -472,7 +481,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
 
             ReactionPlot.Refresh();
 
-            return (isError, baseReaction, totalReactionInPlot);
+            return (isError, baseReaction, totalReactionInPlot, sumReactionPerGroupList);
         }
 
     }

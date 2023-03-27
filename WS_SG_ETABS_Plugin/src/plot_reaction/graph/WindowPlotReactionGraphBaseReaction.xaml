@@ -4,15 +4,16 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WS_SG_ETABS_Plugin.src.plot_reaction.graph"
-                           mc:Ignorable="d" Height="180" Width="400" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+                           mc:Ignorable="d" Height="220" Width="400" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="2.2*"></RowDefinition>
+            <RowDefinition Height="3*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                <Label HorizontalAlignment="Center">Comparison of BASE REACTION to TOTAL REACTION in plot:</Label>
+                <Label HorizontalAlignment="Center">WARNING!</Label>
+                <Label HorizontalAlignment="Center">Comparison of BASE REACTION to TOTAL REACTION PLOTTED:</Label>
 
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
                     <Label>Base reaction =</Label>

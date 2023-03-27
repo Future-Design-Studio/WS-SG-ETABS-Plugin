@@ -149,6 +149,7 @@
     <Compile Include="src\load_combo_EN\WindowLoadComboResult.xaml.cs">
       <DependentUpon>WindowLoadComboResult.xaml</DependentUpon>
     </Compile>
+    <Compile Include="src\plot_reaction\graph\ClassPlotGraph.cs" />
     <Compile Include="src\plot_reaction\graph\FunctionPlotReactionGraph.cs" />
     <Compile Include="src\plot_reaction\graph\WindowPlotReactionGraphBaseReaction.xaml.cs">
       <DependentUpon>WindowPlotReactionGraphBaseReaction.xaml</DependentUpon>
