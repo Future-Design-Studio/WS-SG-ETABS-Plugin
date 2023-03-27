@@ -4,17 +4,17 @@
 library
 C#
 .cs
-C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\
+C:\Users\stefano\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\
 WS_SG_ETABS_Plugin
 none
 false
 DEBUG;TRACE
 
-71331416693
+9-33194879
 
-18-515779747
-182086220535
-src\carbon\WindowCarbonMain.xaml;src\carbon\WindowCarbonResult.xaml;src\copy_properties\WindowCopyPropMain.xaml;src\copy_properties\WindowCopyPropResult.xaml;src\shell_uni_orient\WindowShellUniMain.xaml;src\shell_uni_orient\WindowShellUniResult.xaml;WindowMain.xaml;
+221188654735
+30423727247
+src\carbon\WindowCarbonMain.xaml;src\carbon\WindowCarbonResult.xaml;src\copy_properties\WindowCopyPropMain.xaml;src\copy_properties\WindowCopyPropResult.xaml;src\plot_reaction\WindowPlotReactionMain.xaml;src\plot_reaction\WindowPlotReactionResult.xaml;src\shell_uni_orient\WindowShellUniMain.xaml;src\shell_uni_orient\WindowShellUniResult.xaml;WindowMain.xaml;
 
 False
 
