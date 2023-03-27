@@ -26,7 +26,9 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
             public List<ReactionForce> ReactionForceList { get; set; }
             public int Label { get; set; }
 
-            public jointReaction(string uniqueName, double x, double y, double z, int label, List<ReactionForce> reactionForceList)
+            public string GroupName { get; set; }
+
+            public jointReaction(string uniqueName, double x, double y, double z, int label, List<ReactionForce> reactionForceList, string groupName)
             {
                 UniqueName = uniqueName;
                 XCoordinate = x;
@@ -34,6 +36,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
                 ZCoordinate = z;
                 Label = label;
                 ReactionForceList = reactionForceList;
+                GroupName = groupName;
             }
         }
 
@@ -100,6 +103,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
             List<jointReaction> jointReactionList = new List<jointReaction>();
 
             int groupIndex = 0;
+            int label = 0;
             foreach (Dictionary<string, string> group in groupAndColor)
             {
                 string groupName = group["groupName"];
@@ -171,7 +175,6 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
 
                             uniqueJointRecorded.Add(uniqueName);
 
-                            int label = uniqueJointRecorded.IndexOf(jointReactionRow["UniqueName"]); //index inside the list
                             double xCoord = new double();
                             double yCoord = new double();
                             double zCoord = new double();
@@ -191,7 +194,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
                             ReactionForce eachReactionForce = new ReactionForce(loadCase, fX, fY, fZ, mX, mY, mZ);
                             reactionForceList.Add(eachReactionForce);
 
-                            jointReaction jointReaction = new jointReaction(uniqueName, xCoord, yCoord, zCoord, label, reactionForceList);
+                            jointReaction jointReaction = new jointReaction(uniqueName, xCoord, yCoord, zCoord, label, reactionForceList, groupName);
                             jointReactionList.Add(jointReaction);
 
                             //Plotting
@@ -213,6 +216,8 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
                             }
 
                             src.HelperPlot.BubblePlotter(ReactionPlot, bubbleSize, bubbleText, textSize, bubbleColor, xCoord, yCoord);
+
+                            label++;
                         }
                     }
                 }  
@@ -245,7 +250,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
         {
             List<string> colTitles = new List<string>()
             {
-                "Label","UniqueName","X (m)","Y (m)","Z (m)"
+                "Label","UniqueName", "Group Name", "X (m)","Y (m)","Z (m)"
             };
 
             //Take the first jointReaction and create the column
@@ -273,11 +278,12 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
             {
                 result[i, 0] = eachJointReaction.Label;
                 result[i, 1] = eachJointReaction.UniqueName;
-                result[i, 2] = eachJointReaction.XCoordinate;
-                result[i, 3] = eachJointReaction.YCoordinate;
-                result[i, 4] = eachJointReaction.ZCoordinate;
+                result[i, 2] = eachJointReaction.GroupName;
+                result[i, 3] = eachJointReaction.XCoordinate;
+                result[i, 4] = eachJointReaction.YCoordinate;
+                result[i, 5] = eachJointReaction.ZCoordinate;
 
-                int loadCaseIndex = 5;
+                int loadCaseIndex = 6;
                 foreach (ReactionForce reactionForce in eachJointReaction.ReactionForceList)
                 {
                     result[i, loadCaseIndex] = reactionForce.FX;
@@ -294,7 +300,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
         {
             List<string> colTitles = new List<string>()
             {
-                "Label","UniqueName","X (m)","Y (m)","Z (m)"
+                "Label","UniqueName", "Group Name", "X (m)","Y (m)","Z (m)"
             };
 
             //Take the first jointReaction and create the column
@@ -322,11 +328,12 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
             {
                 result[i, 0] = eachJointReaction.Label;
                 result[i, 1] = eachJointReaction.UniqueName;
-                result[i, 2] = eachJointReaction.XCoordinate;
-                result[i, 3] = eachJointReaction.YCoordinate;
-                result[i, 4] = eachJointReaction.ZCoordinate;
+                result[i, 2] = eachJointReaction.GroupName;
+                result[i, 3] = eachJointReaction.XCoordinate;
+                result[i, 4] = eachJointReaction.YCoordinate;
+                result[i, 5] = eachJointReaction.ZCoordinate;
 
-                int loadCaseIndex = 5;
+                int loadCaseIndex = 6;
                 foreach (ReactionForce reactionForce in eachJointReaction.ReactionForceList)
                 {
                     result[i, loadCaseIndex] = reactionForce.FY;
@@ -343,7 +350,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
         {
             List<string> colTitles = new List<string>()
             {
-                "Label","UniqueName","X (m)","Y (m)","Z (m)"
+                "Label","UniqueName", "Group Name", "X (m)","Y (m)","Z (m)"
             };
 
             //Take the first jointReaction and create the column
@@ -371,11 +378,12 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
             {
                 result[i, 0] = eachJointReaction.Label;
                 result[i, 1] = eachJointReaction.UniqueName;
-                result[i, 2] = eachJointReaction.XCoordinate;
-                result[i, 3] = eachJointReaction.YCoordinate;
-                result[i, 4] = eachJointReaction.ZCoordinate;
+                result[i, 2] = eachJointReaction.GroupName;
+                result[i, 3] = eachJointReaction.XCoordinate;
+                result[i, 4] = eachJointReaction.YCoordinate;
+                result[i, 5] = eachJointReaction.ZCoordinate;
 
-                int loadCaseIndex = 5;
+                int loadCaseIndex = 6;
                 foreach (ReactionForce reactionForce in eachJointReaction.ReactionForceList)
                 {
                     result[i, loadCaseIndex] = reactionForce.FZ;

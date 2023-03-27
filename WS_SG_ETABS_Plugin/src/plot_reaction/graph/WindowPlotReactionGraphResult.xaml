@@ -4,9 +4,17 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WS_SG_ETABS_Plugin.src.plot_reaction.graph"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             mc:Ignorable="d" Height="1000" Width="1400">
     <Grid>
-        <WpfPlot Name="ReactionPlot" />
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+        </Grid.RowDefinitions>
+        
+        
+        <WpfPlot Grid.Row="0" Name="ReactionPlot" />
+
+        <DataGrid Grid.Row="1" Name="dataGridSumPerGroup" IsReadOnly="True" CanUserReorderColumns="False"></DataGrid>
     </Grid>
+    
 </Window>

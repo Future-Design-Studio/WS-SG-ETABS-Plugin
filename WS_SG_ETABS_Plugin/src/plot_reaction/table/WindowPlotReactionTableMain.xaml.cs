@@ -36,7 +36,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
             InitializeComponent();
 
             //Fill in default excel result name
-            textBoxFileName.Text = "reaction";
+            textBoxFileName.Text = "Keyplan";
 
             //Fill in model path (default path)
             modelPath = SapModel.GetModelFilepath();

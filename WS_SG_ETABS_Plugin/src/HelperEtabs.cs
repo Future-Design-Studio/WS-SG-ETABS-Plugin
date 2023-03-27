@@ -1404,11 +1404,21 @@ namespace WS_SG_ETABS_Plugin.src
             int NumberNames = 0;
             string[] MyName = null;
             Sap.LoadCases.GetNameList(ref NumberNames, ref MyName);
-            outputCasesList.AddRange(MyName);
 
+            if (MyName != null)
+            {
+                outputCasesList.AddRange(MyName);
+            }
+           
             //Load Combination
+            NumberNames = 0;
+            MyName = null;
             Sap.RespCombo.GetNameList(ref NumberNames, ref MyName);
-            outputCasesList.AddRange(MyName);
+
+            if (MyName != null)
+            {
+                outputCasesList.AddRange(MyName);
+            }
 
             return outputCasesList;
         }
@@ -1833,6 +1843,20 @@ namespace WS_SG_ETABS_Plugin.src
             }
 
 
+        }
+
+        #endregion
+
+        #region File method
+
+        public static string GetFileName(cSapModel Sap)
+        {
+            string modelPath = Sap.GetModelFilepath();
+
+            string[] splitModelPath = modelPath.Split('.');
+
+            string fileName = splitModelPath[0];
+            return fileName;
         }
 
         #endregion
