@@ -73,6 +73,15 @@ namespace WS_SG_ETABS_Plugin
             IsEnabled = true;
         }
 
+        private void buttonRCBeamSchedule_Click(object sender, RoutedEventArgs e)
+        {
+            IsEnabled = false;
+            //Call up shell uniform window
+            src.rc_beam_schedule.WindowRCBSchedMain windowShellUniMain = new src.rc_beam_schedule.WindowRCBSchedMain(_SapModel, _Plugin);
+            IsEnabled = true;
+        }
+
+
         private void buttonPlotReaction_Click(object sender, RoutedEventArgs e)
         {
             IsEnabled = false;
@@ -103,6 +112,22 @@ namespace WS_SG_ETABS_Plugin
             IsEnabled = false;
             //Call up transfer midas window
             src.etabs_to_rhino.WindowEtabsToRhinoMain windowEtabsToRhinoMain = new src.etabs_to_rhino.WindowEtabsToRhinoMain(_SapModel, _Plugin);
+            IsEnabled = true;
+        }
+
+        private void buttonLoadCombo_Click(object sender, RoutedEventArgs e)
+        {
+            IsEnabled = false;
+            //Call up load combo window
+            src.load_combo_EN.WindowLoadComboMain windowLoadComboMain = new src.load_combo_EN.WindowLoadComboMain(_SapModel, _Plugin);
+            IsEnabled = true;
+        }
+
+        private void buttonWindCoeff_Click(object sender, RoutedEventArgs e)
+        {
+            IsEnabled = false;
+            //Call up Wind Coefficient Application window
+            src.wind_coeff.WindowWindCoeffMain windowWindCoeffMain = new src.wind_coeff.WindowWindCoeffMain(_SapModel, _Plugin);
             IsEnabled = true;
         }
     }

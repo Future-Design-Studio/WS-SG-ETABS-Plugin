@@ -12,8 +12,9 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="0.8*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="2.5*"></RowDefinition>
-            <RowDefinition Height="0.35*"></RowDefinition>
+            <RowDefinition Height="0.5*"></RowDefinition>
         </Grid.RowDefinitions>
 
         <Label Grid.Row="0" Grid.Column="0" Content="Copy Properties From Other ETABS" FontSize="28"/>
@@ -41,11 +42,17 @@
             </Grid>
 
         </Grid>
+        
+        <TextBlock Grid.Row="2" Grid.Column="0" TextWrapping="Wrap" TextAlignment="Justify"  
+                       Margin="10 0 10 0" FontSize="10">Note:<LineBreak/>
+                    1. Unlock ETABS model where the properties is copied from<LineBreak/>
+                    2. Response spectrum will be converted to user function as ETABS is only able to import user functionn<LineBreak/>
+                    3. Press OK to proceed
+        </TextBlock>
 
-        <Grid Grid.Row="2" Grid.Column="0" Margin="0 10 0 10">
+        <Grid Grid.Row="3" Grid.Column="0" Margin="0 10 0 10">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="0.3*"></RowDefinition>
                 <RowDefinition Height="0.3*"></RowDefinition>
             </Grid.RowDefinitions>
 
@@ -61,7 +68,7 @@
                     <Label Content="Property Definition"></Label>
                     <CheckBox Name="checkBoxMaterial" Content="Materials" Checked="checkBoxMaterial_Checked" Unchecked="checkBoxMaterial_Unchecked"></CheckBox>
                     <CheckBox Name="checkBoxFrameSec" Content="Frame section properties" IsEnabled="False"></CheckBox>
-                    <CheckBox Name="checkBoxAreaSec" Content="Area section properties" IsEnabled="False"></CheckBox>
+                    <CheckBox Name="checkBoxAreaSec" Content="Area section properties" IsEnabled="False" Checked="checkBoxAreaSec_Checked"></CheckBox>
                     <CheckBox Name="checkBoxLinkSec" Content="Link section properties"></CheckBox>
                     <CheckBox Name="checkBoxSpringSec" Content="Spring section properties"></CheckBox>
                 </StackPanel>
@@ -87,7 +94,7 @@
 
             </Grid>
 
-            <Label Grid.Row="1" Content="Note: Response spectrum will be converted to user function as ETABS is only able to import user function"></Label>
+           
 
             <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button x:Name="buttonUncheckAll" Content="Uncheck All" Width="100" Click="buttonUncheckAll_Click"/>
@@ -97,10 +104,20 @@
         </Grid>
 
 
-        <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button x:Name="buttonCancel" Content="Cancel" Width="100" Click="buttonCancel_Click"/>
-            <Button x:Name="buttonOk" Content="OK" Width="100" Click="buttonOk_Click"/>
-        </StackPanel>
+        <Grid Grid.Row="4">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <Image HorizontalAlignment="Left" Source="/WS_SG_ETABS_Plugin;component/src/resources/RambollFDSLogo.PNG" />
+
+            <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button x:Name="buttonCancel" Content="Cancel" Width="100" Click="buttonCancel_Click"/>
+                <Button x:Name="buttonOk" Content="OK" Width="100" Click="buttonOk_Click"/>
+            </StackPanel>
+
+        </Grid>
 
     </Grid>
 </Window>
