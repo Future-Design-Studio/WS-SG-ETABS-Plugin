@@ -21,7 +21,7 @@
             <RowDefinition Height="0.4*"></RowDefinition>
             <RowDefinition Height="2*"></RowDefinition>
             <RowDefinition Height="0.4*"></RowDefinition>
-            <RowDefinition Height="2.25*"></RowDefinition>
+            <RowDefinition Height="2.7*"></RowDefinition>
             <RowDefinition Height="1.4*"></RowDefinition>
             <RowDefinition Height="0.4*"></RowDefinition>
         </Grid.RowDefinitions>
@@ -171,25 +171,28 @@
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="1.2*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
             <Label Grid.Row="0" Grid.Column="0" Content="Cover (outside to edge of shear links) (mm): "></Label>
-            <Label Grid.Row="1" Grid.Column="0" Content="Maximum shear links spacing (mm): "></Label>
-            <Label Grid.Row="2" Grid.Column="0" Content="Minimum shear links spacing (mm): "></Label>
-            <Label Grid.Row="3" Grid.Column="0" Content="Shear links spacing steps (will run from max) (mm): "></Label>
-            <Label Grid.Row="4" Grid.Column="0" Content="List rebar diameter (comma seperated): "></Label>
-            <Label Grid.Row="5" Grid.Column="0" Content="List shear links diameter (comma seperated): "></Label>
+            <Label Grid.Row="1" Grid.Column="0" Content="Maximum number of rebar layers: "></Label>
+            <Label Grid.Row="2" Grid.Column="0" Content="Maximum shear links spacing (mm): "></Label>
+            <Label Grid.Row="3" Grid.Column="0" Content="Minimum shear links spacing (mm): "></Label>
+            <Label Grid.Row="4" Grid.Column="0" Content="Shear links spacing steps (will run from max) (mm): "></Label>
+            <Label Grid.Row="5" Grid.Column="0" Content="List rebar diameter (comma seperated): "></Label>
+            <Label Grid.Row="6" Grid.Column="0" Content="List shear links diameter (comma seperated): "></Label>
 
             <TextBox x:Name="textBoxCover" Grid.Row="0" Grid.Column="1" Text="35"></TextBox>
-            <TextBox x:Name="textBoxMaxShearLinksSpacing" Grid.Row="1" Grid.Column="1" Text="300"></TextBox>
-            <TextBox x:Name="textBoxMinShearLinksSpacing" Grid.Row="2" Grid.Column="1" Text="100"></TextBox>
-            <TextBox x:Name="textBoxShearLinksSpacingStep" Grid.Row="3" Grid.Column="1" Text="50"></TextBox>
-            <TextBox x:Name="textBoxRebarDiameterList" Grid.Row="4" Grid.Column="1" Text="16, 20, 25, 32, 40"></TextBox>
-            <TextBox x:Name="textBoxShearLinksDiameterList" Grid.Row="5" Grid.Column="1" Text="10, 12, 16, 20"></TextBox>
+            <TextBox x:Name="textBoxMaxNoLayer" Grid.Row="1" Grid.Column="1" Text="3"></TextBox>
+            <TextBox x:Name="textBoxMaxShearLinksSpacing" Grid.Row="2" Grid.Column="1" Text="300"></TextBox>
+            <TextBox x:Name="textBoxMinShearLinksSpacing" Grid.Row="3" Grid.Column="1" Text="100"></TextBox>
+            <TextBox x:Name="textBoxShearLinksSpacingStep" Grid.Row="4" Grid.Column="1" Text="50"></TextBox>
+            <TextBox x:Name="textBoxRebarDiameterList" Grid.Row="5" Grid.Column="1" Text="16, 20, 25, 32, 40"></TextBox>
+            <TextBox x:Name="textBoxShearLinksDiameterList" Grid.Row="6" Grid.Column="1" Text="10, 12, 16, 20"></TextBox>
         </Grid>
 
         <Grid Grid.Row="11"  Margin="10 -5 10 0">
