@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WS_SG_ETABS_Plugin.src.rc_beam_schedule"
-             mc:Ignorable="d" Height="1000" Width="600" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+             mc:Ignorable="d" Height="1050" Width="600" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
 
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
@@ -12,12 +12,16 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="0.5*"></RowDefinition>
-            <RowDefinition Height="0.5*"></RowDefinition>
-            <RowDefinition Height="0.6*"></RowDefinition>
-            <RowDefinition Height="0.9*"></RowDefinition>
-            <RowDefinition Height="3.2*"></RowDefinition>
-            <RowDefinition Height="1.8*"></RowDefinition>
-            <RowDefinition Height="2.3*"></RowDefinition>
+            <RowDefinition Height="1.1*"></RowDefinition>
+            <RowDefinition Height="0.4*"></RowDefinition>
+            <RowDefinition Height="0.4*"></RowDefinition>
+            <RowDefinition Height="0.7*"></RowDefinition>
+            <RowDefinition Height="0.4*"></RowDefinition>
+            <RowDefinition Height="3*"></RowDefinition>
+            <RowDefinition Height="0.4*"></RowDefinition>
+            <RowDefinition Height="2*"></RowDefinition>
+            <RowDefinition Height="0.4*"></RowDefinition>
+            <RowDefinition Height="2.25*"></RowDefinition>
             <RowDefinition Height="1.4*"></RowDefinition>
             <RowDefinition Height="0.4*"></RowDefinition>
         </Grid.RowDefinitions>
@@ -25,13 +29,18 @@
         <Label Grid.Row="0" Grid.Column="0" Margin="0 -10 0 0" Content="RC Beam Schedule" FontSize="28"/>
 
         <TextBlock Grid.Row="1" Grid.Column="0" TextWrapping="Wrap" TextAlignment="Justify"  
-                       Margin="10 0 10 0" FontSize="10">Note:<LineBreak/>
-                    1. Choose load case or load combination to include in excel<LineBreak/>
-                    2. Choose group(s) to include in excel and plot<LineBreak/>
-                    3. Press OK to proceed
+                       Margin="10 0 10 0" FontSize="10">                    
+                    How to use:<LineBreak/>
+                    1. Select excel save file location (by default it will be in the same folder as ETABS file)<LineBreak/>
+                    2. Choose group(s) and beam type(s) associated with each group(s) to include in the excel<LineBreak/>
+                    3. Adjust rebar division preference<LineBreak/>
+                    4. Adjust cover, rebar diameter and rebar spacing preference<LineBreak/>
+                    5. Press OK to proceed
         </TextBlock>
 
-        <Grid Grid.Row="2" Grid.Column="0" Margin="0 10 0 10">
+        <Label Grid.Row="2" Grid.Column="0" Content="1. Select excel save file location" FontSize="14" FontWeight="Bold"/>
+
+        <Grid Grid.Row="3" Grid.Column="0" Margin="10 0 10 0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="4*"></ColumnDefinition>
@@ -42,7 +51,7 @@
 
         </Grid>
 
-        <Grid Grid.Row="3" Grid.Column="0" Margin="0 10 0 10">
+        <Grid Grid.Row="4" Grid.Column="0" Margin="10 0 10 0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="4*"></ColumnDefinition>
@@ -67,12 +76,14 @@
 
         </Grid>
 
-        <Grid Grid.Row="4" Margin="0 10 0 10">
+        <Label Grid.Row="5" Grid.Column="0" Content="2. Select groups(s) to include in the excel" FontSize="14" FontWeight="Bold"/>
+
+        <Grid Grid.Row="6" Margin="10 -10 10 0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="6*"></RowDefinition>
+                <RowDefinition Height="4.5*"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
 
@@ -108,8 +119,10 @@
                     Content="Add" Click="buttonAdd_Click"></Button>
 
         </Grid>
-        
-        <Grid Grid.Row="5" Grid.Column="0">
+
+        <Label Grid.Row="7" Grid.Column="0" Content="3. Rebar zone division preferences" FontSize="14" FontWeight="Bold"/>
+
+        <Grid Grid.Row="8" Grid.Column="0" Margin="10 -10 10 0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
@@ -125,7 +138,7 @@
             </Grid.ColumnDefinitions>
 
             <Grid Grid.Row="0" Grid.ColumnSpan="2">
-                <Label Content="Simply supported length division left mid right:"></Label>
+                <Label Content="Simply supported rebar zone division (left mid right):"></Label>
             </Grid>
 
             <Label Grid.Row="1" Grid.Column="0" Content="Left"></Label>
@@ -137,7 +150,7 @@
             <TextBox x:Name="textBoxLengthRight" Grid.Row="2" Grid.Column="2" Text="0.25"></TextBox>
 
             <Grid Grid.Row="3" Grid.ColumnSpan="2">
-                <Label Content="Cantilever length division left mid right"></Label>
+                <Label Content="Cantilever rebar zone division (left mid right):"></Label>
             </Grid>
 
             <Label Grid.Row="4" Grid.Column="0" Content="Left"></Label>
@@ -148,7 +161,9 @@
 
         </Grid>
 
-        <Grid Grid.Row="6" Margin="0 10">
+        <Label Grid.Row="9" Grid.Column="0" Content="4. Cover, rebar diameter and rebar spacing preferences" FontSize="14" FontWeight="Bold"/>
+
+        <Grid Grid.Row="10" Margin="10 0 10 0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
@@ -177,7 +192,7 @@
             <TextBox x:Name="textBoxShearLinksDiameterList" Grid.Row="5" Grid.Column="1" Text="10, 12, 16, 20"></TextBox>
         </Grid>
 
-        <Grid Grid.Row="7">
+        <Grid Grid.Row="11"  Margin="10 -5 10 0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
@@ -201,7 +216,7 @@
             <TextBox x:Name="textBoxSpcCToC" Grid.Row="2" Grid.Column="1" Text="80" IsEnabled="False"></TextBox>
         </Grid>
 
-        <StackPanel Grid.Row="8" Orientation="Horizontal" HorizontalAlignment="Right">
+        <StackPanel Grid.Row="12" Orientation="Horizontal" HorizontalAlignment="Right"  Margin="10 0 10 0">
             <Button x:Name="buttonCancel" Content="Cancel" Width="100" Click="buttonCancel_Click"/>
             <Button x:Name="buttonOk" Content="OK" Width="100" Click="buttonOk_Click"/>
         </StackPanel>

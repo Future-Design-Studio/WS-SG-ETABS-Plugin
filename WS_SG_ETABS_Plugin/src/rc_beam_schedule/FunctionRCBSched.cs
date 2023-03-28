@@ -35,8 +35,8 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
             eTemperature temperatureUnits = new eTemperature();
             Ret = Sap.GetPresentUnits_2(ref forceUnits, ref lengthUnits, ref temperatureUnits);
 
-            //Set unit to mm
-            src.HelperEtabs.SetOutputUnitTo_kN_mm_C(Sap);
+            //Set unit to N mm
+            src.HelperEtabs.SetOutputUnitTo_N_mm_C(Sap);
 
             bool tableExist = CheckTableExistRCBSched(Sap);
             
@@ -59,7 +59,7 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
             if (isError) {return isError;}
 
             //Get dimension
-            GetRcBeamDimension(Sap, rcBeamDesignSummary, rcBeamList, cover);
+            GetRcBeamDimensionAndMaterial(Sap, rcBeamDesignSummary, rcBeamList, cover);
 
             //Get beam offset
             GetRcBeamOffset(Sap, rcBeamList);
@@ -197,7 +197,7 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
             return rcBeamList;
         }
 
-        public static void GetRcBeamDimension(cSapModel Sap, src.HelperEtabs.DatabaseTable rcBeamDesignSummary ,List<src.HelperEtabs.RcBeam> rcBeamList, double cover)
+        public static void GetRcBeamDimensionAndMaterial(cSapModel Sap, src.HelperEtabs.DatabaseTable rcBeamDesignSummary ,List<src.HelperEtabs.RcBeam> rcBeamList, double cover)
         {
             //Get table
             List<Dictionary<string , string>> rcBeamDesignSummaryTable = rcBeamDesignSummary.TableInList;
@@ -213,22 +213,32 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
                         double height = 0;
                         double coverTop = 0;
                         double coverBottom = 0;
+                        string concreteMatProp = "";
+                        string rebarMatProp = "";
 
-                        (width, height) = src.HelperEtabs.GetDimensionRectangle(Sap, sectionPropName);
+                        (width, height, concreteMatProp) = src.HelperEtabs.GetRcBeamDimensionAndConcreteMaterial(Sap, sectionPropName);
 
                         rcBeam.Width = width;
                         rcBeam.Height = height;
 
-                        (coverTop, coverBottom) = src.HelperEtabs.GetRcBeamCover(Sap, sectionPropName);
+                        (coverTop, coverBottom, rebarMatProp) = src.HelperEtabs.GetRcBeamCoverAndRebarMaterial(Sap, sectionPropName);
 
-                        //In etabs they call d as cover
-                        rcBeam.d = Math.Max(coverTop, coverBottom);
-
+                        //In etabs cover is to rebar center
                         rcBeam.CoverTop = cover;
                         rcBeam.CoverBottom = cover;
 
                         double d = height - Math.Max(coverTop, coverBottom);
                         rcBeam.d = d;
+
+                        //Get fyk
+                        double fyk = 0;
+                        fyk = src.HelperEtabs.GetRebarFyk(Sap, rebarMatProp);
+                        rcBeam.Fyk = fyk;
+
+                        //Get fck
+                        double fck = 0;
+                        fck = src.HelperEtabs.GetConcreteFck(Sap, concreteMatProp);
+                        rcBeam.Fck = fck;
 
                         break;
                     }
@@ -502,6 +512,10 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
                     rcBeam.MidAv = midAv * 1000; //mm2/m
                     rcBeam.RightAv = rightAv * 1000; //mm2/m
                 }
+
+                //Check againts minimum rebar
+                CompareToMinimumRcBeamRebar(rcBeam);
+
             }
 
         }
@@ -989,8 +1003,8 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
         {
             List<string> colTitles = new List<string>()
             {
-                "UniqueName", "Width (mm)", "Height (mm)", "d (ETABS) (mm)", "d calculated (mm)", "Beam type", "Left Top As (mm2)", "Mid Top As (mm2)", "Right Top As (mm2)"
-                , "Left Bottom As (mm2)", "Mid Bottom As (mm2)", "Right Bottom As (mm2)", "Left Av (mm2/m)", "Mid Av (mm2/m)", "Right Av (mm2/m)"
+                "UniqueName", "Width (mm)", "Height (mm)", "fyk (Mpa)", "fck (Mpa)", "d (ETABS) (mm)", "d calculated (mm)", "Beam type", "As Min(mm2)", "Left Top As (mm2)", 
+                "Mid Top As (mm2)", "Right Top As (mm2)", "Left Bottom As (mm2)", "Mid Bottom As (mm2)", "Right Bottom As (mm2)", "Left Av (mm2/m)", "Mid Av (mm2/m)", "Right Av (mm2/m)"
                 , "Left Top Rebar", "Mid Top Rebar", "Right Top Rebar", "Left Bottom Rebar", "Mid Bottom Rebar", "Right Bottom Rebar"
                 , "Left Shear Links", "Mid Shear Links", "Right Shear Links"
             };
@@ -1014,27 +1028,30 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
                 result[i, 0] = rcBeam.UniqueName;
                 result[i, 1] = rcBeam.Width;
                 result[i, 2] = rcBeam.Height;
-                result[i, 3] = rcBeam.d;
-                result[i, 4] = rcBeam.dCalculated;
-                result[i, 5] = rcBeam.BeamType;
-                result[i, 6] = rcBeam.LeftTopAs;
-                result[i, 7] = rcBeam.MidTopAs;
-                result[i, 8] = rcBeam.RightTopAs;
-                result[i, 9] = rcBeam.LeftBottomAs;
-                result[i, 10] = rcBeam.MidBottomAs;
-                result[i, 11] = rcBeam.RightBottomAs;
-                result[i, 12] = rcBeam.LeftAv;
-                result[i, 13] = rcBeam.MidAv;
-                result[i, 14] = rcBeam.RightAv;
-                result[i, 15] = rcBeam.LeftTopRebar;
-                result[i, 16] = rcBeam.MidTopRebar;
-                result[i, 17] = rcBeam.RightTopRebar;
-                result[i, 18] = rcBeam.LeftBottomRebar;
-                result[i, 19] = rcBeam.MidBottomRebar;
-                result[i, 20] = rcBeam.RightBottomRebar;
-                result[i, 21] = rcBeam.LeftShearLinks;
-                result[i, 22] = rcBeam.MidShearLinks;
-                result[i, 23] = rcBeam.RightShearLinks;
+                result[i, 3] = rcBeam.Fyk;
+                result[i, 4] = rcBeam.Fck;
+                result[i, 5] = rcBeam.d;
+                result[i, 6] = rcBeam.dCalculated;
+                result[i, 7] = rcBeam.BeamType;
+                result[i, 8] = rcBeam.AsMin;
+                result[i, 9] = rcBeam.LeftTopAs;
+                result[i, 10] = rcBeam.MidTopAs;
+                result[i, 11] = rcBeam.RightTopAs;
+                result[i, 12] = rcBeam.LeftBottomAs;
+                result[i, 13] = rcBeam.MidBottomAs;
+                result[i, 14] = rcBeam.RightBottomAs;
+                result[i, 15] = rcBeam.LeftAv;
+                result[i, 16] = rcBeam.MidAv;
+                result[i, 17] = rcBeam.RightAv;
+                result[i, 18] = rcBeam.LeftTopRebar;
+                result[i, 19] = rcBeam.MidTopRebar;
+                result[i, 20] = rcBeam.RightTopRebar;
+                result[i, 21] = rcBeam.LeftBottomRebar;
+                result[i, 22] = rcBeam.MidBottomRebar;
+                result[i, 23] = rcBeam.RightBottomRebar;
+                result[i, 24] = rcBeam.LeftShearLinks;
+                result[i, 25] = rcBeam.MidShearLinks;
+                result[i, 26] = rcBeam.RightShearLinks;
 
                 i++;
             }
@@ -1088,6 +1105,53 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
             xlApp.Quit();
         }
 
+        public static double GetMinimumRcBeamRebarEC(double fck, double fyk, double width, double effDepth)
+        {
+            //Calculate fctm
+            double fctm = 0;
 
+            if (fck <= 50) 
+            {
+                fctm = 0.3 * Math.Pow(fck, 2.0 / 3.0);
+            }
+            else
+            {
+                double fcm = fck + 8;
+                fctm = 2.12 * Math.Log(1 + fcm / 10);
+            }
+
+            //Min rebar percentage
+            double minRebarPercentage = 0.26 * fctm / fyk;
+            minRebarPercentage = Math.Max(minRebarPercentage, 0.13 / 100);
+
+            //Min As
+            double asMin = minRebarPercentage * width * effDepth;
+
+            return asMin;
+        }
+
+        public static void CompareToMinimumRcBeamRebar(src.HelperEtabs.RcBeam rcBeam)
+        {
+            double asMin = 0;
+            asMin = GetMinimumRcBeamRebarEC(rcBeam.Fck, rcBeam.Fyk, rcBeam.Width, rcBeam.d);
+            rcBeam.AsMin = Math.Ceiling(asMin);
+
+            if (rcBeam.BeamType == "Simply supported")
+            {
+                rcBeam.LeftTopAs = Math.Max(rcBeam.LeftTopAs, asMin);
+                rcBeam.MidTopAs = Math.Max(rcBeam.MidTopAs, asMin);
+                rcBeam.RightTopAs = Math.Max(rcBeam.RightTopAs, asMin);
+                rcBeam.LeftBottomAs = Math.Max(rcBeam.LeftTopAs, asMin);
+                rcBeam.MidBottomAs = Math.Max(rcBeam.MidTopAs, asMin);
+                rcBeam.RightBottomAs = Math.Max(rcBeam.RightTopAs, asMin);
+            }
+            else if (rcBeam.BeamType == "Cantilever")
+            {
+                rcBeam.LeftTopAs = Math.Max(rcBeam.LeftTopAs, asMin);
+                rcBeam.RightTopAs = Math.Max(rcBeam.RightTopAs, asMin);
+                rcBeam.LeftBottomAs = Math.Max(rcBeam.LeftTopAs, asMin);
+                rcBeam.RightBottomAs = Math.Max(rcBeam.RightTopAs, asMin);
+            }
+        }
     }
 }

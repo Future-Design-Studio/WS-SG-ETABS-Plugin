@@ -1,19 +1,8 @@
-﻿using System;
+﻿using ETABSv1;
+using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using ETABSv1;
 
 namespace WS_SG_ETABS_Plugin.src
 {
@@ -90,6 +79,9 @@ namespace WS_SG_ETABS_Plugin.src
             public double d { get; set; }
             public double dCalculated { get; set; }
             public string BeamType { get; set; }
+            public double Fyk { get; set; }
+            public double Fck { get; set; }
+            public double AsMin { get; set; }
 
             public RcBeam(string name)
             {
@@ -436,6 +428,11 @@ namespace WS_SG_ETABS_Plugin.src
         public static void SetOutputUnitTo_kN_mm_C(cSapModel Sap)
         {
             Ret = Sap.SetPresentUnits_2(eForce.kN, eLength.mm, eTemperature.C);
+        }
+
+        public static void SetOutputUnitTo_N_mm_C(cSapModel Sap)
+        {
+            Ret = Sap.SetPresentUnits_2(eForce.N, eLength.mm, eTemperature.C);
         }
 
         /// <summary>
@@ -1323,6 +1320,72 @@ namespace WS_SG_ETABS_Plugin.src
             return multipleDatabaseTable;
         }
 
+        /// <summary>
+        /// Get rebar fyk
+        /// </summary>
+        /// <param name="Sap"></param>
+        /// <param name="rebarMatPropName"></param>
+        /// <returns></returns>
+        public static double GetRebarFyk(cSapModel Sap, string rebarMatPropName)
+        {
+            double Fy = 0;
+            double Fu = 0;
+            double EFy = 0;
+            double EFu = 0;
+            int SSType = 0;
+            int SSHysType = 0;
+            double StrainAtHardening = 0;
+            double StrainUltimate = 0;
+            double FinalSlope = 0;
+            bool UseCaltransSSDefaults = false;
+
+            Ret = Sap.PropMaterial.GetORebar_1(rebarMatPropName, ref Fy, ref Fu, ref EFy, ref EFu, ref SSType, ref SSHysType, ref StrainAtHardening, ref StrainUltimate, ref FinalSlope, ref UseCaltransSSDefaults);
+
+            if (Ret != 0)
+            {
+                MessageBox.Show($"Unable to find rebar {rebarMatPropName}");
+                return 0;
+            }
+            else
+            {
+                return Fy;
+            }
+                
+        }
+
+        /// <summary>
+        /// Get concrete fck
+        /// </summary>
+        /// <param name="Sap"></param>
+        /// <param name="rebarMatPropName"></param>
+        /// <returns></returns>
+        public static double GetConcreteFck(cSapModel Sap, string concreteMatPropName)
+        {
+            double Fc = 0;
+            bool IsLightweight = false;
+            double FcsFactor = 0;
+            int SSType = 0;
+            int SSHysType = 0;
+            double StrainAtFc = 0;
+            double StrainUltimate = 0;
+            double FinalSlope = 0;
+            double FrictionAngle = 0;
+            double DilatationalAngle = 0;
+
+            Ret = Sap.PropMaterial.GetOConcrete_1(concreteMatPropName, ref Fc, ref IsLightweight, ref FcsFactor, ref SSType, ref SSHysType, ref StrainAtFc, ref StrainUltimate, ref FinalSlope, ref FrictionAngle, ref DilatationalAngle);
+
+            if (Ret != 0)
+            {
+                MessageBox.Show($"Unable to find concrete {concreteMatPropName}");
+                return 0;
+            }
+            else
+            {
+                return Fc;
+            }
+
+        }
+
         #endregion
 
         #region Response Spectrum Method
@@ -1533,7 +1596,7 @@ namespace WS_SG_ETABS_Plugin.src
         /// <param name="Sap"></param>
         /// <param name="sectionPropName"></param>
         /// <returns></returns>
-        public static (double, double) GetDimensionRectangle (cSapModel Sap, string sectionPropName)
+        public static (double, double, string) GetRcBeamDimensionAndConcreteMaterial (cSapModel Sap, string sectionPropName)
         {
             string FileName = "";
 	        string MatProp = "";
@@ -1547,11 +1610,11 @@ namespace WS_SG_ETABS_Plugin.src
 
             if (Ret == 0)
             {
-                return (T2, T3);
+                return (T2, T3, MatProp);
             }
             else
             {
-                return (0, 0);
+                return (0, 0, "");
             }
         }
 
@@ -1561,7 +1624,7 @@ namespace WS_SG_ETABS_Plugin.src
         /// <param name="Sap"></param>
         /// <param name="sectionPropName"></param>
         /// <returns></returns>
-        public static (double, double) GetRcBeamCover(cSapModel Sap, string sectionPropName)
+        public static (double, double, string) GetRcBeamCoverAndRebarMaterial(cSapModel Sap, string sectionPropName)
         {
             string MatPropLong = "";
             string MatPropConfine = "";
@@ -1576,11 +1639,11 @@ namespace WS_SG_ETABS_Plugin.src
 
             if (Ret == 0)
             {
-                return (CoverTop, CoverTop);
+                return (CoverTop, CoverTop, MatPropLong);
             }
             else
             {
-                return (0, 0);
+                return (0, 0, "");
             }
         }
 
