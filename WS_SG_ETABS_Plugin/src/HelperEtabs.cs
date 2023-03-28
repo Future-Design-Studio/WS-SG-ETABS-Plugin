@@ -51,8 +51,8 @@ namespace WS_SG_ETABS_Plugin.src
             public double Length { get; set; }
             public double Height { get; set; }
             public double Width { get; set; }
-            public double CoverTop { get; set; }
-            public double CoverBottom { get; set; }
+            public double CoverTopEtabs { get; set; }
+            public double CoverBottomEtabs { get; set; }
             public double OffsetI { get; set; }
             public double OffsetJ { get; set; }
             public double LeftLength { get; set; }
@@ -82,6 +82,24 @@ namespace WS_SG_ETABS_Plugin.src
             public double Fyk { get; set; }
             public double Fck { get; set; }
             public double AsMin { get; set; }
+            public List<int> LeftTopRebarDiameterList { get; set; }
+            public List<int> LeftTopNoRebarPerLayer { get; set; }
+            public List<int> MidTopRebarDiameterList { get; set; }
+            public List<int> MidTopNoRebarPerLayer { get; set; }
+            public List<int> RightTopRebarDiameterList { get; set; }
+            public List<int> RightTopNoRebarPerLayer { get; set; }
+            public List<int> LeftBottomRebarDiameterList { get; set; }
+            public List<int> LeftBottomNoRebarPerLayer { get; set; }
+            public List<int> MidBottomRebarDiameterList { get; set; }
+            public List<int> MidBottomNoRebarPerLayer { get; set; }
+            public List<int> RightBottomRebarDiameterList { get; set; }
+            public List<int> RightBottomNoRebarPerLayer { get; set; }
+            public double LeftShearLinksDiameter { get; set; }
+            public double MidShearLinksDiameter { get; set; }
+            public double RightShearLinksDiameter { get; set; }
+            public double Cover { get; set; }
+            public string AsEvaluationComment { get; set; }
+            public string AvEvaluationComment { get; set; }
 
             public RcBeam(string name)
             {
