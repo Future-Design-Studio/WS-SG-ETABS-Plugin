@@ -28,7 +28,8 @@
         <Label Grid.Row="0" Grid.Column="0" Margin="0 -10 0 0" Content="Create Reaction Excel And Keyplan" FontSize="28"/>
 
         <TextBlock Grid.Row="1" Grid.Column="0" TextWrapping="Wrap" TextAlignment="Justify"  
-                       Margin="10 0 10 0" FontSize="10">Note:<LineBreak/>
+                       Margin="10 0 10 0" FontSize="10">
+                    How to use:<LineBreak/>
                     1. Select excel save file location (by default it will be in the same folder as ETABS file)<LineBreak/>
                     2. Select group(s) to include in keyplan<LineBreak/>
                     3. Choose load case(s) and combination(s) to include in excel<LineBreak/>
