@@ -76,7 +76,7 @@
             <ComboBox  Grid.Row="1" Grid.Column="3" x:Name="comBoxExistingDL" 
                        VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
                        Text="0.5" SelectionChanged="comBoxExistingDL_SelectionChanged"></ComboBox>
-            <TextBox Grid.Column="4" x:Name="textBoxNameDL" Grid.Row="1" IsEnabled="False" TextChanged="textBoxNameDL_TextChanged"></TextBox>
+            <TextBox Grid.Column="4" x:Name="textBoxNameDL" Grid.Row="1" IsEnabled="False" TextChanged="textBoxNameDL_TextChanged" VerticalContentAlignment="Center"></TextBox>
 
             <Button Grid.Row="1" Grid.Column="5" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_ADD_DL_Click" ></Button>
 
@@ -126,7 +126,7 @@
             <ComboBox  Grid.Row="1" Grid.Column="3" x:Name="comBoxExistingSDL" 
                        VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
                        Text="0.5" SelectionChanged="comBoxExistingSDL_SelectionChanged"></ComboBox>
-            <TextBox Grid.Column="4" x:Name="textBoxNameSDL" Grid.Row="1" IsEnabled="False" TextChanged="textBoxNameSDL_TextChanged"></TextBox>
+            <TextBox Grid.Column="4" x:Name="textBoxNameSDL" Grid.Row="1" IsEnabled="False" TextChanged="textBoxNameSDL_TextChanged" VerticalContentAlignment="Center"></TextBox>
 
             <Button Grid.Row="1" Grid.Column="5" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_ADD_SDL_Click" ></Button>
 
@@ -178,7 +178,7 @@
             <ComboBox  Grid.Row="1" Grid.Column="3" x:Name="comBoxExistingLL" 
                        VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
                        Text="0.5" SelectionChanged="comBoxExistingLL_SelectionChanged"></ComboBox>
-            <TextBox Grid.Column="4" x:Name="textBoxNameLL" Grid.Row="1" IsEnabled="False" TextChanged="textBoxNameLL_TextChanged"></TextBox>
+            <TextBox Grid.Column="4" x:Name="textBoxNameLL" Grid.Row="1" IsEnabled="False" TextChanged="textBoxNameLL_TextChanged" VerticalContentAlignment="Center"></TextBox>
 
             <ComboBox  Grid.Row="1" Grid.Column="5" x:Name="comBoxLL" 
                        VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
@@ -239,8 +239,8 @@
                        VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
                        Text="0.5" SelectionChanged="comBoxWINDDIRECTION_SelectionChanged"></ComboBox>
 
-            <Button Grid.Row="1" Grid.Column="4" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_ADD_WIND_Click" ></Button>
-            <Button Grid.Row="2" Grid.Column="4" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_ADD_WINDVERTICAL_Click" ></Button>
+            <Button Grid.Row="1" Grid.Column="4" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_ADD_WIND_Click" Name="Button_ADD_WIND"></Button>
+            <Button Grid.Row="2" Grid.Column="4" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_ADD_WINDVERTICAL_Click" Name="Button_ADD_WINDVERTICAL" ></Button>
 
             <ListBox x:Name="listBoxChoosenWIND" Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="5" 
                      d:ItemsSource="{d:SampleData ItemCount=10}" SelectionMode="Single"
@@ -304,8 +304,6 @@
                 <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
-                <ColumnDefinition Width="*"></ColumnDefinition>
-                <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
             <Grid.RowDefinitions>
@@ -316,27 +314,19 @@
             </Grid.RowDefinitions>
 
             <Label Grid.Column="0" Content="Load Pattern Type" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="2"/>
-            <Label Grid.Column="2" Content="Use Existing Load Pattern?" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1"/>
-            <Label Grid.Column="3" Content="Load Pattern Name" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="2"/>
-            <Label Grid.Column="5" Content="Category for ψ factor" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <Label Grid.Column="2" Content="Consider +/-" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1"/>
+            <Label Grid.Column="3" Content="Load Pattern Name" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1"/>
 
             <Label Grid.Row="1" Grid.Column="1" Content="Temperature Load" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             <Label Grid.Row="1" Grid.Column="0" Content="Qk" VerticalAlignment="Center" HorizontalAlignment="Center"/>
 
-            <CheckBox x:Name="checkBoxExistingTEMP" Grid.Row="1" Grid.Column="2"  Grid.ColumnSpan="1"
-                      Checked="checkBoxExistingTEMP_Checked" Unchecked="checkBoxExistingTEMP_Unchecked" 
+            <CheckBox x:Name="checkBoxConsiderplusminus" Grid.Row="1" Grid.Column="2"  Grid.ColumnSpan="1"
+                      Checked="checkBoxConsiderplusminus_Checked" Unchecked="checkBoxConsiderplusminus_Unchecked" 
                       VerticalAlignment="Center" HorizontalAlignment="Center">
             </CheckBox>
-            <ComboBox  Grid.Row="1" Grid.Column="3" x:Name="comBoxExistingTEMP" 
-                       VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
-                       Text="0.5" SelectionChanged="comBoxExistingTEMP_SelectionChanged"></ComboBox>
-            <TextBox Grid.Column="4" x:Name="textBoxNameTEMP" Grid.Row="1" IsEnabled="False" TextChanged="textBoxNameTEMP_TextChanged"></TextBox>
+            <TextBox Grid.Column="3" x:Name="textBoxNameTEMP" Grid.Row="1" IsEnabled="True" TextChanged="textBoxNameTEMP_TextChanged" VerticalContentAlignment="Center"></TextBox>
 
-            <ComboBox  Grid.Row="1" Grid.Column="5" x:Name="comBoxTEMP" 
-                       VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
-                       Text="0.5" SelectionChanged="comBoxTEMP_SelectionChanged"></ComboBox>
-
-            <Button Grid.Row="1" Grid.Column="6" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_ADD_TEMP_Click" ></Button>
+            <Button Grid.Row="1" Grid.Column="6" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_ADD_TEMP_Click" Name ="Button_ADD_TEMP"></Button>
 
             <ListBox x:Name="listBoxChoosenTEMP" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="7" 
                      d:ItemsSource="{d:SampleData ItemCount=2}" SelectionMode="Single"
@@ -368,21 +358,11 @@
                 <RowDefinition Height="0.4*"></RowDefinition>
             </Grid.RowDefinitions>
 
-            <Label Grid.Column="0" Content="Load Pattern Type" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1"/>
-            <Label Grid.Column="1" Content="Use Existing Load Pattern?" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1"/>
-            <Label Grid.Column="2" Content="Load Pattern Name" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1"/>
+            <Label Grid.Column="1" Content="Load Pattern Type" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="2"/>
 
-            <Label Grid.Row="1" Grid.Column="0" Content="Seismic Load" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <Label Grid.Row="1" Grid.Column="1" Content="Seismic Load" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="2"/>
 
-            <CheckBox x:Name="checkBoxExistingSEISMIC" Grid.Row="1" Grid.Column="1"  Grid.ColumnSpan="1"
-                      Checked="checkBoxExistingSEISMIC_Checked" Unchecked="checkBoxExistingSEISMIC_Unchecked" 
-                      VerticalAlignment="Center" HorizontalAlignment="Center">
-            </CheckBox>
-            <ComboBox  Grid.Row="1" Grid.Column="2" x:Name="comBoxExistingSEISMIC" 
-                       VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
-                       Text="0.5" SelectionChanged="comBoxExistingSEISMIC_SelectionChanged"></ComboBox>
-
-            <Button Grid.Row="1" Grid.Column="3" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_ADD_SEISMIC_Click" ></Button>
+            <Button Grid.Row="1" Grid.Column="3" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_ADD_SEISMIC_Click" Name="Button_ADD_SEISMIC"></Button>
 
             <ListBox x:Name="listBoxChoosenSEISMIC" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="4" 
                      d:ItemsSource="{d:SampleData ItemCount=3}" SelectionMode="Single"
@@ -417,6 +397,7 @@
             </Grid.RowDefinitions>
 
             <Label Grid.Column="0" Content="Load Pattern Type" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1"/>
+            <Label Grid.Column="1" Content="Use Existing Load Pattern?" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1"/>
             <Label Grid.Column="2" Content="Load Pattern Name" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="2"/>
             <Label Grid.Column="4" Content="Consider +/- ?" VerticalAlignment="Center" HorizontalAlignment="Center"/>
 
@@ -429,14 +410,14 @@
             <ComboBox  Grid.Row="1" Grid.Column="2" x:Name="comBoxExistingAL" 
                        VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
                        Text="0.5" SelectionChanged="comBoxExistingAL_SelectionChanged"></ComboBox>
-            <TextBox Grid.Column="3" x:Name="textBoxNameAL" Grid.Row="1" IsEnabled="False" TextChanged="textBoxNameAL_TextChanged"></TextBox>
+            <TextBox Grid.Column="3" x:Name="textBoxNameAL" Grid.Row="1" IsEnabled="False" TextChanged="textBoxNameAL_TextChanged" VerticalContentAlignment="Center"></TextBox>
 
             <CheckBox x:Name="checkBoxAL" Grid.Row="1" Grid.Column="4"  Grid.ColumnSpan="1"
                       Checked="checkBoxAL_Checked" Unchecked="checkBoxAL_Unchecked" 
                       VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="False" IsEnabled="False">
             </CheckBox>
 
-            <Button Grid.Row="1" Grid.Column="5" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_ADD_AL_Click" ></Button>
+            <Button Grid.Row="1" Grid.Column="5" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_ADD_AL_Click" Name="Button_ADD_AL"></Button>
 
             <ListBox x:Name="listBoxChoosenAL" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="6" 
                      d:ItemsSource="{d:SampleData ItemCount=4}" SelectionMode="Single"
@@ -482,7 +463,7 @@
                        VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
                        Text="0.5" SelectionChanged="comBoxExistingUPLIFT_SelectionChanged"></ComboBox>
 
-            <Button Grid.Row="1" Grid.Column="3" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_ADD_UPLIFT_Click" ></Button>
+            <Button Grid.Row="1" Grid.Column="3" Content="ADD" VerticalAlignment="Bottom" HorizontalAlignment="Left" Grid.ColumnSpan="1" Margin="144,0,0,5" Click="Button_ADD_UPLIFT_Click" Name="Button_ADD_UPLIFT"></Button>
 
             <ListBox x:Name="listBoxChoosenUPLIFT" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="4" 
                      d:ItemsSource="{d:SampleData ItemCount=1}" SelectionMode="Single"
@@ -507,10 +488,11 @@
             </Grid.ColumnDefinitions>
 
             <Grid.RowDefinitions>
-                <RowDefinition Height="0.4*"></RowDefinition>
-                <RowDefinition Height="0.4*"></RowDefinition>
+                <RowDefinition Height="0.7*"></RowDefinition>
+                <RowDefinition Height="0.7*"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="0.4*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
 
             <Label Grid.Column="0" Content="Load Pattern Type" VerticalAlignment="Center" HorizontalAlignment="Center"/>
@@ -520,14 +502,20 @@
 
             <TextBox Grid.Column="1" x:Name="textBoxNameEHF" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" TextChanged="textBoxNameEHF_TextChanged" >0.005</TextBox>
 
-            <Button Grid.Row="1" Grid.Column="2" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_ADD_EHF_Click" ></Button>
-
-            <ListBox x:Name="listBoxChoosenEHF" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3" 
-                     d:ItemsSource="{d:SampleData ItemCount=30}" SelectionMode="Single"
-                     Margin="0,0,0,31" SelectionChanged="listBoxChoosenEHF_SelectionChanged" Height="80" Grid.RowSpan="3" VerticalAlignment="Bottom">
+            <ListBox x:Name="listBoxChoosenEHFDL" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="3" 
+                     d:ItemsSource="{d:SampleData ItemCount=3}" SelectionMode="Single"
+                     Margin="0,0,0,0" SelectionChanged="listBoxChoosenEHFDL_SelectionChanged" VerticalAlignment="Bottom">
             </ListBox>
 
-            <Button Grid.Row="3" Grid.Column="2" Content="Remove" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_REMOVE_EHF_Click" ></Button>
+            <ListBox x:Name="listBoxChoosenEHFSDL" Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="3" 
+                     d:ItemsSource="{d:SampleData ItemCount=3}" SelectionMode="Single"
+                     Margin="0,0,0,0" SelectionChanged="listBoxChoosenEHFSDL_SelectionChanged" VerticalAlignment="Bottom">
+            </ListBox>
+
+            <ListBox x:Name="listBoxChoosenEHFLL" Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="3" 
+                     d:ItemsSource="{d:SampleData ItemCount=3}" SelectionMode="Single"
+                     Margin="0,0,0,0" SelectionChanged="listBoxChoosenEHFLL_SelectionChanged" VerticalAlignment="Bottom">
+            </ListBox>
 
         </Grid>
 
@@ -555,10 +543,18 @@
 
 
         <Grid Grid.Row="7" Grid.ColumnSpan="2">
-            <StackPanel Grid.Row="10" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <Image Margin ="0 2" HorizontalAlignment="Left" Source="/WS_SG_ETABS_Plugin;component/src/resources/RambollFDSLogo.PNG" />
+
+            <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button x:Name="buttonCancel" Content="Cancel" Width="100" Click="buttonCancel_Click"/>
                 <Button x:Name="buttonOk" Content="OK" Width="100" Click="buttonOk_Click"/>
             </StackPanel>
+
         </Grid>
 
 

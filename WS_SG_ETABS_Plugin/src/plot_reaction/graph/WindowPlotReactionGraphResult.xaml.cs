@@ -61,24 +61,53 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
             bool isError = false;
             double baseReaction = 0;
             double totalReactionInPlot = 0;
+            List<src.plot_reaction.graph.ClassPlotGraph.SumReactionPerGroup> sumReactionPerGroupList = new List<src.plot_reaction.graph.ClassPlotGraph.SumReactionPerGroup>();
 
-            (isError, baseReaction, totalReactionInPlot) = src.plot_reaction.graph.FunctionPlotReactionGraph.PlotReaction(_SapModel, groupAndColor,
+            (isError, baseReaction, totalReactionInPlot, sumReactionPerGroupList) = src.plot_reaction.graph.FunctionPlotReactionGraph.PlotReaction(_SapModel, groupAndColor,
             outputCase, reactionDirection, ReactionPlot, forceFactor, bubbleScaleFactor, textSize, titleSize, axisTitleSize, gridSpacingX, gridSpacingY, title, splitX, splitY, divisionX, divisionY, offsetX, offsetY,
             sumTextSizeX, sumTextSizeY, separationX, separationY, databaseTableList);
 
-            //Show comparison of base reaction to total reaction in plot
-            IsEnabled = false;
-            src.plot_reaction.graph.WindowPlotReactionGraphBaseReaction windowPlotReactionBaseReaction = new src.plot_reaction.graph.WindowPlotReactionGraphBaseReaction(baseReaction, totalReactionInPlot);
-            IsEnabled = true;
+            //Show sum per group
+            DataGridTextColumn c1 = new DataGridTextColumn();
+            c1.Header = "Name";
+            c1.Binding = new Binding("Name");
+            c1.Width = 110;
+            dataGridSumPerGroup.Columns.Add(c1);
+            DataGridTextColumn c2 = new DataGridTextColumn();
+            c2.Header = "Color";
+            c2.Width = 110;
+            c2.Binding = new Binding("Color");
+            dataGridSumPerGroup.Columns.Add(c2);
+            DataGridTextColumn c3 = new DataGridTextColumn();
+            c3.Header = "Total reaction (kN)";
+            c3.Width = 110;
+            c3.Binding = new Binding("SumReaction");
+            dataGridSumPerGroup.Columns.Add(c3);
 
-            //ReactionPlot.Content = reactionPlotList[0];
+            foreach (src.plot_reaction.graph.ClassPlotGraph.SumReactionPerGroup sumReactionPerGroup in sumReactionPerGroupList)
+            {
+                dataGridSumPerGroup.Items.Add(sumReactionPerGroup);
+            }
+
+
+            //If base reaction and total reaction not same, show warning
+            if (baseReaction != totalReactionInPlot)
+            {
+                //Show comparison of base reaction to total reaction in plot
+                IsEnabled = false;
+                src.plot_reaction.graph.WindowPlotReactionGraphBaseReaction windowPlotReactionBaseReaction = new src.plot_reaction.graph.WindowPlotReactionGraphBaseReaction(baseReaction, totalReactionInPlot);
+                IsEnabled = true;
+            }
 
             if (isError)
             {
                 return;
             }
 
+            
+
             ShowDialog();
+
 
         }
     }

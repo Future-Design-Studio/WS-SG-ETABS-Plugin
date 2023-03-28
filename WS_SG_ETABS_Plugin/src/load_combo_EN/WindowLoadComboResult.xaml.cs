@@ -43,17 +43,27 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             List<src.load_combo_EN.ClassLoadCombo.EHFLoad> EHFSDLYLoadList,
             List<src.load_combo_EN.ClassLoadCombo.EHFLoad> EHFLLXLoadList,
             List<src.load_combo_EN.ClassLoadCombo.EHFLoad> EHFLLYLoadList,
-            int notionaldirectionFactor)
+            int notionaldirectionFactor,
+            List<src.load_combo_EN.ClassLoadCombo.WindLoad> WindVertLoadList,
+            int ALneedtimes2,
+            bool createULSB, 
+            bool createULSC, 
+            bool createAccidental, 
+            bool createSeismic, 
+            bool createSLS, 
+            bool createSLSSteel, 
+            bool createUPLC1, 
+            bool createUPLC2)
         {
             _SapModel = SapModel;
             _Plugin = Plugin;
 
             //Mainlogic
-            bool isError = src.load_combo_EN.FunctionLoadCombo.CreateLoadPatternAndCase(_SapModel, _Plugin, deadLoadList, SDLoadList, LiveLoadList, WindLoadList, NotionalDXLoadList, NotionalDYLoadList, NotionalSDXLoadList, NotionalSDYLoadList, TemperatureLoadList, SeismicLoadList, AccidentalLoadList, UpliftLoadList, EHFDLXLoadList, EHFDLYLoadList, EHFSDLXLoadList, EHFSDLYLoadList, EHFLLXLoadList, EHFLLYLoadList, notionaldirectionFactor);
+            bool isError = src.load_combo_EN.FunctionLoadCombo.CreateLoadPatternAndCase(_SapModel, _Plugin, deadLoadList, SDLoadList, LiveLoadList, WindLoadList, NotionalDXLoadList, NotionalDYLoadList, NotionalSDXLoadList, NotionalSDYLoadList, TemperatureLoadList, SeismicLoadList, AccidentalLoadList, UpliftLoadList, EHFDLXLoadList, EHFDLYLoadList, EHFSDLXLoadList, EHFSDLYLoadList, EHFLLXLoadList, EHFLLYLoadList, notionaldirectionFactor, WindVertLoadList, ALneedtimes2, createULSB, createULSC, createAccidental, createSeismic, createSLS, createSLSSteel, createUPLC1, createUPLC2);
 
             if (isError)
             {
-                MessageBox.Show("Error, please let Mani know what happened");
+                MessageBox.Show("Error adding load patterns and cases, please let Mani know what happened");
                 return;
             }
 

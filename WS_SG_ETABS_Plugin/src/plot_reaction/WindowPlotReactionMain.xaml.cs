@@ -42,7 +42,13 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
             //Get joint reaction database table
             bool isError = false;
             List<string> tableKeys = new List<string> { "Joint Reactions", "Group Assignments", "Base Reactions" };
-            (isError, databaseTableList) = src.HelperEtabs.GetMultipleTableDisplay(SapModel, tableKeys, true);
+            (isError, databaseTableList) = src.HelperEtabs.GetMultipleTableDisplay(SapModel, tableKeys, false);
+
+            if (isError)
+            {
+                MessageBox.Show("Error in retreiving joint reactions. Please make sure the model is run!");
+                return;
+            }
 
             ShowDialog();
         }
