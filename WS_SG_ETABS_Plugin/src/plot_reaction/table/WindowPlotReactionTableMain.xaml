@@ -242,10 +242,10 @@
                 </Grid.ColumnDefinitions>
 
                 <RadioButton x:Name="radioButtonShowRenumber" Grid.Column="0" GroupName="radioSum" IsChecked="True">
-                    Show renumbered support location in plot
+                    Show sequenced number joints in keyplan
                 </RadioButton>
                 <RadioButton x:Name="radioButtonShowUniqueName" Grid.Column="1" GroupName="radioSum">
-                    Show unique name from ETABS in plot
+                    Show unique name from ETABS in keyplan
                 </RadioButton>
             </Grid>
         </Grid>
