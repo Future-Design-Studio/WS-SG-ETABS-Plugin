@@ -35,7 +35,8 @@
         <Label Grid.Row="0" Grid.Column="0" Margin="0 -10 0 0" Content="Plot Reaction Bubble Chart" FontSize="28"/>
 
         <TextBlock Grid.Row="1" Grid.Column="0" TextWrapping="Wrap" TextAlignment="Justify"  
-                       Margin="10 0 10 0" FontSize="10">Note:<LineBreak/>
+                       Margin="10 0 10 0" FontSize="10">
+                    How to use:<LineBreak/>
                     1. Select group(s) to include in plot<LineBreak/>
                     2. Choose load case or combination to be plotted<LineBreak/>
                     4. Adjust plot graphic preferences accordingly<LineBreak/>
