@@ -35,8 +35,8 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
             eTemperature temperatureUnits = new eTemperature();
             Ret = Sap.GetPresentUnits_2(ref forceUnits, ref lengthUnits, ref temperatureUnits);
 
-            //Set unit to mm
-            src.HelperEtabs.SetOutputUnitTo_kN_mm_C(Sap);
+            //Set unit to N mm
+            src.HelperEtabs.SetOutputUnitTo_N_mm_C(Sap);
 
             bool tableExist = CheckTableExistRCBSched(Sap);
             
@@ -59,7 +59,7 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
             if (isError) {return isError;}
 
             //Get dimension
-            GetRcBeamDimension(Sap, rcBeamDesignSummary, rcBeamList, cover);
+            GetRcBeamDimensionAndMaterial(Sap, rcBeamDesignSummary, rcBeamList, cover);
 
             //Get beam offset
             GetRcBeamOffset(Sap, rcBeamList);
@@ -69,6 +69,9 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
 
             //Convert area to rebar
             DesignRcBeamRebar(rcBeamList, rebarSpc, rebarSpcPreference, maxShearLinksSpacing, minShearLinksSpacing, shearLinksSpacingStep, rebarDiameterList, shearLinksDiameterList);
+
+            //Get d from rebar
+            CalculateDFromRebar(rcBeamList);
 
             //Compile data to 2d array
             var result = CompileResutRcBeamToArray(rcBeamList);
@@ -197,7 +200,7 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
             return rcBeamList;
         }
 
-        public static void GetRcBeamDimension(cSapModel Sap, src.HelperEtabs.DatabaseTable rcBeamDesignSummary ,List<src.HelperEtabs.RcBeam> rcBeamList, double cover)
+        public static void GetRcBeamDimensionAndMaterial(cSapModel Sap, src.HelperEtabs.DatabaseTable rcBeamDesignSummary ,List<src.HelperEtabs.RcBeam> rcBeamList, double cover)
         {
             //Get table
             List<Dictionary<string , string>> rcBeamDesignSummaryTable = rcBeamDesignSummary.TableInList;
@@ -213,22 +216,33 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
                         double height = 0;
                         double coverTop = 0;
                         double coverBottom = 0;
+                        string concreteMatProp = "";
+                        string rebarMatProp = "";
 
-                        (width, height) = src.HelperEtabs.GetDimensionRectangle(Sap, sectionPropName);
+                        (width, height, concreteMatProp) = src.HelperEtabs.GetRcBeamDimensionAndConcreteMaterial(Sap, sectionPropName);
 
                         rcBeam.Width = width;
                         rcBeam.Height = height;
 
-                        (coverTop, coverBottom) = src.HelperEtabs.GetRcBeamCover(Sap, sectionPropName);
+                        (coverTop, coverBottom, rebarMatProp) = src.HelperEtabs.GetRcBeamCoverAndRebarMaterial(Sap, sectionPropName);
 
-                        //In etabs they call d as cover
-                        rcBeam.d = Math.Max(coverTop, coverBottom);
-
-                        rcBeam.CoverTop = cover;
-                        rcBeam.CoverBottom = cover;
+                        //In etabs cover is to rebar center
+                        rcBeam.CoverTopEtabs = coverTop;
+                        rcBeam.CoverBottomEtabs = coverBottom;
+                        rcBeam.Cover = cover;
 
                         double d = height - Math.Max(coverTop, coverBottom);
                         rcBeam.d = d;
+
+                        //Get fyk
+                        double fyk = 0;
+                        fyk = src.HelperEtabs.GetRebarFyk(Sap, rebarMatProp);
+                        rcBeam.Fyk = fyk;
+
+                        //Get fck
+                        double fck = 0;
+                        fck = src.HelperEtabs.GetConcreteFck(Sap, concreteMatProp);
+                        rcBeam.Fck = fck;
 
                         break;
                     }
@@ -502,6 +516,10 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
                     rcBeam.MidAv = midAv * 1000; //mm2/m
                     rcBeam.RightAv = rightAv * 1000; //mm2/m
                 }
+
+                //Check againts minimum rebar
+                CompareToMinimumRcBeamRebar(rcBeam);
+
             }
 
         }
@@ -509,9 +527,9 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
         public static void DesignRcBeamRebar(List<src.HelperEtabs.RcBeam> rcBeamList, double rebarSpc, string rebarSpcPreference, double maxShearLinksSpacing, double minShearLinksSpacing, double shearLinksSpacingStep,
             int[] rebarDiameterList, int[] shearLinksDiameterList)
         {
-            foreach(src.HelperEtabs.RcBeam rcBeam in rcBeamList)
+            foreach (src.HelperEtabs.RcBeam rcBeam in rcBeamList)
             {
-                double cover = Math.Max(rcBeam.CoverTop, rcBeam.CoverBottom);
+                double cover = rcBeam.Cover;
 
                 int maxNoLayer = 3;
 
@@ -529,9 +547,9 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
                 double leftTopshearLinksDiameter = 0;
                 double leftTopShearLinksSpacing = 0;
                 string leftTopAvEvaluationComment = "";
-                (leftTopNoRebarLayer, leftTopNoRebarPerLayer, leftTopRebarDiameter, leftTopAsEvaluationComment, leftTopNoShearLinksLeg, leftTopshearLinksDiameter, leftTopShearLinksSpacing, 
-                    leftTopAvEvaluationComment, warningRebarDiameterTooBigShown)  = ConvertRcBeamAreaToRebar(
-                    leftTopAs, leftTopAv, width, height, rebarSpc, rebarSpcPreference, maxShearLinksSpacing, minShearLinksSpacing, shearLinksSpacingStep, cover, shearLinksDiameterList, 
+                (leftTopNoRebarLayer, leftTopNoRebarPerLayer, leftTopRebarDiameter, leftTopAsEvaluationComment, leftTopNoShearLinksLeg, leftTopshearLinksDiameter, leftTopShearLinksSpacing,
+                    leftTopAvEvaluationComment, warningRebarDiameterTooBigShown) = ConvertRcBeamAreaToRebar(
+                    leftTopAs, leftTopAv, width, height, rebarSpc, rebarSpcPreference, maxShearLinksSpacing, minShearLinksSpacing, shearLinksSpacingStep, cover, shearLinksDiameterList,
                     rebarDiameterList, maxNoLayer, rcBeam.UniqueName, warningRebarDiameterTooBigShown);
 
                 rcBeam.LeftTopRebar = "";
@@ -540,8 +558,9 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
                     rcBeam.LeftTopRebar += leftTopNoRebarPerLayer[layerIndex] + "H" + leftTopRebarDiameter[layerIndex] + "+";
                 }
                 rcBeam.LeftTopRebar = rcBeam.LeftTopRebar.Remove(rcBeam.LeftTopRebar.Length - 1, 1);
+                rcBeam.LeftTopRebarDiameterList = leftTopRebarDiameter;
+                rcBeam.LeftTopNoRebarPerLayer = leftTopNoRebarPerLayer;
 
-                
                 double leftBottomAs = rcBeam.LeftBottomAs;
                 double leftBottomAv = rcBeam.LeftAv;
                 width = rcBeam.Width;
@@ -554,9 +573,9 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
                 double leftBottomshearLinksDiameter = 0;
                 double leftBottomShearLinksSpacing = 0;
                 string leftBottomAvEvaluationComment = "";
-                (leftBottomNoRebarLayer, leftBottomNoRebarPerLayer, leftBottomRebarDiameter, leftBottomAsEvaluationComment, leftBottomNoShearLinksLeg, leftBottomshearLinksDiameter, leftBottomShearLinksSpacing, 
+                (leftBottomNoRebarLayer, leftBottomNoRebarPerLayer, leftBottomRebarDiameter, leftBottomAsEvaluationComment, leftBottomNoShearLinksLeg, leftBottomshearLinksDiameter, leftBottomShearLinksSpacing,
                     leftBottomAvEvaluationComment, warningRebarDiameterTooBigShown) = ConvertRcBeamAreaToRebar(
-                    leftBottomAs, leftBottomAv, width, height, rebarSpc, rebarSpcPreference, maxShearLinksSpacing, minShearLinksSpacing, shearLinksSpacingStep, cover, shearLinksDiameterList, 
+                    leftBottomAs, leftBottomAv, width, height, rebarSpc, rebarSpcPreference, maxShearLinksSpacing, minShearLinksSpacing, shearLinksSpacingStep, cover, shearLinksDiameterList,
                     rebarDiameterList, maxNoLayer, rcBeam.UniqueName, warningRebarDiameterTooBigShown);
 
                 rcBeam.LeftBottomRebar = "";
@@ -565,9 +584,16 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
                     rcBeam.LeftBottomRebar += leftBottomNoRebarPerLayer[layerIndex] + "H" + leftBottomRebarDiameter[layerIndex] + "+";
                 }
                 rcBeam.LeftBottomRebar = rcBeam.LeftBottomRebar.Remove(rcBeam.LeftBottomRebar.Length - 1, 1);
+                rcBeam.LeftBottomRebarDiameterList = leftBottomRebarDiameter;
+                rcBeam.LeftBottomNoRebarPerLayer = leftBottomNoRebarPerLayer;
 
                 rcBeam.LeftShearLinks = leftTopNoShearLinksLeg + "H" + leftTopshearLinksDiameter + "-" + leftTopShearLinksSpacing;
+                rcBeam.LeftShearLinksDiameter = leftTopshearLinksDiameter;
 
+                string midTopAsEvaluationComment = "";
+                string midTopAvEvaluationComment = "";
+                string midBottomAsEvaluationComment = "";
+                string midBottomAvEvaluationComment = "";
                 if (rcBeam.BeamType == "Simply supported")
                 {
                     double midTopAs = rcBeam.MidTopAs;
@@ -577,11 +603,9 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
                     double midTopNoRebarLayer = 0;
                     List<int> midTopNoRebarPerLayer = new List<int>();
                     List<int> midTopRebarDiameter = new List<int>();
-                    string midTopAsEvaluationComment = "";
                     double midTopNoShearLinksLeg = 0;
                     double midTopshearLinksDiameter = 0;
                     double midTopShearLinksSpacing = 0;
-                    string midTopAvEvaluationComment = "";
                     (midTopNoRebarLayer, midTopNoRebarPerLayer, midTopRebarDiameter, midTopAsEvaluationComment, midTopNoShearLinksLeg, midTopshearLinksDiameter, midTopShearLinksSpacing,
                         midTopAvEvaluationComment, warningRebarDiameterTooBigShown) = ConvertRcBeamAreaToRebar(
                         midTopAs, midTopAv, width, height, rebarSpc, rebarSpcPreference, maxShearLinksSpacing, minShearLinksSpacing, shearLinksSpacingStep, cover, shearLinksDiameterList,
@@ -593,6 +617,8 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
                         rcBeam.MidTopRebar += midTopNoRebarPerLayer[layerIndex] + "H" + midTopRebarDiameter[layerIndex] + "+";
                     }
                     rcBeam.MidTopRebar = rcBeam.MidTopRebar.Remove(rcBeam.MidTopRebar.Length - 1, 1);
+                    rcBeam.MidTopRebarDiameterList = midTopRebarDiameter;
+                    rcBeam.MidTopNoRebarPerLayer = midTopNoRebarPerLayer;
 
                     double midBottomAs = rcBeam.MidBottomAs;
                     double midBottomAv = rcBeam.MidAv;
@@ -601,11 +627,9 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
                     double midBottomNoRebarLayer = 0;
                     List<int> midBottomNoRebarPerLayer = new List<int>();
                     List<int> midBottomRebarDiameter = new List<int>();
-                    string midBottomAsEvaluationComment = "";
                     double midBottomNoShearLinksLeg = 0;
                     double midBottomshearLinksDiameter = 0;
                     double midBottomShearLinksSpacing = 0;
-                    string midBottomAvEvaluationComment = "";
                     (midBottomNoRebarLayer, midBottomNoRebarPerLayer, midBottomRebarDiameter, midBottomAsEvaluationComment, midBottomNoShearLinksLeg, midBottomshearLinksDiameter, midBottomShearLinksSpacing,
                         midBottomAvEvaluationComment, warningRebarDiameterTooBigShown) = ConvertRcBeamAreaToRebar(
                         midBottomAs, midBottomAv, width, height, rebarSpc, rebarSpcPreference, maxShearLinksSpacing, minShearLinksSpacing, shearLinksSpacingStep, cover, shearLinksDiameterList,
@@ -617,8 +641,11 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
                         rcBeam.MidBottomRebar += midBottomNoRebarPerLayer[layerIndex] + "H" + midBottomRebarDiameter[layerIndex] + "+";
                     }
                     rcBeam.MidBottomRebar = rcBeam.MidBottomRebar.Remove(rcBeam.MidBottomRebar.Length - 1, 1);
+                    rcBeam.MidBottomRebarDiameterList = midBottomRebarDiameter;
+                    rcBeam.MidBottomNoRebarPerLayer = midBottomNoRebarPerLayer;
 
                     rcBeam.MidShearLinks = midTopNoShearLinksLeg + "H" + midTopshearLinksDiameter + "-" + midTopShearLinksSpacing;
+                    rcBeam.MidShearLinksDiameter = midTopshearLinksDiameter;
                 }
                 else
                 {
@@ -639,9 +666,9 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
                 double rightTopshearLinksDiameter = 0;
                 double rightTopShearLinksSpacing = 0;
                 string rightTopAvEvaluationComment = "";
-                (rightTopNoRebarLayer, rightTopNoRebarPerLayer, rightTopRebarDiameter, rightTopAsEvaluationComment, rightTopNoShearLinksLeg, rightTopshearLinksDiameter, rightTopShearLinksSpacing, 
+                (rightTopNoRebarLayer, rightTopNoRebarPerLayer, rightTopRebarDiameter, rightTopAsEvaluationComment, rightTopNoShearLinksLeg, rightTopshearLinksDiameter, rightTopShearLinksSpacing,
                     rightTopAvEvaluationComment, warningRebarDiameterTooBigShown) = ConvertRcBeamAreaToRebar(
-                    rightTopAs, rightTopAv, width, height, rebarSpc, rebarSpcPreference, maxShearLinksSpacing, minShearLinksSpacing, shearLinksSpacingStep, cover, shearLinksDiameterList, rebarDiameterList, 
+                    rightTopAs, rightTopAv, width, height, rebarSpc, rebarSpcPreference, maxShearLinksSpacing, minShearLinksSpacing, shearLinksSpacingStep, cover, shearLinksDiameterList, rebarDiameterList,
                     maxNoLayer, rcBeam.UniqueName, warningRebarDiameterTooBigShown);
 
                 rcBeam.RightTopRebar = "";
@@ -650,6 +677,8 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
                     rcBeam.RightTopRebar += rightTopNoRebarPerLayer[layerIndex] + "H" + rightTopRebarDiameter[layerIndex] + "+";
                 }
                 rcBeam.RightTopRebar = rcBeam.RightTopRebar.Remove(rcBeam.RightTopRebar.Length - 1, 1);
+                rcBeam.RightTopRebarDiameterList = rightTopRebarDiameter;
+                rcBeam.RightTopNoRebarPerLayer = rightTopNoRebarPerLayer;
 
                 double rightBottomAs = rcBeam.RightBottomAs;
                 double rightBottomAv = rcBeam.RightAv;
@@ -663,9 +692,9 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
                 double rightBottomshearLinksDiameter = 0;
                 double rightBottomShearLinksSpacing = 0;
                 string rightBottomAvEvaluationComment = "";
-                (rightBottomNoRebarLayer, rightBottomNoRebarPerLayer, rightBottomRebarDiameter, rightBottomAsEvaluationComment, rightBottomNoShearLinksLeg, rightBottomshearLinksDiameter, rightBottomShearLinksSpacing, 
+                (rightBottomNoRebarLayer, rightBottomNoRebarPerLayer, rightBottomRebarDiameter, rightBottomAsEvaluationComment, rightBottomNoShearLinksLeg, rightBottomshearLinksDiameter, rightBottomShearLinksSpacing,
                     rightBottomAvEvaluationComment, warningRebarDiameterTooBigShown) = ConvertRcBeamAreaToRebar(
-                    rightBottomAs, rightBottomAv, width, height, rebarSpc, rebarSpcPreference, maxShearLinksSpacing, minShearLinksSpacing, shearLinksSpacingStep, cover, shearLinksDiameterList, 
+                    rightBottomAs, rightBottomAv, width, height, rebarSpc, rebarSpcPreference, maxShearLinksSpacing, minShearLinksSpacing, shearLinksSpacingStep, cover, shearLinksDiameterList,
                     rebarDiameterList, maxNoLayer, rcBeam.UniqueName, warningRebarDiameterTooBigShown);
 
                 rcBeam.RightBottomRebar = "";
@@ -674,9 +703,25 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
                     rcBeam.RightBottomRebar += rightBottomNoRebarPerLayer[layerIndex] + "H" + rightBottomRebarDiameter[layerIndex] + "+";
                 }
                 rcBeam.RightBottomRebar = rcBeam.RightBottomRebar.Remove(rcBeam.RightBottomRebar.Length - 1, 1);
+                rcBeam.RightBottomRebarDiameterList = rightBottomRebarDiameter;
+                rcBeam.RightBottomNoRebarPerLayer = rightBottomNoRebarPerLayer;
 
                 rcBeam.RightShearLinks = rightTopNoShearLinksLeg + "H" + rightTopshearLinksDiameter + "-" + rightTopShearLinksSpacing;
-                
+                rcBeam.RightShearLinksDiameter = rightTopshearLinksDiameter;
+
+
+                //Gathering evaluation comment
+                if (leftTopAsEvaluationComment != "" || leftBottomAsEvaluationComment != "" || midTopAsEvaluationComment != "" || midBottomAsEvaluationComment != "" ||
+                    rightTopAsEvaluationComment != "" || rightBottomAsEvaluationComment != "")
+                {
+                    rcBeam.AsEvaluationComment = "Num layer req > max num layer";
+                }
+
+                if (leftTopAvEvaluationComment != "" || leftBottomAvEvaluationComment != "" || midTopAvEvaluationComment != "" || midBottomAvEvaluationComment != "" ||
+                    rightTopAvEvaluationComment != "" || rightBottomAvEvaluationComment != "")
+                {
+                    rcBeam.AvEvaluationComment = "Shear links spc < min shear links spc";
+                }
             }
         }
 
@@ -989,10 +1034,10 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
         {
             List<string> colTitles = new List<string>()
             {
-                "UniqueName", "Width (mm)", "Height (mm)", "d (ETABS) (mm)", "d calculated (mm)", "Beam type", "Left Top As (mm2)", "Mid Top As (mm2)", "Right Top As (mm2)"
-                , "Left Bottom As (mm2)", "Mid Bottom As (mm2)", "Right Bottom As (mm2)", "Left Av (mm2/m)", "Mid Av (mm2/m)", "Right Av (mm2/m)"
+                "UniqueName", "Width (mm)", "Height (mm)", "fyk (Mpa)", "fck (Mpa)", "d (ETABS) (mm)", "d calculated (mm)", "Beam type", "As Min(mm2)", "Left Top As (mm2)", 
+                "Mid Top As (mm2)", "Right Top As (mm2)", "Left Bottom As (mm2)", "Mid Bottom As (mm2)", "Right Bottom As (mm2)", "Left Av (mm2/m)", "Mid Av (mm2/m)", "Right Av (mm2/m)"
                 , "Left Top Rebar", "Mid Top Rebar", "Right Top Rebar", "Left Bottom Rebar", "Mid Bottom Rebar", "Right Bottom Rebar"
-                , "Left Shear Links", "Mid Shear Links", "Right Shear Links"
+                , "Left Shear Links", "Mid Shear Links", "Right Shear Links", "Rebar warning", "Shear links warning"
             };
 
             int numOfRow = rcBeamList.Count();
@@ -1014,27 +1059,32 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
                 result[i, 0] = rcBeam.UniqueName;
                 result[i, 1] = rcBeam.Width;
                 result[i, 2] = rcBeam.Height;
-                result[i, 3] = rcBeam.d;
-                result[i, 4] = rcBeam.dCalculated;
-                result[i, 5] = rcBeam.BeamType;
-                result[i, 6] = rcBeam.LeftTopAs;
-                result[i, 7] = rcBeam.MidTopAs;
-                result[i, 8] = rcBeam.RightTopAs;
-                result[i, 9] = rcBeam.LeftBottomAs;
-                result[i, 10] = rcBeam.MidBottomAs;
-                result[i, 11] = rcBeam.RightBottomAs;
-                result[i, 12] = rcBeam.LeftAv;
-                result[i, 13] = rcBeam.MidAv;
-                result[i, 14] = rcBeam.RightAv;
-                result[i, 15] = rcBeam.LeftTopRebar;
-                result[i, 16] = rcBeam.MidTopRebar;
-                result[i, 17] = rcBeam.RightTopRebar;
-                result[i, 18] = rcBeam.LeftBottomRebar;
-                result[i, 19] = rcBeam.MidBottomRebar;
-                result[i, 20] = rcBeam.RightBottomRebar;
-                result[i, 21] = rcBeam.LeftShearLinks;
-                result[i, 22] = rcBeam.MidShearLinks;
-                result[i, 23] = rcBeam.RightShearLinks;
+                result[i, 3] = rcBeam.Fyk;
+                result[i, 4] = rcBeam.Fck;
+                result[i, 5] = rcBeam.d;
+                result[i, 6] = rcBeam.dCalculated;
+                result[i, 7] = rcBeam.BeamType;
+                result[i, 8] = rcBeam.AsMin;
+                result[i, 9] = rcBeam.LeftTopAs;
+                result[i, 10] = rcBeam.MidTopAs;
+                result[i, 11] = rcBeam.RightTopAs;
+                result[i, 12] = rcBeam.LeftBottomAs;
+                result[i, 13] = rcBeam.MidBottomAs;
+                result[i, 14] = rcBeam.RightBottomAs;
+                result[i, 15] = rcBeam.LeftAv;
+                result[i, 16] = rcBeam.MidAv;
+                result[i, 17] = rcBeam.RightAv;
+                result[i, 18] = rcBeam.LeftTopRebar;
+                result[i, 19] = rcBeam.MidTopRebar;
+                result[i, 20] = rcBeam.RightTopRebar;
+                result[i, 21] = rcBeam.LeftBottomRebar;
+                result[i, 22] = rcBeam.MidBottomRebar;
+                result[i, 23] = rcBeam.RightBottomRebar;
+                result[i, 24] = rcBeam.LeftShearLinks;
+                result[i, 25] = rcBeam.MidShearLinks;
+                result[i, 26] = rcBeam.RightShearLinks;
+                result[i, 27] = rcBeam.AsEvaluationComment;
+                result[i, 28] = rcBeam.AvEvaluationComment;
 
                 i++;
             }
@@ -1088,6 +1138,145 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
             xlApp.Quit();
         }
 
+        public static double GetMinimumRcBeamRebarEC(double fck, double fyk, double width, double effDepth)
+        {
+            //Calculate fctm
+            double fctm = 0;
 
+            if (fck <= 50) 
+            {
+                fctm = 0.3 * Math.Pow(fck, 2.0 / 3.0);
+            }
+            else
+            {
+                double fcm = fck + 8;
+                fctm = 2.12 * Math.Log(1 + fcm / 10);
+            }
+
+            //Min rebar percentage
+            double minRebarPercentage = 0.26 * fctm / fyk;
+            minRebarPercentage = Math.Max(minRebarPercentage, 0.13 / 100);
+
+            //Min As
+            double asMin = minRebarPercentage * width * effDepth;
+
+            return asMin;
+        }
+
+        public static void CompareToMinimumRcBeamRebar(src.HelperEtabs.RcBeam rcBeam)
+        {
+            double asMin = 0;
+            asMin = GetMinimumRcBeamRebarEC(rcBeam.Fck, rcBeam.Fyk, rcBeam.Width, rcBeam.d);
+            rcBeam.AsMin = Math.Ceiling(asMin);
+
+            if (rcBeam.BeamType == "Simply supported")
+            {
+                rcBeam.LeftTopAs = Math.Max(rcBeam.LeftTopAs, asMin);
+                rcBeam.MidTopAs = Math.Max(rcBeam.MidTopAs, asMin);
+                rcBeam.RightTopAs = Math.Max(rcBeam.RightTopAs, asMin);
+                rcBeam.LeftBottomAs = Math.Max(rcBeam.LeftTopAs, asMin);
+                rcBeam.MidBottomAs = Math.Max(rcBeam.MidTopAs, asMin);
+                rcBeam.RightBottomAs = Math.Max(rcBeam.RightTopAs, asMin);
+            }
+            else if (rcBeam.BeamType == "Cantilever")
+            {
+                rcBeam.LeftTopAs = Math.Max(rcBeam.LeftTopAs, asMin);
+                rcBeam.RightTopAs = Math.Max(rcBeam.RightTopAs, asMin);
+                rcBeam.LeftBottomAs = Math.Max(rcBeam.LeftTopAs, asMin);
+                rcBeam.RightBottomAs = Math.Max(rcBeam.RightTopAs, asMin);
+            }
+        }
+
+        public static void CalculateDFromRebar(List<src.HelperEtabs.RcBeam> rcBeamList)
+        {
+            foreach(src.HelperEtabs.RcBeam rcBeam in rcBeamList)
+            {
+                double coverToRebarCentroid = 0;
+                double maxCoverToRebarCentroid = 0;
+                double centroidFromFirstRebarCentroid = 0;
+
+                //Left top
+                centroidFromFirstRebarCentroid = GetCentroidFromRebarDiameterList(rcBeam.LeftTopRebarDiameterList, rcBeam.LeftTopNoRebarPerLayer);
+                coverToRebarCentroid = rcBeam.Cover + rcBeam.LeftShearLinksDiameter + 0.5 * rcBeam.LeftTopRebarDiameterList[0] + centroidFromFirstRebarCentroid;
+                maxCoverToRebarCentroid = Math.Max(coverToRebarCentroid, maxCoverToRebarCentroid);
+
+                //Left bottom
+                centroidFromFirstRebarCentroid = GetCentroidFromRebarDiameterList(rcBeam.LeftBottomRebarDiameterList, rcBeam.LeftBottomNoRebarPerLayer);
+                coverToRebarCentroid = rcBeam.Cover + rcBeam.LeftShearLinksDiameter + 0.5 * rcBeam.LeftBottomRebarDiameterList[0] + centroidFromFirstRebarCentroid;
+                maxCoverToRebarCentroid = Math.Max(coverToRebarCentroid, maxCoverToRebarCentroid);
+
+                if (rcBeam.BeamType == "Simply supported")
+                {
+                    //Mid top
+                    centroidFromFirstRebarCentroid = GetCentroidFromRebarDiameterList(rcBeam.MidTopRebarDiameterList, rcBeam.MidTopNoRebarPerLayer);
+                    coverToRebarCentroid = rcBeam.Cover + rcBeam.MidShearLinksDiameter + 0.5 * rcBeam.MidTopRebarDiameterList[0] + centroidFromFirstRebarCentroid;
+                    maxCoverToRebarCentroid = Math.Max(coverToRebarCentroid, maxCoverToRebarCentroid);
+
+                    //Mid bottom
+                    centroidFromFirstRebarCentroid = GetCentroidFromRebarDiameterList(rcBeam.MidBottomRebarDiameterList, rcBeam.MidBottomNoRebarPerLayer);
+                    coverToRebarCentroid = rcBeam.Cover + rcBeam.MidShearLinksDiameter + 0.5 * rcBeam.MidBottomRebarDiameterList[0] + centroidFromFirstRebarCentroid;
+                    maxCoverToRebarCentroid = Math.Max(coverToRebarCentroid, maxCoverToRebarCentroid);
+                }
+
+                //Right top
+                centroidFromFirstRebarCentroid = GetCentroidFromRebarDiameterList(rcBeam.RightTopRebarDiameterList, rcBeam.RightTopNoRebarPerLayer);
+                coverToRebarCentroid = rcBeam.Cover + rcBeam.RightShearLinksDiameter + 0.5 * rcBeam.RightTopRebarDiameterList[0] + centroidFromFirstRebarCentroid;
+                maxCoverToRebarCentroid = Math.Max(coverToRebarCentroid, maxCoverToRebarCentroid);
+
+                //Right bottom
+                centroidFromFirstRebarCentroid = GetCentroidFromRebarDiameterList(rcBeam.RightBottomRebarDiameterList, rcBeam.RightBottomNoRebarPerLayer);
+                coverToRebarCentroid = rcBeam.Cover + rcBeam.RightShearLinksDiameter + 0.5 * rcBeam.RightBottomRebarDiameterList[0] + centroidFromFirstRebarCentroid;
+                maxCoverToRebarCentroid = Math.Max(coverToRebarCentroid, maxCoverToRebarCentroid);
+
+                //Save d calcualated
+                rcBeam.dCalculated = Math.Floor(rcBeam.Height - maxCoverToRebarCentroid);
+
+                //Give warning if d calculated < d ETABS
+                if (rcBeam.dCalculated < rcBeam.d)
+                {
+                    if (rcBeam.AsEvaluationComment == null)
+                    {
+                        rcBeam.AsEvaluationComment = "d calculated < d ETABS";
+                    }
+                    else
+                    {
+                        rcBeam.AsEvaluationComment += ", d calculated < d ETABS";
+                    }
+                }
+            }
+        }
+
+        public static double GetCentroidFromRebarDiameterList(List<int> rebarDiameterList, List<int> noRebarPerLayer)
+        {
+            //For 1 layer only
+            if (rebarDiameterList.Count == 1)
+            {
+                return 0;
+            }
+            else
+            {
+                double sumAreaTimesCentroid = 0;
+                double sumArea = 0;
+                double eachLayerCentroid = 0;
+                int index = 0;
+                foreach (int rebarDiameter in rebarDiameterList)
+                {
+                    sumAreaTimesCentroid += 0.25 * Math.PI * Math.Pow(rebarDiameter, 2) * eachLayerCentroid * noRebarPerLayer[index];
+                    sumArea += 0.25 * Math.PI * Math.Pow(rebarDiameter, 2);
+
+                    //Calculate centroid for next layer
+                    if (index < rebarDiameterList.Count - 1)
+                    {
+                        eachLayerCentroid += 0.5 * rebarDiameter + Math.Max(25, rebarDiameter) + 0.5 * rebarDiameterList[index + 1];
+                    }
+
+                    index++;
+                }
+
+                double centroid = sumAreaTimesCentroid / sumArea;
+                return centroid;
+            }
+
+        }
     }
 }

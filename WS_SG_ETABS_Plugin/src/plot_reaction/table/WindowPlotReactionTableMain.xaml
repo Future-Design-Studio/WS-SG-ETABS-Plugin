@@ -12,18 +12,34 @@
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="0.2*"></RowDefinition>
+            <RowDefinition Height="0.15*"></RowDefinition>
             <RowDefinition Height="0.3*"></RowDefinition>
-            <RowDefinition Height="0.85*"></RowDefinition>
-            <RowDefinition Height="0.5*"></RowDefinition>
+            <RowDefinition Height="0.1*"></RowDefinition>
+            <RowDefinition Height="0.3*"></RowDefinition>
+            <RowDefinition Height="0.1*"></RowDefinition>
+            <RowDefinition Height="0.8*"></RowDefinition>
+            <RowDefinition Height="0.1*"></RowDefinition>
+            <RowDefinition Height="0.4*"></RowDefinition>
+            <RowDefinition Height="0.1*"></RowDefinition>
             <RowDefinition Height="0.7*"></RowDefinition>
-            <RowDefinition Height="0.2*"></RowDefinition>
             <RowDefinition Height="0.1*"></RowDefinition>
         </Grid.RowDefinitions>
 
-        <Label Grid.Row="0" Grid.Column="0" Content="Create Reaction Excel And Support Position Plot" FontSize="28"/>
+        <Label Grid.Row="0" Grid.Column="0" Margin="0 -10 0 0" Content="Create Reaction Excel And Keyplan" FontSize="28"/>
 
-        <Grid Grid.Row="1" Grid.Column="0" Margin="0 0 0 0">
+        <TextBlock Grid.Row="1" Grid.Column="0" TextWrapping="Wrap" TextAlignment="Justify"  
+                       Margin="10 0 10 0" FontSize="10">
+                    How to use:<LineBreak/>
+                    1. Select excel save file location (by default it will be in the same folder as ETABS file)<LineBreak/>
+                    2. Select group(s) to include in keyplan<LineBreak/>
+                    3. Choose load case(s) and combination(s) to include in excel<LineBreak/>
+                    4. Adjust keyplan graphic preferences accordingly<LineBreak/>
+                    5. Press OK to proceed
+        </TextBlock>
+
+        <Label Grid.Row="2" Grid.Column="0" Content="1.Select excel save file location" FontSize="14" FontWeight="Bold"/>
+
+        <Grid Grid.Row="3" Grid.Column="0" Margin="0 0 0 0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
@@ -60,14 +76,14 @@
             </Grid>
         </Grid>
 
+        <Label Grid.Row="4" Grid.Column="0" Content="2.Select group(s) to include in keyplan" FontSize="14" FontWeight="Bold"/>
 
-        <Grid Grid.Row="2" Grid.Column="1" Margin="0 10 0 10">
+        <Grid Grid.Row="5" Grid.Column="1" Margin="10 0 10 0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="6*"></RowDefinition>
+                <RowDefinition Height="4*"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
 
@@ -95,24 +111,24 @@
                 Use default color and opacity
             </CheckBox>
 
-            <Label Grid.Row="3" Grid.Column="0" Content="Selected groups:"/>
+            <Label Grid.Row="2" Grid.Column="0" Content="Selected groups:"/>
 
-            <ListBox x:Name="listBoxChoosenGroup" Grid.Row="4" Grid.ColumnSpan="2" 
+            <ListBox x:Name="listBoxChoosenGroup" Grid.Row="3" Grid.ColumnSpan="2" 
                      d:ItemsSource="{d:SampleData ItemCount=5}" SelectionMode="Single"
                      Margin="0 10 0 10">
             </ListBox>
 
-            <Button x:Name="buttonRemoveGroup" Grid.Row="5" Grid.Column="0" 
+            <Button x:Name="buttonRemoveGroup" Grid.Row="4" Grid.Column="0" 
                     Content="Remove" Click="buttonRemoveGroup_Click"></Button>
 
-            <Button x:Name="buttonAddGroup" Grid.Row="5" Grid.Column="1" 
+            <Button x:Name="buttonAddGroup" Grid.Row="4" Grid.Column="1" 
                     Content="Add" Click="buttonAddGroup_Click"></Button>
 
         </Grid>
 
-
-
-        <Grid Grid.Row="3" Grid.Column="0" Margin="0 10 0 10">
+        <Label Grid.Row="6" Grid.Column="0" Content="3. Select load case(s) and combination(s) to include in excel" FontSize="14" FontWeight="Bold"/>
+        
+        <Grid Grid.Row="7" Grid.Column="0" Margin="10 0 10 0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="4*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
@@ -136,7 +152,9 @@
 
         </Grid>
 
-        <Grid Grid.Row="4">
+        <Label Grid.Row="8" Grid.Column="0" Content="4. Keyplan graphic preferences" FontSize="14" FontWeight="Bold"/>
+
+        <Grid Grid.Row="9">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
@@ -154,8 +172,8 @@
                     <ColumnDefinition Width="*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
 
-                <Label Grid.Column="0" VerticalAlignment="Center" Grid.ColumnSpan="2">Plot title:</Label>
-                <TextBox Grid.Column="1" x:Name="textBoxPlotTitle" Grid.Row="0" TextAlignment="Center" Text="Support Location Plot"/>
+                <Label Grid.Column="0" VerticalAlignment="Center" Grid.ColumnSpan="2">Keyplan title:</Label>
+                <TextBox Grid.Column="1" x:Name="textBoxPlotTitle" Grid.Row="0" TextAlignment="Center" Text="Keyplan"/>
             </Grid>
 
             <Grid Grid.Row="1" Margin="10 0 10 0">
@@ -225,22 +243,15 @@
                 </Grid.ColumnDefinitions>
 
                 <RadioButton x:Name="radioButtonShowRenumber" Grid.Column="0" GroupName="radioSum" IsChecked="True">
-                    Show renumbered support location in plot
+                    Show sequenced number joints in keyplan
                 </RadioButton>
                 <RadioButton x:Name="radioButtonShowUniqueName" Grid.Column="1" GroupName="radioSum">
-                    Show unique name from ETABS in plot
+                    Show unique name from ETABS in keyplan
                 </RadioButton>
             </Grid>
         </Grid>
 
-        <TextBlock Grid.Row="5" Grid.Column="0" TextWrapping="Wrap" TextAlignment="Justify"  
-                       Margin="10 0 10 0" FontSize="10">Note:<LineBreak/>
-                    1. Choose load case or load combination to include in excel<LineBreak/>
-                    2. Choose group(s) to include in excel and plot<LineBreak/>
-                    3. Press OK to proceed
-        </TextBlock>
-
-        <Grid Grid.Row="6">
+        <Grid Grid.Row="10">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
