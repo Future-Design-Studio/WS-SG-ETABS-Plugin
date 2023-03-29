@@ -1326,7 +1326,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
             }
 
-            if (SeismicLoadList.Count == 2)
+            else if (SeismicLoadList.Count == 2)
             {
 
 

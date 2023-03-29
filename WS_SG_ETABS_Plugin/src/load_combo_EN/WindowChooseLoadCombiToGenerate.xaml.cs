@@ -124,7 +124,49 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             ShowDialog();
         }
 
-        
+        private void checkboxALL_Checked(object sender, RoutedEventArgs e)
+        {
+            checkboxULSComboB.IsChecked = true;
+            checkboxULSComboC.IsChecked = true;
+            checkboxService.IsChecked = true;
+            checkboxServiceSteel.IsChecked = true;
+            
+            if (checkboxAccidental.IsEnabled)
+            {
+                checkboxAccidental.IsChecked = true;
+            }
+            if (checkboxSeismic.IsEnabled)
+            {
+                checkboxSeismic.IsChecked = true;
+            }
+            if (checkboxUpliftC1.IsEnabled)
+            {
+                checkboxUpliftC1.IsChecked = true;
+                checkboxUpliftC2.IsChecked = true;
+            }
+        }
+
+        private void checkboxALL_Unchecked(object sender, RoutedEventArgs e)
+        {
+            checkboxULSComboB.IsChecked = false;
+            checkboxULSComboC.IsChecked = false;
+            checkboxService.IsChecked = false;
+            checkboxServiceSteel.IsChecked = false;
+
+            if (checkboxAccidental.IsEnabled)
+            {
+                checkboxAccidental.IsChecked = false;
+            }
+            if (checkboxSeismic.IsEnabled)
+            {
+                checkboxSeismic.IsChecked = false;
+            }
+            if (checkboxUpliftC1.IsEnabled)
+            {
+                checkboxUpliftC1.IsChecked = false;
+                checkboxUpliftC2.IsChecked = false;
+            }
+        }
 
         private void checkboxULSComboB_Checked(object sender, RoutedEventArgs e)
         {
@@ -227,5 +269,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             src.load_combo_EN.WindowLoadComboResult windowLoadComboResult = new src.load_combo_EN.WindowLoadComboResult(_SapModel, _Plugin, deadLoadList, SDLoadList, LiveLoadList, WindLoadList, NotionalDXLoadList, NotionalDYLoadList, NotionalSDXLoadList, NotionalSDYLoadList, TemperatureLoadList, SeismicLoadList, AccidentalLoadList, UpliftLoadList, EHFDLXLoadList, EHFDLYLoadList, EHFSDLXLoadList, EHFSDLYLoadList, EHFLLXLoadList, EHFLLYLoadList, notionaldirectionFactor, WindVertLoadList, ALneedtimes2, createULSB, createULSC, createAccidental, createSeismic, createSLS, createSLSSteel, createUPLC1, createUPLC2);
             
         }
+
+        
     }
 }
