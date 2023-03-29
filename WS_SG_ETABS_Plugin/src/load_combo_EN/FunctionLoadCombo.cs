@@ -721,48 +721,72 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
             #region Seismic load pattern and case
 
-            /*
-            foreach (var seismicLoad in SeismicLoadList)
+            if (SeismicLoadList.Count == 3)
             {
-                isError = src.HelperEtabs.AddLoadPattern(SapModel, seismicLoad.Name, 0, "Seismic", seismicLoad.IsExisting, addAnalysisCase);
-                if (isError)
+                foreach (var seismicLoad in SeismicLoadList)
                 {
-                    return true;
-                }
-            }
-            */
+                    string SeismicLoadCaseName = "P_Seismic (" + seismicLoad.Name + ")";
 
-            foreach (var seismicLoad in SeismicLoadList)
-            {
-                string SeismicLoadCaseName = "P_Seismic (" + seismicLoad.Name + ")";
+                    seismiccaselist.Add(SeismicLoadCaseName);
 
-                seismiccaselist.Add(SeismicLoadCaseName);
-
-                isError = src.HelperEtabs.AddNewRSALoadCase(SapModel, SeismicLoadCaseName);
-                if (isError)
-                {
-                    return true;
+                    isError = src.HelperEtabs.AddNewRSALoadCase(SapModel, SeismicLoadCaseName);
+                    /*
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    */
                 }
             }
 
-            /*
-            LoadType = new string[50];
-            LoadName = new string[50];
-            SF = new double[50];
-            i = 0;
-            NumberLoads = 1;
-            foreach (var seismicLoad in SeismicLoadList)
+            else if (SeismicLoadList.Count == 2)
             {
-                LoadType[i] = "Load";
-                LoadName[i] = seismicLoad.Name;
-                SF[i] = 1.00;
-                isError = src.HelperEtabs.UpdateLoadCase(SapModel, "P_Seismic (" + seismicLoad.Name + ")", NumberLoads, LoadType, LoadName, SF);
-                if (isError)
+                foreach (var seismicLoad in SeismicLoadList)
                 {
-                    return true;
+                    isError = src.HelperEtabs.AddLoadPattern(SapModel, seismicLoad.Name, 0, "Seismic", seismicLoad.IsExisting, addAnalysisCase);
+                    /*
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    */
+                }
+
+                foreach (var seismicLoad in SeismicLoadList)
+                {
+                    string SeismicLoadCaseName = "P_Seismic (" + seismicLoad.Name + ")";
+
+                    seismiccaselist.Add(SeismicLoadCaseName);
+
+                    isError = src.HelperEtabs.AddNewLinearLoadCase(SapModel, SeismicLoadCaseName);
+                    /*
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    */
+                }
+
+                LoadType = new string[50];
+                LoadName = new string[50];
+                SF = new double[50];
+                i = 0;
+                NumberLoads = 1;
+                foreach (var seismicLoad in SeismicLoadList)
+                {
+                    LoadType[i] = "Load";
+                    LoadName[i] = seismicLoad.Name;
+                    SF[i] = 1.00;
+                    isError = src.HelperEtabs.UpdateLoadCase(SapModel, "P_Seismic (" + seismicLoad.Name + ")", NumberLoads, LoadType, LoadName, SF);
+                    /*
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    */
                 }
             }
-            */
+
             #endregion
 
             #region Accidental load pattern and case
