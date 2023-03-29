@@ -130,5 +130,13 @@ namespace WS_SG_ETABS_Plugin
             src.wind_coeff.WindowWindCoeffMain windowWindCoeffMain = new src.wind_coeff.WindowWindCoeffMain(_SapModel, _Plugin);
             IsEnabled = true;
         }
+
+        private void buttonReleaseSelectedNode_Click(object sender, RoutedEventArgs e)
+        {
+            IsEnabled = false;
+            //Call up Release at selected nodes window
+            src.release_selected_node.WindowReleaseSelectedNodeMain windowReleaseSelectedNodeMain = new src.release_selected_node.WindowReleaseSelectedNodeMain(_SapModel, _Plugin);
+            IsEnabled = true;
+        }
     }
 }
