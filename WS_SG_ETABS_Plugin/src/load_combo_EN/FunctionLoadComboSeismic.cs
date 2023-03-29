@@ -72,7 +72,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             nlFactor = new double();
             notionalcaselistIndex = new int();
 
-            if (SeismicLoadList.Count != 0)
+            if (SeismicLoadList.Count == 3)
             {
 
 
@@ -1325,6 +1325,993 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
 
             }
+
+            if (SeismicLoadList.Count == 2)
+            {
+
+
+                int numberOfCombi = (1 * 8) + (1 * 8) + (1 * 8) + (1 * 8);
+
+                //add envelope combi for all B
+                isError = src.HelperEtabs.AddNewLoadCombiEnvelope(SapModel, basecombiname + "ENV");
+                if (isError)
+                {
+                    MessageBox.Show("Error adding load combination set Seismic Design, there could be existing combinations in the model with the same naming.");
+                    return true;
+                }
+
+                //create number of combinations required
+                while (numberloadcombi <= numberOfCombi)
+                {
+                    isError = src.HelperEtabs.AddNewLoadCombiLinear(SapModel, basecombiname + numberloadcombi);
+                    if (isError)
+                    {
+                        MessageBox.Show("Error adding load combination set Seismic Design, there could be existing combinations in the model with the same naming.");
+                        return true;
+                    }
+                    //update envelope load combi
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + "ENV", 1, basecombiname + numberloadcombi, 1);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    numberloadcombi++;
+                }
+
+                #region First 8 load combis for case1 ------------------------- COMBI 1-8
+
+                dlFactor = 1;
+                sdlFactor = 1;
+                llFactor = 1;
+                seismicFactor = 1;
+
+
+
+                //first 8 load combis DL SDL LL ------------------------- COMBI 1-8
+                for (int combi1 = 1; combi1 <= 8; combi1++)
+                {
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, "P_DL", dlFactor);
+                    if (isError)
+                    {
+                        return true;
+                    }
+
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, "P_SDL", sdlFactor);
+                    if (isError)
+                    {
+                        return true;
+                    }
+
+                    foreach (KeyValuePair<string, string> llDetails in llcaseDict)
+                    {
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, llDetails.Key, (llFactor * quasiPermanentDict[llDetails.Value][2]));
+                        if (isError)
+                        {
+                            return true;
+                        }
+                    }
+                }
+
+                //next 8 load combis Seismic ------------------------- COMBI 1-8
+                for (int combi1 = 1; combi1 <= 8; combi1++)
+                {
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, seismiccaselist[0], 1);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, seismiccaselist[1], 0.3);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    combi1++;
+
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, seismiccaselist[0], 1);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, seismiccaselist[1], -0.3);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    combi1++;
+
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, seismiccaselist[0], -1);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, seismiccaselist[1], 0.3);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    combi1++;
+
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, seismiccaselist[0], -1);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, seismiccaselist[1], -0.3);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    combi1++;
+
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, seismiccaselist[1], 1);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, seismiccaselist[0], 0.3);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    combi1++;
+
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, seismiccaselist[1], 1);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, seismiccaselist[0], -0.3);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    combi1++;
+
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, seismiccaselist[1], -1);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, seismiccaselist[0], 0.3);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    combi1++;
+
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, seismiccaselist[1], -1);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, seismiccaselist[0], -0.3);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    combi1++;
+                }
+
+                //next 8 ehf loads ------------------------- COMBI 1-8
+                for (int combi1 = 1; combi1 <= 8; combi1++)
+                {
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, "P_EHFx (DL)", dlFactor);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, "P_EHFx (SDL)", sdlFactor);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    foreach (KeyValuePair<string, string> ehfxLL in ehfllxcaseDict)
+                    {
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, ehfxLL.Key, (llFactor * quasiPermanentDict[ehfxLL.Value][2]));
+                        if (isError)
+                        {
+                            return true;
+                        }
+                    }
+                    combi1++;
+
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, "P_EHFx (DL)", dlFactor);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, "P_EHFx (SDL)", sdlFactor);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    foreach (KeyValuePair<string, string> ehfxLL in ehfllxcaseDict)
+                    {
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, ehfxLL.Key, (llFactor * quasiPermanentDict[ehfxLL.Value][2]));
+                        if (isError)
+                        {
+                            return true;
+                        }
+                    }
+                    combi1++;
+
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, "P_EHFx (DL)", -dlFactor);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, "P_EHFx (SDL)", -sdlFactor);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    foreach (KeyValuePair<string, string> ehfxLL in ehfllxcaseDict)
+                    {
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, ehfxLL.Key, -(llFactor * quasiPermanentDict[ehfxLL.Value][2]));
+                        if (isError)
+                        {
+                            return true;
+                        }
+                    }
+                    combi1++;
+
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, "P_EHFx (DL)", -dlFactor);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, "P_EHFx (SDL)", -sdlFactor);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    foreach (KeyValuePair<string, string> ehfxLL in ehfllxcaseDict)
+                    {
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, ehfxLL.Key, -(llFactor * quasiPermanentDict[ehfxLL.Value][2]));
+                        if (isError)
+                        {
+                            return true;
+                        }
+                    }
+                    combi1++;
+
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, "P_EHFy (DL)", dlFactor);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, "P_EHFy (SDL)", sdlFactor);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    foreach (KeyValuePair<string, string> ehfyLL in ehfllycaseDict)
+                    {
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, ehfyLL.Key, (llFactor * quasiPermanentDict[ehfyLL.Value][2]));
+                        if (isError)
+                        {
+                            return true;
+                        }
+                    }
+                    combi1++;
+
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, "P_EHFy (DL)", dlFactor);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, "P_EHFy (SDL)", sdlFactor);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    foreach (KeyValuePair<string, string> ehfyLL in ehfllycaseDict)
+                    {
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, ehfyLL.Key, (llFactor * quasiPermanentDict[ehfyLL.Value][2]));
+                        if (isError)
+                        {
+                            return true;
+                        }
+                    }
+                    combi1++;
+
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, "P_EHFy (DL)", -dlFactor);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, "P_EHFy (SDL)", -sdlFactor);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    foreach (KeyValuePair<string, string> ehfyLL in ehfllycaseDict)
+                    {
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, ehfyLL.Key, -(llFactor * quasiPermanentDict[ehfyLL.Value][2]));
+                        if (isError)
+                        {
+                            return true;
+                        }
+                    }
+                    combi1++;
+
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, "P_EHFy (DL)", -dlFactor);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, "P_EHFy (SDL)", -sdlFactor);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    foreach (KeyValuePair<string, string> ehfyLL in ehfllycaseDict)
+                    {
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, ehfyLL.Key, -(llFactor * quasiPermanentDict[ehfyLL.Value][2]));
+                        if (isError)
+                        {
+                            return true;
+                        }
+                    }
+                }
+                #endregion
+
+                #region Next 8 load combis for case2 ------------------------- COMBI 9-16
+
+                dlFactor = 1;
+                llFactor = 1;
+                seismicFactor = 1;
+
+
+
+                //first 8 load combis DL LL ------------------------- COMBI 9-16
+                for (int combi1 = 9; combi1 <= 16; combi1++)
+                {
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, "P_DL", dlFactor);
+                    if (isError)
+                    {
+                        return true;
+                    }
+
+                    foreach (KeyValuePair<string, string> llDetails in llcaseDict)
+                    {
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, llDetails.Key, (llFactor * quasiPermanentDict[llDetails.Value][2]));
+                        if (isError)
+                        {
+                            return true;
+                        }
+                    }
+                }
+
+                //next 8 load combis Seismic ------------------------- COMBI 9-16
+                for (int combi1 = 9; combi1 <= 16; combi1++)
+                {
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, seismiccaselist[0], 1);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, seismiccaselist[1], 0.3);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    combi1++;
+
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, seismiccaselist[0], 1);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, seismiccaselist[1], -0.3);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    combi1++;
+
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, seismiccaselist[0], -1);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, seismiccaselist[1], 0.3);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    combi1++;
+
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, seismiccaselist[0], -1);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, seismiccaselist[1], -0.3);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    combi1++;
+
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, seismiccaselist[1], 1);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, seismiccaselist[0], 0.3);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    combi1++;
+
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, seismiccaselist[1], 1);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, seismiccaselist[0], -0.3);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    combi1++;
+
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, seismiccaselist[1], -1);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, seismiccaselist[0], 0.3);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    combi1++;
+
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, seismiccaselist[1], -1);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, seismiccaselist[0], -0.3);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    combi1++;
+                }
+
+                //next 8 ehf loads ------------------------- COMBI 9-16
+                for (int combi1 = 9; combi1 <= 16; combi1++)
+                {
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, "P_EHFx (DL)", dlFactor);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    foreach (KeyValuePair<string, string> ehfxLL in ehfllxcaseDict)
+                    {
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, ehfxLL.Key, (llFactor * quasiPermanentDict[ehfxLL.Value][2]));
+                        if (isError)
+                        {
+                            return true;
+                        }
+                    }
+                    combi1++;
+
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, "P_EHFx (DL)", dlFactor);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    foreach (KeyValuePair<string, string> ehfxLL in ehfllxcaseDict)
+                    {
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, ehfxLL.Key, (llFactor * quasiPermanentDict[ehfxLL.Value][2]));
+                        if (isError)
+                        {
+                            return true;
+                        }
+                    }
+                    combi1++;
+
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, "P_EHFx (DL)", -dlFactor);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    foreach (KeyValuePair<string, string> ehfxLL in ehfllxcaseDict)
+                    {
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, ehfxLL.Key, -(llFactor * quasiPermanentDict[ehfxLL.Value][2]));
+                        if (isError)
+                        {
+                            return true;
+                        }
+                    }
+                    combi1++;
+
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, "P_EHFx (DL)", -dlFactor);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    foreach (KeyValuePair<string, string> ehfxLL in ehfllxcaseDict)
+                    {
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, ehfxLL.Key, -(llFactor * quasiPermanentDict[ehfxLL.Value][2]));
+                        if (isError)
+                        {
+                            return true;
+                        }
+                    }
+                    combi1++;
+
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, "P_EHFy (DL)", dlFactor);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    foreach (KeyValuePair<string, string> ehfyLL in ehfllycaseDict)
+                    {
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, ehfyLL.Key, (llFactor * quasiPermanentDict[ehfyLL.Value][2]));
+                        if (isError)
+                        {
+                            return true;
+                        }
+                    }
+                    combi1++;
+
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, "P_EHFy (DL)", dlFactor);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    foreach (KeyValuePair<string, string> ehfyLL in ehfllycaseDict)
+                    {
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, ehfyLL.Key, (llFactor * quasiPermanentDict[ehfyLL.Value][2]));
+                        if (isError)
+                        {
+                            return true;
+                        }
+                    }
+                    combi1++;
+
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, "P_EHFy (DL)", -dlFactor);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    foreach (KeyValuePair<string, string> ehfyLL in ehfllycaseDict)
+                    {
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, ehfyLL.Key, -(llFactor * quasiPermanentDict[ehfyLL.Value][2]));
+                        if (isError)
+                        {
+                            return true;
+                        }
+                    }
+                    combi1++;
+
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, "P_EHFy (DL)", -dlFactor);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    foreach (KeyValuePair<string, string> ehfyLL in ehfllycaseDict)
+                    {
+                        isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, ehfyLL.Key, -(llFactor * quasiPermanentDict[ehfyLL.Value][2]));
+                        if (isError)
+                        {
+                            return true;
+                        }
+                    }
+                }
+                #endregion
+
+                #region Next 8 load combis for case3 ------------------------- COMBI 17-24
+
+                dlFactor = 1;
+                sdlFactor = 1;
+                seismicFactor = 1;
+
+
+
+                //first 8 load combis DL SDL ------------------------- COMBI 17-24
+                for (int combi1 = 17; combi1 <= 24; combi1++)
+                {
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, "P_DL", dlFactor);
+                    if (isError)
+                    {
+                        return true;
+                    }
+
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, "P_SDL", sdlFactor);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                }
+
+                //next 8 load combis Seismic ------------------------- COMBI 17-24
+                for (int combi1 = 17; combi1 <= 24; combi1++)
+                {
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, seismiccaselist[0], 1);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, seismiccaselist[1], 0.3);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    combi1++;
+
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, seismiccaselist[0], 1);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, seismiccaselist[1], -0.3);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    combi1++;
+
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, seismiccaselist[0], -1);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, seismiccaselist[1], 0.3);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    combi1++;
+
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, seismiccaselist[0], -1);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, seismiccaselist[1], -0.3);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    combi1++;
+
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, seismiccaselist[1], 1);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, seismiccaselist[0], 0.3);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    combi1++;
+
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, seismiccaselist[1], 1);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, seismiccaselist[0], -0.3);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    combi1++;
+
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, seismiccaselist[1], -1);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, seismiccaselist[0], 0.3);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    combi1++;
+
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, seismiccaselist[1], -1);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, seismiccaselist[0], -0.3);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    combi1++;
+                }
+
+                //next 8 ehf loads ------------------------- COMBI 17-24
+                for (int combi1 = 17; combi1 <= 24; combi1++)
+                {
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, "P_EHFx (DL)", dlFactor);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, "P_EHFx (SDL)", sdlFactor);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    combi1++;
+
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, "P_EHFx (DL)", dlFactor);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, "P_EHFx (SDL)", sdlFactor);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    combi1++;
+
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, "P_EHFx (DL)", -dlFactor);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, "P_EHFx (SDL)", -sdlFactor);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    combi1++;
+
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, "P_EHFx (DL)", -dlFactor);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, "P_EHFx (SDL)", -sdlFactor);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    combi1++;
+
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, "P_EHFy (DL)", dlFactor);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, "P_EHFy (SDL)", sdlFactor);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    combi1++;
+
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, "P_EHFy (DL)", dlFactor);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, "P_EHFy (SDL)", sdlFactor);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    combi1++;
+
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, "P_EHFy (DL)", -dlFactor);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, "P_EHFy (SDL)", -sdlFactor);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    combi1++;
+
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, "P_EHFy (DL)", -dlFactor);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, "P_EHFy (SDL)", -sdlFactor);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                }
+                #endregion
+
+                #region Next 8 load combis for case4 ------------------------- COMBI 25-32
+
+                dlFactor = 1;
+                llFactor = 1;
+                seismicFactor = 1;
+
+
+
+                //first 8 load combis DL ------------------------- COMBI 25-32
+                for (int combi1 = 25; combi1 <= 32; combi1++)
+                {
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, "P_DL", dlFactor);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                }
+
+                //next 8 load combis Seismic ------------------------- COMBI 25-32
+                for (int combi1 = 25; combi1 <= 32; combi1++)
+                {
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, seismiccaselist[0], 1);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, seismiccaselist[1], 0.3);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    combi1++;
+
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, seismiccaselist[0], 1);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, seismiccaselist[1], -0.3);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    combi1++;
+
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, seismiccaselist[0], -1);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, seismiccaselist[1], 0.3);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    combi1++;
+
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, seismiccaselist[0], -1);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, seismiccaselist[1], -0.3);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    combi1++;
+
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, seismiccaselist[1], 1);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, seismiccaselist[0], 0.3);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    combi1++;
+
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, seismiccaselist[1], 1);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, seismiccaselist[0], -0.3);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    combi1++;
+
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, seismiccaselist[1], -1);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, seismiccaselist[0], 0.3);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    combi1++;
+
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, seismiccaselist[1], -1);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, seismiccaselist[0], -0.3);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    combi1++;
+                }
+
+                //next 8 ehf loads ------------------------- COMBI 25-32
+                for (int combi1 = 25; combi1 <= 32; combi1++)
+                {
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, "P_EHFx (DL)", dlFactor);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    combi1++;
+
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, "P_EHFx (DL)", dlFactor);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    combi1++;
+
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, "P_EHFx (DL)", -dlFactor);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    combi1++;
+
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, "P_EHFx (DL)", -dlFactor);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    combi1++;
+
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, "P_EHFy (DL)", dlFactor);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    combi1++;
+
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, "P_EHFy (DL)", dlFactor);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    combi1++;
+
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, "P_EHFy (DL)", -dlFactor);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    combi1++;
+
+                    isError = src.HelperEtabs.UpdateLoadCombi(SapModel, basecombiname + combi1, 0, "P_EHFy (DL)", -dlFactor);
+                    if (isError)
+                    {
+                        return true;
+                    }
+                }
+                #endregion
+
+
+            }
+
             else
             {
                 MessageBox.Show("No Seismic Loads defined, skipping Seismic Load Combination Set");
