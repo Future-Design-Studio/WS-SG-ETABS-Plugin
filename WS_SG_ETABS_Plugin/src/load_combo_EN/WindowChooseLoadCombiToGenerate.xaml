@@ -17,6 +17,7 @@
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
@@ -28,104 +29,116 @@
 
 
         <Grid Grid.Row="1">
-            <CheckBox x:Name="checkboxULSComboB" 
-                      Checked="checkboxULSComboB_Checked" Unchecked="checkboxULSComboB_Unchecked" 
+            <CheckBox x:Name="checkboxALL" 
+                      Checked="checkboxALL_Checked" Unchecked="checkboxALL_Unchecked" 
                       VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,0,11">
             </CheckBox>
         </Grid>
         <Grid Grid.Row="1" Grid.Column="2">
-            <Label VerticalAlignment="Center" HorizontalAlignment="Left" >ULS Design (ULS B)</Label>
+            <Label VerticalAlignment="Center" HorizontalAlignment="Left" >Select all available Combinations</Label>
         </Grid>
 
 
 
         <Grid Grid.Row="2">
-            <CheckBox x:Name="checkboxULSComboC" 
-                      Checked="checkboxULSComboC_Checked" Unchecked="checkboxULSComboC_Unchecked" 
-                      VerticalAlignment="Center" HorizontalAlignment="Center">
+            <CheckBox x:Name="checkboxULSComboB" 
+                      Checked="checkboxULSComboB_Checked" Unchecked="checkboxULSComboB_Unchecked" 
+                      VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,0,11">
             </CheckBox>
         </Grid>
-        <Grid Grid.Row="2" Grid.Column="1">
-            <Label VerticalAlignment="Center" HorizontalAlignment="Left" >Pile Design (ULS C)</Label>
+        <Grid Grid.Row="2" Grid.Column="2">
+            <Label VerticalAlignment="Center" HorizontalAlignment="Left" >ULS Design (ULS B)</Label>
         </Grid>
 
 
 
         <Grid Grid.Row="3">
-            <CheckBox x:Name="checkboxAccidental" 
-                      Checked="checkboxAccidental_Checked" Unchecked="checkboxAccidental_Unchecked" 
+            <CheckBox x:Name="checkboxULSComboC" 
+                      Checked="checkboxULSComboC_Checked" Unchecked="checkboxULSComboC_Unchecked" 
                       VerticalAlignment="Center" HorizontalAlignment="Center">
             </CheckBox>
         </Grid>
         <Grid Grid.Row="3" Grid.Column="1">
-            <Label VerticalAlignment="Center" HorizontalAlignment="Left" >Accidental Load Design</Label>
+            <Label VerticalAlignment="Center" HorizontalAlignment="Left" >Pile Design (ULS C)</Label>
         </Grid>
 
 
 
         <Grid Grid.Row="4">
-            <CheckBox x:Name="checkboxSeismic" 
-                      Checked="checkboxSeismic_Checked" Unchecked="checkboxSeismic_Unchecked" 
+            <CheckBox x:Name="checkboxAccidental" 
+                      Checked="checkboxAccidental_Checked" Unchecked="checkboxAccidental_Unchecked" 
                       VerticalAlignment="Center" HorizontalAlignment="Center">
             </CheckBox>
         </Grid>
         <Grid Grid.Row="4" Grid.Column="1">
-            <Label VerticalAlignment="Center" HorizontalAlignment="Left" >Seismic Design</Label>
+            <Label VerticalAlignment="Center" HorizontalAlignment="Left" >Accidental Load Design</Label>
         </Grid>
 
 
 
         <Grid Grid.Row="5">
-            <CheckBox x:Name="checkboxService" 
-                      Checked="checkboxService_Checked" Unchecked="checkboxService_Unchecked" 
+            <CheckBox x:Name="checkboxSeismic" 
+                      Checked="checkboxSeismic_Checked" Unchecked="checkboxSeismic_Unchecked" 
                       VerticalAlignment="Center" HorizontalAlignment="Center">
             </CheckBox>
         </Grid>
         <Grid Grid.Row="5" Grid.Column="1">
-            <Label VerticalAlignment="Center" HorizontalAlignment="Left" >Service Design</Label>
+            <Label VerticalAlignment="Center" HorizontalAlignment="Left" >Seismic Design</Label>
         </Grid>
 
 
 
         <Grid Grid.Row="6">
-            <CheckBox x:Name="checkboxServiceSteel" 
-                      Checked="checkboxServiceSteel_Checked" Unchecked="checkboxServiceSteel_Unchecked" 
+            <CheckBox x:Name="checkboxService" 
+                      Checked="checkboxService_Checked" Unchecked="checkboxService_Unchecked" 
                       VerticalAlignment="Center" HorizontalAlignment="Center">
             </CheckBox>
         </Grid>
         <Grid Grid.Row="6" Grid.Column="1">
-            <Label VerticalAlignment="Center" HorizontalAlignment="Left" >Service Design with Precamber</Label>
+            <Label VerticalAlignment="Center" HorizontalAlignment="Left" >Service Design</Label>
         </Grid>
 
 
 
         <Grid Grid.Row="7">
-            <CheckBox x:Name="checkboxUpliftC1" 
-                      Checked="checkboxUpliftC1_Checked" Unchecked="checkboxUpliftC1_Unchecked" 
+            <CheckBox x:Name="checkboxServiceSteel" 
+                      Checked="checkboxServiceSteel_Checked" Unchecked="checkboxServiceSteel_Unchecked" 
                       VerticalAlignment="Center" HorizontalAlignment="Center">
             </CheckBox>
         </Grid>
         <Grid Grid.Row="7" Grid.Column="1">
-            <Label VerticalAlignment="Center" HorizontalAlignment="Left" >Uplift ULS (Uplift C1)</Label>
+            <Label VerticalAlignment="Center" HorizontalAlignment="Left" >Service Design with Precamber</Label>
         </Grid>
 
 
 
         <Grid Grid.Row="8">
+            <CheckBox x:Name="checkboxUpliftC1" 
+                      Checked="checkboxUpliftC1_Checked" Unchecked="checkboxUpliftC1_Unchecked" 
+                      VerticalAlignment="Center" HorizontalAlignment="Center">
+            </CheckBox>
+        </Grid>
+        <Grid Grid.Row="8" Grid.Column="1">
+            <Label VerticalAlignment="Center" HorizontalAlignment="Left" >Uplift ULS (Uplift C1)</Label>
+        </Grid>
+
+
+
+        <Grid Grid.Row="9">
             <CheckBox x:Name="checkboxUpliftC2" 
                       Checked="checkboxUpliftC2_Checked" Unchecked="checkboxUpliftC2_Unchecked" 
                       VerticalAlignment="Center" HorizontalAlignment="Center">
             </CheckBox>
         </Grid>
-        <Grid Grid.Row="8" Grid.Column="1">
+        <Grid Grid.Row="9" Grid.Column="1">
             <Label VerticalAlignment="Center" HorizontalAlignment="Left" >Uplift Pile Design (Uplift C2)</Label>
         </Grid>
 
 
 
 
-        <Grid Grid.Row="9" Grid.ColumnSpan="2">
-            <StackPanel Grid.Row="10" Orientation="Horizontal" HorizontalAlignment="Right">
+        <Grid Grid.Row="10" Grid.ColumnSpan="2">
+            <StackPanel Grid.Row="11" Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button x:Name="buttonCancel" Content="Cancel" Width="100" Click="buttonCancel_Click"/>
                 <Button x:Name="buttonOk" Content="OK" Width="100" Click="buttonOk_Click"/>
             </StackPanel>

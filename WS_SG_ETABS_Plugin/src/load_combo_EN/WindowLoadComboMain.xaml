@@ -14,13 +14,13 @@
         </Grid.Resources>
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="0.4*"></RowDefinition>
+            <RowDefinition Height="0.3*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
-            <RowDefinition Height="0.5*"></RowDefinition>
+            <RowDefinition Height="0.8*"></RowDefinition>
             <RowDefinition Height="0.2*"></RowDefinition>
         </Grid.RowDefinitions>
 
@@ -358,11 +358,17 @@
                 <RowDefinition Height="0.4*"></RowDefinition>
             </Grid.RowDefinitions>
 
-            <Label Grid.Column="1" Content="Load Pattern Type" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="2"/>
+            <Label Grid.Column="0" Content="Load Pattern Type" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="2"/>
 
-            <Label Grid.Row="1" Grid.Column="1" Content="Seismic Load" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="2"/>
+            <Label Grid.Row="1" Grid.Column="0" Content="Seismic Load" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="2"/>
 
-            <Button Grid.Row="1" Grid.Column="3" Content="ADD" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="21,0,0,0" Click="Button_ADD_SEISMIC_Click" Name="Button_ADD_SEISMIC"></Button>
+            <Label Grid.Column="2" Content="Seismic Type" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1"/>
+
+            <ComboBox  Grid.Row="1" Grid.Column="2" x:Name="comBoxSeismicType" 
+                       VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+                       Text="0.5" SelectionChanged="comBoxSeismicType_SelectionChanged"></ComboBox>
+
+            <Button Grid.Row="1" Grid.Column="3" Content="ADD" VerticalAlignment="Top" HorizontalAlignment="Left" Grid.ColumnSpan="1" Margin="144,6,0,0" Click="Button_ADD_SEISMIC_Click" Name="Button_ADD_SEISMIC"></Button>
 
             <ListBox x:Name="listBoxChoosenSEISMIC" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="4" 
                      d:ItemsSource="{d:SampleData ItemCount=3}" SelectionMode="Single"
@@ -524,17 +530,23 @@
 
 
 
-        <Grid Grid.Row="6" Grid.ColumnSpan="2">
+        <Grid Grid.Row="6" Grid.ColumnSpan="2" Grid.RowSpan="2">
 
             <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
 
             <Label Grid.Row="0" Grid.Column="0" Content="Notes" VerticalAlignment="Center" HorizontalAlignment="Left"/>
-            <Label Grid.Row="1" Grid.Column="0" Content="1) For Seismic, please manually input the response spectrum. From the Load Case created through this plugin, please edit from there instead of creating a new load case so that load combinations will not be affected." VerticalAlignment="Center" HorizontalAlignment="Left"/>
-            <Label Grid.Row="2" Grid.Column="0" Content="2) Wind Load is also created as other load for now for simplicity. Please change the load pattern as required to input proper wind factors if you would like to use diaphragm or shell extents for wind load application." VerticalAlignment="Center" HorizontalAlignment="Left"/>
+            <Label Grid.Row="1" Grid.Column="0" Content="1) For Seismic Load, if Equivalent Seismic Load type is selected, manually input auto load factors in Load Pattern." VerticalAlignment="Center" HorizontalAlignment="Left"/>
+            <Label Grid.Row="2" Grid.Column="0" Content="2) For Seismic Load, if Response Spectrum type is selected, manually input response spectrum in Load Case." VerticalAlignment="Center" HorizontalAlignment="Left"/>
+            <Label Grid.Row="3" Grid.Column="0" Content="3) For Wind load pattern, input auto lateral load manually." VerticalAlignment="Center" HorizontalAlignment="Left"/>
+            <Label Grid.Row="4" Grid.Column="0" Content="4) For Temperature load, if you have existing load, manually change the load case created by this plugin to take in your existing load pattern or type in the exact same name as ur existing temperature load pattern." VerticalAlignment="Center" HorizontalAlignment="Left"/>
+            <Label Grid.Row="5" Grid.Column="0" Content="5) For Notional and EHF, input factors before adding DL, SDL, LL. If required to update factors, please remove and add back DL, SDL and LL within the plugin." VerticalAlignment="Center" HorizontalAlignment="Left"/>
         </Grid>
 
 
