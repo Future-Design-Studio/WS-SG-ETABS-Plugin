@@ -524,17 +524,19 @@
 
 
 
-        <Grid Grid.Row="6" Grid.ColumnSpan="2">
+        <Grid Grid.Row="6" Grid.ColumnSpan="2" Grid.RowSpan="2">
 
             <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
 
             <Label Grid.Row="0" Grid.Column="0" Content="Notes" VerticalAlignment="Center" HorizontalAlignment="Left"/>
-            <Label Grid.Row="1" Grid.Column="0" Content="1) For Seismic, please manually input the response spectrum. From the Load Case created through this plugin, please edit from there instead of creating a new load case so that load combinations will not be affected." VerticalAlignment="Center" HorizontalAlignment="Left"/>
-            <Label Grid.Row="2" Grid.Column="0" Content="2) Wind Load is also created as other load for now for simplicity. Please change the load pattern as required to input proper wind factors if you would like to use diaphragm or shell extents for wind load application." VerticalAlignment="Center" HorizontalAlignment="Left"/>
+            <Label Grid.Row="1" Grid.Column="0" Content="1) For Seismic load case, manually input the response spectrum." VerticalAlignment="Center" HorizontalAlignment="Left"/>
+            <Label Grid.Row="2" Grid.Column="0" Content="2) For Wind load pattern, input auto lateral load manually." VerticalAlignment="Center" HorizontalAlignment="Left"/>
+            <Label Grid.Row="3" Grid.Column="0" Content="3) For Temperature load, if you have existing load, manually change the load case created by this plugin to take in your existing load pattern." VerticalAlignment="Center" HorizontalAlignment="Left"/>
         </Grid>
 
 

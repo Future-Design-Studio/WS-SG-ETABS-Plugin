@@ -74,7 +74,9 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
         }
         private void buttonOk_Click(object sender, RoutedEventArgs e)
         {
+            IsEnabled = false;
             Close();
+            src.load_combo_EN.WindowLoadComboMain windowLoadComboMain = new src.load_combo_EN.WindowLoadComboMain(_SapModel, _Plugin);
         }
     }
 }

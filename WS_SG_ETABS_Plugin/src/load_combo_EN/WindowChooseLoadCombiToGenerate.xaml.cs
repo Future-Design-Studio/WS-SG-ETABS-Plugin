@@ -221,9 +221,11 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 MessageBox.Show("Warning: No Load combinations have been selected. Only load patterns and cases will be generated.");
             }
 
+            Close();
+
             //Call up result window
             src.load_combo_EN.WindowLoadComboResult windowLoadComboResult = new src.load_combo_EN.WindowLoadComboResult(_SapModel, _Plugin, deadLoadList, SDLoadList, LiveLoadList, WindLoadList, NotionalDXLoadList, NotionalDYLoadList, NotionalSDXLoadList, NotionalSDYLoadList, TemperatureLoadList, SeismicLoadList, AccidentalLoadList, UpliftLoadList, EHFDLXLoadList, EHFDLYLoadList, EHFSDLXLoadList, EHFSDLYLoadList, EHFLLXLoadList, EHFLLYLoadList, notionaldirectionFactor, WindVertLoadList, ALneedtimes2, createULSB, createULSC, createAccidental, createSeismic, createSLS, createSLSSteel, createUPLC1, createUPLC2);
-            IsEnabled = true;
+            
         }
     }
 }
