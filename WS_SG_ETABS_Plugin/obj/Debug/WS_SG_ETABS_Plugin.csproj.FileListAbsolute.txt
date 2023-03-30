@@ -261,3 +261,7 @@ C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ET
 C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\rc_beam_schedule\WindowRCBSchedResult.baml
 C:\Users\stefano\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\load_combo_EN\WindowChooseLoadCombiToGenerate.g.cs
 C:\Users\stefano\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\load_combo_EN\WindowChooseLoadCombiToGenerate.baml
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\release_selected_node\WindowReleaseSelectedNodeMain.g.cs
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\release_selected_node\WindowReleaseSelectedNodeResult.g.cs
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\release_selected_node\WindowReleaseSelectedNodeMain.baml
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\release_selected_node\WindowReleaseSelectedNodeResult.baml

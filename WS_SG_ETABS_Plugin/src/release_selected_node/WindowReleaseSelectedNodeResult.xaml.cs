@@ -32,17 +32,19 @@ namespace WS_SG_ETABS_Plugin.src.release_selected_node
             //Mainlogic
             bool isError = src.release_selected_node.FunctionReleaseSelectedNode.ReleaseSelectedNodes(_SapModel, _Plugin, releaseList);
 
-            /*
             if (isError)
             {
-                MessageBox.Show("Error, please let Mani know what happened");
                 return;
             }
-            */
 
             InitializeComponent();
 
             ShowDialog();
+        }
+
+        private void buttonOk_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
         }
     }
 }

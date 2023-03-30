@@ -161,5 +161,65 @@ namespace WS_SG_ETABS_Plugin.src.release_selected_node
             src.release_selected_node.WindowReleaseSelectedNodeResult windowReleaseSelectedResult = new src.release_selected_node.WindowReleaseSelectedNodeResult(_SapModel, _Plugin, releaseList);
             IsEnabled = true;
         }
+
+        private void checkBoxAxial_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void checkBoxShearMajor_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void checkBoxShearMinor_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void checkBoxTorsion_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void checkBoxMomentMinor_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void checkBoxMomentMajor_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void checkBoxAxial_Unchecked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void checkBoxShearMajor_Unchecked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void checkBoxShearMinor_Unchecked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void checkBoxTorsion_Unchecked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void checkBoxMomentMinor_Unchecked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void checkBoxMomentMajor_Unchecked(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

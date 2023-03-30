@@ -1097,6 +1097,34 @@ namespace WS_SG_ETABS_Plugin.src
         }
 
         /// <summary>
+        /// Get list of unique name of joint element which is member of groupName
+        /// </summary>
+        /// <param name="Sap"></param>
+        /// <param name="groupName">Group to inspect</param>
+        /// <returns></returns>
+        public static List<string> GetGroupJointElement(cSapModel Sap, string groupName)
+        {
+            int NumberItems = 0;
+            int[] ObjectType = null;
+            string[] ObjectName = null;
+            List<string> jointList = new List<string>();
+
+            Ret = Sap.GroupDef.GetAssignments(groupName, ref NumberItems, ref ObjectType, ref ObjectName);
+
+            int index = 0;
+            foreach (int singleObjectType in ObjectType)
+            {
+                //ObjectType = 1 is point
+                if (singleObjectType == 1)
+                {
+                    jointList.Add(ObjectName[index]);
+                }
+                index++;
+            }
+            return jointList;
+        }
+
+        /// <summary>
         /// Get list of unique name of area element which is member of groupName
         /// </summary>
         /// <param name="Sap"></param>
@@ -1902,7 +1930,15 @@ namespace WS_SG_ETABS_Plugin.src
             }
         }
 
-
+        /// <summary>
+        /// Assign frame releases using unique name of frames
+        /// </summary>
+        /// <param name="Sap"></param>
+        /// <param name="uniqueName"></param>
+        /// <param name="releaseType"></param>
+        /// <param name="endi"></param>
+        /// <param name="endj"></param>
+        /// <returns></returns>
         public static bool AssignFrameReleases(cSapModel Sap, string uniqueName, List<string> releaseType, bool endi, bool endj)
         {
             bool[] ii = new bool[6];
@@ -2022,6 +2058,29 @@ namespace WS_SG_ETABS_Plugin.src
             {
                 MessageBox.Show("Unknown error, please let Mani know for debugging.");
                 return true;
+            }
+        }
+
+        /// <summary>
+        /// Retrieve the unique names of end I and end J of frame
+        /// </summary>
+        /// <param name="Sap"></param>
+        /// <param name="sectionPropName"></param>
+        /// <returns></returns>
+        public static (string, string, bool) GetEndPointsFrame(cSapModel Sap, string sectionPropName)
+        {
+            string pointI = "";
+            string pointJ = "";
+
+            Ret = Sap.FrameObj.GetPoints(sectionPropName, ref pointI, ref pointJ);
+
+            if (Ret == 0)
+            {
+                return (pointI, pointJ, false);
+            }
+            else
+            {
+                return ("", "", true);
             }
         }
 

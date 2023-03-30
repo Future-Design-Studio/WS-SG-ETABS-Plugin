@@ -15,15 +15,43 @@ namespace WS_SG_ETABS_Plugin.src.release_selected_node
         {
             foreach (var release in releaseList)
             {
+                bool isError = false;
+                string endIname = "";
+                string endJname = "";
                 List<ClassReleaseSelectedNode.ReleaseApplication> applyreleaseList = new List<ClassReleaseSelectedNode.ReleaseApplication>();
                 string groupNameFrame = release.GroupNameFramesToAssign;
                 string groupNameJoint = release.GroupNameJoints;
                 List<string> releaseType = release.ReleaseType;
 
+                List<string> frameUniqueName = src.HelperEtabs.GetGroupFrameElement(SapModel, groupNameFrame);
+                List<string> jointUniqueName = src.HelperEtabs.GetGroupJointElement(SapModel, groupNameJoint);
 
+                foreach (string framename in frameUniqueName)
+                {
+                    (endIname, endJname, isError) = src.HelperEtabs.GetEndPointsFrame(SapModel, framename);
 
+                    if (jointUniqueName.Contains(endIname) && jointUniqueName.Contains(endJname))
+                    {
+                        ClassReleaseSelectedNode.ReleaseApplication eachRelease = new ClassReleaseSelectedNode.ReleaseApplication(framename, releaseType, true, true);
+                        applyreleaseList.Add(eachRelease);
+                    }
+                    else if (jointUniqueName.Contains(endIname))
+                    {
+                        ClassReleaseSelectedNode.ReleaseApplication eachRelease = new ClassReleaseSelectedNode.ReleaseApplication(framename, releaseType, true, false);
+                        applyreleaseList.Add(eachRelease);
+                    }
+                    else if (jointUniqueName.Contains(endJname))
+                    {
+                        ClassReleaseSelectedNode.ReleaseApplication eachRelease = new ClassReleaseSelectedNode.ReleaseApplication(framename, releaseType, false, true);
+                        applyreleaseList.Add(eachRelease);
+                    }
+                    else
+                    {
+                        ClassReleaseSelectedNode.ReleaseApplication eachRelease = new ClassReleaseSelectedNode.ReleaseApplication(framename, releaseType, false, false);
+                        applyreleaseList.Add(eachRelease);
+                    }
+                }
 
-                bool isError = false;
                 foreach (var releaseapplication in applyreleaseList)
                 {
                     isError = src.HelperEtabs.AssignFrameReleases(SapModel, releaseapplication.UniqueName, releaseapplication.ReleaseType, releaseapplication.endirelease, releaseapplication.endjrelease);

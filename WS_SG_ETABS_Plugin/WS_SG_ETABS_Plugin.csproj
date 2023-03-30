@@ -178,6 +178,14 @@
     <Compile Include="src\rc_beam_schedule\WindowRCBSchedResult.xaml.cs">
       <DependentUpon>WindowRCBSchedResult.xaml</DependentUpon>
     </Compile>
+    <Compile Include="src\release_selected_node\ClassReleaseSelectedNode.cs" />
+    <Compile Include="src\release_selected_node\FunctionReleaseSelectedNode.cs" />
+    <Compile Include="src\release_selected_node\WindowReleaseSelectedNodeMain.xaml.cs">
+      <DependentUpon>WindowReleaseSelectedNodeMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\release_selected_node\WindowReleaseSelectedNodeResult.xaml.cs">
+      <DependentUpon>WindowReleaseSelectedNodeResult.xaml</DependentUpon>
+    </Compile>
     <Compile Include="src\select_uniquename\FunctionSelUniqueName.cs" />
     <Compile Include="src\select_uniquename\WindowSelUniqueNameMain.xaml.cs">
       <DependentUpon>WindowSelUniqueNameMain.xaml</DependentUpon>
@@ -283,6 +291,14 @@
     <Page Include="src\rc_beam_schedule\WindowRCBSchedResult.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="src\release_selected_node\WindowReleaseSelectedNodeMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\release_selected_node\WindowReleaseSelectedNodeResult.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="src\select_uniquename\WindowSelUniqueNameMain.xaml">
       <SubType>Designer</SubType>

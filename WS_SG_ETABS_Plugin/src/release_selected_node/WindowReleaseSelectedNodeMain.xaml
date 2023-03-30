@@ -5,16 +5,17 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WS_SG_ETABS_Plugin.src.release_selected_node"
              mc:Ignorable="d" 
-             Height="600" Width="1200" ResizeMode="CanResizeWithGrip" WindowStartupLocation="CenterScreen">
+             Height="700" Width="1200" ResizeMode="CanResizeWithGrip" WindowStartupLocation="CenterScreen">
     <Grid Margin="10">
         <Grid.Resources>
             <SolidColorBrush x:Key="brush" Color="Black"/>
         </Grid.Resources>
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="0.2*"></RowDefinition>
+            <RowDefinition Height="0.1*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
-            <RowDefinition Height="0.15*"></RowDefinition>
+            <RowDefinition Height="0.12*"></RowDefinition>
+            <RowDefinition Height="0.1*"></RowDefinition>
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
@@ -43,12 +44,12 @@
             <Label Grid.Column="2" Content="Release" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1"/>
 
 
-            <ComboBox  Grid.Row="1" Grid.Column="0" x:Name="comBoxGroupsFrames"  Grid.RowSpan="1"
+            <ComboBox  Grid.Row="1" Grid.Column="0" x:Name="comBoxGroupsFrames"  Grid.RowSpan="1" Margin="0 10"
                        VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
                        Text="0.5"></ComboBox>
 
 
-            <ComboBox  Grid.Row="1" Grid.Column="1" x:Name="comBoxGroupsJoints" Grid.RowSpan="1"
+            <ComboBox  Grid.Row="1" Grid.Column="1" x:Name="comBoxGroupsJoints" Grid.RowSpan="1" Margin="0 10"
                        VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
                        Text="0.5"></ComboBox>
 
@@ -81,7 +82,7 @@
 
                 <CheckBox x:Name="checkBoxShearMajor" Grid.Row="1" Grid.Column="1"
                       Checked="checkBoxShearMajor_Checked" Unchecked="checkBoxShearMajor_Unchecked" 
-                      VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="False" IsEnabled="True">
+                      VerticalAlignment="Bottom" HorizontalAlignment="Center" IsChecked="False" IsEnabled="True" Margin="0,0,0,8">
                 </CheckBox>
 
                 <CheckBox x:Name="checkBoxShearMinor" Grid.Row="1" Grid.Column="2"
@@ -129,6 +130,17 @@
                 <Button x:Name="buttonOk" Content="OK" Width="100" Click="buttonOk_Click"/>
             </StackPanel>
 
+        </Grid>
+
+        <Grid Grid.Row="2">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <Label Grid.Row="0" Grid.Column="0" Content="Notes" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+            <Label Grid.Row="1" Grid.Column="0" Content="1) Using this plugin will replace the end releases in the group of frames selected." VerticalAlignment="Center" HorizontalAlignment="Left"/>
         </Grid>
 
     </Grid>
