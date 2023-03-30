@@ -80,7 +80,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
         List<string> rsaList = new List<string>()
         {
-            "RSA_X+Y", "RSA_X", "RSA_Y"
+            "RSA_X", "RSA_Y"
         };
 
         List<string> eqaList = new List<string>()
