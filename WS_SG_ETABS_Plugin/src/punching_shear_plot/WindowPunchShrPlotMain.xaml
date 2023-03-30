@@ -37,7 +37,7 @@
                        Margin="10 0 10 0" FontSize="10">
                     How to use:<LineBreak/>
                     1. Select load case(s) or load combination(s) to include in plot<LineBreak/>
-                    2. Select group to include in plot<LineBreak/>
+                    2. Select group of joint(s) to include in plot<LineBreak/>
                     3. Each force will be grouped according to force increment, thus user need to adjust force increment used in force grouping<LineBreak/>
                     4. Adjust plot graphic preferences accordingly<LineBreak/>
                     5. Press OK to proceed
@@ -88,7 +88,7 @@
 
         </Grid>
 
-        <Label Grid.Row="5" Grid.Column="0" Content="2. Select group to display" FontSize="14" FontWeight="Bold"/>
+        <Label Grid.Row="5" Grid.Column="0" Content="2. Select group of joint(s) to display" FontSize="14" FontWeight="Bold"/>
 
         <Grid Grid.Row="6" Margin="10 0 10 0">
             <Grid.ColumnDefinitions>
@@ -96,7 +96,7 @@
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
-            <Label Grid.Column="0" VerticalAlignment="Center">Group to include in plot:</Label>
+            <Label Grid.Column="0" VerticalAlignment="Center">Group of joint(s) to include in plot:</Label>
             <ComboBox Grid.Column="1" x:Name="comBoxGroup" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" ></ComboBox>
         </Grid>
 

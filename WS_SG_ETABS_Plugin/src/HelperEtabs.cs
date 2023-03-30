@@ -45,10 +45,14 @@ namespace WS_SG_ETABS_Plugin.src
             }
         }
 
-        public class RcBeam
+        public class Beam
         {
             public string UniqueName { get; set; }
             public double Length { get; set; }
+        }
+
+        public class RcBeam : Beam
+        {
             public double Height { get; set; }
             public double Width { get; set; }
             public double CoverTopEtabs { get; set; }
@@ -102,6 +106,21 @@ namespace WS_SG_ETABS_Plugin.src
             public string AvEvaluationComment { get; set; }
 
             public RcBeam(string name)
+            {
+                UniqueName = name;
+            }
+        }
+
+        public class Column
+        {
+            public string UniqueName { get; set; }
+            public double Length { get; set; }
+        }
+
+        public class ColumnPunchingShear : Column
+        {
+
+            public ColumnPunchingShear(string name)
             {
                 UniqueName = name;
             }

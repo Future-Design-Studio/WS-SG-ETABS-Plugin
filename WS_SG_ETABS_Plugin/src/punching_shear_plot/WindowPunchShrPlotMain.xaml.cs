@@ -40,7 +40,7 @@ namespace WS_SG_ETABS_Plugin.src.punching_shear_plot
             //Get joint reaction database table
 
             bool isError = false;
-            List<string> tableKeys = new List<string> { "Joint Reactions", "Group Assignments", "Element Forces - Columns" };
+            List<string> tableKeys = new List<string> { "Joint Reactions", "Group Assignments", "Element Forces - Columns", "Frame Assignments - Section Properties"};
             (isError, databaseTableList) = src.HelperEtabs.GetMultipleTableDisplay(SapModel, tableKeys, false);
 
             if (isError)
