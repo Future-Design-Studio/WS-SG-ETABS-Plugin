@@ -1922,7 +1922,7 @@ namespace WS_SG_ETABS_Plugin.src
 
             if (Ret == 0)
             {
-                return (CoverTop, CoverTop, MatPropLong);
+                return (CoverTop, CoverBot, MatPropLong);
             }
             else
             {

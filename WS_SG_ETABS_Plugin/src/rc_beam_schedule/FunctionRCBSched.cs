@@ -12,7 +12,7 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
         private static int Ret;
 
         public static bool GetRCBeamSchedule(cSapModel Sap, string fileName, string filePath, double leftLength, double midLength, double rightLength, double cantileverLeftLength, double cantileverRightLength,
-            double rebarSpc, string rebarSpcPreference, double maxShearLinksSpacing, double minShearLinksSpacing, double shearLinksSpacingStep, double cover, int[] rebarDiameterList, int[] shearLinksDiameterList,
+            double rebarSpc, string rebarSpcPreference, double maxShearLinksSpacing, double minShearLinksSpacing, double shearLinksSpacingStep, double cover, int maxNoLayer, int[] rebarDiameterList, int[] shearLinksDiameterList,
             List<Dictionary<string, string>> groupAndBeamType)
         {
             bool isError = false;
@@ -68,7 +68,7 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
             GetRcBeamRebarArea(Sap, rcBeamDesignSummary, rcBeamList, leftLength, midLength, rightLength, cantileverLeftLength, cantileverRightLength);
 
             //Convert area to rebar
-            DesignRcBeamRebar(rcBeamList, rebarSpc, rebarSpcPreference, maxShearLinksSpacing, minShearLinksSpacing, shearLinksSpacingStep, rebarDiameterList, shearLinksDiameterList);
+            DesignRcBeamRebar(rcBeamList, rebarSpc, rebarSpcPreference, maxShearLinksSpacing, minShearLinksSpacing, shearLinksSpacingStep, rebarDiameterList, shearLinksDiameterList, maxNoLayer);
 
             //Get d from rebar
             CalculateDFromRebar(rcBeamList);
@@ -525,13 +525,11 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
         }
 
         public static void DesignRcBeamRebar(List<src.HelperEtabs.RcBeam> rcBeamList, double rebarSpc, string rebarSpcPreference, double maxShearLinksSpacing, double minShearLinksSpacing, double shearLinksSpacingStep,
-            int[] rebarDiameterList, int[] shearLinksDiameterList)
+            int[] rebarDiameterList, int[] shearLinksDiameterList, int maxNoLayer)
         {
             foreach (src.HelperEtabs.RcBeam rcBeam in rcBeamList)
             {
                 double cover = rcBeam.Cover;
-
-                int maxNoLayer = 3;
 
                 bool warningRebarDiameterTooBigShown = false;
 
@@ -649,9 +647,9 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
                 }
                 else
                 {
-                    rcBeam.MidTopRebar = "0";
-                    rcBeam.MidBottomRebar = "0";
-                    rcBeam.MidShearLinks = "0";
+                    rcBeam.MidTopRebar = "-";
+                    rcBeam.MidBottomRebar = "-";
+                    rcBeam.MidShearLinks = "-";
                 }
 
                 double rightTopAs = rcBeam.RightTopAs;
