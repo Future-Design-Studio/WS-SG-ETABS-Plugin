@@ -74,7 +74,6 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             if (AccidentalLoadList.Count != 0)
             {
 
-                MessageBox.Show("Starting Load Combination set Accidental Load Design");
 
                 #region Have wind vertical, have wind horizontal, have temperature
 
@@ -86,6 +85,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     isError = src.HelperEtabs.AddNewLoadCombiEnvelope(SapModel, basecombiname + "ENV");
                     if (isError)
                     {
+                        MessageBox.Show("Error adding load combination set Accidental Load Design, there could be existing combinations in the model with the same naming.");
                         return true;
                     }
 
@@ -95,6 +95,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                         isError = src.HelperEtabs.AddNewLoadCombiLinear(SapModel, basecombiname + numberloadcombi);
                         if (isError)
                         {
+                            MessageBox.Show("Error adding load combination set Accidental Load Design, there could be existing combinations in the model with the same naming.");
                             return true;
                         }
                         //update envelope load combi
@@ -3368,6 +3369,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     isError = src.HelperEtabs.AddNewLoadCombiEnvelope(SapModel, basecombiname + "ENV");
                     if (isError)
                     {
+                        MessageBox.Show("Error adding load combination set Accidental Load Design, there could be existing combinations in the model with the same naming.");
                         return true;
                     }
 
@@ -3377,6 +3379,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                         isError = src.HelperEtabs.AddNewLoadCombiLinear(SapModel, basecombiname + numberloadcombi);
                         if (isError)
                         {
+                            MessageBox.Show("Error adding load combination set Accidental Load Design, there could be existing combinations in the model with the same naming.");
                             return true;
                         }
                         //update envelope load combi
@@ -6021,6 +6024,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     isError = src.HelperEtabs.AddNewLoadCombiEnvelope(SapModel, basecombiname + "ENV");
                     if (isError)
                     {
+                        MessageBox.Show("Error adding load combination set Accidental Load Design, there could be existing combinations in the model with the same naming.");
                         return true;
                     }
 
@@ -6030,6 +6034,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                         isError = src.HelperEtabs.AddNewLoadCombiLinear(SapModel, basecombiname + numberloadcombi);
                         if (isError)
                         {
+                            MessageBox.Show("Error adding load combination set Accidental Load Design, there could be existing combinations in the model with the same naming.");
                             return true;
                         }
                         //update envelope load combi
@@ -7768,6 +7773,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     isError = src.HelperEtabs.AddNewLoadCombiEnvelope(SapModel, basecombiname + "ENV");
                     if (isError)
                     {
+                        MessageBox.Show("Error adding load combination set Accidental Load Design, there could be existing combinations in the model with the same naming.");
                         return true;
                     }
 
@@ -7777,6 +7783,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                         isError = src.HelperEtabs.AddNewLoadCombiLinear(SapModel, basecombiname + numberloadcombi);
                         if (isError)
                         {
+                            MessageBox.Show("Error adding load combination set Accidental Load Design, there could be existing combinations in the model with the same naming.");
                             return true;
                         }
                         //update envelope load combi
@@ -9232,6 +9239,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     isError = src.HelperEtabs.AddNewLoadCombiEnvelope(SapModel, basecombiname + "ENV");
                     if (isError)
                     {
+                        MessageBox.Show("Error adding load combination set Accidental Load Design, there could be existing combinations in the model with the same naming.");
                         return true;
                     }
 
@@ -9241,6 +9249,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                         isError = src.HelperEtabs.AddNewLoadCombiLinear(SapModel, basecombiname + numberloadcombi);
                         if (isError)
                         {
+                            MessageBox.Show("Error adding load combination set Accidental Load Design, there could be existing combinations in the model with the same naming.");
                             return true;
                         }
                         //update envelope load combi
@@ -9790,6 +9799,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     isError = src.HelperEtabs.AddNewLoadCombiEnvelope(SapModel, basecombiname + "ENV");
                     if (isError)
                     {
+                        MessageBox.Show("Error adding load combination set Accidental Load Design, there could be existing combinations in the model with the same naming.");
                         return true;
                     }
 
@@ -9799,6 +9809,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                         isError = src.HelperEtabs.AddNewLoadCombiLinear(SapModel, basecombiname + numberloadcombi);
                         if (isError)
                         {
+                            MessageBox.Show("Error adding load combination set Accidental Load Design, there could be existing combinations in the model with the same naming.");
                             return true;
                         }
                         //update envelope load combi
@@ -12166,6 +12177,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     isError = src.HelperEtabs.AddNewLoadCombiEnvelope(SapModel, basecombiname + "ENV");
                     if (isError)
                     {
+                        MessageBox.Show("Error adding load combination set Accidental Load Design, there could be existing combinations in the model with the same naming.");
                         return true;
                     }
 
@@ -12175,6 +12187,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                         isError = src.HelperEtabs.AddNewLoadCombiLinear(SapModel, basecombiname + numberloadcombi);
                         if (isError)
                         {
+                            MessageBox.Show("Error adding load combination set Accidental Load Design, there could be existing combinations in the model with the same naming.");
                             return true;
                         }
                         //update envelope load combi
@@ -14560,6 +14573,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     isError = src.HelperEtabs.AddNewLoadCombiEnvelope(SapModel, basecombiname + "ENV");
                     if (isError)
                     {
+                        MessageBox.Show("Error adding load combination set Accidental Load Design, there could be existing combinations in the model with the same naming.");
                         return true;
                     }
 
@@ -14569,6 +14583,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                         isError = src.HelperEtabs.AddNewLoadCombiLinear(SapModel, basecombiname + numberloadcombi);
                         if (isError)
                         {
+                            MessageBox.Show("Error adding load combination set Accidental Load Design, there could be existing combinations in the model with the same naming.");
                             return true;
                         }
                         //update envelope load combi
@@ -16040,7 +16055,6 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
                 #endregion
 
-                MessageBox.Show("Finished creating Load Combination set Accidental Load Design");
             }
                             
             else

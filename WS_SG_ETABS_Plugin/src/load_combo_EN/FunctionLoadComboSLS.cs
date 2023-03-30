@@ -57,7 +57,6 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             bool isError = false;
             bool addAnalysisCase = false;
 
-            MessageBox.Show("Starting Load Combination Service Design");
 
             #region Load Combination SLS
 
@@ -82,6 +81,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 isError = src.HelperEtabs.AddNewLoadCombiEnvelope(SapModel, basecombiname + "ENV");
                 if (isError)
                 {
+                    MessageBox.Show("Error adding load combination set Service Design, there could be existing combinations in the model with the same naming.");
                     return true;
                 }
 
@@ -91,6 +91,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     isError = src.HelperEtabs.AddNewLoadCombiLinear(SapModel, basecombiname + numberloadcombi);
                     if (isError)
                     {
+                        MessageBox.Show("Error adding load combination set Service Design, there could be existing combinations in the model with the same naming.");
                         return true;
                     }
                     //update envelope load combi
@@ -4977,6 +4978,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 isError = src.HelperEtabs.AddNewLoadCombiEnvelope(SapModel, basecombiname + "ENV");
                 if (isError)
                 {
+                    MessageBox.Show("Error adding load combination set Service Design, there could be existing combinations in the model with the same naming.");
                     return true;
                 }
 
@@ -4986,6 +4988,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     isError = src.HelperEtabs.AddNewLoadCombiLinear(SapModel, basecombiname + numberloadcombi);
                     if (isError)
                     {
+                        MessageBox.Show("Error adding load combination set Service Design, there could be existing combinations in the model with the same naming.");
                         return true;
                     }
                     //update envelope load combi
@@ -9142,6 +9145,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 isError = src.HelperEtabs.AddNewLoadCombiEnvelope(SapModel, basecombiname + "ENV");
                 if (isError)
                 {
+                    MessageBox.Show("Error adding load combination set Service Design, there could be existing combinations in the model with the same naming.");
                     return true;
                 }
 
@@ -9151,6 +9155,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     isError = src.HelperEtabs.AddNewLoadCombiLinear(SapModel, basecombiname + numberloadcombi);
                     if (isError)
                     {
+                        MessageBox.Show("Error adding load combination set Service Design, there could be existing combinations in the model with the same naming.");
                         return true;
                     }
                     //update envelope load combi
@@ -10391,6 +10396,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 isError = src.HelperEtabs.AddNewLoadCombiEnvelope(SapModel, basecombiname + "ENV");
                 if (isError)
                 {
+                    MessageBox.Show("Error adding load combination set Service Design, there could be existing combinations in the model with the same naming.");
                     return true;
                 }
 
@@ -10400,6 +10406,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     isError = src.HelperEtabs.AddNewLoadCombiLinear(SapModel, basecombiname + numberloadcombi);
                     if (isError)
                     {
+                        MessageBox.Show("Error adding load combination set Service Design, there could be existing combinations in the model with the same naming.");
                         return true;
                     }
                     //update envelope load combi
@@ -11473,6 +11480,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 isError = src.HelperEtabs.AddNewLoadCombiEnvelope(SapModel, basecombiname + "ENV");
                 if (isError)
                 {
+                    MessageBox.Show("Error adding load combination set Service Design, there could be existing combinations in the model with the same naming.");
                     return true;
                 }
 
@@ -11482,6 +11490,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     isError = src.HelperEtabs.AddNewLoadCombiLinear(SapModel, basecombiname + numberloadcombi);
                     if (isError)
                     {
+                        MessageBox.Show("Error adding load combination set Service Design, there could be existing combinations in the model with the same naming.");
                         return true;
                     }
                     //update envelope load combi
@@ -11845,6 +11854,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 isError = src.HelperEtabs.AddNewLoadCombiEnvelope(SapModel, basecombiname + "ENV");
                 if (isError)
                 {
+                    MessageBox.Show("Error adding load combination set Service Design, there could be existing combinations in the model with the same naming.");
                     return true;
                 }
 
@@ -11854,6 +11864,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     isError = src.HelperEtabs.AddNewLoadCombiLinear(SapModel, basecombiname + numberloadcombi);
                     if (isError)
                     {
+                        MessageBox.Show("Error adding load combination set Service Design, there could be existing combinations in the model with the same naming.");
                         return true;
                     }
                     //update envelope load combi
@@ -13268,6 +13279,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 isError = src.HelperEtabs.AddNewLoadCombiEnvelope(SapModel, basecombiname + "ENV");
                 if (isError)
                 {
+                    MessageBox.Show("Error adding load combination set Service Design, there could be existing combinations in the model with the same naming.");
                     return true;
                 }
 
@@ -13277,6 +13289,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     isError = src.HelperEtabs.AddNewLoadCombiLinear(SapModel, basecombiname + numberloadcombi);
                     if (isError)
                     {
+                        MessageBox.Show("Error adding load combination set Service Design, there could be existing combinations in the model with the same naming.");
                         return true;
                     }
                     //update envelope load combi
@@ -16835,6 +16848,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 isError = src.HelperEtabs.AddNewLoadCombiEnvelope(SapModel, basecombiname + "ENV");
                 if (isError)
                 {
+                    MessageBox.Show("Error adding load combination set Service Design, there could be existing combinations in the model with the same naming.");
                     return true;
                 }
 
@@ -16844,6 +16858,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     isError = src.HelperEtabs.AddNewLoadCombiLinear(SapModel, basecombiname + numberloadcombi);
                     if (isError)
                     {
+                        MessageBox.Show("Error adding load combination set Service Design, there could be existing combinations in the model with the same naming.");
                         return true;
                     }
                     //update envelope load combi
@@ -17938,7 +17953,6 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
             #endregion
 
-            MessageBox.Show("Finished creating Load Combination Service Design");
 
             return false;
         }
