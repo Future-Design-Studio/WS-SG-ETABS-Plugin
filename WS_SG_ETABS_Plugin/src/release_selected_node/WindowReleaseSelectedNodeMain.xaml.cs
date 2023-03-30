@@ -92,9 +92,44 @@ namespace WS_SG_ETABS_Plugin.src.release_selected_node
             //Check if at least 1 checkbox selected
             if (checkBoxAxial.IsChecked == true || checkBoxShearMajor.IsChecked == true || checkBoxShearMinor.IsChecked == true || checkBoxTorsion.IsChecked == true || checkBoxMomentMinor.IsChecked == true || checkBoxMomentMajor.IsChecked == true)
             {
-                listBoxChoosenReleases.Items.Add("Release group of frames " + groupNameFrame + " at group of nodes from " + groupNameJoint + " for " + comBoxDirection.Text + ", " + textBoxCP.Text);
-                ClassReleaseSelectedNode.ReleaseDetails eachRelease = new ClassReleaseSelectedNode.ReleaseDetails(groupNameFrame, groupNameJoint, releaseType);
-                releaseList.Add(eachRelease);
+                if (releaseType.Count == 1)
+                {
+                    listBoxChoosenReleases.Items.Add("Release group of frames " + groupNameFrame + " at group of nodes from " + groupNameJoint + " for " + releaseType[0] + ".");
+                    ClassReleaseSelectedNode.ReleaseDetails eachRelease = new ClassReleaseSelectedNode.ReleaseDetails(groupNameFrame, groupNameJoint, releaseType);
+                    releaseList.Add(eachRelease);
+                }
+                else if (releaseType.Count == 2)
+                {
+                    listBoxChoosenReleases.Items.Add("Release group of frames " + groupNameFrame + " at group of nodes from " + groupNameJoint + " for " + releaseType[0] + ", " + releaseType[1] + ".");
+                    ClassReleaseSelectedNode.ReleaseDetails eachRelease = new ClassReleaseSelectedNode.ReleaseDetails(groupNameFrame, groupNameJoint, releaseType);
+                    releaseList.Add(eachRelease);
+                }
+                else if (releaseType.Count == 3)
+                {
+                    listBoxChoosenReleases.Items.Add("Release group of frames " + groupNameFrame + " at group of nodes from " + groupNameJoint + " for " + releaseType[0] + ", " + releaseType[1] + ", " + releaseType[2] + ".");
+                    ClassReleaseSelectedNode.ReleaseDetails eachRelease = new ClassReleaseSelectedNode.ReleaseDetails(groupNameFrame, groupNameJoint, releaseType);
+                    releaseList.Add(eachRelease);
+                }
+                else if (releaseType.Count == 4)
+                {
+                    listBoxChoosenReleases.Items.Add("Release group of frames " + groupNameFrame + " at group of nodes from " + groupNameJoint + " for " + releaseType[0] + ", " + releaseType[1] + ", " + releaseType[2] + ", " + releaseType[3] + ".");
+                    ClassReleaseSelectedNode.ReleaseDetails eachRelease = new ClassReleaseSelectedNode.ReleaseDetails(groupNameFrame, groupNameJoint, releaseType);
+                    releaseList.Add(eachRelease);
+                }
+                else if (releaseType.Count == 5)
+                {
+                    listBoxChoosenReleases.Items.Add("Release group of frames " + groupNameFrame + " at group of nodes from " + groupNameJoint + " for " + releaseType[0] + ", " + releaseType[1] + ", " + releaseType[2] + ", " + releaseType[3] + ", " + releaseType[4] + ".");
+                    ClassReleaseSelectedNode.ReleaseDetails eachRelease = new ClassReleaseSelectedNode.ReleaseDetails(groupNameFrame, groupNameJoint, releaseType);
+                    releaseList.Add(eachRelease);
+                }
+                else
+                {
+                    listBoxChoosenReleases.Items.Add("Release group of frames " + groupNameFrame + " at group of nodes from " + groupNameJoint + " for " + releaseType[0] + ", " + releaseType[1] + ", " + releaseType[2] + ", " + releaseType[3] + ", " + releaseType[4] + ", " + releaseType[5] + ".");
+                    ClassReleaseSelectedNode.ReleaseDetails eachRelease = new ClassReleaseSelectedNode.ReleaseDetails(groupNameFrame, groupNameJoint, releaseType);
+                    releaseList.Add(eachRelease);
+                }
+
+
             }
             else
             {
@@ -123,7 +158,7 @@ namespace WS_SG_ETABS_Plugin.src.release_selected_node
         {
             IsEnabled = false;
             //Call up result window
-            src.release_selected_node.WindowReleaseSelectedNodeResult windowReleaseSelectedResult = new src.release_selected_node.WindowReleaseSelectedNodeResult(_SapModel, _Plugin);
+            src.release_selected_node.WindowReleaseSelectedNodeResult windowReleaseSelectedResult = new src.release_selected_node.WindowReleaseSelectedNodeResult(_SapModel, _Plugin, releaseList);
             IsEnabled = true;
         }
     }

@@ -24,5 +24,24 @@ namespace WS_SG_ETABS_Plugin.src.release_selected_node
             }
         }
 
+        public class ReleaseApplication
+        {
+            public string UniqueName { get; set; }
+
+            public List<string> ReleaseType { get; set; }
+
+            public bool endirelease { get; set; }
+
+            public bool endjrelease { get; set; }
+
+            public ReleaseApplication(string uniqueName, List<string> releaseType, bool endirelease, bool endjrelease)
+            {
+                UniqueName = uniqueName;
+                ReleaseType = releaseType;
+                this.endirelease = endirelease;
+                this.endjrelease = endjrelease;
+            }
+        }
+
     }
 }

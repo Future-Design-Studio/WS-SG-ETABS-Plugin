@@ -1902,6 +1902,129 @@ namespace WS_SG_ETABS_Plugin.src
             }
         }
 
+
+        public static bool AssignFrameReleases(cSapModel Sap, string uniqueName, List<string> releaseType, bool endi, bool endj)
+        {
+            bool[] ii = new bool[6];
+            bool[] jj = new bool[6];
+            double[] startValue = new double[6];
+            double[] endValue = new double[6];
+
+            if (releaseType.Contains("Axial"))
+            {
+                if (endi)
+                {
+                    ii[0] = true;
+                }
+                if (endj)
+                {
+                    jj[0] = true;
+                }
+                if (endi && endj)
+                {
+                    MessageBox.Show("Error, Axial cannot be released at both ends.");
+                    return true;
+                }
+            }
+
+            if (releaseType.Contains("ShearMajor"))
+            {
+                if (endi)
+                {
+                    ii[1] = true;
+                }
+                if (endj)
+                {
+                    jj[1] = true;
+                }
+                if (endi && endj)
+                {
+                    MessageBox.Show("Error, Shear Major cannot be released at both ends.");
+                    return true;
+                }
+            }
+
+            if (releaseType.Contains("ShearMinor"))
+            {
+                if (endi)
+                {
+                    ii[2] = true;
+                }
+                if (endj)
+                {
+                    jj[2] = true;
+                }
+                if (endi && endj)
+                {
+                    MessageBox.Show("Error, Shear Minor cannot be released at both ends.");
+                    return true;
+                }
+            }
+
+            if (releaseType.Contains("Torsion"))
+            {
+                if (endi)
+                {
+                    ii[3] = true;
+                }
+                if (endj)
+                {
+                    jj[3] = true;
+                }
+                if (endi && endj)
+                {
+                    MessageBox.Show("Error, Torsion cannot be released at both ends.");
+                    return true;
+                }
+            }
+
+            if (releaseType.Contains("MomentMinor"))
+            {
+                if (endi)
+                {
+                    ii[4] = true;
+                }
+                if (endj)
+                {
+                    jj[4] = true;
+                }
+                if (endi && endj && releaseType.Contains("ShearMinor"))
+                {
+                    MessageBox.Show("Error, Moment Minor cannot be released at both ends if Shear Minor is released at either end.");
+                    return true;
+                }
+            }
+
+            if (releaseType.Contains("MomentMajor"))
+            {
+                if (endi)
+                {
+                    ii[5] = true;
+                }
+                if (endj)
+                {
+                    jj[5] = true;
+                }
+                if (endi && endj && releaseType.Contains("ShearMajor"))
+                {
+                    MessageBox.Show("Error, Moment Major cannot be released at both ends if Shear Major is released at either end.");
+                    return true;
+                }
+            }
+
+            Ret = Sap.FrameObj.SetReleases(uniqueName, ref ii, ref jj, ref startValue, ref endValue);
+
+            if (Ret == 0)
+            {
+                return false;
+            }
+            else
+            {
+                MessageBox.Show("Unknown error, please let Mani know for debugging.");
+                return true;
+            }
+        }
+
         #endregion
 
 

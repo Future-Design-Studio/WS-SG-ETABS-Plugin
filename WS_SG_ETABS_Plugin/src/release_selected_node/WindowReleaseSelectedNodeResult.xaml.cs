@@ -23,13 +23,14 @@ namespace WS_SG_ETABS_Plugin.src.release_selected_node
     {
         cSapModel _SapModel;
         cPluginCallback _Plugin;
-        public WindowReleaseSelectedNodeResult(cSapModel SapModel, cPluginCallback Plugin)
+        public WindowReleaseSelectedNodeResult(cSapModel SapModel, cPluginCallback Plugin,
+            List<src.release_selected_node.ClassReleaseSelectedNode.ReleaseDetails> releaseList)
         {
             _SapModel = SapModel;
             _Plugin = Plugin;
 
             //Mainlogic
-            bool isError = src.release_selected_node.FunctionReleaseSelectedNode.ReleaseSelectedNodes(_SapModel, _Plugin);
+            bool isError = src.release_selected_node.FunctionReleaseSelectedNode.ReleaseSelectedNodes(_SapModel, _Plugin, releaseList);
 
             /*
             if (isError)
