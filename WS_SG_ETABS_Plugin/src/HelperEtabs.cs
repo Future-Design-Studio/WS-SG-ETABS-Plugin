@@ -1904,7 +1904,6 @@ namespace WS_SG_ETABS_Plugin.src
 
         #endregion
 
-
         #region File method
 
         public static string GetFileName(cSapModel Sap)
@@ -1916,6 +1915,15 @@ namespace WS_SG_ETABS_Plugin.src
             string fileName = splitModelPath[0];
             return fileName;
         }
+
+        #endregion
+
+        #region Data source
+
+        public static List<string> reactionDirectionList = new List<string>()
+        {
+            "FX", "FY", "FZ", "MX", "MY", "MZ"
+        };
 
         #endregion
 

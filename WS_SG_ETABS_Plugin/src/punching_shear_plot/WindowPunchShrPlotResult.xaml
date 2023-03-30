@@ -6,6 +6,6 @@
              xmlns:local="clr-namespace:WS_SG_ETABS_Plugin.src.punching_shear_plot"
              mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-            
+        <WpfPlot Name="ReactionPlot" />
     </Grid>
 </Window>

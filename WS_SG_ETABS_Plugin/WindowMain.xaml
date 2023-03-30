@@ -19,6 +19,7 @@
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="0.6*"></RowDefinition>
         </Grid.RowDefinitions>
 
@@ -36,8 +37,8 @@
         <Button Grid.Row="9" x:Name="buttonEtabsToRhino" Content="Export To Rhino" FontSize="16" Click="buttonEtabsToRhino_Click"/>
         <Button Grid.Row="10" x:Name="buttonLoadCombo" Content="Load Combination EN" FontSize="16" Click="buttonLoadCombo_Click"/>
         <Button Grid.Row="11" x:Name="buttonWindCoeff" Content="Wind Coefficient Applications" FontSize="16" Click="buttonWindCoeff_Click"/>
-        
-        
-        <Label Grid.Row="12" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="8">version 1.0.0</Label>
+        <Button Grid.Row="12" x:Name="buttonPunchShrPlot" Content="Punching Shear Plot" FontSize="16" Click="buttonPunchShrPlot_Click"/>
+
+        <Label Grid.Row="13" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="8">version 1.1.0</Label>
     </Grid>
 </Window>

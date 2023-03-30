@@ -21,10 +21,39 @@ namespace WS_SG_ETABS_Plugin.src.punching_shear_plot
     /// </summary>
     public partial class WindowPunchShrPlotResult : Window
     {
+        cSapModel _SapModel;
+        cPluginCallback _Plugin;
+
         public WindowPunchShrPlotResult(cSapModel SapModel, cPluginCallback Plugin, List<string> listChoosenLoadCase, string choosenGroup, string plotTitle, 
-            double bubbleScaleFactor, double textSize, double titleSize, double axisTitleSize, double gridSpacingX, double gridSpacingY)
+            double bubbleScaleFactor, double textSize, double titleSize, double axisTitleSize, double gridSpacingX, double gridSpacingY, 
+            List<src.HelperEtabs.DatabaseTable>databaseTableList)
         {
+            _SapModel = SapModel;
+            _Plugin = Plugin;
+
+            //Check if any load case is choosen
+            bool anyChoosenLoadCase = src.HelperUI.CheckLoadCaseListExist(_SapModel, listChoosenLoadCase);
+
+            if (!anyChoosenLoadCase)
+            {
+                return;
+            }
+
             InitializeComponent();
+
+            bool isError = false;
+
+            isError = src.punching_shear_plot.FunctionPunchingShrPlot.PunchingShearPlot(
+                _SapModel, _Plugin, listChoosenLoadCase, choosenGroup, plotTitle, bubbleScaleFactor, textSize, titleSize, axisTitleSize, gridSpacingX, gridSpacingY);
+
+            if (isError)
+            {
+                return;
+            }
+
+            ShowDialog();
+
+
         }
     }
 }

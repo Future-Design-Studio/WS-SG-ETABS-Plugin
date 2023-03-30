@@ -46,7 +46,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
             comBoxOutputCase.SelectedIndex = 0;
 
             //Fill in combobox for direction
-            comBoxReactionDirection.ItemsSource = src.plot_reaction.graph.FunctionPlotReactionGraph.reactionDirectionList;
+            comBoxReactionDirection.ItemsSource = src.HelperEtabs.reactionDirectionList;
             comBoxReactionDirection.SelectedIndex = 2;
 
             databaseTableListGlobal = databaseTableList;

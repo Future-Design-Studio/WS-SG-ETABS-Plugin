@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WS_SG_ETABS_Plugin.src.punching_shear_plot"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-             mc:Ignorable="d" Height="800" Width="600" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+             mc:Ignorable="d" Height="820" Width="600" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"></ColumnDefinition>
@@ -62,7 +62,6 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="0.2*"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="0.3*"></RowDefinition>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"></ColumnDefinition>
@@ -87,16 +86,9 @@
 
             <ListBox Grid.Row="1" Grid.Column="2" x:Name="listBoxChoosenLoadCase" d:ItemsSource="{d:SampleData ItemCount=5}" VerticalAlignment="Stretch" SelectionMode="Multiple"></ListBox>
 
-            <Label Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Grid.ColumnSpan="2">Reaction force or moment direction to plot:</Label>
-            <ComboBox Grid.Row="2" Grid.Column="2" x:Name="comBoxReactionDirection" 
-                      VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
-                      Margin="35 10 0 10">
-                
-            </ComboBox>
-
         </Grid>
 
-        <Label Grid.Row="5" Grid.Column="0" Content="2.Select group to display" FontSize="14" FontWeight="Bold"/>
+        <Label Grid.Row="5" Grid.Column="0" Content="2. Select group to display" FontSize="14" FontWeight="Bold"/>
 
         <Grid Grid.Row="6" Margin="10 0 10 0">
             <Grid.ColumnDefinitions>
@@ -120,7 +112,7 @@
             <TextBox Grid.Column="1" x:Name="textBoxForceIncrement" Grid.Row="0" TextAlignment="Center" Text="100" InputScope="Digits"/>
         </Grid>
 
-        <Label Grid.Row="9" Grid.Column="0" Content="4.Chart graphic preferences" FontSize="14" FontWeight="Bold"/>
+        <Label Grid.Row="9" Grid.Column="0" Content="4. Chart graphic preferences" FontSize="14" FontWeight="Bold"/>
 
         <Grid Grid.Row="10" Margin="10 0 10 0">
             <Grid.ColumnDefinitions>
@@ -193,7 +185,7 @@
         </Grid>
 
 
-        <Grid Grid.Row="17" Margin="0 10 0 0">
+        <Grid Grid.Row="17" Margin="0 5 0 0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>

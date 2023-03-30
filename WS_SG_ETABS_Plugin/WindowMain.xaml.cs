@@ -130,5 +130,13 @@ namespace WS_SG_ETABS_Plugin
             src.wind_coeff.WindowWindCoeffMain windowWindCoeffMain = new src.wind_coeff.WindowWindCoeffMain(_SapModel, _Plugin);
             IsEnabled = true;
         }
+
+        private void buttonPunchShrPlot_Click(object sender, RoutedEventArgs e)
+        {
+            IsEnabled = false;
+            //Call up window
+            src.punching_shear_plot.WindowPunchShrPlotMain windowPunchShrPlotMain = new src.punching_shear_plot.WindowPunchShrPlotMain(_SapModel, _Plugin);
+            IsEnabled = true;
+        }
     }
 }
