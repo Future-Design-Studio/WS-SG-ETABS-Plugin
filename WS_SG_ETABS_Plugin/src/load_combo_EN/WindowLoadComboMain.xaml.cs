@@ -752,15 +752,11 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 listBoxChoosenSEISMIC.Items.Add(selectedString);
                 string selectedString1 = rsaList[1];
                 listBoxChoosenSEISMIC.Items.Add(selectedString1);
-                string selectedString2 = rsaList[2];
-                listBoxChoosenSEISMIC.Items.Add(selectedString2);
 
                 ClassLoadCombo.SeismicLoad eachSeismicLoad = new ClassLoadCombo.SeismicLoad(selectedString, false);
                 SeismicLoadList.Add(eachSeismicLoad);
                 ClassLoadCombo.SeismicLoad eachSeismicLoad1 = new ClassLoadCombo.SeismicLoad(selectedString1, false);
                 SeismicLoadList.Add(eachSeismicLoad1);
-                ClassLoadCombo.SeismicLoad eachSeismicLoad2 = new ClassLoadCombo.SeismicLoad(selectedString2, false);
-                SeismicLoadList.Add(eachSeismicLoad2);
 
                 Button_ADD_SEISMIC.IsEnabled = false;
             }
