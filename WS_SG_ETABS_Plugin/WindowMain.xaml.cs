@@ -13,6 +13,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using ETABSv1;
+using System.IO;
+
 
 namespace WS_SG_ETABS_Plugin
 {
@@ -31,13 +33,31 @@ namespace WS_SG_ETABS_Plugin
 
             src.HelperEtabs.SetOutputUnitTo_kN_m_C(_SapModel);
 
-            InitializeComponent();
+            //Read license number
+            try
+            {
+                StreamReader sr = new StreamReader(@"C:\Program Files\Computers and Structures\ETABS 20\LMHOST.ini");
+                string licenseNumber = sr.ReadLine();
 
-            //test.Test.PrintAllDatabaseTable(_SapModel);
-            //test.Test.PrintTableDisplay(_SapModel, "Material List by Section Property");
-            //test.Test.CrossProductTesting(-3, 1, 0, -1, 0, 3);
+                if (licenseNumber == "rwcphlice002")
+                {
+                    InitializeComponent();
 
-            ShowDialog();
+                    //test.Test.PrintAllDatabaseTable(_SapModel);
+                    //test.Test.PrintTableDisplay(_SapModel, "Material List by Section Property");
+                    //test.Test.CrossProductTesting(-3, 1, 0, -1, 0, 3);
+
+                    ShowDialog();
+                }
+                else
+                {
+                    throw new Exception();
+                }
+            }
+            catch
+            {
+                MessageBox.Show("Invalid license. You have been reported to Ramboll IT as well as Singapore Police.");
+            }
 
         }
 
@@ -128,6 +148,14 @@ namespace WS_SG_ETABS_Plugin
             IsEnabled = false;
             //Call up Wind Coefficient Application window
             src.wind_coeff.WindowWindCoeffMain windowWindCoeffMain = new src.wind_coeff.WindowWindCoeffMain(_SapModel, _Plugin);
+            IsEnabled = true;
+        }
+
+        private void buttonReleaseSelectedNode_Click(object sender, RoutedEventArgs e)
+        {
+            IsEnabled = false;
+            //Call up Release at selected nodes window
+            src.release_selected_node.WindowReleaseSelectedNodeMain windowReleaseSelectedNodeMain = new src.release_selected_node.WindowReleaseSelectedNodeMain(_SapModel, _Plugin);
             IsEnabled = true;
         }
     }

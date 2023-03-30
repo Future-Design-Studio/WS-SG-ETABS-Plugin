@@ -68,7 +68,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
 
             bool isError = false;
-            bool addAnalysisCase = false;
+            bool addAnalysisCase = true;
 
             if (deadLoadList.Count == 0 || SDLoadList.Count == 0 || LiveLoadList.Count == 0)
             {
