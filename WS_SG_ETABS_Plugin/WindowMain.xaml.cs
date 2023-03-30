@@ -33,25 +33,31 @@ namespace WS_SG_ETABS_Plugin
 
             src.HelperEtabs.SetOutputUnitTo_kN_m_C(_SapModel);
 
-            //Read license
-            StreamReader sr = new StreamReader(@"C:\Program Files\Computers and Structures\ETABS 20\LMHOST.ini");
-            string line = sr.ReadLine();
-
-            if (line == "rwcphlice002")
+            //Read license number
+            try
             {
-                InitializeComponent();
+                StreamReader sr = new StreamReader(@"C:\Program Files\Computers and Structures\ETABS 20\LMHOST.ini");
+                string licenseNumber = sr.ReadLine();
 
-                //test.Test.PrintAllDatabaseTable(_SapModel);
-                //test.Test.PrintTableDisplay(_SapModel, "Material List by Section Property");
-                //test.Test.CrossProductTesting(-3, 1, 0, -1, 0, 3);
+                if (licenseNumber == "rwcphlice002")
+                {
+                    InitializeComponent();
 
-                ShowDialog();
+                    //test.Test.PrintAllDatabaseTable(_SapModel);
+                    //test.Test.PrintTableDisplay(_SapModel, "Material List by Section Property");
+                    //test.Test.CrossProductTesting(-3, 1, 0, -1, 0, 3);
+
+                    ShowDialog();
+                }
+                else
+                {
+                    throw new Exception();
+                }
             }
-            else
+            catch
             {
                 MessageBox.Show("Invalid license. You have been reported to Ramboll IT as well as Singapore Police.");
             }
-
 
         }
 
