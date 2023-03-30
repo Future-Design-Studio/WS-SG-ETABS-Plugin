@@ -26,10 +26,11 @@ namespace WS_SG_ETABS_Plugin.src.release_selected_node
 
         #region Data source
 
+        List<ClassReleaseSelectedNode.ReleaseDetails> releaseList = new List<ClassReleaseSelectedNode.ReleaseDetails>();
 
-        List<string> directionList = new List<string>()
+        List<string> ReleaseType = new List<string>()
         {
-            "Windward", "Leeward"
+            "Axial", "ShearMajor", "ShearMinor", "Torsion", "MomentMinor", "MomentMajor",
         };
 
         #endregion
@@ -47,58 +48,70 @@ namespace WS_SG_ETABS_Plugin.src.release_selected_node
                 return;
             }
 
-            //Fill in combobox for existing patterns
-            List<string> outputPatternsList = src.HelperEtabs.GetAllLoadPattern(_SapModel);
+            //Fill in combobox frames for available groups
+            src.HelperUI.PopulateComboBoxAvailGroup(_SapModel, comBoxGroupsFrames);
+            comBoxGroupsFrames.SelectedIndex = 0;
 
-            comBoxLoadPattern.ItemsSource = outputPatternsList;
-            comBoxLoadPattern.SelectedIndex = 0;
-
-            comBoxDirection.ItemsSource = directionList;
-            comBoxDirection.SelectedIndex = 0;
-
-            //Fill in combobox for available groups
-            src.HelperUI.PopulateComboBoxAvailGroup(_SapModel, comBoxGroups);
-            comBoxGroups.SelectedIndex = 0;
+            //Fill in combobox joints for available groups
+            src.HelperUI.PopulateComboBoxAvailGroup(_SapModel, comBoxGroupsJoints);
+            comBoxGroupsJoints.SelectedIndex = 0;
 
             ShowDialog();
         }
 
-        private void Button_ADD_Wind_Click(object sender, RoutedEventArgs e)
+        private void Button_ADD_Releases_Click(object sender, RoutedEventArgs e)
         {
-            string groupName = comBoxGroups.Text;
-            string loadPattern = comBoxLoadPattern.Text;
-            int direction = new int();
-            if (comBoxDirection.SelectedIndex == 0)
+            string groupNameFrame = comBoxGroupsFrames.Text;
+            string groupNameJoint = comBoxGroupsJoints.Text;
+            List<string> releaseType = new List<string>();
+            if (checkBoxAxial.IsChecked == true)
             {
-                direction = 1;
+                releaseType.Add(ReleaseType[0]);
+            }
+            if (checkBoxShearMajor.IsChecked == true)
+            {
+                releaseType.Add(ReleaseType[1]);
+            }
+            if (checkBoxShearMinor.IsChecked == true)
+            {
+                releaseType.Add(ReleaseType[2]);
+            }
+            if (checkBoxTorsion.IsChecked == true)
+            {
+                releaseType.Add(ReleaseType[3]);
+            }
+            if (checkBoxMomentMinor.IsChecked == true)
+            {
+                releaseType.Add(ReleaseType[4]);
+            }
+            if (checkBoxMomentMajor.IsChecked == true)
+            {
+                releaseType.Add(ReleaseType[5]);
+            }
+            
+            //Check if at least 1 checkbox selected
+            if (checkBoxAxial.IsChecked == true || checkBoxShearMajor.IsChecked == true || checkBoxShearMinor.IsChecked == true || checkBoxTorsion.IsChecked == true || checkBoxMomentMinor.IsChecked == true || checkBoxMomentMajor.IsChecked == true)
+            {
+                listBoxChoosenReleases.Items.Add("Release group of frames " + groupNameFrame + " at group of nodes from " + groupNameJoint + " for " + comBoxDirection.Text + ", " + textBoxCP.Text);
+                ClassReleaseSelectedNode.ReleaseDetails eachRelease = new ClassReleaseSelectedNode.ReleaseDetails(groupNameFrame, groupNameJoint, releaseType);
+                releaseList.Add(eachRelease);
             }
             else
             {
-                direction = 2;
-            }
-
-            double cp = 0;
-            //Check if wind coefficient is filled
-            if (textBoxCP.Text != "")
-            {
-                cp = double.Parse(textBoxCP.Text);
-
-                listBoxChoosenWind.Items.Add(groupName + ", " + loadPattern + ", " + comBoxDirection.Text + ", " + textBoxCP.Text);
-            }
-            else
-            {
-                MessageBox.Show("Please input Cp!");
+                MessageBox.Show("Please select at least 1 type of release before adding.");
             }
 
         }
 
-        private void Button_REMOVE_Wind_Click(object sender, RoutedEventArgs e)
+        private void Button_REMOVE_Releases_Click(object sender, RoutedEventArgs e)
         {
-            if (listBoxChoosenWind.Items.Count != 0 && listBoxChoosenWind.SelectedIndex != -1)
+            if (listBoxChoosenReleases.Items.Count != 0 && listBoxChoosenReleases.SelectedIndex != -1)
             {
-                int selectedIndex = listBoxChoosenWind.SelectedIndex;
+                int selectedIndex = listBoxChoosenReleases.SelectedIndex;
 
-                listBoxChoosenWind.Items.RemoveAt(selectedIndex);
+                listBoxChoosenReleases.Items.RemoveAt(selectedIndex);
+
+                releaseList.RemoveAt(selectedIndex);
             }
         }
         private void buttonCancel_Click(object sender, RoutedEventArgs e)
@@ -112,11 +125,6 @@ namespace WS_SG_ETABS_Plugin.src.release_selected_node
             //Call up result window
             src.release_selected_node.WindowReleaseSelectedNodeResult windowReleaseSelectedResult = new src.release_selected_node.WindowReleaseSelectedNodeResult(_SapModel, _Plugin);
             IsEnabled = true;
-        }
-
-        private void textBoxCP_TextChanged(object sender, TextChangedEventArgs e)
-        {
-
         }
     }
 }

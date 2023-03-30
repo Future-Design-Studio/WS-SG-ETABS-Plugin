@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WS_SG_ETABS_Plugin.src.release_selected_node"
              mc:Ignorable="d" 
-             Height="400" Width="800" ResizeMode="CanResizeWithGrip" WindowStartupLocation="CenterScreen">
+             Height="600" Width="1200" ResizeMode="CanResizeWithGrip" WindowStartupLocation="CenterScreen">
     <Grid Margin="10">
         <Grid.Resources>
             <SolidColorBrush x:Key="brush" Color="Black"/>
@@ -14,22 +14,21 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="0.2*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
-            <RowDefinition Height="0.2*"></RowDefinition>
+            <RowDefinition Height="0.15*"></RowDefinition>
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
-        <Label Grid.Row="0" Grid.Column="0" Content="Wind Coefficients Application" FontSize="28" Grid.ColumnSpan="2"/>
+        <Label Grid.Row="0" Grid.Column="0" Content="Frame End Release Application" FontSize="28" Grid.ColumnSpan="2"/>
 
         <Grid Grid.Row="1">
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
-                <ColumnDefinition Width="*"></ColumnDefinition>
-                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="3*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
@@ -39,41 +38,85 @@
                 <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
 
-            <Label Grid.Column="0" Content="Group Name" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1"/>
-            <Label Grid.Column="1" Content="Load Pattern" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1"/>
-            <Label Grid.Column="2" Content="Direction" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1"/>
-            <Label Grid.Column="3" Content="Cp" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1"/>
+            <Label Grid.Column="0" Content="Group name of Frames to release" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1"/>
+            <Label Grid.Column="1" Content="Group name of Joints to release at" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1"/>
+            <Label Grid.Column="2" Content="Release" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1"/>
 
 
-            <ComboBox  Grid.Row="1" Grid.Column="0" x:Name="comBoxGroups" 
+            <ComboBox  Grid.Row="1" Grid.Column="0" x:Name="comBoxGroupsFrames"  Grid.RowSpan="1"
                        VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
                        Text="0.5"></ComboBox>
 
 
-            <ComboBox  Grid.Row="1" Grid.Column="1" x:Name="comBoxLoadPattern" 
+            <ComboBox  Grid.Row="1" Grid.Column="1" x:Name="comBoxGroupsJoints" Grid.RowSpan="1"
                        VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
                        Text="0.5"></ComboBox>
 
+            <Grid Grid.Row="1" Grid.Column="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
 
-            <ComboBox  Grid.Row="1" Grid.Column="2" x:Name="comBoxDirection" 
-                       VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
-                       Text="0.5"></ComboBox>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
 
+                <Label Grid.Column="0" Content="Axial Load" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" FontSize="9"/>
+                <Label Grid.Column="1" Content="Shear Force 2 (Major)" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" FontSize="9"/>
+                <Label Grid.Column="2" Content="Shear Force 2 (Minor)" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" FontSize="9"/>
+                <Label Grid.Column="3" Content="Torsion" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" FontSize="9"/>
+                <Label Grid.Column="4" Content="Moment 22 (Minor)" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" FontSize="9"/>
+                <Label Grid.Column="5" Content="Moment 33 (Major)" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" FontSize="9"/>
 
-            <TextBox Grid.Column="3" x:Name="textBoxCP" Grid.Row="1" IsEnabled="True" TextChanged="textBoxCP_TextChanged" TextAlignment="Center" VerticalContentAlignment="Center">0.65</TextBox>
+                <CheckBox x:Name="checkBoxAxial" Grid.Row="1" Grid.Column="0"
+                      Checked="checkBoxAxial_Checked" Unchecked="checkBoxAxial_Unchecked" 
+                      VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="False" IsEnabled="True">
+                </CheckBox>
 
-            <Button Grid.Row="1" Grid.Column="4" Content="Add" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="0,0,0,0" Click="Button_ADD_Wind_Click" ></Button>
+                <CheckBox x:Name="checkBoxShearMajor" Grid.Row="1" Grid.Column="1"
+                      Checked="checkBoxShearMajor_Checked" Unchecked="checkBoxShearMajor_Unchecked" 
+                      VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="False" IsEnabled="True">
+                </CheckBox>
 
-            <ListBox x:Name="listBoxChoosenWind" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="4" 
+                <CheckBox x:Name="checkBoxShearMinor" Grid.Row="1" Grid.Column="2"
+                      Checked="checkBoxShearMinor_Checked" Unchecked="checkBoxShearMinor_Unchecked" 
+                      VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="False" IsEnabled="True">
+                </CheckBox>
+
+                <CheckBox x:Name="checkBoxTorsion" Grid.Row="1" Grid.Column="3"
+                      Checked="checkBoxTorsion_Checked" Unchecked="checkBoxTorsion_Unchecked" 
+                      VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="False" IsEnabled="True">
+                </CheckBox>
+
+                <CheckBox x:Name="checkBoxMomentMinor" Grid.Row="1" Grid.Column="4"
+                      Checked="checkBoxMomentMinor_Checked" Unchecked="checkBoxMomentMinor_Unchecked" 
+                      VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="False" IsEnabled="True">
+                </CheckBox>
+
+                <CheckBox x:Name="checkBoxMomentMajor" Grid.Row="1" Grid.Column="5"
+                      Checked="checkBoxMomentMajor_Checked" Unchecked="checkBoxMomentMajor_Unchecked" 
+                      VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="False" IsEnabled="True">
+                </CheckBox>
+            </Grid>
+
+            <Button Grid.Row="1" Grid.Column="3" Content="Add" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="0,0,0,0" Click="Button_ADD_Releases_Click" ></Button>
+
+            <ListBox x:Name="listBoxChoosenReleases" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="3" 
                      d:ItemsSource="{d:SampleData ItemCount=5}" SelectionMode="Single"
                      Margin="0 0 0 0">
             </ListBox>
 
-            <Button Grid.Row="2" Grid.Column="4" Content="Remove" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="0,-150,0,0" Click="Button_REMOVE_Wind_Click" ></Button>
+            <Button Grid.Row="2" Grid.Column="3" Content="Remove" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,10,0,0" Click="Button_REMOVE_Releases_Click" />
 
         </Grid>
 
-        <Grid Grid.Row="2" Margin="0 10">
+        <Grid Grid.Row="3" Margin="0 10">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
