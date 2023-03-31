@@ -39,6 +39,7 @@ namespace WS_SG_ETABS_Plugin.src.wind_coeff
         {
             _SapModel = SapModel;
             _Plugin = Plugin;
+
             InitializeComponent();
 
             //Check if model is locked
@@ -68,6 +69,13 @@ namespace WS_SG_ETABS_Plugin.src.wind_coeff
 
         private void Button_ADD_Wind_Click(object sender, RoutedEventArgs e)
         {
+            //If there is no group, selectedIndex = -1, then return
+            if (comBoxGroups.SelectedIndex == -1)
+            {
+                MessageBox.Show("Please select a group!");
+                return;
+            }
+
             string groupName = comBoxGroups.Text;
             string loadPattern = comBoxLoadPattern.Text;
             int direction = new int();
@@ -115,6 +123,13 @@ namespace WS_SG_ETABS_Plugin.src.wind_coeff
 
         private void buttonOk_Click(object sender, RoutedEventArgs e)
         {
+            //Check if listbox group empty
+            if (listBoxChoosenWind.Items.Count == 0)
+            {
+                MessageBox.Show("Please choose atleast 1 group!");
+                return;
+            }
+
             IsEnabled = false;
             //Call up result window
             src.wind_coeff.WindowWindCoeffResult windowWindCoeffResult = new src.wind_coeff.WindowWindCoeffResult(_SapModel, _Plugin, windLoadList);

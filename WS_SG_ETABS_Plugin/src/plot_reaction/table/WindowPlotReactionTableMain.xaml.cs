@@ -89,6 +89,13 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
             //src.HelperUI.MoveItemsFromListBox(listBoxAvailGroup, listBoxChoosenGroup);
             if (checkBoxDefault.IsChecked == true)
             {
+                //If there is no group, selectedIndex = -1, then return
+                if (comBoxGroup.SelectedIndex == -1)
+                {
+                    MessageBox.Show("Please select a group!");
+                    return;
+                }
+
                 string selectedString = comBoxGroup.Text + "," + "Auto";
                 listBoxChoosenGroup.Items.Add(selectedString);
 
