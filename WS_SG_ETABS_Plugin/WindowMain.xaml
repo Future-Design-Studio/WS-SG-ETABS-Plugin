@@ -27,8 +27,10 @@
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
+        <!-- Logo -->
         <Image Grid.Row="0" Grid.ColumnSpan="4" Grid.RowSpan="2" Margin="5" Source="/WS_SG_ETABS_Plugin;component/src/resources/by_Future_Design_Studio.png"/>
 
+        <!-- Labels -->
         <Label Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" FontWeight="ExtraBold" >Wide Use Case</Label>
         <Label Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" FontWeight="ExtraBold" >Specific Use Case</Label>
         <Label Grid.Row="2" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" FontWeight="ExtraBold" >Upcoming</Label>
@@ -64,11 +66,11 @@
         <Button Grid.Row="7" Grid.Column="3" x:Name="buttonSteelTrussOptimizer" Content="Steel Truss Optimizer" FontSize="16" Click="buttonSteelTrussOptimizer_Click" IsEnabled="False"/>
         <Button Grid.Row="8" Grid.Column="3" x:Name="buttonCircCrack" Content="Circular RC Section Crack Width Calculator" FontSize="16" Click="buttonCircCrack_Click" IsEnabled="False"/>
         <Button Grid.Row="9" Grid.Column="3" x:Name="buttonPreWarning" Content="Grasshopper Geometry Checker" FontSize="16" Click="buttonPreWarning_Click" IsEnabled="False"/>
+
+
+
         
-        
-        
-        
-        
+        <Button Grid.Row="0" Grid.Column="3" Grid.ColumnSpan="1" x:Name="buttonHelper" Content="Help" FontSize="12" Margin="0 10 0 0" Click="buttonHelper_Click" IsEnabled="True" HorizontalAlignment="Right" VerticalAlignment="Top"/>
         <Image Grid.Row="99" Grid.Column="0" Grid.ColumnSpan="1" Grid.RowSpan="2" HorizontalAlignment="Left" Margin="11" Source="/WS_SG_ETABS_Plugin;component/src/resources/RambollFDSLogo.png"/>
         <Label Grid.Row="99" Grid.Column="3" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="10">version 1.0.0</Label>
     </Grid>

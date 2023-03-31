@@ -80,7 +80,7 @@
             </Grid.ColumnDefinitions>
 
             <Grid Grid.Column="0">
-                <Image Source="/WS_SG_ETABS_Plugin;component/src/resources/RambollFDSLogo.PNG" HorizontalAlignment="Left"/>
+                <Image Margin ="0 7 -180 7" HorizontalAlignment="Right" Source="/WS_SG_ETABS_Plugin;component/src/resources/by_Future_Design_Studio_no_powerapp.PNG" />
             </Grid>
 
             <Grid Grid.Column="1">

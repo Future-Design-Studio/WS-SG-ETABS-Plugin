@@ -158,5 +158,45 @@ namespace WS_SG_ETABS_Plugin
             src.release_selected_node.WindowReleaseSelectedNodeMain windowReleaseSelectedNodeMain = new src.release_selected_node.WindowReleaseSelectedNodeMain(_SapModel, _Plugin);
             IsEnabled = true;
         }
+
+        private void buttonHelper_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void buttonPadFooting_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void buttonPunchingShear_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void buttonTrfEtabstoSafe_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void buttonDeleteFrames_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void buttonSteelTrussOptimizer_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void buttonCircCrack_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void buttonPreWarning_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
