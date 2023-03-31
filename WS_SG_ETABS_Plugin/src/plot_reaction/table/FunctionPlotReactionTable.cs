@@ -67,7 +67,8 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
 
 
         public static bool CreateExcelAndPlotPosition (cSapModel Sap, cPluginCallback Plugin, WpfPlot ReactionPlot, List<Dictionary<string, string>> groupAndColor, List<string> listBoxChoosenLoadCase, string plotTitle,
-            double bubbleScaleFactor, int textSize, int titleSize, int axisTitleSize, int gridSpacingX, int gridSpacingY, bool? showRenumber, List<src.HelperEtabs.DatabaseTable> databaseTableList, string fileName, string filePath)
+            double bubbleScaleFactor, int textSize, int titleSize, int axisTitleSize, int gridSpacingX, int gridSpacingY, bool? showRenumber, 
+            bool? includeAllJoints, List<src.HelperEtabs.DatabaseTable> databaseTableList, string fileName, string filePath)
         {
             int Ret;
 
@@ -131,16 +132,22 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
                     bubbleColor = System.Drawing.ColorTranslator.FromHtml(colorHex);
                 }
 
-                
-                //Filter joint reactions based on group
+
+                //Filter joint reactions based on group if not all joints is selected
                 src.HelperEtabs.DatabaseTable jointReactionTableFiltered = new HelperEtabs.DatabaseTable();
-                (isError, jointReactionTableFiltered) = src.HelperEtabs.FilterDatabaseTableUniqueNameByGroup(jointReactionTable, groupAssignmentTable, groupName);
-                if (isError) { return isError; }
+                if (includeAllJoints == false)
+                {
+
+                    (isError, jointReactionTableFiltered) = src.HelperEtabs.FilterDatabaseTableUniqueNameByGroup(jointReactionTable, groupAssignmentTable, groupName);
+                    if (isError) { return isError; }
+                }
+                else
+                {
+                    jointReactionTableFiltered = jointReactionTable;
+                }
 
                 //To save unique joint that has been plotted
                 List<string> uniqueJointRecorded = new List<string>();
-
-                
 
                 foreach (Dictionary<string, string> jointReactionRow in jointReactionTableFiltered.TableInList)
                 {
@@ -239,9 +246,11 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
             var resultFx = CompileReactionToArrayFx(jointReactionList);
             var resultFy = CompileReactionToArrayFy(jointReactionList);
             var resultFz = CompileReactionToArrayFz(jointReactionList);
+            var resultMx = CompileReactionToArrayMx(jointReactionList);
+            var resultMy = CompileReactionToArrayMy(jointReactionList);
+            var resultMz = CompileReactionToArrayMz(jointReactionList);
 
-
-            WriteReactionToExcel(resultFx, resultFy, resultFz, fileName, filePath);
+            WriteReactionToExcel(resultFx, resultFy, resultFz, resultMx, resultMy, resultMz, fileName, filePath);
 
             return isError;
         }
@@ -396,7 +405,158 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
             return result;
         }
 
-        public static void WriteReactionToExcel(object[,] resultFx, object[,] resultFy, object[,] resultFz, string fileName, string filePath)
+        private static object[,] CompileReactionToArrayMx(List<jointReaction> jointReactionList)
+        {
+            List<string> colTitles = new List<string>()
+            {
+                "Label","UniqueName", "Group Name", "X (m)","Y (m)","Z (m)"
+            };
+
+            //Take the first jointReaction and create the column
+            jointReaction jointReaction = jointReactionList[0];
+            foreach (ReactionForce reactionForce in jointReaction.ReactionForceList)
+            {
+                colTitles.Add($"{reactionForce.LoadCase} (kN)");
+            }
+
+            int numOfRow = jointReactionList.Count();
+            int numOfCol = colTitles.Count();
+
+            object[,] result = new object[numOfRow + 1, numOfCol];
+
+            //First row
+            int j = 0;
+            foreach (string colTitle in colTitles)
+            {
+                result[0, j] = colTitle;
+                j++;
+            }
+
+            int i = 1;
+            foreach (jointReaction eachJointReaction in jointReactionList)
+            {
+                result[i, 0] = eachJointReaction.Label;
+                result[i, 1] = eachJointReaction.UniqueName;
+                result[i, 2] = eachJointReaction.GroupName;
+                result[i, 3] = eachJointReaction.XCoordinate;
+                result[i, 4] = eachJointReaction.YCoordinate;
+                result[i, 5] = eachJointReaction.ZCoordinate;
+
+                int loadCaseIndex = 6;
+                foreach (ReactionForce reactionForce in eachJointReaction.ReactionForceList)
+                {
+                    result[i, loadCaseIndex] = reactionForce.MX;
+                    loadCaseIndex++;
+                }
+
+                i++;
+            }
+
+            return result;
+        }
+
+        private static object[,] CompileReactionToArrayMy(List<jointReaction> jointReactionList)
+        {
+            List<string> colTitles = new List<string>()
+            {
+                "Label","UniqueName", "Group Name", "X (m)","Y (m)","Z (m)"
+            };
+
+            //Take the first jointReaction and create the column
+            jointReaction jointReaction = jointReactionList[0];
+            foreach (ReactionForce reactionForce in jointReaction.ReactionForceList)
+            {
+                colTitles.Add($"{reactionForce.LoadCase} (kN)");
+            }
+
+            int numOfRow = jointReactionList.Count();
+            int numOfCol = colTitles.Count();
+
+            object[,] result = new object[numOfRow + 1, numOfCol];
+
+            //First row
+            int j = 0;
+            foreach (string colTitle in colTitles)
+            {
+                result[0, j] = colTitle;
+                j++;
+            }
+
+            int i = 1;
+            foreach (jointReaction eachJointReaction in jointReactionList)
+            {
+                result[i, 0] = eachJointReaction.Label;
+                result[i, 1] = eachJointReaction.UniqueName;
+                result[i, 2] = eachJointReaction.GroupName;
+                result[i, 3] = eachJointReaction.XCoordinate;
+                result[i, 4] = eachJointReaction.YCoordinate;
+                result[i, 5] = eachJointReaction.ZCoordinate;
+
+                int loadCaseIndex = 6;
+                foreach (ReactionForce reactionForce in eachJointReaction.ReactionForceList)
+                {
+                    result[i, loadCaseIndex] = reactionForce.MY;
+                    loadCaseIndex++;
+                }
+
+                i++;
+            }
+
+            return result;
+        }
+
+        private static object[,] CompileReactionToArrayMz(List<jointReaction> jointReactionList)
+        {
+            List<string> colTitles = new List<string>()
+            {
+                "Label","UniqueName", "Group Name", "X (m)","Y (m)","Z (m)"
+            };
+
+            //Take the first jointReaction and create the column
+            jointReaction jointReaction = jointReactionList[0];
+            foreach (ReactionForce reactionForce in jointReaction.ReactionForceList)
+            {
+                colTitles.Add($"{reactionForce.LoadCase} (kN)");
+            }
+
+            int numOfRow = jointReactionList.Count();
+            int numOfCol = colTitles.Count();
+
+            object[,] result = new object[numOfRow + 1, numOfCol];
+
+            //First row
+            int j = 0;
+            foreach (string colTitle in colTitles)
+            {
+                result[0, j] = colTitle;
+                j++;
+            }
+
+            int i = 1;
+            foreach (jointReaction eachJointReaction in jointReactionList)
+            {
+                result[i, 0] = eachJointReaction.Label;
+                result[i, 1] = eachJointReaction.UniqueName;
+                result[i, 2] = eachJointReaction.GroupName;
+                result[i, 3] = eachJointReaction.XCoordinate;
+                result[i, 4] = eachJointReaction.YCoordinate;
+                result[i, 5] = eachJointReaction.ZCoordinate;
+
+                int loadCaseIndex = 6;
+                foreach (ReactionForce reactionForce in eachJointReaction.ReactionForceList)
+                {
+                    result[i, loadCaseIndex] = reactionForce.MZ;
+                    loadCaseIndex++;
+                }
+
+                i++;
+            }
+
+            return result;
+        }
+
+        public static void WriteReactionToExcel(object[,] resultFx, object[,] resultFy, object[,] resultFz, object[,] resultMx, object[,] resultMy, object[,] resultMz, 
+            string fileName, string filePath)
         {
             Microsoft.Office.Interop.Excel.Application xlApp = new Microsoft.Office.Interop.Excel.Application();
 
@@ -414,8 +574,11 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
             xlWorkBook = xlApp.Workbooks.Add(misValue);
 
             //Add worksheets
-            xlWorkBook.Sheets.Add();
-            xlWorkBook.Sheets.Add();
+            xlWorkBook.Sheets.Add(); //Fy
+            xlWorkBook.Sheets.Add(); //Fz
+            xlWorkBook.Sheets.Add(); //Mx
+            xlWorkBook.Sheets.Add(); //My
+            xlWorkBook.Sheets.Add(); //Mz
 
             //Fx
             xlWorkSheet = (Microsoft.Office.Interop.Excel.Worksheet)xlWorkBook.Worksheets.get_Item(1);
@@ -463,7 +626,51 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
             rng = xlWorkSheet.UsedRange.Range["A1", lastCellRange];
 
             rng.Value2 = resultFz;
-            
+
+            //Mx
+            xlWorkSheet = (Microsoft.Office.Interop.Excel.Worksheet)xlWorkBook.Worksheets.get_Item(4);
+
+            xlWorkSheet.Name = "MX";
+
+            numOfRow = resultMx.GetLength(0);
+            numOfCol = resultMx.GetLength(1);
+
+            alphabetOfCol = src.HelperExcel.GetExcelColumnName(numOfCol);
+            lastCellRange = alphabetOfCol + Convert.ToString(numOfRow - 1 + 1);
+
+            rng = xlWorkSheet.UsedRange.Range["A1", lastCellRange];
+
+            rng.Value2 = resultMx;
+
+            //My
+            xlWorkSheet = (Microsoft.Office.Interop.Excel.Worksheet)xlWorkBook.Worksheets.get_Item(5);
+
+            xlWorkSheet.Name = "MY";
+
+            numOfRow = resultMy.GetLength(0);
+            numOfCol = resultMy.GetLength(1);
+
+            alphabetOfCol = src.HelperExcel.GetExcelColumnName(numOfCol);
+            lastCellRange = alphabetOfCol + Convert.ToString(numOfRow - 1 + 1);
+
+            rng = xlWorkSheet.UsedRange.Range["A1", lastCellRange];
+
+            rng.Value2 = resultMy;
+
+            //My
+            xlWorkSheet = (Microsoft.Office.Interop.Excel.Worksheet)xlWorkBook.Worksheets.get_Item(6);
+
+            xlWorkSheet.Name = "MZ";
+
+            numOfRow = resultMz.GetLength(0);
+            numOfCol = resultMz.GetLength(1);
+
+            alphabetOfCol = src.HelperExcel.GetExcelColumnName(numOfCol);
+            lastCellRange = alphabetOfCol + Convert.ToString(numOfRow - 1 + 1);
+
+            rng = xlWorkSheet.UsedRange.Range["A1", lastCellRange];
+
+            rng.Value2 = resultMz;
 
             //Here saving the file in xlsx
             string excelPath = filePath + fileName + ".xlsx";
