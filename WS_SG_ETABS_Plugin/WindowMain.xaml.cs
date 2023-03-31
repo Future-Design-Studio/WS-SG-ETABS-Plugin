@@ -161,7 +161,10 @@ namespace WS_SG_ETABS_Plugin
 
         private void buttonHelper_Click(object sender, RoutedEventArgs e)
         {
-
+            IsEnabled = false;
+            //Call up helper window
+            src.HelperOpenPDF openHelperPdf = new src.HelperOpenPDF();
+            IsEnabled = true;
         }
 
         private void buttonPadFooting_Click(object sender, RoutedEventArgs e)
@@ -195,6 +198,21 @@ namespace WS_SG_ETABS_Plugin
         }
 
         private void buttonPreWarning_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void buttonColOptimizer_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void buttonTrfEtabsLoads_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void buttonTrussGrouping_Click(object sender, RoutedEventArgs e)
         {
 
         }
