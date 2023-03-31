@@ -160,6 +160,49 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
             
             try
             {
+
+                bool? includeAllJoints = checkBoxAllJoints.IsChecked;
+
+                //If include all joints, add one item inside the groupAndColor dictionary
+                if (includeAllJoints == true)
+                {
+                    //Clear groupAndColor dictionary
+                    groupAndColor.Clear();
+
+                    //src.HelperUI.MoveItemsFromListBox(listBoxAvailGroup, listBoxChoosenGroup);
+                    if (checkBoxDefault.IsChecked == true)
+                    {
+                        //Add into dictionary
+                        Dictionary<string, string> eachGroupAndColor = new Dictionary<string, string>
+                        {
+                            {"groupName",  "All"},
+                            {"color", "Auto"}
+                        };
+
+                        groupAndColor.Add(eachGroupAndColor);
+                    }
+                    else
+                    {
+                        string selectedColor = ClrPcker.SelectedColor.ToString();
+
+                        if (selectedColor == "")
+                        {
+                            MessageBox.Show("Please pick a color");
+                        }
+                        else
+                        {
+                            //Add into dictionary
+                            Dictionary<string, string> eachGroupAndColor = new Dictionary<string, string>
+                            {
+                                {"groupName",  "All"},
+                                {"color", selectedColor}
+                            };
+
+                            groupAndColor.Add(eachGroupAndColor);
+                        }
+                    }
+                }
+
                 //Casting listbox content to list
                 List<string> listChoosenLoadCase= listBoxChoosenLoadCase.Items.OfType<string>().ToList();
 
@@ -178,7 +221,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
 
                 //Call up copy result window
                 src.plot_reaction.table.WindowPlotReactionTableResult windowPlotReactionTableResult = new src.plot_reaction.table.WindowPlotReactionTableResult(_SapModel, _Plugin, groupAndColor, listChoosenLoadCase,
-                    plotTitle, bubbleScaleFactor, textSize, titleSize, axisTitleSize, gridSpacingX, gridSpacingY, showRenumber, databaseTableListGlobal, fileName, filePath);
+                    plotTitle, bubbleScaleFactor, textSize, titleSize, axisTitleSize, gridSpacingX, gridSpacingY, showRenumber, includeAllJoints, databaseTableListGlobal, fileName, filePath);
             }
 
             catch (Exception ex)
@@ -193,6 +236,22 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
         private void buttonCancel_Click(object sender, RoutedEventArgs e)
         {
             Close();
+        }
+
+        private void checkBoxAllJoints_Checked(object sender, RoutedEventArgs e)
+        {
+            comBoxGroup.IsEnabled = false;
+            listBoxChoosenGroup.IsEnabled = false;
+            buttonRemoveGroup.IsEnabled = false;
+            buttonAddGroup.IsEnabled = false;
+        }
+
+        private void checkBoxAllJoints_UnChecked(object sender, RoutedEventArgs e)
+        {
+            comBoxGroup.IsEnabled = true;
+            listBoxChoosenGroup.IsEnabled = true;
+            buttonAddGroup.IsEnabled = true;
+            buttonAddGroup.IsEnabled = true;
         }
 
         #endregion

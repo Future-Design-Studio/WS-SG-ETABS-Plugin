@@ -147,6 +147,49 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
                 }
                 */
 
+                bool? includeAllJoints = checkBoxAllJoints.IsChecked;
+
+                //If include all joints, add one item inside the groupAndColor dictionary
+                if (includeAllJoints == true)
+                {
+                    //Clear groupAndColor dictionary
+                    groupAndColor.Clear();
+
+                    //src.HelperUI.MoveItemsFromListBox(listBoxAvailGroup, listBoxChoosenGroup);
+                    if (checkBoxDefault.IsChecked == true)
+                    {
+                        //Add into dictionary
+                        Dictionary<string, string> eachGroupAndColor = new Dictionary<string, string>
+                        {
+                            {"groupName",  "All"},
+                            {"color", "Auto"}
+                        };
+
+                        groupAndColor.Add(eachGroupAndColor);
+                    }
+                    else
+                    {
+                        string selectedColor = ClrPcker.SelectedColor.ToString();
+
+                        if (selectedColor == "")
+                        {
+                            MessageBox.Show("Please pick a color");
+                        }
+                        else
+                        {
+                            //Add into dictionary
+                            Dictionary<string, string> eachGroupAndColor = new Dictionary<string, string>
+                            {
+                                {"groupName",  "All"},
+                                {"color", selectedColor}
+                            };
+
+                            groupAndColor.Add(eachGroupAndColor);
+                        }
+                    }
+                }
+
+
                 string title = textBoxTitle.Text;
                 string outputCase = comBoxOutputCase.SelectedValue.ToString();
                 string reactionDirection = comBoxReactionDirection.SelectedValue.ToString();
@@ -189,7 +232,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
                 //Call up copy property result window
                 src.plot_reaction.graph.WindowPlotReactionGraphResult windowPlotReactionResult = new src.plot_reaction.graph.WindowPlotReactionGraphResult(_SapModel, _Plugin, groupAndColor,
                     outputCase, reactionDirection, forceFactor, bubbleScaleFactor, textSize, titleSize, axisTitleSize, gridSpacingX, gridSpacingY, title, splitX, splitY, divisionX, divisionY, offsetX, offsetY,
-                    sumTextSizeX, sumTextSizeY, separationX, separationY, databaseTableListGlobal);
+                    sumTextSizeX, sumTextSizeY, separationX, separationY, includeAllJoints, databaseTableListGlobal);
                 IsEnabled = true;
             }
 
@@ -263,7 +306,21 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
             textBoxSeparationY.IsEnabled = false;
         }
 
+        private void checkBoxAllJoints_Checked(object sender, RoutedEventArgs e)
+        {
+            comBoxGroup.IsEnabled = false;
+            listBoxChoosenGroup.IsEnabled = false;
+            buttonRemove.IsEnabled = false;
+            buttonAdd.IsEnabled = false;
+        }
 
+        private void checkBoxAllJoints_UnChecked(object sender, RoutedEventArgs e)
+        {
+            comBoxGroup.IsEnabled = true;
+            listBoxChoosenGroup.IsEnabled = true;
+            buttonRemove.IsEnabled = true;
+            buttonAdd.IsEnabled = true;
+        }
 
 
         #endregion

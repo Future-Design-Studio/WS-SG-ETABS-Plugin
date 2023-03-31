@@ -30,21 +30,24 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
 
         public WindowPlotReactionGraphResult(cSapModel SapModel, cPluginCallback Plugin, List<Dictionary<string, string>> groupAndColor, string outputCase,
             string reactionDirection, double forceFactor, double bubbleScaleFactor, int textSize, int titleSize, int axisTitleSize, double gridSpacingX, double gridSpacingY, string title, bool splitX, bool splitY,
-            int divisionX, int divisionY, double offsetX, double offsetY, int sumTextSizeX, int sumTextSizeY, double separationX, double separationY, List<src.HelperEtabs.DatabaseTable> databaseTableList)
+            int divisionX, int divisionY, double offsetX, double offsetY, int sumTextSizeX, int sumTextSizeY, double separationX, double separationY, 
+            bool? includeAllJoints, List<src.HelperEtabs.DatabaseTable> databaseTableList)
         {
             _SapModel = SapModel;
             _Plugin = Plugin;
 
             //Check if any group is choosen
-            List<string> listChoosenGroupName = new List<string>();
-            foreach (Dictionary<string, string> group in groupAndColor)
+            bool anyGroupChoosen = true;
+            if (includeAllJoints == false)
             {
-                listChoosenGroupName.Add(group["groupName"]);
+                List<string> listChoosenGroupName = new List<string>();
+                foreach (Dictionary<string, string> group in groupAndColor)
+                {
+                    listChoosenGroupName.Add(group["groupName"]);
+                }
+
+                anyGroupChoosen = src.HelperUI.CheckGroupListExist(_SapModel, listChoosenGroupName);
             }
-
-
-            //Check if any group is choosen
-            bool anyGroupChoosen = src.HelperUI.CheckGroupListExist(_SapModel, listChoosenGroupName);
 
             if (!anyGroupChoosen)
             {
@@ -65,7 +68,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
 
             (isError, baseReaction, totalReactionInPlot, sumReactionPerGroupList) = src.plot_reaction.graph.FunctionPlotReactionGraph.PlotReaction(_SapModel, groupAndColor,
             outputCase, reactionDirection, ReactionPlot, forceFactor, bubbleScaleFactor, textSize, titleSize, axisTitleSize, gridSpacingX, gridSpacingY, title, splitX, splitY, divisionX, divisionY, offsetX, offsetY,
-            sumTextSizeX, sumTextSizeY, separationX, separationY, databaseTableList);
+            sumTextSizeX, sumTextSizeY, separationX, separationY, includeAllJoints, databaseTableList);
 
             //Show sum per group
             DataGridTextColumn c1 = new DataGridTextColumn();
@@ -91,7 +94,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
 
 
             //If base reaction and total reaction not same, show warning
-            if (baseReaction != totalReactionInPlot)
+            if (Math.Abs(baseReaction - totalReactionInPlot) > 1)
             {
                 //Show comparison of base reaction to total reaction in plot
                 IsEnabled = false;
