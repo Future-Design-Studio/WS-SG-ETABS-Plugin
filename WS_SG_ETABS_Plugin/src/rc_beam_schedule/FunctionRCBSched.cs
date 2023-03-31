@@ -1349,13 +1349,13 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
             foreach (src.HelperEtabs.RcBeam rcBeam in rcBeamList)
             {
                 //Left
-                rcBeam.LeftAvProv = Math.Round(rcBeam.LeftNoShearLinksLeg * 0.25 * Math.PI * Math.Pow(rcBeam.LeftShearLinksDiameter, 2) * (1000 / rcBeam.LeftShearLinksSpacing) * 1000); //mm2/m
+                rcBeam.LeftAvProv = Math.Round(rcBeam.LeftNoShearLinksLeg * 0.25 * Math.PI * Math.Pow(rcBeam.LeftShearLinksDiameter, 2) * (1000 / rcBeam.LeftShearLinksSpacing)); //mm2/m
                 rcBeam.RatioLeftAv = Math.Round(rcBeam.LeftAv / rcBeam.LeftAvProv, 3);
 
                 if (rcBeam.BeamType == "Simply supported")
                 {
                     //Mid
-                    rcBeam.MidAvProv = Math.Round(rcBeam.MidNoShearLinksLeg * 0.25 * Math.PI * Math.Pow(rcBeam.MidShearLinksDiameter, 2) * (1000 / rcBeam.MidShearLinksSpacing) * 1000); //mm2/m
+                    rcBeam.MidAvProv = Math.Round(rcBeam.MidNoShearLinksLeg * 0.25 * Math.PI * Math.Pow(rcBeam.MidShearLinksDiameter, 2) * (1000 / rcBeam.MidShearLinksSpacing)); //mm2/m
                     rcBeam.RatioMidAv = Math.Round(rcBeam.MidAv / rcBeam.MidAvProv, 3);
                 }
                 else
@@ -1365,7 +1365,7 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
                 }
 
                 //Right
-                rcBeam.RightAvProv = Math.Round(rcBeam.RightNoShearLinksLeg * 0.25 * Math.PI * Math.Pow(rcBeam.RightShearLinksDiameter, 2) * (1000 / rcBeam.RightShearLinksSpacing) * 1000); //mm2/m
+                rcBeam.RightAvProv = Math.Round(rcBeam.RightNoShearLinksLeg * 0.25 * Math.PI * Math.Pow(rcBeam.RightShearLinksDiameter, 2) * (1000 / rcBeam.RightShearLinksSpacing)); //mm2/m
                 rcBeam.RatioRightAv = Math.Round(rcBeam.RightAv / rcBeam.RightAvProv, 3);
             }
         }
