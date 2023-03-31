@@ -37,17 +37,17 @@
         <Label Grid.Row="2" Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" FontWeight="ExtraBold" >FDS Only</Label>
         
         <!-- Wide Use Case -->
-        <Button Grid.Row="3" x:Name="buttonRCBeamSchedule" Content="RC Beam Schedule" FontSize="16" Click="buttonRCBeamSchedule_Click"/>
-        <Button Grid.Row="4" x:Name="buttonCopyProperties" Content="Importing ETABS Properties" FontSize="16" Click="buttonCopyProperties_Click"/>
-        <Button Grid.Row="5" x:Name="buttonPlotReaction" Content="Export Joint Reactions" FontSize="16" Click="buttonPlotReaction_Click"/>
-        <Button Grid.Row="6" x:Name="buttonLoadCombo" Content="Load Combination EN" FontSize="16" Click="buttonLoadCombo_Click"/>
+        <Button Grid.Row="3" x:Name="buttonRCBeamSchedule" Content="RC Beam Schedule (Beta Version)" FontSize="16" Click="buttonRCBeamSchedule_Click"/>
+        <Button Grid.Row="4" x:Name="buttonCopyProperties" Content="Importing ETABS Properties (Beta Version)" FontSize="16" Click="buttonCopyProperties_Click"/>
+        <Button Grid.Row="5" x:Name="buttonPlotReaction" Content="Export Joint Reactions (Beta Version)" FontSize="16" Click="buttonPlotReaction_Click"/>
+        <Button Grid.Row="6" x:Name="buttonLoadCombo" Content="Load Combination EN (Beta Version)" FontSize="16" Click="buttonLoadCombo_Click"/>
 
         <!-- Specific Use Case -->
-        <Button Grid.Row="3" Grid.Column="1" x:Name="buttonShellUni" Content="Shell Orientation (Local-3)" FontSize="16" Click="buttonShellUni_Click"/>
-        <Button Grid.Row="4" Grid.Column="1" x:Name="buttonSelUniqueName" Content="Select by Unique Name" FontSize="16" Click="buttonSelUniqueName_Click"/>
-        <Button Grid.Row="5" Grid.Column="1" x:Name="buttonEtabsToRhino" Content="Export To Rhino" FontSize="16" Click="buttonEtabsToRhino_Click"/>
-        <Button Grid.Row="6" Grid.Column="1" x:Name="buttonWindCoeff" Content="Wind Coefficient Applications" FontSize="16" Click="buttonWindCoeff_Click"/>
-        <Button Grid.Row="7" Grid.Column="1" x:Name="buttonReleaseSelectedNode" Content="Release Frames at Specific Nodes" FontSize="16" Click="buttonReleaseSelectedNode_Click"/>
+        <Button Grid.Row="3" Grid.Column="1" x:Name="buttonShellUni" Content="Shell Orientation (Local-3) (Beta Version)" FontSize="16" Click="buttonShellUni_Click"/>
+        <Button Grid.Row="4" Grid.Column="1" x:Name="buttonSelUniqueName" Content="Select by Unique Name (Beta Version)" FontSize="16" Click="buttonSelUniqueName_Click"/>
+        <Button Grid.Row="5" Grid.Column="1" x:Name="buttonEtabsToRhino" Content="Export To Rhino (Beta Version)" FontSize="16" Click="buttonEtabsToRhino_Click"/>
+        <Button Grid.Row="6" Grid.Column="1" x:Name="buttonWindCoeff" Content="Wind Coefficient Applications (Beta Version)" FontSize="16" Click="buttonWindCoeff_Click"/>
+        <Button Grid.Row="7" Grid.Column="1" x:Name="buttonReleaseSelectedNode" Content="Release Frames at Specific Nodes (Beta Version)" FontSize="16" Click="buttonReleaseSelectedNode_Click"/>
 
 
         <!-- Upcoming -->
