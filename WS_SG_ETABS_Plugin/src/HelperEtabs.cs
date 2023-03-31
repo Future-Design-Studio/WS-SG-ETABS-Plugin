@@ -94,12 +94,36 @@ namespace WS_SG_ETABS_Plugin.src
             public List<int> MidBottomNoRebarPerLayer { get; set; }
             public List<int> RightBottomRebarDiameterList { get; set; }
             public List<int> RightBottomNoRebarPerLayer { get; set; }
+            public double LeftTopAsProv { get; set; }
+            public double MidTopAsProv { get; set; }
+            public double RightTopAsProv { get; set; }
+            public double LeftBottomAsProv { get; set; }
+            public double MidBottomAsProv { get; set; }
+            public double RightBottomAsProv { get; set; }
+            public double LeftAvProv { get; set; }
+            public double MidAvProv { get; set; }
+            public double RightAvProv { get; set; }
             public double LeftShearLinksDiameter { get; set; }
+            public double LeftNoShearLinksLeg { get; set; }
+            public double LeftShearLinksSpacing { get; set; }
             public double MidShearLinksDiameter { get; set; }
+            public double MidNoShearLinksLeg { get; set; }
+            public double MidShearLinksSpacing { get; set; }
             public double RightShearLinksDiameter { get; set; }
+            public double RightNoShearLinksLeg { get; set; }
+            public double RightShearLinksSpacing { get; set; }
             public double Cover { get; set; }
             public string AsEvaluationComment { get; set; }
             public string AvEvaluationComment { get; set; }
+            public double RatioLeftTopAs { get; set; }
+            public double RatioLeftBottomAs { get; set; }
+            public double RatioMidTopAs { get; set; }
+            public double RatioMidBottomAs { get; set; }
+            public double RatioRightTopAs { get; set; }
+            public double RatioRightBottomAs { get; set; }
+            public double RatioLeftAv { get; set; }
+            public double RatioMidAv { get; set; }
+            public double RatioRightAv { get; set; }
 
             public RcBeam(string name)
             {
