@@ -25,7 +25,8 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
         cPluginCallback _Plugin;
 
         public WindowPlotReactionTableResult(cSapModel SapModel, cPluginCallback Plugin, List<Dictionary<string, string>> groupAndColor, List<string> listBoxChoosenLoadCase, string plotTitle, 
-            double bubbleScaleFactor, int textSize, int titleSize, int axisTitleSize, int gridSpacingX, int gridSpacingY, bool? showRenumber, List<src.HelperEtabs.DatabaseTable> databaseTableList, string fileName, string filePath)
+            double bubbleScaleFactor, int textSize, int titleSize, int axisTitleSize, int gridSpacingX, int gridSpacingY, bool? showRenumber,
+            bool? includeAllJoints, List<src.HelperEtabs.DatabaseTable> databaseTableList, string fileName, string filePath)
         {
             _SapModel = SapModel;
             _Plugin = Plugin;
@@ -60,7 +61,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
             bool isError = false;
 
             isError = src.plot_reaction.table.FunctionPlotReactionTable.CreateExcelAndPlotPosition(_SapModel, _Plugin, ReactionPlot, groupAndColor, listBoxChoosenLoadCase, plotTitle,
-            bubbleScaleFactor, textSize, titleSize, axisTitleSize, gridSpacingX, gridSpacingY, showRenumber, databaseTableList, fileName, filePath);
+            bubbleScaleFactor, textSize, titleSize, axisTitleSize, gridSpacingX, gridSpacingY, showRenumber, includeAllJoints, databaseTableList, fileName, filePath);
 
             if (isError)
             {

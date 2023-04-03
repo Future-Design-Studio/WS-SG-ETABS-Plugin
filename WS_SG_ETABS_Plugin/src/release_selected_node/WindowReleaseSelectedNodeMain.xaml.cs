@@ -39,6 +39,7 @@ namespace WS_SG_ETABS_Plugin.src.release_selected_node
             _SapModel = SapModel;
             _Plugin = Plugin;
             InitializeComponent();
+
             //Check if model is locked
             bool modelFromLocked = SapModel.GetModelIsLocked();
 
@@ -61,6 +62,13 @@ namespace WS_SG_ETABS_Plugin.src.release_selected_node
 
         private void Button_ADD_Releases_Click(object sender, RoutedEventArgs e)
         {
+            //If there is no group, selectedIndex = -1, then return
+            if (comBoxGroupsFrames.SelectedIndex == -1)
+            {
+                MessageBox.Show("Please select a group!");
+                return;
+            }
+
             string groupNameFrame = comBoxGroupsFrames.Text;
             string groupNameJoint = comBoxGroupsJoints.Text;
             List<string> releaseType = new List<string>();
@@ -156,6 +164,13 @@ namespace WS_SG_ETABS_Plugin.src.release_selected_node
 
         private void buttonOk_Click(object sender, RoutedEventArgs e)
         {
+            //Check if listbox group empty
+            if (listBoxChoosenReleases.Items.Count == 0)
+            {
+                MessageBox.Show("Please choose atleast 1 group!");
+                return;
+            }
+
             IsEnabled = false;
             //Call up result window
             src.release_selected_node.WindowReleaseSelectedNodeResult windowReleaseSelectedResult = new src.release_selected_node.WindowReleaseSelectedNodeResult(_SapModel, _Plugin, releaseList);

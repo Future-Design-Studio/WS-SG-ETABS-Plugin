@@ -161,10 +161,10 @@ namespace WS_SG_ETABS_Plugin
 
         private void buttonHelper_Click(object sender, RoutedEventArgs e)
         {
-            IsEnabled = false;
+            //IsEnabled = false;
             //Call up helper window
-            src.HelperOpenPDF openHelperPdf = new src.HelperOpenPDF();
-            IsEnabled = true;
+            WindowOpenPdf windowOpenPdf = new WindowOpenPdf();
+            //IsEnabled = true;
         }
 
         private void buttonPadFooting_Click(object sender, RoutedEventArgs e)

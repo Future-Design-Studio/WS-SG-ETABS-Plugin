@@ -73,6 +73,12 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
             //Get d from rebar
             CalculateDFromRebar(rcBeamList);
 
+            //Calculate As provided
+            CalculateAsProv(rcBeamList);
+
+            //Calculate Av provided
+            CalculateAvProv(rcBeamList);
+
             //Compile data to 2d array
             var result = CompileResutRcBeamToArray(rcBeamList);
 
@@ -586,7 +592,9 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
                 rcBeam.LeftBottomNoRebarPerLayer = leftBottomNoRebarPerLayer;
 
                 rcBeam.LeftShearLinks = leftTopNoShearLinksLeg + "H" + leftTopshearLinksDiameter + "-" + leftTopShearLinksSpacing;
+                rcBeam.LeftNoShearLinksLeg = leftTopNoShearLinksLeg;
                 rcBeam.LeftShearLinksDiameter = leftTopshearLinksDiameter;
+                rcBeam.LeftShearLinksSpacing = leftTopShearLinksSpacing;
 
                 string midTopAsEvaluationComment = "";
                 string midTopAvEvaluationComment = "";
@@ -643,7 +651,9 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
                     rcBeam.MidBottomNoRebarPerLayer = midBottomNoRebarPerLayer;
 
                     rcBeam.MidShearLinks = midTopNoShearLinksLeg + "H" + midTopshearLinksDiameter + "-" + midTopShearLinksSpacing;
+                    rcBeam.MidNoShearLinksLeg = midTopNoShearLinksLeg;
                     rcBeam.MidShearLinksDiameter = midTopshearLinksDiameter;
+                    rcBeam.MidShearLinksSpacing = midTopShearLinksSpacing;
                 }
                 else
                 {
@@ -705,8 +715,9 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
                 rcBeam.RightBottomNoRebarPerLayer = rightBottomNoRebarPerLayer;
 
                 rcBeam.RightShearLinks = rightTopNoShearLinksLeg + "H" + rightTopshearLinksDiameter + "-" + rightTopShearLinksSpacing;
+                rcBeam.RightNoShearLinksLeg = rightTopNoShearLinksLeg;
                 rcBeam.RightShearLinksDiameter = rightTopshearLinksDiameter;
-
+                rcBeam.RightShearLinksSpacing = rightTopShearLinksSpacing;
 
                 //Gathering evaluation comment
                 if (leftTopAsEvaluationComment != "" || leftBottomAsEvaluationComment != "" || midTopAsEvaluationComment != "" || midBottomAsEvaluationComment != "" ||
@@ -1032,10 +1043,16 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
         {
             List<string> colTitles = new List<string>()
             {
-                "UniqueName", "Width (mm)", "Height (mm)", "fyk (Mpa)", "fck (Mpa)", "d (ETABS) (mm)", "d calculated (mm)", "Beam type", "As Min(mm2)", "Left Top As (mm2)", 
-                "Mid Top As (mm2)", "Right Top As (mm2)", "Left Bottom As (mm2)", "Mid Bottom As (mm2)", "Right Bottom As (mm2)", "Left Av (mm2/m)", "Mid Av (mm2/m)", "Right Av (mm2/m)"
+                "UniqueName", "Width (mm)", "Height (mm)", "fyk (Mpa)", "fck (Mpa)", "d (ETABS) (mm)", "d calculated (mm)", "Beam type", "As Min(mm2)"
+                , "Left Top As (mm2)", "Mid Top As (mm2)", "Right Top As (mm2)", "Left Bottom As (mm2)", "Mid Bottom As (mm2)", "Right Bottom As (mm2)"
+                , "Left Av (mm2/m)", "Mid Av (mm2/m)", "Right Av (mm2/m)"
                 , "Left Top Rebar", "Mid Top Rebar", "Right Top Rebar", "Left Bottom Rebar", "Mid Bottom Rebar", "Right Bottom Rebar"
-                , "Left Shear Links", "Mid Shear Links", "Right Shear Links", "Rebar warning", "Shear links warning"
+                , "Left Shear Links", "Mid Shear Links", "Right Shear Links"
+                , "Left Top As Prov (mm2)", "Mid Top As Prov (mm2)", "Right Top As Prov (mm2)", "Left Bottom As  Prov (mm2)", "Mid Bottom As Prov (mm2)", "Right Bottom As Prov (mm2)"
+                , "Left Av Prov (mm2/m)", "Mid Av Prov (mm2/m)", "Right Av Prov (mm2/m)"
+                , "Left Top As Ratio", "Mid Top As Ratio", "Right Top As Ratio", "Left Bottom As Ratio", "Mid Bottom As Ratio", "Right Bottom As Ratio"
+                , "Left Av Ratio", "Mid Av Ratio", "Right Av Ratio"
+                , "Rebar warning", "Shear links warning"
             };
 
             int numOfRow = rcBeamList.Count();
@@ -1063,26 +1080,53 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
                 result[i, 6] = rcBeam.dCalculated;
                 result[i, 7] = rcBeam.BeamType;
                 result[i, 8] = rcBeam.AsMin;
+
                 result[i, 9] = rcBeam.LeftTopAs;
                 result[i, 10] = rcBeam.MidTopAs;
                 result[i, 11] = rcBeam.RightTopAs;
                 result[i, 12] = rcBeam.LeftBottomAs;
                 result[i, 13] = rcBeam.MidBottomAs;
                 result[i, 14] = rcBeam.RightBottomAs;
+
                 result[i, 15] = rcBeam.LeftAv;
                 result[i, 16] = rcBeam.MidAv;
                 result[i, 17] = rcBeam.RightAv;
+
                 result[i, 18] = rcBeam.LeftTopRebar;
                 result[i, 19] = rcBeam.MidTopRebar;
                 result[i, 20] = rcBeam.RightTopRebar;
                 result[i, 21] = rcBeam.LeftBottomRebar;
                 result[i, 22] = rcBeam.MidBottomRebar;
                 result[i, 23] = rcBeam.RightBottomRebar;
+
                 result[i, 24] = rcBeam.LeftShearLinks;
                 result[i, 25] = rcBeam.MidShearLinks;
                 result[i, 26] = rcBeam.RightShearLinks;
-                result[i, 27] = rcBeam.AsEvaluationComment;
-                result[i, 28] = rcBeam.AvEvaluationComment;
+
+                result[i, 27] = rcBeam.LeftTopAsProv;
+                result[i, 28] = rcBeam.MidTopAsProv;
+                result[i, 29] = rcBeam.RightTopAsProv;
+                result[i, 30] = rcBeam.LeftBottomAsProv;
+                result[i, 31] = rcBeam.MidBottomAsProv;
+                result[i, 32] = rcBeam.RightBottomAsProv;
+
+                result[i, 33] = rcBeam.LeftAvProv;
+                result[i, 34] = rcBeam.MidAvProv;
+                result[i, 35] = rcBeam.RightAvProv;
+
+                result[i, 36] = rcBeam.RatioLeftTopAs;
+                result[i, 37] = rcBeam.RatioMidTopAs;
+                result[i, 38] = rcBeam.RatioRightTopAs;
+                result[i, 39] = rcBeam.RatioLeftBottomAs;
+                result[i, 40] = rcBeam.RatioMidBottomAs;
+                result[i, 41] = rcBeam.RatioRightBottomAs;
+
+                result[i, 42] = rcBeam.RatioLeftAv;
+                result[i, 43] = rcBeam.RatioMidAv;
+                result[i, 44] = rcBeam.RatioRightAv;
+
+                result[i, 45] = rcBeam.AsEvaluationComment;
+                result[i, 46] = rcBeam.AvEvaluationComment;
 
                 i++;
             }
@@ -1241,6 +1285,88 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
                         rcBeam.AsEvaluationComment += ", d calculated < d ETABS";
                     }
                 }
+            }
+        }
+
+        public static void CalculateAsProv(List<src.HelperEtabs.RcBeam> rcBeamList)
+        {
+            foreach (src.HelperEtabs.RcBeam rcBeam in rcBeamList)
+            {
+                //Left top
+                rcBeam.LeftTopAsProv = CalculateAsProvFromRebarList(rcBeam.LeftTopRebarDiameterList, rcBeam.LeftTopNoRebarPerLayer);
+                rcBeam.RatioLeftTopAs = Math.Round(rcBeam.LeftTopAs / rcBeam.LeftTopAsProv, 3);
+
+                //Left bottom
+                rcBeam.LeftBottomAsProv = CalculateAsProvFromRebarList(rcBeam.LeftBottomRebarDiameterList, rcBeam.LeftBottomNoRebarPerLayer);
+                rcBeam.RatioLeftBottomAs = Math.Round(rcBeam.LeftBottomAs / rcBeam.LeftBottomAsProv, 3);
+
+                if (rcBeam.BeamType == "Simply supported")
+                {
+                    //Mid top
+                    rcBeam.MidTopAsProv = CalculateAsProvFromRebarList(rcBeam.MidTopRebarDiameterList, rcBeam.MidTopNoRebarPerLayer);
+                    rcBeam.RatioMidTopAs = Math.Round(rcBeam.MidTopAs / rcBeam.MidTopAsProv, 3);
+
+                    //Mid bottom
+                    rcBeam.MidBottomAsProv = CalculateAsProvFromRebarList(rcBeam.MidBottomRebarDiameterList, rcBeam.MidBottomNoRebarPerLayer);
+                    rcBeam.RatioMidBottomAs = Math.Round(rcBeam.MidBottomAs / rcBeam.MidBottomAsProv, 3);
+                }
+                else
+                {
+                    rcBeam.MidTopAsProv = 0;
+                    rcBeam.RatioMidTopAs = 0;
+
+                    rcBeam.MidBottomAsProv = 0;
+                    rcBeam.RatioMidBottomAs = 0;
+                }
+
+                //Right top
+                rcBeam.RightTopAsProv = CalculateAsProvFromRebarList(rcBeam.RightTopRebarDiameterList, rcBeam.RightTopNoRebarPerLayer);
+                rcBeam.RatioRightTopAs = Math.Round(rcBeam.RightTopAs / rcBeam.RightTopAsProv, 3);
+
+                //Right bottom
+                rcBeam.RightBottomAsProv = CalculateAsProvFromRebarList(rcBeam.RightBottomRebarDiameterList, rcBeam.RightBottomNoRebarPerLayer);
+                rcBeam.RatioRightBottomAs = Math.Round(rcBeam.RightBottomAs / rcBeam.RightBottomAsProv, 3);
+            }
+        }
+
+        public static double CalculateAsProvFromRebarList(List<int> rebarDiameterList, List<int> noRebarPerLayer)
+        {
+            double rebarArea = 0;
+
+            for (int layerIndex = 0; layerIndex < rebarDiameterList.Count; layerIndex++)
+            {
+                double diameter = rebarDiameterList[layerIndex];
+                int noRebar = noRebarPerLayer[layerIndex];
+
+                rebarArea += Math.Round(0.25 * Math.PI * Math.Pow(diameter, 2) * noRebar);
+            }
+
+            return rebarArea;
+        }
+
+        public static void CalculateAvProv(List<src.HelperEtabs.RcBeam> rcBeamList)
+        {
+            foreach (src.HelperEtabs.RcBeam rcBeam in rcBeamList)
+            {
+                //Left
+                rcBeam.LeftAvProv = Math.Round(rcBeam.LeftNoShearLinksLeg * 0.25 * Math.PI * Math.Pow(rcBeam.LeftShearLinksDiameter, 2) * (1000 / rcBeam.LeftShearLinksSpacing)); //mm2/m
+                rcBeam.RatioLeftAv = Math.Round(rcBeam.LeftAv / rcBeam.LeftAvProv, 3);
+
+                if (rcBeam.BeamType == "Simply supported")
+                {
+                    //Mid
+                    rcBeam.MidAvProv = Math.Round(rcBeam.MidNoShearLinksLeg * 0.25 * Math.PI * Math.Pow(rcBeam.MidShearLinksDiameter, 2) * (1000 / rcBeam.MidShearLinksSpacing)); //mm2/m
+                    rcBeam.RatioMidAv = Math.Round(rcBeam.MidAv / rcBeam.MidAvProv, 3);
+                }
+                else
+                {
+                    rcBeam.MidAvProv = 0;
+                    rcBeam.RatioMidAv = 0;
+                }
+
+                //Right
+                rcBeam.RightAvProv = Math.Round(rcBeam.RightNoShearLinksLeg * 0.25 * Math.PI * Math.Pow(rcBeam.RightShearLinksDiameter, 2) * (1000 / rcBeam.RightShearLinksSpacing)); //mm2/m
+                rcBeam.RatioRightAv = Math.Round(rcBeam.RightAv / rcBeam.RightAvProv, 3);
             }
         }
 
