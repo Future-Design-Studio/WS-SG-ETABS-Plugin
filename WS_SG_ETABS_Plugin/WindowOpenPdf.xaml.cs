@@ -17,8 +17,6 @@ namespace WS_SG_ETABS_Plugin
         public WindowOpenPdf()
         {
             InitializeComponent();
-
-
             string folder = Path.GetDirectoryName(Assembly.GetCallingAssembly().Location);
 
             System.Uri uri = new System.Uri($"{folder}\\src\\resources\\Tools.PDF");
