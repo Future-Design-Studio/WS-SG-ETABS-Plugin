@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Reflection;
 using ETABSv1;
 using System.IO;
 
@@ -163,7 +164,8 @@ namespace WS_SG_ETABS_Plugin
         {
             //IsEnabled = false;
             //Call up helper window
-            WindowOpenPdf windowOpenPdf = new WindowOpenPdf();
+            string folder = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            System.Diagnostics.Process.Start($"{folder}\\src\\resources\\Tools.PDF");
             //IsEnabled = true;
         }
 
