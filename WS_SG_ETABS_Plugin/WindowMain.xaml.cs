@@ -216,5 +216,10 @@ namespace WS_SG_ETABS_Plugin
         {
 
         }
+
+        private void buttonFeedback_Click(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://forms.office.com/e/qaiKf5e3a4");
+        }
     }
 }

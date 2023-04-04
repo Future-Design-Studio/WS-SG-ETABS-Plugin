@@ -23,7 +23,6 @@ namespace WS_SG_ETABS_Plugin
 
             pdfViewer.Source = uri;
 
-            ShowDialog();
         }
     }
 }
