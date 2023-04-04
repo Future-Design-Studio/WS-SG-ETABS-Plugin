@@ -19,9 +19,11 @@ namespace WS_SG_ETABS_Plugin
             InitializeComponent();
             string folder = Path.GetDirectoryName(Assembly.GetCallingAssembly().Location);
 
-            System.Uri uri = new System.Uri($"{folder}\\src\\resources\\Tools.PDF");
+            //System.Uri uri = new System.Uri($"{folder}\\src\\resources\\Tools.PDF");
 
-            pdfViewer.Source = uri;
+            System.Diagnostics.Process.Start($"{folder}\\src\\resources\\Tools.PDF");
+            //pdfViewer.Source = uri;
+            //ShowDialog();
 
         }
     }
