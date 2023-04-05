@@ -24,6 +24,8 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
         cSapModel _SapModel;
         cPluginCallback _Plugin;
 
+
+
         #region Data source quasi permenant stuff
 
         List<string> quasiPermanentCategoryList = new List<string>()
@@ -132,7 +134,16 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
         {
             _SapModel = SapModel;
             _Plugin = Plugin;
-            
+
+            //Check if model is locked
+            bool modelToLocked = _SapModel.GetModelIsLocked();
+
+            if (modelToLocked)
+            {
+                MessageBox.Show("ETABS file is locked! Please unlock the model!");
+                return;
+            }
+
             InitializeComponent();
 
             checkBoxExistingDL.IsChecked = true;
