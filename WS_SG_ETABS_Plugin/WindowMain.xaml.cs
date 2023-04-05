@@ -57,7 +57,7 @@ namespace WS_SG_ETABS_Plugin
             }
             catch
             {
-                MessageBox.Show("Invalid license. You have been reported to Ramboll IT as well as Singapore Police.");
+                MessageBox.Show("Illegal license. You have been reported to Ramboll IT as well as Singapore Police.");
             }
 
         }
