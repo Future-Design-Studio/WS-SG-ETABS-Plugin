@@ -17,6 +17,8 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
         {
             bool isError = false;
 
+            //Sap.Analyze();
+
             //Run RC design if result is not available
             bool resultsAvailable = Sap.DesignConcrete.GetResultsAvailable();
             if (!resultsAvailable)
@@ -25,6 +27,7 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
                 if (Ret == 1)
                 {
                     isError = true;
+                    MessageBox.Show("Cannot start RC design. Please run FEM analysis first!");
                     return isError;
                 }
             }
