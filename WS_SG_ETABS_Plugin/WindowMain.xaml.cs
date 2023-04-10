@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Reflection;
 using ETABSv1;
 using System.IO;
 
@@ -56,7 +57,7 @@ namespace WS_SG_ETABS_Plugin
             }
             catch
             {
-                MessageBox.Show("Invalid license. You have been reported to Ramboll IT as well as Singapore Police.");
+                MessageBox.Show("Illegal license. You have been reported to Ramboll IT as well as Singapore Police.");
             }
 
         }
@@ -163,7 +164,8 @@ namespace WS_SG_ETABS_Plugin
         {
             //IsEnabled = false;
             //Call up helper window
-            WindowOpenPdf windowOpenPdf = new WindowOpenPdf();
+            string folder = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            System.Diagnostics.Process.Start($"{folder}\\src\\resources\\Tools.PDF");
             //IsEnabled = true;
         }
 
@@ -215,6 +217,11 @@ namespace WS_SG_ETABS_Plugin
         private void buttonTrussGrouping_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void buttonFeedback_Click(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://forms.office.com/e/qaiKf5e3a4");
         }
     }
 }

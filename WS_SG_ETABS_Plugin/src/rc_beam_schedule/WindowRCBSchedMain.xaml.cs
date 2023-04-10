@@ -34,6 +34,17 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
             _SapModel = SapModel;
             _Plugin = Plugin;
 
+            
+            //Check if model is locked
+            bool modelToLocked = _SapModel.GetModelIsLocked();
+
+            if (!modelToLocked)
+            {
+                MessageBox.Show("ETABS file is unlocked! Please run analysis first!");
+                return;
+            }
+            
+
             InitializeComponent();
 
             //Fill in default excel result name
