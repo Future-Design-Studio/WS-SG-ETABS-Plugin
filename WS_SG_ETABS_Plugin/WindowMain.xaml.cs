@@ -39,6 +39,7 @@ namespace WS_SG_ETABS_Plugin
             {
                 StreamReader sr = new StreamReader(@"C:\Program Files\Computers and Structures\ETABS 20\LMHOST.ini");
                 string licenseNumber = sr.ReadLine();
+                sr.Close();
 
                 if (licenseNumber == "rwcphlice002")
                 {
