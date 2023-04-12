@@ -26,7 +26,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
         string modelPath;
 
         List<src.HelperEtabs.DatabaseTable> databaseTableListGlobal = new List<src.HelperEtabs.DatabaseTable>();
-        List<Dictionary<string, string>> groupAndColor = new List<Dictionary<string, string>>();
+        List<Dictionary<string, string>> groupAndColorNotAll = new List<Dictionary<string, string>>();
 
         public WindowPlotReactionTableMain(cSapModel SapModel, cPluginCallback Plugin, List<src.HelperEtabs.DatabaseTable> databaseTableList)
         {
@@ -106,7 +106,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
                         {"color", "Auto"}
                     };
 
-                groupAndColor.Add(eachGroupAndColor);
+                groupAndColorNotAll.Add(eachGroupAndColor);
             }
             else
             {
@@ -128,7 +128,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
                         {"color", selectedColor}
                     };
 
-                    groupAndColor.Add(eachGroupAndColor);
+                    groupAndColorNotAll.Add(eachGroupAndColor);
                 }
 
             }
@@ -143,7 +143,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
                 listBoxChoosenGroup.Items.RemoveAt(selectedIndex);
             }
 
-            groupAndColor.RemoveAt(selectedIndex);
+            groupAndColorNotAll.RemoveAt(selectedIndex);
         }
 
         private void checkBoxDefault_Checked(object sender, RoutedEventArgs e)
@@ -164,18 +164,21 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
         private void buttonOk_Click(object sender, RoutedEventArgs e)
         {
             IsEnabled = false;
-            
+
+            //groupAndColor container
+            List<Dictionary<string, string>> groupAndColor = new List<Dictionary<string, string>>();
+
             try
             {
 
                 bool? includeAllJoints = checkBoxAllJoints.IsChecked;
 
+                //groupAndColorAll container
+                List<Dictionary<string, string>> groupAndColorAll = new List<Dictionary<string, string>>();
+
                 //If include all joints, add one item inside the groupAndColor dictionary
                 if (includeAllJoints == true)
                 {
-                    //Clear groupAndColor dictionary
-                    groupAndColor.Clear();
-
                     //src.HelperUI.MoveItemsFromListBox(listBoxAvailGroup, listBoxChoosenGroup);
                     if (checkBoxDefault.IsChecked == true)
                     {
@@ -186,7 +189,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
                             {"color", "Auto"}
                         };
 
-                        groupAndColor.Add(eachGroupAndColor);
+                        groupAndColorAll.Add(eachGroupAndColor);
                     }
                     else
                     {
@@ -205,11 +208,18 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
                                 {"color", selectedColor}
                             };
 
-                            groupAndColor.Add(eachGroupAndColor);
+                            groupAndColorAll.Add(eachGroupAndColor);
                         }
                     }
+
+                    groupAndColor = groupAndColorAll;
+                }
+                else
+                {
+                    groupAndColor = groupAndColorNotAll;
                 }
 
+                
                 //Casting listbox content to list
                 List<string> listChoosenLoadCase= listBoxChoosenLoadCase.Items.OfType<string>().ToList();
 
