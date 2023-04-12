@@ -1219,16 +1219,16 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
                 rcBeam.LeftTopAs = Math.Max(rcBeam.LeftTopAs, asMin);
                 rcBeam.MidTopAs = Math.Max(rcBeam.MidTopAs, asMin);
                 rcBeam.RightTopAs = Math.Max(rcBeam.RightTopAs, asMin);
-                rcBeam.LeftBottomAs = Math.Max(rcBeam.LeftTopAs, asMin);
-                rcBeam.MidBottomAs = Math.Max(rcBeam.MidTopAs, asMin);
-                rcBeam.RightBottomAs = Math.Max(rcBeam.RightTopAs, asMin);
+                rcBeam.LeftBottomAs = Math.Max(rcBeam.LeftBottomAs, asMin);
+                rcBeam.MidBottomAs = Math.Max(rcBeam.MidBottomAs, asMin);
+                rcBeam.RightBottomAs = Math.Max(rcBeam.RightBottomAs, asMin);
             }
             else if (rcBeam.BeamType == "Cantilever")
             {
                 rcBeam.LeftTopAs = Math.Max(rcBeam.LeftTopAs, asMin);
                 rcBeam.RightTopAs = Math.Max(rcBeam.RightTopAs, asMin);
-                rcBeam.LeftBottomAs = Math.Max(rcBeam.LeftTopAs, asMin);
-                rcBeam.RightBottomAs = Math.Max(rcBeam.RightTopAs, asMin);
+                rcBeam.LeftBottomAs = Math.Max(rcBeam.LeftBottomAs, asMin);
+                rcBeam.RightBottomAs = Math.Max(rcBeam.RightBottomAs, asMin);
             }
         }
 
