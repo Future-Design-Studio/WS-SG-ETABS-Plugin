@@ -87,10 +87,14 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
 
             IsEnabled = false;
 
-            //Call up export result window
-            src.etabs_to_rhino.WindowEtabsToRhinoResult windowEtabsToRhinoResult = new src.etabs_to_rhino.WindowEtabsToRhinoResult(_SapModel, _Plugin, filePath, fileName);
             
+
+            //Call up progress result window
+            src.etabs_to_rhino.WindowEtabsToRhinoProgress windowEtabsToRhinoProgress = new src.etabs_to_rhino.WindowEtabsToRhinoProgress(_SapModel, _Plugin, filePath, fileName);
+
             IsEnabled = true;
+
+            Close();
         }
 
         #endregion

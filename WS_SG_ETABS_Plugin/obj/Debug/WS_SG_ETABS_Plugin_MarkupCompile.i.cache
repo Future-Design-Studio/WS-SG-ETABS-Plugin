@@ -10,11 +10,11 @@ none
 false
 DEBUG;TRACE
 
-16-496962925
+17931440425
 
-351655437649
+361432880927
 32-1445296698
-src\carbon\WindowCarbonMain.xaml;src\carbon\WindowCarbonResult.xaml;src\copy_properties\WindowCopyPropMain.xaml;src\copy_properties\WindowCopyPropResult.xaml;src\etabs_to_rhino\WindowEtabsToRhinoMain.xaml;src\etabs_to_rhino\WindowEtabsToRhinoResult.xaml;src\plot_reaction\WindowPlotReactionMain.xaml;src\plot_reaction\WindowPlotReactionResult.xaml;src\select_uniquename\WindowSelUniqueNameMain.xaml;src\select_uniquename\WindowSelUniqueNameResult.xaml;src\shell_uni_orient\WindowShellUniMain.xaml;src\shell_uni_orient\WindowShellUniResult.xaml;src\transfer_midas\WindowTransferMidasMain.xaml;src\transfer_midas\WindowTransferMidasProgress.xaml;src\transfer_midas\WindowTransferMidasResult.xaml;WindowMain.xaml;
+src\carbon\WindowCarbonMain.xaml;src\carbon\WindowCarbonResult.xaml;src\copy_properties\WindowCopyPropMain.xaml;src\copy_properties\WindowCopyPropResult.xaml;src\etabs_to_rhino\WindowEtabsToRhinoMain.xaml;src\etabs_to_rhino\WindowEtabsToRhinoResult.xaml;src\etabs_to_rhino\WindowsEtabsToRhinoProgress.xaml;src\plot_reaction\WindowPlotReactionMain.xaml;src\plot_reaction\WindowPlotReactionResult.xaml;src\select_uniquename\WindowSelUniqueNameMain.xaml;src\select_uniquename\WindowSelUniqueNameResult.xaml;src\shell_uni_orient\WindowShellUniMain.xaml;src\shell_uni_orient\WindowShellUniResult.xaml;src\transfer_midas\WindowTransferMidasMain.xaml;src\transfer_midas\WindowTransferMidasProgress.xaml;src\transfer_midas\WindowTransferMidasResult.xaml;WindowMain.xaml;
 
-False
+True
 

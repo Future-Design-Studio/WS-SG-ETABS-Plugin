@@ -212,3 +212,5 @@ D:\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Win32\librhino3dm_nat
 D:\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Rhino3dm.dll
 D:\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\etabs_to_rhino\WindowEtabsToRhinoResult.g.cs
 D:\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\etabs_to_rhino\WindowEtabsToRhinoResult.baml
+D:\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\etabs_to_rhino\WindowsEtabsToRhinoProgress.g.cs
+D:\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\etabs_to_rhino\WindowsEtabsToRhinoProgress.baml

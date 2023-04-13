@@ -31,7 +31,7 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
             _SapModel = SapModel;
             _Plugin = Plugin;
 
-            src.etabs_to_rhino.FunctionEtabsToRhino.ExportEtabsToRhino(_SapModel, filePath, fileName);
+            //src.etabs_to_rhino.FunctionEtabsToRhino.ExportEtabsToRhino(_SapModel, filePath, fileName);
 
             InitializeComponent();
 

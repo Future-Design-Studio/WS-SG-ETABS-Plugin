@@ -126,6 +126,9 @@
     <Compile Include="src\etabs_to_rhino\WindowEtabsToRhinoResult.xaml.cs">
       <DependentUpon>WindowEtabsToRhinoResult.xaml</DependentUpon>
     </Compile>
+    <Compile Include="src\etabs_to_rhino\WindowsEtabsToRhinoProgress.xaml.cs">
+      <DependentUpon>WindowsEtabsToRhinoProgress.xaml</DependentUpon>
+    </Compile>
     <Compile Include="src\HelperMethod.cs" />
     <Compile Include="src\HelperEtabs.cs" />
     <Compile Include="src\carbon\FunctionCarbon.cs" />
@@ -191,6 +194,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="src\etabs_to_rhino\WindowEtabsToRhinoResult.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\etabs_to_rhino\WindowsEtabsToRhinoProgress.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
