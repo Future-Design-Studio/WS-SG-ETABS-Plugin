@@ -117,21 +117,6 @@
 
         </Grid>
 
-        <Grid Grid.Row="3" Margin="0 10">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"></ColumnDefinition>
-                <ColumnDefinition Width="*"></ColumnDefinition>
-            </Grid.ColumnDefinitions>
-
-            <Image Margin ="0 7 -380 7" HorizontalAlignment="Right" Source="/WS_SG_ETABS_Plugin;component/src/resources/by_Future_Design_Studio_no_powerapp.PNG" />
-
-            <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button x:Name="buttonCancel" Content="Cancel" Width="100" Click="buttonCancel_Click"/>
-                <Button x:Name="buttonOk" Content="OK" Width="100" Click="buttonOk_Click"/>
-            </StackPanel>
-
-        </Grid>
-
         <Grid Grid.Row="2">
 
             <Grid.RowDefinitions>
@@ -141,6 +126,21 @@
 
             <Label Grid.Row="0" Grid.Column="0" Content="Notes" VerticalAlignment="Center" HorizontalAlignment="Left"/>
             <Label Grid.Row="1" Grid.Column="0" Content="1) Using this plugin will replace the end releases in the group of frames selected." VerticalAlignment="Center" HorizontalAlignment="Left"/>
+        </Grid>
+
+        <Grid Grid.Row="3" Margin="0 10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="4*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <Image Margin ="0 6 -15 6" HorizontalAlignment="Right" Source="/WS_SG_ETABS_Plugin;component/src/resources/by_Future_Design_Studio_no_powerapp.PNG" />
+
+            <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button x:Name="buttonCancel" Content="Cancel" Width="100" Click="buttonCancel_Click"/>
+                <Button x:Name="buttonOk" Content="OK" Width="100" Click="buttonOk_Click"/>
+            </StackPanel>
+
         </Grid>
 
     </Grid>

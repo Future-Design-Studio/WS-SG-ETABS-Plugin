@@ -75,12 +75,12 @@
 
         <Grid Grid.Row="3">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="2*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
             <Grid Grid.Column="0">
-                <Image Margin ="0 7 -180 7" HorizontalAlignment="Right" Source="/WS_SG_ETABS_Plugin;component/src/resources/by_Future_Design_Studio_no_powerapp.PNG" />
+                <Image Margin ="0 5 -35 5" HorizontalAlignment="Right" Source="/WS_SG_ETABS_Plugin;component/src/resources/by_Future_Design_Studio_no_powerapp.PNG" />
             </Grid>
 
             <Grid Grid.Column="1">

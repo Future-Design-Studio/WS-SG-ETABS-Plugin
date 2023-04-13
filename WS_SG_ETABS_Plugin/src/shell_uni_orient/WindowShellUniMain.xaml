@@ -62,11 +62,11 @@
 
         <Grid Grid.Row="6">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="1.5*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
-            <Image Margin ="0 7 -80 7" HorizontalAlignment="Right" Source="/WS_SG_ETABS_Plugin;component/src/resources/by_Future_Design_Studio_no_powerapp.PNG" />
+            <Image Margin ="0 8 -15 8" HorizontalAlignment="Right" Source="/WS_SG_ETABS_Plugin;component/src/resources/by_Future_Design_Studio_no_powerapp.PNG" />
 
             <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button x:Name="buttonCancel" Content="Cancel" Width="100" Click="buttonCancel_Click"/>
