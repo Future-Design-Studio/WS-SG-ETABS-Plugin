@@ -172,6 +172,9 @@
       <DependentUpon>WindowPlotReactionMain.xaml</DependentUpon>
     </Compile>
     <Compile Include="src\punching_shear_plot\FunctionPunchingShrPlot.cs" />
+    <Compile Include="src\punching_shear_plot\WindowPunchShrPlotLoading.xaml.cs">
+      <DependentUpon>WindowPunchShrPlotLoading.xaml</DependentUpon>
+    </Compile>
     <Compile Include="src\punching_shear_plot\WindowPunchShrPlotMain.xaml.cs">
       <DependentUpon>WindowPunchShrPlotMain.xaml</DependentUpon>
     </Compile>
@@ -290,6 +293,10 @@
     <Page Include="src\plot_reaction\WindowPlotReactionMain.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="src\punching_shear_plot\WindowPunchShrPlotLoading.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="src\punching_shear_plot\WindowPunchShrPlotMain.xaml">
       <SubType>Designer</SubType>

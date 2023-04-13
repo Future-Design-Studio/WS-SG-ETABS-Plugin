@@ -229,7 +229,7 @@ namespace WS_SG_ETABS_Plugin
         {
             IsEnabled = false;
             //Call up window
-            src.punching_shear_plot.WindowPunchShrPlotMain windowPunchShrPlotMain = new src.punching_shear_plot.WindowPunchShrPlotMain(_SapModel, _Plugin);
+            src.punching_shear_plot.WindowPunchShrPlotLoading windowPunchShrPlotLoading = new src.punching_shear_plot.WindowPunchShrPlotLoading(_SapModel, _Plugin);
             IsEnabled = true;
         }
     }

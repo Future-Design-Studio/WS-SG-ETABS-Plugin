@@ -39,7 +39,7 @@ namespace WS_SG_ETABS_Plugin.src.punching_shear_plot
             List<src.HelperEtabs.Point3D> jointList = new List<src.HelperEtabs.Point3D>();
 
             jointList = GetJointList(groupAssignmentsTable);
-            GetColumnConnectedToJoint()
+            //GetColumnConnectedToJoint();
 
 
 
@@ -57,8 +57,10 @@ namespace WS_SG_ETABS_Plugin.src.punching_shear_plot
 
             foreach(Dictionary<string, string> row in table)
             {
-                string 
+                
             }
+
+            return jointList;
         }
     }
 }

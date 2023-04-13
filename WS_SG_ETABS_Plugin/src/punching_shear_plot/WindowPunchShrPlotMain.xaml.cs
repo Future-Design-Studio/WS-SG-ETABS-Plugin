@@ -25,20 +25,23 @@ namespace WS_SG_ETABS_Plugin.src.punching_shear_plot
         cPluginCallback _Plugin;
 
         //List of tables to save joint reaction and grouping table
-        List<src.HelperEtabs.DatabaseTable> databaseTableList = new List<HelperEtabs.DatabaseTable>();
+        List<src.HelperEtabs.DatabaseTable> databaseTableListGlobal = new List<HelperEtabs.DatabaseTable>();
 
-        public WindowPunchShrPlotMain(cSapModel SapModel, cPluginCallback Plugin)
+        public WindowPunchShrPlotMain(cSapModel SapModel, cPluginCallback Plugin, List<src.HelperEtabs.DatabaseTable> databaseTableList)
         {
             _SapModel = SapModel;
             _Plugin = Plugin;
 
             InitializeComponent();
 
+            //Save databaseTableList to global variable
+            databaseTableListGlobal = databaseTableList;
+
+            /*
             //Turn on all load
             src.HelperEtabs.OnAllLoadDatabase(SapModel);
 
             //Get joint reaction database table
-
             bool isError = false;
             List<string> tableKeys = new List<string> { "Joint Reactions", "Group Assignments", "Element Forces - Columns", "Frame Assignments - Section Properties"};
             (isError, databaseTableList) = src.HelperEtabs.GetMultipleTableDisplay(SapModel, tableKeys, false);
@@ -48,6 +51,7 @@ namespace WS_SG_ETABS_Plugin.src.punching_shear_plot
                 MessageBox.Show("Error in retreiving column forces and joint reactions. Please make sure the model is run!");
                 return;
             }
+            */
 
             //Fill in load case list box
             src.HelperUI.PopulateListBoxAvailLoadCase(_SapModel, listBoxAvailLoadCase);
@@ -90,7 +94,7 @@ namespace WS_SG_ETABS_Plugin.src.punching_shear_plot
 
                 //Call up copy result window
                 src.punching_shear_plot.WindowPunchShrPlotResult windowPlotReactionTableResult = new src.punching_shear_plot.WindowPunchShrPlotResult(
-                    _SapModel, _Plugin, listChoosenLoadCase, choosenGroup, plotTitle, bubbleScaleFactor, textSize, titleSize, axisTitleSize, gridSpacingX, gridSpacingY, databaseTableList);
+                    _SapModel, _Plugin, listChoosenLoadCase, choosenGroup, plotTitle, bubbleScaleFactor, textSize, titleSize, axisTitleSize, gridSpacingX, gridSpacingY, databaseTableListGlobal);
             }
 
             catch (Exception ex)
