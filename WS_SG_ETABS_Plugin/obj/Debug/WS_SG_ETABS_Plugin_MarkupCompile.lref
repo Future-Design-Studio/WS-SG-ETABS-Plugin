@@ -6,8 +6,20 @@ FD:\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\src\copy_properties\WindowCopy
 FD:\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\src\copy_properties\WindowCopyPropResult.xaml;;
 FD:\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\src\etabs_to_rhino\WindowEtabsToRhinoMain.xaml;;
 FD:\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\src\etabs_to_rhino\WindowEtabsToRhinoResult.xaml;;
+FD:\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\src\load_combo_EN\WindowChooseLoadCombiToGenerate.xaml;;
+FD:\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\src\load_combo_EN\WindowLoadComboMain.xaml;;
+FD:\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\src\load_combo_EN\WindowLoadComboResult.xaml;;
+FD:\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\src\plot_reaction\graph\WindowPlotReactionGraphBaseReaction.xaml;;
+FD:\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\src\plot_reaction\graph\WindowPlotReactionGraphMain.xaml;;
+FD:\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\src\plot_reaction\graph\WindowPlotReactionGraphResult.xaml;;
+FD:\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\src\plot_reaction\table\WindowPlotReactionTableMain.xaml;;
+FD:\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\src\plot_reaction\table\WindowPlotReactionTableResult.xaml;;
+FD:\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\src\etabs_to_rhino\WindowsEtabsToRhinoProgress.xaml;;
 FD:\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\src\plot_reaction\WindowPlotReactionMain.xaml;;
-FD:\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\src\plot_reaction\WindowPlotReactionResult.xaml;;
+FD:\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\src\rc_beam_schedule\WindowRCBSchedMain.xaml;;
+FD:\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\src\rc_beam_schedule\WindowRCBSchedResult.xaml;;
+FD:\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\src\release_selected_node\WindowReleaseSelectedNodeMain.xaml;;
+FD:\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\src\release_selected_node\WindowReleaseSelectedNodeResult.xaml;;
 FD:\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\src\select_uniquename\WindowSelUniqueNameMain.xaml;;
 FD:\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\src\select_uniquename\WindowSelUniqueNameResult.xaml;;
 FD:\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\src\shell_uni_orient\WindowShellUniMain.xaml;;
@@ -15,6 +27,7 @@ FD:\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\src\shell_uni_orient\WindowShe
 FD:\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\src\transfer_midas\WindowTransferMidasMain.xaml;;
 FD:\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\src\transfer_midas\WindowTransferMidasProgress.xaml;;
 FD:\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\src\transfer_midas\WindowTransferMidasResult.xaml;;
+FD:\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\src\wind_coeff\WindowWindCoeffMain.xaml;;
+FD:\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\src\wind_coeff\WindowWindCoeffResult.xaml;;
 FD:\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\WindowMain.xaml;;
-FD:\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\src\etabs_to_rhino\WindowsEtabsToRhinoProgress.xaml;;
 
