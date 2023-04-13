@@ -98,12 +98,36 @@ namespace WS_SG_ETABS_Plugin.src
             public List<int> MidBottomNoRebarPerLayer { get; set; }
             public List<int> RightBottomRebarDiameterList { get; set; }
             public List<int> RightBottomNoRebarPerLayer { get; set; }
+            public double LeftTopAsProv { get; set; }
+            public double MidTopAsProv { get; set; }
+            public double RightTopAsProv { get; set; }
+            public double LeftBottomAsProv { get; set; }
+            public double MidBottomAsProv { get; set; }
+            public double RightBottomAsProv { get; set; }
+            public double LeftAvProv { get; set; }
+            public double MidAvProv { get; set; }
+            public double RightAvProv { get; set; }
             public double LeftShearLinksDiameter { get; set; }
+            public double LeftNoShearLinksLeg { get; set; }
+            public double LeftShearLinksSpacing { get; set; }
             public double MidShearLinksDiameter { get; set; }
+            public double MidNoShearLinksLeg { get; set; }
+            public double MidShearLinksSpacing { get; set; }
             public double RightShearLinksDiameter { get; set; }
+            public double RightNoShearLinksLeg { get; set; }
+            public double RightShearLinksSpacing { get; set; }
             public double Cover { get; set; }
             public string AsEvaluationComment { get; set; }
             public string AvEvaluationComment { get; set; }
+            public double RatioLeftTopAs { get; set; }
+            public double RatioLeftBottomAs { get; set; }
+            public double RatioMidTopAs { get; set; }
+            public double RatioMidBottomAs { get; set; }
+            public double RatioRightTopAs { get; set; }
+            public double RatioRightBottomAs { get; set; }
+            public double RatioLeftAv { get; set; }
+            public double RatioMidAv { get; set; }
+            public double RatioRightAv { get; set; }
 
             public RcBeam(string name)
             {
@@ -1116,6 +1140,34 @@ namespace WS_SG_ETABS_Plugin.src
         }
 
         /// <summary>
+        /// Get list of unique name of joint element which is member of groupName
+        /// </summary>
+        /// <param name="Sap"></param>
+        /// <param name="groupName">Group to inspect</param>
+        /// <returns></returns>
+        public static List<string> GetGroupJointElement(cSapModel Sap, string groupName)
+        {
+            int NumberItems = 0;
+            int[] ObjectType = null;
+            string[] ObjectName = null;
+            List<string> jointList = new List<string>();
+
+            Ret = Sap.GroupDef.GetAssignments(groupName, ref NumberItems, ref ObjectType, ref ObjectName);
+
+            int index = 0;
+            foreach (int singleObjectType in ObjectType)
+            {
+                //ObjectType = 1 is point
+                if (singleObjectType == 1)
+                {
+                    jointList.Add(ObjectName[index]);
+                }
+                index++;
+            }
+            return jointList;
+        }
+
+        /// <summary>
         /// Get list of unique name of area element which is member of groupName
         /// </summary>
         /// <param name="Sap"></param>
@@ -1918,6 +1970,160 @@ namespace WS_SG_ETABS_Plugin.src
             else
             {
                 return (0, 0, "");
+            }
+        }
+
+        /// <summary>
+        /// Assign frame releases using unique name of frames
+        /// </summary>
+        /// <param name="Sap"></param>
+        /// <param name="uniqueName"></param>
+        /// <param name="releaseType"></param>
+        /// <param name="endi"></param>
+        /// <param name="endj"></param>
+        /// <returns></returns>
+        public static bool AssignFrameReleases(cSapModel Sap, string uniqueName, List<string> releaseType, bool endi, bool endj)
+        {
+            bool[] ii = new bool[6];
+            bool[] jj = new bool[6];
+            double[] startValue = new double[6];
+            double[] endValue = new double[6];
+
+            if (releaseType.Contains("Axial"))
+            {
+                if (endi)
+                {
+                    ii[0] = true;
+                }
+                if (endj)
+                {
+                    jj[0] = true;
+                }
+                if (endi && endj)
+                {
+                    MessageBox.Show("Error, Axial cannot be released at both ends.");
+                    return true;
+                }
+            }
+
+            if (releaseType.Contains("ShearMajor"))
+            {
+                if (endi)
+                {
+                    ii[1] = true;
+                }
+                if (endj)
+                {
+                    jj[1] = true;
+                }
+                if (endi && endj)
+                {
+                    MessageBox.Show("Error, Shear Major cannot be released at both ends.");
+                    return true;
+                }
+            }
+
+            if (releaseType.Contains("ShearMinor"))
+            {
+                if (endi)
+                {
+                    ii[2] = true;
+                }
+                if (endj)
+                {
+                    jj[2] = true;
+                }
+                if (endi && endj)
+                {
+                    MessageBox.Show("Error, Shear Minor cannot be released at both ends.");
+                    return true;
+                }
+            }
+
+            if (releaseType.Contains("Torsion"))
+            {
+                if (endi)
+                {
+                    ii[3] = true;
+                }
+                if (endj)
+                {
+                    jj[3] = true;
+                }
+                if (endi && endj)
+                {
+                    MessageBox.Show("Error, Torsion cannot be released at both ends.");
+                    return true;
+                }
+            }
+
+            if (releaseType.Contains("MomentMinor"))
+            {
+                if (endi)
+                {
+                    ii[4] = true;
+                }
+                if (endj)
+                {
+                    jj[4] = true;
+                }
+                if (endi && endj && releaseType.Contains("ShearMinor"))
+                {
+                    MessageBox.Show("Error, Moment Minor cannot be released at both ends if Shear Minor is released at either end.");
+                    return true;
+                }
+            }
+
+            if (releaseType.Contains("MomentMajor"))
+            {
+                if (endi)
+                {
+                    ii[5] = true;
+                }
+                if (endj)
+                {
+                    jj[5] = true;
+                }
+                if (endi && endj && releaseType.Contains("ShearMajor"))
+                {
+                    MessageBox.Show("Error, Moment Major cannot be released at both ends if Shear Major is released at either end.");
+                    return true;
+                }
+            }
+
+            Ret = Sap.FrameObj.SetReleases(uniqueName, ref ii, ref jj, ref startValue, ref endValue);
+
+            if (Ret == 0)
+            {
+                return false;
+            }
+            else
+            {
+                MessageBox.Show("Unknown error, please let Mani know for debugging.");
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// Retrieve the unique names of end I and end J of frame
+        /// </summary>
+        /// <param name="Sap"></param>
+        /// <param name="sectionPropName"></param>
+        /// <returns></returns>
+        public static (string, string, bool) GetEndPointsFrame(cSapModel Sap, string sectionPropName)
+        {
+            string pointI = "";
+            string pointJ = "";
+
+            Ret = Sap.FrameObj.GetPoints(sectionPropName, ref pointI, ref pointJ);
+
+            if (Ret == 0)
+            {
+                return (pointI, pointJ, false);
+            }
+            else
+            {
+                return ("", "", true);
             }
         }
 

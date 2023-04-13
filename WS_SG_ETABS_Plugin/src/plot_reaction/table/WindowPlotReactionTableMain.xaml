@@ -80,6 +80,7 @@
 
         <Grid Grid.Row="5" Grid.Column="1" Margin="10 0 10 0">
             <Grid.RowDefinitions>
+                <RowDefinition Height="0.8*"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
@@ -92,36 +93,42 @@
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
-            <Label Grid.Row="0" Grid.Column="0" Content="Group"/>
-            <Label Grid.Row="0" Grid.Column="1" Content="Color"/>
+            <CheckBox x:Name="checkBoxAllJoints" Grid.Row="0" Grid.Column="0"
+                      Checked="checkBoxAllJoints_Checked" Unchecked="checkBoxAllJoints_UnChecked" 
+                      VerticalAlignment="Center">
+                Include all joints in the keyplan
+            </CheckBox>
 
-            <ComboBox  Grid.Row="1" Grid.Column="0" x:Name="comBoxGroup" 
+            <Label Grid.Row="1" Grid.Column="0" Content="Group"/>
+            <Label Grid.Row="1" Grid.Column="1" Content="Color"/>
+
+            <ComboBox  Grid.Row="2" Grid.Column="0" x:Name="comBoxGroup" 
                        VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
                        Text="0.5" InputScope="Digits">
             </ComboBox>
 
-            <xctk:ColorPicker Grid.Row="1" Grid.Column="1" Name="ClrPcker" 
+            <xctk:ColorPicker Grid.Row="2" Grid.Column="1" Name="ClrPcker" 
                               SelectedColorChanged="ClrPcker_SelectedColorChanged"
                               Margin="5 0 5 0" IsEnabled="False">
             </xctk:ColorPicker>
 
-            <CheckBox x:Name="checkBoxDefault" Grid.Row="2" Grid.Column="1"  Grid.ColumnSpan="2"
+            <CheckBox x:Name="checkBoxDefault" Grid.Row="3" Grid.Column="1"  Grid.ColumnSpan="2"
                       Checked="checkBoxDefault_Checked" Unchecked="checkBoxDefault_UnChecked" 
                       VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="True">
                 Use default color and opacity
             </CheckBox>
 
-            <Label Grid.Row="2" Grid.Column="0" Content="Selected groups:"/>
+            <Label Grid.Row="3" Grid.Column="0" Content="Selected groups:"/>
 
-            <ListBox x:Name="listBoxChoosenGroup" Grid.Row="3" Grid.ColumnSpan="2" 
+            <ListBox x:Name="listBoxChoosenGroup" Grid.Row="4" Grid.ColumnSpan="2" 
                      d:ItemsSource="{d:SampleData ItemCount=5}" SelectionMode="Single"
                      Margin="0 10 0 10">
             </ListBox>
 
-            <Button x:Name="buttonRemoveGroup" Grid.Row="4" Grid.Column="0" 
+            <Button x:Name="buttonRemoveGroup" Grid.Row="5" Grid.Column="0" 
                     Content="Remove" Click="buttonRemoveGroup_Click"></Button>
 
-            <Button x:Name="buttonAddGroup" Grid.Row="4" Grid.Column="1" 
+            <Button x:Name="buttonAddGroup" Grid.Row="5" Grid.Column="1" 
                     Content="Add" Click="buttonAddGroup_Click"></Button>
 
         </Grid>
@@ -182,7 +189,7 @@
                     <ColumnDefinition Width="*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
 
-                <Label Grid.Column="0" VerticalAlignment="Center" Grid.ColumnSpan="2">Bubble scale factor:</Label>
+                <Label Grid.Column="0" VerticalAlignment="Center" Grid.ColumnSpan="2">Joints scale factor:</Label>
                 <TextBox Grid.Column="1" x:Name="textBoxBubbleScaleFactor" Grid.Row="0" TextAlignment="Center" Text="5" InputScope="Digits"/>
             </Grid>
 
@@ -257,7 +264,7 @@
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
-            <Image HorizontalAlignment="Left" Source="/WS_SG_ETABS_Plugin;component/src/resources/RambollFDSLogo.PNG" />
+            <Image Margin ="0 7 -100 7" HorizontalAlignment="Right" Source="/WS_SG_ETABS_Plugin;component/src/resources/by_Future_Design_Studio_no_powerapp.PNG" />
             
             <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button x:Name="buttonCancel" Content="Cancel" Width="100" Click="buttonCancel_Click"/>

@@ -18,7 +18,8 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
 
         public static (bool, double, double, List<src.plot_reaction.graph.ClassPlotGraph.SumReactionPerGroup>) PlotReaction(cSapModel Sap, List<Dictionary<string, string>> groupAndColor, string outputCase, string reactionDirection,
             WpfPlot ReactionPlot, double forceFactor, double bubbleScaleFactor, int textSize, int titleSize, int axisTitleSize, double gridSpacingX, double gridSpacingY, string title, bool splitX, bool splitY,
-            int divisionX, int divisionY, double offsetX, double offsetY, int sumTextSizeX, int sumTextSizeY, double separationX, double separationY, List<src.HelperEtabs.DatabaseTable> databaseTableList)
+            int divisionX, int divisionY, double offsetX, double offsetY, int sumTextSizeX, int sumTextSizeY, double separationX, double separationY, 
+            bool? includeAllJoints, List<src.HelperEtabs.DatabaseTable> databaseTableList)
         {
             bool isError = false;
             bool showWarning = true;
@@ -96,10 +97,18 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
                 }
                 */
 
-                //Filter joint reactions based on group
+                //Filter joint reactions based on group if not all joints is selected
                 src.HelperEtabs.DatabaseTable jointReactionTableFiltered = new HelperEtabs.DatabaseTable();
-                (isError, jointReactionTableFiltered) = src.HelperEtabs.FilterDatabaseTableUniqueNameByGroup(jointReactionTable, groupAssignmentTable, groupName);
-                if (isError) { return (isError, 0, 0, null); }
+                if (includeAllJoints == false)
+                {
+                    
+                    (isError, jointReactionTableFiltered) = src.HelperEtabs.FilterDatabaseTableUniqueNameByGroup(jointReactionTable, groupAssignmentTable, groupName);
+                    if (isError) { return (isError, 0, 0, null); }
+                }
+                else
+                {
+                    jointReactionTableFiltered = jointReactionTable;
+                }
 
                 foreach (Dictionary<string, string> jointReactionRow in jointReactionTableFiltered.TableInList)
                 {

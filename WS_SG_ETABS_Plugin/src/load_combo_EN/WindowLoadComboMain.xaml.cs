@@ -24,6 +24,8 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
         cSapModel _SapModel;
         cPluginCallback _Plugin;
 
+
+
         #region Data source quasi permenant stuff
 
         List<string> quasiPermanentCategoryList = new List<string>()
@@ -80,7 +82,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
         List<string> rsaList = new List<string>()
         {
-            "RSA_X+Y", "RSA_X", "RSA_Y"
+            "RSA_X", "RSA_Y"
         };
 
         List<string> eqaList = new List<string>()
@@ -132,7 +134,16 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
         {
             _SapModel = SapModel;
             _Plugin = Plugin;
-            
+
+            //Check if model is locked
+            bool modelToLocked = _SapModel.GetModelIsLocked();
+
+            if (modelToLocked)
+            {
+                MessageBox.Show("ETABS file is locked! Please unlock the model!");
+                return;
+            }
+
             InitializeComponent();
 
             checkBoxExistingDL.IsChecked = true;
@@ -752,15 +763,11 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 listBoxChoosenSEISMIC.Items.Add(selectedString);
                 string selectedString1 = rsaList[1];
                 listBoxChoosenSEISMIC.Items.Add(selectedString1);
-                string selectedString2 = rsaList[2];
-                listBoxChoosenSEISMIC.Items.Add(selectedString2);
 
                 ClassLoadCombo.SeismicLoad eachSeismicLoad = new ClassLoadCombo.SeismicLoad(selectedString, false);
                 SeismicLoadList.Add(eachSeismicLoad);
                 ClassLoadCombo.SeismicLoad eachSeismicLoad1 = new ClassLoadCombo.SeismicLoad(selectedString1, false);
                 SeismicLoadList.Add(eachSeismicLoad1);
-                ClassLoadCombo.SeismicLoad eachSeismicLoad2 = new ClassLoadCombo.SeismicLoad(selectedString2, false);
-                SeismicLoadList.Add(eachSeismicLoad2);
 
                 Button_ADD_SEISMIC.IsEnabled = false;
             }
