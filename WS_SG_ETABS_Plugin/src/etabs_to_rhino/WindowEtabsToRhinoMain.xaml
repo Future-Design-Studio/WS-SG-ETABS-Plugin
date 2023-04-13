@@ -16,7 +16,7 @@
             <RowDefinition Height="0.35*"></RowDefinition>
         </Grid.RowDefinitions>
 
-        <Label Grid.Row="0" Grid.Column="0" Content="Export Rhino Model" FontSize="28"/>
+        <Label Grid.Row="0" Grid.Column="0" Content="Export to Rhino" FontSize="28"/>
 
         <Grid Grid.Row="1" Grid.Column="0" Margin="0 0 0 0">
             <Grid.RowDefinitions>
@@ -59,26 +59,28 @@
         </Grid>
 
         <TextBlock Grid.Row="2" Grid.Column="0" TextWrapping="Wrap" TextAlignment="Justify"  
-                   FontSize="10">Note:<LineBreak/>
+                   FontSize="10">
+                How to use:<LineBreak/>
+                1. Adjust the output file path and name, then press the Export button to start the exporting process.<LineBreak/>
+                2. A new .3dm file will be created in the given file path.<LineBreak/><LineBreak/>
+                Note:<LineBreak/>
                 1. The resulting .3dm file contains all frame and area objects available in the etabs model.<LineBreak/>
                 2. Frame objects are represented as lines, with their properties attached as user string attributes.<LineBreak/>
                 3. Area objects are represented as closed polylines, with their properties attached as user string attributes.<LineBreak/>
                 4. The exporting process should take a few seconds to finish in most cases, but might take up to a few minutes depending on the size of the model. <LineBreak/>
                 5. The resulting model units is in milimeters by default.<LineBreak/>
                 <LineBreak/>
-                How to use:<LineBreak/>
-                1. Adjust the output file path and name, then press the Export button to start the exporting process.<LineBreak/>
-                2. A new .3dm file will be created in the given file path.<LineBreak/>
+
         </TextBlock>
 
         <Grid Grid.Row="3">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="2*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
             <Grid Grid.Column="0">
-                <Image Source="/WS_SG_ETABS_Plugin;component/src/resources/RambollFDSLogo.PNG" HorizontalAlignment="Left"/>
+                <Image Margin ="0 5 -35 5" HorizontalAlignment="Right" Source="/WS_SG_ETABS_Plugin;component/src/resources/by_Future_Design_Studio_no_powerapp.PNG" />
             </Grid>
 
             <Grid Grid.Column="1">
