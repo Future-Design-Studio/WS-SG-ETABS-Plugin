@@ -171,6 +171,7 @@
     <Compile Include="src\plot_reaction\WindowPlotReactionMain.xaml.cs">
       <DependentUpon>WindowPlotReactionMain.xaml</DependentUpon>
     </Compile>
+    <Compile Include="src\punching_shear_plot\ClassPunchingShrPlot.cs" />
     <Compile Include="src\punching_shear_plot\FunctionPunchingShrPlot.cs" />
     <Compile Include="src\punching_shear_plot\WindowPunchShrPlotLoading.xaml.cs">
       <DependentUpon>WindowPunchShrPlotLoading.xaml</DependentUpon>

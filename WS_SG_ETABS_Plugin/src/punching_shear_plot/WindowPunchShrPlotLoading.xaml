@@ -10,7 +10,7 @@
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="1.8*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="0.8*"></RowDefinition>
             <RowDefinition Height="0.8*"></RowDefinition>
             <RowDefinition Height="4*"></RowDefinition>
@@ -21,19 +21,23 @@
 
         <ProgressBar Grid.Row="2" Grid.Column="0" Margin="0 3 0 3" IsIndeterminate="True"></ProgressBar>
 
-        <Grid Grid.Row="3" Grid.Column="0" Margin=" 0 10 0 10">
+        <Grid Grid.Row="3" Grid.Column="0" Margin=" 0 10 0 0">
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
 
-            <CheckBox Grid.Row="0" Grid.Column="0" Name="checkBoxJointReaction" Content="Joint Reactions" IsEnabled="False" IsChecked="False"></CheckBox>
-            <CheckBox Grid.Row="1" Grid.Column="0" Name="checkBoxGroupAssignments" Content="Group Assignments" IsEnabled="False" IsChecked="False"></CheckBox>
-            <CheckBox Grid.Row="2" Grid.Column="0" Name="checkBoxElementForcesColumns" Content="Element Forces - Columns" IsEnabled="False" IsChecked="False"></CheckBox>
-            <CheckBox Grid.Row="3" Grid.Column="0" Name="checkBoxFrameAssignmentsSectionProperties" Content="Frame Assignments - Section Properties" IsEnabled="False" IsChecked="False"></CheckBox>
+            <CheckBox Grid.Row="0" Grid.Column="0" Name="checkBoxPointObjectConnectivity" Content="Point Object Connectivity" IsEnabled="False" IsChecked="False"></CheckBox>
+            <CheckBox Grid.Row="1" Grid.Column="0" Name="checkBoxJointReaction" Content="Joint Reactions" IsEnabled="False" IsChecked="False"></CheckBox>
+            <CheckBox Grid.Row="2" Grid.Column="0" Name="checkBoxGroupAssignments" Content="Group Assignments" IsEnabled="False" IsChecked="False"></CheckBox>
+            <CheckBox Grid.Row="3" Grid.Column="0" Name="checkBoxElementForcesColumns" Content="Element Forces - Columns" IsEnabled="False" IsChecked="False"></CheckBox>
+            <CheckBox Grid.Row="4" Grid.Column="0" Name="checkBoxColumnObjectConnectivity" Content="Column Object Connectivity" IsEnabled="False" IsChecked="False"></CheckBox>
+            <CheckBox Grid.Row="5" Grid.Column="0" Name="checkBoxFrameAssignmentsSectionProperties" Content="Frame Assignments - Section Properties" IsEnabled="False" IsChecked="False"></CheckBox>
 
 
         </Grid>

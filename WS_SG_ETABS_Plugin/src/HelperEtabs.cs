@@ -1285,6 +1285,16 @@ namespace WS_SG_ETABS_Plugin.src
             //Check if table to filter contains column key
             //First row only
             List<Dictionary<string, string>> tableInListToFilter = databaseTableToFilter.TableInList;
+
+            //Check if table is not empty
+            if (tableInListToFilter.Count == 0)
+            {
+                MessageBox.Show($"Table {databaseTableToFilter.TableKey} is empty!");
+                DatabaseTable emptyDatabaseTable = new DatabaseTable();
+                isError = true;
+                return (isError, emptyDatabaseTable);
+            }
+
             if (!tableInListToFilter[0].ContainsKey(columnKeyToFilter))
             {
                 MessageBox.Show($"Table {databaseTableToFilter.TableKey} does not contain {columnKeyToFilter}!");
@@ -1307,6 +1317,87 @@ namespace WS_SG_ETABS_Plugin.src
 
             return (isError, databaseTableFiltered);
         }
+
+        public static (bool, double) FindMinValueInDatabaseTable(DatabaseTable databaseTableToFilter, string columnKey)
+        {
+            bool isError = false;
+            DatabaseTable databaseTableFiltered = new DatabaseTable();
+
+            //Check if table to filter contains column key
+            //First row only
+            List<Dictionary<string, string>> tableInListToFilter = databaseTableToFilter.TableInList;
+            if (!tableInListToFilter[0].ContainsKey(columnKey))
+            {
+                MessageBox.Show($"Table {databaseTableToFilter.TableKey} does not contain {columnKey}!");
+                DatabaseTable emptyDatabaseTable = new DatabaseTable();
+                isError = true;
+                return (isError, 0);
+            }
+
+            bool firstLoop = true;
+            double minValue = 0;
+            List<Dictionary<string, string>> tableInListFiltered = new List<Dictionary<string, string>>();
+            foreach (Dictionary<string, string> row in tableInListToFilter)
+            {
+                if (firstLoop)
+                {
+                    minValue = Convert.ToDouble(row[columnKey]);
+                    firstLoop = false;
+                }
+                else
+                {
+                    if (minValue > Convert.ToDouble(row[columnKey]))
+                    {
+                        minValue = Convert.ToDouble(row[columnKey]);
+                    }
+                }
+            }
+            //Save table in list to DatabaseTable
+            databaseTableFiltered.TableInList = tableInListFiltered;
+
+            return (isError, minValue);
+        }
+
+        public static (bool, double) FindMaxValueInDatabaseTable(DatabaseTable databaseTableToFilter, string columnKey)
+        {
+            bool isError = false;
+            DatabaseTable databaseTableFiltered = new DatabaseTable();
+
+            //Check if table to filter contains column key
+            //First row only
+            List<Dictionary<string, string>> tableInListToFilter = databaseTableToFilter.TableInList;
+            if (!tableInListToFilter[0].ContainsKey(columnKey))
+            {
+                MessageBox.Show($"Table {databaseTableToFilter.TableKey} does not contain {columnKey}!");
+                DatabaseTable emptyDatabaseTable = new DatabaseTable();
+                isError = true;
+                return (isError, 0);
+            }
+
+            bool firstLoop = true;
+            double maxValue = 0;
+            List<Dictionary<string, string>> tableInListFiltered = new List<Dictionary<string, string>>();
+            foreach (Dictionary<string, string> row in tableInListToFilter)
+            {
+                if (firstLoop)
+                {
+                    maxValue = Convert.ToDouble(row[columnKey]);
+                    firstLoop = false;
+                }
+                else
+                {
+                    if (maxValue < Convert.ToDouble(row[columnKey]))
+                    {
+                        maxValue = Convert.ToDouble(row[columnKey]);
+                    }
+                }
+            }
+            //Save table in list to DatabaseTable
+            databaseTableFiltered.TableInList = tableInListFiltered;
+
+            return (isError, maxValue);
+        }
+
 
 
         #endregion

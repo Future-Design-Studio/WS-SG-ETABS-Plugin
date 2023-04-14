@@ -32,13 +32,22 @@ namespace WS_SG_ETABS_Plugin.src.punching_shear_plot
             _SapModel = SapModel;
             _Plugin = Plugin;
 
+            //Check if model is locked
+            bool modelToLocked = _SapModel.GetModelIsLocked();
+
+            if (!modelToLocked)
+            {
+                MessageBox.Show("ETABS file is unlocked! Please run analysis first!");
+                return;
+            }
+
             InitializeComponent();
             
             //Turn on all load
             src.HelperEtabs.OnAllLoadDatabase(SapModel);
 
             //Get joint reaction database table
-            List<string> tableKeys = new List<string> { "Joint Reactions", "Group Assignments", "Element Forces - Columns", "Frame Assignments - Section Properties" };
+            List<string> tableKeys = new List<string> { "Point Object Connectivity", "Joint Reactions", "Group Assignments", "Element Forces - Columns", "Column Object Connectivity", "Frame Assignments - Section Properties" };
             loadDatabaseTable(SapModel, Plugin, tableKeys, databaseTableList);
 
             ShowDialog();
@@ -66,7 +75,14 @@ namespace WS_SG_ETABS_Plugin.src.punching_shear_plot
                     else
                     {
                         //Update loading UI
-                        if (tableKey == "Joint Reactions")
+                        if (tableKey == "Point Object Connectivity")
+                        {
+                            Dispatcher.Invoke((Action)(() =>
+                            {
+                                checkBoxPointObjectConnectivity.IsChecked = true;
+                            }));
+                        }
+                        else if (tableKey == "Joint Reactions")
                         {
                             Dispatcher.Invoke((Action)(() => 
                             {
@@ -85,6 +101,13 @@ namespace WS_SG_ETABS_Plugin.src.punching_shear_plot
                             Dispatcher.Invoke((Action)(() =>
                             {
                                 checkBoxElementForcesColumns.IsChecked = true;
+                            }));
+                        }
+                        else if (tableKey == "Column Object Connectivity")
+                        {
+                            Dispatcher.Invoke((Action)(() =>
+                            {
+                                checkBoxColumnObjectConnectivity.IsChecked = true;
                             }));
                         }
                         else if (tableKey == "Frame Assignments - Section Properties")
