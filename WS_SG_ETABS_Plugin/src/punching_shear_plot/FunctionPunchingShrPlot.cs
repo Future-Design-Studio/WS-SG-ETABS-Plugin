@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using ETABSv1;
 using ScottPlot.Renderable;
+using static WS_SG_ETABS_Plugin.src.plot_reaction.table.FunctionPlotReactionTable;
 
 namespace WS_SG_ETABS_Plugin.src.punching_shear_plot
 {
@@ -57,6 +58,11 @@ namespace WS_SG_ETABS_Plugin.src.punching_shear_plot
             jointList = GetJointListFromGroup(pointObjectConnectivityTable, groupAssignmentsTable, choosenGroup);
             GetColumnForceConnectedToJoint(jointPunchingShearDetailsList, jointList, elementForcesColumnsTable, columnObjectConnectivityTable, jointReactionTable, listChoosenLoadCase, errorList);
 
+
+            //Create excel
+            var result = CompilePunchingShearDetailsToArray(jointPunchingShearDetailsList, choosenGroup);
+            WritePunchingShearDetailsToExcel(result, "punching_shear", "C:\\Users\\STEFANO\\OneDrive - Ramboll\\Desktop\\");
+
             return false;
         }
 
@@ -86,7 +92,7 @@ namespace WS_SG_ETABS_Plugin.src.punching_shear_plot
 
             foreach (HelperEtabs.Point3D joint in jointList)
             {
-                ClassPunchingShrPlot.JointPunchingShearDetails jointPunchingShearDetails = new ClassPunchingShrPlot.JointPunchingShearDetails(joint.UniqueName);
+                ClassPunchingShrPlot.JointPunchingShearDetails jointPunchingShearDetails = new ClassPunchingShrPlot.JointPunchingShearDetails(joint.UniqueName, joint.XCoordinate, joint.YCoordinate, joint.ZCoordinate);
 
                 string errorMessage = "";
 
@@ -296,15 +302,102 @@ namespace WS_SG_ETABS_Plugin.src.punching_shear_plot
                     }
                 }
 
-                jointPunchingShearDetails.ForceMaxDifference = maxForceDifferenceInOneJoint;
+                jointPunchingShearDetails.ForceMaxDifference = Math.Ceiling(maxForceDifferenceInOneJoint);
                 jointPunchingShearDetails.LoadCaseMaxDifference = maxLoadCaseInOneJoint;
 
                 jointPunchingShearDetailsList.Add(jointPunchingShearDetails);
 
             }
 
+        }
+
+        public static object [,] CompilePunchingShearDetailsToArray(List<ClassPunchingShrPlot.JointPunchingShearDetails> jointPunchingShearDetails, string choosenGroup)
+        {
+            List<string> colTitles = new List<string>()
+            {
+                "Num","Joint Unique Name", "X (m)","Y (m)","Z (m)", "Group Name", "Punching Shear Force (kN)", "Governing Load Case"
+            };
+
+            int numOfRow = jointPunchingShearDetails.Count();
+            int numOfCol = colTitles.Count();
+
+            object[,] result = new object[numOfRow + 1, numOfCol];
+
+            //First row
+            int j = 0;
+            foreach (string colTitle in colTitles)
+            {
+                result[0, j] = colTitle;
+                j++;
+            }
+
+            int i = 1;
+            foreach (ClassPunchingShrPlot.JointPunchingShearDetails jointPunchingShearDetail in jointPunchingShearDetails)
+            {
+                result[i, 0] = i;
+                result[i, 1] = jointPunchingShearDetail.UniqueName;
+                result[i, 2] = jointPunchingShearDetail.XCoordinate;
+                result[i, 3] = jointPunchingShearDetail.YCoordinate;
+                result[i, 4] = jointPunchingShearDetail.ZCoordinate;
+                result[i, 5] = choosenGroup;
+
+                result[i, 6] = jointPunchingShearDetail.ForceMaxDifference;
+                result[i, 7] = jointPunchingShearDetail.LoadCaseMaxDifference;
+
+                i++;
+            }
+
+            return result;
 
 
+        }
+
+        public static void WritePunchingShearDetailsToExcel(object[,] result, string fileName, string filePath)
+        {
+            Microsoft.Office.Interop.Excel.Application xlApp = new Microsoft.Office.Interop.Excel.Application();
+
+            if (xlApp == null)
+            {
+                MessageBox.Show("Excel is not properly installed!!");
+                return;
+            }
+
+            Microsoft.Office.Interop.Excel.Workbook xlWorkBook;
+            Microsoft.Office.Interop.Excel.Worksheet xlWorkSheet;
+            object misValue = System.Reflection.Missing.Value;
+
+            //Create workbook
+            xlWorkBook = xlApp.Workbooks.Add(misValue);
+
+            //Worksheet
+            xlWorkSheet = (Microsoft.Office.Interop.Excel.Worksheet)xlWorkBook.Worksheets.get_Item(1);
+
+            xlWorkSheet.Name = "Punching shear result";
+
+            int numOfRow = result.GetLength(0);
+            int numOfCol = result.GetLength(1);
+
+            string alphabetOfCol = src.HelperExcel.GetExcelColumnName(numOfCol);
+            string lastCellRange = alphabetOfCol + Convert.ToString(numOfRow - 1 + 1);
+
+            Microsoft.Office.Interop.Excel.Range rng = xlWorkSheet.UsedRange.Range["A1", lastCellRange];
+
+            rng.Value2 = result;
+
+            //Here saving the file in xlsx
+            string excelPath = filePath + fileName + ".xlsx";
+
+            try
+            {
+                xlWorkBook.SaveAs(excelPath, Microsoft.Office.Interop.Excel.XlFileFormat.xlOpenXMLWorkbook);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+            xlWorkBook.Close(true, misValue, misValue);
+            xlApp.Quit();
         }
     }
 }

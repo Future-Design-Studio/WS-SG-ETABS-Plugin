@@ -11,6 +11,9 @@ namespace WS_SG_ETABS_Plugin.src.punching_shear_plot
         public class JointPunchingShearDetails
         {
             public string UniqueName { get; set; }
+            public double XCoordinate { get; set; }
+            public double YCoordinate { get; set; }
+            public double ZCoordinate { get; set; }
 
             public string ColumnIUniqueName { get; set; }
             public string ColumnJUniqueName { get; set; }
@@ -22,9 +25,12 @@ namespace WS_SG_ETABS_Plugin.src.punching_shear_plot
 
             public string SectProp { get; set; }
 
-            public JointPunchingShearDetails(string uniqueName)
+            public JointPunchingShearDetails(string uniqueName, double xCoordinate, double yCoordinate, double zCoordinate)
             {
                 UniqueName = uniqueName;
+                XCoordinate = xCoordinate;
+                YCoordinate = yCoordinate;
+                ZCoordinate = zCoordinate;
 
                 ForceList = new Dictionary<string, double>();
             }
