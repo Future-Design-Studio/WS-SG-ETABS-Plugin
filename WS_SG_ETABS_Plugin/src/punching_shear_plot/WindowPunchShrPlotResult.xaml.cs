@@ -25,7 +25,7 @@ namespace WS_SG_ETABS_Plugin.src.punching_shear_plot
         cPluginCallback _Plugin;
 
         public WindowPunchShrPlotResult(cSapModel SapModel, cPluginCallback Plugin, List<string> listChoosenLoadCase, string choosenGroup, double forceIncrement, string plotTitle, 
-            double bubbleScaleFactor, double textSize, double titleSize, double axisTitleSize, double gridSpacingX, double gridSpacingY, 
+            double bubbleScaleFactor, int textSize, int titleSize, int axisTitleSize, double gridSpacingX, double gridSpacingY, 
             List<src.HelperEtabs.DatabaseTable> databaseTableList)
         {
             _SapModel = SapModel;
@@ -44,7 +44,7 @@ namespace WS_SG_ETABS_Plugin.src.punching_shear_plot
             bool isError = false;
 
             isError = src.punching_shear_plot.FunctionPunchingShrPlot.PunchingShearPlot(
-                _SapModel, _Plugin, listChoosenLoadCase, choosenGroup, forceIncrement, plotTitle, bubbleScaleFactor, textSize, titleSize, axisTitleSize, gridSpacingX, gridSpacingY, databaseTableList);
+                _SapModel, _Plugin, listChoosenLoadCase, choosenGroup, forceIncrement, plotTitle, bubbleScaleFactor, textSize, titleSize, axisTitleSize, gridSpacingX, gridSpacingY, databaseTableList, ReactionPlot);
 
             if (isError)
             {

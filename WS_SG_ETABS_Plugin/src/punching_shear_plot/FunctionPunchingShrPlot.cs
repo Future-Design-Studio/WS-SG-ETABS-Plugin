@@ -6,7 +6,9 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media.TextFormatting;
 using ETABSv1;
+using ScottPlot;
 using ScottPlot.Renderable;
 using static WS_SG_ETABS_Plugin.src.plot_reaction.table.FunctionPlotReactionTable;
 using static WS_SG_ETABS_Plugin.src.punching_shear_plot.ClassPunchingShrPlot;
@@ -16,7 +18,8 @@ namespace WS_SG_ETABS_Plugin.src.punching_shear_plot
     internal class FunctionPunchingShrPlot
     {
         public static bool PunchingShearPlot(cSapModel SapModel, cPluginCallback Plugin, List<string> listChoosenLoadCase, string choosenGroup, double forceIncrement, string plotTitle, 
-            double bubbleScaleFactor, double textSize, double titleSize, double axisTitleSize, double gridSpacingX, double gridSpacingY, List<src.HelperEtabs.DatabaseTable> databaseTableList)
+            double bubbleScaleFactor, int textSize, int titleSize, int axisTitleSize, double gridSpacingX, double gridSpacingY, List<src.HelperEtabs.DatabaseTable> databaseTableList,
+            WpfPlot ReactionPlot)
         {
             bool isError = false;
             List<string> errorList = new List<string>();
@@ -63,6 +66,7 @@ namespace WS_SG_ETABS_Plugin.src.punching_shear_plot
             GetColumnForceConnectedToJoint(jointPunchingShearDetailsList, jointList, elementForcesColumnsTable, columnObjectConnectivityTable, jointReactionTable, listChoosenLoadCase, errorList);
             GetColumnFrameSection(jointPunchingShearDetailsList, frameAssignmentSectPropTable, frameDefSummaryTable);
             List<ClassPunchingShrPlot.GroupDefinition> groupDefinitions = GroupBasedOnForceAndSectProp(jointPunchingShearDetailsList, forceIncrement);
+            PlotPunchingShear(groupDefinitions, plotTitle, bubbleScaleFactor, textSize, titleSize, axisTitleSize, gridSpacingX, gridSpacingY, ReactionPlot);
 
             //Create excel
             var result = CompilePunchingShearDetailsToArray(jointPunchingShearDetailsList, choosenGroup);
@@ -561,7 +565,6 @@ namespace WS_SG_ETABS_Plugin.src.punching_shear_plot
                     if (firstLoop)
                     {
                         sectProp = jointPunchingShearDetails.SectProp;
-
                         forceDividedByIncrement = jointPunchingShearDetails.ForceDividedByIncrement;
 
                         firstLoop = false;
@@ -571,13 +574,74 @@ namespace WS_SG_ETABS_Plugin.src.punching_shear_plot
                     
                 }
 
-                ClassPunchingShrPlot.GroupDefinition groupDefinition = new ClassPunchingShrPlot.GroupDefinition(groupIndex, sectProp, forceDividedByIncrement * forceIncrement, (forceDividedByIncrement + 1) * forceIncrement);
+                ClassPunchingShrPlot.GroupDefinition groupDefinition = new ClassPunchingShrPlot.GroupDefinition(groupIndex, sectProp, forceDividedByIncrement * forceIncrement, (forceDividedByIncrement + 1) * forceIncrement, eachGroupByForce);
                 groupDefinitions.Add(groupDefinition);
 
                 groupIndex++;
             }
 
             return groupDefinitions;
+        }
+
+        public static void PlotPunchingShear(List<ClassPunchingShrPlot.GroupDefinition> groupDefinitions, string plotTitle,
+            double bubbleScaleFactor, int textSize, int titleSize, int axisTitleSize, double gridSpacingX, double gridSpacingY, WpfPlot ReactionPlot)
+        {
+            foreach(ClassPunchingShrPlot.GroupDefinition groupDefinition in groupDefinitions)
+            {
+                //Decide group color plot
+                System.Drawing.Color bubbleColor = new System.Drawing.Color();
+                if (groupDefinitions.Count > 1)
+                {
+                    double colorMapFraction = groupDefinition.GroupIndex / (Convert.ToDouble(groupDefinitions.Count) - 1);
+                    bubbleColor = ScottPlot.Drawing.Colormap.Jet.GetColor(colorMapFraction, .6);
+                }
+                else
+                {
+                    double colorMapFraction = 0;
+                    bubbleColor = ScottPlot.Drawing.Colormap.Jet.GetColor(colorMapFraction, .6);
+                }
+
+                //Plot each column
+                foreach (ClassPunchingShrPlot.JointPunchingShearDetails jointPunchingShearDetails in groupDefinition.JointPunchingShearDetailsList)
+                {
+                    //Bubble size and text
+                    //double reaction = Convert.ToDouble(jointReactionRow[reactionDirection]);
+                    double punchingShearForce = (groupDefinition.MaxForce + groupDefinition.MinForce) / 2;
+                    double bubbleSize = punchingShearForce * bubbleScaleFactor;
+
+                    string bubbleText = Convert.ToString(
+                                                        $"{jointPunchingShearDetails.UniqueName}"
+                                                        + System.Environment.NewLine
+                                                        + $"Sect: {jointPunchingShearDetails.SectProp} kN"
+                                                        + System.Environment.NewLine
+                                                        + $"Case: {jointPunchingShearDetails.LoadCaseMaxDifference}"
+                                                        + System.Environment.NewLine
+                                                        + $"Group: {jointPunchingShearDetails.GroupIndex}" 
+                                                        + System.Environment.NewLine 
+                                                        + $"Force: {jointPunchingShearDetails.ForceMaxDifference} kN"
+                                                        );
+
+
+                    double xCoord = jointPunchingShearDetails.XCoordinate;
+                    double yCoord = jointPunchingShearDetails.YCoordinate;
+
+                    src.HelperPlot.BubblePlotter(ReactionPlot, bubbleSize, bubbleText, textSize, bubbleColor, xCoord, yCoord);
+                }
+
+            }
+            ReactionPlot.Plot.AxisScaleLock(true);
+            ReactionPlot.Plot.Title(plotTitle, true, null, titleSize, "Arial Narrow");
+            ReactionPlot.Plot.AxisAuto(.2, .25); // zoom out to accommodate large bubbles
+
+            //Axis
+            ReactionPlot.Plot.YAxis.Label("Y coordinate (m)", null, axisTitleSize, true, "Arial Narrow");
+            ReactionPlot.Plot.XAxis.Label("X coordinate (m)", null, axisTitleSize, true, "Arial Narrow");
+            ReactionPlot.Plot.YAxis.ManualTickSpacing(gridSpacingY);
+            ReactionPlot.Plot.XAxis.ManualTickSpacing(gridSpacingX);
+
+            ReactionPlot.Refresh();
+
+
         }
 
         public static void WritePunchingShearDetailsToExcel(object[,] result, object[,] resultGroupDef, string fileName, string filePath)
