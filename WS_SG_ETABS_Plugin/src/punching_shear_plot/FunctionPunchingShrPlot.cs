@@ -9,12 +9,13 @@ using System.Windows;
 using ETABSv1;
 using ScottPlot.Renderable;
 using static WS_SG_ETABS_Plugin.src.plot_reaction.table.FunctionPlotReactionTable;
+using static WS_SG_ETABS_Plugin.src.punching_shear_plot.ClassPunchingShrPlot;
 
 namespace WS_SG_ETABS_Plugin.src.punching_shear_plot
 {
     internal class FunctionPunchingShrPlot
     {
-        public static bool PunchingShearPlot(cSapModel SapModel, cPluginCallback Plugin, List<string> listChoosenLoadCase, string choosenGroup, string plotTitle, 
+        public static bool PunchingShearPlot(cSapModel SapModel, cPluginCallback Plugin, List<string> listChoosenLoadCase, string choosenGroup, double forceIncrement, string plotTitle, 
             double bubbleScaleFactor, double textSize, double titleSize, double axisTitleSize, double gridSpacingX, double gridSpacingY, List<src.HelperEtabs.DatabaseTable> databaseTableList)
         {
             bool isError = false;
@@ -37,13 +38,16 @@ namespace WS_SG_ETABS_Plugin.src.punching_shear_plot
             (isError, elementForcesColumnsTable) = src.HelperEtabs.CallDatabaseTableByTableKey(databaseTableList, "Element Forces - Columns");
             if (isError) { return isError; }
 
-
             src.HelperEtabs.DatabaseTable columnObjectConnectivityTable = new HelperEtabs.DatabaseTable();
             (isError, columnObjectConnectivityTable) = src.HelperEtabs.CallDatabaseTableByTableKey(databaseTableList, "Column Object Connectivity");
             if (isError) { return isError; }
 
             src.HelperEtabs.DatabaseTable frameAssignmentSectPropTable = new HelperEtabs.DatabaseTable();
             (isError, frameAssignmentSectPropTable) = src.HelperEtabs.CallDatabaseTableByTableKey(databaseTableList, "Frame Assignments - Section Properties");
+            if (isError) { return isError; }
+
+            src.HelperEtabs.DatabaseTable frameDefSummaryTable = new HelperEtabs.DatabaseTable();
+            (isError, frameDefSummaryTable) = src.HelperEtabs.CallDatabaseTableByTableKey(databaseTableList, "Frame Section Property Definitions - Summary");
             if (isError) { return isError; }
 
             //Filter group to only include points, to improve performance
@@ -57,11 +61,13 @@ namespace WS_SG_ETABS_Plugin.src.punching_shear_plot
             //Get joint which is part of the choosen group
             jointList = GetJointListFromGroup(pointObjectConnectivityTable, groupAssignmentsTable, choosenGroup);
             GetColumnForceConnectedToJoint(jointPunchingShearDetailsList, jointList, elementForcesColumnsTable, columnObjectConnectivityTable, jointReactionTable, listChoosenLoadCase, errorList);
-
+            GetColumnFrameSection(jointPunchingShearDetailsList, frameAssignmentSectPropTable, frameDefSummaryTable);
+            List<ClassPunchingShrPlot.GroupDefinition> groupDefinitions = GroupBasedOnForceAndSectProp(jointPunchingShearDetailsList, forceIncrement);
 
             //Create excel
             var result = CompilePunchingShearDetailsToArray(jointPunchingShearDetailsList, choosenGroup);
-            WritePunchingShearDetailsToExcel(result, "punching_shear", "C:\\Users\\STEFANO\\OneDrive - Ramboll\\Desktop\\");
+            var resultGroupDef = CompileGroupDefinitionsToArray(groupDefinitions);
+            WritePunchingShearDetailsToExcel(result, resultGroupDef, "punching_shear", "C:\\Users\\STEFANO\\OneDrive - Ramboll\\Desktop\\");
 
             return false;
         }
@@ -311,11 +317,85 @@ namespace WS_SG_ETABS_Plugin.src.punching_shear_plot
 
         }
 
+        public static void GetColumnFrameSection(List<ClassPunchingShrPlot.JointPunchingShearDetails> jointPunchingShearDetailsList, HelperEtabs.DatabaseTable frameAssignmentSectPropTable, HelperEtabs.DatabaseTable frameDefSummaryTable)
+        {
+            foreach(ClassPunchingShrPlot.JointPunchingShearDetails jointPunchingShearDetails in jointPunchingShearDetailsList)
+            {
+                bool isError = false;
+
+                bool notFoundColumnI = jointPunchingShearDetails.NotFoundColumnI;
+                bool notFoundColumnJ = jointPunchingShearDetails.NotFoundColumnJ;
+
+                string columnIUniqueName;
+                string columnJUniqueName;
+                string columnISectProp;
+                double columnISectArea;
+                string columnJSectProp;
+                double columnJSectArea;
+
+                string columnSectProp = "";
+
+
+                if (!notFoundColumnI && !notFoundColumnJ)
+                {
+                    columnIUniqueName = jointPunchingShearDetails.ColumnIUniqueName;
+                    columnJUniqueName = jointPunchingShearDetails.ColumnJUniqueName;
+
+                    HelperEtabs.DatabaseTable filteredFrameAssignmentSectPropTable = new HelperEtabs.DatabaseTable();
+                    HelperEtabs.DatabaseTable filteredFrameDefSummaryTable = new HelperEtabs.DatabaseTable();
+                    (isError, filteredFrameAssignmentSectPropTable) = HelperEtabs.FilterDatabaseTable(frameAssignmentSectPropTable, "UniqueName", columnIUniqueName);
+                    columnISectProp = filteredFrameAssignmentSectPropTable.TableInList[0]["SectProp"];
+                    (isError, filteredFrameDefSummaryTable) = HelperEtabs.FilterDatabaseTable(frameDefSummaryTable, "Name", columnISectProp);
+                    columnISectArea = Convert.ToDouble(filteredFrameDefSummaryTable.TableInList[0]["Area"]);
+
+                    (isError, filteredFrameAssignmentSectPropTable) = HelperEtabs.FilterDatabaseTable(frameAssignmentSectPropTable, "UniqueName", columnJUniqueName);
+                    columnJSectProp = filteredFrameAssignmentSectPropTable.TableInList[0]["SectProp"];
+                    (isError, filteredFrameDefSummaryTable) = HelperEtabs.FilterDatabaseTable(frameDefSummaryTable, "Name", columnJSectProp);
+                    columnJSectArea = Convert.ToDouble(filteredFrameDefSummaryTable.TableInList[0]["Area"]);
+
+                    //Take the bigger sect area to take the section property
+                    if (columnISectArea > columnJSectArea)
+                    {
+                        columnSectProp = columnISectProp;
+                    }
+                    else
+                    {
+                        columnSectProp = columnJSectProp;
+                    }
+
+
+                }
+                else if (!notFoundColumnI)
+                {
+                    columnIUniqueName = jointPunchingShearDetails.ColumnIUniqueName;
+
+                    HelperEtabs.DatabaseTable filteredFrameAssignmentSectPropTable = new HelperEtabs.DatabaseTable();
+                    (isError, filteredFrameAssignmentSectPropTable) = HelperEtabs.FilterDatabaseTable(frameAssignmentSectPropTable, "UniqueName", columnIUniqueName);
+                    columnISectProp = filteredFrameAssignmentSectPropTable.TableInList[0]["SectProp"];
+
+                    //Take the bigger sect area to take the section property
+                    columnSectProp = columnISectProp;
+                }
+                else if (!notFoundColumnJ)
+                {
+                    columnJUniqueName = jointPunchingShearDetails.ColumnJUniqueName;
+
+                    HelperEtabs.DatabaseTable filteredFrameAssignmentSectPropTable = new HelperEtabs.DatabaseTable();
+                    (isError, filteredFrameAssignmentSectPropTable) = HelperEtabs.FilterDatabaseTable(frameAssignmentSectPropTable, "UniqueName", columnJUniqueName);
+                    columnJSectProp = filteredFrameAssignmentSectPropTable.TableInList[0]["SectProp"];
+
+                    columnSectProp = columnJSectProp;
+                }
+
+                jointPunchingShearDetails.SectProp = columnSectProp;
+            }
+        }
+
         public static object [,] CompilePunchingShearDetailsToArray(List<ClassPunchingShrPlot.JointPunchingShearDetails> jointPunchingShearDetails, string choosenGroup)
         {
             List<string> colTitles = new List<string>()
             {
-                "Num","Joint Unique Name", "X (m)","Y (m)","Z (m)", "Group Name", "Punching Shear Force (kN)", "Governing Load Case"
+                "Num","Joint Unique Name", "X (m)","Y (m)","Z (m)", "Group Name", "Punching Shear Force (kN)", "Governing Load Case", "Section Property", "Group"
             };
 
             int numOfRow = jointPunchingShearDetails.Count();
@@ -344,6 +424,10 @@ namespace WS_SG_ETABS_Plugin.src.punching_shear_plot
                 result[i, 6] = jointPunchingShearDetail.ForceMaxDifference;
                 result[i, 7] = jointPunchingShearDetail.LoadCaseMaxDifference;
 
+                result[i, 8] = jointPunchingShearDetail.SectProp;
+
+                result[i, 9] = jointPunchingShearDetail.GroupIndex;
+
                 i++;
             }
 
@@ -352,7 +436,151 @@ namespace WS_SG_ETABS_Plugin.src.punching_shear_plot
 
         }
 
-        public static void WritePunchingShearDetailsToExcel(object[,] result, string fileName, string filePath)
+        public static object[,] CompileGroupDefinitionsToArray(List<ClassPunchingShrPlot.GroupDefinition> groupDefinitions)
+        {
+            List<string> colTitles = new List<string>()
+            {
+                "Group", "Section Property", "Min Force (kN)", "Max Force (kN)"
+            };
+
+            int numOfRow = groupDefinitions.Count();
+            int numOfCol = colTitles.Count();
+
+            object[,] result = new object[numOfRow + 1, numOfCol];
+
+            //First row
+            int j = 0;
+            foreach (string colTitle in colTitles)
+            {
+                result[0, j] = colTitle;
+                j++;
+            }
+
+            int i = 1;
+            foreach (ClassPunchingShrPlot.GroupDefinition groupDefinition in groupDefinitions)
+            {
+                result[i, 0] = groupDefinition.GroupIndex;
+                result[i, 1] = groupDefinition.SectProp;
+                result[i, 2] = groupDefinition.MinForce;
+                result[i, 3] = groupDefinition.MaxForce;
+
+                i++;
+            }
+
+            return result;
+
+
+        }
+
+        public static List<ClassPunchingShrPlot.GroupDefinition> GroupBasedOnForceAndSectProp(List<ClassPunchingShrPlot.JointPunchingShearDetails> jointPunchingShearDetailsList, double forceIncrement)
+        {
+            //Sort punching shear details by force
+            List<ClassPunchingShrPlot.JointPunchingShearDetails> sortedJointPunchingShearDetailsList = jointPunchingShearDetailsList.OrderBy(o=>o.ForceMaxDifference).ToList();
+
+            //Container group definition list
+            List<ClassPunchingShrPlot.GroupDefinition> groupDefinitions = new List<ClassPunchingShrPlot.GroupDefinition> ();
+
+            //Get unique sect prop
+            List<string> sectPropList = new List<string>();
+
+            foreach(ClassPunchingShrPlot.JointPunchingShearDetails jointPunchingShearDetails in sortedJointPunchingShearDetailsList)
+            {
+                //If have not yet added
+                if (!sectPropList.Contains(jointPunchingShearDetails.SectProp))
+                {
+                    sectPropList.Add(jointPunchingShearDetails.SectProp);
+                }
+            }
+
+
+            //Group by sect prop
+            List<List<ClassPunchingShrPlot.JointPunchingShearDetails>> groupBySectProp = new List<List<ClassPunchingShrPlot.JointPunchingShearDetails>>();
+            foreach (string sectProp in sectPropList)
+            {
+                List<ClassPunchingShrPlot.JointPunchingShearDetails> eachGroupBySectProp = new List<ClassPunchingShrPlot.JointPunchingShearDetails>();
+                foreach (ClassPunchingShrPlot.JointPunchingShearDetails jointPunchingShearDetails in sortedJointPunchingShearDetailsList)
+                {
+                    if (jointPunchingShearDetails.SectProp == sectProp)
+                    {
+                        eachGroupBySectProp.Add(jointPunchingShearDetails);
+                    }
+                }
+
+                groupBySectProp.Add(eachGroupBySectProp);
+            }
+
+
+            //Group by force
+            List<List<ClassPunchingShrPlot.JointPunchingShearDetails>> groupByForce = new List<List<ClassPunchingShrPlot.JointPunchingShearDetails>>();
+            foreach (List<ClassPunchingShrPlot.JointPunchingShearDetails> eachGroupBySectProp in groupBySectProp)
+            {
+                foreach (ClassPunchingShrPlot.JointPunchingShearDetails jointPunchingShearDetails in eachGroupBySectProp)
+                {
+                    double forceDividedByIncrement = Math.Floor(jointPunchingShearDetails.ForceMaxDifference / forceIncrement);
+                    jointPunchingShearDetails.ForceDividedByIncrement = forceDividedByIncrement;
+                }
+
+                //Get unique force divided by increment
+                List<double> forceDividedByIncrementList = new List<double>();
+                foreach (ClassPunchingShrPlot.JointPunchingShearDetails jointPunchingShearDetails in eachGroupBySectProp)
+                {
+                    //If have not yet added
+                    if (!forceDividedByIncrementList.Contains(jointPunchingShearDetails.ForceDividedByIncrement))
+                    {
+                        forceDividedByIncrementList.Add(jointPunchingShearDetails.ForceDividedByIncrement);
+                    }
+                }
+
+                //Group by force
+                foreach (double forceDividedByIncrement in forceDividedByIncrementList)
+                {
+                    //Container
+                    List<ClassPunchingShrPlot.JointPunchingShearDetails> eachGroupByForce = new List<ClassPunchingShrPlot.JointPunchingShearDetails>();
+
+                    foreach (ClassPunchingShrPlot.JointPunchingShearDetails jointPunchingShearDetails in eachGroupBySectProp)
+                    {
+                        if(jointPunchingShearDetails.ForceDividedByIncrement == forceDividedByIncrement)
+                        {
+                            eachGroupByForce.Add(jointPunchingShearDetails);
+                        }
+                    }
+                    groupByForce.Add(eachGroupByForce);
+                }
+            }
+
+            //Assign group index
+            int groupIndex = 0;
+            foreach(List<ClassPunchingShrPlot.JointPunchingShearDetails> eachGroupByForce in groupByForce)
+            {
+                bool firstLoop = true;
+                string sectProp = "";
+                double forceDividedByIncrement = 0;
+
+                foreach (ClassPunchingShrPlot.JointPunchingShearDetails jointPunchingShearDetails in eachGroupByForce)
+                {
+                    if (firstLoop)
+                    {
+                        sectProp = jointPunchingShearDetails.SectProp;
+
+                        forceDividedByIncrement = jointPunchingShearDetails.ForceDividedByIncrement;
+
+                        firstLoop = false;
+                    }
+
+                    jointPunchingShearDetails.GroupIndex = groupIndex;
+                    
+                }
+
+                ClassPunchingShrPlot.GroupDefinition groupDefinition = new ClassPunchingShrPlot.GroupDefinition(groupIndex, sectProp, forceDividedByIncrement * forceIncrement, (forceDividedByIncrement + 1) * forceIncrement);
+                groupDefinitions.Add(groupDefinition);
+
+                groupIndex++;
+            }
+
+            return groupDefinitions;
+        }
+
+        public static void WritePunchingShearDetailsToExcel(object[,] result, object[,] resultGroupDef, string fileName, string filePath)
         {
             Microsoft.Office.Interop.Excel.Application xlApp = new Microsoft.Office.Interop.Excel.Application();
 
@@ -369,6 +597,9 @@ namespace WS_SG_ETABS_Plugin.src.punching_shear_plot
             //Create workbook
             xlWorkBook = xlApp.Workbooks.Add(misValue);
 
+            //Add worksheets
+            xlWorkBook.Sheets.Add(); //Fy
+
             //Worksheet
             xlWorkSheet = (Microsoft.Office.Interop.Excel.Worksheet)xlWorkBook.Worksheets.get_Item(1);
 
@@ -383,6 +614,21 @@ namespace WS_SG_ETABS_Plugin.src.punching_shear_plot
             Microsoft.Office.Interop.Excel.Range rng = xlWorkSheet.UsedRange.Range["A1", lastCellRange];
 
             rng.Value2 = result;
+
+            //Worksheet
+            xlWorkSheet = (Microsoft.Office.Interop.Excel.Worksheet)xlWorkBook.Worksheets.get_Item(2);
+
+            xlWorkSheet.Name = "Group definitions";
+
+            numOfRow = resultGroupDef.GetLength(0);
+            numOfCol = resultGroupDef.GetLength(1);
+
+            alphabetOfCol = src.HelperExcel.GetExcelColumnName(numOfCol);
+            lastCellRange = alphabetOfCol + Convert.ToString(numOfRow - 1 + 1);
+
+            rng = xlWorkSheet.UsedRange.Range["A1", lastCellRange];
+
+            rng.Value2 = resultGroupDef;
 
             //Here saving the file in xlsx
             string excelPath = filePath + fileName + ".xlsx";
