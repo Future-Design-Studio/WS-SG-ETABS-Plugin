@@ -1286,7 +1286,7 @@ namespace WS_SG_ETABS_Plugin.src
             //First row only
             List<Dictionary<string, string>> tableInListToFilter = databaseTableToFilter.TableInList;
 
-            //Check if table is not empty
+            //Check if input table is not empty
             if (tableInListToFilter.Count == 0)
             {
                 MessageBox.Show($"Table {databaseTableToFilter.TableKey} is empty!");
