@@ -17,45 +17,46 @@ namespace WS_SG_ETABS_Plugin.src.punching_shear_plot
 {
     internal class FunctionPunchingShrPlot
     {
-        public static bool PunchingShearPlot(cSapModel SapModel, cPluginCallback Plugin, List<string> listChoosenLoadCase, string choosenGroup, double forceIncrement, string plotTitle, 
-            double bubbleScaleFactor, int textSize, int titleSize, int axisTitleSize, double gridSpacingX, double gridSpacingY, List<src.HelperEtabs.DatabaseTable> databaseTableList,
+        public static (bool, List<ClassPunchingShrPlot.GroupDefinition>) PunchingShearPlot(cSapModel SapModel, cPluginCallback Plugin, List<string> listChoosenLoadCase, string choosenGroup, double forceIncrement, string plotTitle, 
+            double forceFactor, double bubbleScaleFactor, int textSize, int titleSize, int axisTitleSize, double gridSpacingX, double gridSpacingY, List<src.HelperEtabs.DatabaseTable> databaseTableList,
             WpfPlot ReactionPlot)
         {
             bool isError = false;
             List<string> errorList = new List<string>();
+            List<ClassPunchingShrPlot.GroupDefinition> groupDefinitions = new List<GroupDefinition> ();
 
             //Get the table
             src.HelperEtabs.DatabaseTable pointObjectConnectivityTable = new HelperEtabs.DatabaseTable();
             (isError, pointObjectConnectivityTable) = src.HelperEtabs.CallDatabaseTableByTableKey(databaseTableList, "Point Object Connectivity");
-            if (isError) { return isError; }
+            if (isError) { return (isError, groupDefinitions); }
 
             src.HelperEtabs.DatabaseTable jointReactionTable = new HelperEtabs.DatabaseTable();
             (isError, jointReactionTable) = src.HelperEtabs.CallDatabaseTableByTableKey(databaseTableList, "Joint Reactions");
-            if (isError) { return isError; }
+            if (isError) { return (isError, groupDefinitions); }
 
             src.HelperEtabs.DatabaseTable groupAssignmentsTable = new HelperEtabs.DatabaseTable();
             (isError, groupAssignmentsTable) = src.HelperEtabs.CallDatabaseTableByTableKey(databaseTableList, "Group Assignments");
-            if (isError) { return isError; }
+            if (isError) { return (isError, groupDefinitions); }
 
             src.HelperEtabs.DatabaseTable elementForcesColumnsTable = new HelperEtabs.DatabaseTable();
             (isError, elementForcesColumnsTable) = src.HelperEtabs.CallDatabaseTableByTableKey(databaseTableList, "Element Forces - Columns");
-            if (isError) { return isError; }
+            if (isError) { return (isError, groupDefinitions); }
 
             src.HelperEtabs.DatabaseTable columnObjectConnectivityTable = new HelperEtabs.DatabaseTable();
             (isError, columnObjectConnectivityTable) = src.HelperEtabs.CallDatabaseTableByTableKey(databaseTableList, "Column Object Connectivity");
-            if (isError) { return isError; }
+            if (isError) { return (isError, groupDefinitions); }
 
             src.HelperEtabs.DatabaseTable frameAssignmentSectPropTable = new HelperEtabs.DatabaseTable();
             (isError, frameAssignmentSectPropTable) = src.HelperEtabs.CallDatabaseTableByTableKey(databaseTableList, "Frame Assignments - Section Properties");
-            if (isError) { return isError; }
+            if (isError) { return (isError, groupDefinitions); }
 
             src.HelperEtabs.DatabaseTable frameDefSummaryTable = new HelperEtabs.DatabaseTable();
             (isError, frameDefSummaryTable) = src.HelperEtabs.CallDatabaseTableByTableKey(databaseTableList, "Frame Section Property Definitions - Summary");
-            if (isError) { return isError; }
+            if (isError) { return (isError, groupDefinitions); }
 
             //Filter group to only include points, to improve performance
             (isError, groupAssignmentsTable) = src.HelperEtabs.FilterDatabaseTable(groupAssignmentsTable, "ObjectType", "Point");
-            if (isError) { return isError; }
+            if (isError) { return (isError, groupDefinitions); }
 
             //Container
             List<src.HelperEtabs.Point3D> jointList = new List<src.HelperEtabs.Point3D>();
@@ -65,15 +66,15 @@ namespace WS_SG_ETABS_Plugin.src.punching_shear_plot
             jointList = GetJointListFromGroup(pointObjectConnectivityTable, groupAssignmentsTable, choosenGroup);
             GetColumnForceConnectedToJoint(jointPunchingShearDetailsList, jointList, elementForcesColumnsTable, columnObjectConnectivityTable, jointReactionTable, listChoosenLoadCase, errorList);
             GetColumnFrameSection(jointPunchingShearDetailsList, frameAssignmentSectPropTable, frameDefSummaryTable);
-            List<ClassPunchingShrPlot.GroupDefinition> groupDefinitions = GroupBasedOnForceAndSectProp(jointPunchingShearDetailsList, forceIncrement);
-            PlotPunchingShear(groupDefinitions, plotTitle, bubbleScaleFactor, textSize, titleSize, axisTitleSize, gridSpacingX, gridSpacingY, ReactionPlot);
+            groupDefinitions = GroupBasedOnForceAndSectProp(jointPunchingShearDetailsList, forceIncrement);
+            //PlotPunchingShear(groupDefinitions, plotTitle, bubbleScaleFactor, textSize, titleSize, axisTitleSize, gridSpacingX, gridSpacingY, ReactionPlot);
 
             //Create excel
             var result = CompilePunchingShearDetailsToArray(jointPunchingShearDetailsList, choosenGroup);
             var resultGroupDef = CompileGroupDefinitionsToArray(groupDefinitions);
             WritePunchingShearDetailsToExcel(result, resultGroupDef, "punching_shear", "C:\\Users\\STEFANO\\OneDrive - Ramboll\\Desktop\\");
 
-            return false;
+            return (false, groupDefinitions);
         }
 
         public static List<src.HelperEtabs.Point3D> GetJointListFromGroup(src.HelperEtabs.DatabaseTable pointObjectConnectivityTable, src.HelperEtabs.DatabaseTable groupAssignmentsTable, string choosenGroup)
@@ -594,11 +595,13 @@ namespace WS_SG_ETABS_Plugin.src.punching_shear_plot
                 {
                     double colorMapFraction = groupDefinition.GroupIndex / (Convert.ToDouble(groupDefinitions.Count) - 1);
                     bubbleColor = ScottPlot.Drawing.Colormap.Jet.GetColor(colorMapFraction, .6);
+                    groupDefinition.Color = Convert.ToString(bubbleColor);
                 }
                 else
                 {
                     double colorMapFraction = 0;
                     bubbleColor = ScottPlot.Drawing.Colormap.Jet.GetColor(colorMapFraction, .6);
+                    groupDefinition.Color = Convert.ToString(bubbleColor);
                 }
 
                 //Plot each column
@@ -708,6 +711,125 @@ namespace WS_SG_ETABS_Plugin.src.punching_shear_plot
 
             xlWorkBook.Close(true, misValue, misValue);
             xlApp.Quit();
+            System.Runtime.InteropServices.Marshal.ReleaseComObject(xlApp);
+        }
+
+
+        public static void FilterPunchingShearPlot(List<ClassPunchingShrPlot.GroupDefinition> groupDefinitions, string plotTitle, double forceFactor,
+            double bubbleScaleFactor, int textSize, int titleSize, int axisTitleSize, double gridSpacingX, double gridSpacingY, WpfPlot ReactionPlot, string selectedGroup)
+        {
+            ReactionPlot.Reset();
+            
+            foreach (ClassPunchingShrPlot.GroupDefinition groupDefinition in groupDefinitions)
+            {
+                //Decide group color plot
+                System.Drawing.Color bubbleColor = new System.Drawing.Color();
+
+                if (selectedGroup == "All")
+                {
+                    if (groupDefinitions.Count > 1)
+                    {
+                        double colorMapFraction = groupDefinition.GroupIndex / (Convert.ToDouble(groupDefinitions.Count) - 1);
+                        bubbleColor = ScottPlot.Drawing.Colormap.Jet.GetColor(colorMapFraction, .6);
+                        groupDefinition.Color = Convert.ToString(bubbleColor);
+                    }
+                    else
+                    {
+                        double colorMapFraction = 0;
+                        bubbleColor = ScottPlot.Drawing.Colormap.Jet.GetColor(colorMapFraction, .6);
+                        groupDefinition.Color = Convert.ToString(bubbleColor);
+                    }
+                }
+                else
+                {
+                    if (groupDefinition.GroupIndex == Convert.ToInt32(selectedGroup))
+                    {
+                        if (groupDefinitions.Count > 1)
+                        {
+                            double colorMapFraction = groupDefinition.GroupIndex / (Convert.ToDouble(groupDefinitions.Count) - 1);
+                            bubbleColor = ScottPlot.Drawing.Colormap.Jet.GetColor(colorMapFraction, .6);
+                            groupDefinition.Color = Convert.ToString(bubbleColor);
+                        }
+                        else
+                        {
+                            double colorMapFraction = 0;
+                            bubbleColor = ScottPlot.Drawing.Colormap.Jet.GetColor(colorMapFraction, .6);
+                            groupDefinition.Color = Convert.ToString(bubbleColor);
+                        }
+                    }
+                    else
+                    {
+                        bubbleColor = System.Drawing.Color.FromArgb(100, 200, 200, 200); ;
+                    }
+
+                }
+
+
+                //Plot each column
+                string bubbleText = "";
+                foreach (ClassPunchingShrPlot.JointPunchingShearDetails jointPunchingShearDetails in groupDefinition.JointPunchingShearDetailsList)
+                {
+                    //Bubble size and text
+                    //double reaction = Convert.ToDouble(jointReactionRow[reactionDirection]);
+                    double punchingShearForce = (groupDefinition.MaxForce + groupDefinition.MinForce) / 2;
+                    double bubbleSize = punchingShearForce * bubbleScaleFactor;
+
+                    if (selectedGroup == "All")
+                    {
+                        bubbleText = Convert.ToString(
+                                    $"{jointPunchingShearDetails.UniqueName}"
+                                    + System.Environment.NewLine
+                                    + $"Sect: {jointPunchingShearDetails.SectProp}"
+                                    + System.Environment.NewLine
+                                    + $"Case: {jointPunchingShearDetails.LoadCaseMaxDifference}"
+                                    + System.Environment.NewLine
+                                    + $"Group: {jointPunchingShearDetails.GroupIndex}"
+                                    + System.Environment.NewLine
+                                    + $"Force: {Math.Ceiling(jointPunchingShearDetails.ForceMaxDifference * forceFactor)}"
+                                    );
+                    }
+                    else
+                    {
+                        if (jointPunchingShearDetails.GroupIndex == Convert.ToInt32(selectedGroup))
+                        {
+                            bubbleText = Convert.ToString(
+                                        $"{jointPunchingShearDetails.UniqueName}"
+                                        + System.Environment.NewLine
+                                        + $"Sect: {jointPunchingShearDetails.SectProp} kN"
+                                        + System.Environment.NewLine
+                                        + $"Case: {jointPunchingShearDetails.LoadCaseMaxDifference}"
+                                        + System.Environment.NewLine
+                                        + $"Group: {jointPunchingShearDetails.GroupIndex}"
+                                        + System.Environment.NewLine
+                                        + $"Force: {Math.Ceiling(jointPunchingShearDetails.ForceMaxDifference * forceFactor)}"
+                                        );
+                        }
+                        else
+                        {
+                            bubbleText = "";
+                        }
+                    }
+
+                    double xCoord = jointPunchingShearDetails.XCoordinate;
+                    double yCoord = jointPunchingShearDetails.YCoordinate;
+
+                    src.HelperPlot.BubblePlotter(ReactionPlot, bubbleSize, bubbleText, textSize, bubbleColor, xCoord, yCoord);
+                }
+
+            }
+
+
+            ReactionPlot.Plot.AxisScaleLock(true);
+            ReactionPlot.Plot.Title(plotTitle, true, null, titleSize, "Arial Narrow");
+            ReactionPlot.Plot.AxisAuto(.2, .25); // zoom out to accommodate large bubbles
+
+            //Axis
+            ReactionPlot.Plot.YAxis.Label("Y coordinate (m)", null, axisTitleSize, true, "Arial Narrow");
+            ReactionPlot.Plot.XAxis.Label("X coordinate (m)", null, axisTitleSize, true, "Arial Narrow");
+            ReactionPlot.Plot.YAxis.ManualTickSpacing(gridSpacingY);
+            ReactionPlot.Plot.XAxis.ManualTickSpacing(gridSpacingX);
+            
+            ReactionPlot.Refresh();
         }
     }
 }

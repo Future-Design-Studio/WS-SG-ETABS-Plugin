@@ -44,6 +44,7 @@ namespace WS_SG_ETABS_Plugin.src.punching_shear_plot
             public string SectProp { get; set; }
             public double MinForce { get; set; }
             public double MaxForce { get; set; }
+            public string Color { get; set; }
             public List<JointPunchingShearDetails> JointPunchingShearDetailsList { get; set; }
 
             public GroupDefinition(int groupIndex, string sectProp, double minForce, double maxForce, List<JointPunchingShearDetails> jointPunchingShearDetailsList)

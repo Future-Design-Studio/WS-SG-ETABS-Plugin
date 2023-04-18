@@ -24,7 +24,6 @@ namespace WS_SG_ETABS_Plugin.src
         public static void BubblePlotter(WpfPlot Plot, double bubbleSize, string bubbleText, int textSize, System.Drawing.Color bubbleColor, double xCoord, double yCoord)
         {
 
-
             var myBubblePlot = Plot.Plot.AddBubblePlot();
             myBubblePlot.Add(
                 x: xCoord,
@@ -36,14 +35,15 @@ namespace WS_SG_ETABS_Plugin.src
             );
 
             //Text for each bubble in kN
-            var txt = Plot.Plot.AddText(bubbleText, xCoord, yCoord);
-            //txt.FontBold = true;
-            txt.FontSize = Convert.ToSingle(textSize);
-            txt.Color = System.Drawing.Color.Black;
-            txt.Alignment = Alignment.MiddleCenter;
-            txt.FontName = "Arial Narrow";
-
+            if (!string.IsNullOrWhiteSpace(bubbleText))
+            {
+                var txt = Plot.Plot.AddText(bubbleText, xCoord, yCoord);
+                //txt.FontBold = true;
+                txt.FontSize = Convert.ToSingle(textSize);
+                txt.Color = System.Drawing.Color.Black;
+                txt.Alignment = Alignment.MiddleCenter;
+                txt.FontName = "Arial Narrow";
+            }
         }
-
     }
 }
