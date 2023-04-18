@@ -77,6 +77,7 @@ namespace WS_SG_ETABS_Plugin.src.punching_shear_plot
 
             comBoxGroupFilter.ItemsSource = groupNames;
             comBoxGroupFilter.SelectedIndex = 0;
+            HelperPlot.ResetZoom(ReactionPlot);
 
             //Show sum per group
             DataGridTextColumn c1 = new DataGridTextColumn();
@@ -124,8 +125,10 @@ namespace WS_SG_ETABS_Plugin.src.punching_shear_plot
         {
             string selectedGroup = groupNames[comBoxGroupFilter.SelectedIndex];
 
+            ScottPlot.AxisLimits axisLimits = ReactionPlot.Plot.GetAxisLimits();
+
             FunctionPunchingShrPlot.FilterPunchingShearPlot(groupDefinitions, plotTitleContainer, forceFactorContainer,
-            bubbleScaleFactorContainer, textSizeContainer, titleSizeContainer, axisTitleSizeContainer, gridSpacingXContainer, gridSpacingYContainer, ReactionPlot, selectedGroup);
+            bubbleScaleFactorContainer, textSizeContainer, titleSizeContainer, axisTitleSizeContainer, gridSpacingXContainer, gridSpacingYContainer, ReactionPlot, selectedGroup, axisLimits);
         }
     }
 }

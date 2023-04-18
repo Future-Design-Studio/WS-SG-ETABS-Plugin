@@ -87,6 +87,7 @@ namespace WS_SG_ETABS_Plugin.src.punching_shear_plot
                 double forceIncrement = Convert.ToDouble(textBoxForceIncrement.Text);
 
                 string plotTitle = textBoxTitle.Text;
+                double forceFactor = Convert.ToDouble(textBoxForceFactor.Text);
                 double bubbleScaleFactor = Convert.ToDouble(textBoxBubbleScaleFactor.Text);
                 int textSize = Convert.ToInt32(textBoxTextSize.Text);
                 int titleSize = Convert.ToInt32(textBoxTitleSize.Text);
@@ -96,7 +97,7 @@ namespace WS_SG_ETABS_Plugin.src.punching_shear_plot
 
                 //Call up copy result window
                 src.punching_shear_plot.WindowPunchShrPlotResult windowPlotReactionTableResult = new src.punching_shear_plot.WindowPunchShrPlotResult(
-                    _SapModel, _Plugin, listChoosenLoadCase, choosenGroup, forceIncrement, plotTitle, bubbleScaleFactor, textSize, titleSize, axisTitleSize, gridSpacingX, gridSpacingY, databaseTableListGlobal);
+                    _SapModel, _Plugin, listChoosenLoadCase, choosenGroup, forceIncrement, plotTitle, forceFactor, bubbleScaleFactor, textSize, titleSize, axisTitleSize, gridSpacingX, gridSpacingY, databaseTableListGlobal);
             }
 
             catch (Exception ex)

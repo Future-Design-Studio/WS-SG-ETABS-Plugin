@@ -716,7 +716,7 @@ namespace WS_SG_ETABS_Plugin.src.punching_shear_plot
 
 
         public static void FilterPunchingShearPlot(List<ClassPunchingShrPlot.GroupDefinition> groupDefinitions, string plotTitle, double forceFactor,
-            double bubbleScaleFactor, int textSize, int titleSize, int axisTitleSize, double gridSpacingX, double gridSpacingY, WpfPlot ReactionPlot, string selectedGroup)
+            double bubbleScaleFactor, int textSize, int titleSize, int axisTitleSize, double gridSpacingX, double gridSpacingY, WpfPlot ReactionPlot, string selectedGroup, ScottPlot.AxisLimits axisLimits)
         {
             ReactionPlot.Reset();
             
@@ -795,7 +795,7 @@ namespace WS_SG_ETABS_Plugin.src.punching_shear_plot
                             bubbleText = Convert.ToString(
                                         $"{jointPunchingShearDetails.UniqueName}"
                                         + System.Environment.NewLine
-                                        + $"Sect: {jointPunchingShearDetails.SectProp} kN"
+                                        + $"Sect: {jointPunchingShearDetails.SectProp}"
                                         + System.Environment.NewLine
                                         + $"Case: {jointPunchingShearDetails.LoadCaseMaxDifference}"
                                         + System.Environment.NewLine
@@ -821,7 +821,8 @@ namespace WS_SG_ETABS_Plugin.src.punching_shear_plot
 
             ReactionPlot.Plot.AxisScaleLock(true);
             ReactionPlot.Plot.Title(plotTitle, true, null, titleSize, "Arial Narrow");
-            ReactionPlot.Plot.AxisAuto(.2, .25); // zoom out to accommodate large bubbles
+            //ReactionPlot.Plot.AxisAuto(.2, .25); // zoom out to accommodate large bubbles
+            ReactionPlot.Plot.SetAxisLimits(axisLimits);
 
             //Axis
             ReactionPlot.Plot.YAxis.Label("Y coordinate (m)", null, axisTitleSize, true, "Arial Narrow");

@@ -45,5 +45,10 @@ namespace WS_SG_ETABS_Plugin.src
                 txt.FontName = "Arial Narrow";
             }
         }
+
+        public static void ResetZoom(WpfPlot Plot)
+        {
+            Plot.Plot.AxisAuto(.2, .25); // zoom out to accommodate large bubbles
+        }
     }
 }
