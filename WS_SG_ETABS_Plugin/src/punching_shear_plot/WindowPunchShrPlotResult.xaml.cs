@@ -42,7 +42,7 @@ namespace WS_SG_ETABS_Plugin.src.punching_shear_plot
 
         public WindowPunchShrPlotResult(cSapModel SapModel, cPluginCallback Plugin, List<string> listChoosenLoadCase, string choosenGroup, double forceIncrement, string plotTitle, 
             double forceFactor, double bubbleScaleFactor, int textSize, int titleSize, int axisTitleSize, double gridSpacingX, double gridSpacingY, 
-            List<src.HelperEtabs.DatabaseTable> databaseTableList)
+            List<src.HelperEtabs.DatabaseTable> databaseTableList, string filePath, string fileName)
         {
             _SapModel = SapModel;
             _Plugin = Plugin;
@@ -67,7 +67,8 @@ namespace WS_SG_ETABS_Plugin.src.punching_shear_plot
 
             bool isError = false;
             (isError, groupDefinitions) = src.punching_shear_plot.FunctionPunchingShrPlot.PunchingShearPlot(
-                _SapModel, _Plugin, listChoosenLoadCase, choosenGroup, forceIncrement, plotTitle, forceFactor, bubbleScaleFactor, textSize, titleSize, axisTitleSize, gridSpacingX, gridSpacingY, databaseTableList, ReactionPlot);
+                _SapModel, _Plugin, listChoosenLoadCase, choosenGroup, forceIncrement, plotTitle, forceFactor, bubbleScaleFactor, textSize, titleSize, axisTitleSize, 
+                gridSpacingX, gridSpacingY, databaseTableList, ReactionPlot, filePath, fileName);
 
             //List of group to filter
             foreach(ClassPunchingShrPlot.GroupDefinition groupDefinition in groupDefinitions)
