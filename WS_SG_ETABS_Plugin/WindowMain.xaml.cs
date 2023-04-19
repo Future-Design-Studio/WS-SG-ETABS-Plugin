@@ -212,7 +212,10 @@ namespace WS_SG_ETABS_Plugin
 
         private void buttonTrfEtabsLoads_Click(object sender, RoutedEventArgs e)
         {
-
+            IsEnabled = false;
+            //Call up Etabs to etabs load transferring open file window
+            src.loads_etabs_etabs.WindowEtabsEtabsOpenFile windowOpenFile = new src.loads_etabs_etabs.WindowEtabsEtabsOpenFile(_SapModel, _Plugin);
+            IsEnabled = true;
         }
 
         private void buttonTrussGrouping_Click(object sender, RoutedEventArgs e)
