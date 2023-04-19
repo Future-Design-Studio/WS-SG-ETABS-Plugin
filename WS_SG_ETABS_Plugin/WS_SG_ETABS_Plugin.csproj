@@ -138,6 +138,9 @@
     <Compile Include="src\loads_etabs_etabs\WindowEtabsEtabsOpenFile.xaml.cs">
       <DependentUpon>WindowEtabsEtabsOpenFile.xaml</DependentUpon>
     </Compile>
+    <Compile Include="src\loads_etabs_etabs\WindowEtabsEtabsOpenFileLoading.xaml.cs">
+      <DependentUpon>WindowEtabsEtabsOpenFileLoading.xaml</DependentUpon>
+    </Compile>
     <Compile Include="src\loads_etabs_etabs\WindowEtabsEtabsResult.xaml.cs">
       <DependentUpon>WindowEtabsEtabsResult.xaml</DependentUpon>
     </Compile>
@@ -276,6 +279,10 @@
     <Page Include="src\loads_etabs_etabs\WindowEtabsEtabsOpenFile.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\loads_etabs_etabs\WindowEtabsEtabsOpenFileLoading.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="src\loads_etabs_etabs\WindowEtabsEtabsResult.xaml">
       <SubType>Designer</SubType>
