@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ETABSv1;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,11 +19,26 @@ namespace WS_SG_ETABS_Plugin.src.loads_etabs_etabs
     /// <summary>
     /// Interaction logic for WindowEtabsEtabsResult.xaml
     /// </summary>
-    public partial class WindowEtabsEtabsResult : UserControl
+    public partial class WindowEtabsEtabsResult : Window
     {
-        public WindowEtabsEtabsResult()
+        public WindowEtabsEtabsResult(cSapModel SapModel, cPluginCallback Plugin, List<src.HelperEtabs.DatabaseTable> databaseTableList)
         {
+
+            //Main logic
+            bool isError = src.loads_etabs_etabs.FunctionEtabsEtabsMain.TransferLoadFromEtabsToEtabs(SapModel, Plugin, databaseTableList);
+
+            if (isError)
+            {
+                return;
+            }
+
             InitializeComponent();
+            ShowDialog();
+        }
+
+        private void buttonOk_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
         }
     }
 }

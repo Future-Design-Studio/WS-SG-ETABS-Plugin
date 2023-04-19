@@ -271,3 +271,12 @@ C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws
 C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\release_selected_node\WindowReleaseSelectedNodeResult.baml
 C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\punching_shear_plot\WindowPunchShrPlotLoading.g.cs
 C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\punching_shear_plot\WindowPunchShrPlotLoading.baml
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\loads_etabs_etabs\WindowEtabsEtabsMain.g.cs
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\loads_etabs_etabs\WindowEtabsEtabsOpenFile.g.cs
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\loads_etabs_etabs\WindowEtabsEtabsOpenFileLoading.g.cs
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\loads_etabs_etabs\WindowEtabsEtabsResult.g.cs
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\punching_shear_plot\WindowPunchShrPlotLoading.g.cs
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\punching_shear_plot\WindowPunchShrPlotMain.g.cs
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\punching_shear_plot\WindowPunchShrPlotResult.g.cs
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\release_selected_node\WindowReleaseSelectedNodeMain.g.cs
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\release_selected_node\WindowReleaseSelectedNodeResult.g.cs
