@@ -44,9 +44,9 @@
 
         <TextBlock Grid.Row="2" Grid.Column="0" TextWrapping="Wrap" TextAlignment="Justify"  
                        Margin="10 0 10 0" FontSize="10">Note:<LineBreak/>
-                    1. Unlock ETABS model where the properties is copied from<LineBreak/>
-                    2. Response spectrum will be converted to user function as ETABS is only able to import user functionn<LineBreak/>
-                    3. Press OK to proceed
+                    1. Ensure model to transfer reaction from has been run with requried Load Cases alredy<LineBreak/>
+                    2. Load cases' reactions will be applied on the current model using existing load patterns / new load patterns which can be selected on the next step<LineBreak/>
+                    3. Press OK to proceed to the next step
         </TextBlock>
 
         
