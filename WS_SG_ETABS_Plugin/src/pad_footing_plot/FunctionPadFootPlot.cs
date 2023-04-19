@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media.TextFormatting;
 using WS_SG_ETABS_Plugin.src.punching_shear_plot;
 using static WS_SG_ETABS_Plugin.src.pad_footing_plot.ClassPadFootPlot;
 using static WS_SG_ETABS_Plugin.src.punching_shear_plot.ClassPunchingShrPlot;
@@ -15,29 +16,30 @@ namespace WS_SG_ETABS_Plugin.src.pad_footing_plot
 {
     internal class FunctionPadFootPlot
     {
-        public static bool PadFootingPlot(cSapModel SapModel, cPluginCallback Plugin, List<string> listChoosenLoadCase, string choosenGroup, double sizeIncrement, string plotTitle, double thickness, double density,
+        public static (bool, List<pad_footing_plot.ClassPadFootPlot.GroupDefinition>) PadFootingPlot(cSapModel SapModel, cPluginCallback Plugin, List<string> listChoosenLoadCase, string choosenGroup, double sizeIncrement, string plotTitle, double thickness, double density,
             double soilCapacity, double maxUtilizationRatio, int textSize, int titleSize, int axisTitleSize, double gridSpacingX, double gridSpacingY,
             List<src.HelperEtabs.DatabaseTable> databaseTableList, WpfPlot ReactionPlot, string fileName, string filePath)
         {
             bool isError = false;
             List<string> errorList= new List<string>();
+            List<pad_footing_plot.ClassPadFootPlot.GroupDefinition> groupDefinitions = new List<ClassPadFootPlot.GroupDefinition>();
 
             //Get the table
             src.HelperEtabs.DatabaseTable pointObjectConnectivityTable = new HelperEtabs.DatabaseTable();
             (isError, pointObjectConnectivityTable) = src.HelperEtabs.CallDatabaseTableByTableKey(databaseTableList, "Point Object Connectivity");
-            if (isError) { return isError; }
+            if (isError) { return (isError, groupDefinitions); }
 
             src.HelperEtabs.DatabaseTable jointReactionTable = new HelperEtabs.DatabaseTable();
             (isError, jointReactionTable) = src.HelperEtabs.CallDatabaseTableByTableKey(databaseTableList, "Joint Reactions");
-            if (isError) { return isError; }
+            if (isError) { return (isError, groupDefinitions); }
 
             src.HelperEtabs.DatabaseTable groupAssignmentsTable = new HelperEtabs.DatabaseTable();
             (isError, groupAssignmentsTable) = src.HelperEtabs.CallDatabaseTableByTableKey(databaseTableList, "Group Assignments");
-            if (isError) { return isError; }
+            if (isError) { return (isError, groupDefinitions); }
 
             //Filter group to only include points, to improve performance
             (isError, groupAssignmentsTable) = src.HelperEtabs.FilterDatabaseTable(groupAssignmentsTable, "ObjectType", "Point");
-            if (isError) { return isError; }
+            if (isError) { return (isError, groupDefinitions); }
 
             //Container
             List<src.HelperEtabs.Point3D> jointList = new List<src.HelperEtabs.Point3D>();
@@ -47,15 +49,15 @@ namespace WS_SG_ETABS_Plugin.src.pad_footing_plot
             jointList = GetJointListFromGroup(pointObjectConnectivityTable, groupAssignmentsTable, choosenGroup);
             GetJointReaction(jointPadFootDetailsList, jointList, jointReactionTable, listChoosenLoadCase, errorList);
             double soilCapacityReduced = CalculatePadFootingSize(jointPadFootDetailsList, thickness, density, soilCapacity, errorList, sizeIncrement, maxUtilizationRatio);
-            List<pad_footing_plot.ClassPadFootPlot.GroupDefinition> groupDefinitionList = 
-                GroupByArea(jointPadFootDetailsList, sizeIncrement, soilCapacityReduced);
+            groupDefinitions = GroupByArea(jointPadFootDetailsList, sizeIncrement, soilCapacityReduced);
+            //PlotPadFooting(groupDefinitions, plotTitle, textSize, titleSize, axisTitleSize, gridSpacingX, gridSpacingY, ReactionPlot);
 
             //Create excel
             var result = CompilePadFootDetailsToArray(jointPadFootDetailsList, choosenGroup);
-            var resultGroupDef = CompileGroupDefinitionsToArray(groupDefinitionList);
+            var resultGroupDef = CompileGroupDefinitionsToArray(groupDefinitions);
             WritePadFootDetailsToExcel(result, resultGroupDef, fileName, filePath);
 
-            return isError;
+            return (isError, groupDefinitions);
         }
 
         public static List<src.HelperEtabs.Point3D> GetJointListFromGroup(src.HelperEtabs.DatabaseTable pointObjectConnectivityTable, src.HelperEtabs.DatabaseTable groupAssignmentsTable, string choosenGroup)
@@ -414,7 +416,7 @@ namespace WS_SG_ETABS_Plugin.src.pad_footing_plot
             }
 
             //Assign group index
-            int groupIndex = 0;
+            int groupIndex = 1;
             List<pad_footing_plot.ClassPadFootPlot.GroupDefinition> groupDefinitionList = new List<ClassPadFootPlot.GroupDefinition> ();
             foreach(List<ClassPadFootPlot.JointPadFootDetails> eachGroupByWidth in groupByWidth)
             {
@@ -448,6 +450,142 @@ namespace WS_SG_ETABS_Plugin.src.pad_footing_plot
 
             }
             return groupDefinitionList;
+        }
+
+        public static void PlotPadFooting(List<pad_footing_plot.ClassPadFootPlot.GroupDefinition> groupDefinitions, string plotTitle, int textSize, int titleSize, int axisTitleSize, double gridSpacingX, double gridSpacingY, WpfPlot ReactionPlot)
+        {
+            foreach (ClassPadFootPlot.GroupDefinition groupDefinition in groupDefinitions)
+            {
+                //Decide group color plot
+                System.Drawing.Color color = new System.Drawing.Color();
+                if (groupDefinitions.Count > 1)
+                {
+                    double colorMapFraction = groupDefinition.GroupIndex / (Convert.ToDouble(groupDefinitions.Count) - 1);
+                    color = ScottPlot.Drawing.Colormap.Jet.GetColor(colorMapFraction, .6);
+                    groupDefinition.Color = Convert.ToString(color);
+                }
+                else
+                {
+                    double colorMapFraction = 0;
+                    color = ScottPlot.Drawing.Colormap.Jet.GetColor(colorMapFraction, .6);
+                    groupDefinition.Color = Convert.ToString(color);
+                }
+
+                //Plot each column
+                foreach (ClassPadFootPlot.JointPadFootDetails jointPadFootDetails in groupDefinition.JointPadFootDetailsList)
+                {
+                    //Bubble size and text
+                    //double reaction = Convert.ToDouble(jointReactionRow[reactionDirection]);
+                    double xCenter = jointPadFootDetails.XCoordinate;
+                    double yCenter = jointPadFootDetails.YCoordinate;
+                    double width = groupDefinition.Width;
+
+                    string text = Convert.ToString(
+                                                        $"{jointPadFootDetails.UniqueName}"
+                                                        + System.Environment.NewLine
+                                                        + $"Width: {jointPadFootDetails.Width} m"
+                                                        + System.Environment.NewLine
+                                                        + $"Force: {jointPadFootDetails.ForceMax} kN"
+                                                        + System.Environment.NewLine
+                                                        + $"Case: {jointPadFootDetails.LoadCaseMax}"
+                                                        + System.Environment.NewLine
+                                                        + $"Group: {jointPadFootDetails.GroupIndex}"
+                                                        );
+
+
+                    src.HelperPlot.RectanglePlotter(ReactionPlot, xCenter, yCenter, text, textSize, color, width, width);
+                }
+
+            }
+            ReactionPlot.Plot.AxisScaleLock(true);
+            ReactionPlot.Plot.Title(plotTitle, true, null, titleSize, "Arial Narrow");
+            ReactionPlot.Plot.AxisAuto(.2, .25); // zoom out to accommodate large bubbles
+
+            //Axis
+            ReactionPlot.Plot.YAxis.Label("Y coordinate (m)", null, axisTitleSize, true, "Arial Narrow");
+            ReactionPlot.Plot.XAxis.Label("X coordinate (m)", null, axisTitleSize, true, "Arial Narrow");
+            ReactionPlot.Plot.YAxis.ManualTickSpacing(gridSpacingY);
+            ReactionPlot.Plot.XAxis.ManualTickSpacing(gridSpacingX);
+
+            ReactionPlot.Refresh();
+        }
+
+        public static void FilterPadFootingPlot(List<pad_footing_plot.ClassPadFootPlot.GroupDefinition> groupDefinitions, string plotTitle, int textSize, int titleSize, int axisTitleSize, double gridSpacingX, double gridSpacingY, 
+            WpfPlot ReactionPlot, List<string> selectedGroup, ScottPlot.AxisLimits axisLimits)
+        {
+            ReactionPlot.Reset();
+
+            foreach (ClassPadFootPlot.GroupDefinition groupDefinition in groupDefinitions)
+            {
+                //Decide group color plot
+                System.Drawing.Color color = new System.Drawing.Color();
+
+                if (selectedGroup.Contains(Convert.ToString(groupDefinition.GroupIndex)))
+                {
+                    if (groupDefinitions.Count > 1)
+                    {
+                        double colorMapFraction = groupDefinition.GroupIndex / (Convert.ToDouble(groupDefinitions.Count) - 1);
+                        color = ScottPlot.Drawing.Colormap.Jet.GetColor(colorMapFraction, .6);
+                        groupDefinition.Color = Convert.ToString(color);
+                    }
+                    else
+                    {
+                        double colorMapFraction = 0;
+                        color = ScottPlot.Drawing.Colormap.Jet.GetColor(colorMapFraction, .6);
+                        groupDefinition.Color = Convert.ToString(color);
+                    }
+                }
+                else
+                {
+                    color = System.Drawing.Color.FromArgb(100, 200, 200, 200); ;
+                }
+
+
+                //Plot each column
+                string text = "";
+                foreach (ClassPadFootPlot.JointPadFootDetails jointPadFootDetails in groupDefinition.JointPadFootDetailsList)
+                {
+                    //Size and text
+                    double xCenter = jointPadFootDetails.XCoordinate;
+                    double yCenter = jointPadFootDetails.YCoordinate;
+                    double width = groupDefinition.Width;
+
+                    if (selectedGroup.Contains(Convert.ToString(jointPadFootDetails.GroupIndex)))
+                    {
+                        text = Convert.ToString($"{jointPadFootDetails.UniqueName}"
+                                                    + System.Environment.NewLine
+                                                    + $"Width: {jointPadFootDetails.Width} m"
+                                                    + System.Environment.NewLine
+                                                    + $"Force: {jointPadFootDetails.ForceMax} kN"
+                                                    + System.Environment.NewLine
+                                                    + $"Case: {jointPadFootDetails.LoadCaseMax}"
+                                                    + System.Environment.NewLine
+                                                    + $"Group: {jointPadFootDetails.GroupIndex}"
+                                                    );
+                    }
+                    else
+                    {
+                        text = "";
+                    }
+
+
+                    src.HelperPlot.RectanglePlotter(ReactionPlot, xCenter, yCenter, text, textSize, color, width, width);
+                }
+
+
+            }
+            ReactionPlot.Plot.AxisScaleLock(true);
+            ReactionPlot.Plot.Title(plotTitle, true, null, titleSize, "Arial Narrow");
+            //ReactionPlot.Plot.AxisAuto(.2, .25); // zoom out to accommodate large bubbles
+            ReactionPlot.Plot.SetAxisLimits(axisLimits);
+
+            //Axis
+            ReactionPlot.Plot.YAxis.Label("Y coordinate (m)", null, axisTitleSize, true, "Arial Narrow");
+            ReactionPlot.Plot.XAxis.Label("X coordinate (m)", null, axisTitleSize, true, "Arial Narrow");
+            ReactionPlot.Plot.YAxis.ManualTickSpacing(gridSpacingY);
+            ReactionPlot.Plot.XAxis.ManualTickSpacing(gridSpacingX);
+
+            ReactionPlot.Refresh();
         }
     }
 }

@@ -191,7 +191,7 @@
 
             <Label Grid.Column="0" Content="Title (to include unit accordingly):"></Label>
             <TextBox Grid.Column="1" x:Name="textBoxTitle" Grid.Row="0" TextAlignment="Center" 
-                     Text="Punching Shear Plot" VerticalContentAlignment="Center"/>
+                     Text="Pad Footing Plot" VerticalContentAlignment="Center"/>
 
         </Grid>
 

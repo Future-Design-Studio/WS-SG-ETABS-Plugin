@@ -48,7 +48,7 @@ namespace WS_SG_ETABS_Plugin.src.pad_footing_plot
             public double Width { get; set; }
             public double Area { get; set; }
             public string Color { get; set; }
-            public List<JointPadFootDetails> JointPunchingShearDetailsList { get; set; }
+            public List<JointPadFootDetails> JointPadFootDetailsList { get; set; }
 
             public GroupDefinition(int groupIndex, double width, List<JointPadFootDetails> jointPunchingShearDetailsList)
             {
@@ -56,7 +56,7 @@ namespace WS_SG_ETABS_Plugin.src.pad_footing_plot
                 Width = width;
                 Area = width * width;
 
-                JointPunchingShearDetailsList = jointPunchingShearDetailsList;
+                JointPadFootDetailsList = jointPunchingShearDetailsList;
             }
         }
     }
