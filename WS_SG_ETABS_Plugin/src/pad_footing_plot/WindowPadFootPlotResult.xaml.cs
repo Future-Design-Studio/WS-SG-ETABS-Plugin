@@ -121,15 +121,6 @@ namespace WS_SG_ETABS_Plugin.src.pad_footing_plot
                 gridSpacingXGlobal, gridSpacingYGlobal, ReactionPlot, selectedGroup, axisLimits);
         }
 
-        private void buttonAddGroup_Click(object sender, RoutedEventArgs e)
-        {
-            
-        }
-
-        private void buttonRemoveGroup_Click(object sender, RoutedEventArgs e)
-        {
-            
-        }
 
         private void buttonShowAllGroup_Click(object sender, RoutedEventArgs e)
         {
@@ -143,8 +134,6 @@ namespace WS_SG_ETABS_Plugin.src.pad_footing_plot
 
         private void listBoxShownGroup_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
-
             List<string> selectedGroup = listBoxShownGroup.SelectedItems.OfType<string>().ToList();
 
             ScottPlot.AxisLimits axisLimits = ReactionPlot.Plot.GetAxisLimits();
