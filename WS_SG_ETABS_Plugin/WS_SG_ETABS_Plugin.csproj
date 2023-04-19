@@ -181,6 +181,17 @@
     <Compile Include="src\plot_reaction\WindowPlotReactionMain.xaml.cs">
       <DependentUpon>WindowPlotReactionMain.xaml</DependentUpon>
     </Compile>
+    <Compile Include="src\punching_shear_plot\ClassPunchingShrPlot.cs" />
+    <Compile Include="src\punching_shear_plot\FunctionPunchingShrPlot.cs" />
+    <Compile Include="src\punching_shear_plot\WindowPunchShrPlotLoading.xaml.cs">
+      <DependentUpon>WindowPunchShrPlotLoading.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\punching_shear_plot\WindowPunchShrPlotMain.xaml.cs">
+      <DependentUpon>WindowPunchShrPlotMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\punching_shear_plot\WindowPunchShrPlotResult.xaml.cs">
+      <DependentUpon>WindowPunchShrPlotResult.xaml</DependentUpon>
+    </Compile>
     <Compile Include="src\rc_beam_schedule\FunctionRCBSched.cs" />
     <Compile Include="src\rc_beam_schedule\WindowRCBSchedMain.xaml.cs">
       <DependentUpon>WindowRCBSchedMain.xaml</DependentUpon>
@@ -305,6 +316,18 @@
     <Page Include="src\plot_reaction\WindowPlotReactionMain.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="src\punching_shear_plot\WindowPunchShrPlotLoading.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\punching_shear_plot\WindowPunchShrPlotMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\punching_shear_plot\WindowPunchShrPlotResult.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="src\rc_beam_schedule\WindowRCBSchedMain.xaml">
       <Generator>MSBuild:Compile</Generator>

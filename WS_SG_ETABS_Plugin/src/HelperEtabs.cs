@@ -45,10 +45,14 @@ namespace WS_SG_ETABS_Plugin.src
             }
         }
 
-        public class RcBeam
+        public class Beam
         {
             public string UniqueName { get; set; }
             public double Length { get; set; }
+        }
+
+        public class RcBeam : Beam
+        {
             public double Height { get; set; }
             public double Width { get; set; }
             public double CoverTopEtabs { get; set; }
@@ -126,6 +130,21 @@ namespace WS_SG_ETABS_Plugin.src
             public double RatioRightAv { get; set; }
 
             public RcBeam(string name)
+            {
+                UniqueName = name;
+            }
+        }
+
+        public class Column
+        {
+            public string UniqueName { get; set; }
+            public double Length { get; set; }
+        }
+
+        public class ColumnPunchingShear : Column
+        {
+
+            public ColumnPunchingShear(string name)
             {
                 UniqueName = name;
             }
@@ -1266,6 +1285,16 @@ namespace WS_SG_ETABS_Plugin.src
             //Check if table to filter contains column key
             //First row only
             List<Dictionary<string, string>> tableInListToFilter = databaseTableToFilter.TableInList;
+
+            //Check if table is not empty
+            if (tableInListToFilter.Count == 0)
+            {
+                MessageBox.Show($"Table {databaseTableToFilter.TableKey} is empty!");
+                DatabaseTable emptyDatabaseTable = new DatabaseTable();
+                isError = true;
+                return (isError, emptyDatabaseTable);
+            }
+
             if (!tableInListToFilter[0].ContainsKey(columnKeyToFilter))
             {
                 MessageBox.Show($"Table {databaseTableToFilter.TableKey} does not contain {columnKeyToFilter}!");
@@ -1288,6 +1317,87 @@ namespace WS_SG_ETABS_Plugin.src
 
             return (isError, databaseTableFiltered);
         }
+
+        public static (bool, double) FindMinValueInDatabaseTable(DatabaseTable databaseTableToFilter, string columnKey)
+        {
+            bool isError = false;
+            DatabaseTable databaseTableFiltered = new DatabaseTable();
+
+            //Check if table to filter contains column key
+            //First row only
+            List<Dictionary<string, string>> tableInListToFilter = databaseTableToFilter.TableInList;
+            if (!tableInListToFilter[0].ContainsKey(columnKey))
+            {
+                MessageBox.Show($"Table {databaseTableToFilter.TableKey} does not contain {columnKey}!");
+                DatabaseTable emptyDatabaseTable = new DatabaseTable();
+                isError = true;
+                return (isError, 0);
+            }
+
+            bool firstLoop = true;
+            double minValue = 0;
+            List<Dictionary<string, string>> tableInListFiltered = new List<Dictionary<string, string>>();
+            foreach (Dictionary<string, string> row in tableInListToFilter)
+            {
+                if (firstLoop)
+                {
+                    minValue = Convert.ToDouble(row[columnKey]);
+                    firstLoop = false;
+                }
+                else
+                {
+                    if (minValue > Convert.ToDouble(row[columnKey]))
+                    {
+                        minValue = Convert.ToDouble(row[columnKey]);
+                    }
+                }
+            }
+            //Save table in list to DatabaseTable
+            databaseTableFiltered.TableInList = tableInListFiltered;
+
+            return (isError, minValue);
+        }
+
+        public static (bool, double) FindMaxValueInDatabaseTable(DatabaseTable databaseTableToFilter, string columnKey)
+        {
+            bool isError = false;
+            DatabaseTable databaseTableFiltered = new DatabaseTable();
+
+            //Check if table to filter contains column key
+            //First row only
+            List<Dictionary<string, string>> tableInListToFilter = databaseTableToFilter.TableInList;
+            if (!tableInListToFilter[0].ContainsKey(columnKey))
+            {
+                MessageBox.Show($"Table {databaseTableToFilter.TableKey} does not contain {columnKey}!");
+                DatabaseTable emptyDatabaseTable = new DatabaseTable();
+                isError = true;
+                return (isError, 0);
+            }
+
+            bool firstLoop = true;
+            double maxValue = 0;
+            List<Dictionary<string, string>> tableInListFiltered = new List<Dictionary<string, string>>();
+            foreach (Dictionary<string, string> row in tableInListToFilter)
+            {
+                if (firstLoop)
+                {
+                    maxValue = Convert.ToDouble(row[columnKey]);
+                    firstLoop = false;
+                }
+                else
+                {
+                    if (maxValue < Convert.ToDouble(row[columnKey]))
+                    {
+                        maxValue = Convert.ToDouble(row[columnKey]);
+                    }
+                }
+            }
+            //Save table in list to DatabaseTable
+            databaseTableFiltered.TableInList = tableInListFiltered;
+
+            return (isError, maxValue);
+        }
+
 
 
         #endregion
@@ -2110,7 +2220,6 @@ namespace WS_SG_ETABS_Plugin.src
 
         #endregion
 
-
         #region File method
 
         public static string GetFileName(cSapModel Sap)
@@ -2122,6 +2231,15 @@ namespace WS_SG_ETABS_Plugin.src
             string fileName = splitModelPath[0];
             return fileName;
         }
+
+        #endregion
+
+        #region Data source
+
+        public static List<string> reactionDirectionList = new List<string>()
+        {
+            "FX", "FY", "FZ", "MX", "MY", "MZ"
+        };
 
         #endregion
 

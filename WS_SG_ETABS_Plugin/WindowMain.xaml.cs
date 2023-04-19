@@ -227,5 +227,13 @@ namespace WS_SG_ETABS_Plugin
         {
             System.Diagnostics.Process.Start("https://forms.office.com/e/qaiKf5e3a4");
         }
+
+        private void buttonPunchShrPlot_Click(object sender, RoutedEventArgs e)
+        {
+            IsEnabled = false;
+            //Call up window
+            src.punching_shear_plot.WindowPunchShrPlotLoading windowPunchShrPlotLoading = new src.punching_shear_plot.WindowPunchShrPlotLoading(_SapModel, _Plugin);
+            IsEnabled = true;
+        }
     }
 }

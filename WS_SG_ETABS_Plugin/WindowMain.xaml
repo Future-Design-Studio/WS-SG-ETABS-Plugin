@@ -41,6 +41,7 @@
         <Button Grid.Row="4" x:Name="buttonCopyProperties" Content="Importing ETABS Properties (Beta Version)" FontSize="16" Click="buttonCopyProperties_Click"/>
         <Button Grid.Row="5" x:Name="buttonPlotReaction" Content="Export Joint Reactions (Beta Version)" FontSize="16" Click="buttonPlotReaction_Click"/>
         <Button Grid.Row="6" x:Name="buttonLoadCombo" Content="Load Combination EN (Beta Version)" FontSize="16" Click="buttonLoadCombo_Click"/>
+        <Button Grid.Row="7" x:Name="buttonPunchShrPlot" Content="Plot Punching Shear (Beta Version)" FontSize="16" Click="buttonPunchShrPlot_Click"/>
 
         <!-- Specific Use Case -->
         <Button Grid.Row="3" Grid.Column="1" x:Name="buttonShellUni" Content="Shell Orientation (Local-3) (Beta Version)" FontSize="16" Click="buttonShellUni_Click"/>
@@ -66,6 +67,8 @@
         <Button Grid.Row="7" Grid.Column="3" x:Name="buttonSteelTrussOptimizer" Content="Steel Truss Optimizer" FontSize="16" Click="buttonSteelTrussOptimizer_Click" IsEnabled="False"/>
         <Button Grid.Row="8" Grid.Column="3" x:Name="buttonCircCrack" Content="Circular RC Section Crack Width Calculator" FontSize="16" Click="buttonCircCrack_Click" IsEnabled="False"/>
         <Button Grid.Row="9" Grid.Column="3" x:Name="buttonPreWarning" Content="Grasshopper Geometry Checker" FontSize="16" Click="buttonPreWarning_Click" IsEnabled="False"/>
+
+
 
 
 

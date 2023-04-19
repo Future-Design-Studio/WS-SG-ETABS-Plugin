@@ -16,15 +16,6 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
     {
         private static int Ret;
 
-        #region Data source
-
-        public static List<string> reactionDirectionList = new List<string>()
-        {
-            "FX", "FY", "FZ", "MX", "MY", "MZ"
-        };
-
-        #endregion
-
         public static (bool, double, double, List<src.plot_reaction.graph.ClassPlotGraph.SumReactionPerGroup>) PlotReaction(cSapModel Sap, List<Dictionary<string, string>> groupAndColor, string outputCase, string reactionDirection,
             WpfPlot ReactionPlot, double forceFactor, double bubbleScaleFactor, int textSize, int titleSize, int axisTitleSize, double gridSpacingX, double gridSpacingY, string title, bool splitX, bool splitY,
             int divisionX, int divisionY, double offsetX, double offsetY, int sumTextSizeX, int sumTextSizeY, double separationX, double separationY, 
