@@ -19,7 +19,7 @@ namespace WS_SG_ETABS_Plugin.src.punching_shear_plot
     {
         public static (bool, List<ClassPunchingShrPlot.GroupDefinition>) PunchingShearPlot(cSapModel SapModel, cPluginCallback Plugin, List<string> listChoosenLoadCase, string choosenGroup, double forceIncrement, string plotTitle, 
             double forceFactor, double bubbleScaleFactor, int textSize, int titleSize, int axisTitleSize, double gridSpacingX, double gridSpacingY, List<src.HelperEtabs.DatabaseTable> databaseTableList,
-            WpfPlot ReactionPlot)
+            WpfPlot ReactionPlot, string filePath, string fileName)
         {
             bool isError = false;
             List<string> errorList = new List<string>();
@@ -72,7 +72,7 @@ namespace WS_SG_ETABS_Plugin.src.punching_shear_plot
             //Create excel
             var result = CompilePunchingShearDetailsToArray(jointPunchingShearDetailsList, choosenGroup);
             var resultGroupDef = CompileGroupDefinitionsToArray(groupDefinitions);
-            WritePunchingShearDetailsToExcel(result, resultGroupDef, "punching_shear", "C:\\Users\\STEFANO\\OneDrive - Ramboll\\Desktop\\");
+            WritePunchingShearDetailsToExcel(result, resultGroupDef, fileName, filePath);
 
             return (false, groupDefinitions);
         }
@@ -554,7 +554,7 @@ namespace WS_SG_ETABS_Plugin.src.punching_shear_plot
             }
 
             //Assign group index
-            int groupIndex = 0;
+            int groupIndex = 1;
             foreach(List<ClassPunchingShrPlot.JointPunchingShearDetails> eachGroupByForce in groupByForce)
             {
                 bool firstLoop = true;
@@ -716,7 +716,7 @@ namespace WS_SG_ETABS_Plugin.src.punching_shear_plot
 
 
         public static void FilterPunchingShearPlot(List<ClassPunchingShrPlot.GroupDefinition> groupDefinitions, string plotTitle, double forceFactor,
-            double bubbleScaleFactor, int textSize, int titleSize, int axisTitleSize, double gridSpacingX, double gridSpacingY, WpfPlot ReactionPlot, string selectedGroup, ScottPlot.AxisLimits axisLimits)
+            double bubbleScaleFactor, int textSize, int titleSize, int axisTitleSize, double gridSpacingX, double gridSpacingY, WpfPlot ReactionPlot, List<string> selectedGroup, ScottPlot.AxisLimits axisLimits)
         {
             ReactionPlot.Reset();
             
@@ -725,11 +725,13 @@ namespace WS_SG_ETABS_Plugin.src.punching_shear_plot
                 //Decide group color plot
                 System.Drawing.Color bubbleColor = new System.Drawing.Color();
 
-                if (selectedGroup == "All")
+                if (selectedGroup.Contains(Convert.ToString(groupDefinition.GroupIndex)))
                 {
                     if (groupDefinitions.Count > 1)
                     {
-                        double colorMapFraction = groupDefinition.GroupIndex / (Convert.ToDouble(groupDefinitions.Count) - 1);
+                        //groupDefinition.GroupIndex starts at 1 instead of 0, thus need to -1
+
+                        double colorMapFraction = (groupDefinition.GroupIndex - 1) / (Convert.ToDouble(groupDefinitions.Count) - 1);
                         bubbleColor = ScottPlot.Drawing.Colormap.Jet.GetColor(colorMapFraction, .6);
                         groupDefinition.Color = Convert.ToString(bubbleColor);
                     }
@@ -742,26 +744,7 @@ namespace WS_SG_ETABS_Plugin.src.punching_shear_plot
                 }
                 else
                 {
-                    if (groupDefinition.GroupIndex == Convert.ToInt32(selectedGroup))
-                    {
-                        if (groupDefinitions.Count > 1)
-                        {
-                            double colorMapFraction = groupDefinition.GroupIndex / (Convert.ToDouble(groupDefinitions.Count) - 1);
-                            bubbleColor = ScottPlot.Drawing.Colormap.Jet.GetColor(colorMapFraction, .6);
-                            groupDefinition.Color = Convert.ToString(bubbleColor);
-                        }
-                        else
-                        {
-                            double colorMapFraction = 0;
-                            bubbleColor = ScottPlot.Drawing.Colormap.Jet.GetColor(colorMapFraction, .6);
-                            groupDefinition.Color = Convert.ToString(bubbleColor);
-                        }
-                    }
-                    else
-                    {
-                        bubbleColor = System.Drawing.Color.FromArgb(100, 200, 200, 200); ;
-                    }
-
+                    bubbleColor = System.Drawing.Color.FromArgb(100, 200, 200, 200); ;
                 }
 
 
@@ -774,7 +757,7 @@ namespace WS_SG_ETABS_Plugin.src.punching_shear_plot
                     double punchingShearForce = (groupDefinition.MaxForce + groupDefinition.MinForce) / 2;
                     double bubbleSize = punchingShearForce * bubbleScaleFactor;
 
-                    if (selectedGroup == "All")
+                    if (selectedGroup.Contains(Convert.ToString(jointPunchingShearDetails.GroupIndex)))
                     {
                         bubbleText = Convert.ToString(
                                     $"{jointPunchingShearDetails.UniqueName}"
@@ -790,24 +773,7 @@ namespace WS_SG_ETABS_Plugin.src.punching_shear_plot
                     }
                     else
                     {
-                        if (jointPunchingShearDetails.GroupIndex == Convert.ToInt32(selectedGroup))
-                        {
-                            bubbleText = Convert.ToString(
-                                        $"{jointPunchingShearDetails.UniqueName}"
-                                        + System.Environment.NewLine
-                                        + $"Sect: {jointPunchingShearDetails.SectProp}"
-                                        + System.Environment.NewLine
-                                        + $"Case: {jointPunchingShearDetails.LoadCaseMaxDifference}"
-                                        + System.Environment.NewLine
-                                        + $"Group: {jointPunchingShearDetails.GroupIndex}"
-                                        + System.Environment.NewLine
-                                        + $"Force: {Math.Ceiling(jointPunchingShearDetails.ForceMaxDifference * forceFactor)}"
-                                        );
-                        }
-                        else
-                        {
-                            bubbleText = "";
-                        }
+                        bubbleText = "";
                     }
 
                     double xCoord = jointPunchingShearDetails.XCoordinate;

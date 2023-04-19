@@ -15,6 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using ETABSv1;
 using ScottPlot;
+using WS_SG_ETABS_Plugin.src.pad_footing_plot;
 using static WS_SG_ETABS_Plugin.src.punching_shear_plot.ClassPunchingShrPlot;
 
 namespace WS_SG_ETABS_Plugin.src.punching_shear_plot
@@ -28,31 +29,31 @@ namespace WS_SG_ETABS_Plugin.src.punching_shear_plot
         cPluginCallback _Plugin;
 
         List<ClassPunchingShrPlot.GroupDefinition> groupDefinitions = new List<ClassPunchingShrPlot.GroupDefinition>();
-        string plotTitleContainer;
-        double forceFactorContainer;
-        double bubbleScaleFactorContainer;
-        int textSizeContainer;
-        int titleSizeContainer;
-        int axisTitleSizeContainer;
-        double gridSpacingXContainer;
-        double gridSpacingYContainer;
+        string plotTitleGlobal;
+        double forceFactorGlobal;
+        double bubbleScaleFactorGlobal;
+        int textSizeGlobal;
+        int titleSizeGlobal;
+        int axisTitleSizeGlobal;
+        double gridSpacingXGlobal;
+        double gridSpacingYGlobal;
 
         List<string> groupNames = new List<string>();
 
         public WindowPunchShrPlotResult(cSapModel SapModel, cPluginCallback Plugin, List<string> listChoosenLoadCase, string choosenGroup, double forceIncrement, string plotTitle, 
             double forceFactor, double bubbleScaleFactor, int textSize, int titleSize, int axisTitleSize, double gridSpacingX, double gridSpacingY, 
-            List<src.HelperEtabs.DatabaseTable> databaseTableList)
+            List<src.HelperEtabs.DatabaseTable> databaseTableList, string filePath, string fileName)
         {
             _SapModel = SapModel;
             _Plugin = Plugin;
-            plotTitleContainer = plotTitle;
-            forceFactorContainer = forceFactor;
-            bubbleScaleFactorContainer = bubbleScaleFactor;
-            textSizeContainer = textSize;
-            titleSizeContainer = titleSize;
-            axisTitleSizeContainer = axisTitleSize;
-            gridSpacingXContainer = gridSpacingX;
-            gridSpacingYContainer = gridSpacingY;
+            plotTitleGlobal = plotTitle;
+            forceFactorGlobal = forceFactor;
+            bubbleScaleFactorGlobal = bubbleScaleFactor;
+            textSizeGlobal = textSize;
+            titleSizeGlobal = titleSize;
+            axisTitleSizeGlobal = axisTitleSize;
+            gridSpacingXGlobal = gridSpacingX;
+            gridSpacingYGlobal = gridSpacingY;
 
             //Check if any load case is choosen
             bool anyChoosenLoadCase = src.HelperUI.CheckLoadCaseListExist(_SapModel, listChoosenLoadCase);
@@ -66,17 +67,17 @@ namespace WS_SG_ETABS_Plugin.src.punching_shear_plot
 
             bool isError = false;
             (isError, groupDefinitions) = src.punching_shear_plot.FunctionPunchingShrPlot.PunchingShearPlot(
-                _SapModel, _Plugin, listChoosenLoadCase, choosenGroup, forceIncrement, plotTitle, forceFactor, bubbleScaleFactor, textSize, titleSize, axisTitleSize, gridSpacingX, gridSpacingY, databaseTableList, ReactionPlot);
+                _SapModel, _Plugin, listChoosenLoadCase, choosenGroup, forceIncrement, plotTitle, forceFactor, bubbleScaleFactor, textSize, titleSize, axisTitleSize, 
+                gridSpacingX, gridSpacingY, databaseTableList, ReactionPlot, filePath, fileName);
 
             //List of group to filter
-            groupNames.Add("All");
             foreach(ClassPunchingShrPlot.GroupDefinition groupDefinition in groupDefinitions)
             {
                 groupNames.Add(Convert.ToString(groupDefinition.GroupIndex));
             }
 
-            comBoxGroupFilter.ItemsSource = groupNames;
-            comBoxGroupFilter.SelectedIndex = 0;
+            listBoxShownGroup.ItemsSource = groupNames;
+            listBoxShownGroup.SelectAll();
             HelperPlot.ResetZoom(ReactionPlot);
 
             //Show sum per group
@@ -121,14 +122,24 @@ namespace WS_SG_ETABS_Plugin.src.punching_shear_plot
 
         }
 
-        private void comBoxGroupFilter_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void buttonShowAllGroup_Click(object sender, RoutedEventArgs e)
         {
-            string selectedGroup = groupNames[comBoxGroupFilter.SelectedIndex];
+            listBoxShownGroup.SelectAll();
+        }
+
+        private void hideAllGroup_Click(object sender, RoutedEventArgs e)
+        {
+            listBoxShownGroup.UnselectAll();
+        }
+        private void listBoxShownGroup_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            List<string> selectedGroup = listBoxShownGroup.SelectedItems.OfType<string>().ToList();
 
             ScottPlot.AxisLimits axisLimits = ReactionPlot.Plot.GetAxisLimits();
 
-            FunctionPunchingShrPlot.FilterPunchingShearPlot(groupDefinitions, plotTitleContainer, forceFactorContainer,
-            bubbleScaleFactorContainer, textSizeContainer, titleSizeContainer, axisTitleSizeContainer, gridSpacingXContainer, gridSpacingYContainer, ReactionPlot, selectedGroup, axisLimits);
+            FunctionPunchingShrPlot.FilterPunchingShearPlot(groupDefinitions, plotTitleGlobal, forceFactorGlobal,
+            bubbleScaleFactorGlobal, textSizeGlobal, titleSizeGlobal, axisTitleSizeGlobal, gridSpacingXGlobal, gridSpacingYGlobal, ReactionPlot, selectedGroup, axisLimits);
         }
+
     }
 }

@@ -8,29 +8,46 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"></RowDefinition>
-            <RowDefinition Height="50"></RowDefinition>
-            <RowDefinition Height="140"></RowDefinition>
+            <RowDefinition Height="200"></RowDefinition>
         </Grid.RowDefinitions>
 
 
         <WpfPlot Grid.Row="0" Name="ReactionPlot" />
 
-        <Grid Grid.Row="1" Margin="0 10 0 10">
+        <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="120"></ColumnDefinition>
-                <ColumnDefinition Width="120"></ColumnDefinition>
+                <ColumnDefinition Width="300"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
-            <Label FontSize="15" Content="Filter by group :" VerticalAlignment="Center"></Label>
-        
-            <ComboBox  Grid.Column="1" x:Name="comBoxGroupFilter" 
-                       VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
-                       Text="0.5" InputScope="Digits" SelectionChanged="comBoxGroupFilter_SelectionChanged">
-            </ComboBox>
-        </Grid>
-        <Grid Grid.Row="2">
-            <DataGrid Grid.Row="2" Name="dataGridGroupDefinitions" IsReadOnly="True" CanUserReorderColumns="False" Height="150"></DataGrid>
+            <Grid Grid.Row="0" Grid.Column="0" Margin="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0.2*"></RowDefinition>
+                    <RowDefinition Height="0.2*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+
+                    <Button Grid.Column="0" Margin="0 0 10 0" Name="hideAllGroup" Content="Hide all group(s)" Click="hideAllGroup_Click"></Button>
+                    <Button Grid.Column="1" Margin="10 0 0 0" Name="buttonShowAllGroup" Content="Show all group(s)" Click="buttonShowAllGroup_Click"></Button>
+                </Grid>
+
+                <TextBlock Grid.Row="1" Grid.Column="0" TextWrapping="WrapWithOverflow" VerticalAlignment="Center">
+                Group(s):
+                </TextBlock>
+
+
+
+                <ListBox Grid.Row="2" Grid.Column="0" x:Name="listBoxShownGroup" d:ItemsSource="{d:SampleData ItemCount=5}" VerticalAlignment="Stretch" SelectionMode="Multiple" SelectionChanged="listBoxShownGroup_SelectionChanged"></ListBox>
+
+            </Grid>
+
+            <DataGrid Grid.Row="2" Margin="0 0 10 0" Grid.Column="1" Name="dataGridGroupDefinitions" IsReadOnly="True" CanUserReorderColumns="False" Height="180"></DataGrid>
         </Grid>
 
 
