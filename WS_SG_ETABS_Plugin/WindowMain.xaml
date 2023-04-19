@@ -42,6 +42,7 @@
         <Button Grid.Row="5" x:Name="buttonPlotReaction" Content="Export Joint Reactions (Beta Version)" FontSize="16" Click="buttonPlotReaction_Click"/>
         <Button Grid.Row="6" x:Name="buttonLoadCombo" Content="Load Combination EN (Beta Version)" FontSize="16" Click="buttonLoadCombo_Click"/>
         <Button Grid.Row="7" x:Name="buttonPunchShrPlot" Content="Plot Punching Shear (Beta Version)" FontSize="16" Click="buttonPunchShrPlot_Click"/>
+        <Button Grid.Row="8" x:Name="buttonPadFootPlot" Content="Plot Pad Footing (Beta Version)" FontSize="16" Click="buttonPadFootPlot_Click"/>
 
         <!-- Specific Use Case -->
         <Button Grid.Row="3" Grid.Column="1" x:Name="buttonShellUni" Content="Shell Orientation (Local-3) (Beta Version)" FontSize="16" Click="buttonShellUni_Click"/>

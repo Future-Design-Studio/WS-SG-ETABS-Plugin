@@ -271,3 +271,9 @@ C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws
 C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\release_selected_node\WindowReleaseSelectedNodeResult.baml
 C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\punching_shear_plot\WindowPunchShrPlotLoading.g.cs
 C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\punching_shear_plot\WindowPunchShrPlotLoading.baml
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\pad_footing_plot\WindowPadFootLoading.g.cs
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\pad_footing_plot\WindowPadFootPlotMain.g.cs
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\pad_footing_plot\WindowPadFootPlotResult.g.cs
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\pad_footing_plot\WindowPadFootLoading.baml
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\pad_footing_plot\WindowPadFootPlotMain.baml
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\pad_footing_plot\WindowPadFootPlotResult.baml

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Xsl;
 
 namespace WS_SG_ETABS_Plugin.src
 {
@@ -46,6 +47,29 @@ namespace WS_SG_ETABS_Plugin.src
             }
         }
 
+        public static void RectanglePlotter(WpfPlot Plot, double xCenter, double yCenter, string text, int textSize, System.Drawing.Color color, double xWidth, double yWidth)
+        {
+
+            double[] xs = { xCenter - xWidth / 2.0, xCenter + xWidth / 2.0, xCenter + xWidth / 2.0, xCenter - xWidth / 2.0 };
+            double[] ys = { yCenter + yWidth / 2.0, yCenter + yWidth / 2.0, yCenter - yWidth / 2.0, yCenter - yWidth / 2.0 };
+            Plot.Plot.AddPolygon(xs, ys, color);
+
+            //Text for each bubble in kN
+            if (!string.IsNullOrWhiteSpace(text))
+            {
+                var txt = Plot.Plot.AddText(text, xCenter, yCenter);
+                //txt.FontBold = true;
+                txt.FontSize = Convert.ToSingle(textSize);
+                txt.Color = System.Drawing.Color.Black;
+                txt.Alignment = Alignment.MiddleCenter;
+                txt.FontName = "Arial Narrow";
+            }
+        }
+
+        /// <summary>
+        /// Reset zoom level
+        /// </summary>
+        /// <param name="Plot"></param>
         public static void ResetZoom(WpfPlot Plot)
         {
             Plot.Plot.AxisAuto(.2, .25); // zoom out to accommodate large bubbles
