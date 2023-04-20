@@ -242,7 +242,10 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
             //setup new rhino model instance
             Console.WriteLine("Setting up new Rhino model...");
 
+
             var newModel = new Rhino.FileIO.File3dm();
+            newModel.Settings.ModelUnitSystem = Rhino.UnitSystem.Meters;
+            newModel.Settings.ModelAbsoluteTolerance = 0.001;
 
             int layerFrameObj = newModel.AllLayers.AddLayer("frameObj", System.Drawing.Color.Black);
             int layerAreaObj = newModel.AllLayers.AddLayer("areaObj", System.Drawing.Color.Red);
