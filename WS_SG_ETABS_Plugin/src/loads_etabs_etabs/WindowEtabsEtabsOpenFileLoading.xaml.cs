@@ -30,7 +30,7 @@ namespace WS_SG_ETABS_Plugin.src.loads_etabs_etabs
 
         public WindowEtabsEtabsOpenFileLoading(cSapModel SapModel, cPluginCallback Plugin, string filePathFrom)
         {
-            InitializeComponent();
+            
 
             //Opening model
             (isError, SapModelFrom, myETABSObjectFrom) = src.HelperEtabs.OpenModel(filePathFrom);
@@ -65,10 +65,11 @@ namespace WS_SG_ETABS_Plugin.src.loads_etabs_etabs
             //Turn on all load
             src.HelperEtabs.OnAllLoadDatabase(SapModel);
 
+            InitializeComponent();
+
             //Get joint reaction database table
             List<string> tableKeys = new List<string> { "Point Object Connectivity", "Joint Reactions", "Group Assignments", "Group Definitions" };
             loadDatabaseTable(SapModelFrom, SapModel, Plugin, tableKeys, databaseTableList);
-
 
             ShowDialog();
         }

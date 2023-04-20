@@ -28,9 +28,9 @@ namespace WS_SG_ETABS_Plugin.src.loads_etabs_etabs
         src.HelperEtabs.DatabaseTable pointobjectconnectivityTable = new HelperEtabs.DatabaseTable();
         src.HelperEtabs.DatabaseTable jointreactionTable = new HelperEtabs.DatabaseTable();
         src.HelperEtabs.DatabaseTable groupassignmentTable = new HelperEtabs.DatabaseTable();
-        List<string> loadcasefromList;
-        List<string> jointsindefinedgroupList;
-        List<string> groupnameList;
+        List<string> loadcasefromList = new List<string>();
+        List<string> jointsindefinedgroupList = new List<string>();
+        List<string> groupnameList = new List<string>();
         bool isError = false;
         public WindowEtabsEtabsMain(cSapModel SapModel, cPluginCallback Plugin, List<src.HelperEtabs.DatabaseTable> DatabaseTableList)
         {
@@ -56,6 +56,19 @@ namespace WS_SG_ETABS_Plugin.src.loads_etabs_etabs
             {
                 return;
             }
+            else
+            {
+                foreach (Dictionary<string, string> load in jointreactionTable.TableInList)
+                {
+                    if (!loadcasefromList.Contains(load["OutputCase"]))
+                    {
+                        loadcasefromList.Add(load["OutputCase"]);
+                    }
+                }
+
+                comBoxLoadCase.ItemsSource = loadcasefromList;
+                comBoxLoadCase.SelectedIndex = 0;
+            }
 
             (isError, groupassignmentTable) = src.HelperEtabs.CallDatabaseTableByTableKey(databaseTableList, "Group Assignments");
             if (isError)
@@ -69,13 +82,35 @@ namespace WS_SG_ETABS_Plugin.src.loads_etabs_etabs
             }
             else
             {
+                //Filter group to only include points, to improve performance
+                (isError, groupassignmentTable) = src.HelperEtabs.FilterDatabaseTable(groupassignmentTable, "ObjectType", "Point");
+                if (isError) 
+                {
+                    return;
+                 }
+
                 (isError, groupdefinitionTable) = src.HelperEtabs.CallDatabaseTableByTableKey(databaseTableList, "Group Definitions");
                 if (isError)
                 {
                     return;
                 }
+                else
+                {
+                    foreach (Dictionary<string, string> group in groupdefinitionTable.TableInList)
+                    {
+                        if (group["Name"] != "All")
+                        {
+                            groupnameList.Add(group["Name"]);
+                        }
+                    }
+
+
+                    comBoxGroups.ItemsSource = groupnameList;
+                    comBoxGroups.SelectedIndex = 0;
+                }
             }
 
+            
 
 
 
@@ -113,6 +148,11 @@ namespace WS_SG_ETABS_Plugin.src.loads_etabs_etabs
 
         }
 
+        private void checkBoxCreateNew_Unchecked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
         private void listBoxCasePatternMatching_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
@@ -138,17 +178,22 @@ namespace WS_SG_ETABS_Plugin.src.loads_etabs_etabs
 
         }
 
-        private void listBoxChoosenWind_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void checkBoxUseAllJoints_Unchecked(object sender, RoutedEventArgs e)
         {
 
         }
 
-        private void Button_ADD_Wind_Click(object sender, RoutedEventArgs e)
+        private void listBoxChoosenGroup_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
         }
 
-        private void Button_REMOVE_Wind_Click(object sender, RoutedEventArgs e)
+        private void Button_ADD_Group_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Button_REMOVE_Group_Click(object sender, RoutedEventArgs e)
         {
 
         }
