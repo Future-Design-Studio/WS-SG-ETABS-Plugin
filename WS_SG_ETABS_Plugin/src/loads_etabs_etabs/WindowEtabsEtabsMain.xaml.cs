@@ -254,10 +254,21 @@ namespace WS_SG_ETABS_Plugin.src.loads_etabs_etabs
 
         private void buttonOk_Click(object sender, RoutedEventArgs e)
         {
-            IsEnabled = false;
-            //Call up copy property result window
-            src.loads_etabs_etabs.WindowEtabsEtabsResult windowEtabsEtabsResult = new src.loads_etabs_etabs.WindowEtabsEtabsResult(_SapModel, _Plugin, databaseTableList, selectedGroup, casePatternList, groupdefinitionTable, pointobjectconnectivityTable, jointreactionTable, groupassignmentTable);
-            IsEnabled = true;
+            if (selectedGroup.Count == 0)
+            {
+                MessageBox.Show("Please choose at least a group or click add to use all groups of joints to transfer reactions.");
+            }
+            else if (casePatternList.Count == 0)
+            {
+                MessageBox.Show("Please choose at least 1 load case to transfer reactions.");
+            }
+            else
+            {
+                IsEnabled = false;
+                //Call up copy property result window
+                src.loads_etabs_etabs.WindowEtabsEtabsResult windowEtabsEtabsResult = new src.loads_etabs_etabs.WindowEtabsEtabsResult(_SapModel, _Plugin, databaseTableList, selectedGroup, casePatternList, groupdefinitionTable, pointobjectconnectivityTable, jointreactionTable, groupassignmentTable);
+                IsEnabled = true;
+            }
         }
     }
 }
