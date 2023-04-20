@@ -256,7 +256,7 @@ namespace WS_SG_ETABS_Plugin.src.loads_etabs_etabs
         {
             IsEnabled = false;
             //Call up copy property result window
-            src.loads_etabs_etabs.WindowEtabsEtabsResult windowEtabsEtabsResult = new src.loads_etabs_etabs.WindowEtabsEtabsResult(_SapModel, _Plugin, databaseTableList, selectedGroup, casePatternList);
+            src.loads_etabs_etabs.WindowEtabsEtabsResult windowEtabsEtabsResult = new src.loads_etabs_etabs.WindowEtabsEtabsResult(_SapModel, _Plugin, databaseTableList, selectedGroup, casePatternList, groupdefinitionTable, pointobjectconnectivityTable, jointreactionTable, groupassignmentTable);
             IsEnabled = true;
         }
     }
