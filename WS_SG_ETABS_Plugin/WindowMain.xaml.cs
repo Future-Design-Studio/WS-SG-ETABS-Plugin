@@ -31,6 +31,7 @@ namespace WS_SG_ETABS_Plugin
         {
             _Plugin = Plugin;
             _SapModel = SapModel;
+            string strComputerName = Environment.MachineName.ToString();
 
             src.HelperEtabs.SetOutputUnitTo_kN_m_C(_SapModel);
 
@@ -58,7 +59,6 @@ namespace WS_SG_ETABS_Plugin
             }
             catch
             {
-                string strComputerName = Environment.MachineName.ToString();
                 MessageBox.Show("Illegal license. Your PC ID " + strComputerName + " has been reported to Ramboll IT as well as Singapore Police.");
             }
 
