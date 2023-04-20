@@ -58,7 +58,8 @@ namespace WS_SG_ETABS_Plugin
             }
             catch
             {
-                MessageBox.Show("Illegal license. You have been reported to Ramboll IT as well as Singapore Police.");
+                string strComputerName = Environment.MachineName.ToString();
+                MessageBox.Show("Illegal license. Your PC ID " + strComputerName + " has been reported to Ramboll IT as well as Singapore Police.");
             }
 
         }
