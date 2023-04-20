@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WS_SG_ETABS_Plugin.src.loads_etabs_etabs"
-             mc:Ignorable="d"  Height="150" Width="450" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" WindowStyle="None">
+             mc:Ignorable="d"  Height="172" Width="450" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" WindowStyle="None">
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"></ColumnDefinition>
@@ -13,7 +13,7 @@
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="0.8*"></RowDefinition>
             <RowDefinition Height="0.8*"></RowDefinition>
-            <RowDefinition Height="2*"></RowDefinition>
+            <RowDefinition Height="2.67*"></RowDefinition>
         </Grid.RowDefinitions>
 
         <Label Grid.Row="0" Grid.Column="0" Margin="0 -10 0 0" Content="Transfer Joint Reaction as Load Applied" FontSize="20"/>
@@ -27,11 +27,13 @@
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
 
             <CheckBox Grid.Row="0" Grid.Column="0" Name="checkBoxPointObjectConnectivity" Content="Point Object Connectivity" IsEnabled="False" IsChecked="False" ></CheckBox>
             <CheckBox Grid.Row="1" Grid.Column="0" Name="checkBoxJointReaction" Content="Joint Reactions" IsEnabled="False" IsChecked="False" ></CheckBox>
             <CheckBox Grid.Row="2" Grid.Column="0" Name="checkBoxGroupAssignments" Content="Group Assignments" IsEnabled="False" IsChecked="False" ></CheckBox>
+            <CheckBox Grid.Row="3" Grid.Column="0" Name="checkBoxGroupDefinition" Content="Group Definitions" IsEnabled="False" IsChecked="False" ></CheckBox>
 
 
         </Grid>

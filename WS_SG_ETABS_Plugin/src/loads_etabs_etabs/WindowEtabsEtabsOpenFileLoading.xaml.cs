@@ -115,6 +115,13 @@ namespace WS_SG_ETABS_Plugin.src.loads_etabs_etabs
                                 checkBoxGroupAssignments.IsChecked = true;
                             }));
                         }
+                        else if (tableKey == "Group Definitions")
+                        {
+                            Dispatcher.Invoke((Action)(() =>
+                            {
+                                checkBoxGroupDefinition.IsChecked = true;
+                            }));
+                        }
                         databaseTableList.Add(databaseTable);
                     }
                 }
