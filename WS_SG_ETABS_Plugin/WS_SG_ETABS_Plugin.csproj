@@ -124,6 +124,7 @@
       <DependentUpon>WindowEtabsToRhinoResult.xaml</DependentUpon>
     </Compile>
     <Compile Include="src\HelperExcel.cs" />
+    <Compile Include="src\HelperLicense.cs" />
     <Compile Include="src\HelperMethod.cs" />
     <Compile Include="src\HelperEtabs.cs" />
     <Compile Include="src\carbon\FunctionCarbon.cs" />
