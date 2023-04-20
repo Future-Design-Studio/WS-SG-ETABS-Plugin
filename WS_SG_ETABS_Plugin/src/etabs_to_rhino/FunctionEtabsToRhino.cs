@@ -178,7 +178,7 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
 
             for (var i = 0; i<NumberNames; i++)
             {
-                var frame = new FrameGeometry(MyName[i], PropName[i], StoryName[i], pt0[i], pt1[i], Angle[i], CardinalPoint[i]);
+                var frame = new FrameGeometry(MyName[i], PropName[i], StoryName[i], pt0[i], pt1[i], Angle[i], CardinalPoint[i], Sap);
                 allFrame.Add(frame);
             }
 
@@ -282,6 +282,7 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
                 att.SetUserString("StoryName", frame.StoryName);
                 att.SetUserString("Angle", frame.Angle.ToString());
                 att.SetUserString("Cardinal", frame.Cardinal);
+                att.SetUserString("DesignOrientation", frame.DesignOrientation);
 
                 att.SetUserString("t3", frameProp.T3.ToString());
                 att.SetUserString("t2", frameProp.T2.ToString());
@@ -290,6 +291,7 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
                 att.SetUserString("t2b", frameProp.T2b.ToString());
                 att.SetUserString("tfb", frameProp.Tfb.ToString());
                 att.SetUserString("PropType", frameProp.PropType);
+                
 
                 att.LayerIndex = layerFrameObj;
 
