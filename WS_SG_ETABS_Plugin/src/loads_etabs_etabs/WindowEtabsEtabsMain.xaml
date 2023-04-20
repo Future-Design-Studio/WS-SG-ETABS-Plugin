@@ -4,27 +4,115 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WS_SG_ETABS_Plugin.src.loads_etabs_etabs"
-             mc:Ignorable="d"  Height="420" Width="800" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+             mc:Ignorable="d"  Height="420" Width="1000" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+    
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="0.8*"></RowDefinition>
-            <RowDefinition Height="1.2*"></RowDefinition>
-            <RowDefinition Height="*"></RowDefinition>
-            <RowDefinition Height="2.8*"></RowDefinition>
+            <RowDefinition Height="6*"></RowDefinition>
             <RowDefinition Height="0.5*"></RowDefinition>
         </Grid.RowDefinitions>
 
-        <Label Grid.Row="0" Grid.Column="0" Content="Transfer Joint Reaction as Load Applied" FontSize="28"/>
+        <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Content="Transfer Joint Reaction as Load Applied" FontSize="28"/>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="0.4*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.2*"></RowDefinition>
+                <RowDefinition Height="0.2*"></RowDefinition>
+                <RowDefinition Height="0.2*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+
+
+            <Label Grid.Column="0" Grid.ColumnSpan="3" Content="Load Case and Load Pattern Matching" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="16"/>
+            
+            <Label Grid.Column="0" Grid.Row="1" Content="Load Case From" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <Label Grid.Column="1" Grid.Row="1" Content="Load Pattern To" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <Label Grid.Column="2" Grid.Row="1" Content="Create new Load Pattern?" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+
+            <ComboBox  Grid.Row="2" Grid.Column="0" x:Name="comBoxLoadCase" 
+                       VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+                       Text="0.5"></ComboBox>
+
+
+            <ComboBox  Grid.Row="2" Grid.Column="1" x:Name="comBoxLoadPattern" 
+                       VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+                       Text="0.5"></ComboBox>
+
+            <CheckBox x:Name="checkBoxCreateNew" Grid.Row="2" Grid.Column="2"
+                      Checked="checkBoxCreateNew_Checked" Unchecked="checkBoxCreateNew_Unchecked" 
+                      VerticalAlignment="Center" HorizontalAlignment="Center">
+            </CheckBox>
+
+            <ListBox x:Name="listBoxCasePatternMatching" Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="3" 
+                     d:ItemsSource="{d:SampleData ItemCount=5}" SelectionMode="Single"
+                     Margin="0 0 0 0">
+            </ListBox>
+
+            <Button Grid.Row="3" Grid.Column="3" Content="Add" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="0,-150,0,0" Click="Button_ADD_Case_Pattern_Click" ></Button>
+
+            <Button Grid.Row="3" Grid.Column="3" Content="Remove" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="0,-90,0,0" Click="Button_REMOVE_Case_Pattern_Click" ></Button>
+
+
+        </Grid>
 
         
+        <Grid Grid.Row="1" Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="0.267*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.2*"></RowDefinition>
+                <RowDefinition Height="0.2*"></RowDefinition>
+                <RowDefinition Height="0.2*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
 
-     
+
+            <Label Grid.Column="0" Grid.ColumnSpan="3" Content="Group of joints to transfer loads from" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="16"/>
+
+            <Label Grid.Column="0" Grid.Row="1" Content="Group Name" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <Label Grid.Column="1" Grid.Row="1" Content="Transfer all available joint reactions?" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+
+            <ComboBox  Grid.Row="2" Grid.Column="0" x:Name="comBoxGroups" 
+                       VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+                       Text="0.5"></ComboBox>
+
+            <CheckBox x:Name="checkBoxUseAllJoints" Grid.Row="2" Grid.Column="1"
+                      Checked="checkBoxUseAllJoints_Checked" Unchecked="checkBoxUseAllJoints_Unchecked" 
+                      VerticalAlignment="Center" HorizontalAlignment="Center">
+            </CheckBox>
+
+            <ListBox x:Name="listBoxChoosenWind" Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" 
+                     d:ItemsSource="{d:SampleData ItemCount=5}" SelectionMode="Single"
+                     Margin="0 0 0 0">
+            </ListBox>
+
+            <Button Grid.Row="3" Grid.Column="2" Content="Add" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="0,-150,0,0" Click="Button_ADD_Wind_Click" ></Button>
+
+            <Button Grid.Row="3" Grid.Column="2" Content="Remove" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="0,-90,0,0" Click="Button_REMOVE_Wind_Click" ></Button>
 
 
-        <Grid Grid.Row="4">
+        </Grid>
+
+
+
+
+
+
+        <Grid Grid.Row="3" Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>

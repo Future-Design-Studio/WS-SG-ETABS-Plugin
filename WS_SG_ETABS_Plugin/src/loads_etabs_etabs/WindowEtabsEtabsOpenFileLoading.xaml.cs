@@ -66,7 +66,7 @@ namespace WS_SG_ETABS_Plugin.src.loads_etabs_etabs
             src.HelperEtabs.OnAllLoadDatabase(SapModel);
 
             //Get joint reaction database table
-            List<string> tableKeys = new List<string> { "Point Object Connectivity", "Joint Reactions", "Group Assignments"};
+            List<string> tableKeys = new List<string> { "Point Object Connectivity", "Joint Reactions", "Group Assignments", "Group Definitions" };
             loadDatabaseTable(SapModelFrom, SapModel, Plugin, tableKeys, databaseTableList);
 
 
