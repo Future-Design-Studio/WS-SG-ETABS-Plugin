@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WS_SG_ETABS_Plugin.src.wind_coeff;
 
 namespace WS_SG_ETABS_Plugin.src.loads_etabs_etabs
 {
@@ -46,8 +47,8 @@ namespace WS_SG_ETABS_Plugin.src.loads_etabs_etabs
             comBoxLoadPattern.SelectedIndex = 0;
 
             (isError, pointobjectconnectivityTable) = src.HelperEtabs.CallDatabaseTableByTableKey(databaseTableList, "Point Object Connectivity");
-            if (isError) 
-            { 
+            if (isError)
+            {
                 return;
             }
 
@@ -84,10 +85,10 @@ namespace WS_SG_ETABS_Plugin.src.loads_etabs_etabs
             {
                 //Filter group to only include points, to improve performance
                 (isError, groupassignmentTable) = src.HelperEtabs.FilterDatabaseTable(groupassignmentTable, "ObjectType", "Point");
-                if (isError) 
+                if (isError)
                 {
                     return;
-                 }
+                }
 
                 (isError, groupdefinitionTable) = src.HelperEtabs.CallDatabaseTableByTableKey(databaseTableList, "Group Definitions");
                 if (isError)
@@ -110,13 +111,6 @@ namespace WS_SG_ETABS_Plugin.src.loads_etabs_etabs
                 }
             }
 
-            
-
-
-
-
-
-
             ShowDialog();
         }
 
@@ -125,13 +119,9 @@ namespace WS_SG_ETABS_Plugin.src.loads_etabs_etabs
             Close();
         }
 
-        private void buttonOk_Click(object sender, RoutedEventArgs e)
-        {
-            IsEnabled = false;
-            //Call up copy property result window
-            src.loads_etabs_etabs.WindowEtabsEtabsResult windowEtabsEtabsResult = new src.loads_etabs_etabs.WindowEtabsEtabsResult(_SapModel, _Plugin, databaseTableList);
-            IsEnabled = true;
-        }
+
+        List<string> selectedGroup = new List<string>();
+        List<ClassEtabsEtabs.CaseandPatternMatch> casePatternList = new List<ClassEtabsEtabs.CaseandPatternMatch>();
 
         private void comBoxLoadCase_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -145,12 +135,12 @@ namespace WS_SG_ETABS_Plugin.src.loads_etabs_etabs
 
         private void checkBoxCreateNew_Checked(object sender, RoutedEventArgs e)
         {
-
+            comBoxLoadPattern.IsEnabled = false;
         }
 
         private void checkBoxCreateNew_Unchecked(object sender, RoutedEventArgs e)
         {
-
+            comBoxLoadPattern.IsEnabled = true;
         }
 
         private void listBoxCasePatternMatching_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -160,12 +150,51 @@ namespace WS_SG_ETABS_Plugin.src.loads_etabs_etabs
 
         private void Button_ADD_Case_Pattern_Click(object sender, RoutedEventArgs e)
         {
+            if (checkBoxCreateNew.IsChecked == true)
+            {
+                ClassEtabsEtabs.CaseandPatternMatch eachCasePattern = new ClassEtabsEtabs.CaseandPatternMatch(comBoxLoadCase.Text, comBoxLoadCase.Text + "_transferred", true);
 
+                casePatternList.Add(eachCasePattern);
+                listBoxCasePatternMatching.Items.Add("Load from " + comBoxLoadCase.Text + " assigned to " + comBoxLoadCase.Text + "_transferred.");
+
+                loadcasefromList.RemoveAt(comBoxLoadCase.SelectedIndex);
+
+                comBoxLoadCase.ClearValue(ItemsControl.ItemsSourceProperty);
+                comBoxLoadCase.ItemsSource = loadcasefromList;
+                comBoxLoadCase.SelectedIndex = 0;
+            }
+            else
+            {
+                ClassEtabsEtabs.CaseandPatternMatch eachCasePattern = new ClassEtabsEtabs.CaseandPatternMatch(comBoxLoadCase.Text, comBoxLoadPattern.Text, false);
+
+                casePatternList.Add(eachCasePattern);
+                listBoxCasePatternMatching.Items.Add("Load from " + comBoxLoadCase.Text + " assigned to " + comBoxLoadPattern.Text + ".");
+
+                loadcasefromList.RemoveAt(comBoxLoadCase.SelectedIndex);
+
+                comBoxLoadCase.ClearValue(ItemsControl.ItemsSourceProperty);
+                comBoxLoadCase.ItemsSource = loadcasefromList;
+                comBoxLoadCase.SelectedIndex = 0;
+            }
+            
         }
 
         private void Button_REMOVE_Case_Pattern_Click(object sender, RoutedEventArgs e)
         {
+            if (listBoxCasePatternMatching.Items.Count != 0 && listBoxCasePatternMatching.SelectedIndex != -1)
+            {
+                int selectedIndex = listBoxCasePatternMatching.SelectedIndex;
 
+
+                loadcasefromList.Add(casePatternList[selectedIndex].LoadCaseFrom);
+
+                comBoxLoadCase.ClearValue(ItemsControl.ItemsSourceProperty);
+                comBoxLoadCase.ItemsSource = loadcasefromList;
+                comBoxLoadCase.SelectedIndex = 0;
+
+                listBoxCasePatternMatching.Items.RemoveAt(selectedIndex);
+                casePatternList.RemoveAt(selectedIndex);
+            }
         }
 
         private void comBoxGroups_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -175,12 +204,12 @@ namespace WS_SG_ETABS_Plugin.src.loads_etabs_etabs
 
         private void checkBoxUseAllJoints_Checked(object sender, RoutedEventArgs e)
         {
-
+            comBoxGroups.IsEnabled = false;
         }
 
         private void checkBoxUseAllJoints_Unchecked(object sender, RoutedEventArgs e)
         {
-
+            comBoxGroups.IsEnabled = true;
         }
 
         private void listBoxChoosenGroup_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -190,12 +219,46 @@ namespace WS_SG_ETABS_Plugin.src.loads_etabs_etabs
 
         private void Button_ADD_Group_Click(object sender, RoutedEventArgs e)
         {
+            if (checkBoxUseAllJoints.IsChecked == true)
+            {
+                listBoxChoosenGroup.Items.Clear();
+                selectedGroup.Clear();
 
+                listBoxChoosenGroup.Items.Add("Transfer all available joint reactions.");
+                selectedGroup.Add("All");
+
+                Button_ADD_Group.IsEnabled = false;
+            }
+            else
+            {
+                listBoxChoosenGroup.Items.Add(comBoxGroups.Text);
+                selectedGroup.Add(comBoxGroups.Text);
+            }
         }
 
         private void Button_REMOVE_Group_Click(object sender, RoutedEventArgs e)
         {
+            if (listBoxChoosenGroup.Items.Count != 0 && listBoxChoosenGroup.SelectedIndex != -1)
+            {
+                int selectedIndex = listBoxChoosenGroup.SelectedIndex;
 
+                listBoxChoosenGroup.Items.RemoveAt(selectedIndex);
+                selectedGroup.RemoveAt(selectedIndex);
+
+                Button_ADD_Group.IsEnabled = true;
+            }
+        }
+
+
+
+
+        private void buttonOk_Click(object sender, RoutedEventArgs e)
+        {
+            IsEnabled = false;
+            //Call up copy property result window
+            src.loads_etabs_etabs.WindowEtabsEtabsResult windowEtabsEtabsResult = new src.loads_etabs_etabs.WindowEtabsEtabsResult(_SapModel, _Plugin, databaseTableList, selectedGroup, casePatternList);
+            IsEnabled = true;
         }
     }
 }
+    

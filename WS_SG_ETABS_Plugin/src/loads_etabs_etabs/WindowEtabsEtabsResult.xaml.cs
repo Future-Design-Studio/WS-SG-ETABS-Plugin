@@ -21,11 +21,11 @@ namespace WS_SG_ETABS_Plugin.src.loads_etabs_etabs
     /// </summary>
     public partial class WindowEtabsEtabsResult : Window
     {
-        public WindowEtabsEtabsResult(cSapModel SapModel, cPluginCallback Plugin, List<src.HelperEtabs.DatabaseTable> databaseTableList)
+        public WindowEtabsEtabsResult(cSapModel SapModel, cPluginCallback Plugin, List<src.HelperEtabs.DatabaseTable> databaseTableList, List<string> selectedGroup, List<ClassEtabsEtabs.CaseandPatternMatch> casePatternList)
         {
 
             //Main logic
-            bool isError = src.loads_etabs_etabs.FunctionEtabsEtabsMain.TransferLoadFromEtabsToEtabs(SapModel, Plugin, databaseTableList);
+            bool isError = src.loads_etabs_etabs.FunctionEtabsEtabsMain.TransferLoadFromEtabsToEtabs(SapModel, Plugin, databaseTableList, selectedGroup, casePatternList);
 
             if (isError)
             {
