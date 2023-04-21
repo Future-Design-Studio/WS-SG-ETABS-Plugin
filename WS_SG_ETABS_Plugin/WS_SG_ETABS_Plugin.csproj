@@ -36,6 +36,7 @@
   <ItemGroup>
     <Reference Include="ETABSv1">
       <HintPath>..\..\..\..\..\..\..\..\..\Program Files\Computers and Structures\ETABS 20\ETABSv1.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="LiveCharts, Version=0.9.7.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL">
       <HintPath>..\packages\LiveCharts.0.9.7\lib\net45\LiveCharts.dll</HintPath>
@@ -123,6 +124,7 @@
       <DependentUpon>WindowEtabsToRhinoResult.xaml</DependentUpon>
     </Compile>
     <Compile Include="src\HelperExcel.cs" />
+    <Compile Include="src\HelperLicense.cs" />
     <Compile Include="src\HelperMethod.cs" />
     <Compile Include="src\HelperEtabs.cs" />
     <Compile Include="src\carbon\FunctionCarbon.cs" />
@@ -176,6 +178,14 @@
     </Compile>
     <Compile Include="src\rc_beam_schedule\WindowRCBSchedResult.xaml.cs">
       <DependentUpon>WindowRCBSchedResult.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\release_selected_node\ClassReleaseSelectedNode.cs" />
+    <Compile Include="src\release_selected_node\FunctionReleaseSelectedNode.cs" />
+    <Compile Include="src\release_selected_node\WindowReleaseSelectedNodeMain.xaml.cs">
+      <DependentUpon>WindowReleaseSelectedNodeMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\release_selected_node\WindowReleaseSelectedNodeResult.xaml.cs">
+      <DependentUpon>WindowReleaseSelectedNodeResult.xaml</DependentUpon>
     </Compile>
     <Compile Include="src\select_uniquename\FunctionSelUniqueName.cs" />
     <Compile Include="src\select_uniquename\WindowSelUniqueNameMain.xaml.cs">
@@ -283,6 +293,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="src\release_selected_node\WindowReleaseSelectedNodeMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\release_selected_node\WindowReleaseSelectedNodeResult.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="src\select_uniquename\WindowSelUniqueNameMain.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -327,6 +345,9 @@
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="src\rc_beam_schedule\FlowchartConvertAsToRebar.drawio" />
+    <Content Include="src\resources\Tools.pdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="src\steel_optimization\" />
@@ -370,6 +391,14 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="src\resources\RambollFDSLogo.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="src\resources\by_Future_Design_Studio.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="src\resources\by_Future_Design_Studio_no_powerapp.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>

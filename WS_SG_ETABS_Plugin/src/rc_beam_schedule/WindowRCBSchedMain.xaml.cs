@@ -34,6 +34,17 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
             _SapModel = SapModel;
             _Plugin = Plugin;
 
+            
+            //Check if model is locked
+            bool modelToLocked = _SapModel.GetModelIsLocked();
+
+            if (!modelToLocked)
+            {
+                MessageBox.Show("ETABS file is unlocked! Please run analysis first!");
+                return;
+            }
+            
+
             InitializeComponent();
 
             //Fill in default excel result name
@@ -175,8 +186,15 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
 
         private void buttonAdd_Click(object sender, RoutedEventArgs e)
         {
+            //If there is no group, selectedIndex = -1, then return
+            if (comBoxGroup.SelectedIndex == -1)
+            {
+                MessageBox.Show("Please select a group!");
+                return;
+            }
+
             //Check if group already chosen
-            foreach(Dictionary<string, string> eachGroup in groupAndBeamType)
+            foreach (Dictionary<string, string> eachGroup in groupAndBeamType)
             {
                 if (eachGroup["groupName"] == comBoxGroup.Text)
                 {

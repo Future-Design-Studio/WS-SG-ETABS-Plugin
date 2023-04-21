@@ -36,6 +36,9 @@ namespace WS_SG_ETABS_Plugin.src.copy_properties
             {
                 return;
             }
+
+            InitializeComponent();
+            ShowDialog();
         }
 
         private void buttonOk_Click(object sender, RoutedEventArgs e)

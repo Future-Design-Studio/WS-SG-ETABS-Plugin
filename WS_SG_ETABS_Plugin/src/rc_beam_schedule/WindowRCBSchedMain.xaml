@@ -218,11 +218,21 @@
             <TextBox x:Name="textBoxSpcClearSpc" Grid.Row="1" Grid.Column="1" Text="40" IsEnabled="False"></TextBox>
             <TextBox x:Name="textBoxSpcCToC" Grid.Row="2" Grid.Column="1" Text="80" IsEnabled="False"></TextBox>
         </Grid>
+        
+        <Grid Grid.Row="12">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
 
-        <StackPanel Grid.Row="12" Orientation="Horizontal" HorizontalAlignment="Right"  Margin="10 0 10 0">
-            <Button x:Name="buttonCancel" Content="Cancel" Width="100" Click="buttonCancel_Click"/>
-            <Button x:Name="buttonOk" Content="OK" Width="100" Click="buttonOk_Click"/>
-        </StackPanel>
+            <Image Margin ="0 7 -70 7" HorizontalAlignment="Right" Source="/WS_SG_ETABS_Plugin;component/src/resources/by_Future_Design_Studio_no_powerapp.PNG" />
+
+            <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button x:Name="buttonCancel" Content="Cancel" Width="100" Click="buttonCancel_Click"/>
+                <Button x:Name="buttonOk" Content="OK" Width="100" Click="buttonOk_Click"/>
+            </StackPanel>
+
+        </Grid>
 
     </Grid>
 </Window>

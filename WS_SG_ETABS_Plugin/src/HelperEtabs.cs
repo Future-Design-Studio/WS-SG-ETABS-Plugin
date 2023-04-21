@@ -1121,6 +1121,34 @@ namespace WS_SG_ETABS_Plugin.src
         }
 
         /// <summary>
+        /// Get list of unique name of joint element which is member of groupName
+        /// </summary>
+        /// <param name="Sap"></param>
+        /// <param name="groupName">Group to inspect</param>
+        /// <returns></returns>
+        public static List<string> GetGroupJointElement(cSapModel Sap, string groupName)
+        {
+            int NumberItems = 0;
+            int[] ObjectType = null;
+            string[] ObjectName = null;
+            List<string> jointList = new List<string>();
+
+            Ret = Sap.GroupDef.GetAssignments(groupName, ref NumberItems, ref ObjectType, ref ObjectName);
+
+            int index = 0;
+            foreach (int singleObjectType in ObjectType)
+            {
+                //ObjectType = 1 is point
+                if (singleObjectType == 1)
+                {
+                    jointList.Add(ObjectName[index]);
+                }
+                index++;
+            }
+            return jointList;
+        }
+
+        /// <summary>
         /// Get list of unique name of area element which is member of groupName
         /// </summary>
         /// <param name="Sap"></param>
@@ -1528,6 +1556,243 @@ namespace WS_SG_ETABS_Plugin.src
             return outputCasesList;
         }
 
+
+
+        /// <summary>
+        /// Add load pattern
+        /// </summary>
+        /// <param name="Sap"></param>
+        /// <returns></returns>
+        public static bool AddLoadPattern(cSapModel Sap, string name, double selfWeightMultipiler, string type, bool isExisting, bool addAnalysisCase)
+        {
+
+            string Name = name;
+            double SelfWTMultiplier = selfWeightMultipiler;
+            bool AddAnalysisCase = addAnalysisCase;
+
+            if (type == "Dead" && !isExisting)
+            {
+                eLoadPatternType MyType = eLoadPatternType.Dead;
+                Ret = Sap.LoadPatterns.Add(Name, MyType, SelfWTMultiplier, AddAnalysisCase);
+            }
+
+            else if (type == "SuperDead" && !isExisting)
+            {
+                eLoadPatternType MyType = eLoadPatternType.SuperDead;
+                Ret = Sap.LoadPatterns.Add(Name, MyType, SelfWTMultiplier, AddAnalysisCase);
+            }
+
+            else if (type == "Live" && !isExisting)
+            {
+                eLoadPatternType MyType = eLoadPatternType.Live;
+                Ret = Sap.LoadPatterns.Add(Name, MyType, SelfWTMultiplier, AddAnalysisCase);
+            }
+
+            else if (type == "Wind" && !isExisting)
+            {
+                eLoadPatternType MyType = eLoadPatternType.Wind;
+                Ret = Sap.LoadPatterns.Add(Name, MyType, SelfWTMultiplier, AddAnalysisCase);
+            }
+
+            else if (type == "Notional" && !isExisting)
+            {
+                eLoadPatternType MyType = eLoadPatternType.Notional;
+                Ret = Sap.LoadPatterns.Add(Name, MyType, SelfWTMultiplier, AddAnalysisCase);
+            }
+
+            else if (type == "Temperature" && !isExisting)
+            {
+                eLoadPatternType MyType = eLoadPatternType.Temperature;
+                Ret = Sap.LoadPatterns.Add(Name, MyType, SelfWTMultiplier, AddAnalysisCase);
+            }
+
+            else if (type == "Seismic" && !isExisting)
+            {
+                eLoadPatternType MyType = eLoadPatternType.Quake;
+                Ret = Sap.LoadPatterns.Add(Name, MyType, SelfWTMultiplier, AddAnalysisCase);
+            }
+
+            else if (type == "Accidental" && !isExisting)
+            {
+                eLoadPatternType MyType = eLoadPatternType.Other;
+                Ret = Sap.LoadPatterns.Add(Name, MyType, SelfWTMultiplier, AddAnalysisCase);
+            }
+
+            else if (type == "Uplift" && !isExisting)
+            {
+                eLoadPatternType MyType = eLoadPatternType.Other;
+                Ret = Sap.LoadPatterns.Add(Name, MyType, SelfWTMultiplier, AddAnalysisCase);
+            }
+
+            else if (type == "EHF" && !isExisting)
+            {
+                eLoadPatternType MyType = eLoadPatternType.Notional;
+                Ret = Sap.LoadPatterns.Add(Name, MyType, SelfWTMultiplier, AddAnalysisCase);
+            }
+
+            if (Ret == 0)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        public static bool UpdateLoadCase(cSapModel Sap, string name, int numberLoads, string[] Loadtype, string[] Loadname, double[] Scalefactor)
+        {
+            Ret = Sap.LoadCases.StaticLinear.SetLoads(name, numberLoads, ref Loadtype, ref Loadname, ref Scalefactor);
+
+            if (Ret == 0)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// Add new load case to etabs
+        /// </summary>
+        /// <param name="Sap"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static bool AddNewLinearLoadCase(cSapModel Sap, string name)
+        {
+            Ret = Sap.LoadCases.StaticLinear.SetCase(name);
+
+            if (Ret == 0)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// Add new load case to etabs
+        /// </summary>
+        /// <param name="Sap"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static bool AddNewRSALoadCase(cSapModel Sap, string name)
+        {
+            Ret = Sap.LoadCases.ResponseSpectrum.SetCase(name);
+
+            if (Ret == 0)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="Sap"></param>
+        /// <param name="groupName"></param>
+        /// <param name="loadPattern"></param>
+        /// <param name="direction"></param>
+        /// <param name="cP"></param>
+        /// <returns></returns>
+        public static bool AssignWindLoads(cSapModel Sap, string groupName, string loadPattern, int direction, double cP)
+        {
+            eItemType ItemType = eItemType.Group;
+
+            Ret = Sap.AreaObj.SetLoadWindPressure(groupName, loadPattern, direction, cP, ItemType);
+
+            if (Ret == 0)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// Adds a new linear additive load combination
+        /// </summary>
+        /// <param name="Sap"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static bool AddNewLoadCombiLinear(cSapModel Sap, string nameLoadCombi)
+        {
+
+            Ret = Sap.RespCombo.Add(nameLoadCombi, 0);
+
+            if (Ret == 0)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// Adds a new envelope load combination
+        /// </summary>
+        /// <param name="Sap"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static bool AddNewLoadCombiEnvelope(cSapModel Sap, string nameLoadCombi)
+        {
+
+            Ret = Sap.RespCombo.Add(nameLoadCombi, 1);
+
+            if (Ret == 0)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// Adds a new envelope load combination
+        /// </summary>
+        /// <param name="Sap"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static bool UpdateLoadCombi(cSapModel Sap, string nameLoadCombi, int caseType, string nameLoadCaseOrCombi, double scaleFactor)
+        {
+            eCNameType ItemType = new eCNameType();
+            if (caseType == 0)
+            {
+                ItemType = eCNameType.LoadCase;
+            }
+            else
+            {
+                ItemType = eCNameType.LoadCombo;
+            }
+
+            Ret = Sap.RespCombo.SetCaseList(nameLoadCombi, ref ItemType, nameLoadCaseOrCombi, scaleFactor);
+
+            if (Ret == 0)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+
+
+        }
+
         #endregion
 
         #region shell method
@@ -1689,98 +1954,125 @@ namespace WS_SG_ETABS_Plugin.src
             }
         }
 
-        #endregion
-
-        #region Add load pattern
-
         /// <summary>
-        /// Add load pattern
+        /// Assign frame releases using unique name of frames
         /// </summary>
         /// <param name="Sap"></param>
+        /// <param name="uniqueName"></param>
+        /// <param name="releaseType"></param>
+        /// <param name="endi"></param>
+        /// <param name="endj"></param>
         /// <returns></returns>
-        public static bool AddLoadPattern(cSapModel Sap, string name, double selfWeightMultipiler, string type, bool isExisting, bool addAnalysisCase)
+        public static bool AssignFrameReleases(cSapModel Sap, string uniqueName, List<string> releaseType, bool endi, bool endj)
         {
+            bool[] ii = new bool[6];
+            bool[] jj = new bool[6];
+            double[] startValue = new double[6];
+            double[] endValue = new double[6];
 
-            string Name = name;
-            double SelfWTMultiplier = selfWeightMultipiler;
-            bool AddAnalysisCase = addAnalysisCase;
-
-            if (type == "Dead" && !isExisting)
+            if (releaseType.Contains("Axial"))
             {
-                eLoadPatternType MyType = eLoadPatternType.Dead;
-                Ret = Sap.LoadPatterns.Add(Name, MyType, SelfWTMultiplier, AddAnalysisCase);
+                if (endi)
+                {
+                    ii[0] = true;
+                }
+                if (endj)
+                {
+                    jj[0] = true;
+                }
+                if (endi && endj)
+                {
+                    MessageBox.Show("Error, Axial cannot be released at both ends.");
+                    return true;
+                }
             }
 
-            else if (type == "SuperDead" && !isExisting)
+            if (releaseType.Contains("ShearMajor"))
             {
-                eLoadPatternType MyType = eLoadPatternType.SuperDead;
-                Ret = Sap.LoadPatterns.Add(Name, MyType, SelfWTMultiplier, AddAnalysisCase);
+                if (endi)
+                {
+                    ii[1] = true;
+                }
+                if (endj)
+                {
+                    jj[1] = true;
+                }
+                if (endi && endj)
+                {
+                    MessageBox.Show("Error, Shear Major cannot be released at both ends.");
+                    return true;
+                }
             }
 
-            else if (type == "Live" && !isExisting)
+            if (releaseType.Contains("ShearMinor"))
             {
-                eLoadPatternType MyType = eLoadPatternType.Live;
-                Ret = Sap.LoadPatterns.Add(Name, MyType, SelfWTMultiplier, AddAnalysisCase);
+                if (endi)
+                {
+                    ii[2] = true;
+                }
+                if (endj)
+                {
+                    jj[2] = true;
+                }
+                if (endi && endj)
+                {
+                    MessageBox.Show("Error, Shear Minor cannot be released at both ends.");
+                    return true;
+                }
             }
 
-            else if (type == "Wind" && !isExisting)
+            if (releaseType.Contains("Torsion"))
             {
-                eLoadPatternType MyType = eLoadPatternType.Wind;
-                Ret = Sap.LoadPatterns.Add(Name, MyType, SelfWTMultiplier, AddAnalysisCase);
+                if (endi)
+                {
+                    ii[3] = true;
+                }
+                if (endj)
+                {
+                    jj[3] = true;
+                }
+                if (endi && endj)
+                {
+                    MessageBox.Show("Error, Torsion cannot be released at both ends.");
+                    return true;
+                }
             }
 
-            else if (type == "Notional" && !isExisting)
+            if (releaseType.Contains("MomentMinor"))
             {
-                eLoadPatternType MyType = eLoadPatternType.Notional;
-                Ret = Sap.LoadPatterns.Add(Name, MyType, SelfWTMultiplier, AddAnalysisCase);
+                if (endi)
+                {
+                    ii[4] = true;
+                }
+                if (endj)
+                {
+                    jj[4] = true;
+                }
+                if (endi && endj && releaseType.Contains("ShearMinor"))
+                {
+                    MessageBox.Show("Error, Moment Minor cannot be released at both ends if Shear Minor is released at either end.");
+                    return true;
+                }
             }
 
-            else if (type == "Temperature" && !isExisting)
+            if (releaseType.Contains("MomentMajor"))
             {
-                eLoadPatternType MyType = eLoadPatternType.Temperature;
-                Ret = Sap.LoadPatterns.Add(Name, MyType, SelfWTMultiplier, AddAnalysisCase);
+                if (endi)
+                {
+                    ii[5] = true;
+                }
+                if (endj)
+                {
+                    jj[5] = true;
+                }
+                if (endi && endj && releaseType.Contains("ShearMajor"))
+                {
+                    MessageBox.Show("Error, Moment Major cannot be released at both ends if Shear Major is released at either end.");
+                    return true;
+                }
             }
 
-            else if (type == "Seismic" && !isExisting)
-            {
-                eLoadPatternType MyType = eLoadPatternType.Quake;
-                Ret = Sap.LoadPatterns.Add(Name, MyType, SelfWTMultiplier, AddAnalysisCase);
-            }
-
-            else if (type == "Accidental" && !isExisting)
-            {
-                eLoadPatternType MyType = eLoadPatternType.Other;
-                Ret = Sap.LoadPatterns.Add(Name, MyType, SelfWTMultiplier, AddAnalysisCase);
-            }
-
-            else if (type == "Uplift" && !isExisting)
-            {
-                eLoadPatternType MyType = eLoadPatternType.Other;
-                Ret = Sap.LoadPatterns.Add(Name, MyType, SelfWTMultiplier, AddAnalysisCase);
-            }
-
-            else if (type == "EHF" && !isExisting)
-            {
-                eLoadPatternType MyType = eLoadPatternType.Notional;
-                Ret = Sap.LoadPatterns.Add(Name, MyType, SelfWTMultiplier, AddAnalysisCase);
-            }
-
-            if (Ret ==0)
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
-        }
-             
-        #endregion
-
-        #region Update load case
-        public static bool UpdateLoadCase(cSapModel Sap, string name, int numberLoads, string[] Loadtype, string[] Loadname, double[] Scalefactor)
-        {
-            Ret = Sap.LoadCases.StaticLinear.SetLoads(name, numberLoads, ref Loadtype, ref Loadname, ref Scalefactor);
+            Ret = Sap.FrameObj.SetReleases(uniqueName, ref ii, ref jj, ref startValue, ref endValue);
 
             if (Ret == 0)
             {
@@ -1788,169 +2080,36 @@ namespace WS_SG_ETABS_Plugin.src
             }
             else
             {
+                MessageBox.Show("Unknown error, please let Mani know for debugging.");
                 return true;
             }
         }
 
-        #endregion
-
-        #region Add new load case linear
         /// <summary>
-        /// Add new load case to etabs
+        /// Retrieve the unique names of end I and end J of frame
         /// </summary>
         /// <param name="Sap"></param>
-        /// <param name="name"></param>
+        /// <param name="sectionPropName"></param>
         /// <returns></returns>
-        public static bool AddNewLinearLoadCase(cSapModel Sap, string name)
+        public static (string, string, bool) GetEndPointsFrame(cSapModel Sap, string sectionPropName)
         {
-            Ret = Sap.LoadCases.StaticLinear.SetCase(name);
+            string pointI = "";
+            string pointJ = "";
+
+            Ret = Sap.FrameObj.GetPoints(sectionPropName, ref pointI, ref pointJ);
 
             if (Ret == 0)
             {
-                return false;
+                return (pointI, pointJ, false);
             }
             else
             {
-                return true;
+                return ("", "", true);
             }
         }
 
         #endregion
 
-        #region Add new load case ResponseSpectrum
-        /// <summary>
-        /// Add new load case to etabs
-        /// </summary>
-        /// <param name="Sap"></param>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public static bool AddNewRSALoadCase(cSapModel Sap, string name)
-        {
-            Ret = Sap.LoadCases.ResponseSpectrum.SetCase(name);
-
-            if (Ret == 0)
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
-        }
-
-        #endregion
-
-        #region Assign wind pressure coefficients
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="Sap"></param>
-        /// <param name="groupName"></param>
-        /// <param name="loadPattern"></param>
-        /// <param name="direction"></param>
-        /// <param name="cP"></param>
-        /// <returns></returns>
-        public static bool AssignWindLoads(cSapModel Sap, string groupName, string loadPattern, int direction, double cP)
-        {
-            eItemType ItemType = eItemType.Group;
-
-            Ret = Sap.AreaObj.SetLoadWindPressure(groupName, loadPattern, direction, cP, ItemType);
-
-            if (Ret == 0)
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
-        }
-
-        #endregion
-
-
-        #region Add new load combination Linear
-        /// <summary>
-        /// Adds a new linear additive load combination
-        /// </summary>
-        /// <param name="Sap"></param>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public static bool AddNewLoadCombiLinear(cSapModel Sap, string nameLoadCombi)
-        {
-
-            Ret = Sap.RespCombo.Add(nameLoadCombi, 0);
-
-            if (Ret == 0)
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
-        }
-
-        #endregion
-
-        #region Add new load combination envelope
-        /// <summary>
-        /// Adds a new envelope load combination
-        /// </summary>
-        /// <param name="Sap"></param>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public static bool AddNewLoadCombiEnvelope(cSapModel Sap, string nameLoadCombi)
-        {
-
-            Ret = Sap.RespCombo.Add(nameLoadCombi, 1);
-
-            if (Ret == 0)
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
-        }
-
-        #endregion
-
-        #region Update load combination
-        /// <summary>
-        /// Adds a new envelope load combination
-        /// </summary>
-        /// <param name="Sap"></param>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public static bool UpdateLoadCombi(cSapModel Sap, string nameLoadCombi, int caseType, string nameLoadCaseOrCombi, double scaleFactor)
-        {
-            eCNameType ItemType = new eCNameType();
-            if (caseType ==0)
-            {
-                ItemType = eCNameType.LoadCase;
-            }
-            else
-            {
-                ItemType = eCNameType.LoadCombo;
-            }
-
-            Ret = Sap.RespCombo.SetCaseList(nameLoadCombi, ref ItemType, nameLoadCaseOrCombi, scaleFactor);
-
-            if (Ret == 0)
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
-
-
-        }
-
-        #endregion
 
         #region File method
 

@@ -24,6 +24,8 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
         cSapModel _SapModel;
         cPluginCallback _Plugin;
 
+
+
         #region Data source quasi permenant stuff
 
         List<string> quasiPermanentCategoryList = new List<string>()
@@ -78,9 +80,19 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
         #region Data source seismic
 
-        List<string> seismicList = new List<string>()
+        List<string> rsaList = new List<string>()
         {
-            "RSA", "EQx", "EQy"
+            "RSA_X", "RSA_Y"
+        };
+
+        List<string> eqaList = new List<string>()
+        {
+            "EQ_X", "EQ_Y"
+        };
+
+        List<string> seismictypeList = new List<string>()
+        {
+            "Equivalent Seismic Load", "Response Spectrum"
         };
 
         #endregion
@@ -122,7 +134,16 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
         {
             _SapModel = SapModel;
             _Plugin = Plugin;
-            
+
+            //Check if model is locked
+            bool modelToLocked = _SapModel.GetModelIsLocked();
+
+            if (modelToLocked)
+            {
+                MessageBox.Show("ETABS file is locked! Please unlock the model!");
+                return;
+            }
+
             InitializeComponent();
 
             checkBoxExistingDL.IsChecked = true;
@@ -153,6 +174,9 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
             comBoxLL.ItemsSource = quasiPermanentCategoryList;
             comBoxLL.SelectedIndex = 0;
+
+            comBoxSeismicType.ItemsSource = seismictypeList;
+            comBoxSeismicType.SelectedIndex = 0;
 
             ShowDialog();
         }
@@ -712,24 +736,41 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             
         }
 
+        private void comBoxSeismicType_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
         private void Button_ADD_SEISMIC_Click(object sender, RoutedEventArgs e)
         {
-            
-            string selectedString = seismicList[0];
-            listBoxChoosenSEISMIC.Items.Add(selectedString);
-            string selectedString1 = seismicList[1];
-            listBoxChoosenSEISMIC.Items.Add(selectedString1);
-            string selectedString2 = seismicList[2];
-            listBoxChoosenSEISMIC.Items.Add(selectedString2);
+            if (comBoxSeismicType.SelectedIndex == 0)
+            {
+                string selectedString = eqaList[0];
+                listBoxChoosenSEISMIC.Items.Add(selectedString);
+                string selectedString1 = eqaList[1];
+                listBoxChoosenSEISMIC.Items.Add(selectedString1);
 
-            ClassLoadCombo.SeismicLoad eachSeismicLoad = new ClassLoadCombo.SeismicLoad(selectedString, false);
-            SeismicLoadList.Add(eachSeismicLoad);
-            ClassLoadCombo.SeismicLoad eachSeismicLoad1 = new ClassLoadCombo.SeismicLoad(selectedString1, false);
-            SeismicLoadList.Add(eachSeismicLoad1);
-            ClassLoadCombo.SeismicLoad eachSeismicLoad2 = new ClassLoadCombo.SeismicLoad(selectedString2, false);
-            SeismicLoadList.Add(eachSeismicLoad2);
+                ClassLoadCombo.SeismicLoad eachSeismicLoad = new ClassLoadCombo.SeismicLoad(selectedString, false);
+                SeismicLoadList.Add(eachSeismicLoad);
+                ClassLoadCombo.SeismicLoad eachSeismicLoad1 = new ClassLoadCombo.SeismicLoad(selectedString1, false);
+                SeismicLoadList.Add(eachSeismicLoad1);
 
-            Button_ADD_SEISMIC.IsEnabled = false;
+                Button_ADD_SEISMIC.IsEnabled = false;
+            }
+
+            else if (comBoxSeismicType.SelectedIndex == 1)
+            {
+                string selectedString = rsaList[0];
+                listBoxChoosenSEISMIC.Items.Add(selectedString);
+                string selectedString1 = rsaList[1];
+                listBoxChoosenSEISMIC.Items.Add(selectedString1);
+
+                ClassLoadCombo.SeismicLoad eachSeismicLoad = new ClassLoadCombo.SeismicLoad(selectedString, false);
+                SeismicLoadList.Add(eachSeismicLoad);
+                ClassLoadCombo.SeismicLoad eachSeismicLoad1 = new ClassLoadCombo.SeismicLoad(selectedString1, false);
+                SeismicLoadList.Add(eachSeismicLoad1);
+
+                Button_ADD_SEISMIC.IsEnabled = false;
+            }
 
 
         }
@@ -936,10 +977,14 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 upliftYesOrNo = false;
             }
 
+            Close();
+
             //Call up load combo choosing window
             src.load_combo_EN.WindowChooseLoadCombiToGenerate windowChooseLoadCombiToGenerate = new src.load_combo_EN.WindowChooseLoadCombiToGenerate(_SapModel, _Plugin, accidentalYesOrNo, seismicYesOrNo, upliftYesOrNo, deadLoadList, SDLoadList, LiveLoadList, WindLoadList, NotionalDXLoadList, NotionalDYLoadList, NotionalSDXLoadList, NotionalSDYLoadList, TemperatureLoadList, SeismicLoadList, AccidentalLoadList, UpliftLoadList, EHFDLXLoadList, EHFDLYLoadList, EHFSDLXLoadList, EHFSDLYLoadList, EHFLLXLoadList, EHFLLYLoadList, notionaldirectionFactor, WindVertLoadList, ALneedtimes2);
-            IsEnabled = true;
+            
         }
+
+        
     }
 }
     

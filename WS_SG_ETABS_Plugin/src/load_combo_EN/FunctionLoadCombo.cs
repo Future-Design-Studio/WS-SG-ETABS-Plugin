@@ -68,7 +68,7 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
 
             bool isError = false;
-            bool addAnalysisCase = false;
+            bool addAnalysisCase = true;
 
             if (deadLoadList.Count == 0 || SDLoadList.Count == 0 || LiveLoadList.Count == 0)
             {
@@ -240,12 +240,14 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             foreach (var windLoad in WindLoadList)
             {
                 isError = src.HelperEtabs.AddLoadPattern(SapModel, windLoad.Name, 0, "Wind", false, addAnalysisCase);
+                /*
                 if (isError)
                 {
                     return true;
                 }
+                */
             }
-            
+
 
             foreach (var windLoad in WindLoadList)
             {
@@ -256,12 +258,14 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
 
                 isError = src.HelperEtabs.AddNewLinearLoadCase(SapModel, WindLoadCaseName);
+                /*
                 if (isError)
                 {
                     return true;
                 }
+                */
             }
-            
+
             LoadType = new string[50];
             LoadName = new string[50];
             SF = new double[50];
@@ -273,10 +277,12 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 LoadName[i] = windLoad.Name;
                 SF[i] = 1.00;
                 isError = src.HelperEtabs.UpdateLoadCase(SapModel, "P_" + windLoad.Name, NumberLoads, LoadType, LoadName, SF);
+                /*
                 if (isError)
                 {
                     return true;
                 }
+                */
             }
 
 
@@ -288,10 +294,12 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             foreach (var windvertLoad in WindVertLoadList)
             {
                 isError = src.HelperEtabs.AddLoadPattern(SapModel, windvertLoad.Name, 0, "Wind", false, addAnalysisCase);
+                /*
                 if (isError)
                 {
                     return true;
                 }
+                */
             }
 
 
@@ -304,10 +312,12 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
 
 
                 isError = src.HelperEtabs.AddNewLinearLoadCase(SapModel, WindLoadCaseName);
+                /*
                 if (isError)
                 {
                     return true;
                 }
+                */
             }
 
             LoadType = new string[50];
@@ -321,10 +331,12 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 LoadName[i] = windvertLoad.Name;
                 SF[i] = 1.00;
                 isError = src.HelperEtabs.UpdateLoadCase(SapModel, "P_" + windvertLoad.Name, NumberLoads, LoadType, LoadName, SF);
+                /*
                 if (isError)
                 {
                     return true;
                 }
+                */
             }
 
 
@@ -336,42 +348,50 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             foreach (var notionalDLoad in NotionalDXLoadList)
             {
                 isError = src.HelperEtabs.AddLoadPattern(SapModel, notionalDLoad.Name, 0, "Notional", false, addAnalysisCase);
+                /*
                 if (isError)
                 {
                     return true;
                 }
+                */
             }
-            
+
 
             foreach (var notionalDLoad in NotionalDYLoadList)
             {
                 isError = src.HelperEtabs.AddLoadPattern(SapModel, notionalDLoad.Name, 0, "Notional", false, addAnalysisCase);
+                /*
                 if (isError)
                 {
                     return true;
                 }
+                */
             }
-            
+
 
             foreach (var notionalSDLoad in NotionalSDXLoadList)
             {
                 isError = src.HelperEtabs.AddLoadPattern(SapModel, notionalSDLoad.Name, 0, "Notional", false, addAnalysisCase);
+                /*
                 if (isError)
                 {
                     return true;
                 }
+                */
             }
-            
+
 
             foreach (var notionalSDLoad in NotionalSDYLoadList)
             {
                 isError = src.HelperEtabs.AddLoadPattern(SapModel, notionalSDLoad.Name, 0, "Notional", false, addAnalysisCase);
+                /*
                 if (isError)
                 {
                     return true;
                 }
+                */
             }
-            
+
 
             if (NotionalDirectionFactor == 4)
             { 
@@ -383,10 +403,12 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     {
                         string notionalLoadCaseName = notionalloadcaseName[i];
                         isError = src.HelperEtabs.AddNewLinearLoadCase(SapModel, notionalLoadCaseName);
+                        /*
                         if (isError)
                         {
                             return true;
                         }
+                        */
                         i++;
                     }
                 
@@ -417,10 +439,12 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 if (i>0)
                 {
                     isError = src.HelperEtabs.UpdateLoadCase(SapModel, "P_N0", NumberLoads, LoadType, LoadName, SF);
+                    /*
                     if (isError)
                     {
                         return true;
                     }
+                    */
                 }
             
 
@@ -448,12 +472,14 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 if (i > 0)
                 {
                     isError = src.HelperEtabs.UpdateLoadCase(SapModel, "P_N90", NumberLoads, LoadType, LoadName, SF);
+                    /*
                     if (isError)
                     {
                         return true;
                     }
+                    */
                 }
-            
+
 
                 LoadType = new string[50];
                 LoadName = new string[50];
@@ -495,12 +521,14 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 if (i > 0)
                 {
                     isError = src.HelperEtabs.UpdateLoadCase(SapModel, "P_N45", NumberLoads, LoadType, LoadName, SF);
+                    /*
                     if (isError)
                     {
                         return true;
                     }
+                    */
                 }
-            
+
 
                 LoadType = new string[50];
                 LoadName = new string[50];
@@ -542,10 +570,12 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 if (i > 0)
                 {
                     isError = src.HelperEtabs.UpdateLoadCase(SapModel, "P_N135", NumberLoads, LoadType, LoadName, SF);
+                    /*
                     if (isError)
                     {
                         return true;
                     }
+                    */
                 }
             }
             else
@@ -558,10 +588,12 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                     {
                         string notionalLoadCaseName = notionalloadcaseName[i];
                         isError = src.HelperEtabs.AddNewLinearLoadCase(SapModel, notionalLoadCaseName);
+                        /*
                         if (isError)
                         {
                             return true;
                         }
+                        */
                         i++;
                     }
 
@@ -592,10 +624,12 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 if (i > 0)
                 {
                     isError = src.HelperEtabs.UpdateLoadCase(SapModel, "P_NX", NumberLoads, LoadType, LoadName, SF);
+                    /*
                     if (isError)
                     {
                         return true;
                     }
+                    */
                 }
 
 
@@ -623,10 +657,12 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 if (i > 0)
                 {
                     isError = src.HelperEtabs.UpdateLoadCase(SapModel, "P_NY", NumberLoads, LoadType, LoadName, SF);
+                    /*
                     if (isError)
                     {
                         return true;
                     }
+                    */
                 }
             }
 
@@ -637,10 +673,12 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             foreach (var temperatureLoad in TemperatureLoadList)
             {
                 isError = src.HelperEtabs.AddLoadPattern(SapModel, temperatureLoad.Name, 0, "Temperature", temperatureLoad.IsExisting, addAnalysisCase);
+                /*
                 if (isError)
                 {
                     return true;
                 }
+                */
             }
             
 
@@ -651,12 +689,14 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 tempcaselist.Add(TemperatureLoadCaseName);
 
                 isError = src.HelperEtabs.AddNewLinearLoadCase(SapModel, TemperatureLoadCaseName);
+                /*
                 if (isError)
                 {
                     return true;
                 }
+                */
             }
-            
+
 
             LoadType = new string[50];
             LoadName = new string[50];
@@ -669,58 +709,84 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 LoadName[i] = temperatureLoad.Name;
                 SF[i] = 1.00;
                 isError = src.HelperEtabs.UpdateLoadCase(SapModel, "P_Temp (" + temperatureLoad.Name + ")", NumberLoads, LoadType, LoadName, SF);
+                /*
                 if (isError)
                 {
                     return true;
                 }
+                */
             }
 
             #endregion
 
             #region Seismic load pattern and case
 
-            /*
-            foreach (var seismicLoad in SeismicLoadList)
+            if (SeismicLoadList.Count == 3)
             {
-                isError = src.HelperEtabs.AddLoadPattern(SapModel, seismicLoad.Name, 0, "Seismic", seismicLoad.IsExisting, addAnalysisCase);
-                if (isError)
+                foreach (var seismicLoad in SeismicLoadList)
                 {
-                    return true;
-                }
-            }
-            */
+                    string SeismicLoadCaseName = "P_Seismic (" + seismicLoad.Name + ")";
 
-            foreach (var seismicLoad in SeismicLoadList)
-            {
-                string SeismicLoadCaseName = "P_Seismic (" + seismicLoad.Name + ")";
+                    seismiccaselist.Add(SeismicLoadCaseName);
 
-                seismiccaselist.Add(SeismicLoadCaseName);
-
-                isError = src.HelperEtabs.AddNewRSALoadCase(SapModel, SeismicLoadCaseName);
-                if (isError)
-                {
-                    return true;
+                    isError = src.HelperEtabs.AddNewRSALoadCase(SapModel, SeismicLoadCaseName);
+                    /*
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    */
                 }
             }
 
-            /*
-            LoadType = new string[50];
-            LoadName = new string[50];
-            SF = new double[50];
-            i = 0;
-            NumberLoads = 1;
-            foreach (var seismicLoad in SeismicLoadList)
+            else if (SeismicLoadList.Count == 2)
             {
-                LoadType[i] = "Load";
-                LoadName[i] = seismicLoad.Name;
-                SF[i] = 1.00;
-                isError = src.HelperEtabs.UpdateLoadCase(SapModel, "P_Seismic (" + seismicLoad.Name + ")", NumberLoads, LoadType, LoadName, SF);
-                if (isError)
+                foreach (var seismicLoad in SeismicLoadList)
                 {
-                    return true;
+                    isError = src.HelperEtabs.AddLoadPattern(SapModel, seismicLoad.Name, 0, "Seismic", seismicLoad.IsExisting, addAnalysisCase);
+                    /*
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    */
+                }
+
+                foreach (var seismicLoad in SeismicLoadList)
+                {
+                    string SeismicLoadCaseName = "P_Seismic (" + seismicLoad.Name + ")";
+
+                    seismiccaselist.Add(SeismicLoadCaseName);
+
+                    isError = src.HelperEtabs.AddNewLinearLoadCase(SapModel, SeismicLoadCaseName);
+                    /*
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    */
+                }
+
+                LoadType = new string[50];
+                LoadName = new string[50];
+                SF = new double[50];
+                i = 0;
+                NumberLoads = 1;
+                foreach (var seismicLoad in SeismicLoadList)
+                {
+                    LoadType[i] = "Load";
+                    LoadName[i] = seismicLoad.Name;
+                    SF[i] = 1.00;
+                    isError = src.HelperEtabs.UpdateLoadCase(SapModel, "P_Seismic (" + seismicLoad.Name + ")", NumberLoads, LoadType, LoadName, SF);
+                    /*
+                    if (isError)
+                    {
+                        return true;
+                    }
+                    */
                 }
             }
-            */
+
             #endregion
 
             #region Accidental load pattern and case
@@ -821,10 +887,12 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             foreach (var ehfLoad in EHFDLXLoadList)
             {
                 isError = src.HelperEtabs.AddLoadPattern(SapModel, ehfLoad.Name, 0, "EHF", false, addAnalysisCase);
+                /*
                 if (isError)
                 {
                     return true;
                 }
+                */
             }
 
             i = 0;
@@ -837,10 +905,12 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             if (i > 0)
             {
                 isError = src.HelperEtabs.AddNewLinearLoadCase(SapModel, EHFXDLCaseName);
+                /*
                 if (isError)
                 {
                     return true;
                 }
+                */
             }
 
 
@@ -860,10 +930,12 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             if (i > 0)
             {
                 isError = src.HelperEtabs.UpdateLoadCase(SapModel, EHFXDLCaseName, NumberLoads, LoadType, LoadName, SF);
+                /*
                 if (isError)
                 {
                     return true;
                 }
+                */
             }
 
 
@@ -875,10 +947,12 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             foreach (var ehfLoad in EHFDLYLoadList)
             {
                 isError = src.HelperEtabs.AddLoadPattern(SapModel, ehfLoad.Name, 0, "EHF", false, addAnalysisCase);
+                /*
                 if (isError)
                 {
                     return true;
                 }
+                */
             }
 
             i = 0;
@@ -891,10 +965,12 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             if (i > 0)
             {
                 isError = src.HelperEtabs.AddNewLinearLoadCase(SapModel, EHFYDLCaseName);
+                /*
                 if (isError)
                 {
                     return true;
                 }
+                */
             }
 
 
@@ -914,10 +990,12 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             if (i > 0)
             {
                 isError = src.HelperEtabs.UpdateLoadCase(SapModel, EHFYDLCaseName, NumberLoads, LoadType, LoadName, SF);
+                /*
                 if (isError)
                 {
                     return true;
                 }
+                */
             }
 
 
@@ -929,10 +1007,12 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             foreach (var ehfLoad in EHFSDLXLoadList)
             {
                 isError = src.HelperEtabs.AddLoadPattern(SapModel, ehfLoad.Name, 0, "EHF", false, addAnalysisCase);
+                /*
                 if (isError)
                 {
                     return true;
                 }
+                */
             }
 
             i = 0;
@@ -945,10 +1025,12 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             if (i > 0)
             {
                 isError = src.HelperEtabs.AddNewLinearLoadCase(SapModel, EHFXSDLCaseName);
+                /*
                 if (isError)
                 {
                     return true;
                 }
+                */
             }
 
 
@@ -968,10 +1050,12 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             if (i > 0)
             {
                 isError = src.HelperEtabs.UpdateLoadCase(SapModel, EHFXSDLCaseName, NumberLoads, LoadType, LoadName, SF);
+                /*
                 if (isError)
                 {
                     return true;
                 }
+                */
             }
 
 
@@ -983,10 +1067,12 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             foreach (var ehfLoad in EHFSDLYLoadList)
             {
                 isError = src.HelperEtabs.AddLoadPattern(SapModel, ehfLoad.Name, 0, "EHF", false, addAnalysisCase);
+                /*
                 if (isError)
                 {
                     return true;
                 }
+                */
             }
 
             i = 0;
@@ -999,10 +1085,12 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             if (i > 0)
             {
                 isError = src.HelperEtabs.AddNewLinearLoadCase(SapModel, EHFYSDLCaseName);
+                /*
                 if (isError)
                 {
                     return true;
                 }
+                */
             }
 
 
@@ -1022,10 +1110,12 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             if (i > 0)
             {
                 isError = src.HelperEtabs.UpdateLoadCase(SapModel, EHFYSDLCaseName, NumberLoads, LoadType, LoadName, SF);
+                /*
                 if (isError)
                 {
                     return true;
                 }
+                */
             }
 
 
@@ -1037,10 +1127,12 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             foreach (var ehfLoad in EHFLLXLoadList)
             {
                 isError = src.HelperEtabs.AddLoadPattern(SapModel, ehfLoad.Name, 0, "EHF", false, addAnalysisCase);
+                /*
                 if (isError)
                 {
                     return true;
                 }
+                */
             }
 
 
@@ -1051,10 +1143,12 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 ehfllxcaseDict.Add(EFHLLXLoadCaseName, ehfLoad.QuasiPermenantChosen);
 
                 isError = src.HelperEtabs.AddNewLinearLoadCase(SapModel, EFHLLXLoadCaseName);
+                /*
                 if (isError)
                 {
                     return true;
                 }
+                */
             }
 
 
@@ -1069,10 +1163,12 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 LoadName[i] = ehfLoad.Name;
                 SF[i] = 1.00;
                 isError = src.HelperEtabs.UpdateLoadCase(SapModel, "P_EHFx (LL_" + ehfLoad.BaseLoadPatternName + ")", NumberLoads, LoadType, LoadName, SF);
+                /*
                 if (isError)
                 {
                     return true;
                 }
+                */
             }
 
 
@@ -1083,10 +1179,12 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
             foreach (var ehfLoad in EHFLLYLoadList)
             {
                 isError = src.HelperEtabs.AddLoadPattern(SapModel, ehfLoad.Name, 0, "EHF", false, addAnalysisCase);
+                /*
                 if (isError)
                 {
                     return true;
                 }
+                */
             }
 
 
@@ -1097,13 +1195,15 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 ehfllycaseDict.Add(EHFLLYLoadCaseName, ehfLoad.QuasiPermenantChosen);
 
                 isError = src.HelperEtabs.AddNewLinearLoadCase(SapModel, EHFLLYLoadCaseName);
+                /*
                 if (isError)
                 {
                     return true;
                 }
+                */
             }
 
-            
+
             LoadType = new string[50];
             LoadName = new string[50];
             SF = new double[50];
@@ -1115,10 +1215,12 @@ namespace WS_SG_ETABS_Plugin.src.load_combo_EN
                 LoadName[i] = ehfLoad.Name;
                 SF[i] = 1.00;
                 isError = src.HelperEtabs.UpdateLoadCase(SapModel, "P_EHFy (LL_" + ehfLoad.BaseLoadPatternName + ")", NumberLoads, LoadType, LoadName, SF);
+                /*
                 if (isError)
                 {
                     return true;
                 }
+                */
             }
 
             #endregion

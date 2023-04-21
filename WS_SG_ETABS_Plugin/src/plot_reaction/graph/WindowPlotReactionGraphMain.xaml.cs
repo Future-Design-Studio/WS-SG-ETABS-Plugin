@@ -25,7 +25,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
         cPluginCallback _Plugin;
 
         List<src.HelperEtabs.DatabaseTable> databaseTableListGlobal = new List<src.HelperEtabs.DatabaseTable>();
-        List<Dictionary<string, string>> groupAndColor = new List<Dictionary<string, string>>();
+        List<Dictionary<string, string>> groupAndColorNotAll = new List<Dictionary<string, string>>();
 
         public WindowPlotReactionGraphMain(cSapModel SapModel, cPluginCallback Plugin, List<src.HelperEtabs.DatabaseTable> databaseTableList)
         {
@@ -61,6 +61,13 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
             //src.HelperUI.MoveItemsFromListBox(listBoxAvailGroup, listBoxChoosenGroup);
             if (checkBoxDefault.IsChecked == true)
             {
+                //If there is no group, selectedIndex = -1, then return
+                if (comBoxGroup.SelectedIndex == -1)
+                {
+                    MessageBox.Show("Please select a group!");
+                    return;
+                }
+
                 string selectedString = comBoxGroup.Text + "," + "Auto";
                 listBoxChoosenGroup.Items.Add(selectedString);
 
@@ -71,7 +78,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
                         {"color", "Auto"}
                     };
 
-                groupAndColor.Add(eachGroupAndColor);
+                groupAndColorNotAll.Add(eachGroupAndColor);
             }
             else
             {
@@ -93,7 +100,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
                         {"color", selectedColor}
                     };
 
-                    groupAndColor.Add(eachGroupAndColor);
+                    groupAndColorNotAll.Add(eachGroupAndColor);
                 }
 
             }
@@ -108,7 +115,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
                 listBoxChoosenGroup.Items.RemoveAt(selectedIndex);
             }
 
-            groupAndColor.RemoveAt(selectedIndex);
+            groupAndColorNotAll.RemoveAt(selectedIndex);
         }
 
         private void buttonCancel_Click(object sender, RoutedEventArgs e)
@@ -146,6 +153,57 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
                     listChoosenGroup.Add(groupDict);
                 }
                 */
+
+                bool? includeAllJoints = checkBoxAllJoints.IsChecked;
+
+                //groupAndColor container
+                List<Dictionary<string, string>> groupAndColor = new List<Dictionary<string, string>>();
+
+                //If include all joints, add one item inside the groupAndColor dictionary
+                if (includeAllJoints == true)
+                {
+                    //groupAndColorAll container
+                    List<Dictionary<string, string>> groupAndColorAll = new List<Dictionary<string, string>>();
+
+                    //src.HelperUI.MoveItemsFromListBox(listBoxAvailGroup, listBoxChoosenGroup);
+                    if (checkBoxDefault.IsChecked == true)
+                    {
+                        //Add into dictionary
+                        Dictionary<string, string> eachGroupAndColor = new Dictionary<string, string>
+                        {
+                            {"groupName",  "All"},
+                            {"color", "Auto"}
+                        };
+
+                        groupAndColorAll.Add(eachGroupAndColor);
+                    }
+                    else
+                    {
+                        string selectedColor = ClrPcker.SelectedColor.ToString();
+
+                        if (selectedColor == "")
+                        {
+                            MessageBox.Show("Please pick a color");
+                        }
+                        else
+                        {
+                            //Add into dictionary
+                            Dictionary<string, string> eachGroupAndColor = new Dictionary<string, string>
+                            {
+                                {"groupName",  "All"},
+                                {"color", selectedColor}
+                            };
+
+                            groupAndColorAll.Add(eachGroupAndColor);
+                        }
+                    }
+                    groupAndColor = groupAndColorAll;
+                }
+                else
+                {
+                    groupAndColor = groupAndColorNotAll;
+                }
+
 
                 string title = textBoxTitle.Text;
                 string outputCase = comBoxOutputCase.SelectedValue.ToString();
@@ -189,7 +247,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
                 //Call up copy property result window
                 src.plot_reaction.graph.WindowPlotReactionGraphResult windowPlotReactionResult = new src.plot_reaction.graph.WindowPlotReactionGraphResult(_SapModel, _Plugin, groupAndColor,
                     outputCase, reactionDirection, forceFactor, bubbleScaleFactor, textSize, titleSize, axisTitleSize, gridSpacingX, gridSpacingY, title, splitX, splitY, divisionX, divisionY, offsetX, offsetY,
-                    sumTextSizeX, sumTextSizeY, separationX, separationY, databaseTableListGlobal);
+                    sumTextSizeX, sumTextSizeY, separationX, separationY, includeAllJoints, databaseTableListGlobal);
                 IsEnabled = true;
             }
 
@@ -263,7 +321,21 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
             textBoxSeparationY.IsEnabled = false;
         }
 
+        private void checkBoxAllJoints_Checked(object sender, RoutedEventArgs e)
+        {
+            comBoxGroup.IsEnabled = false;
+            listBoxChoosenGroup.IsEnabled = false;
+            buttonRemove.IsEnabled = false;
+            buttonAdd.IsEnabled = false;
+        }
 
+        private void checkBoxAllJoints_UnChecked(object sender, RoutedEventArgs e)
+        {
+            comBoxGroup.IsEnabled = true;
+            listBoxChoosenGroup.IsEnabled = true;
+            buttonRemove.IsEnabled = true;
+            buttonAdd.IsEnabled = true;
+        }
 
 
         #endregion
