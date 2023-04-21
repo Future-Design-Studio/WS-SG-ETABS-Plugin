@@ -56,7 +56,7 @@
         <Button Grid.Row="3" Grid.Column="2" x:Name="buttonCarbon" Content="Carbon Calulator" Click="buttonCarbon_Click" FontSize="16" IsEnabled="False"/>
         <Button Grid.Row="4" Grid.Column="2" x:Name="buttonPadFooting" Content="Pad Footing Design" Click="buttonPadFooting_Click" FontSize="16" IsEnabled="False"/>
         <Button Grid.Row="5" Grid.Column="2" x:Name="buttonPunchingShear" Content="Punching Shear Force Plot" Click="buttonPunchingShear_Click" FontSize="16" IsEnabled="False"/>
-        <Button Grid.Row="6" Grid.Column="2" x:Name="buttonTrfEtabstoSafe" Content="Transfer ETABS Reaction to SAFE" Click="buttonTrfEtabstoSafe_Click" FontSize="16" IsEnabled="False"/>
+        <Button Grid.Row="6" Grid.Column="2" x:Name="buttonTrfEtabstoSafe" Content="Transfer ETABS Reaction to SAFE" Click="buttonTrfEtabstoSafe_Click" FontSize="16"/>
 
 
         <!-- FDS Only -->
