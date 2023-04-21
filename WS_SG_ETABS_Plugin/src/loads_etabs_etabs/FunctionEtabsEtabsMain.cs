@@ -47,22 +47,20 @@ namespace WS_SG_ETABS_Plugin.src.loads_etabs_etabs
             else
             {
                 #region filter by selected groups
-                foreach (Dictionary<string, string> row in pointobjectconnectivityTable.TableInList)
-                {
-                    pointUniqueName.Add(row["UniqueName"]);
-                }
+                src.HelperEtabs.DatabaseTable groupassignmentTablePoints = new src.HelperEtabs.DatabaseTable();
 
-                
-                foreach (string eachUniqueName in pointUniqueName)
+                (isError, groupassignmentTablePoints) = src.HelperEtabs.FilterDatabaseTable(groupassignmentTable, "ObjectType", "Point");
+
+                foreach (string group in selectedGroup)
                 {
-                    foreach (Dictionary<string, string> row in jointreactionTable.TableInList)
+                    src.HelperEtabs.DatabaseTable databasetableIndiGroup = new src.HelperEtabs.DatabaseTable();
+                    (isError, databasetableIndiGroup) = src.HelperEtabs.FilterDatabaseTableUniqueNameByGroup(jointreactionTable, groupassignmentTablePoints, group);
+                    foreach (Dictionary<string, string> row in databasetableIndiGroup.TableInList)
                     {
-                        if (row["UniqueName"] == eachUniqueName)
-                        {
-                            jointreactionTableFiltered.Add(row);
-                        }
+                        jointreactionTableFiltered.Add(row);
                     }
                 }
+
                 #endregion
             }
 
