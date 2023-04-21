@@ -31,6 +31,7 @@ namespace WS_SG_ETABS_Plugin
         {
             _Plugin = Plugin;
             _SapModel = SapModel;
+            string strComputerName = Environment.MachineName.ToString();
 
             src.HelperEtabs.SetOutputUnitTo_kN_m_C(_SapModel);
 
@@ -230,7 +231,10 @@ namespace WS_SG_ETABS_Plugin
 
         private void buttonTrfEtabsLoads_Click(object sender, RoutedEventArgs e)
         {
-
+            IsEnabled = false;
+            //Call up Etabs to etabs load transferring open file window
+            src.loads_etabs_etabs.WindowEtabsEtabsOpenFile windowOpenFile = new src.loads_etabs_etabs.WindowEtabsEtabsOpenFile(_SapModel, _Plugin);
+            IsEnabled = true;
         }
 
         private void buttonTrussGrouping_Click(object sender, RoutedEventArgs e)
@@ -241,6 +245,14 @@ namespace WS_SG_ETABS_Plugin
         private void buttonFeedback_Click(object sender, RoutedEventArgs e)
         {
             System.Diagnostics.Process.Start("https://forms.office.com/e/qaiKf5e3a4");
+        }
+
+        private void buttonPunchShrPlot_Click(object sender, RoutedEventArgs e)
+        {
+            IsEnabled = false;
+            //Call up window
+            src.punching_shear_plot.WindowPunchShrPlotLoading windowPunchShrPlotLoading = new src.punching_shear_plot.WindowPunchShrPlotLoading(_SapModel, _Plugin);
+            IsEnabled = true;
         }
     }
 }
