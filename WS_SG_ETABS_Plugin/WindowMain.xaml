@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WS_SG_ETABS_Plugin.src"
-             mc:Ignorable="d" Height="550" Width="1500" Closed="WindowMain_Closed" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+             mc:Ignorable="d" Height="550" Width="1700" Closed="WindowMain_Closed" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <Grid Margin="10 0 10 0">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"></RowDefinition>
@@ -49,14 +49,14 @@
         <Button Grid.Row="5" Grid.Column="1" x:Name="buttonEtabsToRhino" Content="Export To Rhino (Beta Version)" FontSize="16" Click="buttonEtabsToRhino_Click"/>
         <Button Grid.Row="6" Grid.Column="1" x:Name="buttonWindCoeff" Content="Wind Coefficient Applications (Beta Version)" FontSize="16" Click="buttonWindCoeff_Click"/>
         <Button Grid.Row="7" Grid.Column="1" x:Name="buttonReleaseSelectedNode" Content="Release Frames at Specific Nodes (Beta Version)" FontSize="16" Click="buttonReleaseSelectedNode_Click"/>
+        <Button Grid.Row="8" Grid.Column="1" x:Name="buttonTrfEtabsLoads" Content="Transfer Joint Reaction as Load Applied (Beta Version)" Click="buttonTrfEtabsLoads_Click" FontSize="16"/>
 
 
         <!-- Upcoming -->
         <Button Grid.Row="3" Grid.Column="2" x:Name="buttonCarbon" Content="Carbon Calulator" Click="buttonCarbon_Click" FontSize="16" IsEnabled="False"/>
         <Button Grid.Row="4" Grid.Column="2" x:Name="buttonPadFooting" Content="Pad Footing Design" Click="buttonPadFooting_Click" FontSize="16" IsEnabled="False"/>
         <Button Grid.Row="5" Grid.Column="2" x:Name="buttonPunchingShear" Content="Punching Shear Force Plot" Click="buttonPunchingShear_Click" FontSize="16" IsEnabled="False"/>
-        <Button Grid.Row="6" Grid.Column="2" x:Name="buttonTrfEtabsLoads" Content="Transfer Joint Reaction as Load Applied" Click="buttonTrfEtabsLoads_Click" FontSize="16"/>
-        <Button Grid.Row="7" Grid.Column="2" x:Name="buttonTrfEtabstoSafe" Content="Transfer ETABS Reaction to SAFE" Click="buttonTrfEtabstoSafe_Click" FontSize="16" IsEnabled="False"/>
+        <Button Grid.Row="6" Grid.Column="2" x:Name="buttonTrfEtabstoSafe" Content="Transfer ETABS Reaction to SAFE" Click="buttonTrfEtabstoSafe_Click" FontSize="16" IsEnabled="False"/>
 
 
         <!-- FDS Only -->
