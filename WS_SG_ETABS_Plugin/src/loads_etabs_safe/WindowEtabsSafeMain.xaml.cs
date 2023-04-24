@@ -27,10 +27,12 @@ namespace WS_SG_ETABS_Plugin.src.loads_etabs_safe
         SAFEv1.cSapModel _SapModelSAFE;
         ETABSv1.cPluginCallback _PluginETABS;
         List<src.HelperEtabs.DatabaseTable> databaseTableListETABS;
-        src.HelperEtabs.DatabaseTable groupdefinitionTable = new HelperEtabs.DatabaseTable();
         src.HelperEtabs.DatabaseTable pointobjectconnectivityTable = new HelperEtabs.DatabaseTable();
         src.HelperEtabs.DatabaseTable jointreactionTable = new HelperEtabs.DatabaseTable();
-        src.HelperEtabs.DatabaseTable groupassignmentTable = new HelperEtabs.DatabaseTable();
+        src.HelperEtabs.DatabaseTable storydefinitionTable = new HelperEtabs.DatabaseTable();
+        src.HelperEtabs.DatabaseTable jointforcesFrametable = new HelperEtabs.DatabaseTable();
+        src.HelperEtabs.DatabaseTable jointforcesShelltable = new HelperEtabs.DatabaseTable();
+        src.HelperEtabs.DatabaseTable jointforcesLinktable = new HelperEtabs.DatabaseTable();
         List<string> loadcasefromList = new List<string>();
         List<string> jointsindefinedgroupList = new List<string>();
         List<string> groupnameList = new List<string>();
@@ -55,6 +57,19 @@ namespace WS_SG_ETABS_Plugin.src.loads_etabs_safe
                 return;
             }
 
+            (isError, storydefinitionTable) = src.HelperEtabs.CallDatabaseTableByTableKey(databaseTableListETABS, "Story Definitions");
+            if (isError)
+            {
+                return;
+            }
+
+            string storyabove = "";
+            int storeyloop = 0;
+            foreach (Dictionary<string, string> row in storydefinitionTable.TableInList)
+            {
+                if (row["Name"])
+            }
+
             (isError, jointreactionTable) = src.HelperEtabs.CallDatabaseTableByTableKey(databaseTableListETABS, "Joint Reactions");
             if (isError)
             {
@@ -64,54 +79,26 @@ namespace WS_SG_ETABS_Plugin.src.loads_etabs_safe
             {
                 foreach (Dictionary<string, string> load in jointreactionTable.TableInList)
                 {
-                    if (!loadcasefromList.Contains(load["OutputCase"]))
+                    if (load["StepNumber"] != null)
                     {
-                        loadcasefromList.Add(load["OutputCase"]);
+                        if (!loadcasefromList.Contains(load["OutputCase"] + "_Step_" + load["StepNumber"]))
+                        {
+                            loadcasefromList.Add(load["OutputCase"] + "_Step_" + load["StepNumber"]);
+                        }
                     }
+                    else
+                    {
+                        if (!loadcasefromList.Contains(load["OutputCase"]))
+                        {
+                            loadcasefromList.Add(load["OutputCase"]);
+                        }
+                    }
+        
+                    
                 }
 
                 comBoxLoadCase.ItemsSource = loadcasefromList;
                 comBoxLoadCase.SelectedIndex = 0;
-            }
-
-            (isError, groupassignmentTable) = src.HelperEtabs.CallDatabaseTableByTableKey(databaseTableListETABS, "Group Assignments");
-            if (isError)
-            {
-                comBoxGroups.IsEnabled = false;
-                checkBoxUseAllJoints.IsChecked = true;
-                checkBoxUseAllJoints.IsEnabled = false;
-                listBoxChoosenGroup.Items.Add("All available Joint Reactions will be transferred.");
-                Button_ADD_Group.IsEnabled = false;
-                Button_REMOVE_Group.IsEnabled = false;
-            }
-            else
-            {
-                //Filter group to only include points, to improve performance
-                (isError, groupassignmentTable) = src.HelperEtabs.FilterDatabaseTable(groupassignmentTable, "ObjectType", "Point");
-                if (isError)
-                {
-                    return;
-                }
-
-                (isError, groupdefinitionTable) = src.HelperEtabs.CallDatabaseTableByTableKey(databaseTableListETABS, "Group Definitions");
-                if (isError)
-                {
-                    return;
-                }
-                else
-                {
-                    foreach (Dictionary<string, string> group in groupdefinitionTable.TableInList)
-                    {
-                        if (group["Name"] != "All")
-                        {
-                            groupnameList.Add(group["Name"]);
-                        }
-                    }
-
-
-                    comBoxGroups.ItemsSource = groupnameList;
-                    comBoxGroups.SelectedIndex = 0;
-                }
             }
 
             ShowDialog();
@@ -221,22 +208,10 @@ namespace WS_SG_ETABS_Plugin.src.loads_etabs_safe
         }
 
         private void Button_ADD_Group_Click(object sender, RoutedEventArgs e)
-        {
-            if (checkBoxUseAllJoints.IsChecked == true)
-            {
-                listBoxChoosenGroup.Items.Clear();
-                selectedGroup.Clear();
-
-                listBoxChoosenGroup.Items.Add("Transfer all available joint reactions.");
-                selectedGroup.Add("All");
-
-                Button_ADD_Group.IsEnabled = false;
-            }
-            else
-            {
-                listBoxChoosenGroup.Items.Add(comBoxGroups.Text);
-                selectedGroup.Add(comBoxGroups.Text);
-            }
+        {    
+            listBoxChoosenGroup.Items.Add(comBoxGroups.Text);   
+            selectedGroup.Add(comBoxGroups.Text);
+            Button_ADD_Group.IsEnabled = false;
         }
 
         private void Button_REMOVE_Group_Click(object sender, RoutedEventArgs e)
@@ -269,7 +244,7 @@ namespace WS_SG_ETABS_Plugin.src.loads_etabs_safe
             {
                 IsEnabled = false;
                 //Call up copy property result window
-                src.loads_etabs_safe.WindowEtabsSafeResult windowEtabsSafeResult = new src.loads_etabs_safe.WindowEtabsSafeResult(_SapModelETABS, _SapModelSAFE, _PluginETABS, databaseTableListETABS, selectedGroup, casePatternList, groupdefinitionTable, pointobjectconnectivityTable, jointreactionTable, groupassignmentTable);
+                src.loads_etabs_safe.WindowEtabsSafeResult windowEtabsSafeResult = new src.loads_etabs_safe.WindowEtabsSafeResult(_SapModelETABS, _SapModelSAFE, _PluginETABS, databaseTableListETABS, selectedGroup, casePatternList, pointobjectconnectivityTable, jointreactionTable, storydefinitionTable, jointforcesFrametable, jointforcesShelltable, jointforcesLinktable);
                 IsEnabled = true;
             }
         }

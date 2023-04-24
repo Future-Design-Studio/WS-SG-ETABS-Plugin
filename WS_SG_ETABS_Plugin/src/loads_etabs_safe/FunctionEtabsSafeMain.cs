@@ -21,6 +21,11 @@ namespace WS_SG_ETABS_Plugin.src.loads_etabs_safe
 
             List<Dictionary<string, string>> jointreactionTableFiltered = new List<Dictionary<string, string>>();
 
+
+
+
+
+
             if (selectedGroup[0] == "All")
             {
                 #region filter by selected groups

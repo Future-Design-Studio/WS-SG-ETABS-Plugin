@@ -68,12 +68,12 @@ namespace WS_SG_ETABS_Plugin.src.loads_etabs_safe
             }
 
             //Turn on all load
-            src.HelperEtabs.OnAllLoadDatabase(SapModelEtabs);
+            src.HelperEtabs.OnAllLoadDatabaseWithoutCombinations(SapModelEtabs);
 
             InitializeComponent();
 
             //Get joint reaction database table
-            List<string> tableKeys = new List<string> { "Point Object Connectivity", "Joint Reactions", "Group Assignments", "Group Definitions" };
+            List<string> tableKeys = new List<string> { "Point Object Connectivity", "Joint Reactions", "Story Definitions", "Element Joint Forces - Frame", "Element Joint Forces - Shells", "Element Joint Forces - Links" };
             loadDatabaseTable(SapModelEtabs, SapModelSAFE, PluginEtabs, tableKeys, databaseTableListETABS);
 
             ShowDialog();
@@ -113,18 +113,32 @@ namespace WS_SG_ETABS_Plugin.src.loads_etabs_safe
                                 checkBoxJointReaction.IsChecked = true;
                             }));
                         }
-                        else if (tableKey == "Group Assignments")
+                        else if (tableKey == "Story Definitions")
                         {
                             Dispatcher.Invoke((Action)(() =>
                             {
-                                checkBoxGroupAssignments.IsChecked = true;
+                                checkBoxStorydefin.IsChecked = true;
                             }));
                         }
-                        else if (tableKey == "Group Definitions")
+                        else if (tableKey == "Element Joint Forces - Frame")
                         {
                             Dispatcher.Invoke((Action)(() =>
                             {
-                                checkBoxGroupDefinition.IsChecked = true;
+                                checkBoxJointForcesFrame.IsChecked = true;
+                            }));
+                        }
+                        else if (tableKey == "Element Joint Forces - Shells")
+                        {
+                            Dispatcher.Invoke((Action)(() =>
+                            {
+                                checkBoxJointForcesShell.IsChecked = true;
+                            }));
+                        }
+                        else if (tableKey == "Element Joint Forces - Links")
+                        {
+                            Dispatcher.Invoke((Action)(() =>
+                            {
+                                checkBoxJointForcesLink.IsChecked = true;
                             }));
                         }
                         databaseTableListETABS.Add(databaseTable);

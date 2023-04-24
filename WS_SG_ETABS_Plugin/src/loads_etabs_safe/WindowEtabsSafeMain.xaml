@@ -9,7 +9,7 @@
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"></ColumnDefinition>
-            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="0.7*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"></RowDefinition>
@@ -81,19 +81,13 @@
             </Grid.RowDefinitions>
 
 
-            <Label Grid.Column="0" Grid.ColumnSpan="3" Content="Group of joints to transfer loads from" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="16"/>
+            <Label Grid.Column="0" Grid.ColumnSpan="3" Content="Story Level to Export and update SAFE Loads" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="16"/>
 
-            <Label Grid.Column="0" Grid.Row="1" Content="Group Name" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-            <Label Grid.Column="1" Grid.Row="1" Content="Transfer all available joint reactions?" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <Label Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Content="Story Level" VerticalAlignment="Center" HorizontalAlignment="Center"/>
 
-            <ComboBox  Grid.Row="2" Grid.Column="0" x:Name="comBoxGroups" 
+            <ComboBox  Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" x:Name="comBoxGroups" 
                        VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
                        Text="0.5" SelectionChanged="comBoxGroups_SelectionChanged"></ComboBox>
-
-            <CheckBox x:Name="checkBoxUseAllJoints" Grid.Row="2" Grid.Column="1"
-                      Checked="checkBoxUseAllJoints_Checked" Unchecked="checkBoxUseAllJoints_Unchecked" 
-                      VerticalAlignment="Center" HorizontalAlignment="Center">
-            </CheckBox>
 
             <ListBox x:Name="listBoxChoosenGroup" Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" 
                      d:ItemsSource="{d:SampleData ItemCount=5}" SelectionMode="Single"
