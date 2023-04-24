@@ -2256,7 +2256,7 @@ namespace WS_SG_ETABS_Plugin.src
             }
             else
             {
-                MessageBox.Show("Unknown error, please let Mani know for debugging.");
+                MessageBox.Show("Unknown error, please let FDS know for debugging.");
                 return true;
             }
         }

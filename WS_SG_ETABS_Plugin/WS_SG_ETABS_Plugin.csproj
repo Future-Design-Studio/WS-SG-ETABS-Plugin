@@ -154,6 +154,9 @@
     <Compile Include="src\loads_etabs_safe\WindowEtabsSafeMain.xaml.cs">
       <DependentUpon>WindowEtabsSafeMain.xaml</DependentUpon>
     </Compile>
+    <Compile Include="src\loads_etabs_safe\WindowEtabsSafeOpenFile.xaml.cs">
+      <DependentUpon>WindowEtabsSafeOpenFile.xaml</DependentUpon>
+    </Compile>
     <Compile Include="src\loads_etabs_safe\WindowEtabsSafeResult.xaml.cs">
       <DependentUpon>WindowEtabsSafeResult.xaml</DependentUpon>
     </Compile>
@@ -302,6 +305,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="src\loads_etabs_safe\WindowEtabsSafeMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\loads_etabs_safe\WindowEtabsSafeOpenFile.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
