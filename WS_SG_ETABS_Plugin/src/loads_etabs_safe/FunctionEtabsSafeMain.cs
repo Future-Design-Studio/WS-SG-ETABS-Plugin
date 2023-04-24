@@ -6,96 +6,161 @@ using System.Threading.Tasks;
 using ETABSv1;
 using SAFEv1;
 using System.Windows.Forms;
+using Microsoft.Office.Core;
 
 namespace WS_SG_ETABS_Plugin.src.loads_etabs_safe
 {
     internal class FunctionEtabsSafeMain
     {
 
-        public static bool TransferLoadFromEtabsToSafe(ETABSv1.cSapModel SapModelETABS, SAFEv1.cSapModel SapModelSAFE, ETABSv1.cPluginCallback PluginEtabs, List<src.HelperEtabs.DatabaseTable> databaseTableList, List<string> selectedGroup, List<ClassEtabsSafe.CaseandPatternMatch> casePatternList, src.HelperEtabs.DatabaseTable groupdefinitionTable, src.HelperEtabs.DatabaseTable pointobjectconnectivityTable, src.HelperEtabs.DatabaseTable jointreactionTable, src.HelperEtabs.DatabaseTable groupassignmentTable)
+        public static bool TransferLoadFromEtabsToSafe(ETABSv1.cSapModel SapModelETABS, SAFEv1.cSapModel SapModelSAFE, ETABSv1.cPluginCallback PluginEtabs, List<src.HelperEtabs.DatabaseTable> databaseTableList, List<string> selectedLevel, List<ClassEtabsSafe.CaseandPatternMatch> casePatternList, src.HelperEtabs.DatabaseTable pointobjectconnectivityTable, src.HelperEtabs.DatabaseTable jointreactionTable, src.HelperEtabs.DatabaseTable storydefinitionTable)
         {
 
             bool isError = false;
             List<string> pointUniqueName = new List<string>();
 
 
-            List<Dictionary<string, string>> jointreactionTableFiltered = new List<Dictionary<string, string>>();
+            src.HelperEtabs.DatabaseTable jointforcesFrameTable = new HelperEtabs.DatabaseTable();
+            src.HelperEtabs.DatabaseTable jointforcesShellTable = new HelperEtabs.DatabaseTable();
+            src.HelperEtabs.DatabaseTable jointforcesLinkTable = new HelperEtabs.DatabaseTable();
 
+            List<string> listofTableKeys = new List<string>() { "Element Joint Forces - Frame", "Element Joint Forces - Shells", "Element Joint Forces - Links" };
 
+            //if (databaseTableList.Contains("Element Joint Forces - Frame"))
 
-
-
-
-            if (selectedGroup[0] == "All")
+            foreach (src.HelperEtabs.DatabaseTable table in databaseTableList)
             {
-                #region filter by selected groups
-                foreach (Dictionary<string, string> row in pointobjectconnectivityTable.TableInList)
+                try
                 {
-                    pointUniqueName.Add(row["UniqueName"]);
-                }
-
-                foreach (string eachUniqueName in pointUniqueName)
-                {
-                    foreach (Dictionary<string, string> row in jointreactionTable.TableInList)
+                    if (table.TableKey == "Element Joint Forces - Frame")
                     {
-                        if (row["UniqueName"] == eachUniqueName)
+                        (isError, jointforcesFrameTable) = src.HelperEtabs.CallDatabaseTableByTableKey(databaseTableList, "Element Joint Forces - Frame");
+                        if (isError)
                         {
-                            jointreactionTableFiltered.Add(row);
+                            return isError;
                         }
+                        listofTableKeys.Remove("Element Joint Forces - Frame");
                     }
-                }
-                #endregion
-            }
-            else
-            {
-                #region filter by selected groups
-                src.HelperEtabs.DatabaseTable groupassignmentTablePoints = new src.HelperEtabs.DatabaseTable();
-
-                (isError, groupassignmentTablePoints) = src.HelperEtabs.FilterDatabaseTable(groupassignmentTable, "ObjectType", "Point");
-
-                foreach (string group in selectedGroup)
-                {
-                    src.HelperEtabs.DatabaseTable databasetableIndiGroup = new src.HelperEtabs.DatabaseTable();
-                    (isError, databasetableIndiGroup) = src.HelperEtabs.FilterDatabaseTableUniqueNameByGroup(jointreactionTable, groupassignmentTablePoints, group);
-                    foreach (Dictionary<string, string> row in databasetableIndiGroup.TableInList)
+                    if (table.TableKey == "Element Joint Forces - Shells")
                     {
-                        jointreactionTableFiltered.Add(row);
+                        (isError, jointforcesShellTable) = src.HelperEtabs.CallDatabaseTableByTableKey(databaseTableList, "Element Joint Forces - Shells");
+                        if (isError)
+                        {
+                            return isError;
+                        }
+                        listofTableKeys.Remove("Element Joint Forces - Shells");
+                    }
+                    if (table.TableKey == "Element Joint Forces - Links")
+                    {
+                        (isError, jointforcesLinkTable) = src.HelperEtabs.CallDatabaseTableByTableKey(databaseTableList, "Element Joint Forces - Links");
+                        if (isError)
+                        {
+                            return isError;
+                        }
+                        listofTableKeys.Remove("Element Joint Forces - Links");
                     }
                 }
-
-                #endregion
+                catch
+                {
+                    continue;
+                }
+                
             }
+
+            int storyindex = 0;
+            List<string> storyLevelsList = new List<string>();
+            foreach (Dictionary<string, string> row in storydefinitionTable.TableInList)
+            {
+                if (row["Story"] != selectedLevel[0])
+                {
+                    storyLevelsList.Add(row["Story"]);
+                }
+            }
+
+
+
+            #region filter point unique names, jointreactiontable by selected level
+
+            (isError, pointobjectconnectivityTable) = src.HelperEtabs.FilterDatabaseTable(pointobjectconnectivityTable, "Story", selectedLevel[0]);
+            List<string> pointUniqueNameFromAll = new List<string>();
+            List<string> pointUniqueNameToRemove = new List<string>();
+            foreach (Dictionary<string, string> row in pointobjectconnectivityTable.TableInList)
+            {
+                pointUniqueName.Add(row["UniqueName"]);
+                pointUniqueNameFromAll.Add(row["UniqueName"]);
+                pointUniqueNameToRemove.Add(row["UniqueName"]);
+            }
+
+
+            List<string> pointUniqueNameReactions = new List<string>();
+            List<Dictionary<string,string>> jointreactionDatabaseFiltered = new List<Dictionary<string,string>>();
+
+            foreach (Dictionary<string, string> row in jointreactionTable.TableInList)
+            {
+                if (pointUniqueName.Contains(row["UniqueName"]))
+                {
+                    pointUniqueNameReactions.Add(row["UniqueName"]);
+                    pointUniqueNameToRemove.Remove(row["UniqueName"]);
+                    jointreactionDatabaseFiltered.Add(row);
+                }
+            }
+            #endregion
+
+            #region filter joint forces by above selected level
+            List<Dictionary<string, string>> jointforcesFrameTableFiltered = new List<Dictionary<string, string>>();
+            List<Dictionary<string, string>> jointforcesShellTableFiltered = new List<Dictionary<string, string>>();
+            List<Dictionary<string, string>> jointforcesLinkTableFiltered = new List<Dictionary<string, string>>();
+
+            try
+            {
+                foreach (Dictionary<string, string> row in jointforcesFrameTable.TableInList)
+                {
+                    if (storyLevelsList.Contains(row["Story"]) && pointUniqueNameToRemove.Contains(row["Joint"]))
+                    {
+                        jointforcesFrameTableFiltered.Add(row);
+                    }
+                }
+            }
+            catch
+            {
+                
+            }
+            
+
+            try
+            {
+                foreach (Dictionary<string, string> row in jointforcesShellTable.TableInList)
+                {
+                    if (storyLevelsList.Contains(row["Story"]) && pointUniqueNameToRemove.Contains(row["Joint"]))
+                    {
+                        jointforcesShellTableFiltered.Add(row);
+                    }
+                }
+            }
+            catch
+            {
+
+            }
+            
+            try
+            {
+                foreach (Dictionary<string, string> row in jointforcesLinkTable.TableInList)
+                {
+                    if (storyLevelsList.Contains(row["Story"]) && pointUniqueNameToRemove.Contains(row["Joint"]))
+                    {
+                        jointforcesLinkTableFiltered.Add(row);
+                    }
+                }
+            }
+            catch 
+            {
+
+            }
+            #endregion
 
 
 
             #region Point unique name matching
-            pointUniqueName.Clear();
-
-            foreach (Dictionary<string, string> row in jointreactionTableFiltered)
-            {
-                pointUniqueName.Add(row["UniqueName"]);
-            }
-
-            pointUniqueName = pointUniqueName.Distinct().ToList();
-
-            List<Dictionary<string, string>> pointobjectconnectivityTableFiltered = new List<Dictionary<string, string>>();
-            List<Dictionary<string, string>> pointobjectconnectivityTableFromDict = pointobjectconnectivityTable.TableInList;
-            int i = 0;
-            foreach (string eachUniqueName in pointUniqueName)
-            {
-                foreach (Dictionary<string, string> row in pointobjectconnectivityTableFromDict)
-                {
-                    if (row["UniqueName"] == eachUniqueName)
-                    {
-                        pointobjectconnectivityTableFiltered.Add(row);
-                        break;
-                    }
-                    i++;
-                }
-                pointobjectconnectivityTableFromDict.RemoveAt(i);
-                i = 0;
-            }
-
             src.HelperSafe.DatabaseTable pointobjectconnectivityTableTo = new src.HelperSafe.DatabaseTable();
             List<string> pointUniqueNameTo = new List<string>();
 
@@ -107,7 +172,7 @@ namespace WS_SG_ETABS_Plugin.src.loads_etabs_safe
 
             List<Dictionary<string, string>> pointobjectconnectivityTableToDict = pointobjectconnectivityTableTo.TableInList;
 
-            foreach (Dictionary<string, string> rowfrom in pointobjectconnectivityTableFiltered)
+            foreach (Dictionary<string, string> rowfrom in pointobjectconnectivityTable.TableInList)
             {
                 List<double> distanceList = new List<double>();
                 foreach (Dictionary<string, string> rowto in pointobjectconnectivityTableToDict)
@@ -144,19 +209,65 @@ namespace WS_SG_ETABS_Plugin.src.loads_etabs_safe
 
             #region create dictionary with updated joint unique names and load patterns
             List<Dictionary<string, string>> jointreactionTableFilteredLoads = new List<Dictionary<string, string>>();
-            foreach (Dictionary<string, string> row in jointreactionTableFiltered)
+            List<Dictionary<string, string>> jointforcesFrameTableFilteredLoads = new List<Dictionary<string, string>>();
+            List<Dictionary<string, string>> jointforcesShellTableFilteredLoads = new List<Dictionary<string, string>>();
+            List<Dictionary<string, string>> jointforcesLinkTableFilteredLoads = new List<Dictionary<string, string>>();
+
+            foreach (Dictionary<string, string> row in jointreactionDatabaseFiltered)
             {
                 if (caseFrom.Contains(row["OutputCase"]))
                 {
-                    row["UniqueName"] = pointUniqueNameTo[pointUniqueName.IndexOf(row["UniqueName"])];
+                    row["UniqueName"] = pointUniqueNameTo[pointUniqueNameFromAll.IndexOf(row["UniqueName"])];
                     row["OutputCase"] = patternTo[caseFrom.IndexOf(row["OutputCase"])];
                     jointreactionTableFilteredLoads.Add(row);
                 }
             }
+
+            try
+            {
+                foreach (Dictionary<string, string> row in jointforcesFrameTableFiltered)
+                {
+                    if (caseFrom.Contains(row["OutputCase"]))
+                    {
+                        row["Joint"] = pointUniqueNameTo[pointUniqueNameFromAll.IndexOf(row["Joint"])];
+                        row["OutputCase"] = patternTo[caseFrom.IndexOf(row["OutputCase"])];
+                        jointforcesFrameTableFilteredLoads.Add(row);
+                    }
+                }
+            }
+            catch { }
+
+            try
+            {
+                foreach (Dictionary<string, string> row in jointforcesShellTableFiltered)
+                {
+                    if (caseFrom.Contains(row["OutputCase"]))
+                    {
+                        row["Joint"] = pointUniqueNameTo[pointUniqueNameFromAll.IndexOf(row["Joint"])];
+                        row["OutputCase"] = patternTo[caseFrom.IndexOf(row["OutputCase"])];
+                        jointforcesShellTableFilteredLoads.Add(row);
+                    }
+                }
+            }
+            catch { }
+
+            try
+            {
+                foreach (Dictionary<string, string> row in jointforcesLinkTableFiltered)
+                {
+                    if (caseFrom.Contains(row["OutputCase"]))
+                    {
+                        row["Joint"] = pointUniqueNameTo[pointUniqueNameFromAll.IndexOf(row["Joint"])];
+                        row["OutputCase"] = patternTo[caseFrom.IndexOf(row["OutputCase"])];
+                        jointforcesLinkTableFilteredLoads.Add(row);
+                    }
+                }
+            }
+            catch { }
+            
             #endregion
 
             #region create group and add points inside
-
             int ret = SapModelSAFE.GroupDef.Delete("Temp_GRP_Plugin_Joints_Identified");
             isError = src.HelperSafe.CreateNewGroup(SapModelSAFE, "Temp_GRP_Plugin_Joints_Identified");
             if (isError)
@@ -176,28 +287,50 @@ namespace WS_SG_ETABS_Plugin.src.loads_etabs_safe
             }
             #endregion
 
+
             #region update database table with loads assigned
+
+            List<string> checkJointExist = new List<string>();
             src.HelperSafe.DatabaseTable databaseTableLoadsAssigned = new src.HelperSafe.DatabaseTable();
             databaseTableLoadsAssigned = src.HelperSafe.GetTableEdit(SapModelSAFE, "Joint Loads Assignments - Force");
 
-            for (i = 0; i < 10; i++)
-            {
-                src.HelperSafe.DeleteExistingLoadsFromPoints(SapModelSAFE, patternTo, "Temp_GRP_Plugin_Joints_Identified");
-            }
-
-            /*foreach (Dictionary<string, string> row in databaseTableLoadsAssigned.TableInList)
+            foreach (Dictionary<string, string> row in databaseTableLoadsAssigned.TableInList)
             {
                 if (pointUniqueNameTo.Contains(row["UniqueName"]) && patternTo.Contains(row["LoadPattern"]))
                 {
-                    MessageBox.Show("Warning: Some or all of the joints inside group: Temp_GRP_Plugin_Joints_Identified have joint loads already assigned which will add on to the loads being transferred by this plugin. Existing loads will not be deleted.");
-                    break;
+                    row["FX"] = "0.00";
+                    row["FY"] = "0.00";
+                    row["FZ"] = "0.00";
+                    row["MX"] = "0.00";
+                    row["MY"] = "0.00";
+                    row["MZ"] = "0.00";
+                    checkJointExist.Add(row["UniqueName"] + row["LoadPattern"]);
                 }
             }
-            */
+            
+
 
             foreach (Dictionary<string, string> row in jointreactionTableFilteredLoads)
             {
-                Dictionary<string, string> newrow = new Dictionary<string, string>()
+                if (checkJointExist.Contains(row["UniqueName"] + row["OutputCase"]))
+                {
+                    foreach (Dictionary<string, string> rowupdate in databaseTableLoadsAssigned.TableInList)
+                    {
+                        if (rowupdate["UniqueName"] == row["UniqueName"] && rowupdate["LoadPattern"] == row["OutputCase"])
+                        {
+                            rowupdate["FX"] = (Convert.ToDouble(rowupdate["FX"]) + ((Convert.ToDouble(row["FX"])) * (-1))).ToString();
+                            rowupdate["FY"] = (Convert.ToDouble(rowupdate["FY"]) + ((Convert.ToDouble(row["FY"])) * (-1))).ToString();
+                            rowupdate["FZ"] = (Convert.ToDouble(rowupdate["FZ"]) + ((Convert.ToDouble(row["FZ"])) * (-1))).ToString();
+                            rowupdate["MX"] = (Convert.ToDouble(rowupdate["MX"]) + ((Convert.ToDouble(row["MX"])) * (-1))).ToString();
+                            rowupdate["MY"] = (Convert.ToDouble(rowupdate["MY"]) + ((Convert.ToDouble(row["MY"])) * (-1))).ToString();
+                            rowupdate["MZ"] = (Convert.ToDouble(rowupdate["MZ"]) + ((Convert.ToDouble(row["MZ"])) * (-1))).ToString();
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    Dictionary<string, string> newrow = new Dictionary<string, string>()
                     {
                         {"UniqueName", row["UniqueName"] },
                         {"LoadPattern", row["OutputCase"] },
@@ -211,8 +344,159 @@ namespace WS_SG_ETABS_Plugin.src.loads_etabs_safe
                         {"YDim", "" },
                         {"GUID", "" }
                     };
-                databaseTableLoadsAssigned.TableInList.Add(newrow);
+                    checkJointExist.Add(row["UniqueName"] + row["OutputCase"]);
+                    databaseTableLoadsAssigned.TableInList.Add(newrow);
+                }
             }
+
+            try
+            {
+                foreach (Dictionary<string, string> row in jointforcesFrameTableFilteredLoads)
+                {
+                    if (checkJointExist.Contains(row["Joint"] + row["OutputCase"]))
+                    {
+                        foreach (Dictionary<string, string> rowupdate in databaseTableLoadsAssigned.TableInList)
+                        {
+                            if (rowupdate["UniqueName"] == row["Joint"] && rowupdate["LoadPattern"] == row["OutputCase"])
+                            {
+                                rowupdate["FX"] = (Convert.ToDouble(rowupdate["FX"]) + ((Convert.ToDouble(row["F1"])) * (-1))).ToString();
+                                rowupdate["FY"] = (Convert.ToDouble(rowupdate["FY"]) + ((Convert.ToDouble(row["F2"])) * (-1))).ToString();
+                                rowupdate["FZ"] = (Convert.ToDouble(rowupdate["FZ"]) + ((Convert.ToDouble(row["F3"])) * (-1))).ToString();
+                                rowupdate["MX"] = (Convert.ToDouble(rowupdate["MX"]) + ((Convert.ToDouble(row["M1"])) * (-1))).ToString();
+                                rowupdate["MY"] = (Convert.ToDouble(rowupdate["MY"]) + ((Convert.ToDouble(row["M2"])) * (-1))).ToString();
+                                rowupdate["MZ"] = (Convert.ToDouble(rowupdate["MZ"]) + ((Convert.ToDouble(row["M3"])) * (-1))).ToString();
+                                break;
+                            }
+                        }
+                    }
+            
+                    else
+            
+                    {
+                        Dictionary<string, string> newrow = new Dictionary<string, string>()
+                
+                        {
+                    
+                            {"UniqueName", row["Joint"] },
+                            {"LoadPattern", row["OutputCase"] },
+                            {"FX", ((Convert.ToDouble(row["F1"]))*(-1)).ToString()},
+                            {"FY", ((Convert.ToDouble(row["F2"]))*(-1)).ToString()},
+                            {"FZ", ((Convert.ToDouble(row["F3"]))*(-1)).ToString()},
+                            {"MX", ((Convert.ToDouble(row["M1"]))*(-1)).ToString()},
+                            {"MY", ((Convert.ToDouble(row["M2"]))*(-1)).ToString()},
+                            {"MZ", ((Convert.ToDouble(row["M3"]))*(-1)).ToString()},
+                            {"XDim", "" },
+                            {"YDim", "" },
+                            {"GUID", "" }
+                        };
+                        checkJointExist.Add(row["Joint"] + row["OutputCase"]);
+                        databaseTableLoadsAssigned.TableInList.Add(newrow);
+                    }
+                }
+            }
+            catch { }
+            
+            try
+            {
+                foreach (Dictionary<string, string> row in jointforcesShellTableFilteredLoads)
+                {
+                    if (checkJointExist.Contains(row["Joint"] + row["OutputCase"]))
+                    {
+                        foreach (Dictionary<string, string> rowupdate in databaseTableLoadsAssigned.TableInList)
+                        {
+                            if (rowupdate["UniqueName"] == row["Joint"] && rowupdate["LoadPattern"] == row["OutputCase"])
+                            {
+                                rowupdate["FX"] = (Convert.ToDouble(rowupdate["FX"]) + ((Convert.ToDouble(row["F1"])) * (-1))).ToString();
+                                rowupdate["FY"] = (Convert.ToDouble(rowupdate["FY"]) + ((Convert.ToDouble(row["F2"])) * (-1))).ToString();
+                                rowupdate["FZ"] = (Convert.ToDouble(rowupdate["FZ"]) + ((Convert.ToDouble(row["F3"])) * (-1))).ToString();
+                                rowupdate["MX"] = (Convert.ToDouble(rowupdate["MX"]) + ((Convert.ToDouble(row["M1"])) * (-1))).ToString();
+                                rowupdate["MY"] = (Convert.ToDouble(rowupdate["MY"]) + ((Convert.ToDouble(row["M2"])) * (-1))).ToString();
+                                rowupdate["MZ"] = (Convert.ToDouble(rowupdate["MZ"]) + ((Convert.ToDouble(row["M3"])) * (-1))).ToString();
+                                break;
+                            }
+                        }
+                    }
+
+                    else
+
+                    {
+                        Dictionary<string, string> newrow = new Dictionary<string, string>()
+
+                    {
+
+                        {"UniqueName", row["Joint"] },
+                        {"LoadPattern", row["OutputCase"] },
+                        {"FX", ((Convert.ToDouble(row["F1"]))*(-1)).ToString()},
+                        {"FY", ((Convert.ToDouble(row["F2"]))*(-1)).ToString()},
+                        {"FZ", ((Convert.ToDouble(row["F3"]))*(-1)).ToString()},
+                        {"MX", ((Convert.ToDouble(row["M1"]))*(-1)).ToString()},
+                        {"MY", ((Convert.ToDouble(row["M2"]))*(-1)).ToString()},
+                        {"MZ", ((Convert.ToDouble(row["M3"]))*(-1)).ToString()},
+                        {"XDim", "" },
+                        {"YDim", "" },
+                        {"GUID", "" }
+                    };
+                        checkJointExist.Add(row["Joint"] + row["OutputCase"]);
+                        databaseTableLoadsAssigned.TableInList.Add(newrow);
+                    }
+                }
+            }
+            catch 
+            {
+                
+            }
+            
+            try
+            {
+                foreach (Dictionary<string, string> row in jointforcesLinkTableFilteredLoads)
+                {
+                    if (checkJointExist.Contains(row["Joint"] + row["OutputCase"]))
+                    {
+                        foreach (Dictionary<string, string> rowupdate in databaseTableLoadsAssigned.TableInList)
+                        {
+                            if (rowupdate["UniqueName"] == row["Joint"] && rowupdate["LoadPattern"] == row["OutputCase"])
+                            {
+                                rowupdate["FX"] = (Convert.ToDouble(rowupdate["FX"]) + ((Convert.ToDouble(row["F1"])) * (-1))).ToString();
+                                rowupdate["FY"] = (Convert.ToDouble(rowupdate["FY"]) + ((Convert.ToDouble(row["F2"])) * (-1))).ToString();
+                                rowupdate["FZ"] = (Convert.ToDouble(rowupdate["FZ"]) + ((Convert.ToDouble(row["F3"])) * (-1))).ToString();
+                                rowupdate["MX"] = (Convert.ToDouble(rowupdate["MX"]) + ((Convert.ToDouble(row["M1"])) * (-1))).ToString();
+                                rowupdate["MY"] = (Convert.ToDouble(rowupdate["MY"]) + ((Convert.ToDouble(row["M2"])) * (-1))).ToString();
+                                rowupdate["MZ"] = (Convert.ToDouble(rowupdate["MZ"]) + ((Convert.ToDouble(row["M3"])) * (-1))).ToString();
+                                break;
+                            }
+                        }
+                    }
+
+                    else
+
+                    {
+                        Dictionary<string, string> newrow = new Dictionary<string, string>()
+
+                    {
+
+                        {"UniqueName", row["Joint"] },
+                        {"LoadPattern", row["OutputCase"] },
+                        {"FX", ((Convert.ToDouble(row["F1"]))*(-1)).ToString()},
+                        {"FY", ((Convert.ToDouble(row["F2"]))*(-1)).ToString()},
+                        {"FZ", ((Convert.ToDouble(row["F3"]))*(-1)).ToString()},
+                        {"MX", ((Convert.ToDouble(row["M1"]))*(-1)).ToString()},
+                        {"MY", ((Convert.ToDouble(row["M2"]))*(-1)).ToString()},
+                        {"MZ", ((Convert.ToDouble(row["M3"]))*(-1)).ToString()},
+                        {"XDim", "" },
+                        {"YDim", "" },
+                        {"GUID", "" }
+                    };
+                        checkJointExist.Add(row["Joint"] + row["OutputCase"]);
+                        databaseTableLoadsAssigned.TableInList.Add(newrow);
+                    }
+                }
+            }
+            catch { }
+            
+
+
+
+
             isError = src.HelperSafe.ApplyEtabsTable(SapModelSAFE, databaseTableLoadsAssigned);
 
             if (isError)

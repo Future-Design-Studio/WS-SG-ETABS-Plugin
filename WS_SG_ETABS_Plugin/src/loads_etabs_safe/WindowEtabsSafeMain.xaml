@@ -59,7 +59,7 @@
                      Margin="0 0 0 0" SelectionChanged="listBoxCasePatternMatching_SelectionChanged">
             </ListBox>
 
-            <Button Grid.Row="3" Grid.Column="3" Content="Add" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="0,-150,0,0" Click="Button_ADD_Case_Pattern_Click" ></Button>
+            <Button Grid.Row="3" Grid.Column="3" Content="Add" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="0,-150,0,0" Click="Button_ADD_Case_Pattern_Click" Name="Button_ADD_Case_Pattern" ></Button>
 
             <Button Grid.Row="3" Grid.Column="3" Content="Remove" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="0,-90,0,0" Click="Button_REMOVE_Case_Pattern_Click" ></Button>
 

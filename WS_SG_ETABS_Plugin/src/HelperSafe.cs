@@ -1671,10 +1671,6 @@ namespace WS_SG_ETABS_Plugin.src
             foreach (string patternName in patternnameList)
             {
                 Ret = Sap.PointObj.DeleteLoadForce(groupNameJoint, patternName, ItemType);
-                if (Ret == 0)
-                {
-                    MessageBox.Show(patternName + " loads were assigned to joints inside group of joints :" + groupNameJoint + " and these have been removed to prevent double counting old loads.");
-                }
             }
         }
 

@@ -30,12 +30,9 @@ namespace WS_SG_ETABS_Plugin.src.loads_etabs_safe
         src.HelperEtabs.DatabaseTable pointobjectconnectivityTable = new HelperEtabs.DatabaseTable();
         src.HelperEtabs.DatabaseTable jointreactionTable = new HelperEtabs.DatabaseTable();
         src.HelperEtabs.DatabaseTable storydefinitionTable = new HelperEtabs.DatabaseTable();
-        src.HelperEtabs.DatabaseTable jointforcesFrametable = new HelperEtabs.DatabaseTable();
-        src.HelperEtabs.DatabaseTable jointforcesShelltable = new HelperEtabs.DatabaseTable();
-        src.HelperEtabs.DatabaseTable jointforcesLinktable = new HelperEtabs.DatabaseTable();
         List<string> loadcasefromList = new List<string>();
         List<string> jointsindefinedgroupList = new List<string>();
-        List<string> groupnameList = new List<string>();
+        List<string> storeynameList = new List<string>();
         bool isError = false;
         public WindowEtabsSafeMain(ETABSv1.cSapModel SapModelETABS, SAFEv1.cSapModel SapModelSAFE, ETABSv1.cPluginCallback PluginETABS, List<src.HelperEtabs.DatabaseTable> DatabaseTableListETABS)
         {
@@ -63,12 +60,13 @@ namespace WS_SG_ETABS_Plugin.src.loads_etabs_safe
                 return;
             }
 
-            string storyabove = "";
-            int storeyloop = 0;
+
             foreach (Dictionary<string, string> row in storydefinitionTable.TableInList)
             {
-                if (row["Name"])
+                storeynameList.Add(row["Story"]);
             }
+            comBoxGroups.ItemsSource = storeynameList;
+            comBoxGroups.SelectedIndex = 0;
 
             (isError, jointreactionTable) = src.HelperEtabs.CallDatabaseTableByTableKey(databaseTableListETABS, "Joint Reactions");
             if (isError)
@@ -110,7 +108,7 @@ namespace WS_SG_ETABS_Plugin.src.loads_etabs_safe
         }
 
 
-        List<string> selectedGroup = new List<string>();
+        List<string> selectedLevel = new List<string>();
         List<ClassEtabsSafe.CaseandPatternMatch> casePatternList = new List<ClassEtabsSafe.CaseandPatternMatch>();
 
         private void comBoxLoadCase_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -147,11 +145,20 @@ namespace WS_SG_ETABS_Plugin.src.loads_etabs_safe
                 casePatternList.Add(eachCasePattern);
                 listBoxCasePatternMatching.Items.Add("Load from " + comBoxLoadCase.Text + " assigned to " + comBoxLoadCase.Text + "_transferred.");
 
-                loadcasefromList.RemoveAt(comBoxLoadCase.SelectedIndex);
+                if (comBoxLoadCase.SelectedIndex != -1)
+                {
+                    loadcasefromList.RemoveAt(comBoxLoadCase.SelectedIndex);
+                }
 
                 comBoxLoadCase.ClearValue(ItemsControl.ItemsSourceProperty);
                 comBoxLoadCase.ItemsSource = loadcasefromList;
                 comBoxLoadCase.SelectedIndex = 0;
+
+                if (loadcasefromList.Count == 0)
+                {
+                    Button_ADD_Case_Pattern.IsEnabled = false;
+                }
+                
             }
             else
             {
@@ -160,11 +167,20 @@ namespace WS_SG_ETABS_Plugin.src.loads_etabs_safe
                 casePatternList.Add(eachCasePattern);
                 listBoxCasePatternMatching.Items.Add("Load from " + comBoxLoadCase.Text + " assigned to " + comBoxLoadPattern.Text + ".");
 
-                loadcasefromList.RemoveAt(comBoxLoadCase.SelectedIndex);
+                if (comBoxLoadCase.SelectedIndex != -1)
+                {
+                    loadcasefromList.RemoveAt(comBoxLoadCase.SelectedIndex);
+                }
 
                 comBoxLoadCase.ClearValue(ItemsControl.ItemsSourceProperty);
                 comBoxLoadCase.ItemsSource = loadcasefromList;
                 comBoxLoadCase.SelectedIndex = 0;
+
+                if (loadcasefromList.Count == 0)
+                {
+                    Button_ADD_Case_Pattern.IsEnabled = false;
+                }
+                    
             }
 
         }
@@ -184,6 +200,8 @@ namespace WS_SG_ETABS_Plugin.src.loads_etabs_safe
 
                 listBoxCasePatternMatching.Items.RemoveAt(selectedIndex);
                 casePatternList.RemoveAt(selectedIndex);
+
+                Button_ADD_Case_Pattern.IsEnabled = true;
             }
         }
 
@@ -210,7 +228,7 @@ namespace WS_SG_ETABS_Plugin.src.loads_etabs_safe
         private void Button_ADD_Group_Click(object sender, RoutedEventArgs e)
         {    
             listBoxChoosenGroup.Items.Add(comBoxGroups.Text);   
-            selectedGroup.Add(comBoxGroups.Text);
+            selectedLevel.Add(comBoxGroups.Text);
             Button_ADD_Group.IsEnabled = false;
         }
 
@@ -221,7 +239,7 @@ namespace WS_SG_ETABS_Plugin.src.loads_etabs_safe
                 int selectedIndex = listBoxChoosenGroup.SelectedIndex;
 
                 listBoxChoosenGroup.Items.RemoveAt(selectedIndex);
-                selectedGroup.RemoveAt(selectedIndex);
+                selectedLevel.RemoveAt(selectedIndex);
 
                 Button_ADD_Group.IsEnabled = true;
             }
@@ -232,19 +250,19 @@ namespace WS_SG_ETABS_Plugin.src.loads_etabs_safe
 
         private void buttonOk_Click(object sender, RoutedEventArgs e)
         {
-            if (selectedGroup.Count == 0)
+            if (selectedLevel.Count == 0)
             {
-                MessageBox.Show("Please choose at least a group or click add to use all groups of joints to transfer reactions.");
+                MessageBox.Show("Please choose a storey level.");
             }
             else if (casePatternList.Count == 0)
             {
-                MessageBox.Show("Please choose at least 1 load case to transfer reactions.");
+                MessageBox.Show("Please choose at least 1 load case to transfer loads.");
             }
             else
             {
                 IsEnabled = false;
                 //Call up copy property result window
-                src.loads_etabs_safe.WindowEtabsSafeResult windowEtabsSafeResult = new src.loads_etabs_safe.WindowEtabsSafeResult(_SapModelETABS, _SapModelSAFE, _PluginETABS, databaseTableListETABS, selectedGroup, casePatternList, pointobjectconnectivityTable, jointreactionTable, storydefinitionTable, jointforcesFrametable, jointforcesShelltable, jointforcesLinktable);
+                src.loads_etabs_safe.WindowEtabsSafeResult windowEtabsSafeResult = new src.loads_etabs_safe.WindowEtabsSafeResult(_SapModelETABS, _SapModelSAFE, _PluginETABS, databaseTableListETABS, selectedLevel, casePatternList, pointobjectconnectivityTable, jointreactionTable, storydefinitionTable);
                 IsEnabled = true;
             }
         }

@@ -93,56 +93,53 @@ namespace WS_SG_ETABS_Plugin.src.loads_etabs_safe
 
                     if (isError)
                     {
-                        MessageBox.Show("Error in retreiving joint reactions and groupings. Please make sure the model is run!");
-                        return;
+                        MessageBox.Show("Error in retreiving table for " + tableKey + ". It is possible this table doesn't exist or model is not run, please double check.");
+                        isError = false;
                     }
-                    else
+                    //Update loading UI
+                    if (tableKey == "Point Object Connectivity")
                     {
-                        //Update loading UI
-                        if (tableKey == "Point Object Connectivity")
+                        Dispatcher.Invoke((Action)(() =>
                         {
-                            Dispatcher.Invoke((Action)(() =>
-                            {
-                                checkBoxPointObjectConnectivity.IsChecked = true;
-                            }));
-                        }
-                        else if (tableKey == "Joint Reactions")
-                        {
-                            Dispatcher.Invoke((Action)(() =>
-                            {
-                                checkBoxJointReaction.IsChecked = true;
-                            }));
-                        }
-                        else if (tableKey == "Story Definitions")
-                        {
-                            Dispatcher.Invoke((Action)(() =>
-                            {
-                                checkBoxStorydefin.IsChecked = true;
-                            }));
-                        }
-                        else if (tableKey == "Element Joint Forces - Frame")
-                        {
-                            Dispatcher.Invoke((Action)(() =>
-                            {
-                                checkBoxJointForcesFrame.IsChecked = true;
-                            }));
-                        }
-                        else if (tableKey == "Element Joint Forces - Shells")
-                        {
-                            Dispatcher.Invoke((Action)(() =>
-                            {
-                                checkBoxJointForcesShell.IsChecked = true;
-                            }));
-                        }
-                        else if (tableKey == "Element Joint Forces - Links")
-                        {
-                            Dispatcher.Invoke((Action)(() =>
-                            {
-                                checkBoxJointForcesLink.IsChecked = true;
-                            }));
-                        }
-                        databaseTableListETABS.Add(databaseTable);
+                            checkBoxPointObjectConnectivity.IsChecked = true;
+                        }));
                     }
+                    else if (tableKey == "Joint Reactions")
+                    {
+                        Dispatcher.Invoke((Action)(() =>
+                        {
+                            checkBoxJointReaction.IsChecked = true;
+                        }));
+                    }
+                    else if (tableKey == "Story Definitions")
+                    {
+                        Dispatcher.Invoke((Action)(() =>
+                        {
+                            checkBoxStorydefin.IsChecked = true;
+                        }));
+                    }
+                    else if (tableKey == "Element Joint Forces - Frame")
+                    {
+                        Dispatcher.Invoke((Action)(() =>
+                        {
+                            checkBoxJointForcesFrame.IsChecked = true;
+                        }));
+                    }
+                    else if (tableKey == "Element Joint Forces - Shells")
+                    {
+                        Dispatcher.Invoke((Action)(() =>
+                        {
+                            checkBoxJointForcesShell.IsChecked = true;
+                        }));
+                    }
+                    else if (tableKey == "Element Joint Forces - Links")
+                    {
+                        Dispatcher.Invoke((Action)(() =>
+                        {
+                            checkBoxJointForcesLink.IsChecked = true;
+                        }));
+                    }
+                    databaseTableListETABS.Add(databaseTable);
                 }
             });
 
