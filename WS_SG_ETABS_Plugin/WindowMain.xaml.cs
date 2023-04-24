@@ -189,11 +189,6 @@ namespace WS_SG_ETABS_Plugin
             //IsEnabled = true;
         }
 
-        private void buttonPadFooting_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
         private void buttonTrfEtabstoSafe_Click(object sender, RoutedEventArgs e)
         {
             IsEnabled = false;
@@ -253,7 +248,7 @@ namespace WS_SG_ETABS_Plugin
             IsEnabled = true;
         }
 
-        private void buttonPadFootPlot_Click(object sender, RoutedEventArgs e)
+        private void buttonPadFooting_Click(object sender, RoutedEventArgs e)
         {
             IsEnabled = false;
             //Call up window
