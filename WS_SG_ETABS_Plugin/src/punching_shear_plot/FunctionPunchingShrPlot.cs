@@ -19,7 +19,7 @@ namespace WS_SG_ETABS_Plugin.src.punching_shear_plot
     {
         public static (bool, List<ClassPunchingShrPlot.GroupDefinition>) PunchingShearPlot(cSapModel SapModel, cPluginCallback Plugin, List<string> listChoosenLoadCase, string choosenGroup, double forceIncrement, string plotTitle, 
             double forceFactor, double bubbleScaleFactor, int textSize, int titleSize, int axisTitleSize, double gridSpacingX, double gridSpacingY, List<src.HelperEtabs.DatabaseTable> databaseTableList,
-            WpfPlot ReactionPlot)
+            WpfPlot ReactionPlot, string filePath, string fileName)
         {
             bool isError = false;
             List<string> errorList = new List<string>();
@@ -72,7 +72,7 @@ namespace WS_SG_ETABS_Plugin.src.punching_shear_plot
             //Create excel
             var result = CompilePunchingShearDetailsToArray(jointPunchingShearDetailsList, choosenGroup);
             var resultGroupDef = CompileGroupDefinitionsToArray(groupDefinitions);
-            WritePunchingShearDetailsToExcel(result, resultGroupDef, "punching_shear", "C:\\Users\\STEFANO\\OneDrive - Ramboll\\Desktop\\");
+            WritePunchingShearDetailsToExcel(result, resultGroupDef, fileName, filePath);
 
             return (false, groupDefinitions);
         }
@@ -554,7 +554,7 @@ namespace WS_SG_ETABS_Plugin.src.punching_shear_plot
             }
 
             //Assign group index
-            int groupIndex = 0;
+            int groupIndex = 1;
             foreach(List<ClassPunchingShrPlot.JointPunchingShearDetails> eachGroupByForce in groupByForce)
             {
                 bool firstLoop = true;
@@ -729,7 +729,9 @@ namespace WS_SG_ETABS_Plugin.src.punching_shear_plot
                 {
                     if (groupDefinitions.Count > 1)
                     {
-                        double colorMapFraction = groupDefinition.GroupIndex / (Convert.ToDouble(groupDefinitions.Count) - 1);
+                        //groupDefinition.GroupIndex starts at 1 instead of 0, thus need to -1
+
+                        double colorMapFraction = (groupDefinition.GroupIndex - 1) / (Convert.ToDouble(groupDefinitions.Count) - 1);
                         bubbleColor = ScottPlot.Drawing.Colormap.Jet.GetColor(colorMapFraction, .6);
                         groupDefinition.Color = Convert.ToString(bubbleColor);
                     }

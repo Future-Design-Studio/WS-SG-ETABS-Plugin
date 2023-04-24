@@ -25,6 +25,7 @@ namespace WS_SG_ETABS_Plugin.src.punching_shear_plot
         cSapModel _SapModel;
         cPluginCallback _Plugin;
 
+
         List<src.HelperEtabs.DatabaseTable> databaseTableList = new List<src.HelperEtabs.DatabaseTable>();
 
         public WindowPunchShrPlotLoading(cSapModel SapModel, cPluginCallback Plugin)
@@ -140,5 +141,12 @@ namespace WS_SG_ETABS_Plugin.src.punching_shear_plot
             }
 
         }
+
+        /*
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            e.Cancel = true;
+        }
+        */
     }
 }

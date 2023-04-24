@@ -23,6 +23,7 @@ namespace WS_SG_ETABS_Plugin.src.punching_shear_plot
     {
         cSapModel _SapModel;
         cPluginCallback _Plugin;
+        string modelPath;
 
         //List of tables to save joint reaction and grouping table
         List<src.HelperEtabs.DatabaseTable> databaseTableListGlobal = new List<HelperEtabs.DatabaseTable>();
@@ -33,6 +34,13 @@ namespace WS_SG_ETABS_Plugin.src.punching_shear_plot
             _Plugin = Plugin;
 
             InitializeComponent();
+
+            //Fill in default excel result name
+            textBoxFileName.Text = "punching_shear";
+
+            //Fill in model path (default path)
+            modelPath = SapModel.GetModelFilepath();
+            textBoxFilePath.Text = modelPath;
 
             //Save databaseTableList to global variable
             databaseTableListGlobal = databaseTableList;
@@ -82,6 +90,9 @@ namespace WS_SG_ETABS_Plugin.src.punching_shear_plot
                 //Casting listbox content to list
                 List<string> listChoosenLoadCase = listBoxChoosenLoadCase.Items.OfType<string>().ToList();
 
+                string fileName = textBoxFileName.Text;
+                string filePath = textBoxFilePath.Text;
+
                 string choosenGroup = comBoxGroup.Text;
 
                 double forceIncrement = Convert.ToDouble(textBoxForceIncrement.Text);
@@ -97,7 +108,8 @@ namespace WS_SG_ETABS_Plugin.src.punching_shear_plot
 
                 //Call up copy result window
                 src.punching_shear_plot.WindowPunchShrPlotResult windowPlotReactionTableResult = new src.punching_shear_plot.WindowPunchShrPlotResult(
-                    _SapModel, _Plugin, listChoosenLoadCase, choosenGroup, forceIncrement, plotTitle, forceFactor, bubbleScaleFactor, textSize, titleSize, axisTitleSize, gridSpacingX, gridSpacingY, databaseTableListGlobal);
+                    _SapModel, _Plugin, listChoosenLoadCase, choosenGroup, forceIncrement, plotTitle, forceFactor, bubbleScaleFactor, textSize, titleSize, 
+                    axisTitleSize, gridSpacingX, gridSpacingY, databaseTableListGlobal, filePath, fileName);
             }
 
             catch (Exception ex)
@@ -114,6 +126,27 @@ namespace WS_SG_ETABS_Plugin.src.punching_shear_plot
             Close();
         }
 
+        private void buttonDefaultPath_Click(object sender, RoutedEventArgs e)
+        {
+            textBoxFilePath.Text = modelPath;
+        }
+
+        private void buttonModifyPath_Click(object sender, RoutedEventArgs e)
+        {
+            var dialog = new System.Windows.Forms.FolderBrowserDialog();
+            dialog.SelectedPath = textBoxFilePath.Text;
+
+            System.Windows.Forms.DialogResult result = dialog.ShowDialog();
+
+            if (result == System.Windows.Forms.DialogResult.OK)
+            {
+                textBoxFilePath.Text = dialog.SelectedPath;
+            }
+        }
+
+
         #endregion
+
+
     }
 }

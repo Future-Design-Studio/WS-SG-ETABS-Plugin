@@ -460,7 +460,9 @@ namespace WS_SG_ETABS_Plugin.src.pad_footing_plot
                 System.Drawing.Color color = new System.Drawing.Color();
                 if (groupDefinitions.Count > 1)
                 {
-                    double colorMapFraction = groupDefinition.GroupIndex / (Convert.ToDouble(groupDefinitions.Count) - 1);
+                    //groupDefinition.GroupIndex starts at 1 instead of 0, thus need to -1
+
+                    double colorMapFraction = (groupDefinition.GroupIndex - 1) / (Convert.ToDouble(groupDefinitions.Count) - 1);
                     color = ScottPlot.Drawing.Colormap.Jet.GetColor(colorMapFraction, .6);
                     groupDefinition.Color = Convert.ToString(color);
                 }
