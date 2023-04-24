@@ -196,7 +196,10 @@ namespace WS_SG_ETABS_Plugin
 
         private void buttonTrfEtabstoSafe_Click(object sender, RoutedEventArgs e)
         {
-
+            IsEnabled = false;
+            //Call up Etabs to etabs load transferring open file window
+            src.loads_etabs_safe.WindowEtabsSafeOpenFile windowOpenFile = new src.loads_etabs_safe.WindowEtabsSafeOpenFile(_SapModel, _Plugin);
+            IsEnabled = true;
         }
 
         private void buttonDeleteFrames_Click(object sender, RoutedEventArgs e)

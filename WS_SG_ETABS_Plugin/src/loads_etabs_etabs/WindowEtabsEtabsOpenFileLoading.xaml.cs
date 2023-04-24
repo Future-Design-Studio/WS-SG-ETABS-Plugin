@@ -63,7 +63,7 @@ namespace WS_SG_ETABS_Plugin.src.loads_etabs_etabs
             }
 
             //Turn on all load
-            src.HelperEtabs.OnAllLoadDatabase(SapModel);
+            src.HelperEtabs.OnAllLoadDatabaseWithoutCombinations(SapModel);
 
             InitializeComponent();
 
