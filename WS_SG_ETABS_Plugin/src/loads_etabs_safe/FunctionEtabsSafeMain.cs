@@ -3,14 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WS_SG_ETABS_Plugin.src.loads_etabs_etabs;
+using ETABSv1;
+using SAFEv1;
+using System.Windows.Forms;
 
 namespace WS_SG_ETABS_Plugin.src.loads_etabs_safe
 {
     internal class FunctionEtabsSafeMain
     {
 
-        public static bool TransferLoadFromEtabsToEtabs(cSapModel SapModel, cPluginCallback Plugin, List<src.HelperEtabs.DatabaseTable> databaseTableList, List<string> selectedGroup, List<ClassEtabsEtabs.CaseandPatternMatch> casePatternList, src.HelperEtabs.DatabaseTable groupdefinitionTable, src.HelperEtabs.DatabaseTable pointobjectconnectivityTable, src.HelperEtabs.DatabaseTable jointreactionTable, src.HelperEtabs.DatabaseTable groupassignmentTable)
+        public static bool TransferLoadFromEtabsToSafe(ETABSv1.cSapModel SapModelETABS, SAFEv1.cSapModel SapModelSAFE, ETABSv1.cPluginCallback PluginEtabs, List<src.HelperEtabs.DatabaseTable> databaseTableList, List<string> selectedGroup, List<ClassEtabsSafe.CaseandPatternMatch> casePatternList, src.HelperEtabs.DatabaseTable groupdefinitionTable, src.HelperEtabs.DatabaseTable pointobjectconnectivityTable, src.HelperEtabs.DatabaseTable jointreactionTable, src.HelperEtabs.DatabaseTable groupassignmentTable)
         {
 
             bool isError = false;
@@ -89,10 +91,10 @@ namespace WS_SG_ETABS_Plugin.src.loads_etabs_safe
                 i = 0;
             }
 
-            src.HelperEtabs.DatabaseTable pointobjectconnectivityTableTo = new src.HelperEtabs.DatabaseTable();
+            src.HelperSafe.DatabaseTable pointobjectconnectivityTableTo = new src.HelperSafe.DatabaseTable();
             List<string> pointUniqueNameTo = new List<string>();
 
-            (isError, pointobjectconnectivityTableTo) = src.HelperEtabs.GetTableDisplay(SapModel, "Point Object Connectivity", false);
+            (isError, pointobjectconnectivityTableTo) = src.HelperSafe.GetTableDisplay(SapModelSAFE, "Point Object Connectivity", false);
             if (isError)
             {
                 return isError;
@@ -130,7 +132,7 @@ namespace WS_SG_ETABS_Plugin.src.loads_etabs_safe
 
                 if (casematch.IsCreateNewPattern)
                 {
-                    isError = src.HelperEtabs.AddLoadPattern(SapModel, casematch.LoadPatternTo, 0, "Other", false, true);
+                    isError = src.HelperSafe.AddLoadPattern(SapModelSAFE, casematch.LoadPatternTo, 0, "Other", false, true);
                 }
             }
             #endregion
@@ -150,14 +152,14 @@ namespace WS_SG_ETABS_Plugin.src.loads_etabs_safe
 
             #region create group and add points inside
 
-            int ret = SapModel.GroupDef.Delete("Temp_GRP_Plugin_Joints_Identified");
-            isError = src.HelperEtabs.CreateNewGroup(SapModel, "Temp_GRP_Plugin_Joints_Identified");
+            int ret = SapModelSAFE.GroupDef.Delete("Temp_GRP_Plugin_Joints_Identified");
+            isError = src.HelperSafe.CreateNewGroup(SapModelSAFE, "Temp_GRP_Plugin_Joints_Identified");
             if (isError)
             {
                 MessageBox.Show("Unable to create group, please check what happen");
                 return isError;
             }
-            isError = src.HelperEtabs.AddPointsInsideGroup(SapModel, pointUniqueNameTo, "Temp_GRP_Plugin_Joints_Identified");
+            isError = src.HelperSafe.AddPointsInsideGroup(SapModelSAFE, pointUniqueNameTo, "Temp_GRP_Plugin_Joints_Identified");
             if (isError)
             {
                 MessageBox.Show("Unable to add points inside group, please check what happen");
@@ -170,12 +172,15 @@ namespace WS_SG_ETABS_Plugin.src.loads_etabs_safe
             #endregion
 
             #region update database table with loads assigned
-            src.HelperEtabs.DatabaseTable databaseTableLoadsAssigned = new src.HelperEtabs.DatabaseTable();
-            databaseTableLoadsAssigned = src.HelperEtabs.GetTableEdit(SapModel, "Joint Loads Assignments - Force");
+            src.HelperSafe.DatabaseTable databaseTableLoadsAssigned = new src.HelperSafe.DatabaseTable();
+            databaseTableLoadsAssigned = src.HelperSafe.GetTableEdit(SapModelSAFE, "Joint Loads Assignments - Force");
 
-            //src.HelperEtabs.DeleteExistingLoadsFromPoints(SapModel, patternTo, "Temp_GRP_Plugin_Joints_Identified");
+            for (i = 0; i < 10; i++)
+            {
+                src.HelperSafe.DeleteExistingLoadsFromPoints(SapModelSAFE, patternTo, "Temp_GRP_Plugin_Joints_Identified");
+            }
 
-            foreach (Dictionary<string, string> row in databaseTableLoadsAssigned.TableInList)
+            /*foreach (Dictionary<string, string> row in databaseTableLoadsAssigned.TableInList)
             {
                 if (pointUniqueNameTo.Contains(row["UniqueName"]) && patternTo.Contains(row["LoadPattern"]))
                 {
@@ -183,6 +188,7 @@ namespace WS_SG_ETABS_Plugin.src.loads_etabs_safe
                     break;
                 }
             }
+            */
 
             foreach (Dictionary<string, string> row in jointreactionTableFilteredLoads)
             {
@@ -202,7 +208,7 @@ namespace WS_SG_ETABS_Plugin.src.loads_etabs_safe
                     };
                 databaseTableLoadsAssigned.TableInList.Add(newrow);
             }
-            isError = src.HelperEtabs.ApplyEtabsTable(SapModel, databaseTableLoadsAssigned);
+            isError = src.HelperSafe.ApplyEtabsTable(SapModelSAFE, databaseTableLoadsAssigned);
 
             if (isError)
             {
