@@ -183,6 +183,17 @@
     <Compile Include="src\load_combo_EN\WindowLoadComboResult.xaml.cs">
       <DependentUpon>WindowLoadComboResult.xaml</DependentUpon>
     </Compile>
+    <Compile Include="src\pad_footing_plot\ClassPadFootPlot.cs" />
+    <Compile Include="src\pad_footing_plot\FunctionPadFootPlot.cs" />
+    <Compile Include="src\pad_footing_plot\WindowPadFootLoading.xaml.cs">
+      <DependentUpon>WindowPadFootLoading.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\pad_footing_plot\WindowPadFootPlotMain.xaml.cs">
+      <DependentUpon>WindowPadFootPlotMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\pad_footing_plot\WindowPadFootPlotResult.xaml.cs">
+      <DependentUpon>WindowPadFootPlotResult.xaml</DependentUpon>
+    </Compile>
     <Compile Include="src\plot_reaction\graph\ClassPlotGraph.cs" />
     <Compile Include="src\plot_reaction\graph\FunctionPlotReactionGraph.cs" />
     <Compile Include="src\plot_reaction\graph\WindowPlotReactionGraphBaseReaction.xaml.cs">
@@ -333,6 +344,18 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="src\load_combo_EN\WindowLoadComboResult.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\pad_footing_plot\WindowPadFootLoading.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\pad_footing_plot\WindowPadFootPlotMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\pad_footing_plot\WindowPadFootPlotResult.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

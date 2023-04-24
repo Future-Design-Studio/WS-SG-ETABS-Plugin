@@ -252,5 +252,15 @@ namespace WS_SG_ETABS_Plugin
             src.punching_shear_plot.WindowPunchShrPlotLoading windowPunchShrPlotLoading = new src.punching_shear_plot.WindowPunchShrPlotLoading(_SapModel, _Plugin);
             IsEnabled = true;
         }
+
+        private void buttonPadFootPlot_Click(object sender, RoutedEventArgs e)
+        {
+            IsEnabled = false;
+            //Call up window
+            src.pad_footing_plot.WindowPadFootLoading windowPadFootPlotLoading = new src.pad_footing_plot.WindowPadFootLoading(_SapModel, _Plugin);
+            IsEnabled = true;
+        }
+
+        
     }
 }
