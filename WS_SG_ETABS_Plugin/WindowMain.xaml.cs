@@ -194,11 +194,6 @@ namespace WS_SG_ETABS_Plugin
 
         }
 
-        private void buttonPunchingShear_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
         private void buttonTrfEtabstoSafe_Click(object sender, RoutedEventArgs e)
         {
 
@@ -247,7 +242,7 @@ namespace WS_SG_ETABS_Plugin
             System.Diagnostics.Process.Start("https://forms.office.com/e/qaiKf5e3a4");
         }
 
-        private void buttonPunchShrPlot_Click(object sender, RoutedEventArgs e)
+        private void buttonPunchingShear_Click(object sender, RoutedEventArgs e)
         {
             IsEnabled = false;
             //Call up window
