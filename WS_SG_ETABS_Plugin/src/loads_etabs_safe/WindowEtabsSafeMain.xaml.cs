@@ -61,9 +61,13 @@ namespace WS_SG_ETABS_Plugin.src.loads_etabs_safe
             }
 
 
-            foreach (Dictionary<string, string> row in storydefinitionTable.TableInList)
+            foreach (Dictionary<string, string> row in pointobjectconnectivityTable.TableInList)
             {
-                storeynameList.Add(row["Story"]);
+                if (!storeynameList.Contains(row["Story"]))
+                {
+                    storeynameList.Add(row["Story"]);
+                }
+                
             }
             comBoxGroups.ItemsSource = storeynameList;
             comBoxGroups.SelectedIndex = 0;
