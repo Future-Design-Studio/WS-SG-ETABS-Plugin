@@ -31,7 +31,6 @@ namespace WS_SG_ETABS_Plugin
         {
             _Plugin = Plugin;
             _SapModel = SapModel;
-            string strComputerName = Environment.MachineName.ToString();
 
             src.HelperEtabs.SetOutputUnitTo_kN_m_C(_SapModel);
 
