@@ -222,11 +222,23 @@ namespace WS_SG_ETABS_Plugin.src.loads_etabs_safe
 
             foreach (Dictionary<string, string> row in jointreactionDatabaseFiltered)
             {
-                if (caseFrom.Contains(row["OutputCase"]))
+                if (row["StepNumber"] != null)
                 {
-                    row["UniqueName"] = pointUniqueNameTo[pointUniqueNameFromAll.IndexOf(row["UniqueName"])];
-                    row["OutputCase"] = patternTo[caseFrom.IndexOf(row["OutputCase"])];
-                    jointreactionTableFilteredLoads.Add(row);
+                    if (caseFrom.Contains(row["OutputCase"] + "_Step_" + row["StepNumber"]))
+                    {
+                        row["UniqueName"] = pointUniqueNameTo[pointUniqueNameFromAll.IndexOf(row["UniqueName"])];
+                        row["OutputCase"] = patternTo[caseFrom.IndexOf(row["OutputCase"] + "_Step_" + row["StepNumber"])];
+                        jointreactionTableFilteredLoads.Add(row);
+                    }
+                }
+                else
+                {
+                    if (caseFrom.Contains(row["OutputCase"]))
+                    {
+                        row["UniqueName"] = pointUniqueNameTo[pointUniqueNameFromAll.IndexOf(row["UniqueName"])];
+                        row["OutputCase"] = patternTo[caseFrom.IndexOf(row["OutputCase"])];
+                        jointreactionTableFilteredLoads.Add(row);
+                    }
                 }
             }
 
@@ -234,11 +246,23 @@ namespace WS_SG_ETABS_Plugin.src.loads_etabs_safe
             {
                 foreach (Dictionary<string, string> row in jointforcesFrameTableFiltered)
                 {
-                    if (caseFrom.Contains(row["OutputCase"]))
+                    if (row["StepNumber"] != null)
                     {
-                        row["Joint"] = pointUniqueNameTo[pointUniqueNameFromAll.IndexOf(row["Joint"])];
-                        row["OutputCase"] = patternTo[caseFrom.IndexOf(row["OutputCase"])];
-                        jointforcesFrameTableFilteredLoads.Add(row);
+                        if (caseFrom.Contains(row["OutputCase"] + "_Step_" + row["StepNumber"]))
+                        {
+                            row["Joint"] = pointUniqueNameTo[pointUniqueNameFromAll.IndexOf(row["Joint"])];
+                            row["OutputCase"] = patternTo[caseFrom.IndexOf(row["OutputCase"] + "_Step_" + row["StepNumber"])];
+                            jointforcesFrameTableFilteredLoads.Add(row);
+                        }
+                    }
+                    else
+                    {
+                        if (caseFrom.Contains(row["OutputCase"]))
+                        {
+                            row["Joint"] = pointUniqueNameTo[pointUniqueNameFromAll.IndexOf(row["Joint"])];
+                            row["OutputCase"] = patternTo[caseFrom.IndexOf(row["OutputCase"])];
+                            jointforcesFrameTableFilteredLoads.Add(row);
+                        }
                     }
                 }
             }
@@ -248,11 +272,23 @@ namespace WS_SG_ETABS_Plugin.src.loads_etabs_safe
             {
                 foreach (Dictionary<string, string> row in jointforcesShellTableFiltered)
                 {
-                    if (caseFrom.Contains(row["OutputCase"]))
+                    if (row["StepNumber"] != null)
                     {
-                        row["Joint"] = pointUniqueNameTo[pointUniqueNameFromAll.IndexOf(row["Joint"])];
-                        row["OutputCase"] = patternTo[caseFrom.IndexOf(row["OutputCase"])];
-                        jointforcesShellTableFilteredLoads.Add(row);
+                        if (caseFrom.Contains(row["OutputCase"] + "_Step_" + row["StepNumber"]))
+                        {
+                            row["Joint"] = pointUniqueNameTo[pointUniqueNameFromAll.IndexOf(row["Joint"])];
+                            row["OutputCase"] = patternTo[caseFrom.IndexOf(row["OutputCase"] + "_Step_" + row["StepNumber"])];
+                            jointforcesShellTableFilteredLoads.Add(row);
+                        }
+                    }
+                    else
+                    {
+                        if (caseFrom.Contains(row["OutputCase"]))
+                        {
+                            row["Joint"] = pointUniqueNameTo[pointUniqueNameFromAll.IndexOf(row["Joint"])];
+                            row["OutputCase"] = patternTo[caseFrom.IndexOf(row["OutputCase"])];
+                            jointforcesShellTableFilteredLoads.Add(row);
+                        }
                     }
                 }
             }
@@ -262,11 +298,23 @@ namespace WS_SG_ETABS_Plugin.src.loads_etabs_safe
             {
                 foreach (Dictionary<string, string> row in jointforcesLinkTableFiltered)
                 {
-                    if (caseFrom.Contains(row["OutputCase"]))
+                    if (row["StepNumber"] != null)
                     {
-                        row["Joint"] = pointUniqueNameTo[pointUniqueNameFromAll.IndexOf(row["Joint"])];
-                        row["OutputCase"] = patternTo[caseFrom.IndexOf(row["OutputCase"])];
-                        jointforcesLinkTableFilteredLoads.Add(row);
+                        if (caseFrom.Contains(row["OutputCase"] + "_Step_" + row["StepNumber"]))
+                        {
+                            row["Joint"] = pointUniqueNameTo[pointUniqueNameFromAll.IndexOf(row["Joint"])];
+                            row["OutputCase"] = patternTo[caseFrom.IndexOf(row["OutputCase"] + "_Step_" + row["StepNumber"])];
+                            jointforcesLinkTableFilteredLoads.Add(row);
+                        }
+                    }
+                    else
+                    {
+                        if (caseFrom.Contains(row["OutputCase"]))
+                        {
+                            row["Joint"] = pointUniqueNameTo[pointUniqueNameFromAll.IndexOf(row["Joint"])];
+                            row["OutputCase"] = patternTo[caseFrom.IndexOf(row["OutputCase"])];
+                            jointforcesLinkTableFilteredLoads.Add(row);
+                        }
                     }
                 }
             }
