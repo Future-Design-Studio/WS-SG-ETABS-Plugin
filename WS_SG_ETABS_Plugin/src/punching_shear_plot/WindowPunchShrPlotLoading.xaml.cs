@@ -25,6 +25,7 @@ namespace WS_SG_ETABS_Plugin.src.punching_shear_plot
         cSapModel _SapModel;
         cPluginCallback _Plugin;
 
+
         List<src.HelperEtabs.DatabaseTable> databaseTableList = new List<src.HelperEtabs.DatabaseTable>();
 
         public WindowPunchShrPlotLoading(cSapModel SapModel, cPluginCallback Plugin)
@@ -47,7 +48,8 @@ namespace WS_SG_ETABS_Plugin.src.punching_shear_plot
             src.HelperEtabs.OnAllLoadDatabase(SapModel);
 
             //Get joint reaction database table
-            List<string> tableKeys = new List<string> { "Point Object Connectivity", "Joint Reactions", "Group Assignments", "Element Forces - Columns", "Column Object Connectivity", "Frame Assignments - Section Properties" };
+            List<string> tableKeys = new List<string> { "Point Object Connectivity", "Joint Reactions", "Group Assignments", "Element Forces - Columns", "Column Object Connectivity", "Frame Assignments - Section Properties", 
+                "Frame Section Property Definitions - Summary" };
             loadDatabaseTable(SapModel, Plugin, tableKeys, databaseTableList);
 
             ShowDialog();
@@ -115,7 +117,14 @@ namespace WS_SG_ETABS_Plugin.src.punching_shear_plot
                             Dispatcher.Invoke((Action)(() =>
                             {
                                 checkBoxFrameAssignmentsSectionProperties.IsChecked = true;
-                            }));
+                            })); 
+                        }
+                        else if (tableKey == "Frame Section Property Definitions - Summary")
+                        {
+                            Dispatcher.Invoke((Action)(() =>
+                            {
+                                checkBoxFrameDefSummary.IsChecked = true;
+                            })); 
                         }
 
                         databaseTableList.Add(databaseTable);
@@ -132,5 +141,12 @@ namespace WS_SG_ETABS_Plugin.src.punching_shear_plot
             }
 
         }
+
+        /*
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            e.Cancel = true;
+        }
+        */
     }
 }

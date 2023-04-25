@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ScottPlot;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,8 +23,9 @@ namespace WS_SG_ETABS_Plugin.src.punching_shear_plot
             public Dictionary<string, double> ForceList { get; set; }
             public double ForceMaxDifference { get; set; }
             public string LoadCaseMaxDifference { get; set; }
-
             public string SectProp { get; set; }
+            public double ForceDividedByIncrement { get; set; }
+            public double GroupIndex { get; set; }
 
             public JointPunchingShearDetails(string uniqueName, double xCoordinate, double yCoordinate, double zCoordinate)
             {
@@ -36,5 +38,27 @@ namespace WS_SG_ETABS_Plugin.src.punching_shear_plot
             }
         }
 
+        public class GroupDefinition
+        {
+            public int GroupIndex { get; set; }
+            public string SectProp { get; set; }
+            public double MinForce { get; set; }
+            public double MaxForce { get; set; }
+            public string Color { get; set; }
+            public List<JointPunchingShearDetails> JointPunchingShearDetailsList { get; set; }
+
+            public GroupDefinition(int groupIndex, string sectProp, double minForce, double maxForce, List<JointPunchingShearDetails> jointPunchingShearDetailsList)
+            {
+                GroupIndex = groupIndex;
+                SectProp = sectProp;
+                MinForce = minForce;
+                MaxForce = maxForce;
+
+                JointPunchingShearDetailsList = jointPunchingShearDetailsList;
+            }
+        }
     }
+
+
+
 }

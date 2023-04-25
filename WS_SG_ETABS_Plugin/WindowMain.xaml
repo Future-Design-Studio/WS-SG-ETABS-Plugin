@@ -41,7 +41,9 @@
         <Button Grid.Row="4" x:Name="buttonCopyProperties" Content="Importing ETABS Properties (Beta Version)" FontSize="16" Click="buttonCopyProperties_Click"/>
         <Button Grid.Row="5" x:Name="buttonPlotReaction" Content="Export Joint Reactions (Beta Version)" FontSize="16" Click="buttonPlotReaction_Click"/>
         <Button Grid.Row="6" x:Name="buttonLoadCombo" Content="Load Combination EN (Beta Version)" FontSize="16" Click="buttonLoadCombo_Click"/>
-        <Button Grid.Row="7" x:Name="buttonPunchShrPlot" Content="Plot Punching Shear (Beta Version)" FontSize="16" Click="buttonPunchShrPlot_Click"/>
+        <Button Grid.Row="7" Grid.Column="0" x:Name="buttonPadFooting" Content="Pad Footing Design (Beta Version)" Click="buttonPadFooting_Click" FontSize="16"/>
+        <Button Grid.Row="8" Grid.Column="0" x:Name="buttonPunchingShear" Content="Punching Shear Force Plot (Beta Version)" Click="buttonPunchingShear_Click" FontSize="16"/>
+        <Button Grid.Row="9" Grid.Column="0" x:Name="buttonTrfEtabstoSafe" Content="Transfer ETABS Reaction to SAFE (Beta Version)" Click="buttonTrfEtabstoSafe_Click" FontSize="16"/>
 
         <!-- Specific Use Case -->
         <Button Grid.Row="3" Grid.Column="1" x:Name="buttonShellUni" Content="Shell Orientation (Local-3) (Beta Version)" FontSize="16" Click="buttonShellUni_Click"/>
@@ -54,9 +56,6 @@
 
         <!-- Upcoming -->
         <Button Grid.Row="3" Grid.Column="2" x:Name="buttonCarbon" Content="Carbon Calulator" Click="buttonCarbon_Click" FontSize="16" IsEnabled="False"/>
-        <Button Grid.Row="4" Grid.Column="2" x:Name="buttonPadFooting" Content="Pad Footing Design" Click="buttonPadFooting_Click" FontSize="16" IsEnabled="False"/>
-        <Button Grid.Row="5" Grid.Column="2" x:Name="buttonPunchingShear" Content="Punching Shear Force Plot" Click="buttonPunchingShear_Click" FontSize="16" IsEnabled="False"/>
-        <Button Grid.Row="6" Grid.Column="2" x:Name="buttonTrfEtabstoSafe" Content="Transfer ETABS Reaction to SAFE" Click="buttonTrfEtabstoSafe_Click" FontSize="16"/>
 
 
         <!-- FDS Only -->
