@@ -170,7 +170,14 @@ namespace WS_SG_ETABS_Plugin.src.loads_etabs_safe
                 return isError;
             }
 
-            List<Dictionary<string, string>> pointobjectconnectivityTableToDict = pointobjectconnectivityTableTo.TableInList;
+            src.HelperSafe.DatabaseTable pointobjectconnectivityTableToFiltered = new src.HelperSafe.DatabaseTable();
+            (isError, pointobjectconnectivityTableToFiltered) = src.HelperSafe.FilterDatabaseTable(pointobjectconnectivityTableTo, "Z", "0");
+            if (isError)
+            {
+                return isError;
+            }
+
+            List<Dictionary<string, string>> pointobjectconnectivityTableToDict = pointobjectconnectivityTableToFiltered.TableInList;
 
             foreach (Dictionary<string, string> rowfrom in pointobjectconnectivityTable.TableInList)
             {
