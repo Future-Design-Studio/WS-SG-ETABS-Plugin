@@ -29,6 +29,8 @@ namespace WS_SG_ETABS_Plugin
 
         public WindowMain(ref cSapModel SapModel, ref cPluginCallback Plugin)
         {
+            string version = "1.0.0";
+
             _Plugin = Plugin;
             _SapModel = SapModel;
 
@@ -65,17 +67,18 @@ namespace WS_SG_ETABS_Plugin
             }
             */
 
-            bool licenseValid = src.HelperLicense.CheckLicense();
+            bool licenseValid = src.HelperLicense.CheckLicense(version);
 
             if (!licenseValid)
             {
-                string userComputerName = Environment.MachineName.ToString();
-                MessageBox.Show("Illegal license. Your PC ID " + userComputerName + " has been reported to Ramboll IT as well as Singapore Police.");
                 Close();
             }
             else
             {
                 InitializeComponent();
+
+                labelVersion.Content = "version " + version;
+
                 ShowDialog();
             }
 
