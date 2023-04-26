@@ -1,8 +1,21 @@
 ﻿using ETABSv1;
+using Microsoft.ML;
+using Microsoft.ML.Trainers;
+using Microsoft.Office.Interop.Excel;
+using Microsoft.SqlServer.Server;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Windows.Forms;
+using static Microsoft.ML.Trainers.KMeansTrainer;
+using static WS_SG_ETABS_Plugin.src.rc_beam_schedule.ClassFunctionRCBSched;
+using Accord.MachineLearning;
+using Accord.Math;
+using Accord.Statistics.Analysis;
+using Accord.Statistics.Kernels;
+using System.Windows.Markup;
 
 namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
 {
@@ -82,6 +95,9 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
             //Calculate Av provided
             CalculateAvProv(rcBeamList);
 
+            //do kmeans
+            RcBeamClusteringUsingKMeans(rcBeamList);
+
             //Compile data to 2d array
             var result = CompileResutRcBeamToArray(rcBeamList);
 
@@ -157,6 +173,10 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
             //Get group database table
             src.HelperEtabs.DatabaseTable groupDatabaseTable = new HelperEtabs.DatabaseTable();
             (isError, groupDatabaseTable) = src.HelperEtabs.GetTableDisplay(Sap, "Group Assignments", false);
+
+            //Filter group to only include line, to improve performance
+            (isError, groupDatabaseTable) = src.HelperEtabs.FilterDatabaseTable(groupDatabaseTable, "ObjectType", "Line");
+            if (isError) { return (isError, rcBeamList); }
 
             foreach (Dictionary<string, string> groupWithBeamType in groupAndBeamType)
             {
@@ -1055,7 +1075,8 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
                 , "Left Av Prov (mm2/m)", "Mid Av Prov (mm2/m)", "Right Av Prov (mm2/m)"
                 , "Left Top As Ratio", "Mid Top As Ratio", "Right Top As Ratio", "Left Bottom As Ratio", "Mid Bottom As Ratio", "Right Bottom As Ratio"
                 , "Left Av Ratio", "Mid Av Ratio", "Right Av Ratio"
-                , "Rebar warning", "Shear links warning"
+                , "Rebar warning", "Shear links warning",
+                "Cluster"
             };
 
             int numOfRow = rcBeamList.Count();
@@ -1130,6 +1151,8 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
 
                 result[i, 45] = rcBeam.AsEvaluationComment;
                 result[i, 46] = rcBeam.AvEvaluationComment;
+
+                result[i, 47] = rcBeam.Cluster;
 
                 i++;
             }
@@ -1402,6 +1425,274 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
 
                 double centroid = sumAreaTimesCentroid / sumArea;
                 return centroid;
+            }
+
+        }
+
+        public static void RcBeamClusteringUsingKMeans(List<src.HelperEtabs.RcBeam> rcBeamList)
+        {
+            List<ClassFunctionRCBSched.RcBeamForMLInput> rcBeamForMLInputList = new List<ClassFunctionRCBSched.RcBeamForMLInput>();
+
+            //Convert RcBeam to RcBeamForML
+            foreach(src.HelperEtabs.RcBeam rcBeam in rcBeamList)
+            {
+                ClassFunctionRCBSched.RcBeamForMLInput rcBeamForML = new ClassFunctionRCBSched.RcBeamForMLInput(rcBeam.UniqueName, (float)rcBeam.Height, (float)rcBeam.Width, (float)rcBeam.LeftTopAs, (float)rcBeam.MidTopAs,
+                    (float)rcBeam.RightTopAs, (float)rcBeam.LeftBottomAs, (float)rcBeam.MidBottomAs, (float)rcBeam.RightBottomAs, (float)rcBeam.LeftAv, (float)rcBeam.RightAv);
+                rcBeamForMLInputList.Add(rcBeamForML);
+            }
+
+            //Normalize data
+            NormalizeData(rcBeamForMLInputList);
+
+
+            MLContext mlContext = new MLContext();
+
+            /*
+            //PCA to 2 axis
+
+            IDataView dataView = mlContext.Data.LoadFromEnumerable(rcBeamForMLInputList);
+
+            string featuresColumnName = "Features";
+            var pipelinePCA = mlContext.Transforms
+                .Concatenate(featuresColumnName, "Width", "Height", "LeftTopAs", "MidTopAs", "RightTopAs", "LeftBottomAs", "MidBottomAs",
+                "RightBottomAs", "LeftAv", "RightAv")
+                .Append(mlContext.Transforms.ProjectToPrincipalComponents(outputColumnName:"PCAFeatures", featuresColumnName, rank: 2));
+
+            var modelPCA = pipelinePCA.Fit(dataView);
+
+            var transformedDataView = modelPCA.Transform(dataView);
+
+            var PCAResults = mlContext.Data.CreateEnumerable<ClassFunctionRCBSched.PCAResult>(transformedDataView, reuseRowObject: false).ToList();
+
+            int index = 0;
+            foreach (var result in PCAResults)
+            {
+                rcBeamForMLInputList[index].PC1 = result.PCAFeatures[0];
+                rcBeamForMLInputList[index].PC2 = result.PCAFeatures[1];
+                index++;
+            }
+            */
+
+            //Prepare data for ML
+            double[][] observations = new double[rcBeamForMLInputList.Count()][];
+
+            int index = 0;
+            foreach(ClassFunctionRCBSched.RcBeamForMLInput rcBeamForMLInput in rcBeamForMLInputList)
+            {
+                observations[index] = new double[]
+                {
+                    rcBeamForMLInput.Width,
+                    rcBeamForMLInput.Height,
+                    rcBeamForMLInput.LeftTopAs,
+                    rcBeamForMLInput.MidTopAs,
+                    rcBeamForMLInput.RightTopAs,
+                    rcBeamForMLInput.LeftBottomAs,
+                    rcBeamForMLInput.MidBottomAs,
+                    rcBeamForMLInput.RightBottomAs,
+                    rcBeamForMLInput.LeftAv,
+                    rcBeamForMLInput.RightAv,
+                };
+                index++;
+            }
+
+            /*
+            //PCA to 2 axis
+            var method = PrincipalComponentMethod.Center;
+            var pca = new KernelPrincipalComponentAnalysis(new Linear(), method);
+            pca.Learn(observations);
+            pca.NumberOfOutputs = 2;
+            double[][] PCAresults = pca.Transform(observations);
+
+            index = 0;
+            foreach (var result in PCAresults)
+            {
+                rcBeamForMLInputList[index].PC1 = (float)result[0];
+                rcBeamForMLInputList[index].PC2 = (float)result[1];
+                index++;
+            }
+            */
+
+            /*
+            //Plot error chart
+            int minNumCluster = 1;
+            int maxNumCluster = 30;
+            List<double> numClusterList = new List<double>();
+            List<double> errorList = new List<double>();
+
+            for(int numClusters = minNumCluster; numClusters < maxNumCluster; numClusters++)
+            {
+
+                KMeans kmeans = new KMeans(k: numClusters);
+                var clusters = kmeans.Learn(observations);
+                var error = kmeans.Error;
+
+                numClusterList.Add(numClusters);
+                errorList.Add(error);
+            }
+            
+
+            ML.WindowRCBSchedKMeans windowRCBSchedKMeans = new ML.WindowRCBSchedKMeans(numClusterList, errorList);
+            */
+
+            //TSNE to 2 axis
+            Accord.Math.Random.Generator.Seed = 0;
+            Accord.MachineLearning.Clustering.TSNE tSNE = new Accord.MachineLearning.Clustering.TSNE()
+            {
+                NumberOfOutputs = 2,
+                //Perplexity = Math.Floor((double) rcBeamForMLInputList.Count() / 3)
+                Perplexity = 25
+            };
+            
+
+            double[][] TSNEresults = tSNE.Transform(observations);
+
+            index = 0;
+            foreach (var result in TSNEresults)
+            {
+                rcBeamForMLInputList[index].PC1 = (float) result[0];
+                rcBeamForMLInputList[index].PC2 = (float) result[1];
+                index++;
+            }
+
+            
+            int numClusters = 4;
+
+            //Accord KMeans
+            KMeans kmeans = new KMeans(k: numClusters);
+            var clusters = kmeans.Learn(observations);
+            int[] labels = clusters.Decide(observations);
+
+            //Parsing cluster back to rcBeamListForML
+            index = 0;
+            foreach (ClassFunctionRCBSched.RcBeamForMLInput rcBeamForMLInput in rcBeamForMLInputList)
+            {
+                rcBeamForMLInput.Cluster = Convert.ToString(labels[index]);
+                index++;
+            }
+
+            //Parsing cluster back to rcBeamList
+            index = 0;
+            foreach (src.HelperEtabs.RcBeam rcBeam in rcBeamList)
+            {
+                rcBeam.Cluster =  Convert.ToString(labels[index]);
+                index++;
+            }
+            
+
+            /*
+            //ML.NET KMeans
+            int numClusters = 10;
+            IDataView dataViewKMeans = mlContext.Data.LoadFromEnumerable(rcBeamForMLInputList);
+            string featuresColumnNameKMeans = "Features";
+            
+            var pipelineKMeans = mlContext.Transforms
+                .Concatenate(featuresColumnNameKMeans, "Width", "Height", "LeftTopAs", "MidTopAs", "RightTopAs", "LeftBottomAs", "MidBottomAs", 
+                "RightBottomAs", "LeftAv", "RightAv")
+                .Append(mlContext.Clustering.Trainers.KMeans(featuresColumnNameKMeans, numberOfClusters: numClusters));
+
+            
+            //var pipelineKMeans = mlContext.Transforms
+                //.Concatenate(featuresColumnName, "PC1", "PC2")
+                //.Append(mlContext.Clustering.Trainers.KMeans(featuresColumnNameKMeans, numberOfClusters: numClusters));
+            
+            var modelKMeans = pipelineKMeans.Fit(dataViewKMeans);
+            
+            //Predict
+            var predEngine = mlContext.Model.CreatePredictionEngine<RcBeamForMLInput, RcBeamForMLOutput>(modelKMeans);
+
+            foreach (ClassFunctionRCBSched.RcBeamForMLInput rcBeamForMLInput in rcBeamForMLInputList)
+            {
+                RcBeamForMLOutput predictionResult = predEngine.Predict(rcBeamForMLInput);
+                rcBeamForMLInput.Cluster = Convert.ToString(predictionResult.PredictedClusterId);
+            }
+
+            //Parsing cluster back to rcBeamList
+            index = 0;
+            foreach (src.HelperEtabs.RcBeam rcBeam in rcBeamList)
+            {
+                rcBeam.Cluster = rcBeamForMLInputList[index].Cluster;
+                index++;
+            }
+            */
+
+            WindowRCBSchedPCAResult windowRCBSchedPCAResult = new WindowRCBSchedPCAResult(rcBeamForMLInputList, numClusters);
+        }
+
+        public static void NormalizeData(List<ClassFunctionRCBSched.RcBeamForMLInput> rcBeamForMLInputList)
+        {
+            string[] properties = { "Height", "Width",
+            "LeftTopAs",
+            "MidTopAs",
+            "RightTopAs",
+            "LeftBottomAs",
+            "MidBottomAs",
+            "RightBottomAs",
+            "LeftAv",
+            "RightAv" };
+
+            foreach (string  property in properties)
+            {
+
+                //Search for max and min
+                //bool firstLoop = true;
+                //double max = 0;
+                //double min = 0;
+                List<double> listOfValues = new List<double>();
+
+                foreach(ClassFunctionRCBSched.RcBeamForMLInput rcBeamForMLInput in rcBeamForMLInputList)
+                {
+                    //Do log transformation
+                    double originalValue = Convert.ToDouble(rcBeamForMLInput.GetType().GetProperty(property).GetValue(rcBeamForMLInput, null));
+                    float logTransormedValue = (float) Math.Log(originalValue + 1);
+                    rcBeamForMLInput.GetType().GetProperty(property).SetValue(rcBeamForMLInput, logTransormedValue);
+
+                    listOfValues.Add(logTransormedValue);
+
+                    /*
+                    if (firstLoop)
+                    {
+                        max = Convert.ToDouble(rcBeamForMLInput.GetType().GetProperty(property).GetValue(rcBeamForMLInput, null));
+                        min = Convert.ToDouble(rcBeamForMLInput.GetType().GetProperty(property).GetValue(rcBeamForMLInput, null));
+                        firstLoop = false;
+                    }
+                    else
+                    {
+                        if (Convert.ToDouble(rcBeamForMLInput.GetType().GetProperty(property).GetValue(rcBeamForMLInput, null)) > max)
+                        {
+                            max = Convert.ToDouble(rcBeamForMLInput.GetType().GetProperty(property).GetValue(rcBeamForMLInput, null));
+                        }
+                        else if (Convert.ToDouble(rcBeamForMLInput.GetType().GetProperty(property).GetValue(rcBeamForMLInput, null)) < min)
+                        {
+                            min = Convert.ToDouble(rcBeamForMLInput.GetType().GetProperty(property).GetValue(rcBeamForMLInput, null));
+                        }
+                    }
+                    */
+                }
+
+                //Caculate mean and std dev
+                double mean = listOfValues.Average();
+                double stdDev = HelperMethod.GetStandardDeviation(listOfValues);
+
+                if (stdDev == 0)
+                {
+                    stdDev = 0.001;
+                }
+
+                //Conversion
+                foreach (ClassFunctionRCBSched.RcBeamForMLInput rcBeamForMLInput in rcBeamForMLInputList)
+                {
+                    double originalValue = Convert.ToDouble(rcBeamForMLInput.GetType().GetProperty(property).GetValue(rcBeamForMLInput, null));
+                    float normalizedValue = (float)((originalValue - mean) / stdDev);
+
+                    /*
+                    double originalValue = Convert.ToDouble(rcBeamForMLInput.GetType().GetProperty(property).GetValue(rcBeamForMLInput, null));
+                    float normalizedValue = (float) ((originalValue - min) / (max - min));
+                    */
+
+                    rcBeamForMLInput.GetType().GetProperty(property).SetValue(rcBeamForMLInput, normalizedValue);
+                    
+                }
+
             }
 
         }

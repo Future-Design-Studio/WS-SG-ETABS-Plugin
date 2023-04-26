@@ -134,12 +134,29 @@ namespace WS_SG_ETABS_Plugin.src
             return (X, Y, Z);
         }
 
+        /// <summary>
+        /// Calculate standard deviation
+        /// </summary>
+        /// <param name="sequence"></param>
+        /// <returns></returns>
+        public static double GetStandardDeviation(IEnumerable<double> sequence)
+        {
+            double result = 0;
+
+            if (sequence.Any())
+            {
+                double average = sequence.Average();
+                double sum = sequence.Sum(d => Math.Pow(d - average, 2));
+                result = Math.Sqrt((sum) / sequence.Count());
+            }
+            return result;
+        }
 
 
         #endregion
 
         #region Geometry Method
-        
+
         public static bool IsAreaHorizontal (List<src.HelperEtabs.Point3D> pointList)
         {
             bool isHorizontal = true;
