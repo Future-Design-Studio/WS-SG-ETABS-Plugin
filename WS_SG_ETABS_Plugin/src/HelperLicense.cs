@@ -73,7 +73,7 @@ namespace WS_SG_ETABS_Plugin.src
                                     return licenseValid;
                                 }
                             }
-                            MessageBox.Show("Invalid version of ETABS PowerAPP detected! You will be redirected to download page for latest version of ETABS PowerAPP.");
+                            MessageBox.Show("Superseded version of ETABS PowerAPP detected! You will be redirected to download page for latest version of ETABS PowerAPP.");
                             System.Diagnostics.Process.Start("https://tinyurl.com/ETABSPowerAPP");
                             licenseValid = false;
                             return licenseValid;
