@@ -87,7 +87,7 @@ namespace WS_SG_ETABS_Plugin.src
                     }
 
                 }
-
+                MessageBox.Show("License not available for your PC ID. Please contact FDS with your PC ID " + userComputerName + " to request for a license.");
                 licenseValid = false;
                 return licenseValid;
             }
