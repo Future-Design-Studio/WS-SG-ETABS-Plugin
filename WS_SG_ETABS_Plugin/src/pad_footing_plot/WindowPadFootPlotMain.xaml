@@ -11,7 +11,7 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="0.7*"></RowDefinition>
-            <RowDefinition Height="1.5*"></RowDefinition>
+            <RowDefinition Height="1.7*"></RowDefinition>
             <RowDefinition Height="0.5*"></RowDefinition>
             <RowDefinition Height="0.5*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
@@ -40,11 +40,12 @@
         <TextBlock Grid.Row="1" Grid.Column="0" TextWrapping="Wrap" TextAlignment="Justify"  
                        Margin="10 0 10 0" FontSize="10">
                     How to use:<LineBreak/>
-                    1. Select load case(s) or load combination(s) to include in plot<LineBreak/>
-                    2. Select group of joint(s) to include in plot<LineBreak/>
-                    3. Each force will be grouped according to force increment, thus user need to adjust force increment used in force grouping<LineBreak/>
-                    4. Adjust plot graphic preferences accordingly<LineBreak/>
-                    5. Press OK to proceed
+                    1. Select excel save file location (by default it will be in the same folder as ETABS file)<LineBreak/>
+                    2. Select load case(s) or load combination(s) to include in plot<LineBreak/>
+                    3. Select group of joint(s) to include in plot<LineBreak/>
+                    4. Each footing will be grouped according to force increment, thus user need to adjust force increment used in force grouping<LineBreak/>
+                    5. Adjust plot graphic preferences accordingly<LineBreak/>
+                    6. Press OK to proceed
         </TextBlock>
 
         <Label Grid.Row="2" Grid.Column="0" Content="1. Select excel save file location" FontSize="14" FontWeight="Bold"/>
@@ -252,7 +253,7 @@
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
-            <Image Margin ="0 4 -75 4" HorizontalAlignment="Right" Source="/WS_SG_ETABS_Plugin;component/src/resources/by_Future_Design_Studio_no_powerapp.PNG" />
+            <Image Margin ="0 7 -80 7" HorizontalAlignment="Right" Source="/WS_SG_ETABS_Plugin;component/src/resources/by_Future_Design_Studio_no_powerapp.PNG" />
 
             <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button x:Name="buttonCancel" Content="Cancel" Width="100" Click="buttonCancel_Click"/>
