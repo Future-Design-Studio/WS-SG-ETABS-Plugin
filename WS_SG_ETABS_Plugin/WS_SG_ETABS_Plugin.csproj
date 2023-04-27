@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Rhino3dm.7.15.0\build\net45\Rhino3dm.props" Condition="Exists('..\packages\Rhino3dm.7.15.0\build\net45\Rhino3dm.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -12,6 +13,8 @@
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -33,6 +36,7 @@
   <ItemGroup>
     <Reference Include="ETABSv1">
       <HintPath>..\..\..\..\..\..\..\..\..\Program Files\Computers and Structures\ETABS 20\ETABSv1.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="LiveCharts, Version=0.9.7.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL">
       <HintPath>..\packages\LiveCharts.0.9.7\lib\net45\LiveCharts.dll</HintPath>
@@ -42,6 +46,12 @@
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="Rhino3dm, Version=7.15.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Rhino3dm.7.15.0\lib\net45\Rhino3dm.dll</HintPath>
+    </Reference>
+    <Reference Include="SAFEv1">
+      <HintPath>..\..\..\..\..\..\..\Program Files\Computers and Structures\SAFE 20\SAFEv1.dll</HintPath>
+    </Reference>
     <Reference Include="ScottPlot, Version=4.1.59.0, Culture=neutral, PublicKeyToken=86698dc10387c39e, processorArchitecture=MSIL">
       <HintPath>..\packages\ScottPlot.4.1.59\lib\net462\ScottPlot.dll</HintPath>
     </Reference>
@@ -106,19 +116,130 @@
     <Compile Include="src\copy_properties\WindowCopyPropResult.xaml.cs">
       <DependentUpon>WindowCopyPropResult.xaml</DependentUpon>
     </Compile>
+    <Compile Include="src\etabs_to_rhino\AreaGeometry.cs" />
+    <Compile Include="src\etabs_to_rhino\FrameGeometry.cs" />
+    <Compile Include="src\etabs_to_rhino\FrameGeometryProp.cs" />
+    <Compile Include="src\etabs_to_rhino\FunctionEtabsToRhino.cs" />
+    <Compile Include="src\etabs_to_rhino\WindowEtabsToRhinoMain.xaml.cs">
+      <DependentUpon>WindowEtabsToRhinoMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\etabs_to_rhino\WindowEtabsToRhinoResult.xaml.cs">
+      <DependentUpon>WindowEtabsToRhinoResult.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\HelperExcel.cs" />
+    <Compile Include="src\HelperLicense.cs" />
     <Compile Include="src\HelperMethod.cs" />
     <Compile Include="src\HelperEtabs.cs" />
     <Compile Include="src\carbon\FunctionCarbon.cs" />
     <Compile Include="cPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="src\HelperPlot.cs" />
+    <Compile Include="src\HelperSafe.cs" />
     <Compile Include="src\HelperUI.cs" />
-    <Compile Include="src\plot_reaction\FunctionPlotReaction.cs" />
+    <Compile Include="src\loads_etabs_etabs\ClassEtabsEtabs.cs" />
+    <Compile Include="src\loads_etabs_etabs\FunctionEtabsEtabsMain.cs" />
+    <Compile Include="src\loads_etabs_etabs\WindowEtabsEtabsMain.xaml.cs">
+      <DependentUpon>WindowEtabsEtabsMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\loads_etabs_etabs\WindowEtabsEtabsOpenFile.xaml.cs">
+      <DependentUpon>WindowEtabsEtabsOpenFile.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\loads_etabs_etabs\WindowEtabsEtabsOpenFileLoading.xaml.cs">
+      <DependentUpon>WindowEtabsEtabsOpenFileLoading.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\loads_etabs_etabs\WindowEtabsEtabsResult.xaml.cs">
+      <DependentUpon>WindowEtabsEtabsResult.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\loads_etabs_safe\ClassEtabsSafe.cs" />
+    <Compile Include="src\loads_etabs_safe\FunctionEtabsSafeMain.cs" />
+    <Compile Include="src\loads_etabs_safe\WindowEtabsSafeMain.xaml.cs">
+      <DependentUpon>WindowEtabsSafeMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\loads_etabs_safe\WindowEtabsSafeOpenFile.xaml.cs">
+      <DependentUpon>WindowEtabsSafeOpenFile.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\loads_etabs_safe\WindowEtabsSafeOpenFileLoading.xaml.cs">
+      <DependentUpon>WindowEtabsSafeOpenFileLoading.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\loads_etabs_safe\WindowEtabsSafeResult.xaml.cs">
+      <DependentUpon>WindowEtabsSafeResult.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\load_combo_EN\ClassLoadCombo.cs" />
+    <Compile Include="src\load_combo_EN\FunctionLoadCombo.cs" />
+    <Compile Include="src\load_combo_EN\FunctionLoadComboAccidental.cs" />
+    <Compile Include="src\load_combo_EN\FunctionLoadComboB.cs" />
+    <Compile Include="src\load_combo_EN\FunctionLoadComboC.cs" />
+    <Compile Include="src\load_combo_EN\FunctionLoadComboSeismic.cs" />
+    <Compile Include="src\load_combo_EN\FunctionLoadComboSLS.cs" />
+    <Compile Include="src\load_combo_EN\FunctionLoadComboSLSSteel.cs" />
+    <Compile Include="src\load_combo_EN\FunctionLoadComboUpliftC1.cs" />
+    <Compile Include="src\load_combo_EN\FunctionLoadComboUpliftC2.cs" />
+    <Compile Include="src\load_combo_EN\WindowChooseLoadCombiToGenerate.xaml.cs">
+      <DependentUpon>WindowChooseLoadCombiToGenerate.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\load_combo_EN\WindowLoadComboMain.xaml.cs">
+      <DependentUpon>WindowLoadComboMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\load_combo_EN\WindowLoadComboResult.xaml.cs">
+      <DependentUpon>WindowLoadComboResult.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\pad_footing_plot\ClassPadFootPlot.cs" />
+    <Compile Include="src\pad_footing_plot\FunctionPadFootPlot.cs" />
+    <Compile Include="src\pad_footing_plot\WindowPadFootLoading.xaml.cs">
+      <DependentUpon>WindowPadFootLoading.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\pad_footing_plot\WindowPadFootPlotMain.xaml.cs">
+      <DependentUpon>WindowPadFootPlotMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\pad_footing_plot\WindowPadFootPlotResult.xaml.cs">
+      <DependentUpon>WindowPadFootPlotResult.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\plot_reaction\graph\ClassPlotGraph.cs" />
+    <Compile Include="src\plot_reaction\graph\FunctionPlotReactionGraph.cs" />
+    <Compile Include="src\plot_reaction\graph\WindowPlotReactionGraphBaseReaction.xaml.cs">
+      <DependentUpon>WindowPlotReactionGraphBaseReaction.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\plot_reaction\graph\WindowPlotReactionGraphMain.xaml.cs">
+      <DependentUpon>WindowPlotReactionGraphMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\plot_reaction\graph\WindowPlotReactionGraphResult.xaml.cs">
+      <DependentUpon>WindowPlotReactionGraphResult.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\plot_reaction\table\FunctionPlotReactionTable.cs" />
+    <Compile Include="src\plot_reaction\table\WindowPlotReactionTableMain.xaml.cs">
+      <DependentUpon>WindowPlotReactionTableMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\plot_reaction\table\WindowPlotReactionTableResult.xaml.cs">
+      <DependentUpon>WindowPlotReactionTableResult.xaml</DependentUpon>
+    </Compile>
     <Compile Include="src\plot_reaction\WindowPlotReactionMain.xaml.cs">
       <DependentUpon>WindowPlotReactionMain.xaml</DependentUpon>
     </Compile>
-    <Compile Include="src\plot_reaction\WindowPlotReactionResult.xaml.cs">
-      <DependentUpon>WindowPlotReactionResult.xaml</DependentUpon>
+    <Compile Include="src\punching_shear_plot\ClassPunchingShrPlot.cs" />
+    <Compile Include="src\punching_shear_plot\FunctionPunchingShrPlot.cs" />
+    <Compile Include="src\punching_shear_plot\WindowPunchShrPlotLoading.xaml.cs">
+      <DependentUpon>WindowPunchShrPlotLoading.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\punching_shear_plot\WindowPunchShrPlotMain.xaml.cs">
+      <DependentUpon>WindowPunchShrPlotMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\punching_shear_plot\WindowPunchShrPlotResult.xaml.cs">
+      <DependentUpon>WindowPunchShrPlotResult.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\rc_beam_schedule\FunctionRCBSched.cs" />
+    <Compile Include="src\rc_beam_schedule\WindowRCBSchedMain.xaml.cs">
+      <DependentUpon>WindowRCBSchedMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\rc_beam_schedule\WindowRCBSchedResult.xaml.cs">
+      <DependentUpon>WindowRCBSchedResult.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\release_selected_node\ClassReleaseSelectedNode.cs" />
+    <Compile Include="src\release_selected_node\FunctionReleaseSelectedNode.cs" />
+    <Compile Include="src\release_selected_node\WindowReleaseSelectedNodeMain.xaml.cs">
+      <DependentUpon>WindowReleaseSelectedNodeMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\release_selected_node\WindowReleaseSelectedNodeResult.xaml.cs">
+      <DependentUpon>WindowReleaseSelectedNodeResult.xaml</DependentUpon>
     </Compile>
     <Compile Include="src\select_uniquename\FunctionSelUniqueName.cs" />
     <Compile Include="src\select_uniquename\WindowSelUniqueNameMain.xaml.cs">
@@ -144,6 +265,14 @@
     <Compile Include="src\transfer_midas\WindowTransferMidasResult.xaml.cs">
       <DependentUpon>WindowTransferMidasResult.xaml</DependentUpon>
     </Compile>
+    <Compile Include="src\wind_coeff\ClassWindCoeff.cs" />
+    <Compile Include="src\wind_coeff\FunctionWindCoeff.cs" />
+    <Compile Include="src\wind_coeff\WindowWindCoeffMain.xaml.cs">
+      <DependentUpon>WindowWindCoeffMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\wind_coeff\WindowWindCoeffResult.xaml.cs">
+      <DependentUpon>WindowWindCoeffResult.xaml</DependentUpon>
+    </Compile>
     <Compile Include="test\Test.cs" />
     <Compile Include="WindowMain.xaml.cs">
       <DependentUpon>WindowMain.xaml</DependentUpon>
@@ -166,11 +295,119 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="src\etabs_to_rhino\WindowEtabsToRhinoMain.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="src\etabs_to_rhino\WindowEtabsToRhinoResult.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="src\loads_etabs_etabs\WindowEtabsEtabsMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\loads_etabs_etabs\WindowEtabsEtabsOpenFile.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\loads_etabs_etabs\WindowEtabsEtabsOpenFileLoading.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="src\loads_etabs_etabs\WindowEtabsEtabsResult.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\loads_etabs_safe\WindowEtabsSafeMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\loads_etabs_safe\WindowEtabsSafeOpenFile.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\loads_etabs_safe\WindowEtabsSafeOpenFileLoading.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\loads_etabs_safe\WindowEtabsSafeResult.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\load_combo_EN\WindowChooseLoadCombiToGenerate.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="src\load_combo_EN\WindowLoadComboMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\load_combo_EN\WindowLoadComboResult.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\pad_footing_plot\WindowPadFootLoading.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\pad_footing_plot\WindowPadFootPlotMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\pad_footing_plot\WindowPadFootPlotResult.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\plot_reaction\graph\WindowPlotReactionGraphBaseReaction.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="src\plot_reaction\graph\WindowPlotReactionGraphMain.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="src\plot_reaction\graph\WindowPlotReactionGraphResult.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="src\plot_reaction\table\WindowPlotReactionTableMain.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="src\plot_reaction\table\WindowPlotReactionTableResult.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="src\plot_reaction\WindowPlotReactionMain.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="src\plot_reaction\WindowPlotReactionResult.xaml">
+    <Page Include="src\punching_shear_plot\WindowPunchShrPlotLoading.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\punching_shear_plot\WindowPunchShrPlotMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\punching_shear_plot\WindowPunchShrPlotResult.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\rc_beam_schedule\WindowRCBSchedMain.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="src\rc_beam_schedule\WindowRCBSchedResult.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="src\release_selected_node\WindowReleaseSelectedNodeMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\release_selected_node\WindowReleaseSelectedNodeResult.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -202,6 +439,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="src\wind_coeff\WindowWindCoeffMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\wind_coeff\WindowWindCoeffResult.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="WindowMain.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -209,6 +454,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="src\rc_beam_schedule\FlowchartConvertAsToRebar.drawio" />
+    <Content Include="src\resources\Tools.pdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="src\steel_optimization\" />
@@ -250,5 +499,24 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="src\resources\RambollFDSLogo.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="src\resources\by_Future_Design_Studio.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="src\resources\by_Future_Design_Studio_no_powerapp.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Rhino3dm.7.15.0\build\net45\Rhino3dm.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Rhino3dm.7.15.0\build\net45\Rhino3dm.props'))" />
+  </Target>
 </Project>

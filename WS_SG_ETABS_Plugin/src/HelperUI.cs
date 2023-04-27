@@ -59,6 +59,8 @@ namespace WS_SG_ETABS_Plugin.src
                 groupListConverted.RemoveAt(index);
             }
 
+            groupListConverted.Sort();
+
             comboBox.ItemsSource = groupListConverted;
             comboBox.SelectedIndex = 0;
 
@@ -94,6 +96,16 @@ namespace WS_SG_ETABS_Plugin.src
             return true;
         }
 
+        public static bool CheckLoadCaseListExist(cSapModel Sap, List<string> listChoosenLoadCase)
+        {
+            if (listChoosenLoadCase.Count == 0)
+            {
+                MessageBox.Show("Please choose atleast 1 load case");
+                return false;
+            }
+            return true;
+        }
+
         /*        public static void PopulateComboBox(ComboBox comboBox, List<T> data, string DisplayMemberPath, )
                 {
                     comboBox.ItemsSource = data;
@@ -112,6 +124,24 @@ namespace WS_SG_ETABS_Plugin.src
                     comBoxColumnConcreteGrade.SelectedValuePath = "Emission";
                     comBoxColumnConcreteGrade.SelectedIndex = 0;
                 }*/
+
+
+        /// <summary>
+        /// Populate listBox with available load cases
+        /// </summary>
+        /// <param name="SapModel"></param>
+        /// <param name="listBox"></param>
+        public static void PopulateListBoxAvailLoadCase(cSapModel SapModel, ListBox listBox)
+        {
+            List<string> loadCaseList = src.HelperEtabs.GetLoadCaseAndComboList(SapModel);
+
+            loadCaseList.Sort();
+
+            foreach (string loadCase in loadCaseList)
+            {
+                listBox.Items.Add(loadCase);
+            }
+        }
 
     }
 }
