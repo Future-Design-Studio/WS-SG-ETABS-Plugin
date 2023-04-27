@@ -10,9 +10,15 @@ FC:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\w
 FC:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\src\loads_etabs_etabs\WindowEtabsEtabsOpenFile.xaml;;
 FC:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\src\loads_etabs_etabs\WindowEtabsEtabsOpenFileLoading.xaml;;
 FC:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\src\loads_etabs_etabs\WindowEtabsEtabsResult.xaml;;
+FC:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\src\loads_etabs_safe\WindowEtabsSafeMain.xaml;;
+FC:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\src\loads_etabs_safe\WindowEtabsSafeOpenFile.xaml;;
+FC:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\src\loads_etabs_safe\WindowEtabsSafeOpenFileLoading.xaml;;
+FC:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\src\loads_etabs_safe\WindowEtabsSafeResult.xaml;;
 FC:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\src\load_combo_EN\WindowChooseLoadCombiToGenerate.xaml;;
 FC:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\src\load_combo_EN\WindowLoadComboMain.xaml;;
 FC:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\src\load_combo_EN\WindowLoadComboResult.xaml;;
+FC:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\src\pad_footing_plot\WindowPadFootLoading.xaml;;
+FC:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\src\pad_footing_plot\WindowPadFootPlotMain.xaml;;
 FC:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\src\plot_reaction\graph\WindowPlotReactionGraphBaseReaction.xaml;;
 FC:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\src\plot_reaction\graph\WindowPlotReactionGraphMain.xaml;;
 FC:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\src\plot_reaction\graph\WindowPlotReactionGraphResult.xaml;;
