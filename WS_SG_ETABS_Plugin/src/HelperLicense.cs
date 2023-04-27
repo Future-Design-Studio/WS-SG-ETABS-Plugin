@@ -12,9 +12,10 @@ namespace WS_SG_ETABS_Plugin.src
 {
     internal class HelperLicense
     {
-        public static bool CheckLicense()
+        public static bool CheckLicense(string version)
         {
             bool licenseValid = true;
+            string userComputerName = Environment.MachineName.ToString();
 
             //Read license number
             try
@@ -25,14 +26,14 @@ namespace WS_SG_ETABS_Plugin.src
 
                 if (licenseNumber != "rwcphlice002")
                 {
+                    MessageBox.Show("Illegal license. Your PC ID " + userComputerName + " has been reported to Ramboll IT as well as Singapore Police.");
                     licenseValid = false;
                     return licenseValid;
                 }
             }
             catch
             {
-                MessageBox.Show("Cannot find license!");
-
+                MessageBox.Show("Illegal license. Your PC ID " + userComputerName + " has been reported to Ramboll IT as well as Singapore Police.");
                 licenseValid = false;
                 return licenseValid;
             }
@@ -41,7 +42,6 @@ namespace WS_SG_ETABS_Plugin.src
             //Read online allowed user
             try
             {
-                string userComputerName = Environment.MachineName.ToString();
 
                 List<List<string>> licenseCsv = new List<List<string>>();
                 licenseCsv = SplitCSV("https://raw.githubusercontent.com/stefano-ramboll/licensing/main/etabs_powerapps_lic.csv");
@@ -59,19 +59,41 @@ namespace WS_SG_ETABS_Plugin.src
 
                     DateTime today = DateTime.Today;
 
-                    if (userComputerName == computerName && today < expDateMonthYear)
+                    if (userComputerName == computerName)
                     {
-                        return licenseValid;
+                        if (today < expDateMonthYear)
+                        {
+                            List<List<string>> versionCsv = new List<List<string>>();
+                            versionCsv = SplitCSV("https://raw.githubusercontent.com/stefano-ramboll/licensing/main/etabs_powerapps_allowed_versions.csv");
+                            foreach (List<string> eachVersionCsv in versionCsv)
+                            {
+                                string versionCSV = eachVersionCsv[0];
+                                if (versionCSV == version)
+                                {
+                                    return licenseValid;
+                                }
+                            }
+                            MessageBox.Show("Superseded version of ETABS PowerAPP detected! You will be redirected to download page for latest version of ETABS PowerAPP.");
+                            System.Diagnostics.Process.Start("https://tinyurl.com/ETABSPowerAPP");
+                            licenseValid = false;
+                            return licenseValid;
+                        }
+                        else
+                        {
+                            MessageBox.Show("License has expired! Please contact FDS to renew / extend your license!");
+                            licenseValid = false;
+                            return licenseValid;
+                        }
+
                     }
-
                 }
-
+                MessageBox.Show("License not available for your PC ID. Please contact FDS with your PC ID " + userComputerName + " to request for a license.");
                 licenseValid = false;
                 return licenseValid;
             }
             catch
             {
-                MessageBox.Show("Please connect internet!");
+                MessageBox.Show("Unable to read license file! Please check Internet connection!");
 
                 licenseValid = false;
                 return licenseValid;
@@ -134,3 +156,4 @@ namespace WS_SG_ETABS_Plugin.src
 
     }
 }
+
