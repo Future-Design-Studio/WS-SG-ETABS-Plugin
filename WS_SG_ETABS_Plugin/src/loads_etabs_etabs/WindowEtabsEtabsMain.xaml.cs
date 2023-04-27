@@ -13,7 +13,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using WS_SG_ETABS_Plugin.src.wind_coeff;
 
 namespace WS_SG_ETABS_Plugin.src.loads_etabs_etabs
 {

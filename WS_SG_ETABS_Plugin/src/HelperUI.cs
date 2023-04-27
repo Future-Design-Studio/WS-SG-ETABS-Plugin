@@ -59,6 +59,8 @@ namespace WS_SG_ETABS_Plugin.src
                 groupListConverted.RemoveAt(index);
             }
 
+            groupListConverted.Sort();
+
             comboBox.ItemsSource = groupListConverted;
             comboBox.SelectedIndex = 0;
 
@@ -132,6 +134,8 @@ namespace WS_SG_ETABS_Plugin.src
         public static void PopulateListBoxAvailLoadCase(cSapModel SapModel, ListBox listBox)
         {
             List<string> loadCaseList = src.HelperEtabs.GetLoadCaseAndComboList(SapModel);
+
+            loadCaseList.Sort();
 
             foreach (string loadCase in loadCaseList)
             {
