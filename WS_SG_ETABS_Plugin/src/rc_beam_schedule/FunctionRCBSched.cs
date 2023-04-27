@@ -158,6 +158,10 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
             src.HelperEtabs.DatabaseTable groupDatabaseTable = new HelperEtabs.DatabaseTable();
             (isError, groupDatabaseTable) = src.HelperEtabs.GetTableDisplay(Sap, "Group Assignments", false);
 
+            //Filter group to only include line, to improve performance
+            (isError, groupDatabaseTable) = src.HelperEtabs.FilterDatabaseTable(groupDatabaseTable, "ObjectType", "Line");
+            if (isError) { return (isError, rcBeamList); }
+
             foreach (Dictionary<string, string> groupWithBeamType in groupAndBeamType)
             {
                 string groupName = groupWithBeamType["groupName"];
