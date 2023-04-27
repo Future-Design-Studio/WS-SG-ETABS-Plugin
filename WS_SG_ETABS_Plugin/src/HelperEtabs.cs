@@ -1,4 +1,6 @@
 ﻿using ETABSv1;
+using Microsoft.Office.Interop.Excel;
+using ScottPlot.Drawing.Colormaps;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -1028,6 +1030,23 @@ namespace WS_SG_ETABS_Plugin.src
             Ret = Sap.DatabaseTables.SetLoadCombinationsSelectedForDisplay(ref MyName);
         }
 
+        public static void OnAllLoadDatabaseWithoutCombinations(cSapModel Sap)
+        {
+            //Load Pattern
+            int NumberNames = 0;
+            string[] MyName = null;
+            Sap.LoadPatterns.GetNameList(ref NumberNames, ref MyName);
+            Ret = Sap.DatabaseTables.SetLoadPatternsSelectedForDisplay(ref MyName);
+
+            //Load Case
+            Sap.LoadCases.GetNameList(ref NumberNames, ref MyName);
+            Ret = Sap.DatabaseTables.SetLoadCasesSelectedForDisplay(ref MyName);
+
+            //Load Combination
+            MyName = new string[1] {""};
+            Ret = Sap.DatabaseTables.SetLoadCombinationsSelectedForDisplay(ref MyName);
+        }
+
         #endregion
 
         #region Group Method
@@ -1065,6 +1084,45 @@ namespace WS_SG_ETABS_Plugin.src
                 Ret = Sap.AreaObj.SetSelected(group, true, eItemType.Group);
             }
 
+        }
+        /// <summary>
+        /// Create new group by defining group name
+        /// </summary>
+        /// <param name="Sap"></param>
+        /// <param name="groupName"></param>
+        /// <returns></returns>
+        public static bool CreateNewGroup(cSapModel Sap, string groupName)
+        {
+            
+            Ret = Sap.GroupDef.SetGroup_1(groupName, -1, false, false, false, false, false, false, false, false, false, false, false, false, false);
+
+            if (Ret != 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        /// <summary>
+        /// Takes in list of points and group name and assigns the list of points inside the group
+        /// </summary>
+        /// <param name="Sap"></param>
+        /// <param name="listofPoints"></param>
+        /// <param name="groupName"></param>
+        /// <returns></returns>
+        public static bool AddPointsInsideGroup(cSapModel Sap, List<string> listofPoints, string groupName)
+        {
+            foreach (string points in listofPoints)
+            {
+                Ret = Sap.PointObj.SetGroupAssign(points, groupName);
+                if (Ret != 0)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         public static void CheckDuplicateObjectInGroup(cSapModel Sap, List<string> groupList)
@@ -1633,6 +1691,25 @@ namespace WS_SG_ETABS_Plugin.src
 
             return outputPatternsList;
         }
+        /// <summary>
+        /// Delete specified list of patterns loads assigned from joints inside a group
+        /// </summary>
+        /// <param name="Sap"></param>
+        /// <param name="patternnameList"></param>
+        /// <param name="groupNameJoint"></param>
+        /// <returns></returns>
+        public static void DeleteExistingLoadsFromPoints(cSapModel Sap, List<string> patternnameList, string groupNameJoint)
+        {
+            eItemType ItemType = eItemType.Group;
+            foreach (string patternName in patternnameList)
+            {
+                Ret = Sap.PointObj.DeleteLoadForce(groupNameJoint, patternName, ItemType);
+                if (Ret == 0)
+                {
+                    MessageBox.Show(patternName + " loads were assigned to joints inside group of joints :" + groupNameJoint + " and these have been removed to prevent double counting old loads.");
+                }
+            }
+        }
 
         /// <summary>
         /// Get list of load cases and combo
@@ -1737,6 +1814,12 @@ namespace WS_SG_ETABS_Plugin.src
             else if (type == "EHF" && !isExisting)
             {
                 eLoadPatternType MyType = eLoadPatternType.Notional;
+                Ret = Sap.LoadPatterns.Add(Name, MyType, SelfWTMultiplier, AddAnalysisCase);
+            }
+
+            else if (type == "Other" && !isExisting)
+            {
+                eLoadPatternType MyType = eLoadPatternType.Other;
                 Ret = Sap.LoadPatterns.Add(Name, MyType, SelfWTMultiplier, AddAnalysisCase);
             }
 
@@ -2190,7 +2273,7 @@ namespace WS_SG_ETABS_Plugin.src
             }
             else
             {
-                MessageBox.Show("Unknown error, please let Mani know for debugging.");
+                MessageBox.Show("Unknown error, please let FDS know for debugging.");
                 return true;
             }
         }

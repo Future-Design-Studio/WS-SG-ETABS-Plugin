@@ -73,11 +73,8 @@ namespace WS_SG_ETABS_Plugin.src.pad_footing_plot
             }
 
             listBoxShownGroup.ItemsSource = groupNames;
-            selectedGroupChanged();
-            HelperPlot.ResetZoom(ReactionPlot);
-
-            listBoxShownGroup.ItemsSource = groupNames;
             listBoxShownGroup.SelectAll();
+            HelperPlot.ResetZoom(ReactionPlot);
 
             //Show group
             DataGridTextColumn c1 = new DataGridTextColumn();
@@ -110,17 +107,6 @@ namespace WS_SG_ETABS_Plugin.src.pad_footing_plot
             ShowDialog();
 
         }
-
-        private void selectedGroupChanged()
-        {
-            List<string> selectedGroup = listBoxShownGroup.Items.OfType<string>().ToList();
-
-            ScottPlot.AxisLimits axisLimits = ReactionPlot.Plot.GetAxisLimits();
-
-            FunctionPadFootPlot.FilterPadFootingPlot(groupDefinitions, plotTitleGlobal, textSizeGlobal, titleSizeGlobal, axisTitleSizeGlobal, 
-                gridSpacingXGlobal, gridSpacingYGlobal, ReactionPlot, selectedGroup, axisLimits);
-        }
-
 
         private void buttonShowAllGroup_Click(object sender, RoutedEventArgs e)
         {
