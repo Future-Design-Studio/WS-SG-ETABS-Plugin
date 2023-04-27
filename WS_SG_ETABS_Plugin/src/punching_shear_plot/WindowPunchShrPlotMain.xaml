@@ -12,7 +12,7 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="0.7*"></RowDefinition>
-            <RowDefinition Height="1.5*"></RowDefinition>
+            <RowDefinition Height="1.8*"></RowDefinition>
             <RowDefinition Height="0.5*"></RowDefinition>
             <RowDefinition Height="0.5*"></RowDefinition>
             <RowDefinition Height="1*"></RowDefinition>
@@ -34,16 +34,17 @@
             <RowDefinition Height="0.6*"></RowDefinition>
         </Grid.RowDefinitions>
 
-        <Label Grid.Row="0" Grid.Column="0" Margin="0 -10 0 0" Content="Plot Punching Shear Force" FontSize="28"/>
+        <Label Grid.Row="0" Grid.Column="0" Margin="0 -10 0 0" Content="Plot Pad Footing" FontSize="28"/>
 
         <TextBlock Grid.Row="1" Grid.Column="0" TextWrapping="Wrap" TextAlignment="Justify"  
                        Margin="10 0 10 0" FontSize="10">
                     How to use:<LineBreak/>
-                    1. Select load case(s) or load combination(s) to include in plot<LineBreak/>
-                    2. Select group of joint(s) to include in plot<LineBreak/>
-                    3. Each force will be grouped according to force increment, thus user need to adjust force increment used in force grouping<LineBreak/>
-                    4. Adjust plot graphic preferences accordingly<LineBreak/>
-                    5. Press OK to proceed
+                    1. Select excel save file location (by default it will be in the same folder as ETABS file)<LineBreak/>
+                    2. Select load case(s) or load combination(s) to include in plot<LineBreak/>
+                    3. Select group of joint(s) to include in plot<LineBreak/>
+                    4. Each footing will be grouped according to force increment, thus user need to adjust force increment used in force grouping<LineBreak/>
+                    5. Adjust plot graphic preferences accordingly<LineBreak/>
+                    6. Press OK to proceed
         </TextBlock>
 
         <Label Grid.Row="2" Grid.Column="0" Content="1. Select excel save file location" FontSize="14" FontWeight="Bold"/>
@@ -150,7 +151,7 @@
 
             <Label Grid.Column="0" Content="Title (to include unit accordingly):"></Label>
             <TextBox Grid.Column="1" x:Name="textBoxTitle" Grid.Row="0" TextAlignment="Center" 
-                     Text="Punching Shear Plot" VerticalContentAlignment="Center"/>
+                     Text="Plot Pad Footing" VerticalContentAlignment="Center"/>
 
         </Grid>
 
