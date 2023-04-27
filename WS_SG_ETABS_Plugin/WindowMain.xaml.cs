@@ -29,10 +29,15 @@ namespace WS_SG_ETABS_Plugin
 
         public WindowMain(ref cSapModel SapModel, ref cPluginCallback Plugin)
         {
+            string version = "1.1.0";
+
             _Plugin = Plugin;
             _SapModel = SapModel;
 
             src.HelperEtabs.SetOutputUnitTo_kN_m_C(_SapModel);
+
+            /*
+            string strComputerName = Environment.MachineName.ToString();
 
             //Read license number
             try
@@ -58,8 +63,25 @@ namespace WS_SG_ETABS_Plugin
             }
             catch
             {
-                MessageBox.Show("Illegal license. You have been reported to Ramboll IT as well as Singapore Police.");
+                MessageBox.Show("Illegal license. Your PC ID " + strComputerName + " has been reported to Ramboll IT as well as Singapore Police.");
             }
+            */
+
+            bool licenseValid = src.HelperLicense.CheckLicense(version);
+
+            if (!licenseValid)
+            {
+                Close();
+            }
+            else
+            {
+                InitializeComponent();
+
+                labelVersion.Content = "version " + version;
+
+                ShowDialog();
+            }
+
 
         }
 
@@ -170,19 +192,12 @@ namespace WS_SG_ETABS_Plugin
             //IsEnabled = true;
         }
 
-        private void buttonPadFooting_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void buttonPunchingShear_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
         private void buttonTrfEtabstoSafe_Click(object sender, RoutedEventArgs e)
         {
-
+            IsEnabled = false;
+            //Call up Etabs to etabs load transferring open file window
+            src.loads_etabs_safe.WindowEtabsSafeOpenFile windowOpenFile = new src.loads_etabs_safe.WindowEtabsSafeOpenFile(_SapModel, _Plugin);
+            IsEnabled = true;
         }
 
         private void buttonDeleteFrames_Click(object sender, RoutedEventArgs e)
@@ -212,7 +227,10 @@ namespace WS_SG_ETABS_Plugin
 
         private void buttonTrfEtabsLoads_Click(object sender, RoutedEventArgs e)
         {
-
+            IsEnabled = false;
+            //Call up Etabs to etabs load transferring open file window
+            src.loads_etabs_etabs.WindowEtabsEtabsOpenFile windowOpenFile = new src.loads_etabs_etabs.WindowEtabsEtabsOpenFile(_SapModel, _Plugin);
+            IsEnabled = true;
         }
 
         private void buttonTrussGrouping_Click(object sender, RoutedEventArgs e)
@@ -225,7 +243,7 @@ namespace WS_SG_ETABS_Plugin
             System.Diagnostics.Process.Start("https://forms.office.com/e/qaiKf5e3a4");
         }
 
-        private void buttonPunchShrPlot_Click(object sender, RoutedEventArgs e)
+        private void buttonPunchingShear_Click(object sender, RoutedEventArgs e)
         {
             IsEnabled = false;
             //Call up window
@@ -233,7 +251,7 @@ namespace WS_SG_ETABS_Plugin
             IsEnabled = true;
         }
 
-        private void buttonPadFootPlot_Click(object sender, RoutedEventArgs e)
+        private void buttonPadFooting_Click(object sender, RoutedEventArgs e)
         {
             IsEnabled = false;
             //Call up window

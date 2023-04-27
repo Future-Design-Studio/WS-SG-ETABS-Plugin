@@ -5,14 +5,14 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WS_SG_ETABS_Plugin.src.punching_shear_plot"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-             mc:Ignorable="d" Height="900" Width="600" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+             mc:Ignorable="d" Height="910" Width="600" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="0.7*"></RowDefinition>
-            <RowDefinition Height="1.8*"></RowDefinition>
+            <RowDefinition Height="2.05*"></RowDefinition>
             <RowDefinition Height="0.5*"></RowDefinition>
             <RowDefinition Height="0.5*"></RowDefinition>
             <RowDefinition Height="1*"></RowDefinition>
@@ -34,7 +34,7 @@
             <RowDefinition Height="0.6*"></RowDefinition>
         </Grid.RowDefinitions>
 
-        <Label Grid.Row="0" Grid.Column="0" Margin="0 -10 0 0" Content="Plot Pad Footing" FontSize="28"/>
+        <Label Grid.Row="0" Grid.Column="0" Margin="0 -10 0 0" Content="Plot Punching Shear Force" FontSize="28"/>
 
         <TextBlock Grid.Row="1" Grid.Column="0" TextWrapping="Wrap" TextAlignment="Justify"  
                        Margin="10 0 10 0" FontSize="10">
@@ -42,7 +42,7 @@
                     1. Select excel save file location (by default it will be in the same folder as ETABS file)<LineBreak/>
                     2. Select load case(s) or load combination(s) to include in plot<LineBreak/>
                     3. Select group of joint(s) to include in plot<LineBreak/>
-                    4. Each footing will be grouped according to force increment, thus user need to adjust force increment used in force grouping<LineBreak/>
+                    4. Each force will be grouped according to force increment and column section, thus user need to adjust force increment used in force grouping<LineBreak/>
                     5. Adjust plot graphic preferences accordingly<LineBreak/>
                     6. Press OK to proceed
         </TextBlock>
@@ -151,7 +151,7 @@
 
             <Label Grid.Column="0" Content="Title (to include unit accordingly):"></Label>
             <TextBox Grid.Column="1" x:Name="textBoxTitle" Grid.Row="0" TextAlignment="Center" 
-                     Text="Plot Pad Footing" VerticalContentAlignment="Center"/>
+                     Text="Punching Shear Plot" VerticalContentAlignment="Center"/>
 
         </Grid>
 
@@ -232,7 +232,7 @@
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
-            <Image HorizontalAlignment="Left" Source="/WS_SG_ETABS_Plugin;component/src/resources/RambollFDSLogo.PNG" />
+            <Image Margin ="0 7 -70 7" HorizontalAlignment="Right" Source="/WS_SG_ETABS_Plugin;component/src/resources/by_Future_Design_Studio_no_powerapp.PNG" />
 
             <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button x:Name="buttonCancel" Content="Cancel" Width="100" Click="buttonCancel_Click"/>
