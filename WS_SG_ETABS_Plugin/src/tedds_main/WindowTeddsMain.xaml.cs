@@ -32,6 +32,15 @@ namespace WS_SG_ETABS_Plugin.src.tedds_main
             _Plugin = Plugin;
             _SapModel = SapModel;
 
+            //Check if model is locked
+            bool modelToLocked = _SapModel.GetModelIsLocked();
+
+            if (!modelToLocked)
+            {
+                MessageBox.Show("ETABS file is unlocked! Please run analysis first!");
+                return;
+            }
+
             bool licenseValid = src.HelperLicense.CheckLicense(version, "TEDDS");
 
             if (!licenseValid)
@@ -68,7 +77,7 @@ namespace WS_SG_ETABS_Plugin.src.tedds_main
         {
             IsEnabled = false;
             //Call up Release at selected nodes window
-            src.release_selected_node.WindowReleaseSelectedNodeMain windowReleaseSelectedNodeMain = new src.release_selected_node.WindowReleaseSelectedNodeMain(_SapModel, _Plugin);
+            src.tedds_main.precast_rc_column.WindowPrecastRCColumnLoading windowPrecastRCColumnLoading = new src.tedds_main.precast_rc_column.WindowPrecastRCColumnLoading(_SapModel, _Plugin);
             IsEnabled = true;
         }
 

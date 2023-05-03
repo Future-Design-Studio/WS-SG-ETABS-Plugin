@@ -255,6 +255,12 @@
     <Compile Include="src\shell_uni_orient\WindowShellUniResult.xaml.cs">
       <DependentUpon>WindowShellUniResult.xaml</DependentUpon>
     </Compile>
+    <Compile Include="src\tedds_main\precast_rc_column\WindowPrecastRCColumnLoading.xaml.cs">
+      <DependentUpon>WindowPrecastRCColumnLoading.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\tedds_main\WindowTeddsMain.xaml.cs">
+      <DependentUpon>WindowTeddsMain.xaml</DependentUpon>
+    </Compile>
     <Compile Include="src\transfer_midas\FunctionTransferMidas.cs" />
     <Compile Include="src\transfer_midas\WindowTransferMidasMain.xaml.cs">
       <DependentUpon>WindowTransferMidasMain.xaml</DependentUpon>
@@ -427,6 +433,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="src\tedds_main\precast_rc_column\WindowPrecastRCColumnLoading.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\tedds_main\WindowTeddsMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="src\transfer_midas\WindowTransferMidasMain.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -455,9 +469,15 @@
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="src\rc_beam_schedule\FlowchartConvertAsToRebar.drawio" />
-    <Content Include="src\resources\Tools.pdf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <Resource Include="src\resources\TEDDS_API.pdf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="src\resources\TEDDS_by_Future_Design_Studio.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="src\resources\Tools.pdf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="src\steel_optimization\" />
