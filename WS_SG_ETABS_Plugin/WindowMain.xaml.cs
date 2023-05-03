@@ -67,7 +67,7 @@ namespace WS_SG_ETABS_Plugin
             }
             */
 
-            bool licenseValid = src.HelperLicense.CheckLicense(version);
+            bool licenseValid = src.HelperLicense.CheckLicense(version, "ETABS");
 
             if (!licenseValid)
             {

@@ -12,7 +12,7 @@ namespace WS_SG_ETABS_Plugin.src
 {
     internal class HelperLicense
     {
-        public static bool CheckLicense(string version)
+        public static bool CheckLicense(string version, string powerAPPType)
         {
             bool licenseValid = true;
             string userComputerName = Environment.MachineName.ToString();
@@ -63,20 +63,47 @@ namespace WS_SG_ETABS_Plugin.src
                     {
                         if (today < expDateMonthYear)
                         {
-                            List<List<string>> versionCsv = new List<List<string>>();
-                            versionCsv = SplitCSV("https://raw.githubusercontent.com/stefano-ramboll/licensing/main/etabs_powerapps_allowed_versions.csv");
-                            foreach (List<string> eachVersionCsv in versionCsv)
+                            if (powerAPPType == "ETABS")
                             {
-                                string versionCSV = eachVersionCsv[0];
-                                if (versionCSV == version)
+                                List<List<string>> versionCsv = new List<List<string>>();
+                                versionCsv = SplitCSV("https://raw.githubusercontent.com/stefano-ramboll/licensing/main/etabs_powerapps_allowed_versions.csv");
+                                foreach (List<string> eachVersionCsv in versionCsv)
                                 {
-                                    return licenseValid;
+                                    string versionCSV = eachVersionCsv[0];
+                                    if (versionCSV == version)
+                                    {
+                                        return licenseValid;
+                                    }
                                 }
+                                MessageBox.Show("Superseded version of ETABS PowerAPP detected! You will be redirected to download page for latest version of FDS PowerAPP.");
+                                System.Diagnostics.Process.Start("https://tinyurl.com/ETABSPowerAPP");
+                                licenseValid = false;
+                                return licenseValid;
                             }
-                            MessageBox.Show("Superseded version of ETABS PowerAPP detected! You will be redirected to download page for latest version of ETABS PowerAPP.");
-                            System.Diagnostics.Process.Start("https://tinyurl.com/ETABSPowerAPP");
-                            licenseValid = false;
-                            return licenseValid;
+                            else if (powerAPPType == "TEDDS")
+                            {
+                                List<List<string>> versionCsv = new List<List<string>>();
+                                versionCsv = SplitCSV("https://raw.githubusercontent.com/stefano-ramboll/licensing/main/tedds_powerapps_allowed_versions.csv");
+                                foreach (List<string> eachVersionCsv in versionCsv)
+                                {
+                                    string versionCSV = eachVersionCsv[0];
+                                    if (versionCSV == version)
+                                    {
+                                        return licenseValid;
+                                    }
+                                }
+                                MessageBox.Show("Superseded version of TEDDS PowerAPP detected! You will be redirected to download page for latest version of FDS PowerAPP.");
+                                System.Diagnostics.Process.Start("https://tinyurl.com/ETABSPowerAPP");
+                                licenseValid = false;
+                                return licenseValid;
+                            }
+                            else
+                            {
+                                MessageBox.Show("Unkown error in checking Licenses, please revert back to FDS.");
+                                licenseValid = false;
+                                return licenseValid;
+                            }
+                            
                         }
                         else
                         {
