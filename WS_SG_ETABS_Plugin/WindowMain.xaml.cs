@@ -259,6 +259,12 @@ namespace WS_SG_ETABS_Plugin
             IsEnabled = true;
         }
 
-        
+        private void buttonTrfTedds_Click(object sender, RoutedEventArgs e)
+        {
+            IsEnabled = false;
+            //Call up window
+            src.tedds_main.WindowTeddsMain windowTeddsMain = new src.tedds_main.WindowTeddsMain(_SapModel, _Plugin);
+            IsEnabled = true;
+        }
     }
 }

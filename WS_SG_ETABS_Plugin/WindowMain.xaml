@@ -52,6 +52,7 @@
         <Button Grid.Row="6" Grid.Column="1" x:Name="buttonWindCoeff" Content="Wind Coefficient Applications (Beta Version)" FontSize="16" Click="buttonWindCoeff_Click"/>
         <Button Grid.Row="7" Grid.Column="1" x:Name="buttonReleaseSelectedNode" Content="Release Frames at Specific Nodes (Beta Version)" FontSize="16" Click="buttonReleaseSelectedNode_Click"/>
         <Button Grid.Row="8" Grid.Column="1" x:Name="buttonTrfEtabsLoads" Content="Transfer Joint Reaction as Load Applied (Beta Version)" Click="buttonTrfEtabsLoads_Click" FontSize="16"/>
+        <Button Grid.Row="9" Grid.Column="1" x:Name="buttonTedds" Content="TEDDS API (Beta Version)" Click="buttonTrfTedds_Click" FontSize="16"/>
 
 
         <!-- Upcoming -->
