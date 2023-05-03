@@ -42,17 +42,6 @@ namespace WS_SG_ETABS_Plugin.src.tedds_main.precast_rc_column
             //Set unit in EtabsFrom
             src.HelperEtabs.SetOutputUnit(SapModelEtabs, forceUnitETABS, lengthUnitETABS, temperatureUnitETABS);
 
-            //Check if modelFrom is locked
-            bool modelFromLocked = SapModelEtabs.GetModelIsLocked();
-
-            if (!modelFromLocked)
-            {
-                mySAFEObject.ApplicationExit(false);
-                MessageBox.Show("SAFE file is locked! Please unlock the model!");
-                isError = true;
-                return;
-            }
-
             //Turn on all load
             src.HelperEtabs.OnAllLoadDatabaseWithoutCombinations(SapModelEtabs);
 
@@ -60,12 +49,12 @@ namespace WS_SG_ETABS_Plugin.src.tedds_main.precast_rc_column
 
             //Get joint reaction database table
             List<string> tableKeys = new List<string> { "Point Object Connectivity", "Joint Reactions", "Story Definitions", "Element Joint Forces - Frame", "Element Joint Forces - Shells", "Element Joint Forces - Links" };
-            loadDatabaseTable(SapModelEtabs, SapModelSAFE, PluginEtabs, tableKeys, databaseTableListETABS);
+            loadDatabaseTable(SapModelEtabs, PluginEtabs, tableKeys, databaseTableListETABS);
 
             ShowDialog();
         }
 
-        private async void loadDatabaseTable(ETABSv1.cSapModel SapModelEtabs, SAFEv1.cSapModel SapModelSAFE, ETABSv1.cPluginCallback PluginEtabs, List<string> tableKeys, List<src.HelperEtabs.DatabaseTable> databaseTableListETABS)
+        private async void loadDatabaseTable(cSapModel SapModelEtabs, cPluginCallback PluginEtabs, List<string> tableKeys, List<src.HelperEtabs.DatabaseTable> databaseTableListETABS)
         {
             bool isError = false;
 
@@ -134,7 +123,7 @@ namespace WS_SG_ETABS_Plugin.src.tedds_main.precast_rc_column
             if (!isError)
             {
                 //Call up window
-                src.loads_etabs_safe.WindowEtabsSafeMain windowEtabsSafeMain = new src.loads_etabs_safe.WindowEtabsSafeMain(SapModelEtabs, SapModelSAFE, PluginEtabs, databaseTableListETABS);
+                src.tedds_main.precast_rc_column.WindowPrecastRCColumnMain windowPrecastRCColumnMain = new src.tedds_main.precast_rc_column.WindowPrecastRCColumnMain(SapModelEtabs, PluginEtabs, databaseTableListETABS);
             }
 
         }
