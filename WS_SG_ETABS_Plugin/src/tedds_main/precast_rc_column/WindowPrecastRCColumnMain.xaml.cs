@@ -41,57 +41,7 @@ namespace WS_SG_ETABS_Plugin.src.tedds_main.precast_rc_column
             IsEnabled = true;
         }
 
-        private void comBoxLoadCase_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
-
-        private void comBoxLoadPattern_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
-
-        private void checkBoxCreateNew_Checked(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void checkBoxCreateNew_Unchecked(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void Button_ADD_Case_Pattern_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void Button_REMOVE_Case_Pattern_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void comBoxGroups_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
-
-        private void Button_ADD_Group_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void Button_REMOVE_Group_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void listBoxCasePatternMatching_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
-
-        private void listBoxChoosenGroup_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void comBoxGroup_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
         }
