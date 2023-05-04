@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using ETABSv1;
 
 namespace WS_SG_ETABS_Plugin.src.tedds_main.precast_rc_column
 {
@@ -20,11 +21,11 @@ namespace WS_SG_ETABS_Plugin.src.tedds_main.precast_rc_column
     /// </summary>
     public partial class WindowPrecastRCColumnResult : Window
     {
-        public WindowPrecastRCColumnResult()
+        public WindowPrecastRCColumnResult(cSapModel SapModel, cPluginCallback Plugin, List<src.HelperEtabs.DatabaseTable> DatabaseTableListETABS, List<ClassPrecastRCColumn.GroupandCoverandGradeMatch> groupList)
         {
 
             //Main logic
-            bool isError = src.tedds_main.precast_rc_column.FunctionPrecastRCColumn.PrecastRCColumn();
+            bool isError = src.tedds_main.precast_rc_column.FunctionPrecastRCColumn.PrecastRCColumn(SapModel, Plugin, DatabaseTableListETABS, groupList);
 
             if (isError)
             {

@@ -263,6 +263,7 @@
     <Compile Include="src\shell_uni_orient\WindowShellUniResult.xaml.cs">
       <DependentUpon>WindowShellUniResult.xaml</DependentUpon>
     </Compile>
+    <Compile Include="src\tedds_main\precast_rc_column\ClassPrecastRCColumn.cs" />
     <Compile Include="src\tedds_main\precast_rc_column\FunctionPrecastRCColumn.cs" />
     <Compile Include="src\tedds_main\precast_rc_column\WindowPrecastRCColumnLoading.xaml.cs">
       <DependentUpon>WindowPrecastRCColumnLoading.xaml</DependentUpon>

@@ -39,9 +39,9 @@
                        VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
                        Text="0.5" SelectionChanged="comBoxGroup_SelectionChanged"></ComboBox>
 
-            <ListBox x:Name="listBoxCasePatternMatching" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="3"
+            <ListBox x:Name="listBoxGroups" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="3"
                      d:ItemsSource="{d:SampleData ItemCount=5}" SelectionMode="Single"
-                     Margin="0 0 0 0" SelectionChanged="listBoxCasePatternMatching_SelectionChanged">
+                     Margin="0 0 0 0" SelectionChanged="listBoxGroups_SelectionChanged">
             </ListBox>
 
 

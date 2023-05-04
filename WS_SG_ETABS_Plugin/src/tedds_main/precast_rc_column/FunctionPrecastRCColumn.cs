@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 using System.Windows;
 using Tekla;
 using Tekla.Structural.InteropAssemblies.TeddsCalc;
+using ETABSv1;
 
 namespace WS_SG_ETABS_Plugin.src.tedds_main.precast_rc_column
 {
     internal class FunctionPrecastRCColumn
     {
-        public static bool PrecastRCColumn()
+        public static bool PrecastRCColumn(cSapModel SapModel, cPluginCallback Plugin, List<src.HelperEtabs.DatabaseTable> DatabaseTableListETABS, List<ClassPrecastRCColumn.GroupandCoverandGradeMatch> groupList)
         {
             ICalculator calculator = new Calculator();
 
