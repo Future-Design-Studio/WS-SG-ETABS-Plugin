@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WS_SG_ETABS_Plugin.src.tedds_main.precast_rc_column"
-             mc:Ignorable="d"    Height="440" Width="1100" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+             mc:Ignorable="d"    Height="440" Width="1000" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
 
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
@@ -23,10 +23,6 @@
                 <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
-                <ColumnDefinition Width="*"></ColumnDefinition>
-                <ColumnDefinition Width="*"></ColumnDefinition>
-                <ColumnDefinition Width="*"></ColumnDefinition>
-                <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="0.4*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
@@ -36,37 +32,49 @@
             </Grid.RowDefinitions>
 
 
-            <Label Grid.Column="0" Grid.Row="0" Content="Group of columns" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <!-- Column 0 -->
+            <Label Grid.Column="0" Grid.Row="0" Content="Groups of columns" VerticalAlignment="Center" HorizontalAlignment="Center"/>
 
             <ComboBox  Grid.Row="1" Grid.Column="0" x:Name="comBoxGroup" 
                        VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
                        Text="0.5" SelectionChanged="comBoxGroup_SelectionChanged"></ComboBox>
 
-            <CheckBox x:Name="checkBoxCreateNew" Grid.Row="1" Grid.Column="2"
-                      Checked="checkBoxCreateNew_Checked" Unchecked="checkBoxCreateNew_Unchecked" 
-                      VerticalAlignment="Center" HorizontalAlignment="Center">
-            </CheckBox>
-
-            <ListBox x:Name="listBoxCasePatternMatching" Grid.Column="0" Grid.Row="2" 
+            <ListBox x:Name="listBoxCasePatternMatching" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="3"
                      d:ItemsSource="{d:SampleData ItemCount=5}" SelectionMode="Single"
                      Margin="0 0 0 0" SelectionChanged="listBoxCasePatternMatching_SelectionChanged">
             </ListBox>
 
-            <Button Grid.Row="3" Grid.Column="1" Content="Add" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="0,-150,0,0" Click="Button_ADD_Case_Pattern_Click" Name="Button_ADD_Case_Pattern" ></Button>
 
-            <Button Grid.Row="3" Grid.Column="1" Content="Remove" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="0,-90,0,0" Click="Button_REMOVE_Case_Pattern_Click" ></Button>
+            <!-- Column 1 -->
+            <Label Grid.Column="1" Grid.Row="0" Content="Cover (mm)" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            
+            <TextBox  Grid.Row="1" Grid.Column="1" x:Name="textboxCover" 
+                       VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+                       Text="35" InputMethod.InputScope="Number" TextChanged="textboxCover_TextChanged"></TextBox>
 
 
+            <!-- Column 2 -->
+            <Label Grid.Column="2" Grid.Row="0" Content="Concrete Grade" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+
+            <ComboBox  Grid.Row="1" Grid.Column="2" x:Name="comboxConcreteGrade" 
+                       VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+                       Text="35" SelectionChanged="comboxConcreteGrade_SelectionChanged"></ComboBox>
+
+
+            <!-- Column 3 -->
+            <Button Grid.Row="3" Grid.Column="3" Content="Add" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="0,-150,0,0" Click="Button_ADD_Case_Pattern_Click" Name="Button_ADD_Case_Pattern" ></Button>
+
+            <Button Grid.Row="3" Grid.Column="3" Content="Remove" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="1" Margin="0,-90,0,0" Click="Button_REMOVE_Case_Pattern_Click" ></Button>
         </Grid>
 
 
-        
 
 
 
 
 
 
+        <!-- Logo and ok/cancel -->
         <Grid Grid.Row="3">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*"></ColumnDefinition>

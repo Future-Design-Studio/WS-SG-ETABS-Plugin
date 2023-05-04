@@ -45,5 +45,25 @@ namespace WS_SG_ETABS_Plugin.src.tedds_main.precast_rc_column
         {
 
         }
+
+        private void textboxCover_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+        }
+
+        private void listBoxCasePatternMatching_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+        private void Button_ADD_Case_Pattern_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Button_REMOVE_Case_Pattern_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

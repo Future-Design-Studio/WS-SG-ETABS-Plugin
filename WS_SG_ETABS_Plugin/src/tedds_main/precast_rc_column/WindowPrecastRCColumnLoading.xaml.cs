@@ -42,7 +42,7 @@ namespace WS_SG_ETABS_Plugin.src.tedds_main.precast_rc_column
             src.HelperEtabs.SetOutputUnit(SapModelEtabs, forceUnitETABS, lengthUnitETABS, temperatureUnitETABS);
 
             //Turn on all load
-            src.HelperEtabs.OnAllLoadDatabaseWithoutCombinations(SapModelEtabs);
+            src.HelperEtabs.OnAllLoadDatabase(SapModelEtabs);
 
             InitializeComponent();
 
