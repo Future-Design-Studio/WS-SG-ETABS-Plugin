@@ -56,6 +56,8 @@
 
         <!-- Upcoming -->
         <Button Grid.Row="3" Grid.Column="2" x:Name="buttonCarbon" Content="Carbon Calulator" Click="buttonCarbon_Click" FontSize="16" IsEnabled="False"/>
+        <Button Grid.Row="4" Grid.Column="2" x:Name="buttonSafeCopyProperties" Content="Importing SAFE Properties" Click="buttonSafeCopyProperties_Click" FontSize="16" IsEnabled="False"/>
+        <Button Grid.Row="5" Grid.Column="2" x:Name="buttonTEDDSAPI" Content="TEDDS PowerAPP" Click="buttonTEDDSAPI_Click" FontSize="16" IsEnabled="False"/>
 
 
         <!-- FDS Only -->
