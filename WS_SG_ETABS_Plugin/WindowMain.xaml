@@ -43,7 +43,6 @@
         <Button Grid.Row="6" x:Name="buttonLoadCombo" Content="Load Combination EN (Beta Version)" FontSize="16" Click="buttonLoadCombo_Click"/>
         <Button Grid.Row="7" Grid.Column="0" x:Name="buttonPadFooting" Content="Pad Footing Design (Beta Version)" Click="buttonPadFooting_Click" FontSize="16"/>
         <Button Grid.Row="8" Grid.Column="0" x:Name="buttonPunchingShear" Content="Punching Shear Force Plot (Beta Version)" Click="buttonPunchingShear_Click" FontSize="16"/>
-        <Button Grid.Row="9" Grid.Column="0" x:Name="buttonTrfEtabstoSafe" Content="Transfer ETABS Reaction to SAFE (Beta Version)" Click="buttonTrfEtabstoSafe_Click" FontSize="16"/>
 
         <!-- Specific Use Case -->
         <Button Grid.Row="3" Grid.Column="1" x:Name="buttonShellUni" Content="Shell Orientation (Local-3) (Beta Version)" FontSize="16" Click="buttonShellUni_Click"/>
@@ -52,6 +51,7 @@
         <Button Grid.Row="6" Grid.Column="1" x:Name="buttonWindCoeff" Content="Wind Coefficient Applications (Beta Version)" FontSize="16" Click="buttonWindCoeff_Click"/>
         <Button Grid.Row="7" Grid.Column="1" x:Name="buttonReleaseSelectedNode" Content="Release Frames at Specific Nodes (Beta Version)" FontSize="16" Click="buttonReleaseSelectedNode_Click"/>
         <Button Grid.Row="8" Grid.Column="1" x:Name="buttonTrfEtabsLoads" Content="Transfer Joint Reaction as Load Applied (Beta Version)" Click="buttonTrfEtabsLoads_Click" FontSize="16"/>
+        <Button Grid.Row="9" Grid.Column="1" x:Name="buttonTrfEtabstoSafe" Content="Transfer ETABS Reaction to SAFE (Beta Version)" Click="buttonTrfEtabstoSafe_Click" FontSize="16"/>
 
 
         <!-- Upcoming -->
