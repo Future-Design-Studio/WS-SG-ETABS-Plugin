@@ -44,6 +44,13 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
                                                             ref PointY,
                                                             ref PointZ);
 
+
+            //check if result is empty
+            if (MyName == null)
+            {
+                return null;
+            }
+
             //new variables
             int counter = 0;
             List<Point3d> ptsPerArea = new List<Point3d>();
@@ -139,6 +146,13 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
                                                             ref CardinalPoint,
                                                             csys);
             
+            //check if result is empty
+            if (MyName == null)
+            {
+                return null;
+            }
+            
+            
             //new variables
             List<Point3d> pt0 = new List<Point3d>();
             List<Point3d> pt1 = new List<Point3d>();
@@ -209,6 +223,12 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
                                                                         ref tfb,
                                                                         ref Area);
 
+            //check if result is empty
+            if (MyName == null)
+            {
+                return null;
+            }
+
             //var allFrameProp = new List<FrameGeometryProp>();
             var allFrameProp = new Dictionary<string,FrameGeometryProp>();
 
@@ -237,6 +257,206 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
             }
             
         }
+
+        #region WIP - NOT READY
+
+        public static List<Curve> CreateProfile(FrameGeometryProp frameProp)
+        {
+            var output = new List<Curve>();
+
+            if (frameProp.PropType == "Circle")
+            {
+                double diameter = Convert.ToDouble(frameProp.T3);
+
+                var outerCircle = new Circle(diameter / 2);
+
+                output.Add(outerCircle.ToNurbsCurve());
+            }
+
+            else if (frameProp.PropType == "Pipe")
+            {
+                double diameter = Convert.ToDouble(frameProp.T3);
+                double thickness = Convert.ToDouble(frameProp.Tw);
+
+                var outerCircle = new Circle(diameter / 2);
+                var innerCircle = new Circle(diameter / 2 - thickness);
+
+                output.Add(outerCircle.ToNurbsCurve());
+                output.Add(innerCircle.ToNurbsCurve());
+            }
+
+            else if (frameProp.PropType == "Rectangular")
+            {
+                double depth = Convert.ToDouble(frameProp.T3);
+                double width = Convert.ToDouble(frameProp.T2);
+
+                var pts = new List<Point3d>();
+                pts.Add(new Point3d(width / -2, depth / 2, 0));
+                pts.Add(new Point3d(width / 2, depth / 2, 0));
+                pts.Add(new Point3d(width / 2, depth / -2, 0));
+                pts.Add(new Point3d(width / -2, depth / -2, 0));
+                pts.Add(new Point3d(width / -2, depth / 2, 0));
+                pts.Reverse();
+                var rect = new Polyline(pts);
+
+                output.Add(rect.ToPolylineCurve());
+            }
+
+            else if (frameProp.PropType == "I")
+            {
+                double depth = Convert.ToDouble(frameProp.T3);
+                double width = Convert.ToDouble(frameProp.T2);
+                double tf = Convert.ToDouble(frameProp.Tf);
+                double tw = Convert.ToDouble(frameProp.Tw);
+
+                var pts = new List<Point3d>();
+                pts.Add(new Point3d(width / -2, depth / 2, 0));
+                pts.Add(new Point3d(width / 2, depth / 2, 0));
+                pts.Add(new Point3d(width / 2, depth / 2 - tf, 0));
+                pts.Add(new Point3d(tw / 2, depth / 2 - tf, 0));
+                pts.Add(new Point3d(tw / 2, depth / -2 + tf, 0));
+                pts.Add(new Point3d(width / 2, depth / -2 + tf, 0));
+                pts.Add(new Point3d(width / 2, depth / -2, 0));
+                pts.Add(new Point3d(width / -2, depth / -2, 0));
+                pts.Add(new Point3d(width / -2, depth / -2 + tf, 0));
+                pts.Add(new Point3d(tw / -2, depth / -2 + tf, 0));
+                pts.Add(new Point3d(tw / -2, depth / 2 - tf, 0));
+                pts.Add(new Point3d(width / -2, depth / 2 - tf, 0));
+                pts.Add(new Point3d(width / -2, depth / 2, 0));
+                pts.Reverse();
+                var rect = new Polyline(pts);
+
+                output.Add(rect.ToPolylineCurve());
+            }
+
+            else if (frameProp.PropType == "Box")
+            {
+                double depth = Convert.ToDouble(frameProp.T3);
+                double width = Convert.ToDouble(frameProp.T2);
+                double tf = Convert.ToDouble(frameProp.Tf);
+                double tw = Convert.ToDouble(frameProp.Tw);
+
+
+            }
+
+            return output;
+        }
+        public static void IncludeExtrusion(Rhino.FileIO.File3dm file3dm, List<FrameGeometry> allFrame, Dictionary<string, FrameGeometryProp> allFrameProp, List<AreaGeometry> allAreas)
+        {
+            ////////////////////////
+            // CREATE PROFILE FOR EACH FRAME PROPERTY
+            ////////////////////////
+
+            var available_frametype = new List<string> { "Circle", "Pipe", "Rectangular", "I" };
+
+            var frameprop_profile = new Dictionary<string, List<Curve>>();
+
+            foreach (var keyVal in allFrameProp)
+            {
+                var frameprop = keyVal.Value;
+                if (available_frametype.Contains(frameprop.PropType))
+                {
+                    var profile_crv = CreateProfile(frameprop);
+                    frameprop_profile.Add(frameprop.Name, profile_crv);
+                }
+            }
+
+
+            ////////////////////////
+            // CREATE EXTRUSION FOR ALL FRAME OBJECTS
+            ////////////////////////
+            var outputPlanes = new List<Plane>();
+            var outputLines = new List<LineCurve>();
+            var outputFrameBreps = new List<Brep>();
+
+            foreach (var frame in allFrame)
+            {
+                var frameprop = allFrameProp[frame.PropName];
+
+                if (available_frametype.Contains(frameprop.PropType) && frameprop.PropType == "Pipe") //filter for frame type
+                {
+                    var profile = frameprop_profile[frameprop.Name];
+
+                    // create orientation transformation
+                    var pt0 = frame.Pt0;
+                    var pt1 = frame.Pt1;
+                    var frame_vec = pt1 - pt0;
+
+                    var plane1_x = Vector3d.CrossProduct(Vector3d.ZAxis, frame_vec);
+                    var plane1_y = Vector3d.CrossProduct(frame_vec, plane1_x);
+
+                    var plane0 = Plane.WorldXY;
+                    var plane0_moveup = new Plane(new Point3d(0, 0, frame_vec.Length), Vector3d.XAxis, Vector3d.YAxis);
+                    var plane1 = new Plane(pt0, plane1_x, plane1_y);
+
+                    var angle = Rhino.RhinoMath.ToRadians(Convert.ToDouble(frame.Angle));
+
+
+                    // vertical frame special case
+                    if (pt1.X == pt0.X && pt1.Y == pt0.Y)
+                    {
+                        plane1 = new Plane(pt0, frame_vec);
+                        angle -= Math.PI / 2; //etabs default depth is parallel to World X-Axis for vertical frame
+                    }
+
+                    outputPlanes.Add(plane1);
+
+                    var t0 = Transform.Rotation(angle, Point3d.Origin);
+                    var t1 = Transform.PlaneToPlane(plane0, plane1);
+
+                    // create geometry -- NOT READY NEED FIX, resulting geometry currently is not a solid
+                    var geo = new Brep();
+
+                    var bottomcap = Brep.CreateTrimmedPlane(plane0, profile);
+                    bottomcap.Flip();
+                    var topcap = Brep.CreateTrimmedPlane(plane0_moveup, profile); // profile need to move up to the plane
+                    geo.Append(bottomcap);
+                    
+                    foreach (var p in profile)
+                    {
+                        var extrusion = Extrusion.Create(p, frame_vec.Length, false);
+                        geo.Append(extrusion.ToBrep());
+                    }
+
+                    geo.Append(topcap);
+
+                    //orient brep from WorldXY plane to frame plane
+                    geo.Transform(t0);
+                    geo.Transform(t1);
+
+                    if (geo.IsValid)
+                    {
+                        outputFrameBreps.Add(geo);
+                    }
+                    
+                    
+                }
+            }
+
+
+            ////////////////////////
+            // CREATE EXTRUSION FOR ALL AREA OBJECTS
+            ////////////////////////
+
+
+            ////////////////////////
+            // ADD EXTRUSION TO RHINO MODEL INSTANCE
+            ////////////////////////
+
+            int frameExtrusionObj = file3dm.AllLayers.AddLayer("frameExtrusion", System.Drawing.Color.Blue);
+
+            var att = new Rhino.DocObjects.ObjectAttributes();
+            att.LayerIndex = frameExtrusionObj;
+
+            foreach (var obj in outputFrameBreps)
+            {
+                file3dm.Objects.AddBrep(obj, att);
+            }
+            
+        }
+
+        #endregion
+
         public static void ExportEtabsToRhino(cSapModel Sap, string filePath, string fileName, IProgress<int> progress)
         {
             //setup new rhino model instance
@@ -250,92 +470,100 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
             int layerFrameObj = newModel.AllLayers.AddLayer("frameObj", System.Drawing.Color.Black);
             int layerAreaObj = newModel.AllLayers.AddLayer("areaObj", System.Drawing.Color.Red);
 
-            Console.WriteLine("Parsing through etabs properties...");
 
-            //all etabs frame and area with property
+            //rebuild etabs frame objects 
+            //attach etabs property as user text in thino
             var allFrames = GetAllFrames(Sap);
             var allFrameProp = GetAllFrameProperties(Sap);
 
             progress.Report(20);
 
-            var allAreas = GetAllAreasWithProperties(Sap);
-
-            progress.Report(60);
-
-
-            //rebuild etabs frame objects 
-            //attach etabs property as user text in thino
-            Console.WriteLine("Rebuilding etabs FRAME objects in Rhino...");
-
-            for (var i = 0; i<allFrames.Count; i++)
+            if (allFrames != null && allFrameProp != null) 
             {
-                
-                var frame = allFrames[i];
-                string framePropName = frame.PropName;
-                FrameGeometryProp frameProp = allFrameProp[framePropName];
+                for (var i = 0; i < allFrames.Count; i++)
+                {
+
+                    var frame = allFrames[i];
+                    string framePropName = frame.PropName;
+                    FrameGeometryProp frameProp = allFrameProp[framePropName];
 
 
-                var att = new Rhino.DocObjects.ObjectAttributes();
+                    var att = new Rhino.DocObjects.ObjectAttributes();
 
-                att.SetUserString("Name", frame.Name);
-                att.SetUserString("PropName", frame.PropName);
-                att.SetUserString("StoryName", frame.StoryName);
-                att.SetUserString("Angle", frame.Angle.ToString());
-                att.SetUserString("Cardinal", frame.Cardinal);
-                att.SetUserString("DesignOrientation", frame.DesignOrientation);
+                    att.SetUserString("Name", frame.Name);
+                    att.SetUserString("PropName", frame.PropName);
+                    att.SetUserString("StoryName", frame.StoryName);
+                    att.SetUserString("Angle", frame.Angle.ToString());
+                    att.SetUserString("Cardinal", frame.Cardinal);
+                    att.SetUserString("DesignOrientation", frame.DesignOrientation);
 
-                att.SetUserString("t3", frameProp.T3.ToString());
-                att.SetUserString("t2", frameProp.T2.ToString());
-                att.SetUserString("tf", frameProp.Tf.ToString());
-                att.SetUserString("tw", frameProp.Tw.ToString());
-                att.SetUserString("t2b", frameProp.T2b.ToString());
-                att.SetUserString("tfb", frameProp.Tfb.ToString());
-                att.SetUserString("PropType", frameProp.PropType);
-                
-
-                att.LayerIndex = layerFrameObj;
+                    att.SetUserString("t3", frameProp.T3.ToString());
+                    att.SetUserString("t2", frameProp.T2.ToString());
+                    att.SetUserString("tf", frameProp.Tf.ToString());
+                    att.SetUserString("tw", frameProp.Tw.ToString());
+                    att.SetUserString("t2b", frameProp.T2b.ToString());
+                    att.SetUserString("tfb", frameProp.Tfb.ToString());
+                    att.SetUserString("PropType", frameProp.PropType);
 
 
-                newModel.Objects.AddLine(frame.Pt0, frame.Pt1, att);
+                    att.LayerIndex = layerFrameObj;
+
+
+                    newModel.Objects.AddLine(frame.Pt0, frame.Pt1, att);
+                }
             }
-
-            progress.Report(70);
             
+
+            progress.Report(30);
+
 
 
             //rebuild etabs area objects in rhino
             //attach etabs property as user text in rhino
-            Console.WriteLine("Rebuilding etabs AREA objects in rhino...");
+            var allAreas = GetAllAreasWithProperties(Sap);
 
-            for (var i = 0; i< allAreas.Count; i++)
+            progress.Report(70);
+
+            if (allAreas != null)
             {
-                var area = allAreas[i];
-
-                var att = new Rhino.DocObjects.ObjectAttributes();
-
-                att.SetUserString("Name",area.Name);
-                att.SetUserString("PropName", area.PropName);
-                att.SetUserString("DesignOrientation", area.DesignOrientation);
-                att.SetUserString("IsOpening", area.IsOpening.ToString());
-
-                att.LayerIndex = layerAreaObj;
-
-
-                var polyline = new Polyline();
-
-                for (var j = 0; j < area.BoundaryPoints.Count; j++)
+                for (var i = 0; i < allAreas.Count; i++)
                 {
-                    var pt = area.BoundaryPoints[j];
-                    polyline.Add(pt);
+                    var area = allAreas[i];
+
+                    var att = new Rhino.DocObjects.ObjectAttributes();
+
+                    att.SetUserString("Name", area.Name);
+                    att.SetUserString("PropName", area.PropName);
+                    att.SetUserString("DesignOrientation", area.DesignOrientation);
+                    att.SetUserString("IsOpening", area.IsOpening.ToString());
+
+                    att.LayerIndex = layerAreaObj;
+
+
+                    var polyline = new Polyline();
+
+                    for (var j = 0; j < area.BoundaryPoints.Count; j++)
+                    {
+                        var pt = area.BoundaryPoints[j];
+                        polyline.Add(pt);
+                    }
+
+                    var lastPt = area.BoundaryPoints[0];
+                    polyline.Add(lastPt);
+
+                    newModel.Objects.AddPolyline(polyline, att);
                 }
-
-                var lastPt = area.BoundaryPoints[0];
-                polyline.Add(lastPt);
-
-                newModel.Objects.AddPolyline(polyline, att);
             }
+            
 
             progress.Report(90);
+
+
+            var includeExtrusion = false;
+            if (includeExtrusion && allFrames != null && allFrameProp != null)
+            {
+                IncludeExtrusion(newModel, allFrames, allFrameProp, allAreas);
+            }
 
 
             var outputModelPath = filePath;
