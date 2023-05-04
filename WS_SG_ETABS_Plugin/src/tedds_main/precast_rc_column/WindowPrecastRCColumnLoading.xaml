@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WS_SG_ETABS_Plugin.src.tedds_main.precast_rc_column"
-             mc:Ignorable="d"    Height="220" Width="450" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" WindowStyle="None">
+             mc:Ignorable="d"    Height="250" Width="450" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" WindowStyle="None">
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"></ColumnDefinition>
@@ -13,7 +13,7 @@
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="0.8*"></RowDefinition>
             <RowDefinition Height="0.8*"></RowDefinition>
-            <RowDefinition Height="3.5*"></RowDefinition>
+            <RowDefinition Height="3.8*"></RowDefinition>
         </Grid.RowDefinitions>
 
         <Label Grid.Row="0" Grid.Column="0" Margin="0 -10 0 0" Content="Precast concrete column design (EN1992)" FontSize="20"/>
@@ -30,14 +30,16 @@
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
 
-            <CheckBox Grid.Row="0" Grid.Column="0" Name="checkBoxPointObjectConnectivity" Content="Point Object Connectivity" IsEnabled="False" IsChecked="False" ></CheckBox>
-            <CheckBox Grid.Row="1" Grid.Column="0" Name="checkBoxJointReaction" Content="Joint Reactions" IsEnabled="False" IsChecked="False" ></CheckBox>
-            <CheckBox Grid.Row="2" Grid.Column="0" Name="checkBoxStorydefin" Content="Story Definitions" IsEnabled="False" IsChecked="False" ></CheckBox>
-            <CheckBox Grid.Row="3" Grid.Column="0" Name="checkBoxJointForcesFrame" Content="Element Joint Forces - Frame" IsEnabled="False" IsChecked="False" ></CheckBox>
-            <CheckBox Grid.Row="4" Grid.Column="0" Name="checkBoxJointForcesShell" Content="Element Joint Forces - Shells" IsEnabled="False" IsChecked="False" ></CheckBox>
-            <CheckBox Grid.Row="5" Grid.Column="0" Name="checkBoxJointForcesLink" Content="Element Joint Forces - Links" IsEnabled="False" IsChecked="False" ></CheckBox>
+            <CheckBox Grid.Row="0" Grid.Column="0" Name="checkBoxColumnObjectConnectivity" Content="Column Object Connectivity" IsEnabled="False" IsChecked="False" ></CheckBox>
+            <CheckBox Grid.Row="1" Grid.Column="0" Name="checkBoxConcreteColumnOverwrites" Content="Concrete Column Overwrites" IsEnabled="False" IsChecked="False" ></CheckBox>
+            <CheckBox Grid.Row="2" Grid.Column="0" Name="checkBoxSConcreteColumnPMMEnvelope" Content="Concrete Column PMM Envelope" IsEnabled="False" IsChecked="False" ></CheckBox>
+            <CheckBox Grid.Row="3" Grid.Column="0" Name="checkBoxFrameAssignmentsSectionProperties" Content="Frame Assignments - Section Properties" IsEnabled="False" IsChecked="False" ></CheckBox>
+            <CheckBox Grid.Row="4" Grid.Column="0" Name="checkBoxFrameSectionPropertyDefinitionsConcreteCircle" Content="Frame Section Property Definitions - Concrete Circle" IsEnabled="False" IsChecked="False" ></CheckBox>
+            <CheckBox Grid.Row="5" Grid.Column="0" Name="checkBoxFrameSectionPropertyDefinitionsConcreteRectangular" Content="Frame Section Property Definitions - Concrete Rectangular" IsEnabled="False" IsChecked="False" ></CheckBox>
+            <CheckBox Grid.Row="6" Grid.Column="0" Name="checkBoxGroupAssignments" Content="Group Assignments" IsEnabled="False" IsChecked="False" ></CheckBox>
 
 
         </Grid>
