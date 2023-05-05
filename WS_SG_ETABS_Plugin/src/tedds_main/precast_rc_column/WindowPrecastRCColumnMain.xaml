@@ -46,11 +46,11 @@
 
 
             <!-- Column 1 -->
-            <Label Grid.Column="1" Grid.Row="0" Content="Cover (mm)" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <Label Grid.Column="1" Grid.Row="0" Content="Cover (mm)" VerticalAlignment="Center" HorizontalAlignment="Center" ForceCursor="True"/>
             
             <TextBox  Grid.Row="1" Grid.Column="1" x:Name="textboxCover" 
                        VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
-                       Text="35" InputMethod.InputScope="Number" TextChanged="textboxCover_TextChanged"></TextBox>
+                       Text="35" TextChanged="textboxCover_TextChanged" InputScope="Number"></TextBox>
 
 
             <!-- Column 2 -->
