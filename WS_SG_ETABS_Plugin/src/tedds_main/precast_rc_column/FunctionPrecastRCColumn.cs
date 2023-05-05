@@ -27,8 +27,7 @@ namespace WS_SG_ETABS_Plugin.src.tedds_main.precast_rc_column
             {
                 System.IO.Directory.CreateDirectory(folderPath);
             }
-            MessageBox.Show("Tedds files created from this plugin will be save in folder: TeddsFilesFromTeddsPowerAPP");
-            MessageBox.Show("Folder location: " + folderPath);
+            MessageBox.Show("Tedds files created from this plugin will be saved in ETABS source folder at: TeddsFilesFromTeddsPowerAPP");
             #endregion
 
             #region start main function
@@ -47,28 +46,50 @@ namespace WS_SG_ETABS_Plugin.src.tedds_main.precast_rc_column
                 #region set variables to be taken into document
                 ICalculator calculator = new Calculator();
                 calculator.Initialize();
+                calculator.Functions.SetVar("_ColumnSpliceCheckBox", 1);
+                calculator.Functions.SetVar("_rcc.BracedY", 1);
+                calculator.Functions.SetVar("_rcc.BracedZ", 1);
+                calculator.Functions.SetVar("_isLiftingCheckIncluded", 0);
+
+                //input from plugin main required
+                calculator.Functions.SetVar("c_{nom}", 50, "mm");
+
+                //input from etabs required
+                calculator.Functions.SetVar("_rcc.ColumnGrade", "C90/105");
+
+                calculator.Functions.SetVar("_rcc.Type", "Rectangular");
                 calculator.Functions.SetVar("b", 500, "mm");
                 calculator.Functions.SetVar("h", 500, "mm");
-                calculator.Functions.SetVar("l_{y}", 500, "mm");
-                calculator.Functions.SetVar("l_{z}", 500, "mm");
-                calculator.Functions.SetVar("_rcc.Type", "Rectangular");
-                calculator.Functions.SetVar("M_{btmy}", 500, "kNm");
-                calculator.Functions.SetVar("M_{btmz}", 500, "kNm");
-                calculator.Functions.SetVar("M_{topy}", 500, "kNm");
-                calculator.Functions.SetVar("M_{topz}", 500, "kNm");
-                calculator.Functions.SetVar("N_{Ed}", 500, "kN");
-                calculator.Functions.SetVar("c_{nom}", 500, "mm");
-                calculator.Functions.SetVar("f_{ck}", 500, "MPa");
+
+                calculator.Functions.SetVar("l_{0y}", 500, "mm");
+                calculator.Functions.SetVar("l_{0z}", 500, "mm");
+
+                calculator.Functions.SetVar("M_{btmy}", 5, "kNm");
+                calculator.Functions.SetVar("M_{btmz}", 5, "kNm");
+                calculator.Functions.SetVar("M_{topy}", 5, "kNm");
+                calculator.Functions.SetVar("M_{topz}", 5, "kNm");
+                calculator.Functions.SetVar("N_{Ed}", 5, "kN");
+
+                calculator.Functions.SetVar("M_{Fry.Splice1}", 6, "kNm");
+                calculator.Functions.SetVar("M_{Frz.Splice1}", 6, "kNm");
+
+
+
+
                 string variables = calculator.GetVariables();
+                /*
+                calculator.InitializeCalc("$(SysLbrDir)Precast column design-EN1992-x-engb.lbr", "Precast column design (EN1992)", variables);
+                string variables2 = calculator.GetVariables();
+                */
                 #endregion
 
-                ITeddsDocument doc1 = new Document();
-
-                ITeddsDocument Add2("$(SysLbrDir)Precast column design-EN1992-x-engb.lbr", "Precast column design (EN1992)", variables);
+                
+                ITeddsDocuments doc1 = new Documents();
+                doc1.Add2("$(SysLbrDir)Precast column design-EN1992-x-engb.lbr", "Precast column design (EN1992)", variables);
+                doc1.Close(true);
 
 
             }
-
             #endregion
 
             //calculator.InitializeCalc("$(SysLbrDir)Precast column design-EN1992-x-engb.lbr", "Precast column design (EN1992)", variables);
