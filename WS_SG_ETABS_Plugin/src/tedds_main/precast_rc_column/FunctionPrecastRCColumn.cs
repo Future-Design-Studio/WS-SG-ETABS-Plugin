@@ -233,6 +233,121 @@ namespace WS_SG_ETABS_Plugin.src.tedds_main.precast_rc_column
                     }
                     #endregion
 
+                    double Ptop = new double();
+                    double Pbot = new double();
+                    double Pcrit = new double();
+                    double Mmajortop = new double();
+                    double Mmajorbot = new double();
+                    double Mmajorcrit = new double();
+                    double Mminortop = new double();
+                    double Mminorbot = new double();
+                    double Mminorcrit = new double();
+
+                    foreach (string column in columnUniqueNames)
+                    {
+                        #region get forces of the column in question
+                        foreach (Dictionary<string,string> row in columnpmmTable.TableInList)
+                        {
+                            if (row["UniqueName"] == column && row["Location"] == "Top")
+                            {
+                                Ptop = Convert.ToDouble(row["P"]);
+                                Mmajortop = Convert.ToDouble(row["P"]);
+                                Mminortop = Convert.ToDouble(row["P"]);
+                            }
+                            else if (row["UniqueName"] == column && row["Location"] == "Bottom")
+                            {
+                                Pbot = Convert.ToDouble(row["P"]);
+                                Mmajorbot = Convert.ToDouble(row["P"]);
+                                Mminorbot = Convert.ToDouble(row["P"]);
+                                break;
+                            }
+                        }
+                        Pcrit = Math.Max(Math.Abs(Ptop), Math.Abs(Pbot));
+                        Mmajorcrit = Math.Max(Math.Abs(Mmajortop), Math.Abs(Mmajorbot));
+                        Mminorcrit = Math.Max(Math.Abs(Mminortop), Math.Abs(Mminorbot));
+                        #endregion
+
+                        #region get concrete fck, section size, section type, of the column in question
+
+                        string sectionType = null;
+
+                        foreach (Dictionary<string,string> row in sectionpropertyassignmentTable.TableInList)
+                        {
+                            if (row["UniqueName"] == column)
+                            {
+                                if (row["Shape"] == "Concrete Rectangular")
+                                    sectionType = "Rectangular";
+                                else if (row["Shape"] == "Concrete Circular")
+                                {
+                                    sectionType = "Circular";
+                                }
+                                else
+                                {
+                                    break;                               
+                                }
+                            }
+                        }
+                        if (sectionType == null)
+                        {
+                            break;
+                        }
+
+                        #endregion
+
+
+
+
+
+
+                        #region set variables to be taken into document
+                        ICalculator calculator = new Calculator();
+                        calculator.Initialize();
+                        calculator.Functions.SetVar("_ColumnSpliceCheckBox", 1);
+                        calculator.Functions.SetVar("_rcc.BracedY", 1);
+                        calculator.Functions.SetVar("_rcc.BracedZ", 1);
+                        calculator.Functions.SetVar("_isLiftingCheckIncluded", 0);
+
+                        //input from plugin main required
+                        calculator.Functions.SetVar("c_{nom}", group.Cover, "mm");
+                        calculator.Functions.SetVar("_CalcUI", 0);
+
+                        //input from etabs required
+                        //calculator.Functions.SetVar("_rcc.ColumnGrade", "C90/105");
+
+                        //calculator.Functions.SetVar("_rcc.Type", sectionType);
+                        //calculator.Functions.SetVar("b", 500, "mm");
+                        //calculator.Functions.SetVar("h", 500, "mm");
+
+                        //calculator.Functions.SetVar("l_{0y}", 500, "mm");
+                        //calculator.Functions.SetVar("l_{0z}", 500, "mm");
+
+                        calculator.Functions.SetVar("M_{btmy}", Mmajorbot, "kNm");
+                        calculator.Functions.SetVar("M_{btmz}", Mminorbot, "kNm");
+                        calculator.Functions.SetVar("M_{topy}", Mmajortop, "kNm");
+                        calculator.Functions.SetVar("M_{topz}", Mminortop, "kNm");
+                        calculator.Functions.SetVar("N_{Ed}", Pcrit, "kN");
+
+                        calculator.Functions.SetVar("M_{Fry.Splice1}", Mmajorcrit, "kNm");
+                        calculator.Functions.SetVar("M_{Frz.Splice1}", Mminorcrit, "kNm");
+
+                        string variables = calculator.GetVariables();
+                        /*
+                        calculator.InitializeCalc("$(SysLbrDir)Precast column design-EN1992-x-engb.lbr", "Precast column design (EN1992)", variables);
+                        string variables2 = calculator.GetVariables();
+                        */
+                        #endregion
+
+
+                        #region create, calculate and save tedds file
+                        ITeddsDocuments doc1 = new Documents();
+                        doc1.Add2("$(SysLbrDir)Precast column design-EN1992-x-engb.lbr", "Precast column design (EN1992)", variables);
+                        ITeddsDocument doc2 = doc1[0];
+                        doc2.Calculate();
+                        doc2.SaveAs(groupfolderPath + "\\" + group.Group + ".ted");
+                        doc1.Close(false);
+                        doc2.Close(false);
+                        #endregion
+                    }
 
 
 
@@ -245,61 +360,6 @@ namespace WS_SG_ETABS_Plugin.src.tedds_main.precast_rc_column
 
 
 
-
-
-
-                    #region set variables to be taken into document
-                    ICalculator calculator = new Calculator();
-                    calculator.Initialize();
-                    calculator.Functions.SetVar("_ColumnSpliceCheckBox", 1);
-                    calculator.Functions.SetVar("_rcc.BracedY", 1);
-                    calculator.Functions.SetVar("_rcc.BracedZ", 1);
-                    calculator.Functions.SetVar("_isLiftingCheckIncluded", 0);
-
-                    //input from plugin main required
-                    calculator.Functions.SetVar("c_{nom}", 50, "mm");
-                    calculator.Functions.SetVar("_CalcUI", 0);
-
-                    //input from etabs required
-                    calculator.Functions.SetVar("_rcc.ColumnGrade", "C90/105");
-
-                    calculator.Functions.SetVar("_rcc.Type", "Rectangular");
-                    calculator.Functions.SetVar("b", 500, "mm");
-                    calculator.Functions.SetVar("h", 500, "mm");
-
-                    calculator.Functions.SetVar("l_{0y}", 500, "mm");
-                    calculator.Functions.SetVar("l_{0z}", 500, "mm");
-
-                    calculator.Functions.SetVar("M_{btmy}", 5, "kNm");
-                    calculator.Functions.SetVar("M_{btmz}", 5, "kNm");
-                    calculator.Functions.SetVar("M_{topy}", 5, "kNm");
-                    calculator.Functions.SetVar("M_{topz}", 5, "kNm");
-                    calculator.Functions.SetVar("N_{Ed}", 5, "kN");
-
-                    calculator.Functions.SetVar("M_{Fry.Splice1}", 6, "kNm");
-                    calculator.Functions.SetVar("M_{Frz.Splice1}", 6, "kNm");
-
-
-                    calculator.Functions.SetVar("N_{Ed}", 5, "kN");
-
-
-                    string variables = calculator.GetVariables();
-                    /*
-                    calculator.InitializeCalc("$(SysLbrDir)Precast column design-EN1992-x-engb.lbr", "Precast column design (EN1992)", variables);
-                    string variables2 = calculator.GetVariables();
-                    */
-                    #endregion
-
-
-                    #region create, calculate and save tedds file
-                    ITeddsDocuments doc1 = new Documents();
-                    doc1.Add2("$(SysLbrDir)Precast column design-EN1992-x-engb.lbr", "Precast column design (EN1992)", variables);
-                    ITeddsDocument doc2 = doc1[0];
-                    doc2.Calculate();
-                    doc2.SaveAs(groupfolderPath + "\\" + group.Group + ".ted");
-                    doc1.Close(false);
-                    doc2.Close(false);
-                    #endregion
                 }
                 else
                 {
