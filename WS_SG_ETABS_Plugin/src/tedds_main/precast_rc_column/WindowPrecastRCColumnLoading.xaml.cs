@@ -8,6 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Markup;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
@@ -63,7 +64,7 @@ namespace WS_SG_ETABS_Plugin.src.tedds_main.precast_rc_column
             }
 
             //Get joint reaction database table
-            List<string> tableKeys = new List<string> { "Column Object Connectivity", "Concrete Column Overwrites - " + designCode, "Concrete Column PMM Envelope - " + designCode, "Frame Assignments - Section Properties", "Frame Section Property Definitions - Concrete Circle", "Frame Section Property Definitions - Concrete Rectangular", "Group Assignments" };
+            List<string> tableKeys = new List<string> { "Column Object Connectivity", "Concrete Column Overwrites - " + designCode, "Concrete Column PMM Envelope - " + designCode, "Material Properties - Concrete Data", "Frame Assignments - Section Properties", "Frame Section Property Definitions - Concrete Circle", "Frame Section Property Definitions - Concrete Rectangular", "Group Assignments" };
             loadDatabaseTable(SapModelEtabs, PluginEtabs, tableKeys, databaseTableListETABS);
 
             ShowDialog();
@@ -81,7 +82,7 @@ namespace WS_SG_ETABS_Plugin.src.tedds_main.precast_rc_column
 
                     (isError, databaseTable) = src.HelperEtabs.GetTableDisplay(SapModelEtabs, tableKey, false);
 
-                    if (isError && (tableKey == tableKeys[4] || tableKey == tableKeys[5]))
+                    if (isError && (tableKey == tableKeys[5] || tableKey == tableKeys[6]))
                     {
                         MessageBox.Show("Error in retreiving table for " + tableKey + ". It is possible this table doesn't exist or model is not run.");
                         isError = false;
@@ -119,24 +120,31 @@ namespace WS_SG_ETABS_Plugin.src.tedds_main.precast_rc_column
                     {
                         Dispatcher.Invoke((Action)(() =>
                         {
-                            checkBoxFrameAssignmentsSectionProperties.IsChecked = true;
+                            checkBoxMaterialProperties.IsChecked = true;
                         }));
                     }
                     else if (tableKey == tableKeys[4])
                     {
                         Dispatcher.Invoke((Action)(() =>
                         {
-                            checkBoxFrameSectionPropertyDefinitionsConcreteCircle.IsChecked = true;
+                            checkBoxFrameAssignmentsSectionProperties.IsChecked = true;
                         }));
                     }
                     else if (tableKey == tableKeys[5])
                     {
                         Dispatcher.Invoke((Action)(() =>
                         {
-                            checkBoxFrameSectionPropertyDefinitionsConcreteRectangular.IsChecked = true;
+                            checkBoxFrameSectionPropertyDefinitionsConcreteCircle.IsChecked = true;
                         }));
                     }
                     else if (tableKey == tableKeys[6])
+                    {
+                        Dispatcher.Invoke((Action)(() =>
+                        {
+                            checkBoxFrameSectionPropertyDefinitionsConcreteRectangular.IsChecked = true;
+                        }));
+                    }
+                    else if (tableKey == tableKeys[7])
                     {
                         Dispatcher.Invoke((Action)(() =>
                         {

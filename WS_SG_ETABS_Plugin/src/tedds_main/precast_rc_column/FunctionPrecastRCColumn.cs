@@ -53,6 +53,7 @@ namespace WS_SG_ETABS_Plugin.src.tedds_main.precast_rc_column
 
                 //input from plugin main required
                 calculator.Functions.SetVar("c_{nom}", 50, "mm");
+                calculator.Functions.SetVar("_CalcUI", 0);
 
                 //input from etabs required
                 calculator.Functions.SetVar("_rcc.ColumnGrade", "C90/105");
@@ -74,6 +75,7 @@ namespace WS_SG_ETABS_Plugin.src.tedds_main.precast_rc_column
                 calculator.Functions.SetVar("M_{Frz.Splice1}", 6, "kNm");
 
 
+                calculator.Functions.SetVar("N_{Ed}", 5, "kN");
 
 
                 string variables = calculator.GetVariables();
@@ -83,10 +85,16 @@ namespace WS_SG_ETABS_Plugin.src.tedds_main.precast_rc_column
                 */
                 #endregion
 
-                
+
+                #region create, calculate and save tedds file
                 ITeddsDocuments doc1 = new Documents();
                 doc1.Add2("$(SysLbrDir)Precast column design-EN1992-x-engb.lbr", "Precast column design (EN1992)", variables);
-                doc1.Close(true);
+                ITeddsDocument doc2 = doc1[0];
+                doc2.Calculate();
+                doc2.SaveAs(groupfolderPath + "\\" + group.Group + ".ted");
+                doc1.Close(false);
+                doc2.Close(false);
+                #endregion
 
 
             }
