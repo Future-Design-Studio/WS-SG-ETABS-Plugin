@@ -153,19 +153,23 @@ namespace WS_SG_ETABS_Plugin.src.tedds_main.precast_rc_column
                     #endregion
 
                     #region filter column overwrite table by group
-                    (isError, columnoverwriteTable) = src.HelperEtabs.CallDatabaseTableByTableKey(DatabaseTableListETABS, "Concrete Column Overwrites - " + designCode);
-                    if (isError)
+
+                    if (designCode != "Eurocode 2-2004")
                     {
-                        MessageBox.Show("Error reading Concrete Column Overwrites.");
-                        return true;
-                    }
-                    else
-                    {
-                        (isError, columnoverwriteTable) = src.HelperEtabs.FilterDatabaseTableUniqueNameByGroup(columnoverwriteTable, groupassignmentTable, group.Group);
+                        (isError, columnoverwriteTable) = src.HelperEtabs.CallDatabaseTableByTableKey(DatabaseTableListETABS, "Concrete Column Overwrites - " + designCode);
                         if (isError)
                         {
-                            MessageBox.Show("Error filtering Concrete Column Overwrites table based on selected group. Please check that selected group contains columns.");
+                            MessageBox.Show("Error reading Concrete Column Overwrites.");
                             return true;
+                        }
+                        else
+                        {
+                            (isError, columnoverwriteTable) = src.HelperEtabs.FilterDatabaseTableUniqueNameByGroup(columnoverwriteTable, groupassignmentTable, group.Group);
+                            if (isError)
+                            {
+                                MessageBox.Show("Error filtering Concrete Column Overwrites table based on selected group. Please check that selected group contains columns.");
+                                return true;
+                            }
                         }
                     }
                     #endregion
