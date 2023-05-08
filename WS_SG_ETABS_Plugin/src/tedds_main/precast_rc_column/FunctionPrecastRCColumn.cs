@@ -233,18 +233,19 @@ namespace WS_SG_ETABS_Plugin.src.tedds_main.precast_rc_column
                     }
                     #endregion
 
-                    double Ptop = new double();
-                    double Pbot = new double();
-                    double Pcrit = new double();
-                    double Mmajortop = new double();
-                    double Mmajorbot = new double();
-                    double Mmajorcrit = new double();
-                    double Mminortop = new double();
-                    double Mminorbot = new double();
-                    double Mminorcrit = new double();
 
                     foreach (string column in columnUniqueNames)
                     {
+                        double Ptop = new double();
+                        double Pbot = new double();
+                        double Pcrit = new double();
+                        double Mmajortop = new double();
+                        double Mmajorbot = new double();
+                        double Mmajorcrit = new double();
+                        double Mminortop = new double();
+                        double Mminorbot = new double();
+                        double Mminorcrit = new double();
+
                         #region get forces of the column in question
                         foreach (Dictionary<string,string> row in columnpmmTable.TableInList)
                         {
@@ -270,14 +271,21 @@ namespace WS_SG_ETABS_Plugin.src.tedds_main.precast_rc_column
                         #region get concrete fck, section size, section type, of the column in question
 
                         string sectionType = null;
+                        string sectionProperty = null;
+                        string materialProperty = null;
+                        double concreteStrength = new double();
+                        string concreteGrade = null;
+                        double width = new double();
+                        double height = new double();
 
                         foreach (Dictionary<string,string> row in sectionpropertyassignmentTable.TableInList)
                         {
                             if (row["UniqueName"] == column)
                             {
+                                #region get shape of element
                                 if (row["Shape"] == "Concrete Rectangular")
                                     sectionType = "Rectangular";
-                                else if (row["Shape"] == "Concrete Circular")
+                                else if (row["Shape"] == "Concrete Circle")
                                 {
                                     sectionType = "Circular";
                                 }
@@ -285,19 +293,249 @@ namespace WS_SG_ETABS_Plugin.src.tedds_main.precast_rc_column
                                 {
                                     break;                               
                                 }
+                                #endregion
+
+                                sectionProperty = row["SectProp"];
+                                if (sectionType == "Rectangular")
+                                {
+                                    #region get height and width
+                                    foreach (Dictionary<string,string> rowrect in rectanglecolumndefinitionTable.TableInList)
+                                    {
+                                        if (rowrect["Name"] == sectionProperty)
+                                        {
+                                            materialProperty = rowrect["Material"];
+                                            height = Convert.ToDouble(rowrect["Depth"]);
+                                            width = Convert.ToDouble(rowrect["Width"]);
+                                            break;
+                                        }
+                                    }
+                                    #endregion
+                                    #region get concrete strength and grade
+                                    foreach (Dictionary<string,string> rowmaterial in materialpropertiesTable.TableInList)
+                                    {
+                                        if (rowmaterial["Material"] == materialProperty)
+                                        {
+                                            concreteStrength = Convert.ToDouble(rowmaterial["Fc"]);
+
+                                            if (concreteStrength < 16)
+                                            {
+                                                concreteGrade = "C12/15";
+                                            }
+                                            else if (concreteStrength < 20)
+                                            {
+                                                concreteGrade = "C16/20";
+                                            }
+                                            else if (concreteStrength < 25)
+                                            {
+                                                concreteGrade = "C20/25";
+                                            }
+                                            else if (concreteStrength < 28)
+                                            {
+                                                concreteGrade = "C25/30";
+                                            }
+                                            else if (concreteStrength < 30)
+                                            {
+                                                concreteGrade = "C28/35";
+                                            }
+                                            else if (concreteStrength < 32)
+                                            {
+                                                concreteGrade = "C30/37";
+                                            }
+                                            else if (concreteStrength < 35)
+                                            {
+                                                concreteGrade = "C32/40";
+                                            }
+                                            else if (concreteStrength < 40)
+                                            {
+                                                concreteGrade = "C35/45";
+                                            }
+                                            else if (concreteStrength < 45)
+                                            {
+                                                concreteGrade = "C40/50";
+                                            }
+                                            else if (concreteStrength < 50)
+                                            {
+                                                concreteGrade = "C45/55";
+                                            }
+                                            else if (concreteStrength < 55)
+                                            {
+                                                concreteGrade = "C50/60";
+                                            }
+                                            else if (concreteStrength < 60)
+                                            {
+                                                concreteGrade = "C55/67";
+                                            }
+                                            else if (concreteStrength < 70)
+                                            {
+                                                concreteGrade = "C60/75";
+                                            }
+                                            else if (concreteStrength < 80)
+                                            {
+                                                concreteGrade = "C70/85";
+                                            }
+                                            else if (concreteStrength < 90)
+                                            {
+                                                concreteGrade = "C80/95";
+                                            }
+                                            else if (concreteStrength >= 90)
+                                            {
+                                                concreteGrade = "C90/105";
+                                            }
+                                            break;
+                                        }
+                                    }
+
+                                    #endregion
+                                }
+                                else if (sectionType == "Circular")
+                                {
+                                    #region get height and width
+                                    foreach (Dictionary<string, string> rowcirc in circlecolumndefinitionTable.TableInList)
+                                    {
+                                        if (rowcirc["Name"] == sectionProperty)
+                                        {
+                                            materialProperty = rowcirc["Material"];
+                                            height = Convert.ToDouble(rowcirc["Diameter"]);
+                                            width = Convert.ToDouble(rowcirc["Diameter"]);
+                                            break;
+                                        }
+                                    }
+                                    #endregion
+                                    #region get concrete strength and grade
+                                    foreach (Dictionary<string, string> rowmaterial in materialpropertiesTable.TableInList)
+                                    {
+                                        if (rowmaterial["Material"] == materialProperty)
+                                        {
+                                            concreteStrength = Convert.ToDouble(rowmaterial["Fc"]);
+
+                                            if (concreteStrength < 16)
+                                            {
+                                                concreteGrade = "C12/15";
+                                            }
+                                            else if (concreteStrength < 20)
+                                            {
+                                                concreteGrade = "C16/20";
+                                            }
+                                            else if (concreteStrength < 25)
+                                            {
+                                                concreteGrade = "C20/25";
+                                            }
+                                            else if (concreteStrength < 28)
+                                            {
+                                                concreteGrade = "C25/30";
+                                            }
+                                            else if (concreteStrength < 30)
+                                            {
+                                                concreteGrade = "C28/35";
+                                            }
+                                            else if (concreteStrength < 32)
+                                            {
+                                                concreteGrade = "C30/37";
+                                            }
+                                            else if (concreteStrength < 35)
+                                            {
+                                                concreteGrade = "C32/40";
+                                            }
+                                            else if (concreteStrength < 40)
+                                            {
+                                                concreteGrade = "C35/45";
+                                            }
+                                            else if (concreteStrength < 45)
+                                            {
+                                                concreteGrade = "C40/50";
+                                            }
+                                            else if (concreteStrength < 50)
+                                            {
+                                                concreteGrade = "C45/55";
+                                            }
+                                            else if (concreteStrength < 55)
+                                            {
+                                                concreteGrade = "C50/60";
+                                            }
+                                            else if (concreteStrength < 60)
+                                            {
+                                                concreteGrade = "C55/67";
+                                            }
+                                            else if (concreteStrength < 70)
+                                            {
+                                                concreteGrade = "C60/75";
+                                            }
+                                            else if (concreteStrength < 80)
+                                            {
+                                                concreteGrade = "C70/85";
+                                            }
+                                            else if (concreteStrength < 90)
+                                            {
+                                                concreteGrade = "C80/95";
+                                            }
+                                            else if (concreteStrength >= 90)
+                                            {
+                                                concreteGrade = "C90/105";
+                                            }
+                                            break;
+                                        }
+                                    }
+
+                                    #endregion
+                                }
+                                else
+                                {
+                                    MessageBox.Show("Unknown error with section type, please check code");
+                                    return true;
+                                }
+                                break;
                             }
                         }
-                        if (sectionType == null)
+                        if (sectionType == null || sectionProperty == null || materialProperty == null || concreteStrength.ToString() == null || concreteGrade == null || width.ToString() == null || height.ToString() == null)
                         {
                             break;
                         }
 
                         #endregion
 
+                        #region get effective length factors
 
+                        double length = new double();
+                        double majoreffectiveLength = new double();
+                        double minoreffectiveLength = new double();
+                        double majorFactor = new double();
+                        double minorFactor = new double();
+                        bool progDet = false;
 
-
-
+                        foreach  (Dictionary<string,string> row in columnobjectconnectivityTable.TableInList)
+                        {
+                            if (row["UniqueName"] == column)
+                            {
+                                length = Convert.ToDouble(row["Length"]);
+                                if (designCode != "Eurocode 2-2004")
+                                {
+                                    foreach (Dictionary<string,string> rowoverwrite in columnoverwriteTable.TableInList)
+                                    {
+                                        if (rowoverwrite["UniqueName"] == column)
+                                        {
+                                            majorFactor = Convert.ToDouble(row["LMajor"]);
+                                            majoreffectiveLength = length * majorFactor;
+                                            minorFactor = Convert.ToDouble(row["LMinor"]);
+                                            minoreffectiveLength = length * minorFactor;
+                                            break;
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    Ret = SapModel.DesignConcrete.Eurocode_2_2004.GetOverwrite(column, 3, ref majorFactor, ref progDet);
+                                    Ret = SapModel.DesignConcrete.Eurocode_2_2004.GetOverwrite(column, 4, ref minorFactor, ref progDet);
+                                    majoreffectiveLength = length * majorFactor;
+                                    minoreffectiveLength = length * minorFactor;
+                                }
+                                break;
+                            }
+                        }
+                        if (length.ToString() == null || majoreffectiveLength.ToString() == null || minoreffectiveLength.ToString() == null || majorFactor.ToString() == null || minorFactor.ToString() == null)
+                        {
+                            break;
+                        }
+                        #endregion
 
                         #region set variables to be taken into document
                         ICalculator calculator = new Calculator();
@@ -312,14 +550,14 @@ namespace WS_SG_ETABS_Plugin.src.tedds_main.precast_rc_column
                         calculator.Functions.SetVar("_CalcUI", 0);
 
                         //input from etabs required
-                        //calculator.Functions.SetVar("_rcc.ColumnGrade", "C90/105");
+                        calculator.Functions.SetVar("_rcc.ColumnGrade", concreteGrade);
 
-                        //calculator.Functions.SetVar("_rcc.Type", sectionType);
-                        //calculator.Functions.SetVar("b", 500, "mm");
-                        //calculator.Functions.SetVar("h", 500, "mm");
+                        calculator.Functions.SetVar("_rcc.Type", sectionType);
+                        calculator.Functions.SetVar("b", width, "mm");
+                        calculator.Functions.SetVar("h", height, "mm");
 
-                        //calculator.Functions.SetVar("l_{0y}", 500, "mm");
-                        //calculator.Functions.SetVar("l_{0z}", 500, "mm");
+                        calculator.Functions.SetVar("l_{0y}", majoreffectiveLength, "m");
+                        calculator.Functions.SetVar("l_{0z}", minoreffectiveLength, "m");
 
                         calculator.Functions.SetVar("M_{btmy}", Mmajorbot, "kNm");
                         calculator.Functions.SetVar("M_{btmz}", Mminorbot, "kNm");
@@ -337,28 +575,16 @@ namespace WS_SG_ETABS_Plugin.src.tedds_main.precast_rc_column
                         */
                         #endregion
 
-
                         #region create, calculate and save tedds file
                         ITeddsDocuments doc1 = new Documents();
                         doc1.Add2("$(SysLbrDir)Precast column design-EN1992-x-engb.lbr", "Precast column design (EN1992)", variables);
                         ITeddsDocument doc2 = doc1[0];
                         doc2.Calculate();
-                        doc2.SaveAs(groupfolderPath + "\\" + group.Group + ".ted");
+                        doc2.SaveAs(groupfolderPath + "\\" + group.Group + "_" + column + ".ted");
                         doc1.Close(false);
                         doc2.Close(false);
                         #endregion
                     }
-
-
-
-
-
-
-
-
-
-
-
 
                 }
                 else
