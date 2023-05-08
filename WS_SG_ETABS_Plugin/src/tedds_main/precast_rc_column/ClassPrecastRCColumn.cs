@@ -12,13 +12,13 @@ namespace WS_SG_ETABS_Plugin.src.tedds_main.precast_rc_column
         {
             public string Group { get; set; }
             public string Cover { get; set; }
-            public string Grade { get; set; }
+            public int Method { get; set; }
 
-            public GroupandCoverandGradeMatch(string group, string cover, string grade)
+            public GroupandCoverandGradeMatch(string group, string cover, int method)
             {
                 Group = group;
                 Cover = cover;
-                Grade = grade;
+                Method = method;
             }
         }
     }

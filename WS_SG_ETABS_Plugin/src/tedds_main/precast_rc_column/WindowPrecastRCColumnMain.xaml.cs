@@ -24,14 +24,10 @@ namespace WS_SG_ETABS_Plugin.src.tedds_main.precast_rc_column
     public partial class WindowPrecastRCColumnMain : Window
     {
 
-        #region Data source concrete grade
-
-        List<string> concreteGradeList = new List<string>()
+        List<string> calcMethodList = new List<string>()
         {
-            "C12/15", "C16/20", "C20/25", "C25/30", "C28/35", "C30/37", "C32/40", "C35/45", "C40/50", "C45/55", "C50/60", "C55/67", "C60/75", "C70/85", "C80/95", "C90/105"
+            "All Columns within group", "Critical Column per group per storey"
         };
-
-        #endregion
 
         cSapModel SapModel;
         cPluginCallback Plugin;
@@ -57,8 +53,8 @@ namespace WS_SG_ETABS_Plugin.src.tedds_main.precast_rc_column
             comBoxGroup.SelectedIndex = 0;
 
             //Fill in combobox for concrete grade
-            comboxConcreteGrade.ItemsSource = concreteGradeList;
-            comboxConcreteGrade.SelectedIndex = 0;
+            comboxCalcMethod.ItemsSource = calcMethodList;
+            comboxCalcMethod.SelectedIndex = 0;
 
 
             (isError, groupassignmentTable) = src.HelperEtabs.CallDatabaseTableByTableKey(databaseTableListETABS, "Group Assignments");
@@ -114,9 +110,12 @@ namespace WS_SG_ETABS_Plugin.src.tedds_main.precast_rc_column
         {
             if (!string.IsNullOrEmpty(textboxCover.Text) && IsDigitsOnly(textboxCover.Text))
             {
-                ClassPrecastRCColumn.GroupandCoverandGradeMatch eachgroupList = new ClassPrecastRCColumn.GroupandCoverandGradeMatch(comBoxGroup.Text, textboxCover.Text, comboxConcreteGrade.Text);
+                
+                ClassPrecastRCColumn.GroupandCoverandGradeMatch eachgroupList = new ClassPrecastRCColumn.GroupandCoverandGradeMatch(comBoxGroup.Text, textboxCover.Text, comboxCalcMethod.SelectedIndex);
                 groupList.Add(eachgroupList);
-                listBoxGroups.Items.Add("Group of columns from group: " + comBoxGroup.Text + ", " + textboxCover.Text + "mm cover, concrete grade: " + comboxConcreteGrade.Text);
+                listBoxGroups.Items.Add("Group of columns from group: " + comBoxGroup.Text + ", " + textboxCover.Text + "mm cover, with method: " + calcMethodList[comboxCalcMethod.SelectedIndex]);
+                
+                
             }
             else if (string.IsNullOrEmpty(textboxCover.Text))
             {
@@ -138,11 +137,6 @@ namespace WS_SG_ETABS_Plugin.src.tedds_main.precast_rc_column
                 listBoxGroups.Items.RemoveAt(selectedIndex);
                 groupList.RemoveAt(selectedIndex);
             }
-        }
-
-        private void comboxConcreteGrade_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
         }
 
         private void buttonCancel_Click(object sender, RoutedEventArgs e)
@@ -188,6 +182,11 @@ namespace WS_SG_ETABS_Plugin.src.tedds_main.precast_rc_column
             }
 
             return true;
+        }
+
+        private void comboxCalcMethod_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
         }
     }
 }

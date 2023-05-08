@@ -54,11 +54,11 @@
 
 
             <!-- Column 2 -->
-            <Label Grid.Column="2" Grid.Row="0" Content="Concrete Grade" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <Label Grid.Column="2" Grid.Row="0" Content="Method of calculation" VerticalAlignment="Center" HorizontalAlignment="Center"/>
 
-            <ComboBox  Grid.Row="1" Grid.Column="2" x:Name="comboxConcreteGrade" 
+            <ComboBox  Grid.Row="1" Grid.Column="2" x:Name="comboxCalcMethod" 
                        VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
-                       Text="35" SelectionChanged="comboxConcreteGrade_SelectionChanged"></ComboBox>
+                       Text="35" SelectionChanged="comboxCalcMethod_SelectionChanged"></ComboBox>
 
 
             <!-- Column 3 -->
