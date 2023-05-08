@@ -10,11 +10,13 @@ using ETABSv1;
 using System.Windows.Controls;
 using Tekla.Structural.InteropAssemblies.TeddsCalc;
 using Microsoft.Office.Interop.Excel;
+using ScottPlot.Drawing.Colormaps;
 
 namespace WS_SG_ETABS_Plugin.src.tedds_main.precast_rc_column
 {
     internal class FunctionPrecastRCColumn
     {
+        private static int Ret;
         public static bool PrecastRCColumn(cSapModel SapModel, cPluginCallback Plugin, List<src.HelperEtabs.DatabaseTable> DatabaseTableListETABS, List<ClassPrecastRCColumn.GroupandCoverandGradeMatch> groupList)
         {
 
@@ -27,6 +29,8 @@ namespace WS_SG_ETABS_Plugin.src.tedds_main.precast_rc_column
             src.HelperEtabs.DatabaseTable rectanglecolumndefinitionTable = new HelperEtabs.DatabaseTable();
             src.HelperEtabs.DatabaseTable groupassignmentTable = new HelperEtabs.DatabaseTable();
             bool isError = false;
+            string designCode = "";
+            Ret = SapModel.DesignConcrete.GetCode(ref designCode);
 
             #region Data source concrete grade
 
@@ -94,26 +98,140 @@ namespace WS_SG_ETABS_Plugin.src.tedds_main.precast_rc_column
                             }
                         }
                     }
-                    #endregion
 
-
-                    #region create list of columns within selected group
+                    //create a list of unique names of columns within group to filter
                     List<string> columnUniqueNames = new List<string>();
-
-                    foreach (Dictionary<string,string> row in groupassignmentTable.TableInList)
+                    (isError, columnobjectconnectivityTable) = src.HelperEtabs.CallDatabaseTableByTableKey(DatabaseTableListETABS, "Column Object Connectivity");
+                    if (isError)
                     {
-                        if (!columnUniqueNames.Contains(row["UniqueName"]);
+                        MessageBox.Show("Error reading Column Object Connectivity table.");
+                        return true;
+                    }
+                    else
+                    {
+
+                        foreach (Dictionary<string, string> row in groupassignmentTable.TableInList)
                         {
-                            columnUniqueNames.Add(row["UniqueName"]);
+                            foreach (Dictionary<string,string> rowcolumn in columnobjectconnectivityTable.TableInList)
+                            {
+                                if (!columnUniqueNames.Contains(row["UniqueName"]) && row["UniqueName"] == rowcolumn["UniqueName"])
+                                {
+                                    columnUniqueNames.Add(row["UniqueName"]);
+                                }
+                            }
                         }
                     }
 
+                    //filter group assignment database by names of columns only
+                    List<Dictionary<string, string>> groupassignmentTableFiltered = new List<Dictionary<string, string>>();
+                    foreach (Dictionary<string, string> row in groupassignmentTable.TableInList)
+                    {
+                        if (columnUniqueNames.Contains(row["UniqueName"]))
+                        {
+                            groupassignmentTableFiltered.Add(row);
+                        }
+                    }
+                    groupassignmentTable.TableInList = groupassignmentTableFiltered;
                     #endregion
 
+                    #region filter column object connectivity table by group
+                    (isError, columnobjectconnectivityTable) = src.HelperEtabs.CallDatabaseTableByTableKey(DatabaseTableListETABS, "Column Object Connectivity");
+                    if (isError)
+                    {
+                        MessageBox.Show("Error reading Column Object Connectivity table.");
+                        return true;
+                    }
+                    else
+                    {
+                        (isError, columnobjectconnectivityTable) = src.HelperEtabs.FilterDatabaseTableUniqueNameByGroup(columnobjectconnectivityTable, groupassignmentTable, group.Group);
+                        if (isError)
+                        {
+                            MessageBox.Show("Error filtering Column Object Connectivity table based on selected group. Please check that selected group contains columns.");
+                            return true;
+                        }
+                    }
+                    #endregion
 
+                    #region filter column overwrite table by group
+                    (isError, columnoverwriteTable) = src.HelperEtabs.CallDatabaseTableByTableKey(DatabaseTableListETABS, "Concrete Column Overwrites - " + designCode);
+                    if (isError)
+                    {
+                        MessageBox.Show("Error reading Concrete Column Overwrites.");
+                        return true;
+                    }
+                    else
+                    {
+                        (isError, columnoverwriteTable) = src.HelperEtabs.FilterDatabaseTableUniqueNameByGroup(columnoverwriteTable, groupassignmentTable, group.Group);
+                        if (isError)
+                        {
+                            MessageBox.Show("Error filtering Concrete Column Overwrites table based on selected group. Please check that selected group contains columns.");
+                            return true;
+                        }
+                    }
+                    #endregion
 
+                    #region filter column pmm table by group
+                    (isError, columnpmmTable) = src.HelperEtabs.CallDatabaseTableByTableKey(DatabaseTableListETABS, "Concrete Column PMM Envelope - " + designCode);
+                    if (isError)
+                    {
+                        MessageBox.Show("Error reading Concrete Column PMM Envelope.");
+                        return true;
+                    }
+                    else
+                    {
+                        (isError, columnpmmTable) = src.HelperEtabs.FilterDatabaseTableUniqueNameByGroup(columnpmmTable, groupassignmentTable, group.Group);
+                        if (isError)
+                        {
+                            MessageBox.Show("Error filtering Concrete Column PMM Envelope table based on selected group. Please check that selected group contains columns.");
+                            return true;
+                        }
+                    }
+                    #endregion
 
+                    #region get material property table
+                    (isError, materialpropertiesTable) = src.HelperEtabs.CallDatabaseTableByTableKey(DatabaseTableListETABS, "Material Properties - Concrete Data");
+                    if (isError)
+                    {
+                        MessageBox.Show("Error reading Material Properties - Concrete Data.");
+                        return true;
+                    }
+                    #endregion
 
+                    #region filter section property assignment table by group
+                    (isError, sectionpropertyassignmentTable) = src.HelperEtabs.CallDatabaseTableByTableKey(DatabaseTableListETABS, "Frame Assignments - Section Properties");
+                    if (isError)
+                    {
+                        MessageBox.Show("Error reading Frame Assignments - Section Properties.");
+                        return true;
+                    }
+                    else
+                    {
+                        (isError, sectionpropertyassignmentTable) = src.HelperEtabs.FilterDatabaseTableUniqueNameByGroup(sectionpropertyassignmentTable, groupassignmentTable, group.Group);
+                        if (isError)
+                        {
+                            MessageBox.Show("Error filtering Frame Assignments - Section Properties table based on selected group. Please check that selected group contains columns.");
+                            return true;
+                        }
+                    }
+                    #endregion
+
+                    #region get circle column definition table
+                    (isError, circlecolumndefinitionTable) = src.HelperEtabs.CallDatabaseTableByTableKey(DatabaseTableListETABS, "Frame Section Property Definitions - Concrete Circle");
+                    if (isError)
+                    {
+                        MessageBox.Show("Error reading Frame Section Property Definitions - Concrete Circle.");
+                        return true;
+                    }
+                    #endregion
+
+                    #region get rectangle column definition table
+                    (isError, rectanglecolumndefinitionTable) = src.HelperEtabs.CallDatabaseTableByTableKey(DatabaseTableListETABS, "Frame Section Property Definitions - Concrete Rectangular");
+                    if (isError)
+                    {
+                        MessageBox.Show("Error reading Frame Section Property Definitions - Concrete Rectangular.");
+                        return true;
+                    }
+                    #endregion
 
 
 
