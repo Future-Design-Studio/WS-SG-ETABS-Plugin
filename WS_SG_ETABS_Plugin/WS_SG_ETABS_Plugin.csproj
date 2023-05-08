@@ -49,6 +49,9 @@
     <Reference Include="Rhino3dm, Version=7.15.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Rhino3dm.7.15.0\lib\net45\Rhino3dm.dll</HintPath>
     </Reference>
+    <Reference Include="SAFEv1">
+      <HintPath>..\..\..\..\..\..\..\Program Files\Computers and Structures\SAFE 20\SAFEv1.dll</HintPath>
+    </Reference>
     <Reference Include="ScottPlot, Version=4.1.59.0, Culture=neutral, PublicKeyToken=86698dc10387c39e, processorArchitecture=MSIL">
       <HintPath>..\packages\ScottPlot.4.1.59\lib\net462\ScottPlot.dll</HintPath>
     </Reference>
@@ -127,6 +130,7 @@
       <DependentUpon>WindowsEtabsToRhinoProgress.xaml</DependentUpon>
     </Compile>
     <Compile Include="src\HelperExcel.cs" />
+    <Compile Include="src\HelperLicense.cs" />
     <Compile Include="src\HelperMethod.cs" />
     <Compile Include="src\HelperEtabs.cs" />
     <Compile Include="src\carbon\FunctionCarbon.cs" />
@@ -139,7 +143,36 @@
       <DependentUpon>HelperPDFOpen.cs</DependentUpon>
     </Compile>
     <Compile Include="src\HelperPlot.cs" />
+    <Compile Include="src\HelperSafe.cs" />
     <Compile Include="src\HelperUI.cs" />
+    <Compile Include="src\loads_etabs_etabs\ClassEtabsEtabs.cs" />
+    <Compile Include="src\loads_etabs_etabs\FunctionEtabsEtabsMain.cs" />
+    <Compile Include="src\loads_etabs_etabs\WindowEtabsEtabsMain.xaml.cs">
+      <DependentUpon>WindowEtabsEtabsMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\loads_etabs_etabs\WindowEtabsEtabsOpenFile.xaml.cs">
+      <DependentUpon>WindowEtabsEtabsOpenFile.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\loads_etabs_etabs\WindowEtabsEtabsOpenFileLoading.xaml.cs">
+      <DependentUpon>WindowEtabsEtabsOpenFileLoading.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\loads_etabs_etabs\WindowEtabsEtabsResult.xaml.cs">
+      <DependentUpon>WindowEtabsEtabsResult.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\loads_etabs_safe\ClassEtabsSafe.cs" />
+    <Compile Include="src\loads_etabs_safe\FunctionEtabsSafeMain.cs" />
+    <Compile Include="src\loads_etabs_safe\WindowEtabsSafeMain.xaml.cs">
+      <DependentUpon>WindowEtabsSafeMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\loads_etabs_safe\WindowEtabsSafeOpenFile.xaml.cs">
+      <DependentUpon>WindowEtabsSafeOpenFile.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\loads_etabs_safe\WindowEtabsSafeOpenFileLoading.xaml.cs">
+      <DependentUpon>WindowEtabsSafeOpenFileLoading.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\loads_etabs_safe\WindowEtabsSafeResult.xaml.cs">
+      <DependentUpon>WindowEtabsSafeResult.xaml</DependentUpon>
+    </Compile>
     <Compile Include="src\load_combo_EN\ClassLoadCombo.cs" />
     <Compile Include="src\load_combo_EN\FunctionLoadCombo.cs" />
     <Compile Include="src\load_combo_EN\FunctionLoadComboAccidental.cs" />
@@ -158,6 +191,17 @@
     </Compile>
     <Compile Include="src\load_combo_EN\WindowLoadComboResult.xaml.cs">
       <DependentUpon>WindowLoadComboResult.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\pad_footing_plot\ClassPadFootPlot.cs" />
+    <Compile Include="src\pad_footing_plot\FunctionPadFootPlot.cs" />
+    <Compile Include="src\pad_footing_plot\WindowPadFootLoading.xaml.cs">
+      <DependentUpon>WindowPadFootLoading.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\pad_footing_plot\WindowPadFootPlotMain.xaml.cs">
+      <DependentUpon>WindowPadFootPlotMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\pad_footing_plot\WindowPadFootPlotResult.xaml.cs">
+      <DependentUpon>WindowPadFootPlotResult.xaml</DependentUpon>
     </Compile>
     <Compile Include="src\plot_reaction\graph\ClassPlotGraph.cs" />
     <Compile Include="src\plot_reaction\graph\FunctionPlotReactionGraph.cs" />
@@ -179,6 +223,17 @@
     </Compile>
     <Compile Include="src\plot_reaction\WindowPlotReactionMain.xaml.cs">
       <DependentUpon>WindowPlotReactionMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\punching_shear_plot\ClassPunchingShrPlot.cs" />
+    <Compile Include="src\punching_shear_plot\FunctionPunchingShrPlot.cs" />
+    <Compile Include="src\punching_shear_plot\WindowPunchShrPlotLoading.xaml.cs">
+      <DependentUpon>WindowPunchShrPlotLoading.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\punching_shear_plot\WindowPunchShrPlotMain.xaml.cs">
+      <DependentUpon>WindowPunchShrPlotMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\punching_shear_plot\WindowPunchShrPlotResult.xaml.cs">
+      <DependentUpon>WindowPunchShrPlotResult.xaml</DependentUpon>
     </Compile>
     <Compile Include="src\rc_beam_schedule\FunctionRCBSched.cs" />
     <Compile Include="src\rc_beam_schedule\WindowRCBSchedMain.xaml.cs">
@@ -257,6 +312,38 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="src\loads_etabs_etabs\WindowEtabsEtabsMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\loads_etabs_etabs\WindowEtabsEtabsOpenFile.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\loads_etabs_etabs\WindowEtabsEtabsOpenFileLoading.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="src\loads_etabs_etabs\WindowEtabsEtabsResult.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\loads_etabs_safe\WindowEtabsSafeMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\loads_etabs_safe\WindowEtabsSafeOpenFile.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\loads_etabs_safe\WindowEtabsSafeOpenFileLoading.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\loads_etabs_safe\WindowEtabsSafeResult.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="src\load_combo_EN\WindowChooseLoadCombiToGenerate.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -266,6 +353,18 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="src\load_combo_EN\WindowLoadComboResult.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\pad_footing_plot\WindowPadFootLoading.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\pad_footing_plot\WindowPadFootPlotMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\pad_footing_plot\WindowPadFootPlotResult.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -296,6 +395,18 @@
     <Page Include="src\plot_reaction\WindowPlotReactionMain.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="src\punching_shear_plot\WindowPunchShrPlotLoading.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\punching_shear_plot\WindowPunchShrPlotMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\punching_shear_plot\WindowPunchShrPlotResult.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="src\rc_beam_schedule\WindowRCBSchedMain.xaml">
       <Generator>MSBuild:Compile</Generator>
