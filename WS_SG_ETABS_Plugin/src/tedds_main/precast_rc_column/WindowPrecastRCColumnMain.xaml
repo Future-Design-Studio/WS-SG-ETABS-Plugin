@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WS_SG_ETABS_Plugin.src.tedds_main.precast_rc_column"
-             mc:Ignorable="d"    Height="440" Width="1000" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+             mc:Ignorable="d"    Height="480" Width="1000" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
 
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
@@ -12,13 +12,14 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"></RowDefinition>
+            <RowDefinition Height="1.2*"></RowDefinition>
             <RowDefinition Height="6*"></RowDefinition>
             <RowDefinition Height="0.5*"></RowDefinition>
         </Grid.RowDefinitions>
 
         <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Content="Precast concrete column design (EN1992)" FontSize="28"/>
 
-        <Grid Grid.Row="1">
+        <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
@@ -69,8 +70,31 @@
 
 
 
+        <!-- Folder path selector -->
+        <Grid Grid.Row="1" Grid.Column="0" Margin="10 0 10 0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="4*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
 
+            <Label Grid.Column="0" Content="Tedds file save location"></Label>
 
+            <Grid Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+
+                <TextBox x:Name="filePath" Grid.Row="0" IsEnabled="False"></TextBox>
+
+                <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button x:Name="buttonDefaultPath" Content="Default path" Width="100" Click="buttonDefaultPath_Click"/>
+                    <Button x:Name="buttonModifyPath" Content="Modify path" Width="100" Click="buttonModifyPath_Click"/>
+                </StackPanel>
+
+            </Grid>
+
+        </Grid>
 
 
 

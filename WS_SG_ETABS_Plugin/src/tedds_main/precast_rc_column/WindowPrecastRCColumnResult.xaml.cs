@@ -21,11 +21,11 @@ namespace WS_SG_ETABS_Plugin.src.tedds_main.precast_rc_column
     /// </summary>
     public partial class WindowPrecastRCColumnResult : Window
     {
-        public WindowPrecastRCColumnResult(cSapModel SapModel, cPluginCallback Plugin, List<src.HelperEtabs.DatabaseTable> DatabaseTableListETABS, List<ClassPrecastRCColumn.GroupandCoverandGradeMatch> groupList)
+        public WindowPrecastRCColumnResult(cSapModel SapModel, cPluginCallback Plugin, List<src.HelperEtabs.DatabaseTable> DatabaseTableListETABS, List<ClassPrecastRCColumn.GroupandCoverandGradeMatch> groupList, string folderPath)
         {
 
             //Main logic
-            bool isError = src.tedds_main.precast_rc_column.FunctionPrecastRCColumn.PrecastRCColumn(SapModel, Plugin, DatabaseTableListETABS, groupList);
+            bool isError = src.tedds_main.precast_rc_column.FunctionPrecastRCColumn.PrecastRCColumn(SapModel, Plugin, DatabaseTableListETABS, groupList, folderPath);
 
             if (isError)
             {

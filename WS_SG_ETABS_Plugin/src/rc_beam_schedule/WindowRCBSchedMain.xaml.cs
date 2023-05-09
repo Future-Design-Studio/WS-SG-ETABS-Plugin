@@ -229,5 +229,10 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
         {
 
         }
+
+        private void filePath_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+        }
     }
 }

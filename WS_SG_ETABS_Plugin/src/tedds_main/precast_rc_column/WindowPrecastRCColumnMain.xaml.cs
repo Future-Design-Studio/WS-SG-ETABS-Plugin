@@ -24,6 +24,7 @@ namespace WS_SG_ETABS_Plugin.src.tedds_main.precast_rc_column
     public partial class WindowPrecastRCColumnMain : Window
     {
 
+        string modelPath;
         List<string> calcMethodList = new List<string>()
         {
             "All Columns within group", "Critical Column per group per storey"
@@ -31,7 +32,7 @@ namespace WS_SG_ETABS_Plugin.src.tedds_main.precast_rc_column
 
         cSapModel SapModel;
         cPluginCallback Plugin;
-        List<src.HelperEtabs.DatabaseTable> DatabaseTableListETABS = new List<HelperEtabs.DatabaseTable> ();
+        List<src.HelperEtabs.DatabaseTable> DatabaseTableListETABS = new List<HelperEtabs.DatabaseTable>();
         src.HelperEtabs.DatabaseTable groupassignmentTable = new HelperEtabs.DatabaseTable();
         bool isError = false;
         List<string> groupnameList = new List<string>();
@@ -45,6 +46,10 @@ namespace WS_SG_ETABS_Plugin.src.tedds_main.precast_rc_column
             DatabaseTableListETABS = databaseTableListETABS;
 
             InitializeComponent();
+
+            //Fill in model path (default path)
+            modelPath = SapModel.GetModelFilepath();
+            filePath.Text = modelPath;
 
             //Fill in combobox for groups
             string[] outputCasesList = src.HelperEtabs.GetGroupList(SapModelEtabs);
@@ -110,12 +115,12 @@ namespace WS_SG_ETABS_Plugin.src.tedds_main.precast_rc_column
         {
             if (!string.IsNullOrEmpty(textboxCover.Text) && IsDigitsOnly(textboxCover.Text))
             {
-                
+
                 ClassPrecastRCColumn.GroupandCoverandGradeMatch eachgroupList = new ClassPrecastRCColumn.GroupandCoverandGradeMatch(comBoxGroup.Text, textboxCover.Text, comboxCalcMethod.SelectedIndex);
                 groupList.Add(eachgroupList);
                 listBoxGroups.Items.Add("Group of columns from group: " + comBoxGroup.Text + ", " + textboxCover.Text + "mm cover, with method: " + calcMethodList[comboxCalcMethod.SelectedIndex]);
-                
-                
+
+
             }
             else if (string.IsNullOrEmpty(textboxCover.Text))
             {
@@ -125,7 +130,7 @@ namespace WS_SG_ETABS_Plugin.src.tedds_main.precast_rc_column
             {
                 MessageBox.Show("Please enter only numeric values for Concrete Cover!");
             }
-            
+
         }
 
         private void Button_REMOVE_Case_Pattern_Click(object sender, RoutedEventArgs e)
@@ -139,6 +144,30 @@ namespace WS_SG_ETABS_Plugin.src.tedds_main.precast_rc_column
             }
         }
 
+        private void comboxCalcMethod_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+        private void buttonDefaultPath_Click(object sender, RoutedEventArgs e)
+        {
+            filePath.Text = modelPath;
+        }
+
+        private void buttonModifyPath_Click(object sender, RoutedEventArgs e)
+        {
+            var dialog = new System.Windows.Forms.FolderBrowserDialog();
+            dialog.SelectedPath = filePath.Text;
+
+            System.Windows.Forms.DialogResult result = dialog.ShowDialog();
+
+            if (result == System.Windows.Forms.DialogResult.OK)
+            {
+                filePath.Text = dialog.SelectedPath;
+            }
+        }
+
+
         private void buttonCancel_Click(object sender, RoutedEventArgs e)
         {
             Close();
@@ -149,7 +178,7 @@ namespace WS_SG_ETABS_Plugin.src.tedds_main.precast_rc_column
             {
                 IsEnabled = false;
                 //Call up copy property result window
-                src.tedds_main.precast_rc_column.WindowPrecastRCColumnResult windowPrecastRCColumnResult = new src.tedds_main.precast_rc_column.WindowPrecastRCColumnResult(SapModel, Plugin, DatabaseTableListETABS, groupList);
+                src.tedds_main.precast_rc_column.WindowPrecastRCColumnResult windowPrecastRCColumnResult = new src.tedds_main.precast_rc_column.WindowPrecastRCColumnResult(SapModel, Plugin, DatabaseTableListETABS, groupList, filePath.Text);
                 IsEnabled = true;
             }
             else
@@ -168,7 +197,7 @@ namespace WS_SG_ETABS_Plugin.src.tedds_main.precast_rc_column
                 if (c.ToString() == ".")
                 {
                     i++;
-                    if (i>1)
+                    if (i > 1)
                     {
                         return false;
                     }
@@ -182,11 +211,6 @@ namespace WS_SG_ETABS_Plugin.src.tedds_main.precast_rc_column
             }
 
             return true;
-        }
-
-        private void comboxCalcMethod_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
         }
     }
 }

@@ -82,7 +82,7 @@ namespace WS_SG_ETABS_Plugin.src.tedds_main.precast_rc_column
 
                     (isError, databaseTable) = src.HelperEtabs.GetTableDisplay(SapModelEtabs, tableKey, false);
 
-                    if (isError && (tableKey == tableKeys[5] || tableKey == tableKeys[6]))
+                    if (isError && (tableKey == tableKeys[5] || tableKey == tableKeys[6] || tableKey == tableKeys[1]))
                     {
                         MessageBox.Show("Error in retreiving table for " + tableKey + ". It is possible this table doesn't exist or model is not run.");
                         isError = false;

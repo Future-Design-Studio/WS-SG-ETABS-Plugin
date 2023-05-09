@@ -17,7 +17,7 @@ namespace WS_SG_ETABS_Plugin.src.tedds_main.precast_rc_column
     internal class FunctionPrecastRCColumn
     {
         private static int Ret;
-        public static bool PrecastRCColumn(cSapModel SapModel, cPluginCallback Plugin, List<src.HelperEtabs.DatabaseTable> DatabaseTableListETABS, List<ClassPrecastRCColumn.GroupandCoverandGradeMatch> groupList)
+        public static bool PrecastRCColumn(cSapModel SapModel, cPluginCallback Plugin, List<src.HelperEtabs.DatabaseTable> DatabaseTableListETABS, List<ClassPrecastRCColumn.GroupandCoverandGradeMatch> groupList, string folderPathselected)
         {
 
             src.HelperEtabs.DatabaseTable columnobjectconnectivityTable = new HelperEtabs.DatabaseTable();
@@ -43,15 +43,13 @@ namespace WS_SG_ETABS_Plugin.src.tedds_main.precast_rc_column
 
             #region Create folder to store all tedds documents and folderPath to store path
             //Check if have folder to store tedds files, otherwise create new folder to store
-            string modelPath = SapModel.GetModelFilepath();
-            string folderPath = modelPath + "TeddsFilesFromTeddsPowerAPP\\";
+            string folderPath = folderPathselected + "\\TeddsFilesFromTeddsPowerAPP\\";
             bool exists = System.IO.Directory.Exists(folderPath);
 
             if (!exists)
             {
                 System.IO.Directory.CreateDirectory(folderPath);
             }
-            MessageBox.Show("Tedds files created from this plugin will be saved in ETABS source folder at: TeddsFilesFromTeddsPowerAPP");
             #endregion
 
             #region start main function
@@ -60,16 +58,6 @@ namespace WS_SG_ETABS_Plugin.src.tedds_main.precast_rc_column
             {
                 if (group.Method == 0)
                 {
-                    #region create folder path
-                    string groupfolderPath = folderPath + group.Group;
-                    exists = System.IO.Directory.Exists(groupfolderPath);
-
-                    if (!exists)
-                    {
-                        System.IO.Directory.CreateDirectory(groupfolderPath);
-                    }
-                    #endregion
-
 
                     #region filter group assignment table
                     (isError, groupassignmentTable) = src.HelperEtabs.CallDatabaseTableByTableKey(DatabaseTableListETABS, "Group Assignments");
@@ -542,6 +530,7 @@ namespace WS_SG_ETABS_Plugin.src.tedds_main.precast_rc_column
                         #endregion
 
                         #region set variables to be taken into document
+
                         ICalculator calculator = new Calculator();
                         calculator.Initialize();
                         calculator.Functions.SetVar("_ColumnSpliceCheckBox", 1);
@@ -583,11 +572,13 @@ namespace WS_SG_ETABS_Plugin.src.tedds_main.precast_rc_column
                         ITeddsDocuments doc1 = new Documents();
                         doc1.Add2("$(SysLbrDir)Precast column design-EN1992-x-engb.lbr", "Precast column design (EN1992)", variables);
                         ITeddsDocument doc2 = doc1[0];
-                        doc2.Calculate();
-                        doc2.SaveAs(groupfolderPath + "\\" + group.Group + "_" + column + ".ted");
+                        //doc2.Calculate();
+                        doc2.SaveAs(folderPath + "\\" + group.Group + "_" + column + ".ted");
                         doc2.Close(false);
                         doc1.Close(false);
                         
+                        
+
                         #endregion
                     }
 
