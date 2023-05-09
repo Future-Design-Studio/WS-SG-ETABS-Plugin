@@ -163,7 +163,7 @@ namespace WS_SG_ETABS_Plugin.src.tedds_main.precast_rc_column
 
             if (result == System.Windows.Forms.DialogResult.OK)
             {
-                filePath.Text = dialog.SelectedPath;
+                filePath.Text = dialog.SelectedPath + "\\";
             }
         }
 
