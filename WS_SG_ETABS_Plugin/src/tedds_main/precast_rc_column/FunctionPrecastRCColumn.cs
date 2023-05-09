@@ -109,6 +109,10 @@ namespace WS_SG_ETABS_Plugin.src.tedds_main.precast_rc_column
                             }
                         }
                     }
+                    if (columnUniqueNames.Count == 0)
+                    {
+                        continue;
+                    }
 
                     //filter group assignment database by names of columns only
                     List<Dictionary<string, string>> groupassignmentTableFiltered = new List<Dictionary<string, string>>();
@@ -160,6 +164,10 @@ namespace WS_SG_ETABS_Plugin.src.tedds_main.precast_rc_column
                             }
                         }
                     }
+                    if (columnoverwriteTable.TableInList.Count == 0)
+                    {
+                        continue;
+                    }
                     #endregion
 
                     #region filter column pmm table by group
@@ -176,6 +184,23 @@ namespace WS_SG_ETABS_Plugin.src.tedds_main.precast_rc_column
                         {
                             MessageBox.Show("Error filtering Concrete Column PMM Envelope table based on selected group. Please check that selected group contains columns.");
                             return true;
+                        }
+                        else
+                        {
+                            //check if have any overstressed column
+                            foreach (Dictionary<string, string> row in columnpmmTable.TableInList)
+                            {
+                                if (row["RatioRebar"] == "O/S")
+                                {
+                                    MessageBox.Show("Warning: Column Unique Name " + row["UniqueName"] + " in group " + group.Group + " is overstressed. Please recheck design before running again. Skipping this group for TEDDS output.");
+                                    isError = true;
+                                    break;
+                                }
+                            }
+                            if (isError)
+                            {
+                                continue;
+                            }
                         }
                     }
                     #endregion
@@ -638,6 +663,10 @@ namespace WS_SG_ETABS_Plugin.src.tedds_main.precast_rc_column
                             }
                         }
                     }
+                    if (columnUniqueNames.Count == 0)
+                    {
+                        continue;
+                    }
 
                     //filter group assignment database by names of columns only
                     List<Dictionary<string, string>> groupassignmentTableFiltered = new List<Dictionary<string, string>>();
@@ -666,6 +695,11 @@ namespace WS_SG_ETABS_Plugin.src.tedds_main.precast_rc_column
                             MessageBox.Show("Error filtering Concrete Column PMM Envelope table based on selected group. Please check that selected group contains columns.");
                             return true;
                         }
+                    }
+
+                    if (columnpmmTable.TableInList.Count == 0)
+                    {
+                        continue;
                     }
                     #endregion
 
@@ -697,12 +731,29 @@ namespace WS_SG_ETABS_Plugin.src.tedds_main.precast_rc_column
                             storyRebarMatching.Add(individualStory, 0);
                             foreach (Dictionary<string,string> row in temporarypmmTable.TableInList)
                             {
-                                if (Convert.ToDouble(row["RatioRebar"].Substring(0, row["RatioRebar"].Length - 2)) > storyRebarMatching[individualStory])
+                                if (row["RatioRebar"] == "O/S")
                                 {
-                                    storyRebarMatching[individualStory] = Convert.ToDouble(row["RatioRebar"]);
+                                    MessageBox.Show("Warning: Column Unique Name " + row["UniqueName"] + " in group " + group.Group + " is overstressed. Please recheck design before running again. Skipping this group for TEDDS output.");
+                                    isError = true;
+                                    break;
+                                }
+                                else
+                                {
+                                    if (Convert.ToDouble(row["RatioRebar"].Substring(0, row["RatioRebar"].Length - 2)) > storyRebarMatching[individualStory])
+                                    {
+                                        storyRebarMatching[individualStory] = Convert.ToDouble(row["RatioRebar"].Substring(0, row["RatioRebar"].Length - 2));
+                                    }
                                 }
                             }
+                            if (isError)
+                            {
+                                break; ;
+                            }
                         }
+                    }
+                    if (isError)
+                    {
+                        continue;
                     }
                     #endregion
 
@@ -710,7 +761,7 @@ namespace WS_SG_ETABS_Plugin.src.tedds_main.precast_rc_column
                     columnUniqueNames.Clear();
                     foreach (Dictionary<string,string> row in columnpmmTable.TableInList)
                     {
-                        if ((Convert.ToDouble(row["RatioRebar"]) == storyRebarMatching[row["Story"]]) && (!columnUniqueNames.Contains(row["UniqueName"])))
+                        if ((Convert.ToDouble(row["RatioRebar"].Substring(0, row["RatioRebar"].Length - 2)) == storyRebarMatching[row["Story"]]) && (!columnUniqueNames.Contains(row["UniqueName"])))
                         {
                             columnUniqueNames.Add(row["UniqueName"]);
                         }
