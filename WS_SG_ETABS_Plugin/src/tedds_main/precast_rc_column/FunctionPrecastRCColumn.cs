@@ -19,7 +19,6 @@ namespace WS_SG_ETABS_Plugin.src.tedds_main.precast_rc_column
         private static int Ret;
         public static bool PrecastRCColumn(cSapModel SapModel, cPluginCallback Plugin, List<src.HelperEtabs.DatabaseTable> DatabaseTableListETABS, List<ClassPrecastRCColumn.GroupandCoverandGradeMatch> groupList, string folderPathselected)
         {
-
             src.HelperEtabs.DatabaseTable columnobjectconnectivityTable = new HelperEtabs.DatabaseTable();
             src.HelperEtabs.DatabaseTable columnoverwriteTable = new HelperEtabs.DatabaseTable();
             src.HelperEtabs.DatabaseTable columnpmmTable = new HelperEtabs.DatabaseTable();
@@ -56,9 +55,9 @@ namespace WS_SG_ETABS_Plugin.src.tedds_main.precast_rc_column
 
             foreach (ClassPrecastRCColumn.GroupandCoverandGradeMatch group in groupList)
             {
+                #region method to output every single column inside group as long as no overstressed column within the grup
                 if (group.Method == 0)
                 {
-
                     #region filter group assignment table
                     (isError, groupassignmentTable) = src.HelperEtabs.CallDatabaseTableByTableKey(DatabaseTableListETABS, "Group Assignments");
                     if (isError)
@@ -610,6 +609,9 @@ namespace WS_SG_ETABS_Plugin.src.tedds_main.precast_rc_column
                     }
 
                 }
+                #endregion
+
+                #region method to output the most critical columns within the group, done by taking the max rebar % within the group, if more than 1 column have the same max rebar %, all the max rebar % columns will output tedds for user to choose which is most critical from the forces
                 else
                 {
 
@@ -1232,18 +1234,10 @@ namespace WS_SG_ETABS_Plugin.src.tedds_main.precast_rc_column
 
                         #endregion
                     }
-
                 }
-
-
-
+                #endregion
             }
             #endregion
-
-            //calculator.InitializeCalc("$(SysLbrDir)Precast column design-EN1992-x-engb.lbr", "Precast column design (EN1992)", variables);
-
-
-
 
             return false;
         }
