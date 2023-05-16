@@ -25,7 +25,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
         cPluginCallback _Plugin;
 
         List<src.HelperEtabs.DatabaseTable> databaseTableListGlobal = new List<src.HelperEtabs.DatabaseTable>();
-        List<Dictionary<string, string>> groupAndColor = new List<Dictionary<string, string>>();
+        List<Dictionary<string, string>> groupAndColorNotAll = new List<Dictionary<string, string>>();
 
         public WindowPlotReactionGraphMain(cSapModel SapModel, cPluginCallback Plugin, List<src.HelperEtabs.DatabaseTable> databaseTableList)
         {
@@ -46,7 +46,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
             comBoxOutputCase.SelectedIndex = 0;
 
             //Fill in combobox for direction
-            comBoxReactionDirection.ItemsSource = src.plot_reaction.graph.FunctionPlotReactionGraph.reactionDirectionList;
+            comBoxReactionDirection.ItemsSource = src.HelperEtabs.reactionDirectionList;
             comBoxReactionDirection.SelectedIndex = 2;
 
             databaseTableListGlobal = databaseTableList;
@@ -61,6 +61,13 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
             //src.HelperUI.MoveItemsFromListBox(listBoxAvailGroup, listBoxChoosenGroup);
             if (checkBoxDefault.IsChecked == true)
             {
+                //If there is no group, selectedIndex = -1, then return
+                if (comBoxGroup.SelectedIndex == -1)
+                {
+                    MessageBox.Show("Please select a group!");
+                    return;
+                }
+
                 string selectedString = comBoxGroup.Text + "," + "Auto";
                 listBoxChoosenGroup.Items.Add(selectedString);
 
@@ -71,7 +78,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
                         {"color", "Auto"}
                     };
 
-                groupAndColor.Add(eachGroupAndColor);
+                groupAndColorNotAll.Add(eachGroupAndColor);
             }
             else
             {
@@ -93,7 +100,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
                         {"color", selectedColor}
                     };
 
-                    groupAndColor.Add(eachGroupAndColor);
+                    groupAndColorNotAll.Add(eachGroupAndColor);
                 }
 
             }
@@ -108,7 +115,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
                 listBoxChoosenGroup.Items.RemoveAt(selectedIndex);
             }
 
-            groupAndColor.RemoveAt(selectedIndex);
+            groupAndColorNotAll.RemoveAt(selectedIndex);
         }
 
         private void buttonCancel_Click(object sender, RoutedEventArgs e)
@@ -149,11 +156,14 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
 
                 bool? includeAllJoints = checkBoxAllJoints.IsChecked;
 
+                //groupAndColor container
+                List<Dictionary<string, string>> groupAndColor = new List<Dictionary<string, string>>();
+
                 //If include all joints, add one item inside the groupAndColor dictionary
                 if (includeAllJoints == true)
                 {
-                    //Clear groupAndColor dictionary
-                    groupAndColor.Clear();
+                    //groupAndColorAll container
+                    List<Dictionary<string, string>> groupAndColorAll = new List<Dictionary<string, string>>();
 
                     //src.HelperUI.MoveItemsFromListBox(listBoxAvailGroup, listBoxChoosenGroup);
                     if (checkBoxDefault.IsChecked == true)
@@ -165,7 +175,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
                             {"color", "Auto"}
                         };
 
-                        groupAndColor.Add(eachGroupAndColor);
+                        groupAndColorAll.Add(eachGroupAndColor);
                     }
                     else
                     {
@@ -184,9 +194,14 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
                                 {"color", selectedColor}
                             };
 
-                            groupAndColor.Add(eachGroupAndColor);
+                            groupAndColorAll.Add(eachGroupAndColor);
                         }
                     }
+                    groupAndColor = groupAndColorAll;
+                }
+                else
+                {
+                    groupAndColor = groupAndColorNotAll;
                 }
 
 

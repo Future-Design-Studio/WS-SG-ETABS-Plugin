@@ -29,6 +29,15 @@ namespace WS_SG_ETABS_Plugin.src.shell_uni_orient
             _SapModel = SapModel;
             _Plugin = Plugin;
 
+            //Check if model is locked
+            bool modelToLocked = _SapModel.GetModelIsLocked();
+
+            if (modelToLocked)
+            {
+                MessageBox.Show("ETABS file is locked! Please unlock the model!");
+                return;
+            }
+
             InitializeComponent();
 
             //Fill in available groups list box

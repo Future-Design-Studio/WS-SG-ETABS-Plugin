@@ -34,6 +34,17 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
             _SapModel = SapModel;
             _Plugin = Plugin;
 
+            
+            //Check if model is locked
+            bool modelToLocked = _SapModel.GetModelIsLocked();
+
+            if (!modelToLocked)
+            {
+                MessageBox.Show("ETABS file is unlocked! Please run analysis first!");
+                return;
+            }
+            
+
             InitializeComponent();
 
             //Fill in default excel result name
@@ -93,6 +104,7 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
                 double cantileverRightLength = Convert.ToDouble(textBoxCantileverLengthLeft.Text);
 
                 double cover = Convert.ToDouble(textBoxCover.Text);
+                int maxNoLayer = Convert.ToInt32(textBoxMaxNoLayer.Text);
                 double maxShearLinksSpacing = Convert.ToDouble(textBoxMaxShearLinksSpacing.Text);
                 double minShearLinksSpacing = Convert.ToDouble(textBoxMinShearLinksSpacing.Text);
                 double shearLinksSpacingStep = Convert.ToDouble(textBoxShearLinksSpacingStep.Text);
@@ -144,8 +156,7 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
                     IsEnabled = false;
                     //Call up carbon result window
                     src.rc_beam_schedule.WindowRCBSchedResult windowRCBSchedResult = new src.rc_beam_schedule.WindowRCBSchedResult(_SapModel, _Plugin, name, path, leftLength, midLength, rightLength, cantileverLeftLength, cantileverRightLength,
-                        rebarSpc, rebarSpcPreference, maxShearLinksSpacing, minShearLinksSpacing, shearLinksSpacingStep, cover,
-                                                                                     rebarDiameterList, shearLinksDiameterList, groupAndBeamType);
+                        rebarSpc, rebarSpcPreference, maxShearLinksSpacing, minShearLinksSpacing, shearLinksSpacingStep, cover, maxNoLayer, rebarDiameterList, shearLinksDiameterList, groupAndBeamType);
                     IsEnabled = true;
                 }
             }
@@ -175,6 +186,23 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
 
         private void buttonAdd_Click(object sender, RoutedEventArgs e)
         {
+            //If there is no group, selectedIndex = -1, then return
+            if (comBoxGroup.SelectedIndex == -1)
+            {
+                MessageBox.Show("Please select a group!");
+                return;
+            }
+
+            //Check if group already chosen
+            foreach (Dictionary<string, string> eachGroup in groupAndBeamType)
+            {
+                if (eachGroup["groupName"] == comBoxGroup.Text)
+                {
+                    MessageBox.Show($"Group {comBoxGroup.Text} is already selected");
+                    return;
+                }
+            }
+
             string selectedString = comBoxGroup.Text + "," + comBoxBeamType.Text;
             listBoxChoosenGroup.Items.Add(selectedString);
 

@@ -1,19 +1,10 @@
-﻿using System;
+﻿using ETABSv1;
+using Microsoft.Office.Interop.Excel;
+using ScottPlot.Drawing.Colormaps;
+using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using ETABSv1;
 
 namespace WS_SG_ETABS_Plugin.src
 {
@@ -56,14 +47,18 @@ namespace WS_SG_ETABS_Plugin.src
             }
         }
 
-        public class RcBeam
+        public class Beam
         {
             public string UniqueName { get; set; }
             public double Length { get; set; }
+        }
+
+        public class RcBeam : Beam
+        {
             public double Height { get; set; }
             public double Width { get; set; }
-            public double CoverTop { get; set; }
-            public double CoverBottom { get; set; }
+            public double CoverTopEtabs { get; set; }
+            public double CoverBottomEtabs { get; set; }
             public double OffsetI { get; set; }
             public double OffsetJ { get; set; }
             public double LeftLength { get; set; }
@@ -90,8 +85,68 @@ namespace WS_SG_ETABS_Plugin.src
             public double d { get; set; }
             public double dCalculated { get; set; }
             public string BeamType { get; set; }
+            public double Fyk { get; set; }
+            public double Fck { get; set; }
+            public double AsMin { get; set; }
+            public List<int> LeftTopRebarDiameterList { get; set; }
+            public List<int> LeftTopNoRebarPerLayer { get; set; }
+            public List<int> MidTopRebarDiameterList { get; set; }
+            public List<int> MidTopNoRebarPerLayer { get; set; }
+            public List<int> RightTopRebarDiameterList { get; set; }
+            public List<int> RightTopNoRebarPerLayer { get; set; }
+            public List<int> LeftBottomRebarDiameterList { get; set; }
+            public List<int> LeftBottomNoRebarPerLayer { get; set; }
+            public List<int> MidBottomRebarDiameterList { get; set; }
+            public List<int> MidBottomNoRebarPerLayer { get; set; }
+            public List<int> RightBottomRebarDiameterList { get; set; }
+            public List<int> RightBottomNoRebarPerLayer { get; set; }
+            public double LeftTopAsProv { get; set; }
+            public double MidTopAsProv { get; set; }
+            public double RightTopAsProv { get; set; }
+            public double LeftBottomAsProv { get; set; }
+            public double MidBottomAsProv { get; set; }
+            public double RightBottomAsProv { get; set; }
+            public double LeftAvProv { get; set; }
+            public double MidAvProv { get; set; }
+            public double RightAvProv { get; set; }
+            public double LeftShearLinksDiameter { get; set; }
+            public double LeftNoShearLinksLeg { get; set; }
+            public double LeftShearLinksSpacing { get; set; }
+            public double MidShearLinksDiameter { get; set; }
+            public double MidNoShearLinksLeg { get; set; }
+            public double MidShearLinksSpacing { get; set; }
+            public double RightShearLinksDiameter { get; set; }
+            public double RightNoShearLinksLeg { get; set; }
+            public double RightShearLinksSpacing { get; set; }
+            public double Cover { get; set; }
+            public string AsEvaluationComment { get; set; }
+            public string AvEvaluationComment { get; set; }
+            public double RatioLeftTopAs { get; set; }
+            public double RatioLeftBottomAs { get; set; }
+            public double RatioMidTopAs { get; set; }
+            public double RatioMidBottomAs { get; set; }
+            public double RatioRightTopAs { get; set; }
+            public double RatioRightBottomAs { get; set; }
+            public double RatioLeftAv { get; set; }
+            public double RatioMidAv { get; set; }
+            public double RatioRightAv { get; set; }
 
             public RcBeam(string name)
+            {
+                UniqueName = name;
+            }
+        }
+
+        public class Column
+        {
+            public string UniqueName { get; set; }
+            public double Length { get; set; }
+        }
+
+        public class ColumnPunchingShear : Column
+        {
+
+            public ColumnPunchingShear(string name)
             {
                 UniqueName = name;
             }
@@ -436,6 +491,11 @@ namespace WS_SG_ETABS_Plugin.src
         public static void SetOutputUnitTo_kN_mm_C(cSapModel Sap)
         {
             Ret = Sap.SetPresentUnits_2(eForce.kN, eLength.mm, eTemperature.C);
+        }
+
+        public static void SetOutputUnitTo_N_mm_C(cSapModel Sap)
+        {
+            Ret = Sap.SetPresentUnits_2(eForce.N, eLength.mm, eTemperature.C);
         }
 
         /// <summary>
@@ -970,6 +1030,23 @@ namespace WS_SG_ETABS_Plugin.src
             Ret = Sap.DatabaseTables.SetLoadCombinationsSelectedForDisplay(ref MyName);
         }
 
+        public static void OnAllLoadDatabaseWithoutCombinations(cSapModel Sap)
+        {
+            //Load Pattern
+            int NumberNames = 0;
+            string[] MyName = null;
+            Sap.LoadPatterns.GetNameList(ref NumberNames, ref MyName);
+            Ret = Sap.DatabaseTables.SetLoadPatternsSelectedForDisplay(ref MyName);
+
+            //Load Case
+            Sap.LoadCases.GetNameList(ref NumberNames, ref MyName);
+            Ret = Sap.DatabaseTables.SetLoadCasesSelectedForDisplay(ref MyName);
+
+            //Load Combination
+            MyName = new string[1] {""};
+            Ret = Sap.DatabaseTables.SetLoadCombinationsSelectedForDisplay(ref MyName);
+        }
+
         #endregion
 
         #region Group Method
@@ -1007,6 +1084,45 @@ namespace WS_SG_ETABS_Plugin.src
                 Ret = Sap.AreaObj.SetSelected(group, true, eItemType.Group);
             }
 
+        }
+        /// <summary>
+        /// Create new group by defining group name
+        /// </summary>
+        /// <param name="Sap"></param>
+        /// <param name="groupName"></param>
+        /// <returns></returns>
+        public static bool CreateNewGroup(cSapModel Sap, string groupName)
+        {
+            
+            Ret = Sap.GroupDef.SetGroup_1(groupName, -1, false, false, false, false, false, false, false, false, false, false, false, false, false);
+
+            if (Ret != 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        /// <summary>
+        /// Takes in list of points and group name and assigns the list of points inside the group
+        /// </summary>
+        /// <param name="Sap"></param>
+        /// <param name="listofPoints"></param>
+        /// <param name="groupName"></param>
+        /// <returns></returns>
+        public static bool AddPointsInsideGroup(cSapModel Sap, List<string> listofPoints, string groupName)
+        {
+            foreach (string points in listofPoints)
+            {
+                Ret = Sap.PointObj.SetGroupAssign(points, groupName);
+                if (Ret != 0)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         public static void CheckDuplicateObjectInGroup(cSapModel Sap, List<string> groupList)
@@ -1079,6 +1195,34 @@ namespace WS_SG_ETABS_Plugin.src
                 index++;
             }
             return frameList;
+        }
+
+        /// <summary>
+        /// Get list of unique name of joint element which is member of groupName
+        /// </summary>
+        /// <param name="Sap"></param>
+        /// <param name="groupName">Group to inspect</param>
+        /// <returns></returns>
+        public static List<string> GetGroupJointElement(cSapModel Sap, string groupName)
+        {
+            int NumberItems = 0;
+            int[] ObjectType = null;
+            string[] ObjectName = null;
+            List<string> jointList = new List<string>();
+
+            Ret = Sap.GroupDef.GetAssignments(groupName, ref NumberItems, ref ObjectType, ref ObjectName);
+
+            int index = 0;
+            foreach (int singleObjectType in ObjectType)
+            {
+                //ObjectType = 1 is point
+                if (singleObjectType == 1)
+                {
+                    jointList.Add(ObjectName[index]);
+                }
+                index++;
+            }
+            return jointList;
         }
 
         /// <summary>
@@ -1199,6 +1343,16 @@ namespace WS_SG_ETABS_Plugin.src
             //Check if table to filter contains column key
             //First row only
             List<Dictionary<string, string>> tableInListToFilter = databaseTableToFilter.TableInList;
+
+            //Check if input table is not empty
+            if (tableInListToFilter.Count == 0)
+            {
+                MessageBox.Show($"Table {databaseTableToFilter.TableKey} is empty!");
+                DatabaseTable emptyDatabaseTable = new DatabaseTable();
+                isError = true;
+                return (isError, emptyDatabaseTable);
+            }
+
             if (!tableInListToFilter[0].ContainsKey(columnKeyToFilter))
             {
                 MessageBox.Show($"Table {databaseTableToFilter.TableKey} does not contain {columnKeyToFilter}!");
@@ -1221,6 +1375,87 @@ namespace WS_SG_ETABS_Plugin.src
 
             return (isError, databaseTableFiltered);
         }
+
+        public static (bool, double) FindMinValueInDatabaseTable(DatabaseTable databaseTableToFilter, string columnKey)
+        {
+            bool isError = false;
+            DatabaseTable databaseTableFiltered = new DatabaseTable();
+
+            //Check if table to filter contains column key
+            //First row only
+            List<Dictionary<string, string>> tableInListToFilter = databaseTableToFilter.TableInList;
+            if (!tableInListToFilter[0].ContainsKey(columnKey))
+            {
+                MessageBox.Show($"Table {databaseTableToFilter.TableKey} does not contain {columnKey}!");
+                DatabaseTable emptyDatabaseTable = new DatabaseTable();
+                isError = true;
+                return (isError, 0);
+            }
+
+            bool firstLoop = true;
+            double minValue = 0;
+            List<Dictionary<string, string>> tableInListFiltered = new List<Dictionary<string, string>>();
+            foreach (Dictionary<string, string> row in tableInListToFilter)
+            {
+                if (firstLoop)
+                {
+                    minValue = Convert.ToDouble(row[columnKey]);
+                    firstLoop = false;
+                }
+                else
+                {
+                    if (minValue > Convert.ToDouble(row[columnKey]))
+                    {
+                        minValue = Convert.ToDouble(row[columnKey]);
+                    }
+                }
+            }
+            //Save table in list to DatabaseTable
+            databaseTableFiltered.TableInList = tableInListFiltered;
+
+            return (isError, minValue);
+        }
+
+        public static (bool, double) FindMaxValueInDatabaseTable(DatabaseTable databaseTableToFilter, string columnKey)
+        {
+            bool isError = false;
+            DatabaseTable databaseTableFiltered = new DatabaseTable();
+
+            //Check if table to filter contains column key
+            //First row only
+            List<Dictionary<string, string>> tableInListToFilter = databaseTableToFilter.TableInList;
+            if (!tableInListToFilter[0].ContainsKey(columnKey))
+            {
+                MessageBox.Show($"Table {databaseTableToFilter.TableKey} does not contain {columnKey}!");
+                DatabaseTable emptyDatabaseTable = new DatabaseTable();
+                isError = true;
+                return (isError, 0);
+            }
+
+            bool firstLoop = true;
+            double maxValue = 0;
+            List<Dictionary<string, string>> tableInListFiltered = new List<Dictionary<string, string>>();
+            foreach (Dictionary<string, string> row in tableInListToFilter)
+            {
+                if (firstLoop)
+                {
+                    maxValue = Convert.ToDouble(row[columnKey]);
+                    firstLoop = false;
+                }
+                else
+                {
+                    if (maxValue < Convert.ToDouble(row[columnKey]))
+                    {
+                        maxValue = Convert.ToDouble(row[columnKey]);
+                    }
+                }
+            }
+            //Save table in list to DatabaseTable
+            databaseTableFiltered.TableInList = tableInListFiltered;
+
+            return (isError, maxValue);
+        }
+
 
 
         #endregion
@@ -1323,6 +1558,72 @@ namespace WS_SG_ETABS_Plugin.src
             return multipleDatabaseTable;
         }
 
+        /// <summary>
+        /// Get rebar fyk
+        /// </summary>
+        /// <param name="Sap"></param>
+        /// <param name="rebarMatPropName"></param>
+        /// <returns></returns>
+        public static double GetRebarFyk(cSapModel Sap, string rebarMatPropName)
+        {
+            double Fy = 0;
+            double Fu = 0;
+            double EFy = 0;
+            double EFu = 0;
+            int SSType = 0;
+            int SSHysType = 0;
+            double StrainAtHardening = 0;
+            double StrainUltimate = 0;
+            double FinalSlope = 0;
+            bool UseCaltransSSDefaults = false;
+
+            Ret = Sap.PropMaterial.GetORebar_1(rebarMatPropName, ref Fy, ref Fu, ref EFy, ref EFu, ref SSType, ref SSHysType, ref StrainAtHardening, ref StrainUltimate, ref FinalSlope, ref UseCaltransSSDefaults);
+
+            if (Ret != 0)
+            {
+                MessageBox.Show($"Unable to find rebar {rebarMatPropName}");
+                return 0;
+            }
+            else
+            {
+                return Fy;
+            }
+                
+        }
+
+        /// <summary>
+        /// Get concrete fck
+        /// </summary>
+        /// <param name="Sap"></param>
+        /// <param name="rebarMatPropName"></param>
+        /// <returns></returns>
+        public static double GetConcreteFck(cSapModel Sap, string concreteMatPropName)
+        {
+            double Fc = 0;
+            bool IsLightweight = false;
+            double FcsFactor = 0;
+            int SSType = 0;
+            int SSHysType = 0;
+            double StrainAtFc = 0;
+            double StrainUltimate = 0;
+            double FinalSlope = 0;
+            double FrictionAngle = 0;
+            double DilatationalAngle = 0;
+
+            Ret = Sap.PropMaterial.GetOConcrete_1(concreteMatPropName, ref Fc, ref IsLightweight, ref FcsFactor, ref SSType, ref SSHysType, ref StrainAtFc, ref StrainUltimate, ref FinalSlope, ref FrictionAngle, ref DilatationalAngle);
+
+            if (Ret != 0)
+            {
+                MessageBox.Show($"Unable to find concrete {concreteMatPropName}");
+                return 0;
+            }
+            else
+            {
+                return Fc;
+            }
+
+        }
+
         #endregion
 
         #region Response Spectrum Method
@@ -1390,6 +1691,25 @@ namespace WS_SG_ETABS_Plugin.src
 
             return outputPatternsList;
         }
+        /// <summary>
+        /// Delete specified list of patterns loads assigned from joints inside a group
+        /// </summary>
+        /// <param name="Sap"></param>
+        /// <param name="patternnameList"></param>
+        /// <param name="groupNameJoint"></param>
+        /// <returns></returns>
+        public static void DeleteExistingLoadsFromPoints(cSapModel Sap, List<string> patternnameList, string groupNameJoint)
+        {
+            eItemType ItemType = eItemType.Group;
+            foreach (string patternName in patternnameList)
+            {
+                Ret = Sap.PointObj.DeleteLoadForce(groupNameJoint, patternName, ItemType);
+                if (Ret == 0)
+                {
+                    MessageBox.Show(patternName + " loads were assigned to joints inside group of joints :" + groupNameJoint + " and these have been removed to prevent double counting old loads.");
+                }
+            }
+        }
 
         /// <summary>
         /// Get list of load cases and combo
@@ -1421,6 +1741,249 @@ namespace WS_SG_ETABS_Plugin.src
             }
 
             return outputCasesList;
+        }
+
+
+
+        /// <summary>
+        /// Add load pattern
+        /// </summary>
+        /// <param name="Sap"></param>
+        /// <returns></returns>
+        public static bool AddLoadPattern(cSapModel Sap, string name, double selfWeightMultipiler, string type, bool isExisting, bool addAnalysisCase)
+        {
+
+            string Name = name;
+            double SelfWTMultiplier = selfWeightMultipiler;
+            bool AddAnalysisCase = addAnalysisCase;
+
+            if (type == "Dead" && !isExisting)
+            {
+                eLoadPatternType MyType = eLoadPatternType.Dead;
+                Ret = Sap.LoadPatterns.Add(Name, MyType, SelfWTMultiplier, AddAnalysisCase);
+            }
+
+            else if (type == "SuperDead" && !isExisting)
+            {
+                eLoadPatternType MyType = eLoadPatternType.SuperDead;
+                Ret = Sap.LoadPatterns.Add(Name, MyType, SelfWTMultiplier, AddAnalysisCase);
+            }
+
+            else if (type == "Live" && !isExisting)
+            {
+                eLoadPatternType MyType = eLoadPatternType.Live;
+                Ret = Sap.LoadPatterns.Add(Name, MyType, SelfWTMultiplier, AddAnalysisCase);
+            }
+
+            else if (type == "Wind" && !isExisting)
+            {
+                eLoadPatternType MyType = eLoadPatternType.Wind;
+                Ret = Sap.LoadPatterns.Add(Name, MyType, SelfWTMultiplier, AddAnalysisCase);
+            }
+
+            else if (type == "Notional" && !isExisting)
+            {
+                eLoadPatternType MyType = eLoadPatternType.Notional;
+                Ret = Sap.LoadPatterns.Add(Name, MyType, SelfWTMultiplier, AddAnalysisCase);
+            }
+
+            else if (type == "Temperature" && !isExisting)
+            {
+                eLoadPatternType MyType = eLoadPatternType.Temperature;
+                Ret = Sap.LoadPatterns.Add(Name, MyType, SelfWTMultiplier, AddAnalysisCase);
+            }
+
+            else if (type == "Seismic" && !isExisting)
+            {
+                eLoadPatternType MyType = eLoadPatternType.Quake;
+                Ret = Sap.LoadPatterns.Add(Name, MyType, SelfWTMultiplier, AddAnalysisCase);
+            }
+
+            else if (type == "Accidental" && !isExisting)
+            {
+                eLoadPatternType MyType = eLoadPatternType.Other;
+                Ret = Sap.LoadPatterns.Add(Name, MyType, SelfWTMultiplier, AddAnalysisCase);
+            }
+
+            else if (type == "Uplift" && !isExisting)
+            {
+                eLoadPatternType MyType = eLoadPatternType.Other;
+                Ret = Sap.LoadPatterns.Add(Name, MyType, SelfWTMultiplier, AddAnalysisCase);
+            }
+
+            else if (type == "EHF" && !isExisting)
+            {
+                eLoadPatternType MyType = eLoadPatternType.Notional;
+                Ret = Sap.LoadPatterns.Add(Name, MyType, SelfWTMultiplier, AddAnalysisCase);
+            }
+
+            else if (type == "Other" && !isExisting)
+            {
+                eLoadPatternType MyType = eLoadPatternType.Other;
+                Ret = Sap.LoadPatterns.Add(Name, MyType, SelfWTMultiplier, AddAnalysisCase);
+            }
+
+            if (Ret == 0)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        public static bool UpdateLoadCase(cSapModel Sap, string name, int numberLoads, string[] Loadtype, string[] Loadname, double[] Scalefactor)
+        {
+            Ret = Sap.LoadCases.StaticLinear.SetLoads(name, numberLoads, ref Loadtype, ref Loadname, ref Scalefactor);
+
+            if (Ret == 0)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// Add new load case to etabs
+        /// </summary>
+        /// <param name="Sap"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static bool AddNewLinearLoadCase(cSapModel Sap, string name)
+        {
+            Ret = Sap.LoadCases.StaticLinear.SetCase(name);
+
+            if (Ret == 0)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// Add new load case to etabs
+        /// </summary>
+        /// <param name="Sap"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static bool AddNewRSALoadCase(cSapModel Sap, string name)
+        {
+            Ret = Sap.LoadCases.ResponseSpectrum.SetCase(name);
+
+            if (Ret == 0)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="Sap"></param>
+        /// <param name="groupName"></param>
+        /// <param name="loadPattern"></param>
+        /// <param name="direction"></param>
+        /// <param name="cP"></param>
+        /// <returns></returns>
+        public static bool AssignWindLoads(cSapModel Sap, string groupName, string loadPattern, int direction, double cP)
+        {
+            eItemType ItemType = eItemType.Group;
+
+            Ret = Sap.AreaObj.SetLoadWindPressure(groupName, loadPattern, direction, cP, ItemType);
+
+            if (Ret == 0)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// Adds a new linear additive load combination
+        /// </summary>
+        /// <param name="Sap"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static bool AddNewLoadCombiLinear(cSapModel Sap, string nameLoadCombi)
+        {
+
+            Ret = Sap.RespCombo.Add(nameLoadCombi, 0);
+
+            if (Ret == 0)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// Adds a new envelope load combination
+        /// </summary>
+        /// <param name="Sap"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static bool AddNewLoadCombiEnvelope(cSapModel Sap, string nameLoadCombi)
+        {
+
+            Ret = Sap.RespCombo.Add(nameLoadCombi, 1);
+
+            if (Ret == 0)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// Adds a new envelope load combination
+        /// </summary>
+        /// <param name="Sap"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static bool UpdateLoadCombi(cSapModel Sap, string nameLoadCombi, int caseType, string nameLoadCaseOrCombi, double scaleFactor)
+        {
+            eCNameType ItemType = new eCNameType();
+            if (caseType == 0)
+            {
+                ItemType = eCNameType.LoadCase;
+            }
+            else
+            {
+                ItemType = eCNameType.LoadCombo;
+            }
+
+            Ret = Sap.RespCombo.SetCaseList(nameLoadCombi, ref ItemType, nameLoadCaseOrCombi, scaleFactor);
+
+            if (Ret == 0)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+
+
         }
 
         #endregion
@@ -1533,7 +2096,7 @@ namespace WS_SG_ETABS_Plugin.src
         /// <param name="Sap"></param>
         /// <param name="sectionPropName"></param>
         /// <returns></returns>
-        public static (double, double) GetDimensionRectangle (cSapModel Sap, string sectionPropName)
+        public static (double, double, string) GetRcBeamDimensionAndConcreteMaterial (cSapModel Sap, string sectionPropName)
         {
             string FileName = "";
 	        string MatProp = "";
@@ -1547,11 +2110,11 @@ namespace WS_SG_ETABS_Plugin.src
 
             if (Ret == 0)
             {
-                return (T2, T3);
+                return (T2, T3, MatProp);
             }
             else
             {
-                return (0, 0);
+                return (0, 0, "");
             }
         }
 
@@ -1561,7 +2124,7 @@ namespace WS_SG_ETABS_Plugin.src
         /// <param name="Sap"></param>
         /// <param name="sectionPropName"></param>
         /// <returns></returns>
-        public static (double, double) GetRcBeamCover(cSapModel Sap, string sectionPropName)
+        public static (double, double, string) GetRcBeamCoverAndRebarMaterial(cSapModel Sap, string sectionPropName)
         {
             string MatPropLong = "";
             string MatPropConfine = "";
@@ -1576,106 +2139,133 @@ namespace WS_SG_ETABS_Plugin.src
 
             if (Ret == 0)
             {
-                return (CoverTop, CoverTop);
+                return (CoverTop, CoverBot, MatPropLong);
             }
             else
             {
-                return (0, 0);
+                return (0, 0, "");
             }
         }
-
-        #endregion
-
-        #region Add load pattern
 
         /// <summary>
-        /// Add load pattern
+        /// Assign frame releases using unique name of frames
         /// </summary>
         /// <param name="Sap"></param>
+        /// <param name="uniqueName"></param>
+        /// <param name="releaseType"></param>
+        /// <param name="endi"></param>
+        /// <param name="endj"></param>
         /// <returns></returns>
-        public static bool AddLoadPattern(cSapModel Sap, string name, double selfWeightMultipiler, string type, bool isExisting, bool addAnalysisCase)
+        public static bool AssignFrameReleases(cSapModel Sap, string uniqueName, List<string> releaseType, bool endi, bool endj)
         {
+            bool[] ii = new bool[6];
+            bool[] jj = new bool[6];
+            double[] startValue = new double[6];
+            double[] endValue = new double[6];
 
-            string Name = name;
-            double SelfWTMultiplier = selfWeightMultipiler;
-            bool AddAnalysisCase = addAnalysisCase;
-
-            if (type == "Dead" && !isExisting)
+            if (releaseType.Contains("Axial"))
             {
-                eLoadPatternType MyType = eLoadPatternType.Dead;
-                Ret = Sap.LoadPatterns.Add(Name, MyType, SelfWTMultiplier, AddAnalysisCase);
+                if (endi)
+                {
+                    ii[0] = true;
+                }
+                if (endj)
+                {
+                    jj[0] = true;
+                }
+                if (endi && endj)
+                {
+                    MessageBox.Show("Error, Axial cannot be released at both ends.");
+                    return true;
+                }
             }
 
-            else if (type == "SuperDead" && !isExisting)
+            if (releaseType.Contains("ShearMajor"))
             {
-                eLoadPatternType MyType = eLoadPatternType.SuperDead;
-                Ret = Sap.LoadPatterns.Add(Name, MyType, SelfWTMultiplier, AddAnalysisCase);
+                if (endi)
+                {
+                    ii[1] = true;
+                }
+                if (endj)
+                {
+                    jj[1] = true;
+                }
+                if (endi && endj)
+                {
+                    MessageBox.Show("Error, Shear Major cannot be released at both ends.");
+                    return true;
+                }
             }
 
-            else if (type == "Live" && !isExisting)
+            if (releaseType.Contains("ShearMinor"))
             {
-                eLoadPatternType MyType = eLoadPatternType.Live;
-                Ret = Sap.LoadPatterns.Add(Name, MyType, SelfWTMultiplier, AddAnalysisCase);
+                if (endi)
+                {
+                    ii[2] = true;
+                }
+                if (endj)
+                {
+                    jj[2] = true;
+                }
+                if (endi && endj)
+                {
+                    MessageBox.Show("Error, Shear Minor cannot be released at both ends.");
+                    return true;
+                }
             }
 
-            else if (type == "Wind" && !isExisting)
+            if (releaseType.Contains("Torsion"))
             {
-                eLoadPatternType MyType = eLoadPatternType.Wind;
-                Ret = Sap.LoadPatterns.Add(Name, MyType, SelfWTMultiplier, AddAnalysisCase);
+                if (endi)
+                {
+                    ii[3] = true;
+                }
+                if (endj)
+                {
+                    jj[3] = true;
+                }
+                if (endi && endj)
+                {
+                    MessageBox.Show("Error, Torsion cannot be released at both ends.");
+                    return true;
+                }
             }
 
-            else if (type == "Notional" && !isExisting)
+            if (releaseType.Contains("MomentMinor"))
             {
-                eLoadPatternType MyType = eLoadPatternType.Notional;
-                Ret = Sap.LoadPatterns.Add(Name, MyType, SelfWTMultiplier, AddAnalysisCase);
+                if (endi)
+                {
+                    ii[4] = true;
+                }
+                if (endj)
+                {
+                    jj[4] = true;
+                }
+                if (endi && endj && releaseType.Contains("ShearMinor"))
+                {
+                    MessageBox.Show("Error, Moment Minor cannot be released at both ends if Shear Minor is released at either end.");
+                    return true;
+                }
             }
 
-            else if (type == "Temperature" && !isExisting)
+            if (releaseType.Contains("MomentMajor"))
             {
-                eLoadPatternType MyType = eLoadPatternType.Temperature;
-                Ret = Sap.LoadPatterns.Add(Name, MyType, SelfWTMultiplier, AddAnalysisCase);
+                if (endi)
+                {
+                    ii[5] = true;
+                }
+                if (endj)
+                {
+                    jj[5] = true;
+                }
+                if (endi && endj && releaseType.Contains("ShearMajor"))
+                {
+                    MessageBox.Show("Error, Moment Major cannot be released at both ends if Shear Major is released at either end.");
+                    return true;
+                }
             }
 
-            else if (type == "Seismic" && !isExisting)
-            {
-                eLoadPatternType MyType = eLoadPatternType.Quake;
-                Ret = Sap.LoadPatterns.Add(Name, MyType, SelfWTMultiplier, AddAnalysisCase);
-            }
-
-            else if (type == "Accidental" && !isExisting)
-            {
-                eLoadPatternType MyType = eLoadPatternType.Other;
-                Ret = Sap.LoadPatterns.Add(Name, MyType, SelfWTMultiplier, AddAnalysisCase);
-            }
-
-            else if (type == "Uplift" && !isExisting)
-            {
-                eLoadPatternType MyType = eLoadPatternType.Other;
-                Ret = Sap.LoadPatterns.Add(Name, MyType, SelfWTMultiplier, AddAnalysisCase);
-            }
-
-            else if (type == "EHF" && !isExisting)
-            {
-                eLoadPatternType MyType = eLoadPatternType.Notional;
-                Ret = Sap.LoadPatterns.Add(Name, MyType, SelfWTMultiplier, AddAnalysisCase);
-            }
-
-            if (Ret ==0)
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
-        }
-             
-        #endregion
-
-        #region Update load case
-        public static bool UpdateLoadCase(cSapModel Sap, string name, int numberLoads, string[] Loadtype, string[] Loadname, double[] Scalefactor)
-        {
-            Ret = Sap.LoadCases.StaticLinear.SetLoads(name, numberLoads, ref Loadtype, ref Loadname, ref Scalefactor);
+            Ret = Sap.FrameObj.SetReleases(uniqueName, ref ii, ref jj, ref startValue, ref endValue);
 
             if (Ret == 0)
             {
@@ -1683,166 +2273,32 @@ namespace WS_SG_ETABS_Plugin.src
             }
             else
             {
+                MessageBox.Show("Unknown error, please let FDS know for debugging.");
                 return true;
             }
         }
 
-        #endregion
-
-        #region Add new load case linear
         /// <summary>
-        /// Add new load case to etabs
+        /// Retrieve the unique names of end I and end J of frame
         /// </summary>
         /// <param name="Sap"></param>
-        /// <param name="name"></param>
+        /// <param name="sectionPropName"></param>
         /// <returns></returns>
-        public static bool AddNewLinearLoadCase(cSapModel Sap, string name)
+        public static (string, string, bool) GetEndPointsFrame(cSapModel Sap, string sectionPropName)
         {
-            Ret = Sap.LoadCases.StaticLinear.SetCase(name);
+            string pointI = "";
+            string pointJ = "";
+
+            Ret = Sap.FrameObj.GetPoints(sectionPropName, ref pointI, ref pointJ);
 
             if (Ret == 0)
             {
-                return false;
+                return (pointI, pointJ, false);
             }
             else
             {
-                return true;
+                return ("", "", true);
             }
-        }
-
-        #endregion
-
-        #region Add new load case ResponseSpectrum
-        /// <summary>
-        /// Add new load case to etabs
-        /// </summary>
-        /// <param name="Sap"></param>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public static bool AddNewRSALoadCase(cSapModel Sap, string name)
-        {
-            Ret = Sap.LoadCases.ResponseSpectrum.SetCase(name);
-
-            if (Ret == 0)
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
-        }
-
-        #endregion
-
-        #region Assign wind pressure coefficients
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="Sap"></param>
-        /// <param name="groupName"></param>
-        /// <param name="loadPattern"></param>
-        /// <param name="direction"></param>
-        /// <param name="cP"></param>
-        /// <returns></returns>
-        public static bool AssignWindLoads(cSapModel Sap, string groupName, string loadPattern, int direction, double cP)
-        {
-            eItemType ItemType = eItemType.Group;
-
-            Ret = Sap.AreaObj.SetLoadWindPressure(groupName, loadPattern, direction, cP, ItemType);
-
-            if (Ret == 0)
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
-        }
-
-        #endregion
-
-
-        #region Add new load combination Linear
-        /// <summary>
-        /// Adds a new linear additive load combination
-        /// </summary>
-        /// <param name="Sap"></param>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public static bool AddNewLoadCombiLinear(cSapModel Sap, string nameLoadCombi)
-        {
-
-            Ret = Sap.RespCombo.Add(nameLoadCombi, 0);
-
-            if (Ret == 0)
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
-        }
-
-        #endregion
-
-        #region Add new load combination envelope
-        /// <summary>
-        /// Adds a new envelope load combination
-        /// </summary>
-        /// <param name="Sap"></param>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public static bool AddNewLoadCombiEnvelope(cSapModel Sap, string nameLoadCombi)
-        {
-
-            Ret = Sap.RespCombo.Add(nameLoadCombi, 1);
-
-            if (Ret == 0)
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
-        }
-
-        #endregion
-
-        #region Update load combination
-        /// <summary>
-        /// Adds a new envelope load combination
-        /// </summary>
-        /// <param name="Sap"></param>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public static bool UpdateLoadCombi(cSapModel Sap, string nameLoadCombi, int caseType, string nameLoadCaseOrCombi, double scaleFactor)
-        {
-            eCNameType ItemType = new eCNameType();
-            if (caseType ==0)
-            {
-                ItemType = eCNameType.LoadCase;
-            }
-            else
-            {
-                ItemType = eCNameType.LoadCombo;
-            }
-
-            Ret = Sap.RespCombo.SetCaseList(nameLoadCombi, ref ItemType, nameLoadCaseOrCombi, scaleFactor);
-
-            if (Ret == 0)
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
-
-
         }
 
         #endregion
@@ -1858,6 +2314,15 @@ namespace WS_SG_ETABS_Plugin.src
             string fileName = splitModelPath[0];
             return fileName;
         }
+
+        #endregion
+
+        #region Data source
+
+        public static List<string> reactionDirectionList = new List<string>()
+        {
+            "FX", "FY", "FZ", "MX", "MY", "MZ"
+        };
 
         #endregion
 
