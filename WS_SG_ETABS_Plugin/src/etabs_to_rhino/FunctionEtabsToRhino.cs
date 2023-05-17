@@ -258,7 +258,7 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
             
         }
 
-        #region WIP - NOT READY
+        #region WIP - EXTRUSION MODEL - DEPLOYED WITH LIMITED CAPABILITIES
 
         public static List<Curve> CreateProfile(FrameGeometryProp frameProp)
         {
@@ -336,10 +336,74 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
                 double tf = Convert.ToDouble(frameProp.Tf);
                 double tw = Convert.ToDouble(frameProp.Tw);
 
+                var outerProfilePts = new List<Point3d>();
+                outerProfilePts.Add(new Point3d(width / -2, depth / 2, 0));
+                outerProfilePts.Add(new Point3d(width / 2, depth / 2, 0));
+                outerProfilePts.Add(new Point3d(width / 2, depth / -2, 0));
+                outerProfilePts.Add(new Point3d(width / -2, depth / -2, 0));
+                outerProfilePts.Add(new Point3d(width / -2, depth / 2, 0));
+                outerProfilePts.Reverse();
+                var outerProfile = new Polyline(outerProfilePts);
 
+                var innerProfilePts = new List<Point3d>();
+                innerProfilePts.Add(new Point3d(width / -2 + tw, depth / 2 - tf, 0));
+                innerProfilePts.Add(new Point3d(width / 2 - tw, depth / 2 - tf, 0));
+                innerProfilePts.Add(new Point3d(width / 2 - tw, depth / -2 + tf, 0));
+                innerProfilePts.Add(new Point3d(width / -2 + tw, depth / -2 + tf, 0));
+                innerProfilePts.Add(new Point3d(width / -2 + tw, depth / 2 - tf, 0));
+                innerProfilePts.Reverse();
+                var innerProfile = new Polyline(innerProfilePts);
+
+                output.Add(outerProfile.ToPolylineCurve());
+                output.Add(innerProfile.ToPolylineCurve());
             }
 
             return output;
+        }
+        public static List<Brep> CreateExtrusion(List<Curve> profile, FrameGeometryProp frameProp, double length)
+        {
+            var outputFrameBreps = new List<Brep>();
+
+            if (frameProp.PropType == "Circle" ||
+                frameProp.PropType == "Rectangular" ||
+                frameProp.PropType == "I")
+            {
+                var extrusion = Extrusion.Create(profile[0], length, true);
+                outputFrameBreps.Add(extrusion.ToBrep());
+            }
+
+            /*
+            else if (frameProp.PropType == "Pipe")
+            {
+                var outercircle = new Circle();
+                var try_outercircle = profile[0].TryGetCircle(out outercircle);
+                var innercircle = new Circle();
+                var try_innercircle = profile[1].TryGetCircle(out innercircle);
+                var other_radius = innercircle.Radius;
+
+                var outer_cylinder = new Cylinder(outercircle, length);
+                var extrusion = Extrusion.CreatePipeExtrusion(outer_cylinder, other_radius, true, true);
+
+                outputFrameBreps.Add(extrusion.ToBrep());
+            }
+            */
+
+            else if (frameProp.PropType == "Box" ||
+                        frameProp.PropType == "Pipe") //NOT TESTED WITH ETABS YET, TESTED IN GRASSHHOPPER. IF IT WORKS CAN BE USED FOR "Pipe" TOO.
+            {
+                var outerProfile = profile[0];
+                var innerProfile = profile[1];
+
+                var extrusion = new Extrusion();
+                extrusion.SetOuterProfile(outerProfile, true);
+                extrusion.AddInnerProfile(innerProfile);
+                extrusion.SetPathAndUp(new Point3d(0, 0, 0), new Point3d(0, 0, length), Vector3d.YAxis);
+
+                outputFrameBreps.Add(extrusion.ToBrep());
+            }
+
+            
+            return outputFrameBreps;
         }
         public static void IncludeExtrusion(Rhino.FileIO.File3dm file3dm, List<FrameGeometry> allFrame, Dictionary<string, FrameGeometryProp> allFrameProp, List<AreaGeometry> allAreas)
         {
@@ -347,7 +411,7 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
             // CREATE PROFILE FOR EACH FRAME PROPERTY
             ////////////////////////
 
-            var available_frametype = new List<string> { "Circle", "Pipe", "Rectangular", "I" };
+            var available_frametype = new List<string> { "Circle", "Pipe", "Rectangular", "I", "Box" };
 
             var frameprop_profile = new Dictionary<string, List<Curve>>();
 
@@ -373,7 +437,7 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
             {
                 var frameprop = allFrameProp[frame.PropName];
 
-                if (available_frametype.Contains(frameprop.PropType) && frameprop.PropType == "Pipe") //filter for frame type
+                if (available_frametype.Contains(frameprop.PropType)) //filter for frame type
                 {
                     var profile = frameprop_profile[frameprop.Name];
 
@@ -405,27 +469,12 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
                     var t1 = Transform.PlaneToPlane(plane0, plane1);
 
                     // create geometry -- NOT READY NEED FIX, resulting geometry currently is not a solid
-                    var geo = new Brep();
+                    var extrusions = CreateExtrusion(profile, frameprop, frame_vec.Length);
 
-                    var bottomcap = Brep.CreateTrimmedPlane(plane0, profile);
-                    bottomcap.Flip();
-                    var topcap = Brep.CreateTrimmedPlane(plane0_moveup, profile); // profile need to move up to the plane
-                    geo.Append(bottomcap);
-                    
-                    foreach (var p in profile)
+                    foreach(var geo in extrusions)
                     {
-                        var extrusion = Extrusion.Create(p, frame_vec.Length, false);
-                        geo.Append(extrusion.ToBrep());
-                    }
-
-                    geo.Append(topcap);
-
-                    //orient brep from WorldXY plane to frame plane
-                    geo.Transform(t0);
-                    geo.Transform(t1);
-
-                    if (geo.IsValid)
-                    {
+                        geo.Transform(t0);
+                        geo.Transform(t1);
                         outputFrameBreps.Add(geo);
                     }
                     
@@ -457,7 +506,7 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
 
         #endregion
 
-        public static void ExportEtabsToRhino(cSapModel Sap, string filePath, string fileName, IProgress<int> progress)
+        public static void ExportEtabsToRhino(cSapModel Sap, string filePath, string fileName, Dictionary<string, bool?> selectedItems, IProgress<int> progress)
         {
             //setup new rhino model instance
             Console.WriteLine("Setting up new Rhino model...");
@@ -559,7 +608,8 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
             progress.Report(90);
 
 
-            var includeExtrusion = false;
+            bool includeExtrusion = selectedItems["extrusionModel"] ?? false;
+
             if (includeExtrusion && allFrames != null && allFrameProp != null)
             {
                 IncludeExtrusion(newModel, allFrames, allFrameProp, allAreas);
