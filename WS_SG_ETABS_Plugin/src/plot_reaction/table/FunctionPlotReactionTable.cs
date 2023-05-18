@@ -675,6 +675,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
             //Here saving the file in xlsx
             string excelPath = filePath + fileName + ".xlsx";
 
+            /*
             try
             {
                 xlWorkBook.SaveAs(excelPath, Microsoft.Office.Interop.Excel.XlFileFormat.xlOpenXMLWorkbook);
@@ -685,6 +686,12 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
             }
 
             xlWorkBook.Close(true, misValue, misValue);
+            xlApp.Quit();
+            */
+
+            xlApp.DisplayAlerts = false;
+            xlWorkBook.SaveCopyAs(excelPath);
+            xlWorkBook.Close();
             xlApp.Quit();
         }
     }
