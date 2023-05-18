@@ -86,16 +86,26 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
 
         private void buttonAddGroup_Click(object sender, RoutedEventArgs e)
         {
+            //If there is no group, selectedIndex = -1, then return
+            if (comBoxGroup.SelectedIndex == -1)
+            {
+                MessageBox.Show("Please select a group!");
+                return;
+            }
+
+            //If group already selected
+            foreach (Dictionary<string, string> eachGroupAndColorNotAll in groupAndColorNotAll)
+            {
+                if (eachGroupAndColorNotAll["groupName"] == comBoxGroup.Text)
+                {
+                    MessageBox.Show("Group is already selected!");
+                    return;
+                }
+            }
+
             //src.HelperUI.MoveItemsFromListBox(listBoxAvailGroup, listBoxChoosenGroup);
             if (checkBoxDefault.IsChecked == true)
             {
-                //If there is no group, selectedIndex = -1, then return
-                if (comBoxGroup.SelectedIndex == -1)
-                {
-                    MessageBox.Show("Please select a group!");
-                    return;
-                }
-
                 string selectedString = comBoxGroup.Text + "," + "Auto";
                 listBoxChoosenGroup.Items.Add(selectedString);
 

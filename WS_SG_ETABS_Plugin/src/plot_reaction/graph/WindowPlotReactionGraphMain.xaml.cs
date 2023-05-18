@@ -49,6 +49,11 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
             comBoxReactionDirection.ItemsSource = src.HelperEtabs.reactionDirectionList;
             comBoxReactionDirection.SelectedIndex = 2;
 
+            //Fill in combobox for max or min
+            List<string> maxOrMinList = new List<string>() {"Max", "Min"};
+            comBoxMaxOrMin.ItemsSource = maxOrMinList;
+            comBoxMaxOrMin.SelectedIndex = 0;
+
             databaseTableListGlobal = databaseTableList;
 
             ShowDialog();
@@ -58,16 +63,26 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
 
         private void buttonAdd_Click(object sender, RoutedEventArgs e)
         {
+            //If there is no group, selectedIndex = -1, then return
+            if (comBoxGroup.SelectedIndex == -1)
+            {
+                MessageBox.Show("Please select a group!");
+                return;
+            }
+
+            //If group already selected
+            foreach (Dictionary<string, string> eachGroupAndColorNotAll in groupAndColorNotAll)
+            {
+                if (eachGroupAndColorNotAll["groupName"] == comBoxGroup.Text)
+                {
+                    MessageBox.Show("Group is already selected!");
+                    return;
+                }
+            }
+
             //src.HelperUI.MoveItemsFromListBox(listBoxAvailGroup, listBoxChoosenGroup);
             if (checkBoxDefault.IsChecked == true)
             {
-                //If there is no group, selectedIndex = -1, then return
-                if (comBoxGroup.SelectedIndex == -1)
-                {
-                    MessageBox.Show("Please select a group!");
-                    return;
-                }
-
                 string selectedString = comBoxGroup.Text + "," + "Auto";
                 listBoxChoosenGroup.Items.Add(selectedString);
 
@@ -209,6 +224,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
                 string outputCase = comBoxOutputCase.SelectedValue.ToString();
                 string reactionDirection = comBoxReactionDirection.SelectedValue.ToString();
                 double forceFactor = Convert.ToDouble(textBoxForceFactor.Text);
+                string maxOrMin = comBoxMaxOrMin.SelectedValue.ToString();
                 double bubbleScaleFactor = Convert.ToDouble(textBoxBubbleScaleFactor.Text);
                 int textSize = Convert.ToInt32(textBoxTextSize.Text);
                 int titleSize = Convert.ToInt32(textBoxTitleSize.Text);
@@ -247,7 +263,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
                 //Call up copy property result window
                 src.plot_reaction.graph.WindowPlotReactionGraphResult windowPlotReactionResult = new src.plot_reaction.graph.WindowPlotReactionGraphResult(_SapModel, _Plugin, groupAndColor,
                     outputCase, reactionDirection, forceFactor, bubbleScaleFactor, textSize, titleSize, axisTitleSize, gridSpacingX, gridSpacingY, title, splitX, splitY, divisionX, divisionY, offsetX, offsetY,
-                    sumTextSizeX, sumTextSizeY, separationX, separationY, includeAllJoints, databaseTableListGlobal);
+                    sumTextSizeX, sumTextSizeY, separationX, separationY, includeAllJoints, maxOrMin, databaseTableListGlobal);
                 IsEnabled = true;
             }
 
