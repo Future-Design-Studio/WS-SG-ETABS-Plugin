@@ -19,7 +19,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
         public static (bool, double, double, List<src.plot_reaction.graph.ClassPlotGraph.SumReactionPerGroup>) PlotReaction(cSapModel Sap, List<Dictionary<string, string>> groupAndColor, string outputCase, string reactionDirection,
             WpfPlot ReactionPlot, double forceFactor, double bubbleScaleFactor, int textSize, int titleSize, int axisTitleSize, double gridSpacingX, double gridSpacingY, string title, bool splitX, bool splitY,
             int divisionX, int divisionY, double offsetX, double offsetY, int sumTextSizeX, int sumTextSizeY, double separationX, double separationY, 
-            bool? includeAllJoints, List<src.HelperEtabs.DatabaseTable> databaseTableList)
+            bool? includeAllJoints, string maxOrMin, List<src.HelperEtabs.DatabaseTable> databaseTableList)
         {
             bool isError = false;
             bool showWarning = true;
@@ -101,7 +101,6 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
                 src.HelperEtabs.DatabaseTable jointReactionTableFiltered = new HelperEtabs.DatabaseTable();
                 if (includeAllJoints == false)
                 {
-                    
                     (isError, jointReactionTableFiltered) = src.HelperEtabs.FilterDatabaseTableUniqueNameByGroup(jointReactionTable, groupAssignmentTable, groupName);
                     if (isError) { return (isError, 0, 0, null); }
                 }
@@ -110,6 +109,75 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
                     jointReactionTableFiltered = jointReactionTable;
                 }
 
+                //Get joint unique name list then distinct it
+                List<string> jointUniqueNameList = new List<string>();
+                foreach (Dictionary<string, string>  jointReactionRow in jointReactionTableFiltered.TableInList)
+                {
+                    jointUniqueNameList.Add(jointReactionRow["UniqueName"]);
+                }
+                List<string> distinctJointUniqueNameList = jointUniqueNameList.Distinct().ToList();
+
+                foreach(string distinctJointUniqueName in distinctJointUniqueNameList)
+                {
+                    //Need to loop to capture case with multiple reactions with the same output case (for example seismic)
+                    List<double> reactionList = new List<double>();
+                    double xCoord = new double();
+                    double yCoord = new double();
+                    double zCoord = new double();
+                    string uniqueName = "";
+                    bool firstFoundMatchCase = true;
+                    foreach (Dictionary<string, string> jointReactionRow in jointReactionTableFiltered.TableInList)
+                    {
+
+                        if (jointReactionRow["UniqueName"] == distinctJointUniqueName && jointReactionRow["OutputCase"] == outputCase)
+                        {
+                            if (firstFoundMatchCase)
+                            {
+                                //Find coordinate of the joint
+                                Ret = Sap.PointObj.GetCoordCartesian(jointReactionRow["UniqueName"], ref xCoord, ref yCoord, ref zCoord);
+                                uniqueName = jointReactionRow["UniqueName"];
+
+                                firstFoundMatchCase = false;
+                            }
+
+                            reactionList.Add(Convert.ToDouble(jointReactionRow[reactionDirection]));
+                        }
+                    }
+
+                    //Bubble size and text
+                    double reaction = new double();
+                    if (maxOrMin == "Max")
+                    {
+                        reaction = reactionList.Max();
+                    }
+                    else if (maxOrMin == "Min")
+                    {
+                        reaction = reactionList.Min();
+                    }
+                    totalReactionInPlot += reaction;
+                    double bubbleSize = Math.Abs(reaction) * bubbleScaleFactor * forceFactor;
+                    string bubbleText = Convert.ToString(Convert.ToInt32(reaction * forceFactor));
+
+                    //Compile the data inside dictionary for sum
+                    Dictionary<string, object> reactionData = new Dictionary<string, object>()
+                    {
+                        {"uniqueName", uniqueName},
+                        {"groupName", groupName},
+                        {"reaction",  reaction * forceFactor},
+                        {"xCoord", xCoord},
+                        {"yCoord", yCoord}
+                    };
+
+                    compiledReactionData.Add(reactionData);
+
+                    src.HelperPlot.BubblePlotter(ReactionPlot, bubbleSize, bubbleText, textSize, bubbleColor, xCoord, yCoord);
+
+                    //Sum of reactions per group
+                    sumReaction += reaction;
+                }
+
+
+                /*
                 foreach (Dictionary<string, string> jointReactionRow in jointReactionTableFiltered.TableInList)
                 {
                     if (jointReactionRow["OutputCase"] == outputCase)
@@ -117,31 +185,6 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
                         double xCoord = new double();
                         double yCoord = new double();
                         double zCoord = new double();
-
-                        /*
-                        foreach (src.HelperEtabs.Point3D point in pointList)
-                        {
-                            if (jointReactionRow["UniqueName"] == point.UniqueName)
-                            {
-                                xCoord = point.XCoordinate;
-                                yCoord = point.YCoordinate;
-                                zCoord = point.ZCoordinate;
-                            }
-                        }
-                        */
-
-                        /*
-                        //Find coordinate of the joint
-                        foreach (Dictionary<string, string> pointRow in pointConnectivityTable)
-                        {
-                            if(pointRow["UniqueName"] == jointReactionRow["UniqueName"])
-                            {
-                                xCoord = Convert.ToDouble(pointRow["X"]);
-                                yCoord = Convert.ToDouble(pointRow["Y"]);
-                                break;
-                            }
-                        }
-                        */
 
                         //Find coordinate of the joint
                         Ret = Sap.PointObj.GetCoordCartesian(jointReactionRow["UniqueName"], ref xCoord, ref yCoord, ref zCoord);
@@ -171,6 +214,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
                     }
 
                 }
+                */
 
                 src.plot_reaction.graph.ClassPlotGraph.SumReactionPerGroup sumReactionPerGroup = new src.plot_reaction.graph.ClassPlotGraph.SumReactionPerGroup(groupName, bubbleColor, sumReaction);
                 sumReactionPerGroupList.Add(sumReactionPerGroup);
@@ -460,14 +504,24 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
             //Get and show base reaction compared to reaction in plot
             double baseReaction = 0;
             List<Dictionary<string, string>> baseReactionsTableInList = baseReactionsTable.TableInList;
+            List<double> baseReactionForSpecificCaseList = new List<double>();
             foreach (Dictionary<string, string> row in baseReactionsTableInList)
             {
                 if (row["OutputCase"] == outputCase)
                 {
-                    baseReaction = Convert.ToDouble(row[reactionDirection]);
-                    break;
+                    baseReactionForSpecificCaseList.Add(Convert.ToDouble(row[reactionDirection]));
                 }
             }
+
+            if (maxOrMin == "Max")
+            {
+                baseReaction = baseReactionForSpecificCaseList.Max();
+            }
+            else if (maxOrMin == "Min")
+            {
+                baseReaction = baseReactionForSpecificCaseList.Min();
+            }
+            
 
             ReactionPlot.Plot.AxisScaleLock(true);
             ReactionPlot.Plot.Title(title, true, null, titleSize, "Arial Narrow");
