@@ -338,6 +338,7 @@ namespace WS_SG_ETABS_Plugin.src.pad_footing_plot
             //Here saving the file in xlsx
             string excelPath = filePath + fileName + ".xlsx";
 
+            /*
             try
             {
                 xlWorkBook.SaveAs(excelPath, Microsoft.Office.Interop.Excel.XlFileFormat.xlOpenXMLWorkbook);
@@ -348,6 +349,12 @@ namespace WS_SG_ETABS_Plugin.src.pad_footing_plot
             }
 
             xlWorkBook.Close(true, misValue, misValue);
+            xlApp.Quit();
+            */
+
+            xlApp.DisplayAlerts = false;
+            xlWorkBook.SaveCopyAs(excelPath);
+            xlWorkBook.Close();
             xlApp.Quit();
             System.Runtime.InteropServices.Marshal.ReleaseComObject(xlApp);
         }
