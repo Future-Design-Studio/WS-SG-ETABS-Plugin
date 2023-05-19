@@ -277,7 +277,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
         {
             comBoxGroup.IsEnabled = true;
             listBoxChoosenGroup.IsEnabled = true;
-            buttonAddGroup.IsEnabled = true;
+            buttonRemoveGroup.IsEnabled = true;
             buttonAddGroup.IsEnabled = true;
         }
 
