@@ -730,6 +730,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
             xlWorkBook.SaveCopyAs(excelPath);
             xlWorkBook.Close();
             xlApp.Quit();
+            System.Runtime.InteropServices.Marshal.ReleaseComObject(xlApp);
         }
     }
 }
