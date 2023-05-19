@@ -24,5 +24,10 @@ namespace WS_SG_ETABS_Plugin.src.rc_col_schedule
         {
             InitializeComponent();
         }
+
+        private void buttonOk_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
     }
 }
