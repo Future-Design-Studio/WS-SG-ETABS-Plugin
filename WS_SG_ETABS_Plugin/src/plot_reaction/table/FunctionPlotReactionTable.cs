@@ -17,7 +17,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
     internal class FunctionPlotReactionTable
     {
         #region Class
-        public class jointReaction
+        public class JointReaction
         {
             public string UniqueName { get; set; }
             public double XCoordinate { get; set; }
@@ -27,16 +27,17 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
             public int Label { get; set; }
 
             public string GroupName { get; set; }
+            public System.Drawing.Color BubbleColor = new System.Drawing.Color();
 
-            public jointReaction(string uniqueName, double x, double y, double z, int label, List<ReactionForce> reactionForceList, string groupName)
+            public JointReaction(string uniqueName, double x, double y, double z, List<ReactionForce> reactionForceList, string groupName, System.Drawing.Color bubbleColor)
             {
                 UniqueName = uniqueName;
                 XCoordinate = x;
                 YCoordinate = y;
                 ZCoordinate = z;
-                Label = label;
                 ReactionForceList = reactionForceList;
                 GroupName = groupName;
+                BubbleColor = bubbleColor;
             }
         }
 
@@ -101,10 +102,9 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
             if (isError) { return isError; }
 
             //To save all the reaction
-            List<jointReaction> jointReactionList = new List<jointReaction>();
+            List<JointReaction> jointReactionList = new List<JointReaction>();
 
             int groupIndex = 0;
-            int label = 0;
             foreach (Dictionary<string, string> group in groupAndColor)
             {
                 string groupName = group["groupName"];
@@ -157,7 +157,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
                         if (jointReactionRow["OutputCase"] == loadCase && uniqueJointRecorded.Contains(jointReactionRow["UniqueName"]))
                         {
                             //Go through jointReactionList and find the joint
-                            foreach (jointReaction jointReaction in jointReactionList)
+                            foreach (JointReaction jointReaction in jointReactionList)
                             {
                                 if (jointReactionRow["UniqueName"] == jointReaction.UniqueName)
                                 {
@@ -201,9 +201,10 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
                             ReactionForce eachReactionForce = new ReactionForce(loadCase, fX, fY, fZ, mX, mY, mZ);
                             reactionForceList.Add(eachReactionForce);
 
-                            jointReaction jointReaction = new jointReaction(uniqueName, xCoord, yCoord, zCoord, label, reactionForceList, groupName);
+                            JointReaction jointReaction = new JointReaction(uniqueName, xCoord, yCoord, zCoord, reactionForceList, groupName, bubbleColor);
                             jointReactionList.Add(jointReaction);
 
+                            /*
                             //Plotting
                             //Bubble size and text
                             //double reaction = Convert.ToDouble(jointReactionRow[reactionDirection]);
@@ -225,11 +226,47 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
                             src.HelperPlot.BubblePlotter(ReactionPlot, bubbleSize, bubbleText, textSize, bubbleColor, xCoord, yCoord);
 
                             label++;
+                            */
                         }
                     }
                 }  
                 groupIndex++;
             }
+
+            //Sort joint by x then y for labelling
+            List<JointReaction> sortedJointReactionList = jointReactionList.OrderBy(s => s.XCoordinate).ThenBy(s => s.YCoordinate).ToList();
+
+            int label = 1;
+            foreach (JointReaction jointReaction in sortedJointReactionList)
+            {
+                //Set label
+                jointReaction.Label = label;
+
+                //Plotting
+                //Bubble size and text
+                double bubbleSize = 1 * bubbleScaleFactor;
+
+                string bubbleText = "";
+                if (showRenumberCasting)
+                {
+                    //Use the index in uniqueJoint
+                    bubbleText = Convert.ToString(label);
+                }
+                else
+                {
+                    //Use the unique name
+                    bubbleText = Convert.ToString(jointReaction.UniqueName);
+                }
+
+                System.Drawing.Color bubbleColor = jointReaction.BubbleColor;
+                double xCoord = jointReaction.XCoordinate;
+                double yCoord = jointReaction.YCoordinate;
+
+                src.HelperPlot.BubblePlotter(ReactionPlot, bubbleSize, bubbleText, textSize, bubbleColor, xCoord, yCoord);
+
+                label++;
+            }
+
             ReactionPlot.Plot.AxisScaleLock(true);
             ReactionPlot.Plot.Title(plotTitle, true, null, titleSize, "Arial Narrow");
             ReactionPlot.Plot.AxisAuto(.2, .25); // zoom out to accommodate large bubbles
@@ -243,19 +280,19 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
             ReactionPlot.Refresh();
 
             //Create excel
-            var resultFx = CompileReactionToArrayFx(jointReactionList);
-            var resultFy = CompileReactionToArrayFy(jointReactionList);
-            var resultFz = CompileReactionToArrayFz(jointReactionList);
-            var resultMx = CompileReactionToArrayMx(jointReactionList);
-            var resultMy = CompileReactionToArrayMy(jointReactionList);
-            var resultMz = CompileReactionToArrayMz(jointReactionList);
+            var resultFx = CompileReactionToArrayFx(sortedJointReactionList);
+            var resultFy = CompileReactionToArrayFy(sortedJointReactionList);
+            var resultFz = CompileReactionToArrayFz(sortedJointReactionList);
+            var resultMx = CompileReactionToArrayMx(sortedJointReactionList);
+            var resultMy = CompileReactionToArrayMy(sortedJointReactionList);
+            var resultMz = CompileReactionToArrayMz(sortedJointReactionList);
 
             WriteReactionToExcel(resultFx, resultFy, resultFz, resultMx, resultMy, resultMz, fileName, filePath);
 
             return isError;
         }
 
-        private static object[,] CompileReactionToArrayFx(List<jointReaction> jointReactionList)
+        private static object[,] CompileReactionToArrayFx(List<JointReaction> jointReactionList)
         {
             List<string> colTitles = new List<string>()
             {
@@ -263,7 +300,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
             };
 
             //Take the first jointReaction and create the column
-            jointReaction jointReaction = jointReactionList[0];
+            JointReaction jointReaction = jointReactionList[0];
             foreach (ReactionForce reactionForce in jointReaction.ReactionForceList)
             {
                 colTitles.Add($"{reactionForce.LoadCase} (kN)");
@@ -283,7 +320,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
             }
 
             int i = 1;
-            foreach (jointReaction eachJointReaction in jointReactionList)
+            foreach (JointReaction eachJointReaction in jointReactionList)
             {
                 result[i, 0] = eachJointReaction.Label;
                 result[i, 1] = eachJointReaction.UniqueName;
@@ -305,7 +342,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
             return result;
         }
 
-        private static object[,] CompileReactionToArrayFy(List<jointReaction> jointReactionList)
+        private static object[,] CompileReactionToArrayFy(List<JointReaction> jointReactionList)
         {
             List<string> colTitles = new List<string>()
             {
@@ -313,7 +350,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
             };
 
             //Take the first jointReaction and create the column
-            jointReaction jointReaction = jointReactionList[0];
+            JointReaction jointReaction = jointReactionList[0];
             foreach (ReactionForce reactionForce in jointReaction.ReactionForceList)
             {
                 colTitles.Add($"{reactionForce.LoadCase} (kN)");
@@ -333,7 +370,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
             }
 
             int i = 1;
-            foreach (jointReaction eachJointReaction in jointReactionList)
+            foreach (JointReaction eachJointReaction in jointReactionList)
             {
                 result[i, 0] = eachJointReaction.Label;
                 result[i, 1] = eachJointReaction.UniqueName;
@@ -355,7 +392,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
             return result;
         }
 
-        private static object[,] CompileReactionToArrayFz(List<jointReaction> jointReactionList)
+        private static object[,] CompileReactionToArrayFz(List<JointReaction> jointReactionList)
         {
             List<string> colTitles = new List<string>()
             {
@@ -363,7 +400,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
             };
 
             //Take the first jointReaction and create the column
-            jointReaction jointReaction = jointReactionList[0];
+            JointReaction jointReaction = jointReactionList[0];
             foreach (ReactionForce reactionForce in jointReaction.ReactionForceList)
             {
                 colTitles.Add($"{reactionForce.LoadCase} (kN)");
@@ -383,7 +420,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
             }
 
             int i = 1;
-            foreach (jointReaction eachJointReaction in jointReactionList)
+            foreach (JointReaction eachJointReaction in jointReactionList)
             {
                 result[i, 0] = eachJointReaction.Label;
                 result[i, 1] = eachJointReaction.UniqueName;
@@ -405,7 +442,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
             return result;
         }
 
-        private static object[,] CompileReactionToArrayMx(List<jointReaction> jointReactionList)
+        private static object[,] CompileReactionToArrayMx(List<JointReaction> jointReactionList)
         {
             List<string> colTitles = new List<string>()
             {
@@ -413,7 +450,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
             };
 
             //Take the first jointReaction and create the column
-            jointReaction jointReaction = jointReactionList[0];
+            JointReaction jointReaction = jointReactionList[0];
             foreach (ReactionForce reactionForce in jointReaction.ReactionForceList)
             {
                 colTitles.Add($"{reactionForce.LoadCase} (kN)");
@@ -433,7 +470,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
             }
 
             int i = 1;
-            foreach (jointReaction eachJointReaction in jointReactionList)
+            foreach (JointReaction eachJointReaction in jointReactionList)
             {
                 result[i, 0] = eachJointReaction.Label;
                 result[i, 1] = eachJointReaction.UniqueName;
@@ -455,7 +492,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
             return result;
         }
 
-        private static object[,] CompileReactionToArrayMy(List<jointReaction> jointReactionList)
+        private static object[,] CompileReactionToArrayMy(List<JointReaction> jointReactionList)
         {
             List<string> colTitles = new List<string>()
             {
@@ -463,7 +500,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
             };
 
             //Take the first jointReaction and create the column
-            jointReaction jointReaction = jointReactionList[0];
+            JointReaction jointReaction = jointReactionList[0];
             foreach (ReactionForce reactionForce in jointReaction.ReactionForceList)
             {
                 colTitles.Add($"{reactionForce.LoadCase} (kN)");
@@ -483,7 +520,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
             }
 
             int i = 1;
-            foreach (jointReaction eachJointReaction in jointReactionList)
+            foreach (JointReaction eachJointReaction in jointReactionList)
             {
                 result[i, 0] = eachJointReaction.Label;
                 result[i, 1] = eachJointReaction.UniqueName;
@@ -505,7 +542,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
             return result;
         }
 
-        private static object[,] CompileReactionToArrayMz(List<jointReaction> jointReactionList)
+        private static object[,] CompileReactionToArrayMz(List<JointReaction> jointReactionList)
         {
             List<string> colTitles = new List<string>()
             {
@@ -513,7 +550,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
             };
 
             //Take the first jointReaction and create the column
-            jointReaction jointReaction = jointReactionList[0];
+            JointReaction jointReaction = jointReactionList[0];
             foreach (ReactionForce reactionForce in jointReaction.ReactionForceList)
             {
                 colTitles.Add($"{reactionForce.LoadCase} (kN)");
@@ -533,7 +570,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
             }
 
             int i = 1;
-            foreach (jointReaction eachJointReaction in jointReactionList)
+            foreach (JointReaction eachJointReaction in jointReactionList)
             {
                 result[i, 0] = eachJointReaction.Label;
                 result[i, 1] = eachJointReaction.UniqueName;
@@ -675,6 +712,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
             //Here saving the file in xlsx
             string excelPath = filePath + fileName + ".xlsx";
 
+            /*
             try
             {
                 xlWorkBook.SaveAs(excelPath, Microsoft.Office.Interop.Excel.XlFileFormat.xlOpenXMLWorkbook);
@@ -685,6 +723,12 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
             }
 
             xlWorkBook.Close(true, misValue, misValue);
+            xlApp.Quit();
+            */
+
+            xlApp.DisplayAlerts = false;
+            xlWorkBook.SaveCopyAs(excelPath);
+            xlWorkBook.Close();
             xlApp.Quit();
         }
     }
