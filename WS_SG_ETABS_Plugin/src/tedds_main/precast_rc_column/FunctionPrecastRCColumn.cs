@@ -162,10 +162,11 @@ namespace WS_SG_ETABS_Plugin.src.tedds_main.precast_rc_column
                                 return true;
                             }
                         }
-                    }
-                    if (columnoverwriteTable.TableInList.Count == 0)
-                    {
-                        continue;
+
+                        if (columnoverwriteTable.TableInList.Count == 0)
+                        {
+                            continue;
+                        }
                     }
                     #endregion
 
@@ -426,67 +427,67 @@ namespace WS_SG_ETABS_Plugin.src.tedds_main.precast_rc_column
                                         {
                                             concreteStrength = Convert.ToDouble(rowmaterial["Fc"]);
 
-                                            if (concreteStrength < 16)
+                                            if (concreteStrength < 16000)
                                             {
                                                 concreteGrade = "C12/15";
                                             }
-                                            else if (concreteStrength < 20)
+                                            else if (concreteStrength < 20000)
                                             {
                                                 concreteGrade = "C16/20";
                                             }
-                                            else if (concreteStrength < 25)
+                                            else if (concreteStrength < 25000)
                                             {
                                                 concreteGrade = "C20/25";
                                             }
-                                            else if (concreteStrength < 28)
+                                            else if (concreteStrength < 28000)
                                             {
                                                 concreteGrade = "C25/30";
                                             }
-                                            else if (concreteStrength < 30)
+                                            else if (concreteStrength < 30000)
                                             {
                                                 concreteGrade = "C28/35";
                                             }
-                                            else if (concreteStrength < 32)
+                                            else if (concreteStrength < 32000)
                                             {
                                                 concreteGrade = "C30/37";
                                             }
-                                            else if (concreteStrength < 35)
+                                            else if (concreteStrength < 35000)
                                             {
                                                 concreteGrade = "C32/40";
                                             }
-                                            else if (concreteStrength < 40)
+                                            else if (concreteStrength < 40000)
                                             {
                                                 concreteGrade = "C35/45";
                                             }
-                                            else if (concreteStrength < 45)
+                                            else if (concreteStrength < 45000)
                                             {
                                                 concreteGrade = "C40/50";
                                             }
-                                            else if (concreteStrength < 50)
+                                            else if (concreteStrength < 50000)
                                             {
                                                 concreteGrade = "C45/55";
                                             }
-                                            else if (concreteStrength < 55)
+                                            else if (concreteStrength < 55000)
                                             {
                                                 concreteGrade = "C50/60";
                                             }
-                                            else if (concreteStrength < 60)
+                                            else if (concreteStrength < 60000)
                                             {
                                                 concreteGrade = "C55/67";
                                             }
-                                            else if (concreteStrength < 70)
+                                            else if (concreteStrength < 70000)
                                             {
                                                 concreteGrade = "C60/75";
                                             }
-                                            else if (concreteStrength < 80)
+                                            else if (concreteStrength < 80000)
                                             {
                                                 concreteGrade = "C70/85";
                                             }
-                                            else if (concreteStrength < 90)
+                                            else if (concreteStrength < 90000)
                                             {
                                                 concreteGrade = "C80/95";
                                             }
-                                            else if (concreteStrength >= 90)
+                                            else if (concreteStrength >= 90000)
                                             {
                                                 concreteGrade = "C90/105";
                                             }
@@ -1053,67 +1054,67 @@ namespace WS_SG_ETABS_Plugin.src.tedds_main.precast_rc_column
                                         {
                                             concreteStrength = Convert.ToDouble(rowmaterial["Fc"]);
 
-                                            if (concreteStrength < 16)
+                                            if (concreteStrength < 16000)
                                             {
                                                 concreteGrade = "C12/15";
                                             }
-                                            else if (concreteStrength < 20)
+                                            else if (concreteStrength < 20000)
                                             {
                                                 concreteGrade = "C16/20";
                                             }
-                                            else if (concreteStrength < 25)
+                                            else if (concreteStrength < 25000)
                                             {
                                                 concreteGrade = "C20/25";
                                             }
-                                            else if (concreteStrength < 28)
+                                            else if (concreteStrength < 28000)
                                             {
                                                 concreteGrade = "C25/30";
                                             }
-                                            else if (concreteStrength < 30)
+                                            else if (concreteStrength < 30000)
                                             {
                                                 concreteGrade = "C28/35";
                                             }
-                                            else if (concreteStrength < 32)
+                                            else if (concreteStrength < 32000)
                                             {
                                                 concreteGrade = "C30/37";
                                             }
-                                            else if (concreteStrength < 35)
+                                            else if (concreteStrength < 35000)
                                             {
                                                 concreteGrade = "C32/40";
                                             }
-                                            else if (concreteStrength < 40)
+                                            else if (concreteStrength < 40000)
                                             {
                                                 concreteGrade = "C35/45";
                                             }
-                                            else if (concreteStrength < 45)
+                                            else if (concreteStrength < 45000)
                                             {
                                                 concreteGrade = "C40/50";
                                             }
-                                            else if (concreteStrength < 50)
+                                            else if (concreteStrength < 50000)
                                             {
                                                 concreteGrade = "C45/55";
                                             }
-                                            else if (concreteStrength < 55)
+                                            else if (concreteStrength < 55000)
                                             {
                                                 concreteGrade = "C50/60";
                                             }
-                                            else if (concreteStrength < 60)
+                                            else if (concreteStrength < 60000)
                                             {
                                                 concreteGrade = "C55/67";
                                             }
-                                            else if (concreteStrength < 70)
+                                            else if (concreteStrength < 70000)
                                             {
                                                 concreteGrade = "C60/75";
                                             }
-                                            else if (concreteStrength < 80)
+                                            else if (concreteStrength < 80000)
                                             {
                                                 concreteGrade = "C70/85";
                                             }
-                                            else if (concreteStrength < 90)
+                                            else if (concreteStrength < 90000)
                                             {
                                                 concreteGrade = "C80/95";
                                             }
-                                            else if (concreteStrength >= 90)
+                                            else if (concreteStrength >= 90000)
                                             {
                                                 concreteGrade = "C90/105";
                                             }
