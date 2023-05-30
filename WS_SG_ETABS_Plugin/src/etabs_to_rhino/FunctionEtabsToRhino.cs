@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Animation;
@@ -260,7 +261,7 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
 
         #region WIP - EXTRUSION MODEL - DEPLOYED WITH LIMITED CAPABILITIES
 
-        public static List<Curve> CreateProfile(FrameGeometryProp frameProp)
+        public static List<Curve> CreateFrameProfile(FrameGeometryProp frameProp)
         {
             var output = new List<Curve>();
 
@@ -360,7 +361,7 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
 
             return output;
         }
-        public static List<Brep> CreateExtrusion(List<Curve> profile, FrameGeometryProp frameProp, double length)
+        public static List<Brep> CreateFrameExtrusion(List<Curve> profile, FrameGeometryProp frameProp, double length)
         {
             var outputFrameBreps = new List<Brep>();
 
@@ -405,7 +406,7 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
             
             return outputFrameBreps;
         }
-        public static void IncludeExtrusion(Rhino.FileIO.File3dm file3dm, List<FrameGeometry> allFrame, Dictionary<string, FrameGeometryProp> allFrameProp, List<AreaGeometry> allAreas)
+        public static void IncludeFrameExtrusion(Rhino.FileIO.File3dm file3dm, List<FrameGeometry> allFrame, Dictionary<string, FrameGeometryProp> allFrameProp, List<AreaGeometry> allAreas)
         {
             ////////////////////////
             // CREATE PROFILE FOR EACH FRAME PROPERTY
@@ -420,7 +421,7 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
                 var frameprop = keyVal.Value;
                 if (available_frametype.Contains(frameprop.PropType))
                 {
-                    var profile_crv = CreateProfile(frameprop);
+                    var profile_crv = CreateFrameProfile(frameprop);
                     frameprop_profile.Add(frameprop.Name, profile_crv);
                 }
             }
@@ -469,10 +470,17 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
                     var t1 = Transform.PlaneToPlane(plane0, plane1);
 
                     // create geometry -- NOT READY NEED FIX, resulting geometry currently is not a solid
-                    var extrusions = CreateExtrusion(profile, frameprop, frame_vec.Length);
+                    var extrusions = CreateFrameExtrusion(profile, frameprop, frame_vec.Length);
 
                     foreach(var geo in extrusions)
                     {
+                        if (frame.Cardinal == "TopCenter")
+                        {
+                            var vec = Vector3d.YAxis * frameprop.T3 / -2;
+                            var tf = Transform.Translation(vec);
+                            geo.Transform(tf);
+                        }
+
                         geo.Transform(t0);
                         geo.Transform(t1);
                         outputFrameBreps.Add(geo);
@@ -483,9 +491,7 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
             }
 
 
-            ////////////////////////
-            // CREATE EXTRUSION FOR ALL AREA OBJECTS
-            ////////////////////////
+            
 
 
             ////////////////////////
@@ -502,6 +508,86 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
                 file3dm.Objects.AddBrep(obj, att);
             }
             
+        }
+        public static void IncludeAreaExtrusion(Rhino.FileIO.File3dm file3dm,  List<AreaGeometry> allAreas)
+        {
+            ////////////////////////
+            // CREATE EXTRUSION FOR ALL AREA OBJECTS
+            ////////////////////////
+            var outputWallBreps = new List<Brep>();
+            var outputFloorBreps = new List<Brep>();
+
+            for (var i = 0; i < allAreas.Count; i++)
+            {
+                var area = allAreas[i];
+
+                var polyline = new Polyline();
+
+                for (var j = 0; j < area.BoundaryPoints.Count; j++)
+                {
+                    var pt = area.BoundaryPoints[j];
+                    polyline.Add(pt);                    
+                }
+
+                var lastPt = area.BoundaryPoints[0];
+                polyline.Add(lastPt);
+
+                var plane0 = new Plane(area.BoundaryPoints[0], area.BoundaryPoints[1], area.BoundaryPoints[2]);
+                
+                var t0 = Transform.PlanarProjection(plane0);
+                polyline.Transform(t0);
+
+                if (area.DesignOrientation == "Wall")
+                {
+                    var wallExtrusion = Extrusion.Create(polyline.ToPolylineCurve(), area.Thickness, true);
+
+                    var t1 = Transform.Translation(plane0.Normal * area.Thickness / -2);
+
+                    wallExtrusion.Transform(t1);
+
+                    outputWallBreps.Add(wallExtrusion.ToBrep());
+                }
+
+                if(area.DesignOrientation == "Floor")
+                {
+                    var vec = plane0.Normal;
+
+                    var crv = polyline.ToPolylineCurve();
+                    var orientation = crv.ClosedCurveOrientation(Vector3d.ZAxis);
+
+                    if(orientation == CurveOrientation.CounterClockwise) crv.Reverse();
+
+                    var floorExtrusion = Extrusion.Create(crv, area.Thickness, true);
+
+                    outputFloorBreps.Add(floorExtrusion.ToBrep());
+                }
+                
+            }
+            
+
+            ////////////////////////
+            // ADD EXTRUSION TO RHINO MODEL INSTANCE
+            ////////////////////////
+
+            int wallExtrusionObj = file3dm.AllLayers.AddLayer("wallExtrusion", System.Drawing.Color.DarkGray);
+
+            var att0 = new Rhino.DocObjects.ObjectAttributes();
+            att0.LayerIndex = wallExtrusionObj;
+
+            foreach (var obj in outputWallBreps)
+            {
+                file3dm.Objects.AddBrep(obj, att0);
+            }
+
+            int floorExtrusionObj = file3dm.AllLayers.AddLayer("floorExtrusion", System.Drawing.Color.Gray);
+
+            var att1 = new Rhino.DocObjects.ObjectAttributes();
+            att1.LayerIndex = floorExtrusionObj;
+
+            foreach (var obj in outputFloorBreps)
+            {
+                file3dm.Objects.AddBrep(obj, att1);
+            }
         }
 
         #endregion
@@ -585,6 +671,7 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
                     att.SetUserString("PropName", area.PropName);
                     att.SetUserString("DesignOrientation", area.DesignOrientation);
                     att.SetUserString("IsOpening", area.IsOpening.ToString());
+                    att.SetUserString("Thickness", area.Thickness.ToString());
 
                     att.LayerIndex = layerAreaObj;
 
@@ -612,7 +699,12 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
 
             if (includeExtrusion && allFrames != null && allFrameProp != null)
             {
-                IncludeExtrusion(newModel, allFrames, allFrameProp, allAreas);
+                IncludeFrameExtrusion(newModel, allFrames, allFrameProp, allAreas);
+            }
+
+            if (includeExtrusion && allAreas != null)
+            {
+                IncludeAreaExtrusion(newModel, allAreas);
             }
 
 
