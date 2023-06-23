@@ -94,7 +94,7 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
             for (var i = 0; i < NumberNames; i++)
             {
                 var area = new AreaGeometry(MyName[i], DesignOrientaion[i], ptsGroup[i], Sap);
-                allAreas.Add(area);
+                if (area.DesignOrientation != "Null") allAreas.Add(area);
             }
 
 
@@ -194,7 +194,7 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
             for (var i = 0; i<NumberNames; i++)
             {
                 var frame = new FrameGeometry(MyName[i], PropName[i], StoryName[i], pt0[i], pt1[i], Angle[i], CardinalPoint[i], Sap);
-                allFrame.Add(frame);
+                if (frame.DesignOrientation != "Null") allFrame.Add(frame);
             }
 
             return allFrame;
@@ -620,6 +620,9 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
 
                     var frame = allFrames[i];
                     string framePropName = frame.PropName;
+
+                    //if (allFrameProp.ContainsKey(framePropName) == false) continue;
+
                     FrameGeometryProp frameProp = allFrameProp[framePropName];
 
 
