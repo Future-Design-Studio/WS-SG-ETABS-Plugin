@@ -26,13 +26,15 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
         cPluginCallback _Plugin;
         string _filePath;
         string _fileName;
+        Dictionary<string, bool?> _selectedItems;
 
-        public WindowEtabsToRhinoProgress(cSapModel SapModel, cPluginCallback Plugin, string filePath, string fileName)
+        public WindowEtabsToRhinoProgress(cSapModel SapModel, cPluginCallback Plugin, string filePath, string fileName, Dictionary<string,bool?> selectedItems)
         {
             _SapModel = SapModel;
             _Plugin = Plugin;
             _filePath = filePath;
             _fileName = fileName;
+            _selectedItems = selectedItems;
 
 
             InitializeComponent();
@@ -52,7 +54,7 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
 
             var progress = new Progress<int>(x => pbStatus.Value = x);
 
-            await Task.Run(() => src.etabs_to_rhino.FunctionEtabsToRhino.ExportEtabsToRhino(_SapModel, _filePath, _fileName, progress));
+            await Task.Run(() => src.etabs_to_rhino.FunctionEtabsToRhino.ExportEtabsToRhino(_SapModel, _filePath, _fileName, _selectedItems, progress));
 
             pbStatus.Value = 100;
 

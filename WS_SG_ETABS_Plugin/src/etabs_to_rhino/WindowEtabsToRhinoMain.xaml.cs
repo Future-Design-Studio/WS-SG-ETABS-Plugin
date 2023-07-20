@@ -85,17 +85,22 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
             string filePath = textBoxFilePath.Text;
             string fileName = textBoxFileName.Text;
 
+            //Collect which boxes are selected
+            Dictionary<string, bool?> selectedItems = new Dictionary<string, bool?>()
+            {
+                {"extrusionModel", checkBoxExtrusion.IsChecked }
+            };
+
             IsEnabled = false;
 
-            
-
             //Call up progress result window
-            src.etabs_to_rhino.WindowEtabsToRhinoProgress windowEtabsToRhinoProgress = new src.etabs_to_rhino.WindowEtabsToRhinoProgress(_SapModel, _Plugin, filePath, fileName);
+            src.etabs_to_rhino.WindowEtabsToRhinoProgress windowEtabsToRhinoProgress = new src.etabs_to_rhino.WindowEtabsToRhinoProgress(_SapModel, _Plugin, filePath, fileName, selectedItems);
 
             IsEnabled = true;
 
             Close();
         }
+
 
         #endregion
     }
