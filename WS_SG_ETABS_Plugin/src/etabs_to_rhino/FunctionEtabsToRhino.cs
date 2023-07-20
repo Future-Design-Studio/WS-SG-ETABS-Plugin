@@ -178,7 +178,7 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
 
             for (var i = 0; i<NumberNames; i++)
             {
-                var frame = new FrameGeometry(MyName[i], PropName[i], StoryName[i], pt0[i], pt1[i], Angle[i], CardinalPoint[i]);
+                var frame = new FrameGeometry(MyName[i], PropName[i], StoryName[i], pt0[i], pt1[i], Angle[i], CardinalPoint[i], Sap);
                 allFrame.Add(frame);
             }
 
@@ -237,21 +237,30 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
             }
             
         }
-        public static void ExportEtabsToRhino(cSapModel Sap, string filePath, string fileName)
+        public static void ExportEtabsToRhino(cSapModel Sap, string filePath, string fileName, IProgress<int> progress)
         {
             //setup new rhino model instance
             Console.WriteLine("Setting up new Rhino model...");
 
+
             var newModel = new Rhino.FileIO.File3dm();
+            newModel.Settings.ModelUnitSystem = Rhino.UnitSystem.Meters;
+            newModel.Settings.ModelAbsoluteTolerance = 0.001;
 
             int layerFrameObj = newModel.AllLayers.AddLayer("frameObj", System.Drawing.Color.Black);
             int layerAreaObj = newModel.AllLayers.AddLayer("areaObj", System.Drawing.Color.Red);
 
             Console.WriteLine("Parsing through etabs properties...");
 
-            //all etabs frame with property
+            //all etabs frame and area with property
             var allFrames = GetAllFrames(Sap);
             var allFrameProp = GetAllFrameProperties(Sap);
+
+            progress.Report(20);
+
+            var allAreas = GetAllAreasWithProperties(Sap);
+
+            progress.Report(60);
 
 
             //rebuild etabs frame objects 
@@ -273,6 +282,7 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
                 att.SetUserString("StoryName", frame.StoryName);
                 att.SetUserString("Angle", frame.Angle.ToString());
                 att.SetUserString("Cardinal", frame.Cardinal);
+                att.SetUserString("DesignOrientation", frame.DesignOrientation);
 
                 att.SetUserString("t3", frameProp.T3.ToString());
                 att.SetUserString("t2", frameProp.T2.ToString());
@@ -281,21 +291,21 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
                 att.SetUserString("t2b", frameProp.T2b.ToString());
                 att.SetUserString("tfb", frameProp.Tfb.ToString());
                 att.SetUserString("PropType", frameProp.PropType);
+                
 
                 att.LayerIndex = layerFrameObj;
 
 
                 newModel.Objects.AddLine(frame.Pt0, frame.Pt1, att);
-
             }
+
+            progress.Report(70);
             
 
 
             //rebuild etabs area objects in rhino
             //attach etabs property as user text in rhino
             Console.WriteLine("Rebuilding etabs AREA objects in rhino...");
-
-            var allAreas = GetAllAreasWithProperties(Sap);
 
             for (var i = 0; i< allAreas.Count; i++)
             {
@@ -323,10 +333,11 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
                 polyline.Add(lastPt);
 
                 newModel.Objects.AddPolyline(polyline, att);
-            }    
+            }
+
+            progress.Report(90);
 
 
-          
             var outputModelPath = filePath;
             var outputModelName = fileName;
             var rhinoModelPath = System.IO.Path.Combine(outputModelPath, outputModelName + ".3dm");

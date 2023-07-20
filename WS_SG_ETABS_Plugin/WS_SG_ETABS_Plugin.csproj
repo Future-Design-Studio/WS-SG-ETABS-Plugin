@@ -35,7 +35,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ETABSv1">
-      <HintPath>..\..\..\..\..\..\..\..\..\Program Files\Computers and Structures\ETABS 20\ETABSv1.dll</HintPath>
+      <HintPath>C:\Program Files\Computers and Structures\ETABS 20\ETABSv1.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="LiveCharts, Version=0.9.7.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL">
@@ -133,6 +133,9 @@
     </Compile>
     <Compile Include="src\etabs_to_rhino\WindowEtabsToRhinoResult.xaml.cs">
       <DependentUpon>WindowEtabsToRhinoResult.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\etabs_to_rhino\WindowsEtabsToRhinoProgress.xaml.cs">
+      <DependentUpon>WindowsEtabsToRhinoProgress.xaml</DependentUpon>
     </Compile>
     <Compile Include="src\HelperExcel.cs" />
     <Compile Include="src\HelperLicense.cs" />
@@ -400,6 +403,10 @@
     <Page Include="src\plot_reaction\table\WindowPlotReactionTableResult.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="src\etabs_to_rhino\WindowsEtabsToRhinoProgress.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="src\plot_reaction\WindowPlotReactionMain.xaml">
       <Generator>MSBuild:Compile</Generator>
