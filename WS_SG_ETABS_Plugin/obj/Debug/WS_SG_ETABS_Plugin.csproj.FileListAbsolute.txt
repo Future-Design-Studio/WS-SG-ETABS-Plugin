@@ -334,3 +334,5 @@ C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ET
 C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\tedds_main\precast_rc_column\WindowPrecastRCColumnLoading.baml
 C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\tedds_main\precast_rc_column\WindowPrecastRCColumnMain.baml
 C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\tedds_main\precast_rc_column\WindowPrecastRCColumnResult.baml
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\etabs_to_rhino\WindowsEtabsToRhinoProgress.g.cs
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\etabs_to_rhino\WindowsEtabsToRhinoProgress.baml
