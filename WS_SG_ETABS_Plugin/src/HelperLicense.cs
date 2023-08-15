@@ -33,9 +33,25 @@ namespace WS_SG_ETABS_Plugin.src
             }
             catch
             {
-                MessageBox.Show("Illegal license. Your PC ID " + userComputerName + " has been reported to Ramboll IT as well as Singapore Police.");
-                licenseValid = false;
-                return licenseValid;
+                try
+                {
+                    StreamReader sr = new StreamReader(@"C:\Program Files\Computers and Structures\ETABS 21\LMHOST.ini");
+                    string licenseNumber = sr.ReadLine();
+                    sr.Close();
+
+                    if (licenseNumber != "rwcphlice002")
+                    {
+                        MessageBox.Show("Illegal license. Your PC ID " + userComputerName + " has been reported to Ramboll IT as well as Singapore Police.");
+                        licenseValid = false;
+                        return licenseValid;
+                    }
+                }
+                catch
+                {
+                    MessageBox.Show("Illegal license. Your PC ID " + userComputerName + " has been reported to Ramboll IT as well as Singapore Police.");
+                    licenseValid = false;
+                    return licenseValid;
+                }
             }
 
 
