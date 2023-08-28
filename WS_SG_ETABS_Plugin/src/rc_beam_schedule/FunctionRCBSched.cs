@@ -614,7 +614,12 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
                 rcBeam.LeftBottomRebarDiameterList = leftBottomRebarDiameter;
                 rcBeam.LeftBottomNoRebarPerLayer = leftBottomNoRebarPerLayer;
 
-                rcBeam.LeftShearLinks = leftTopNoShearLinksLeg + "H" + leftTopshearLinksDiameter + "-" + leftTopShearLinksSpacing;
+                // Left shear links
+                rcBeam.LeftShearLinks = "H" + leftTopshearLinksDiameter + "-" + leftTopShearLinksSpacing + " (Link)";
+                if (leftTopNoShearLinksLeg > 2)
+                {
+                    rcBeam.LeftShearLinks += " + " + (leftTopNoShearLinksLeg - 2) + "H" + leftTopshearLinksDiameter + "-" + leftTopShearLinksSpacing + " (Hooks)";
+                }
                 rcBeam.LeftNoShearLinksLeg = leftTopNoShearLinksLeg;
                 rcBeam.LeftShearLinksDiameter = leftTopshearLinksDiameter;
                 rcBeam.LeftShearLinksSpacing = leftTopShearLinksSpacing;
@@ -672,8 +677,13 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
                     rcBeam.MidBottomRebar = rcBeam.MidBottomRebar.Remove(rcBeam.MidBottomRebar.Length - 1, 1);
                     rcBeam.MidBottomRebarDiameterList = midBottomRebarDiameter;
                     rcBeam.MidBottomNoRebarPerLayer = midBottomNoRebarPerLayer;
-
-                    rcBeam.MidShearLinks = midTopNoShearLinksLeg + "H" + midTopshearLinksDiameter + "-" + midTopShearLinksSpacing;
+                    
+                    //Mid shear links
+                    rcBeam.MidShearLinks = "H" + midTopshearLinksDiameter + "-" + midTopShearLinksSpacing + " (Link)";
+                    if (midTopNoShearLinksLeg > 2)
+                    {
+                        rcBeam.MidShearLinks += " + " + (midTopNoShearLinksLeg - 2) + "H" + midTopshearLinksDiameter + "-" + midTopShearLinksSpacing + " (Hooks)";
+                    }
                     rcBeam.MidNoShearLinksLeg = midTopNoShearLinksLeg;
                     rcBeam.MidShearLinksDiameter = midTopshearLinksDiameter;
                     rcBeam.MidShearLinksSpacing = midTopShearLinksSpacing;
@@ -737,7 +747,12 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
                 rcBeam.RightBottomRebarDiameterList = rightBottomRebarDiameter;
                 rcBeam.RightBottomNoRebarPerLayer = rightBottomNoRebarPerLayer;
 
-                rcBeam.RightShearLinks = rightTopNoShearLinksLeg + "H" + rightTopshearLinksDiameter + "-" + rightTopShearLinksSpacing;
+                // Right shear links
+                rcBeam.RightShearLinks = "H" + rightTopshearLinksDiameter + "-" + rightTopShearLinksSpacing + " (Link)";
+                if (rightTopNoShearLinksLeg > 2)
+                {
+                    rcBeam.RightShearLinks += " + " + (rightTopNoShearLinksLeg - 2) + "H" + rightTopshearLinksDiameter + "-" + rightTopShearLinksSpacing + " (Hooks)";
+                }
                 rcBeam.RightNoShearLinksLeg = rightTopNoShearLinksLeg;
                 rcBeam.RightShearLinksDiameter = rightTopshearLinksDiameter;
                 rcBeam.RightShearLinksSpacing = rightTopShearLinksSpacing;
@@ -827,6 +842,10 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
                         {
                             rebarSpc = Math.Max(25, maxRebarDiameterInAllLayer);
                             maxNoRebarPerLayer = Convert.ToInt32(Math.Floor((width - cover * 2 - shearLinksDiameter * 2 - maxRebarDiameterInAllLayer) / (rebarSpc + maxRebarDiameterInAllLayer) + 1));
+                        }
+                        else if (rebarSpcPreference == "autoRamboll")
+                        {
+                            maxNoRebarPerLayer = Convert.ToInt32(Math.Floor(width/100));
                         }
 
                         //Show warning if number of rebar per layer can only fit 1, means the diameter is too big

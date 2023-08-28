@@ -63,7 +63,7 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
             comBoxBeamType.SelectedIndex = 0;
 
             //Default check the rebar preference
-            radioButtonSpcClearSpc.IsChecked = true;
+            radioButtonSpcAutoRamboll.IsChecked = true;
 
             ShowDialog();
         }
@@ -132,6 +132,11 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
                 {
                     rebarSpc = 0;
                     rebarSpcPreference = "auto";
+                }
+                else if (radioButtonSpcAutoRamboll.IsChecked == true)
+                {
+                    rebarSpc = 0;
+                    rebarSpcPreference = "autoRamboll";
                 }
 
                 //Casting listbox content to list
