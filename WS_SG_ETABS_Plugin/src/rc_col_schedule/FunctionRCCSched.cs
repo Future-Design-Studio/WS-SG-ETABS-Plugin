@@ -1,4 +1,4 @@
-﻿using ETABSv1;
+﻿  using ETABSv1;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -603,8 +603,9 @@ namespace WS_SG_ETABS_Plugin.src.rc_col_schedule
             bool rebarSatisfied = false;
             int noRebarLayer = 0;
             int maxRebarDiameterInAllLayer = 0;
+
             int maxNoRebarPerLayer = 0;
-            int minNoRebarPerLayer = 4;
+            int minNoRebarPerLayer = 0;
 
             //Keep looping if not both satisfied
             while (shearLinksDiameterIndex <= shearLinksDiameterList.Count() - 1 && !shearLinksSatisfied)
@@ -631,35 +632,51 @@ namespace WS_SG_ETABS_Plugin.src.rc_col_schedule
                     while (rebarDiameterIndexCurrentLayer <= rebarDiameterList.Count() - 1 && !rebarSatisfied)
                     {
 
-                        //Set no of rebar per layer to minimum
-                        if (currentLayer == 0)
-                        {
-                            noRebarPerLayer[currentLayer] = minNoRebarPerLayer;
-                        }
-                        else
-                        {
-                            noRebarPerLayer[currentLayer] = 4;
-                        }
-
                         rebarDiameterPerLayer[currentLayer] = rebarDiameterList[rebarDiameterIndexCurrentLayer];
                         maxRebarDiameterInAllLayer = rebarDiameterPerLayer.Max();
 
                         //Calculating how many rebar per layer based on rebar spc preference
                         if (rebarSpcPreference == "clear")
                         {
-                            maxNoRebarPerLayer = Convert.ToInt32(Math.Floor(((width - cover * 2 - shearLinksDiameter * 2 - maxRebarDiameterInAllLayer) * 2 + (height - cover * 2 - shearLinksDiameter * 2 - maxRebarDiameterInAllLayer)) 
-                                / (rebarSpc + maxRebarDiameterInAllLayer) + 1));
+                            double widthSpace = width - cover * 2 - shearLinksDiameter * 2 - maxRebarDiameterInAllLayer;
+                            double heightSpace = height - cover * 2 - shearLinksDiameter * 2 - maxRebarDiameterInAllLayer;
+                            double widthNoRebar = Math.Floor(widthSpace / (rebarSpc + maxRebarDiameterInAllLayer) + 1) * 2;
+                            double heightNoRebar = Math.Floor(heightSpace / (rebarSpc + maxRebarDiameterInAllLayer) + 1) * 2;
+                            maxNoRebarPerLayer = Convert.ToInt32(widthNoRebar + heightNoRebar - 4);
                         }
                         else if (rebarSpcPreference == "ctoc")
                         {
-                            maxNoRebarPerLayer = Convert.ToInt32(Math.Floor(((width - cover * 2 - shearLinksDiameter * 2 - maxRebarDiameterInAllLayer) * 2 + (height - cover * 2 - shearLinksDiameter * 2 - maxRebarDiameterInAllLayer)) 
-                                / (rebarSpc) + 1));
+                            double widthSpace = width - cover * 2 - shearLinksDiameter * 2 - maxRebarDiameterInAllLayer;
+                            double heightSpace = height - cover * 2 - shearLinksDiameter * 2 - maxRebarDiameterInAllLayer;
+                            double widthNoRebar = Math.Floor(widthSpace / (rebarSpc) + 1) * 2;
+                            double heightNoRebar = Math.Floor(heightSpace / (rebarSpc) + 1) * 2;
+                            maxNoRebarPerLayer = Convert.ToInt32(widthNoRebar + heightNoRebar - 4);
                         }
                         else if (rebarSpcPreference == "auto")
                         {
                             rebarSpc = Math.Max(25, maxRebarDiameterInAllLayer);
-                            maxNoRebarPerLayer = Convert.ToInt32(Math.Floor(((width - cover * 2 - shearLinksDiameter * 2 - maxRebarDiameterInAllLayer) * 2 + (height - cover * 2 - shearLinksDiameter * 2 - maxRebarDiameterInAllLayer)) 
-                                / (rebarSpc + maxRebarDiameterInAllLayer) + 1));
+                            double widthSpace = width - cover * 2 - shearLinksDiameter * 2 - maxRebarDiameterInAllLayer;
+                            double heightSpace = height - cover * 2 - shearLinksDiameter * 2 - maxRebarDiameterInAllLayer;
+                            double widthNoRebar = Math.Floor(widthSpace / (rebarSpc + maxRebarDiameterInAllLayer) + 1) * 2;
+                            double heightNoRebar = Math.Floor(heightSpace / (rebarSpc + maxRebarDiameterInAllLayer) + 1) * 2;
+                            maxNoRebarPerLayer = Convert.ToInt32(widthNoRebar + heightNoRebar - 4);
+                        }
+                        else if (rebarSpcPreference == "autoRamboll")
+                        {
+                            rebarSpc = Math.Max(25, maxRebarDiameterInAllLayer);
+                            maxNoRebarPerLayer = Convert.ToInt32(Math.Floor(width/100 * 2) + Math.Floor(height /100 * 2) - 4);
+                        }
+
+                        //Set no of rebar per layer to minimum
+                        //For column number of max and min rebar per layer is set to be same
+                        minNoRebarPerLayer = maxNoRebarPerLayer;
+                        if (currentLayer == 0)
+                        {
+                            noRebarPerLayer[currentLayer] = minNoRebarPerLayer;
+                        }
+                        else
+                        {
+                            noRebarPerLayer[currentLayer] = Math.Max(0, minNoRebarPerLayer - 4);
                         }
 
                         //Show warning if number of rebar per layer can only fit 1, means the diameter is too big

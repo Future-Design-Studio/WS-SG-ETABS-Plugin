@@ -54,7 +54,7 @@ namespace WS_SG_ETABS_Plugin.src.rc_col_schedule
             src.HelperUI.PopulateComboBoxAvailGroup(_SapModel, comBoxGroup);
 
             //Default check the rebar preference
-            radioButtonSpcAuto.IsChecked = true;
+            radioButtonSpcClearSpc.IsChecked = true;
 
             ShowDialog();
         }
