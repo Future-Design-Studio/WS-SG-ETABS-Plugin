@@ -96,7 +96,7 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
             CalculateAvProv(rcBeamList);
 
             //do kmeans
-            RcBeamClusteringUsingKMeans(rcBeamList);
+            //RcBeamClusteringUsingKMeans(rcBeamList);
 
             //Compile data to 2d array
             var result = CompileResutRcBeamToArray(rcBeamList);
@@ -368,7 +368,7 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
 
                 foreach (Dictionary<string, string> row in rcBeamDesignSummaryTable)
                 {
-                    if (row["UniqueName"] == rcBeam.UniqueName && rcBeam.BeamType == "Simply supported")
+                    if (row["UniqueName"] == rcBeam.UniqueName && rcBeam.BeamType == "Single/multi span")
                     {
                         if (Convert.ToDouble(row["Station"]) <= leftStation)
                         {
@@ -519,7 +519,7 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
                 }
 
                 //if short beam
-                if (midNotFound && rcBeam.BeamType == "Simply supported")
+                if (midNotFound && rcBeam.BeamType == "Single/multi span")
                 {
                     rcBeam.LeftBottomAs = leftBottomAs;
                     rcBeam.LeftTopAs = leftTopAs;
@@ -623,7 +623,7 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
                 string midTopAvEvaluationComment = "";
                 string midBottomAsEvaluationComment = "";
                 string midBottomAvEvaluationComment = "";
-                if (rcBeam.BeamType == "Simply supported")
+                if (rcBeam.BeamType == "Single/multi span")
                 {
                     double midTopAs = rcBeam.MidTopAs;
                     double midTopAv = rcBeam.MidAv;
@@ -1237,7 +1237,7 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
             asMin = GetMinimumRcBeamRebarEC(rcBeam.Fck, rcBeam.Fyk, rcBeam.Width, rcBeam.d);
             rcBeam.AsMin = Math.Ceiling(asMin);
 
-            if (rcBeam.BeamType == "Simply supported")
+            if (rcBeam.BeamType == "Single/multi span")
             {
                 rcBeam.LeftTopAs = Math.Max(rcBeam.LeftTopAs, asMin);
                 rcBeam.MidTopAs = Math.Max(rcBeam.MidTopAs, asMin);
@@ -1273,7 +1273,7 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
                 coverToRebarCentroid = rcBeam.Cover + rcBeam.LeftShearLinksDiameter + 0.5 * rcBeam.LeftBottomRebarDiameterList[0] + centroidFromFirstRebarCentroid;
                 maxCoverToRebarCentroid = Math.Max(coverToRebarCentroid, maxCoverToRebarCentroid);
 
-                if (rcBeam.BeamType == "Simply supported")
+                if (rcBeam.BeamType == "Single/multi span")
                 {
                     //Mid top
                     centroidFromFirstRebarCentroid = GetCentroidFromRebarDiameterList(rcBeam.MidTopRebarDiameterList, rcBeam.MidTopNoRebarPerLayer);
@@ -1326,7 +1326,7 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
                 rcBeam.LeftBottomAsProv = CalculateAsProvFromRebarList(rcBeam.LeftBottomRebarDiameterList, rcBeam.LeftBottomNoRebarPerLayer);
                 rcBeam.RatioLeftBottomAs = Math.Round(rcBeam.LeftBottomAs / rcBeam.LeftBottomAsProv, 3);
 
-                if (rcBeam.BeamType == "Simply supported")
+                if (rcBeam.BeamType == "Single/multi span")
                 {
                     //Mid top
                     rcBeam.MidTopAsProv = CalculateAsProvFromRebarList(rcBeam.MidTopRebarDiameterList, rcBeam.MidTopNoRebarPerLayer);
@@ -1378,7 +1378,7 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
                 rcBeam.LeftAvProv = Math.Round(rcBeam.LeftNoShearLinksLeg * 0.25 * Math.PI * Math.Pow(rcBeam.LeftShearLinksDiameter, 2) * (1000 / rcBeam.LeftShearLinksSpacing)); //mm2/m
                 rcBeam.RatioLeftAv = Math.Round(rcBeam.LeftAv / rcBeam.LeftAvProv, 3);
 
-                if (rcBeam.BeamType == "Simply supported")
+                if (rcBeam.BeamType == "Single/multi span")
                 {
                     //Mid
                     rcBeam.MidAvProv = Math.Round(rcBeam.MidNoShearLinksLeg * 0.25 * Math.PI * Math.Pow(rcBeam.MidShearLinksDiameter, 2) * (1000 / rcBeam.MidShearLinksSpacing)); //mm2/m

@@ -58,12 +58,12 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
             src.HelperUI.PopulateComboBoxAvailGroup(_SapModel, comBoxGroup);
 
             //Fill in combobox for beam type
-            List<string> beamTypes = new List<string> { "Simply supported", "Cantilever" };
+            List<string> beamTypes = new List<string> { "Single/multi span", "Cantilever" };
             comBoxBeamType.ItemsSource = beamTypes;
             comBoxBeamType.SelectedIndex = 0;
 
             //Default check the rebar preference
-            radioButtonSpcAuto.IsChecked = true;
+            radioButtonSpcClearSpc.IsChecked = true;
 
             ShowDialog();
         }
