@@ -131,6 +131,7 @@ namespace WS_SG_ETABS_Plugin.src
             public double RatioLeftAv { get; set; }
             public double RatioMidAv { get; set; }
             public double RatioRightAv { get; set; }
+            public string Cluster { get; set; }
 
             public RcBeam(string name)
             {
