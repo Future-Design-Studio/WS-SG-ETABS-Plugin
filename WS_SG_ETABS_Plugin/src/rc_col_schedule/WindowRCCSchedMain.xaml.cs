@@ -54,7 +54,7 @@ namespace WS_SG_ETABS_Plugin.src.rc_col_schedule
             src.HelperUI.PopulateComboBoxAvailGroup(_SapModel, comBoxGroup);
 
             //Default check the rebar preference
-            radioButtonSpcClearSpc.IsChecked = true;
+            radioButtonSpcAutoRamboll.IsChecked = true;
 
             ShowDialog();
         }
@@ -85,6 +85,8 @@ namespace WS_SG_ETABS_Plugin.src.rc_col_schedule
                 string name = fileName.Text;
                 string path = filePath.Text;
 
+
+                double minimumRebarPercentage = Convert.ToDouble(textBoxMinimumRebar.Text)/100;
                 double cover = Convert.ToDouble(textBoxCover.Text);
                 int maxNoLayer = Convert.ToInt32(textBoxMaxNoLayer.Text);
                 double maxShearLinksSpacing = Convert.ToDouble(textBoxMaxShearLinksSpacing.Text);
@@ -115,11 +117,16 @@ namespace WS_SG_ETABS_Plugin.src.rc_col_schedule
                     rebarSpc = 0;
                     rebarSpcPreference = "auto";
                 }
+                else if (radioButtonSpcAutoRamboll.IsChecked == true)
+                {
+                    rebarSpc = 0;
+                    rebarSpcPreference = "autoRamboll";
+                }
 
                 IsEnabled = false;
                 //Call up carbon result window
                 src.rc_col_schedule.WindowRCCSchedResult windowRCCSchedResult = new WindowRCCSchedResult(_SapModel, _Plugin, name, path,
-                    rebarSpc, rebarSpcPreference, maxShearLinksSpacing, minShearLinksSpacing, shearLinksSpacingStep, cover, maxNoLayer, rebarDiameterList, shearLinksDiameterList, groupList);
+                    rebarSpc, rebarSpcPreference, maxShearLinksSpacing, minShearLinksSpacing, shearLinksSpacingStep, minimumRebarPercentage, cover, maxNoLayer, rebarDiameterList, shearLinksDiameterList, groupList);
                 IsEnabled = true;
 
             }

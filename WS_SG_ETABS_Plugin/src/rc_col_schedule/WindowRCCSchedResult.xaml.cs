@@ -26,7 +26,7 @@ namespace WS_SG_ETABS_Plugin.src.rc_col_schedule
         cPluginCallback _Plugin;
 
         public WindowRCCSchedResult(cSapModel SapModel, cPluginCallback Plugin, string fileName, string filePath, double rebarSpc, string rebarSpcPreference, double maxShearLinksSpacing, 
-            double minShearLinksSpacing, double shearLinksSpacingStep, double cover, int maxNoLayer, int[] rebarDiameterList, int[] shearLinksDiameterList,
+            double minShearLinksSpacing, double shearLinksSpacingStep, double minimumRebarPercentage, double cover, int maxNoLayer, int[] rebarDiameterList, int[] shearLinksDiameterList,
             List<string> listChoosenGroupName)
         {
             _SapModel = SapModel;
@@ -42,7 +42,7 @@ namespace WS_SG_ETABS_Plugin.src.rc_col_schedule
 
             //Main logic
             bool isError = src.rc_col_schedule.FunctionRCCSched.GetRCColumnSchedule(_SapModel, _Plugin, fileName, filePath,
-                    rebarSpc, rebarSpcPreference, maxShearLinksSpacing, minShearLinksSpacing, shearLinksSpacingStep, cover, maxNoLayer, rebarDiameterList, shearLinksDiameterList, listChoosenGroupName);
+                    rebarSpc, rebarSpcPreference, maxShearLinksSpacing, minShearLinksSpacing, shearLinksSpacingStep, minimumRebarPercentage, cover, maxNoLayer, rebarDiameterList, shearLinksDiameterList, listChoosenGroupName);
 
             if (isError)
             {

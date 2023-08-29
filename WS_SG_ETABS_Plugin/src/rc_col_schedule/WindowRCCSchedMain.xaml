@@ -14,12 +14,12 @@
             <RowDefinition Height="1.1*"></RowDefinition>
             <RowDefinition Height="0.4*"></RowDefinition>
             <RowDefinition Height="0.4*"></RowDefinition>
-            <RowDefinition Height="0.7*"></RowDefinition>
+            <RowDefinition Height="0.6*"></RowDefinition>
             <RowDefinition Height="0.4*"></RowDefinition>
-            <RowDefinition Height="3*"></RowDefinition>
+            <RowDefinition Height="2.5*"></RowDefinition>
             <RowDefinition Height="0.4*"></RowDefinition>
             <RowDefinition Height="2.7*"></RowDefinition>
-            <RowDefinition Height="1.4*"></RowDefinition>
+            <RowDefinition Height="1.8*"></RowDefinition>
             <RowDefinition Height="0.4*"></RowDefinition>
         </Grid.RowDefinitions>
 
@@ -113,10 +113,11 @@
         </Grid>
 
 
-        <Label Grid.Row="7" Grid.Column="0" Content="4. Cover, rebar diameter and rebar spacing preferences" FontSize="14" FontWeight="Bold"/>
+        <Label Grid.Row="7" Grid.Column="0" Content="3. Cover, minimum rebar, rebar diameter and rebar spacing preferences" FontSize="14" FontWeight="Bold"/>
 
         <Grid Grid.Row="8" Margin="10 0 10 0">
             <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
@@ -130,25 +131,28 @@
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
-            <Label Grid.Row="0" Grid.Column="0" Content="Cover (outside to edge of shear links) (mm): "></Label>
-            <Label Grid.Row="1" Grid.Column="0" Content="Maximum number of rebar layers: "></Label>
-            <Label Grid.Row="2" Grid.Column="0" Content="Maximum shear links spacing (mm): "></Label>
-            <Label Grid.Row="3" Grid.Column="0" Content="Minimum shear links spacing (mm): "></Label>
-            <Label Grid.Row="4" Grid.Column="0" Content="Shear links spacing steps (will run from max) (mm): "></Label>
-            <Label Grid.Row="5" Grid.Column="0" Content="List rebar diameter (comma seperated): "></Label>
-            <Label Grid.Row="6" Grid.Column="0" Content="List shear links diameter (comma seperated): "></Label>
+            <Label Grid.Row="0" Grid.Column="0" Content="Minimum rebar percentage (%): "></Label>
+            <Label Grid.Row="1" Grid.Column="0" Content="Cover (outside to edge of shear links) (mm): "></Label>
+            <Label Grid.Row="2" Grid.Column="0" Content="Maximum number of rebar layers: "></Label>
+            <Label Grid.Row="3" Grid.Column="0" Content="Maximum shear links spacing (mm): "></Label>
+            <Label Grid.Row="4" Grid.Column="0" Content="Minimum shear links spacing (mm): "></Label>
+            <Label Grid.Row="5" Grid.Column="0" Content="Shear links spacing steps (will run from max) (mm): "></Label>
+            <Label Grid.Row="6" Grid.Column="0" Content="List rebar diameter (comma seperated): "></Label>
+            <Label Grid.Row="7" Grid.Column="0" Content="List shear links diameter (comma seperated): "></Label>
 
-            <TextBox x:Name="textBoxCover" Grid.Row="0" Grid.Column="1" Text="35"></TextBox>
-            <TextBox x:Name="textBoxMaxNoLayer" Grid.Row="1" Grid.Column="1" Text="3"></TextBox>
-            <TextBox x:Name="textBoxMaxShearLinksSpacing" Grid.Row="2" Grid.Column="1" Text="300"></TextBox>
-            <TextBox x:Name="textBoxMinShearLinksSpacing" Grid.Row="3" Grid.Column="1" Text="100"></TextBox>
-            <TextBox x:Name="textBoxShearLinksSpacingStep" Grid.Row="4" Grid.Column="1" Text="50"></TextBox>
-            <TextBox x:Name="textBoxRebarDiameterList" Grid.Row="5" Grid.Column="1" Text="12, 16, 20, 25, 32, 40"></TextBox>
-            <TextBox x:Name="textBoxShearLinksDiameterList" Grid.Row="6" Grid.Column="1" Text="10, 12, 16, 20"></TextBox>
+            <TextBox x:Name="textBoxMinimumRebar" Grid.Row="0" Grid.Column="1" Text="0.2"></TextBox>
+            <TextBox x:Name="textBoxCover" Grid.Row="1" Grid.Column="1" Text="35"></TextBox>
+            <TextBox x:Name="textBoxMaxNoLayer" Grid.Row="2" Grid.Column="1" Text="3"></TextBox>
+            <TextBox x:Name="textBoxMaxShearLinksSpacing" Grid.Row="3" Grid.Column="1" Text="300"></TextBox>
+            <TextBox x:Name="textBoxMinShearLinksSpacing" Grid.Row="4" Grid.Column="1" Text="100"></TextBox>
+            <TextBox x:Name="textBoxShearLinksSpacingStep" Grid.Row="5" Grid.Column="1" Text="50"></TextBox>
+            <TextBox x:Name="textBoxRebarDiameterList" Grid.Row="6" Grid.Column="1" Text="12, 16, 20, 25, 32, 40"></TextBox>
+            <TextBox x:Name="textBoxShearLinksDiameterList" Grid.Row="7" Grid.Column="1" Text="10, 12, 16, 20"></TextBox>
         </Grid>
 
         <Grid Grid.Row="9"  Margin="10 -5 10 0">
             <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
@@ -166,7 +170,7 @@
             <RadioButton Grid.Row="2" Grid.Column="0" GroupName="rebarSpc" Content="Min center to center spacing between rebar (mm)" Name="radioButtonSpcCToC" 
                          Checked="radioButtonSpcCToC_Checked"></RadioButton>
             <RadioButton Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" GroupName="rebarSpc" Content="Auto (use EC rules, clear spacing = max[25mm, rebar dia])" Name="radioButtonSpcAuto"></RadioButton>
-            <RadioButton Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" GroupName="rebarSpc" Content="Auto (use EC rules, clear spacing = max[25mm, rebar dia])" Name="radioButtonSpcAuto"></RadioButton>
+            <RadioButton Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" GroupName="rebarSpc" Content="Auto (use Ramboll standard practice, no of rebar = width (in mm)/100 )" Name="radioButtonSpcAutoRamboll"></RadioButton>
             
             <TextBox x:Name="textBoxSpcClearSpc" Grid.Row="1" Grid.Column="1" Text="50" IsEnabled="False"></TextBox>
             <TextBox x:Name="textBoxSpcCToC" Grid.Row="2" Grid.Column="1" Text="80" IsEnabled="False"></TextBox>

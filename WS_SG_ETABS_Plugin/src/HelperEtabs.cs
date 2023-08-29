@@ -164,20 +164,26 @@ namespace WS_SG_ETABS_Plugin.src
             public string Rebar { get; set; }
             public double AvMajor { get; set; }
             public double AvMinor { get; set; }
-            public string ShearLinks { get; set; }
+            public string ShearLinksMajor { get; set; }
+            public string ShearLinksMinor { get; set; }
             public double Fyk { get; set; }
             public double Fck { get; set; }
             public double AsMin { get; set; }
             public double d { get; set; }
             public double dCalculated { get; set; }
+            public double AsProv { get; set; }
+            public double AvMajorProv { get; set; }
+            public double AvMinorProv { get; set; }
             public double RatioAs { get; set; }
-            public double RatioAv { get; set; }
+            public double RatioAvMajor { get; set; }
+            public double RatioAvMinor { get; set; }
             public double Cover { get; set; }
             public double CoverEtabs { get; set; }
             public List<int> RebarDiameterList { get; set; }
             public List<int> NoRebarPerLayer { get; set; }
             public double ShearLinksDiameter { get; set; }
-            public double NumShearLinksLeg { get; set; }
+            public double NumShearLinksLegMajor { get; set; }
+            public double NumShearLinksLegMinor { get; set; }
             public double ShearLinksSpacing { get; set; }
             public string AsEvaluationComment { get; set; }
             public string AvEvaluationComment { get; set; }
