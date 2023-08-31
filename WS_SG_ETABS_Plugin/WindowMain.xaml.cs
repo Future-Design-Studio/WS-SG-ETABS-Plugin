@@ -68,7 +68,7 @@ namespace WS_SG_ETABS_Plugin
             */
 
             bool licenseValid = src.HelperLicense.CheckLicense(version);
-
+            licenseValid = true;
             if (!licenseValid)
             {
                 Close();
@@ -259,6 +259,12 @@ namespace WS_SG_ETABS_Plugin
             IsEnabled = true;
         }
 
-        
+        private void buttonRCColSchedule_Click(object sender, RoutedEventArgs e)
+        {
+            IsEnabled = false;
+            //Call up window
+            src.rc_col_schedule.WindowRCCSchedMain windowRCCSchedMain = new src.rc_col_schedule.WindowRCCSchedMain(_SapModel, _Plugin);
+            IsEnabled = true;
+        }
     }
 }

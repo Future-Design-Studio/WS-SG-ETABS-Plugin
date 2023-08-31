@@ -346,6 +346,13 @@
     <Compile Include="src\rc_beam_schedule\WindowRCBSchedResult.xaml.cs">
       <DependentUpon>WindowRCBSchedResult.xaml</DependentUpon>
     </Compile>
+    <Compile Include="src\rc_col_schedule\FunctionRCCSched.cs" />
+    <Compile Include="src\rc_col_schedule\WindowRCCSchedMain.xaml.cs">
+      <DependentUpon>WindowRCCSchedMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\rc_col_schedule\WindowRCCSchedResult.xaml.cs">
+      <DependentUpon>WindowRCCSchedResult.xaml</DependentUpon>
+    </Compile>
     <Compile Include="src\release_selected_node\ClassReleaseSelectedNode.cs" />
     <Compile Include="src\release_selected_node\FunctionReleaseSelectedNode.cs" />
     <Compile Include="src\release_selected_node\WindowReleaseSelectedNodeMain.xaml.cs">
@@ -523,6 +530,14 @@
     <Page Include="src\rc_beam_schedule\WindowRCBSchedResult.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="src\rc_col_schedule\WindowRCCSchedMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\rc_col_schedule\WindowRCCSchedResult.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="src\release_selected_node\WindowReleaseSelectedNodeMain.xaml">
       <SubType>Designer</SubType>

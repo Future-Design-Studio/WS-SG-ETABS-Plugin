@@ -1,5 +1,6 @@
 ﻿using ETABSv1;
 using Microsoft.Office.Interop.Excel;
+//using SAFEv1;
 using ScottPlot.Drawing.Colormaps;
 using System;
 using System.Collections.Generic;
@@ -148,6 +149,46 @@ namespace WS_SG_ETABS_Plugin.src
         {
 
             public ColumnPunchingShear(string name)
+            {
+                UniqueName = name;
+            }
+        }
+
+        public class RcColumn : Column
+        {
+            public double Height { get; set; }
+            public double Width { get; set; }
+            public double Diameter { get; set; }
+            public string Shape { get; set; }
+            public double As { get; set; }
+            public string Rebar { get; set; }
+            public double AvMajor { get; set; }
+            public double AvMinor { get; set; }
+            public string ShearLinksMajor { get; set; }
+            public string ShearLinksMinor { get; set; }
+            public double Fyk { get; set; }
+            public double Fck { get; set; }
+            public double AsMin { get; set; }
+            public double d { get; set; }
+            public double dCalculated { get; set; }
+            public double AsProv { get; set; }
+            public double AvMajorProv { get; set; }
+            public double AvMinorProv { get; set; }
+            public double RatioAs { get; set; }
+            public double RatioAvMajor { get; set; }
+            public double RatioAvMinor { get; set; }
+            public double Cover { get; set; }
+            public double CoverEtabs { get; set; }
+            public List<int> RebarDiameterList { get; set; }
+            public List<int> NoRebarPerLayer { get; set; }
+            public double ShearLinksDiameter { get; set; }
+            public double NumShearLinksLegMajor { get; set; }
+            public double NumShearLinksLegMinor { get; set; }
+            public double ShearLinksSpacing { get; set; }
+            public string AsEvaluationComment { get; set; }
+            public string AvEvaluationComment { get; set; }
+
+            public RcColumn(string name)
             {
                 UniqueName = name;
             }
@@ -2120,6 +2161,70 @@ namespace WS_SG_ETABS_Plugin.src
         }
 
         /// <summary>
+        /// Get (width, depth) of column circle or rectangle section property
+        /// </summary>
+        /// <param name="Sap"></param>
+        /// <param name="sectionPropName"></param>
+        /// <returns></returns>
+        public static (double, double, double, string, string) GetRcColumnDimensionAndConcreteMaterial(ETABSv1.cSapModel Sap, string sectionPropName)
+        {
+            //Get property type
+            ETABSv1.eFramePropType propType = new ETABSv1.eFramePropType();
+            string propTypeString = "";
+
+            Ret = Sap.PropFrame.GetTypeOAPI(sectionPropName, ref propType);
+            propTypeString = propType.ToString();
+
+            if (propTypeString == "Rectangular")
+            {
+                string FileName = "";
+                string MatProp = "";
+                double T3 = 0;
+                double T2 = 0;
+                int Color = 0;
+                string Notes = "";
+                string GUID = "";
+
+                Ret = Sap.PropFrame.GetRectangle(sectionPropName, ref FileName, ref MatProp, ref T3, ref T2, ref Color, ref Notes, ref GUID);
+
+                if (Ret == 0)
+                {
+                    return (T2, T3, 0, propTypeString, MatProp);
+                }
+                else
+                {
+                    return (0, 0, 0, "", "");
+                }
+            }
+            else if (propTypeString == "Circle")
+            {
+                string FileName = "";
+                string MatProp = "";
+                double T3 = 0;
+                int Color = 0;
+                string Notes = "";
+                string GUID = "";
+
+                Ret = Sap.PropFrame.GetCircle(sectionPropName, ref FileName, ref MatProp, ref T3, ref Color, ref Notes, ref GUID);
+
+                if (Ret == 0)
+                {
+                    return (0, 0, T3, propTypeString, MatProp);
+                }
+                else
+                {
+                    return (0, 0, 0, "", "");
+                }
+            }
+            else
+            {
+                MessageBox.Show("Only rectangular or circle shape is supported!");
+                return (0, 0, 0, "", "");
+            }
+
+        }
+
+        /// <summary>
         /// Get (cover top, cover bottom) of beam section property
         /// </summary>
         /// <param name="Sap"></param>
@@ -2145,6 +2250,43 @@ namespace WS_SG_ETABS_Plugin.src
             else
             {
                 return (0, 0, "");
+            }
+        }
+
+
+        /// <summary>
+        /// Get (cover top, cover bottom) of column section property
+        /// </summary>
+        /// <param name="Sap"></param>
+        /// <param name="sectionPropName"></param>
+        /// <returns></returns>
+        public static (double, double, double, string) GetRcColumnCoverAndRebarMaterial(cSapModel Sap, string sectionPropName)
+        {
+            string MatPropLong = "";
+            string MatPropConfine = "";
+            int Pattern = 0;
+            int ConfineType = 1;
+            double Cover = 0;
+            int NumberCBars = 0;
+            int NumberR3Bars = 0;
+            int NumberR2Bars = 0;
+            string RebarSize = "";
+            string TieSize = "";
+            double TieSpacingLongit = 0;
+            int Number3DirTieBars = 0;
+            int Number2DirTieBars = 0;
+            bool ToBeDesigned = false;
+
+            Ret = Sap.PropFrame.GetRebarColumn(sectionPropName, ref MatPropLong, ref MatPropConfine, ref Pattern, ref ConfineType, ref Cover, ref NumberCBars, ref NumberR3Bars, ref NumberR2Bars, 
+                ref RebarSize, ref TieSize, ref TieSpacingLongit, ref Number3DirTieBars, ref Number2DirTieBars, ref ToBeDesigned);
+
+            if (Ret == 0)
+            {
+                return (Cover, Convert.ToDouble(RebarSize), Convert.ToDouble(TieSize), MatPropLong);
+            }
+            else
+            {
+                return (0, 0, 0, "");
             }
         }
 
