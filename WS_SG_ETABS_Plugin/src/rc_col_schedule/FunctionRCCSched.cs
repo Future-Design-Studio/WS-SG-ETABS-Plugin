@@ -1033,8 +1033,8 @@ namespace WS_SG_ETABS_Plugin.src.rc_col_schedule
                 int index = 0;
                 foreach (int rebarDiameter in rebarDiameterList)
                 {
-                    sumAreaTimesCentroid += 0.25 * Math.PI * Math.Pow(rebarDiameter, 2) * eachLayerCentroid * noRebarPerLayer[index];
-                    sumArea += 0.25 * Math.PI * Math.Pow(rebarDiameter, 2) * noRebarPerLayer[index];
+                    sumAreaTimesCentroid += 0.25 * Math.PI * Math.Pow(rebarDiameter, 2) * eachLayerCentroid;
+                    sumArea += 0.25 * Math.PI * Math.Pow(rebarDiameter, 2);
 
                     //Calculate centroid for next layer
                     if (index < rebarDiameterList.Count - 1)
