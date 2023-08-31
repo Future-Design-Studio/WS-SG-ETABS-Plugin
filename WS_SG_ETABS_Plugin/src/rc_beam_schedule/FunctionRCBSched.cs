@@ -1431,12 +1431,12 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
                 foreach (int rebarDiameter in rebarDiameterList)
                 {
                     sumAreaTimesCentroid += 0.25 * Math.PI * Math.Pow(rebarDiameter, 2) * eachLayerCentroid * noRebarPerLayer[index];
-                    sumArea += 0.25 * Math.PI * Math.Pow(rebarDiameter, 2);
+                    sumArea += 0.25 * Math.PI * Math.Pow(rebarDiameter, 2) * noRebarPerLayer[index];
 
                     //Calculate centroid for next layer
                     if (index < rebarDiameterList.Count - 1)
                     {
-                        eachLayerCentroid += 0.5 * rebarDiameter + Math.Max(25, rebarDiameter) + 0.5 * rebarDiameterList[index + 1];
+                        eachLayerCentroid += 0.5 * rebarDiameter + Math.Max(25, Math.Max(rebarDiameterList[index + 1], rebarDiameter)) + 0.5 * rebarDiameterList[index + 1];
                     }
 
                     index++;
