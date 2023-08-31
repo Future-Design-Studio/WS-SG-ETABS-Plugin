@@ -121,6 +121,7 @@ namespace WS_SG_ETABS_Plugin.src
             public double Cover { get; set; }
             public string AsEvaluationComment { get; set; }
             public string AvEvaluationComment { get; set; }
+            public string EtabsComment { get; set; }
             public double RatioLeftTopAs { get; set; }
             public double RatioLeftBottomAs { get; set; }
             public double RatioMidTopAs { get; set; }
