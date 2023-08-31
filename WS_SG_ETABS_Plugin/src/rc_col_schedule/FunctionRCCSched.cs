@@ -70,6 +70,9 @@ namespace WS_SG_ETABS_Plugin.src.rc_col_schedule
             //Convert area to rebar
             DesignRcColumnRebar(rcColumnList, rebarSpc, rebarSpcPreference, maxShearLinksSpacing, minShearLinksSpacing, shearLinksSpacingStep, rebarDiameterList, shearLinksDiameterList, maxNoLayer);
 
+            //Check etabs message
+            CheckMessageRcColRebar(rcColumnList, rcColumnDesignSummary);
+
             //Get d from rebar
             CalculateDFromRebar(rcColumnList);
 
@@ -827,13 +830,13 @@ namespace WS_SG_ETABS_Plugin.src.rc_col_schedule
                 "UniqueName", "Width (mm)", "Height (mm)", "fyk (Mpa)", "fck (Mpa)", "d (ETABS) (mm)", "d calculated (mm)", "As Min(mm2)"
                 , "As (mm2)","Av Major (mm2/m)","Av Minor (mm2/m)"
                 , "Rebar", "Shear Links Major", "Shear Links Minor"
-                , "As Prov (mm2)"
+                , "As Prov (mm2)", "As Prov (%)"
                 , "Av Major Prov (mm2/m)"
                 , "Av Minor Prov (mm2/m)"
                 , "As Ratio"
                 , "Av Major Ratio"
                 , "Av Minor Ratio"
-                , "Rebar warning", "Shear links warning"
+                , "ETABS warning", "Rebar warning", "Shear links warning"
             };
 
             int numOfRow = rcColumnList.Count();
@@ -871,14 +874,16 @@ namespace WS_SG_ETABS_Plugin.src.rc_col_schedule
                 result[i, 13] = rcColumn.ShearLinksMinor;
 
                 result[i, 14] = rcColumn.AsProv;
-                result[i, 15] = rcColumn.AvMajorProv;
-                result[i, 16] = rcColumn.AvMinorProv;
-                result[i, 17] = rcColumn.RatioAs;
-                result[i, 18] = rcColumn.RatioAvMajor;
-                result[i, 19] = rcColumn.RatioAvMinor;
+                result[i, 15] = rcColumn.AsProvPercentage;
+                result[i, 16] = rcColumn.AvMajorProv;
+                result[i, 17] = rcColumn.AvMinorProv;
+                result[i, 18] = rcColumn.RatioAs;
+                result[i, 19] = rcColumn.RatioAvMajor;
+                result[i, 20] = rcColumn.RatioAvMinor;
 
-                result[i, 20] = rcColumn.AsEvaluationComment;
-                result[i, 21] = rcColumn.AvEvaluationComment;
+                result[i, 21] = rcColumn.EtabsComment;
+                result[i, 22] = rcColumn.AsEvaluationComment;
+                result[i, 23] = rcColumn.AvEvaluationComment;
 
                 i++;
             }
@@ -980,11 +985,67 @@ namespace WS_SG_ETABS_Plugin.src.rc_col_schedule
             }
         }
 
+        public static void CheckMessageRcColRebar(List<src.HelperEtabs.RcColumn> rcColumnList, src.HelperEtabs.DatabaseTable rcColumnDesignSummary)
+        {
+            //Get table
+            List<Dictionary<string, string>> rcBeamDesignSummaryTable = rcColumnDesignSummary.TableInList;
+
+            bool popUpShown = false;
+
+            //Getting message for each beam
+            foreach (src.HelperEtabs.RcColumn rcColumn in rcColumnList)
+            {
+                bool messageTaken = false;
+                double length = 0;
+
+                rcColumn.EtabsComment = "";
+
+                foreach (Dictionary<string, string> row in rcBeamDesignSummaryTable)
+                {
+
+                    if (row["UniqueName"] == rcColumn.UniqueName)
+                    {
+                        if (row["WarnMsg"] != "No Message")
+                        {
+                            rcColumn.EtabsComment += row["WarnMsg"];
+                            messageTaken = true;
+
+                            //Show warning if ETABS has warning!
+                            if (!popUpShown)
+                            {
+                                MessageBox.Show($"Warning! ETABS has warning message!");
+                                popUpShown = true;
+                            }
+                        }
+
+                        if (row["ErrMsg"] != "No Message")
+                        {
+                            rcColumn.EtabsComment += row["ErrMsg"];
+                            messageTaken = true;
+
+                            //Show warning if ETABS has warning!
+                            if (!popUpShown)
+                            {
+                                MessageBox.Show($"Warning! ETABS has warning message!");
+                                popUpShown = true;
+                            }
+                        }
+
+                        if (messageTaken)
+                        {
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
         public static void CalculateAsProv(List<src.HelperEtabs.RcColumn> rcColumnList)
         {
             foreach (src.HelperEtabs.RcColumn rcColumn in rcColumnList)
             {
                 rcColumn.AsProv = CalculateAsProvFromRebarList(rcColumn.RebarDiameterList, rcColumn.NoRebarPerLayer);
+                rcColumn.AsProvPercentage = Math.Round(rcColumn.AsProv / (rcColumn.Height * rcColumn.Width) * 100, 2); //in %
                 rcColumn.RatioAs = Math.Round(rcColumn.As / rcColumn.AsProv, 3);
             }
         }

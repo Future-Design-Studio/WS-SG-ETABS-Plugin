@@ -173,6 +173,7 @@ namespace WS_SG_ETABS_Plugin.src
             public double d { get; set; }
             public double dCalculated { get; set; }
             public double AsProv { get; set; }
+            public double AsProvPercentage { get; set; }
             public double AvMajorProv { get; set; }
             public double AvMinorProv { get; set; }
             public double RatioAs { get; set; }
@@ -188,6 +189,7 @@ namespace WS_SG_ETABS_Plugin.src
             public double ShearLinksSpacing { get; set; }
             public string AsEvaluationComment { get; set; }
             public string AvEvaluationComment { get; set; }
+            public string EtabsComment { get; set; }
 
             public RcColumn(string name)
             {
