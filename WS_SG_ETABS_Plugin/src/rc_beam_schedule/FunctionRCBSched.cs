@@ -86,6 +86,9 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
             //Convert area to rebar
             DesignRcBeamRebar(rcBeamList, rebarSpc, rebarSpcPreference, maxShearLinksSpacing, minShearLinksSpacing, shearLinksSpacingStep, rebarDiameterList, shearLinksDiameterList, maxNoLayer);
 
+            //Check warning and error message from ETABS
+            CheckMessageRcBeamRebar(rcBeamList, rcBeamDesignSummary);
+
             //Get d from rebar
             CalculateDFromRebar(rcBeamList);
 
@@ -1094,7 +1097,7 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
                 , "Left Av Prov (mm2/m)", "Mid Av Prov (mm2/m)", "Right Av Prov (mm2/m)"
                 , "Left Top As Ratio", "Mid Top As Ratio", "Right Top As Ratio", "Left Bottom As Ratio", "Mid Bottom As Ratio", "Right Bottom As Ratio"
                 , "Left Av Ratio", "Mid Av Ratio", "Right Av Ratio"
-                , "Rebar warning", "Shear links warning",
+                , "ETABS warning", "Rebar warning", "Shear links warning",
                 "Cluster"
             };
 
@@ -1168,10 +1171,11 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
                 result[i, 43] = rcBeam.RatioMidAv;
                 result[i, 44] = rcBeam.RatioRightAv;
 
-                result[i, 45] = rcBeam.AsEvaluationComment;
-                result[i, 46] = rcBeam.AvEvaluationComment;
+                result[i, 45] = rcBeam.EtabsComment;
+                result[i, 46] = rcBeam.AsEvaluationComment;
+                result[i, 47] = rcBeam.AvEvaluationComment;
 
-                result[i, 47] = rcBeam.Cluster;
+                result[i, 48] = rcBeam.Cluster;
 
                 i++;
             }
@@ -1274,6 +1278,61 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
             }
         }
 
+        public static void CheckMessageRcBeamRebar(List<src.HelperEtabs.RcBeam> rcBeamList, src.HelperEtabs.DatabaseTable rcBeamDesignSummary)
+        {
+            //Get table
+            List<Dictionary<string, string>> rcBeamDesignSummaryTable = rcBeamDesignSummary.TableInList;
+
+            bool popUpShown = false;
+
+            //Getting message for each beam
+            foreach (src.HelperEtabs.RcBeam rcBeam in rcBeamList)
+            {
+                bool messageTaken = false;
+                double length = 0;
+
+                rcBeam.EtabsComment = "";
+
+                foreach (Dictionary<string, string> row in rcBeamDesignSummaryTable)
+                {
+
+                    if (row["UniqueName"] == rcBeam.UniqueName)
+                    {
+                        if (row["WarnMsg"] != "No Message")
+                        {
+                            rcBeam.EtabsComment += row["WarnMsg"];
+                            messageTaken = true;
+
+                            //Show warning if ETABS has warning!
+                            if (!popUpShown)
+                            {
+                                MessageBox.Show($"Warning! ETABS has warning message!");
+                                popUpShown = true;
+                            }
+                        }
+
+                        if (row["ErrMsg"] != "No Message")
+                        {
+                            rcBeam.EtabsComment += row["ErrMsg"];
+                            messageTaken = true;
+
+                            //Show warning if ETABS has warning!
+                            if (!popUpShown)
+                            {
+                                MessageBox.Show($"Warning! ETABS has warning message!");
+                                popUpShown = true;
+                            }
+                        }
+
+                        if (messageTaken)
+                        {
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
         public static void CalculateDFromRebar(List<src.HelperEtabs.RcBeam> rcBeamList)
         {
             foreach(src.HelperEtabs.RcBeam rcBeam in rcBeamList)
@@ -1323,7 +1382,7 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
                 {
                     if (rcBeam.AsEvaluationComment == null)
                     {
-                        rcBeam.AsEvaluationComment = "d calculated < d ETABS";
+                        rcBeam.AsEvaluationComment += "d calculated < d ETABS";
                     }
                     else
                     {
