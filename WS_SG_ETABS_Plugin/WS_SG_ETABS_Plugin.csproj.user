@@ -5,7 +5,7 @@
     <StartProgram>C:\Program Files\Computers and Structures\ETABS 20\ETABS.exe</StartProgram>
   </PropertyGroup>
   <PropertyGroup>
-    <ProjectView>ProjectFiles</ProjectView>
+    <ProjectView>ShowAllFiles</ProjectView>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <StartProgram>C:\Program Files\Computers and Structures\ETABS 20\ETABS.exe</StartProgram>

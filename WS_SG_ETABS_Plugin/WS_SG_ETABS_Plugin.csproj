@@ -88,7 +88,7 @@
       <HintPath>..\packages\Accord.Statistics.3.8.0\lib\net462\Accord.Statistics.dll</HintPath>
     </Reference>
     <Reference Include="ETABSv1">
-      <HintPath>..\..\..\..\..\..\..\..\..\Program Files\Computers and Structures\ETABS 20\ETABSv1.dll</HintPath>
+      <HintPath>C:\Program Files\Computers and Structures\ETABS 20\ETABSv1.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="LiveCharts, Version=0.9.7.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL">
@@ -231,6 +231,9 @@
     <Compile Include="src\etabs_to_rhino\WindowEtabsToRhinoResult.xaml.cs">
       <DependentUpon>WindowEtabsToRhinoResult.xaml</DependentUpon>
     </Compile>
+    <Compile Include="src\etabs_to_rhino\WindowsEtabsToRhinoProgress.xaml.cs">
+      <DependentUpon>WindowsEtabsToRhinoProgress.xaml</DependentUpon>
+    </Compile>
     <Compile Include="src\HelperExcel.cs" />
     <Compile Include="src\HelperLicense.cs" />
     <Compile Include="src\HelperMethod.cs" />
@@ -238,6 +241,12 @@
     <Compile Include="src\carbon\FunctionCarbon.cs" />
     <Compile Include="cPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="src\HelperPDFOpen.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="src\HelperPDFOpen.Designer.cs">
+      <DependentUpon>HelperPDFOpen.cs</DependentUpon>
+    </Compile>
     <Compile Include="src\HelperML.cs" />
     <Compile Include="src\HelperPlot.cs" />
     <Compile Include="src\HelperSafe.cs" />
@@ -498,6 +507,10 @@
     <Page Include="src\plot_reaction\table\WindowPlotReactionTableResult.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="src\etabs_to_rhino\WindowsEtabsToRhinoProgress.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="src\plot_reaction\WindowPlotReactionMain.xaml">
       <Generator>MSBuild:Compile</Generator>

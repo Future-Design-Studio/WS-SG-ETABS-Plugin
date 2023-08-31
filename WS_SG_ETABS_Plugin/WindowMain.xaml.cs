@@ -268,3 +268,14 @@ namespace WS_SG_ETABS_Plugin
         }
     }
 }
+        private void buttonSafeCopyProperties_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void buttonTEDDSAPI_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+    }
+}
