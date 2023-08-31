@@ -1033,14 +1033,13 @@ namespace WS_SG_ETABS_Plugin.src.rc_col_schedule
                 int index = 0;
                 foreach (int rebarDiameter in rebarDiameterList)
                 {
-                    sumAreaTimesCentroid += 0.25 * Math.PI * Math.Pow(rebarDiameter, 2) * eachLayerCentroid * noRebarPerLayer[index];
+                    sumAreaTimesCentroid += 0.25 * Math.PI * Math.Pow(rebarDiameter, 2) * eachLayerCentroid;
                     sumArea += 0.25 * Math.PI * Math.Pow(rebarDiameter, 2);
 
-                    //Calculate centroid for next layer. For RC column assumed rebar to be bundled
+                    //Calculate centroid for next layer
                     if (index < rebarDiameterList.Count - 1)
                     {
                         eachLayerCentroid += 0.5 * rebarDiameter + 0.5 * rebarDiameterList[index + 1];
-                        //eachLayerCentroid += 0.5 * rebarDiameter + Math.Max(25, rebarDiameter) + 0.5 * rebarDiameterList[index + 1];
                     }
 
                     index++;
