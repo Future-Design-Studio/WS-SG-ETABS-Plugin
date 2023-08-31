@@ -610,6 +610,8 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="src\group_rc_beam_by_force\" />
+    <Folder Include="src\plot_displacement\" />
     <Folder Include="src\steel_optimization\" />
   </ItemGroup>
   <ItemGroup>

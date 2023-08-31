@@ -266,8 +266,7 @@ namespace WS_SG_ETABS_Plugin
             src.rc_col_schedule.WindowRCCSchedMain windowRCCSchedMain = new src.rc_col_schedule.WindowRCCSchedMain(_SapModel, _Plugin);
             IsEnabled = true;
         }
-    }
-}
+
         private void buttonSafeCopyProperties_Click(object sender, RoutedEventArgs e)
         {
 
