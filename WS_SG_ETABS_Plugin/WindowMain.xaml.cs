@@ -29,7 +29,7 @@ namespace WS_SG_ETABS_Plugin
 
         public WindowMain(ref cSapModel SapModel, ref cPluginCallback Plugin)
         {
-            string version = "1.1.0";
+            string version = "1.2.0";
 
             _Plugin = Plugin;
             _SapModel = SapModel;
@@ -68,7 +68,7 @@ namespace WS_SG_ETABS_Plugin
             */
 
             bool licenseValid = src.HelperLicense.CheckLicense(version);
-            licenseValid = true;
+            
             if (!licenseValid)
             {
                 Close();
