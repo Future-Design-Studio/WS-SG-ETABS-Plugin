@@ -41,7 +41,7 @@ namespace WS_SG_ETABS_Plugin.src.tedds_main
                 return;
             }
 
-            bool licenseValid = src.HelperLicense.CheckLicense(version, "TEDDS");
+            bool licenseValid = src.HelperLicense.CheckLicense(version);
 
             if (!licenseValid)
             {
