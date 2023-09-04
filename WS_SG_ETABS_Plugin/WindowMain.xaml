@@ -44,6 +44,7 @@
         <Button Grid.Row="6" x:Name="buttonLoadCombo" Content="Load Combination EN (Beta Version)" FontSize="16" Click="buttonLoadCombo_Click"/>
         <Button Grid.Row="7" Grid.Column="0" x:Name="buttonPadFooting" Content="Pad Footing Design (Beta Version)" Click="buttonPadFooting_Click" FontSize="16"/>
         <Button Grid.Row="8" Grid.Column="0" x:Name="buttonPunchingShear" Content="Punching Shear Force Plot (Beta Version)" Click="buttonPunchingShear_Click" FontSize="16"/>
+        <Button Grid.Row="9" Grid.Column="0" x:Name="buttonTedds" Content="TEDDS PowerApp (Beta Version)" Click="buttonTrfTedds_Click" FontSize="16"/>
         <Button Grid.Row="9" Grid.Column="0" x:Name="buttonTrfEtabstoSafe" Content="Transfer ETABS Reaction to SAFE (Beta Version)" Click="buttonTrfEtabstoSafe_Click" FontSize="16"/>
         <Button Grid.Row="10" Grid.Column="0" x:Name="buttonRCColSchedule" Content="RC Column Schedule (Beta Version)" Click="buttonRCColSchedule_Click" FontSize="16"/>
 
@@ -58,8 +59,6 @@
 
         <!-- Upcoming -->
         <Button Grid.Row="3" Grid.Column="2" x:Name="buttonCarbon" Content="Carbon Calulator" Click="buttonCarbon_Click" FontSize="16" IsEnabled="False"/>
-        <Button Grid.Row="4" Grid.Column="2" x:Name="buttonSafeCopyProperties" Content="Importing SAFE Properties" Click="buttonSafeCopyProperties_Click" FontSize="16" IsEnabled="False"/>
-        <Button Grid.Row="5" Grid.Column="2" x:Name="buttonTEDDSAPI" Content="TEDDS PowerAPP" Click="buttonTEDDSAPI_Click" FontSize="16" IsEnabled="False"/>
 
 
         <!-- FDS Only -->

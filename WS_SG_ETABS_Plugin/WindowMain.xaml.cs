@@ -268,13 +268,12 @@ namespace WS_SG_ETABS_Plugin
         }
 
         private void buttonSafeCopyProperties_Click(object sender, RoutedEventArgs e)
+        private void buttonTrfTedds_Click(object sender, RoutedEventArgs e)
         {
-
-        }
-
-        private void buttonTEDDSAPI_Click(object sender, RoutedEventArgs e)
-        {
-
+            IsEnabled = false;
+            //Call up window
+            src.tedds_main.WindowTeddsMain windowTeddsMain = new src.tedds_main.WindowTeddsMain(_SapModel, _Plugin);
+            IsEnabled = true;
         }
     }
 }

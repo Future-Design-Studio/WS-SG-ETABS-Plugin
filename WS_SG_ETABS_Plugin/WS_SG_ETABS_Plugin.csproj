@@ -189,6 +189,14 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="Tedds.TeddsCalcIA, Version=25.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\TeklaTeddsAPI.25.0.0\lib\net\Tedds.TeddsCalcIA.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Tedds.TeddsIA, Version=25.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\TeklaTeddsAPI.25.0.0\lib\net\Tedds.TeddsIA.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="Xceed.Wpf.AvalonDock, Version=4.4.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
       <HintPath>..\packages\Extended.Wpf.Toolkit.4.4.0\lib\net40\Xceed.Wpf.AvalonDock.dll</HintPath>
@@ -384,6 +392,20 @@
     <Compile Include="src\shell_uni_orient\WindowShellUniResult.xaml.cs">
       <DependentUpon>WindowShellUniResult.xaml</DependentUpon>
     </Compile>
+    <Compile Include="src\tedds_main\precast_rc_column\ClassPrecastRCColumn.cs" />
+    <Compile Include="src\tedds_main\precast_rc_column\FunctionPrecastRCColumn.cs" />
+    <Compile Include="src\tedds_main\precast_rc_column\WindowPrecastRCColumnLoading.xaml.cs">
+      <DependentUpon>WindowPrecastRCColumnLoading.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\tedds_main\precast_rc_column\WindowPrecastRCColumnMain.xaml.cs">
+      <DependentUpon>WindowPrecastRCColumnMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\tedds_main\precast_rc_column\WindowPrecastRCColumnResult.xaml.cs">
+      <DependentUpon>WindowPrecastRCColumnResult.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\tedds_main\WindowTeddsMain.xaml.cs">
+      <DependentUpon>WindowTeddsMain.xaml</DependentUpon>
+    </Compile>
     <Compile Include="src\transfer_midas\FunctionTransferMidas.cs" />
     <Compile Include="src\transfer_midas\WindowTransferMidasMain.xaml.cs">
       <DependentUpon>WindowTransferMidasMain.xaml</DependentUpon>
@@ -576,6 +598,22 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="src\tedds_main\precast_rc_column\WindowPrecastRCColumnLoading.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\tedds_main\precast_rc_column\WindowPrecastRCColumnMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\tedds_main\precast_rc_column\WindowPrecastRCColumnResult.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\tedds_main\WindowTeddsMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="src\transfer_midas\WindowTransferMidasMain.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -605,9 +643,15 @@
     <None Include="app.config" />
     <None Include="packages.config" />
     <None Include="src\rc_beam_schedule\FlowchartConvertAsToRebar.drawio" />
-    <Content Include="src\resources\Tools.pdf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <Resource Include="src\resources\TEDDS_API.pdf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="src\resources\TEDDS_by_Future_Design_Studio.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="src\resources\Tools.pdf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="src\group_rc_beam_by_force\" />

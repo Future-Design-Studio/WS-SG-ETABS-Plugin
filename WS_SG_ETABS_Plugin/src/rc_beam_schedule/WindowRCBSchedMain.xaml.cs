@@ -229,5 +229,15 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
                 groupAndBeamType.RemoveAt(selectedIndex);
             }
         }
+
+        private void textBoxCover_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+        }
+
+        private void filePath_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+        }
     }
 }
