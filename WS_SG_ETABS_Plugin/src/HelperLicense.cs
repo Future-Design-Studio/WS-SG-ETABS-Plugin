@@ -16,13 +16,33 @@ namespace WS_SG_ETABS_Plugin.src
         {
             bool licenseValid = true;
             string userComputerName = Environment.MachineName.ToString();
+            string licenseNumber;
 
             //Read license number
             try
             {
-                StreamReader sr = new StreamReader(@"C:\Program Files\Computers and Structures\ETABS 20\LMHOST.ini");
-                string licenseNumber = sr.ReadLine();
-                sr.Close();
+                //Support 3 versions of ETABS
+                try
+                {
+                    StreamReader sr = new StreamReader(@"C:\Program Files\Computers and Structures\ETABS 20\LMHOST.ini");
+                    licenseNumber = sr.ReadLine();
+                    sr.Close();
+                }
+                catch
+                {
+                    try
+                    {
+                        StreamReader sr = new StreamReader(@"C:\Program Files\Computers and Structures\ETABS 21\LMHOST.ini");
+                        licenseNumber = sr.ReadLine();
+                        sr.Close();
+                    }
+                    catch
+                    {
+                        StreamReader sr = new StreamReader(@"C:\Program Files\Computers and Structures\ETABS 22\LMHOST.ini");
+                        licenseNumber = sr.ReadLine();
+                        sr.Close();
+                    }
+                }
 
                 if (licenseNumber != "rwcphlice002")
                 {
@@ -33,25 +53,10 @@ namespace WS_SG_ETABS_Plugin.src
             }
             catch
             {
-                try
-                {
-                    StreamReader sr = new StreamReader(@"C:\Program Files\Computers and Structures\ETABS 21\LMHOST.ini");
-                    string licenseNumber = sr.ReadLine();
-                    sr.Close();
+                MessageBox.Show("Illegal license. Your PC ID " + userComputerName + " has been reported to Ramboll IT as well as Singapore Police.");
+                licenseValid = false;
+                return licenseValid;
 
-                    if (licenseNumber != "rwcphlice002")
-                    {
-                        MessageBox.Show("Illegal license. Your PC ID " + userComputerName + " has been reported to Ramboll IT as well as Singapore Police.");
-                        licenseValid = false;
-                        return licenseValid;
-                    }
-                }
-                catch
-                {
-                    MessageBox.Show("Illegal license. Your PC ID " + userComputerName + " has been reported to Ramboll IT as well as Singapore Police.");
-                    licenseValid = false;
-                    return licenseValid;
-                }
             }
 
 
