@@ -143,7 +143,7 @@
             <TextBox x:Name="textBoxMinimumRebar" Grid.Row="0" Grid.Column="1" Text="0.2"></TextBox>
             <TextBox x:Name="textBoxCover" Grid.Row="1" Grid.Column="1" Text="35"></TextBox>
             <TextBox x:Name="textBoxMaxNoLayer" Grid.Row="2" Grid.Column="1" Text="3"></TextBox>
-            <TextBox x:Name="textBoxMaxShearLinksSpacing" Grid.Row="3" Grid.Column="1" Text="300"></TextBox>
+            <TextBox x:Name="textBoxMaxShearLinksSpacing" Grid.Row="3" Grid.Column="1" Text="150"></TextBox>
             <TextBox x:Name="textBoxMinShearLinksSpacing" Grid.Row="4" Grid.Column="1" Text="100"></TextBox>
             <TextBox x:Name="textBoxShearLinksSpacingStep" Grid.Row="5" Grid.Column="1" Text="50"></TextBox>
             <TextBox x:Name="textBoxRebarDiameterList" Grid.Row="6" Grid.Column="1" Text="12, 16, 20, 25, 32, 40"></TextBox>
