@@ -1047,6 +1047,19 @@ namespace WS_SG_ETABS_Plugin.src.rc_col_schedule
                 rcColumn.AsProv = CalculateAsProvFromRebarList(rcColumn.RebarDiameterList, rcColumn.NoRebarPerLayer);
                 rcColumn.AsProvPercentage = Math.Round(rcColumn.AsProv / (rcColumn.Height * rcColumn.Width) * 100, 2); //in %
                 rcColumn.RatioAs = Math.Round(rcColumn.As / rcColumn.AsProv, 3);
+
+                //Give warning if Asprov > 4%
+                if (rcColumn.AsProvPercentage > 4)
+                {
+                    if (rcColumn.AsEvaluationComment == "")
+                    {
+                        rcColumn.AsEvaluationComment = "As provided > 4%";
+                    }
+                    else
+                    {
+                        rcColumn.AsEvaluationComment += ", As provided > 4%";
+                    }
+                }
             }
         }
 
