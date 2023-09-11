@@ -40,13 +40,6 @@ namespace WS_SG_ETABS_Plugin.src.tedds_main
                 MessageBox.Show("ETABS file is unlocked! Please run analysis first!");
                 return;
             }
-
-            bool licenseValid = src.HelperLicense.CheckLicense(version);
-
-            if (!licenseValid)
-            {
-                Close();
-            }
             else
             {
                 InitializeComponent();
@@ -55,6 +48,8 @@ namespace WS_SG_ETABS_Plugin.src.tedds_main
 
                 ShowDialog();
             }
+
+
 
 
         }

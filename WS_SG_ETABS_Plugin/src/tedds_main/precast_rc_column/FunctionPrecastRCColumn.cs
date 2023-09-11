@@ -1225,11 +1225,11 @@ namespace WS_SG_ETABS_Plugin.src.tedds_main.precast_rc_column
                         #region create, save tedds file
                         ITeddsDocuments doc1 = new Documents();
                         doc1.Add2("$(SysLbrDir)Precast column design-EN1992-x-engb.lbr", "Precast column design (EN1992)", variables);
-                        ITeddsDocument doc2 = doc1[0];
+                        //ITeddsDocument doc2 = doc1[0];
                         //doc2.Calculate();
-                        doc2.SaveAs(folderPath + "\\" + group.Group + "_" + storey + "_" + column + "_critical_column_method.ted");
-                        doc2.Close(false);
+                        doc1[0].SaveAs(folderPath + "\\" + group.Group + "_" + storey + "_" + column + "_critical_column_method.ted");
                         doc1.Close(false);
+                        //doc1[0].Close(false);
 
 
 
