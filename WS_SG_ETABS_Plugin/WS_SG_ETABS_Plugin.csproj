@@ -50,7 +50,7 @@
       <HintPath>..\packages\Rhino3dm.7.15.0\lib\net45\Rhino3dm.dll</HintPath>
     </Reference>
     <Reference Include="SAFEv1">
-      <HintPath>C:\Program Files\Computers and Structures\SAFE 20\SAFEv1.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\Program Files\Computers and Structures\SAFE 21\SAFEv1.dll</HintPath>
     </Reference>
     <Reference Include="ScottPlot, Version=4.1.59.0, Culture=neutral, PublicKeyToken=86698dc10387c39e, processorArchitecture=MSIL">
       <HintPath>..\packages\ScottPlot.4.1.59\lib\net462\ScottPlot.dll</HintPath>

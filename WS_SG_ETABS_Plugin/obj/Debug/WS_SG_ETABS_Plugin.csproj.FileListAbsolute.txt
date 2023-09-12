@@ -544,3 +544,4 @@ C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debu
 C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\WS_SG_ETABS_Plugin.csproj.CopyComplete
 C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\WS_SG_ETABS_Plugin.dll
 C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\WS_SG_ETABS_Plugin.pdb
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\SAFEv1.dll
