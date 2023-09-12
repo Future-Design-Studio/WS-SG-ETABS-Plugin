@@ -29,7 +29,7 @@ namespace WS_SG_ETABS_Plugin
 
         public WindowMain(ref cSapModel SapModel, ref cPluginCallback Plugin)
         {
-            string version = "1.1.1";
+            string version = "1.2.0";
 
             _Plugin = Plugin;
             _SapModel = SapModel;
@@ -68,7 +68,7 @@ namespace WS_SG_ETABS_Plugin
             */
 
             bool licenseValid = src.HelperLicense.CheckLicense(version);
-
+            
             if (!licenseValid)
             {
                 Close();
@@ -259,14 +259,24 @@ namespace WS_SG_ETABS_Plugin
             IsEnabled = true;
         }
 
+        private void buttonRCColSchedule_Click(object sender, RoutedEventArgs e)
+        {
+            IsEnabled = false;
+            //Call up window
+            src.rc_col_schedule.WindowRCCSchedMain windowRCCSchedMain = new src.rc_col_schedule.WindowRCCSchedMain(_SapModel, _Plugin);
+            IsEnabled = true;
+        }
+
         private void buttonSafeCopyProperties_Click(object sender, RoutedEventArgs e)
         {
 
         }
-
-        private void buttonTEDDSAPI_Click(object sender, RoutedEventArgs e)
+        private void buttonTrfTedds_Click(object sender, RoutedEventArgs e)
         {
-
+            IsEnabled = false;
+            //Call up window
+            src.tedds_main.WindowTeddsMain windowTeddsMain = new src.tedds_main.WindowTeddsMain(_SapModel, _Plugin);
+            IsEnabled = true;
         }
     }
 }

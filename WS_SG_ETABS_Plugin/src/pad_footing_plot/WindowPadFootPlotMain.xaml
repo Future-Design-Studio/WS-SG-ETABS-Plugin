@@ -107,14 +107,14 @@
                 Selected load case(s) or combination(s):
             </TextBlock>
 
-            <ListBox Grid.Row="1" Grid.Column="0" x:Name="listBoxAvailLoadCase" d:ItemsSource="{d:SampleData ItemCount=5}" VerticalAlignment="Stretch" SelectionMode="Multiple"></ListBox>
+            <ListBox Grid.Row="1" Grid.Column="0" x:Name="listBoxAvailLoadCase" d:ItemsSource="{d:SampleData ItemCount=5}" VerticalAlignment="Stretch" SelectionMode="Extended"></ListBox>
 
             <StackPanel Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Margin="10 0">
                 <Button x:Name="buttonAddLoadCase" Content=">>" Click="buttonAddLoadCase_Click"></Button>
                 <Button x:Name="buttonRemoveLoadCase" Content="&lt;&lt;" Click="buttonRemoveLoadCase_Click"></Button>
             </StackPanel>
 
-            <ListBox Grid.Row="1" Grid.Column="2" x:Name="listBoxChoosenLoadCase" d:ItemsSource="{d:SampleData ItemCount=5}" VerticalAlignment="Stretch" SelectionMode="Multiple"></ListBox>
+            <ListBox Grid.Row="1" Grid.Column="2" x:Name="listBoxChoosenLoadCase" d:ItemsSource="{d:SampleData ItemCount=5}" VerticalAlignment="Stretch" SelectionMode="Extended"></ListBox>
 
         </Grid>
 

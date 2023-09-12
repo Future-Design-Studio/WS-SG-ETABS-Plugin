@@ -22,7 +22,7 @@
             <RowDefinition Height="2*"></RowDefinition>
             <RowDefinition Height="0.4*"></RowDefinition>
             <RowDefinition Height="2.7*"></RowDefinition>
-            <RowDefinition Height="1.4*"></RowDefinition>
+            <RowDefinition Height="1.8*"></RowDefinition>
             <RowDefinition Height="0.4*"></RowDefinition>
         </Grid.RowDefinitions>
 
@@ -201,6 +201,7 @@
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
 
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
@@ -214,8 +215,9 @@
             <RadioButton Grid.Row="2" Grid.Column="0" GroupName="rebarSpc" Content="Min center to center spacing between rebar (mm)" Name="radioButtonSpcCToC" 
                          Checked="radioButtonSpcCToC_Checked"></RadioButton>
             <RadioButton Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" GroupName="rebarSpc" Content="Auto (use EC rules, clear spacing = max[25mm, rebar dia])" Name="radioButtonSpcAuto"></RadioButton>
-
-            <TextBox x:Name="textBoxSpcClearSpc" Grid.Row="1" Grid.Column="1" Text="40" IsEnabled="False"></TextBox>
+            <RadioButton Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" GroupName="rebarSpc" Content="Auto (use Ramboll standard practice, no of rebar = width (in mm)/100 )" Name="radioButtonSpcAutoRamboll"></RadioButton>
+            
+            <TextBox x:Name="textBoxSpcClearSpc" Grid.Row="1" Grid.Column="1" Text="50" IsEnabled="False"></TextBox>
             <TextBox x:Name="textBoxSpcCToC" Grid.Row="2" Grid.Column="1" Text="80" IsEnabled="False"></TextBox>
         </Grid>
         
