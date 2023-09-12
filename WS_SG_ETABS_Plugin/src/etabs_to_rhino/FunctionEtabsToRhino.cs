@@ -700,14 +700,15 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
             progress.Report(90);
 
 
-            bool includeExtrusion = selectedItems["extrusionModel"] ?? false;
+            bool includeFrameExtrusion = selectedItems["extrusionFrameModel"] ?? false;
+            bool includeAreaExtrusion = selectedItems["extrusionAreaModel"] ?? false;
 
-            if (includeExtrusion && allFrames != null && allFrameProp != null)
+            if (includeFrameExtrusion && allFrames != null && allFrameProp != null)
             {
                 IncludeFrameExtrusion(newModel, allFrames, allFrameProp, allAreas);
             }
 
-            if (includeExtrusion && allAreas != null)
+            if (includeAreaExtrusion && allAreas != null)
             {
                 IncludeAreaExtrusion(newModel, allAreas);
             }
