@@ -532,7 +532,9 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
                 var lastPt = area.BoundaryPoints[0];
                 polyline.Add(lastPt);
 
-                var plane0 = new Plane(area.BoundaryPoints[0], area.BoundaryPoints[1], area.BoundaryPoints[2]);
+                var center = polyline.CenterPoint();
+
+                var plane0 = new Plane(area.BoundaryPoints[0], area.BoundaryPoints[1], center);
                 
                 var t0 = Transform.PlanarProjection(plane0);
                 polyline.Transform(t0);
