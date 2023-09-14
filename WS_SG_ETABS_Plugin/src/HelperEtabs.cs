@@ -132,11 +132,34 @@ namespace WS_SG_ETABS_Plugin.src
             public double RatioMidAv { get; set; }
             public double RatioRightAv { get; set; }
             public string Cluster { get; set; }
+            public double LeftStation { get; set; }
+            public double RightStation { get; set; }
+            public List<FrameForceEachCase> FrameForceEachCaseList { get; set;}
 
             public RcBeam(string name)
             {
                 UniqueName = name;
+                FrameForceEachCaseList = new List<FrameForceEachCase>();
             }
+        }
+
+        public class FrameForceEachCase
+        {
+            public FrameForceEachCase(string name)
+            {
+                LoadCaseName = name;
+            }
+
+            public string LoadCaseName { get; set; }
+            public double LeftMomentNeg { get; set; }
+            public double LeftMomentPos { get; set; }
+            public double LeftShear { get; set; }
+            public double MidMomentNeg { get; set; }
+            public double MidMomentPos { get; set; }
+            public double MidShear { get; set; }
+            public double RightMomentNeg { get; set; }
+            public double RightMomentPos { get; set; }
+            public double RightShear { get; set; }
         }
 
         public class Column
