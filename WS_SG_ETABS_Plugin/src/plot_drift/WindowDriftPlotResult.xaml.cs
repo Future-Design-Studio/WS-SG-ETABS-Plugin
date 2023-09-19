@@ -14,6 +14,7 @@ using System.Windows.Media.TextFormatting;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using ETABSv1;
+using SAFEv1;
 using ScottPlot;
 
 namespace WS_SG_ETABS_Plugin.src.plot_drift
@@ -23,16 +24,15 @@ namespace WS_SG_ETABS_Plugin.src.plot_drift
     /// </summary>
     public partial class WindowDriftPlotResult : Window
     {
-        public WindowDriftPlotResult(cSapModel SapModel, cPluginCallback Plugin, string outputCase, string displacementDirection, string maxDisplacementFactor, string choosenGroup, string plotTitle,
-            int textSize, int titleSize, int axisTitleSize, double gridSpacingX, double gridSpacingY,
+        public WindowDriftPlotResult(ETABSv1.cSapModel SapModel, ETABSv1.cPluginCallback Plugin, string outputCase, string displacementDirection, string maxDisplacementFactor, string choosenGroup,
+            int legendTextSize, int titleSize, int axisTitleSize, double gridSpacingDisplacementX, double gridSpacingDriftX, double gridSpacingY,
             List<src.HelperEtabs.DatabaseTable> databaseTableList, string fileName, string filePath)
 
         {
             InitializeComponent();
 
-            src.plot_drift.FunctionDriftPlot.PlotDrift(SapModel, Plugin, outputCase, displacementDirection, maxDisplacementFactor, choosenGroup, plotTitle,
-            textSize, titleSize, axisTitleSize, gridSpacingX, gridSpacingY,
-            databaseTableList, fileName, filePath, DriftPlot, DisplacementPlot);
+            src.plot_drift.FunctionDriftPlot.PlotDrift(SapModel, Plugin, outputCase, displacementDirection, maxDisplacementFactor, choosenGroup, legendTextSize,
+                    titleSize, axisTitleSize, gridSpacingDisplacementX, gridSpacingDriftX, gridSpacingY, databaseTableList, fileName, filePath, DriftPlot, DisplacementPlot);
 
             ShowDialog();
         }

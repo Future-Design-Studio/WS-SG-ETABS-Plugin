@@ -98,23 +98,22 @@ namespace WS_SG_ETABS_Plugin.src.plot_drift
                 string fileName = textBoxFileName.Text;
                 string filePath = textBoxFilePath.Text;
 
-                string plotTitle = textBoxTitle.Text;
-
                 string outputCase = comBoxOutputCase.SelectedValue.ToString();
                 string choosenGroup = comBoxGroup.Text;
                 string displacementDirection = comBoxDirection.SelectedValue.ToString();
                 string maxDisplacementFactor = textBoxDisplacementFactor.Text;
 
-                int textSize = Convert.ToInt32(textBoxTextSize.Text);
+                int legendTextSize = Convert.ToInt32(textBoxLegendTextSize.Text);
                 int titleSize = Convert.ToInt32(textBoxTitleSize.Text);
                 int axisTitleSize = Convert.ToInt32(textBoxAxisTitleSize.Text);
-                int gridSpacingX = Convert.ToInt32(textBoxGridSpacingX.Text);
+                int gridSpacingDisplacementX = Convert.ToInt32(textBoxGridSpacingDisplacementX.Text);
+                double gridSpacingDriftX = Convert.ToDouble(textBoxGridSpacingDriftX.Text);
                 int gridSpacingY = Convert.ToInt32(textBoxGridSpacingY.Text);
 
                 //Call up copy result window
                 src.plot_drift.WindowDriftPlotResult windowdriftPlotResult = new src.plot_drift.WindowDriftPlotResult(
-                    _SapModel, _Plugin, outputCase, displacementDirection, maxDisplacementFactor, choosenGroup, plotTitle, textSize,
-                    titleSize, axisTitleSize, gridSpacingX, gridSpacingY, databaseTableListGlobal, fileName, filePath);
+                    _SapModel, _Plugin, outputCase, displacementDirection, maxDisplacementFactor, choosenGroup, legendTextSize,
+                    titleSize, axisTitleSize, gridSpacingDisplacementX, gridSpacingDriftX, gridSpacingY, databaseTableListGlobal, fileName, filePath);
             }
 
             catch (Exception ex)

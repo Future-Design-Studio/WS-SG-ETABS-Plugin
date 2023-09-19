@@ -14,8 +14,8 @@ namespace WS_SG_ETABS_Plugin.src.plot_drift
 {
     internal class FunctionDriftPlot
     {
-        public static bool PlotDrift(cSapModel SapModel, cPluginCallback Plugin, string outputCase, string displacementDirection, string maxDisplacementFactor, string choosenGroup, string plotTitle,
-            int textSize, int titleSize, int axisTitleSize, double gridSpacingX, double gridSpacingY,
+        public static bool PlotDrift(cSapModel SapModel, cPluginCallback Plugin, string outputCase, string displacementDirection, string maxDisplacementFactor, string choosenGroup,
+            int legendTextSize, int titleSize, int axisTitleSize, double gridSpacingDisplacementX, double gridSpacingDriftX, double gridSpacingY,
             List<src.HelperEtabs.DatabaseTable> databaseTableList, string fileName, string filePath, WpfPlot DriftPlot, WpfPlot DisplacementPlot)
         {
             bool isError = false;
@@ -60,45 +60,64 @@ namespace WS_SG_ETABS_Plugin.src.plot_drift
 
                 //Plot displacement
                 (double[] zCoordinateList, double[] displacementList, double[] driftList) = ConvertToArray(jointDisplacementDetailList);
-                DisplacementPlot.Plot.AddScatterLines(displacementList, zCoordinateList);
-                DriftPlot.Plot.AddScatterLines(driftList, zCoordinateList);
+                DisplacementPlot.Plot.AddScatterLines(displacementList, zCoordinateList, System.Drawing.ColorTranslator.FromHtml("#ffce00"), 2, LineStyle.Solid, "Displacement (mm)");
+                DriftPlot.Plot.AddScatterLines(driftList, zCoordinateList, System.Drawing.ColorTranslator.FromHtml("#ffce00"), 2, LineStyle.Solid, "Inter-story drift");
 
                 //Plot limit
+                var denominator = maxDisplacementFactor.Split('/')[1];
                 (zCoordinateList, displacementList, driftList) = ConvertToArray(maxJointDisplacementDetailList);
-                DisplacementPlot.Plot.AddScatterLines(displacementList, zCoordinateList);
-                DriftPlot.Plot.AddScatterLines(driftList, zCoordinateList);
-
+                DisplacementPlot.Plot.AddScatterLines(displacementList, zCoordinateList, System.Drawing.ColorTranslator.FromHtml("#FF0000"), 2, LineStyle.Dash, $"Limit H/{denominator}");
+                DriftPlot.Plot.AddScatterLines(driftList, zCoordinateList, System.Drawing.ColorTranslator.FromHtml("#FF0000"), 2, LineStyle.Dash, $"Limit h/{denominator}");
             }
+
+
+            DisplacementPlot.Plot.Title($"Lateral Deflection (Case: {outputCase}, Direction: {displacementDirection})", true, null, titleSize, "Arial Narrow");
+            DisplacementPlot.Plot.YAxis.Label("Height (m)", null, axisTitleSize, true, "Arial Narrow");
+            DisplacementPlot.Plot.XAxis.Label("Displacement (mm)", null, axisTitleSize, true, "Arial Narrow");
+            DisplacementPlot.Plot.YAxis.ManualTickSpacing(gridSpacingY);
+            DisplacementPlot.Plot.XAxis.ManualTickSpacing(gridSpacingDisplacementX);
+            var displacementLegend = DisplacementPlot.Plot.Legend();
+            displacementLegend.FontSize = legendTextSize;
+
+            DriftPlot.Plot.Title($"Inter-story Drift (Case: {outputCase}, Direction: {displacementDirection})", true, null, titleSize, "Arial Narrow");
+            DriftPlot.Plot.YAxis.Label("Height (m)", null, axisTitleSize, true, "Arial Narrow");
+            DriftPlot.Plot.XAxis.Label("Inter-story Drift", null, axisTitleSize, true, "Arial Narrow");
+            DriftPlot.Plot.YAxis.ManualTickSpacing(gridSpacingY);
+            DriftPlot.Plot.XAxis.ManualTickSpacing(gridSpacingDriftX);
+            var driftLegend = DriftPlot.Plot.Legend();
+            driftLegend.FontSize = legendTextSize;
 
             DisplacementPlot.Refresh();
             DriftPlot.Refresh();
-
 
             return true;
         }
 
         public static bool CheckCaseHaveMultipleResult(List<src.HelperEtabs.Point3D> jointList, src.HelperEtabs.DatabaseTable jointDisplacementsTable, string outputCase)
         {
-            //take first joint only
-            src.HelperEtabs.Point3D joint = jointList[0];
-
-            List<Dictionary<string, string>> tableInList = jointDisplacementsTable.TableInList;
-
-            bool foundRowMatch = false;
-            foreach (Dictionary<string, string> row in tableInList)
+            if (jointList.Count > 0)
             {
-                if (row["UniqueName"] == joint.UniqueName && row["OutputCase"] == outputCase)
+                //take first joint only
+                src.HelperEtabs.Point3D joint = jointList[0];
+
+                List<Dictionary<string, string>> tableInList = jointDisplacementsTable.TableInList;
+
+                bool foundRowMatch = false;
+                foreach (Dictionary<string, string> row in tableInList)
                 {
-                    //If foundRowMatch already true, meaning there are multiple results for each output case
-                    if (foundRowMatch)
+                    if (row["UniqueName"] == joint.UniqueName && row["OutputCase"] == outputCase)
                     {
-                        return true;
+                        //If foundRowMatch already true, meaning there are multiple results for each output case
+                        if (foundRowMatch)
+                        {
+                            return true;
+                        }
+                        foundRowMatch = true;
                     }
-                    foundRowMatch = true;
                 }
+                return false;
             }
             return false;
-            
         }
 
         public static List<ClassDriftPlot.JointDisplacementDetail> GetJointDisplacement(List<src.HelperEtabs.Point3D> jointList, src.HelperEtabs.DatabaseTable jointDisplacementsTable,
