@@ -278,5 +278,13 @@ namespace WS_SG_ETABS_Plugin
             src.tedds_main.WindowTeddsMain windowTeddsMain = new src.tedds_main.WindowTeddsMain(_SapModel, _Plugin);
             IsEnabled = true;
         }
+
+        private void buttonPlotDrift_Click(object sender, RoutedEventArgs e)
+        {
+            IsEnabled = false;
+            //Call up window
+            src.plot_drift.WindowDriftPlotLoading windowDriftPlotLoading = new src.plot_drift.WindowDriftPlotLoading(_SapModel, _Plugin);
+            IsEnabled = true;
+        }
     }
 }

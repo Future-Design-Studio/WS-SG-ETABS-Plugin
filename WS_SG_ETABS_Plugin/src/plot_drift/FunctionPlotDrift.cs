@@ -79,25 +79,26 @@ namespace WS_SG_ETABS_Plugin.src.plot_drift
 
         public static bool CheckCaseHaveMultipleResult(List<src.HelperEtabs.Point3D> jointList, src.HelperEtabs.DatabaseTable jointDisplacementsTable, string outputCase)
         {
-            foreach (src.HelperEtabs.Point3D joint in jointList)
-            {
-                List<Dictionary<string, string>> tableInList = jointDisplacementsTable.TableInList;
+            //take first joint only
+            src.HelperEtabs.Point3D joint = jointList[0];
 
-                bool foundRowMatch = false;
-                foreach (Dictionary<string, string> row in tableInList)
+            List<Dictionary<string, string>> tableInList = jointDisplacementsTable.TableInList;
+
+            bool foundRowMatch = false;
+            foreach (Dictionary<string, string> row in tableInList)
+            {
+                if (row["UniqueName"] == joint.UniqueName && row["OutputCase"] == outputCase)
                 {
-                    if (row["UniqueName"] == joint.UniqueName && row["OutputCase"] == outputCase)
+                    //If foundRowMatch already true, meaning there are multiple results for each output case
+                    if (foundRowMatch)
                     {
-                        //If foundRowMatch already true, meaning there are multiple results for each output case
-                        if (foundRowMatch)
-                        {
-                            return true;
-                        }
-                        foundRowMatch = true;
+                        return true;
                     }
+                    foundRowMatch = true;
                 }
             }
             return false;
+            
         }
 
         public static List<ClassDriftPlot.JointDisplacementDetail> GetJointDisplacement(List<src.HelperEtabs.Point3D> jointList, src.HelperEtabs.DatabaseTable jointDisplacementsTable,
@@ -137,7 +138,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_drift
                 }
                 else
                 {
-                    jointDisplacementDetail.Drift = (jointDisplacementDetail.Displacement - sortedJointDisplacementDetailList[index - 1].Displacement) / (jointDisplacementDetail.ZCoordinate - sortedJointDisplacementDetailList[index - 1].ZCoordinate);
+                    jointDisplacementDetail.Drift = ((jointDisplacementDetail.Displacement - sortedJointDisplacementDetailList[index - 1].Displacement) / 1000) / (jointDisplacementDetail.ZCoordinate - sortedJointDisplacementDetailList[index - 1].ZCoordinate);
                 }
                 index++;
             }
@@ -152,12 +153,14 @@ namespace WS_SG_ETABS_Plugin.src.plot_drift
 
             //Get minimum Z
             double minimumZ = 0;
+            double maximumZ = 0;
             bool firstZ = true;
             foreach (HelperEtabs.Point3D joint in jointList)
             {
                 if (firstZ)
                 {
                     minimumZ = joint.ZCoordinate;
+                    maximumZ = joint.ZCoordinate;
                     firstZ = false;
                 }
                 else
@@ -166,22 +169,26 @@ namespace WS_SG_ETABS_Plugin.src.plot_drift
                     {
                         minimumZ = joint.ZCoordinate;
                     }
+                    if (maximumZ < joint.ZCoordinate)
+                    {
+                        maximumZ = joint.ZCoordinate;
+                    }
                 }
             }
 
-            foreach (HelperEtabs.Point3D joint in jointList)
-            {
-                var nominator = maxDisplacementFactor.Split('/')[0];
-                var denominator = maxDisplacementFactor.Split('/')[1];
+            var nominator = maxDisplacementFactor.Split('/')[0];
+            var denominator = maxDisplacementFactor.Split('/')[1];
 
-                double displacementLimit = (joint.ZCoordinate - minimumZ) * Convert.ToDouble(nominator) / Convert.ToDouble(denominator) * 1000; //m to mm
+            double displacementLimit = (maximumZ - minimumZ) * Convert.ToDouble(nominator) / Convert.ToDouble(denominator) * 1000; //m to mm
 
-                ClassDriftPlot.JointDisplacementDetail jointDisplacementDetail = new ClassDriftPlot.JointDisplacementDetail(joint.UniqueName, joint.ZCoordinate, displacementLimit);
-                jointDisplacementDetail.Drift = Convert.ToDouble(Convert.ToDouble(nominator) / Convert.ToDouble(denominator));
-                jointDisplacementDetailList.Add(jointDisplacementDetail);
-            }
+            ClassDriftPlot.JointDisplacementDetail jointDisplacementDetail = new ClassDriftPlot.JointDisplacementDetail("displimit", minimumZ, 0);
+            jointDisplacementDetail.Drift = Convert.ToDouble(nominator) / Convert.ToDouble(denominator);
+            jointDisplacementDetailList.Add(jointDisplacementDetail);
 
-            //Get the drift
+            jointDisplacementDetail = new ClassDriftPlot.JointDisplacementDetail("displimit", maximumZ, displacementLimit);
+            jointDisplacementDetail.Drift = Convert.ToDouble(nominator) / Convert.ToDouble(denominator);
+            jointDisplacementDetailList.Add(jointDisplacementDetail);
+
             //Sort from lowest Z
             List<ClassDriftPlot.JointDisplacementDetail> sortedJointDisplacementDetailList = jointDisplacementDetailList.OrderBy(o => o.ZCoordinate).ToList();
 
