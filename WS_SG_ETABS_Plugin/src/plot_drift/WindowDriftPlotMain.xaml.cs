@@ -106,14 +106,25 @@ namespace WS_SG_ETABS_Plugin.src.plot_drift
                 int legendTextSize = Convert.ToInt32(textBoxLegendTextSize.Text);
                 int titleSize = Convert.ToInt32(textBoxTitleSize.Text);
                 int axisTitleSize = Convert.ToInt32(textBoxAxisTitleSize.Text);
+                int tickLabelSize = Convert.ToInt32(textBoxTickLabelSize.Text);
                 int gridSpacingDisplacementX = Convert.ToInt32(textBoxGridSpacingDisplacementX.Text);
                 double gridSpacingDriftX = Convert.ToDouble(textBoxGridSpacingDriftX.Text);
                 int gridSpacingY = Convert.ToInt32(textBoxGridSpacingY.Text);
 
+                bool showMaxDisp = new bool();
+                if (checkBoxMaxDisp.IsChecked == true)
+                {
+                    showMaxDisp = true;
+                }
+                else
+                {
+                    showMaxDisp = false;
+                }
+
                 //Call up copy result window
                 src.plot_drift.WindowDriftPlotResult windowdriftPlotResult = new src.plot_drift.WindowDriftPlotResult(
                     _SapModel, _Plugin, outputCase, displacementDirection, maxDisplacementFactor, choosenGroup, legendTextSize,
-                    titleSize, axisTitleSize, gridSpacingDisplacementX, gridSpacingDriftX, gridSpacingY, databaseTableListGlobal, fileName, filePath);
+                    titleSize, axisTitleSize, tickLabelSize, gridSpacingDisplacementX, gridSpacingDriftX, gridSpacingY, showMaxDisp, databaseTableListGlobal, fileName, filePath);
             }
 
             catch (Exception ex)

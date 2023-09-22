@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WS_SG_ETABS_Plugin.src.plot_drift"
-             mc:Ignorable="d" Height="700" Width="600" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+             mc:Ignorable="d" Height="750" Width="600" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"></ColumnDefinition>
@@ -15,6 +15,8 @@
             <RowDefinition Height="0.5*"></RowDefinition>
             <RowDefinition Height="0.5*"></RowDefinition>
             <RowDefinition Height="1*"></RowDefinition>
+            <RowDefinition Height="0.5*"></RowDefinition>
+            <RowDefinition Height="0.5*"></RowDefinition>
             <RowDefinition Height="0.5*"></RowDefinition>
             <RowDefinition Height="0.5*"></RowDefinition>
             <RowDefinition Height="0.5*"></RowDefinition>
@@ -137,8 +139,8 @@
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
-            <Label Grid.Column="0" VerticalAlignment="Center" Grid.ColumnSpan="2">Legend text size:</Label>
-            <TextBox Grid.Column="1" x:Name="textBoxLegendTextSize" Grid.Row="0" TextAlignment="Center" Text="28" InputScope="Number"/>
+            <Label Grid.Column="0" VerticalAlignment="Center" Grid.ColumnSpan="2">Title size:</Label>
+            <TextBox Grid.Column="1" x:Name="textBoxTitleSize" Grid.Row="0" TextAlignment="Center" Text="36" InputScope="Number"/>
         </Grid>
 
         <Grid Grid.Row="12" Margin="10 0 10 0">
@@ -147,9 +149,11 @@
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
-            <Label Grid.Column="0" VerticalAlignment="Center" Grid.ColumnSpan="2">Title size:</Label>
-            <TextBox Grid.Column="1" x:Name="textBoxTitleSize" Grid.Row="0" TextAlignment="Center" Text="36" InputScope="Number"/>
+            <Label Grid.Column="0" VerticalAlignment="Center" Grid.ColumnSpan="2">Legend text size:</Label>
+            <TextBox Grid.Column="1" x:Name="textBoxLegendTextSize" Grid.Row="0" TextAlignment="Center" Text="16" InputScope="Number"/>
         </Grid>
+
+
 
         <Grid Grid.Row="13" Margin="10 0 10 0">
             <Grid.ColumnDefinitions>
@@ -167,11 +171,21 @@
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
+            <Label Grid.Column="0" VerticalAlignment="Center" Grid.ColumnSpan="2">Tick label text size:</Label>
+            <TextBox Grid.Column="1" x:Name="textBoxTickLabelSize" Grid.Row="0" TextAlignment="Center" Text="12" InputScope="Number"/>
+        </Grid>
+
+        <Grid Grid.Row="15" Margin="10 0 10 0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
             <Label Grid.Column="0" VerticalAlignment="Center" Grid.ColumnSpan="2">Displacement plot grid spacing x (mm):</Label>
             <TextBox Grid.Column="1" x:Name="textBoxGridSpacingDisplacementX" Grid.Row="0" TextAlignment="Center" Text="50" InputScope="Digits"/>
         </Grid>
 
-        <Grid Grid.Row="15" Margin="10 0 10 0">
+        <Grid Grid.Row="16" Margin="10 0 10 0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
@@ -181,7 +195,7 @@
             <TextBox Grid.Column="1" x:Name="textBoxGridSpacingDriftX" Grid.Row="0" TextAlignment="Center" Text="0.001" InputScope="Number"/>
         </Grid>
 
-        <Grid Grid.Row="16" Margin="10 0 10 0">
+        <Grid Grid.Row="17" Margin="10 0 10 0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
@@ -189,6 +203,12 @@
 
             <Label Grid.Column="0" VerticalAlignment="Center" Grid.ColumnSpan="2">Plot grid spacing y:</Label>
             <TextBox Grid.Column="1" x:Name="textBoxGridSpacingY" Grid.Row="0" TextAlignment="Center" Text="50" InputScope="Digits"/>
+        </Grid>
+
+        <Grid Grid.Row="18" Margin="10 0 10 0">
+
+            <CheckBox x:Name="checkBoxMaxDisp" Grid.Row="0">
+                Display max and min displacement of each storey for the selected load case (heavy computation)</CheckBox>
         </Grid>
 
 

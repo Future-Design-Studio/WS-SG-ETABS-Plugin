@@ -1547,6 +1547,21 @@ namespace WS_SG_ETABS_Plugin.src
             return point3DList;
         }
 
+        public static List<Point3D> FilterPointBasedOnZCoord(List<Point3D> jointList, List<double> uniqueZCoordList)
+        {
+            List<Point3D> point3DList = new List<Point3D>();
+
+            foreach (Point3D joint in jointList)
+            {
+                if (uniqueZCoordList.Contains(joint.ZCoordinate))
+                {
+                    point3DList.Add(joint);
+                }
+
+            }
+
+            return point3DList;
+        }
 
         #endregion
 

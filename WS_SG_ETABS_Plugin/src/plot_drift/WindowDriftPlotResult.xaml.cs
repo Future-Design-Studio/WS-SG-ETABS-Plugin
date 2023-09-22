@@ -25,14 +25,14 @@ namespace WS_SG_ETABS_Plugin.src.plot_drift
     public partial class WindowDriftPlotResult : Window
     {
         public WindowDriftPlotResult(ETABSv1.cSapModel SapModel, ETABSv1.cPluginCallback Plugin, string outputCase, string displacementDirection, string maxDisplacementFactor, string choosenGroup,
-            int legendTextSize, int titleSize, int axisTitleSize, double gridSpacingDisplacementX, double gridSpacingDriftX, double gridSpacingY,
+            int legendTextSize, int titleSize, int axisTitleSize, int tickLabelSize, double gridSpacingDisplacementX, double gridSpacingDriftX, double gridSpacingY, bool showMaxDisp,
             List<src.HelperEtabs.DatabaseTable> databaseTableList, string fileName, string filePath)
 
         {
             InitializeComponent();
 
             src.plot_drift.FunctionDriftPlot.PlotDrift(SapModel, Plugin, outputCase, displacementDirection, maxDisplacementFactor, choosenGroup, legendTextSize,
-                    titleSize, axisTitleSize, gridSpacingDisplacementX, gridSpacingDriftX, gridSpacingY, databaseTableList, fileName, filePath, DriftPlot, DisplacementPlot);
+                    titleSize, axisTitleSize, tickLabelSize, gridSpacingDisplacementX, gridSpacingDriftX, gridSpacingY, showMaxDisp, databaseTableList, fileName, filePath, DriftPlot, DisplacementPlot);
 
             ShowDialog();
         }
