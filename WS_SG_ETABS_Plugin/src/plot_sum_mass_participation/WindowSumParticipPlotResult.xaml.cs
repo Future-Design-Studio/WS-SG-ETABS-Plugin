@@ -12,17 +12,23 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using ETABSv1;
 
 namespace WS_SG_ETABS_Plugin.src.plot_sum_mass_participation
 {
     /// <summary>
     /// Interaction logic for WindowSumParticipPlotResult.xaml
     /// </summary>
-    public partial class WindowSumParticipPlotResult : UserControl
+    public partial class WindowSumParticipPlotResult : Window
     {
-        public WindowSumParticipPlotResult()
+        public WindowSumParticipPlotResult(cSapModel _SapModel, cPluginCallback _Plugin, int legendTextSize, int titleSize, int axisTitleSize, int tickLabelSize, bool showUz,
+            string fileName, string filePath)
         {
             InitializeComponent();
+
+            FunctionSumParticipPlot.PlotSumParticipationFactor(_SapModel, _Plugin, legendTextSize, titleSize, axisTitleSize, tickLabelSize, showUz, fileName, filePath, Plot);
+
+            ShowDialog();
         }
     }
 }
