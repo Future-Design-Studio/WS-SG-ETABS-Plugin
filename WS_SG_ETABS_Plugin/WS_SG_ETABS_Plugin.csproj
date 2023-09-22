@@ -349,6 +349,13 @@
     <Compile Include="src\plot_reaction\WindowPlotReactionMain.xaml.cs">
       <DependentUpon>WindowPlotReactionMain.xaml</DependentUpon>
     </Compile>
+    <Compile Include="src\plot_sum_mass_participation\FunctionSumParticipPlot.cs" />
+    <Compile Include="src\plot_sum_mass_participation\WindowSumParticipPlotMain.xaml.cs">
+      <DependentUpon>WindowSumParticipPlotMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\plot_sum_mass_participation\WindowSumParticipPlotResult.xaml.cs">
+      <DependentUpon>WindowSumParticipPlotResult.xaml</DependentUpon>
+    </Compile>
     <Compile Include="src\punching_shear_plot\ClassPunchingShrPlot.cs" />
     <Compile Include="src\punching_shear_plot\FunctionPunchingShrPlot.cs" />
     <Compile Include="src\punching_shear_plot\WindowPunchShrPlotLoading.xaml.cs">
@@ -560,6 +567,14 @@
     <Page Include="src\plot_reaction\WindowPlotReactionMain.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="src\plot_sum_mass_participation\WindowSumParticipPlotMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\plot_sum_mass_participation\WindowSumParticipPlotResult.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="src\punching_shear_plot\WindowPunchShrPlotLoading.xaml">
       <Generator>MSBuild:Compile</Generator>
