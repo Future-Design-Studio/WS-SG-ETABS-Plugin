@@ -21,12 +21,11 @@ namespace WS_SG_ETABS_Plugin.src.plot_sum_mass_participation
     /// </summary>
     public partial class WindowSumParticipPlotResult : Window
     {
-        public WindowSumParticipPlotResult(cSapModel _SapModel, cPluginCallback _Plugin, int legendTextSize, int titleSize, int axisTitleSize, int tickLabelSize, bool showUz,
-            string fileName, string filePath)
+        public WindowSumParticipPlotResult(cSapModel _SapModel, cPluginCallback _Plugin, int legendTextSize, int titleSize, int axisTitleSize, int tickLabelSize, bool showUz)
         {
             InitializeComponent();
 
-            FunctionSumParticipPlot.PlotSumParticipationFactor(_SapModel, _Plugin, legendTextSize, titleSize, axisTitleSize, tickLabelSize, showUz, fileName, filePath, Plot);
+            FunctionSumParticipPlot.PlotSumParticipationFactor(_SapModel, _Plugin, legendTextSize, titleSize, axisTitleSize, tickLabelSize, showUz, Plot);
 
             ShowDialog();
         }

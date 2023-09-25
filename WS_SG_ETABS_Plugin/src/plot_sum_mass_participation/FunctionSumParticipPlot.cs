@@ -12,8 +12,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_sum_mass_participation
 {
     internal class FunctionSumParticipPlot
     {
-        public static void PlotSumParticipationFactor(cSapModel SapModel, cPluginCallback Plugin, int legendTextSize, int titleSize, int axisTitleSize, int tickLabelSize, bool showUz,
-            string fileName, string filePath, WpfPlot Plot)
+        public static void PlotSumParticipationFactor(cSapModel SapModel, cPluginCallback Plugin, int legendTextSize, int titleSize, int axisTitleSize, int tickLabelSize, bool showUz, WpfPlot Plot)
         {
             //Get database
             bool isError = false;
