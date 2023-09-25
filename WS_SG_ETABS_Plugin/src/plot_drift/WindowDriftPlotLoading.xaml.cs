@@ -66,8 +66,17 @@ namespace WS_SG_ETABS_Plugin.src.plot_drift
 
                     if (isError)
                     {
-                        MessageBox.Show("Error in retrieving joint displacements. Please make sure the model is run!");
-                        return;
+                        if (tableKey == "Joint Displacements")
+                        {
+                            MessageBox.Show("Error in retrieving joint displacements. Please make sure the model is run!");
+                            return;
+                        }
+                        else if (tableKey == "Group Assignments")
+                        {
+                            MessageBox.Show("Error in retrieving group assignments. Please make sure you have group!");
+                            return;
+                        }
+
                     }
                     else
                     {

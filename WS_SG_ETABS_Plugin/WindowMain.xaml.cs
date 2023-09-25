@@ -286,5 +286,13 @@ namespace WS_SG_ETABS_Plugin
             src.plot_drift.WindowDriftPlotLoading windowDriftPlotLoading = new src.plot_drift.WindowDriftPlotLoading(_SapModel, _Plugin);
             IsEnabled = true;
         }
+
+        private void buttonPlotSumMassParticip_Click(object sender, RoutedEventArgs e)
+        {
+            IsEnabled = false;
+            //Call up window
+            src.plot_sum_mass_participation.WindowSumParticipPlotMain windowSumParticipPlotMain = new src.plot_sum_mass_participation.WindowSumParticipPlotMain(_SapModel, _Plugin);
+            IsEnabled = true;
+        }
     }
 }
