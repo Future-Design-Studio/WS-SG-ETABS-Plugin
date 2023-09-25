@@ -33,22 +33,10 @@ namespace WS_SG_ETABS_Plugin.src.plot_sum_mass_participation
 
             InitializeComponent();
 
-            //Fill in default excel result name
-            textBoxFileName.Text = "sum_mass_participation_factor_plot";
-
-            //Fill in model path (default path)
-            modelPath = SapModel.GetModelFilepath();
-            textBoxFilePath.Text = modelPath;
-
             ShowDialog();
         }
 
         #region Button Method
-
-        private void buttonDefaultPath_Click(object sender, RoutedEventArgs e)
-        {
-            textBoxFilePath.Text = modelPath;
-        }
 
         private void buttonOk_Click(object sender, RoutedEventArgs e)
         {
@@ -60,9 +48,6 @@ namespace WS_SG_ETABS_Plugin.src.plot_sum_mass_participation
                 //Casting listbox content to list
                 List<string> listChoosenLoadCase = listBoxChoosenLoadCase.Items.OfType<string>().ToList();
                 */
-
-                string fileName = textBoxFileName.Text;
-                string filePath = textBoxFilePath.Text;
 
                 int legendTextSize = Convert.ToInt32(textBoxLegendTextSize.Text);
                 int titleSize = Convert.ToInt32(textBoxTitleSize.Text);
@@ -81,7 +66,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_sum_mass_participation
 
                 //Call up copy result window
                 plot_sum_mass_participation.WindowSumParticipPlotResult windowSumParticipPlotResult = new plot_sum_mass_participation.WindowSumParticipPlotResult(
-                    _SapModel, _Plugin, legendTextSize, titleSize, axisTitleSize, tickLabelSize, showUz, fileName, filePath);
+                    _SapModel, _Plugin, legendTextSize, titleSize, axisTitleSize, tickLabelSize, showUz);
             }
 
             catch (Exception ex)
@@ -96,19 +81,6 @@ namespace WS_SG_ETABS_Plugin.src.plot_sum_mass_participation
         private void buttonCancel_Click(object sender, RoutedEventArgs e)
         {
             Close();
-        }
-
-        private void buttonModifyPath_Click(object sender, RoutedEventArgs e)
-        {
-            var dialog = new System.Windows.Forms.FolderBrowserDialog();
-            dialog.SelectedPath = textBoxFilePath.Text;
-
-            System.Windows.Forms.DialogResult result = dialog.ShowDialog();
-
-            if (result == System.Windows.Forms.DialogResult.OK)
-            {
-                textBoxFilePath.Text = dialog.SelectedPath;
-            }
         }
 
         #endregion
