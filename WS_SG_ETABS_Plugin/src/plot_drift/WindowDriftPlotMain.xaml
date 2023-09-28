@@ -172,7 +172,7 @@
             </Grid.ColumnDefinitions>
 
             <Label Grid.Column="0" VerticalAlignment="Center" Grid.ColumnSpan="2">Tick label text size:</Label>
-            <TextBox Grid.Column="1" x:Name="textBoxTickLabelSize" Grid.Row="0" TextAlignment="Center" Text="12" InputScope="Number"/>
+            <TextBox Grid.Column="1" x:Name="textBoxTickLabelSize" Grid.Row="0" TextAlignment="Center" Text="16" InputScope="Number"/>
         </Grid>
 
         <Grid Grid.Row="15" Margin="10 0 10 0">
@@ -182,7 +182,7 @@
             </Grid.ColumnDefinitions>
 
             <Label Grid.Column="0" VerticalAlignment="Center" Grid.ColumnSpan="2">Displacement plot grid spacing x (mm):</Label>
-            <TextBox Grid.Column="1" x:Name="textBoxGridSpacingDisplacementX" Grid.Row="0" TextAlignment="Center" Text="50" InputScope="Digits"/>
+            <TextBox Grid.Column="1" x:Name="textBoxGridSpacingDisplacementX" Grid.Row="0" TextAlignment="Center" Text="100" InputScope="Digits"/>
         </Grid>
 
         <Grid Grid.Row="16" Margin="10 0 10 0">

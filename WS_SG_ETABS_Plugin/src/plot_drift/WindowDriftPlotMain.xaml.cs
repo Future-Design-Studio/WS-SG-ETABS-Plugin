@@ -47,7 +47,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_drift
             comBoxOutputCase.SelectedIndex = 0;
 
             //Fill in combobox for direction
-            comBoxDirection.ItemsSource = src.HelperEtabs.lateralDeflectionDirectionList;
+            comBoxDirection.ItemsSource = src.HelperEtabs.lateralDeflectionDirectionWithSRSSList;
             comBoxDirection.SelectedIndex = 0;
 
             //Save databaseTableList to global variable

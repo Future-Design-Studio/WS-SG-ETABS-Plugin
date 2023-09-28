@@ -2592,6 +2592,12 @@ namespace WS_SG_ETABS_Plugin.src
             "Ux", "Uy"
         };
 
+
+        public static List<string> lateralDeflectionDirectionWithSRSSList = new List<string>()
+        {
+            "Ux", "Uy", "Ux + Uy (SRSS)"
+        };
+
         #endregion
 
     }

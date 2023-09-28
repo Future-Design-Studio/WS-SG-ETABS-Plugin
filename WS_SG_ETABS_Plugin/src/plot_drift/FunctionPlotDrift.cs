@@ -141,8 +141,8 @@ namespace WS_SG_ETABS_Plugin.src.plot_drift
                 //Plot limit
                 var denominator = maxDisplacementFactor.Split('/')[1];
                 (zCoordinateList, displacementList, driftList) = ConvertToArray(limitJointDisplacementDetailList);
-                //DisplacementPlot.Plot.AddScatterLines(displacementList, zCoordinateList, System.Drawing.ColorTranslator.FromHtml("#FF0000"), 2, LineStyle.Dash, $"Limit H/{denominator}");
-                DisplacementPlot.Plot.AddScatterLines(displacementList, zCoordinateList, System.Drawing.ColorTranslator.FromHtml("#FFFFFF"), 2, LineStyle.Dash, null);
+                DisplacementPlot.Plot.AddScatterLines(displacementList, zCoordinateList, System.Drawing.ColorTranslator.FromHtml("#FF0000"), 2, LineStyle.Dash, $"Limit H/{denominator}");
+                //DisplacementPlot.Plot.AddScatterLines(displacementList, zCoordinateList, System.Drawing.ColorTranslator.FromHtml("#FFFFFF"), 2, LineStyle.Dash, null);
                 DriftPlot.Plot.AddScatterLines(driftList, zCoordinateList, System.Drawing.ColorTranslator.FromHtml("#FF0000"), 2, LineStyle.Dash, $"Limit h/{denominator}");
 
             }
@@ -216,7 +216,16 @@ namespace WS_SG_ETABS_Plugin.src.plot_drift
                 {
                     if (row["UniqueName"] == joint.UniqueName)
                     {
-                        double displacement = Math.Abs(Convert.ToDouble(row[displacementDirection])) * 1000; //m to mm
+                        double displacement;
+
+                        if (displacementDirection == "Ux + Uy (SRSS)")
+                        {
+                            displacement = Math.Pow(Math.Pow(Convert.ToDouble(row["Ux"]), 2) + Math.Pow(Convert.ToDouble(row["Uy"]), 2), 0.5) * 1000; //m to mm
+                        }
+                        else
+                        {
+                            displacement = Math.Abs(Convert.ToDouble(row[displacementDirection])) * 1000; //m to mm
+                        }
 
                         ClassDriftPlot.JointDisplacementDetail jointDisplacementDetail = new ClassDriftPlot.JointDisplacementDetail(joint.UniqueName, joint.ZCoordinate, displacement);
                         jointDisplacementDetailList.Add(jointDisplacementDetail);
@@ -410,7 +419,16 @@ namespace WS_SG_ETABS_Plugin.src.plot_drift
                         {
                             if (row["UniqueName"] == jointFilteredZ.UniqueName)
                             {
-                                double displacement = Convert.ToDouble(row[displacementDirection]) * 1000;
+                                double displacement;
+
+                                if (displacementDirection == "Ux + Uy (SRSS)")
+                                {
+                                    displacement = Math.Pow(Math.Pow(Convert.ToDouble(row["Ux"]), 2) + Math.Pow(Convert.ToDouble(row["Uy"]), 2), 0.5) * 1000; //m to mm
+                                }
+                                else
+                                {
+                                    displacement = Math.Abs(Convert.ToDouble(row[displacementDirection])) * 1000; //m to mm
+                                }
 
                                 if (firstMatch)
                                 {
