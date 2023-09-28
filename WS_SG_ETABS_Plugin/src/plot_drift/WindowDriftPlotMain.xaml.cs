@@ -28,7 +28,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_drift
         //List of tables to save joint reaction and grouping table
         List<src.HelperEtabs.DatabaseTable> databaseTableListGlobal = new List<HelperEtabs.DatabaseTable>();
 
-        public WindowDriftPlotMain(cSapModel SapModel, cPluginCallback Plugin, List<src.HelperEtabs.DatabaseTable> databaseTableList)
+        public WindowDriftPlotMain(cSapModel SapModel, cPluginCallback Plugin, List<src.HelperEtabs.DatabaseTable> databaseTableList, List<string> listChoosenLoadCase)
         {
             _SapModel = SapModel;
             _Plugin = Plugin;
@@ -43,8 +43,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_drift
             textBoxFilePath.Text = modelPath;
 
             //Fill in combobox for output case
-            List<string> outputCasesList = src.HelperEtabs.GetLoadCaseAndComboList(_SapModel);
-            comBoxOutputCase.ItemsSource = outputCasesList;
+            comBoxOutputCase.ItemsSource = listChoosenLoadCase;
             comBoxOutputCase.SelectedIndex = 0;
 
             //Fill in combobox for direction

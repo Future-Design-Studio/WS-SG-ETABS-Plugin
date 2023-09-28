@@ -328,6 +328,9 @@
     <Compile Include="src\plot_drift\WindowDriftPlotResult.xaml.cs">
       <DependentUpon>WindowDriftPlotResult.xaml</DependentUpon>
     </Compile>
+    <Compile Include="src\plot_drift\WindowDriftPlotSelectLoad.xaml.cs">
+      <DependentUpon>WindowDriftPlotSelectLoad.xaml</DependentUpon>
+    </Compile>
     <Compile Include="src\plot_reaction\graph\ClassPlotGraph.cs" />
     <Compile Include="src\plot_reaction\graph\FunctionPlotReactionGraph.cs" />
     <Compile Include="src\plot_reaction\graph\WindowPlotReactionGraphBaseReaction.xaml.cs">
@@ -537,6 +540,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="src\plot_drift\WindowDriftPlotResult.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\plot_drift\WindowDriftPlotSelectLoad.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
