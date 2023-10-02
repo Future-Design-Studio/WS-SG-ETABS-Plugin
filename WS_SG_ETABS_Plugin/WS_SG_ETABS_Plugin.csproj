@@ -317,6 +317,17 @@
     <Compile Include="src\pad_footing_plot\WindowPadFootPlotResult.xaml.cs">
       <DependentUpon>WindowPadFootPlotResult.xaml</DependentUpon>
     </Compile>
+    <Compile Include="src\plot_drift\ClassPlotDrift.cs" />
+    <Compile Include="src\plot_drift\FunctionPlotDrift.cs" />
+    <Compile Include="src\plot_drift\WindowDriftPlotLoading.xaml.cs">
+      <DependentUpon>WindowDriftPlotLoading.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\plot_drift\WindowDriftPlotMain.xaml.cs">
+      <DependentUpon>WindowDriftPlotMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\plot_drift\WindowDriftPlotResult.xaml.cs">
+      <DependentUpon>WindowDriftPlotResult.xaml</DependentUpon>
+    </Compile>
     <Compile Include="src\plot_reaction\graph\ClassPlotGraph.cs" />
     <Compile Include="src\plot_reaction\graph\FunctionPlotReactionGraph.cs" />
     <Compile Include="src\plot_reaction\graph\WindowPlotReactionGraphBaseReaction.xaml.cs">
@@ -337,6 +348,13 @@
     </Compile>
     <Compile Include="src\plot_reaction\WindowPlotReactionMain.xaml.cs">
       <DependentUpon>WindowPlotReactionMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\plot_sum_mass_participation\FunctionSumParticipPlot.cs" />
+    <Compile Include="src\plot_sum_mass_participation\WindowSumParticipPlotMain.xaml.cs">
+      <DependentUpon>WindowSumParticipPlotMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\plot_sum_mass_participation\WindowSumParticipPlotResult.xaml.cs">
+      <DependentUpon>WindowSumParticipPlotResult.xaml</DependentUpon>
     </Compile>
     <Compile Include="src\punching_shear_plot\ClassPunchingShrPlot.cs" />
     <Compile Include="src\punching_shear_plot\FunctionPunchingShrPlot.cs" />
@@ -510,6 +528,18 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="src\plot_drift\WindowDriftPlotLoading.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\plot_drift\WindowDriftPlotMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\plot_drift\WindowDriftPlotResult.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="src\plot_reaction\graph\WindowPlotReactionGraphBaseReaction.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -537,6 +567,14 @@
     <Page Include="src\plot_reaction\WindowPlotReactionMain.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="src\plot_sum_mass_participation\WindowSumParticipPlotMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\plot_sum_mass_participation\WindowSumParticipPlotResult.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="src\punching_shear_plot\WindowPunchShrPlotLoading.xaml">
       <Generator>MSBuild:Compile</Generator>

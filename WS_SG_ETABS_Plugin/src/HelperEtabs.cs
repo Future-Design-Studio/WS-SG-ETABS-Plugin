@@ -1089,6 +1089,26 @@ namespace WS_SG_ETABS_Plugin.src
             Ret = Sap.DatabaseTables.SetLoadCombinationsSelectedForDisplay(ref MyName);
         }
 
+
+        public static List<src.HelperEtabs.Point3D> GetJointListFromGroup(src.HelperEtabs.DatabaseTable pointObjectConnectivityTable, src.HelperEtabs.DatabaseTable groupAssignmentsTable, string choosenGroup)
+        {
+            bool isError = false;
+            src.HelperEtabs.DatabaseTable filteredJointReactionTable = new HelperEtabs.DatabaseTable();
+            List<src.HelperEtabs.Point3D> jointList = new List<src.HelperEtabs.Point3D>();
+
+            //Get table from database
+            (isError, filteredJointReactionTable) = src.HelperEtabs.FilterDatabaseTableUniqueNameByGroup(pointObjectConnectivityTable, groupAssignmentsTable, choosenGroup);
+            List<Dictionary<string, string>> table = filteredJointReactionTable.TableInList;
+
+            foreach (Dictionary<string, string> row in table)
+            {
+                src.HelperEtabs.Point3D joint = new HelperEtabs.Point3D(row["UniqueName"], Convert.ToDouble(row["X"]), Convert.ToDouble(row["Y"]), Convert.ToDouble(row["Z"]));
+                jointList.Add(joint);
+            }
+
+            return jointList;
+        }
+
         #endregion
 
         #region Group Method
@@ -1527,6 +1547,21 @@ namespace WS_SG_ETABS_Plugin.src
             return point3DList;
         }
 
+        public static List<Point3D> FilterPointBasedOnZCoord(List<Point3D> jointList, List<double> uniqueZCoordList)
+        {
+            List<Point3D> point3DList = new List<Point3D>();
+
+            foreach (Point3D joint in jointList)
+            {
+                if (uniqueZCoordList.Contains(joint.ZCoordinate))
+                {
+                    point3DList.Add(joint);
+                }
+
+            }
+
+            return point3DList;
+        }
 
         #endregion
 
@@ -2465,6 +2500,11 @@ namespace WS_SG_ETABS_Plugin.src
         public static List<string> reactionDirectionList = new List<string>()
         {
             "FX", "FY", "FZ", "MX", "MY", "MZ"
+        };
+
+        public static List<string> lateralDeflectionDirectionList = new List<string>()
+        {
+            "Ux", "Uy"
         };
 
         #endregion

@@ -41,7 +41,9 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
             textBoxFilePath.Text = modelPath;
 
             //Fill in model name (default path)
+            
             modelName = SapModel.GetModelFilename(false);
+            modelName = System.IO.Path.GetFileNameWithoutExtension(modelName);
             textBoxFileName.Text = modelName;
 
             ShowDialog();
@@ -88,7 +90,8 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
             //Collect which boxes are selected
             Dictionary<string, bool?> selectedItems = new Dictionary<string, bool?>()
             {
-                {"extrusionModel", checkBoxExtrusion.IsChecked }
+                {"extrusionFrameModel", checkBoxFrameExtrusion.IsChecked },
+                {"extrusionAreaModel", checkBoxAreaExtrusion.IsChecked }
             };
 
             IsEnabled = false;

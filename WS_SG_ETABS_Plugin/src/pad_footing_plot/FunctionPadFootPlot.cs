@@ -46,7 +46,7 @@ namespace WS_SG_ETABS_Plugin.src.pad_footing_plot
             List<ClassPadFootPlot.JointPadFootDetails> jointPadFootDetailsList = new List<ClassPadFootPlot.JointPadFootDetails>();
 
             //Get joint which is part of the choosen group
-            jointList = GetJointListFromGroup(pointObjectConnectivityTable, groupAssignmentsTable, choosenGroup);
+            jointList = HelperEtabs.GetJointListFromGroup(pointObjectConnectivityTable, groupAssignmentsTable, choosenGroup);
             GetJointReaction(jointPadFootDetailsList, jointList, jointReactionTable, listChoosenLoadCase, errorList);
             double soilCapacityReduced = CalculatePadFootingSize(jointPadFootDetailsList, thickness, density, soilCapacity, errorList, sizeIncrement, maxUtilizationRatio);
             groupDefinitions = GroupByArea(jointPadFootDetailsList, sizeIncrement, soilCapacityReduced);
@@ -58,25 +58,6 @@ namespace WS_SG_ETABS_Plugin.src.pad_footing_plot
             WritePadFootDetailsToExcel(result, resultGroupDef, fileName, filePath);
 
             return (isError, groupDefinitions);
-        }
-
-        public static List<src.HelperEtabs.Point3D> GetJointListFromGroup(src.HelperEtabs.DatabaseTable pointObjectConnectivityTable, src.HelperEtabs.DatabaseTable groupAssignmentsTable, string choosenGroup)
-        {
-            bool isError = false;
-            src.HelperEtabs.DatabaseTable filteredJointReactionTable = new HelperEtabs.DatabaseTable();
-            List<src.HelperEtabs.Point3D> jointList = new List<src.HelperEtabs.Point3D>();
-
-            //Get table from database
-            (isError, filteredJointReactionTable) = src.HelperEtabs.FilterDatabaseTableUniqueNameByGroup(pointObjectConnectivityTable, groupAssignmentsTable, choosenGroup);
-            List<Dictionary<string, string>> table = filteredJointReactionTable.TableInList;
-
-            foreach (Dictionary<string, string> row in table)
-            {
-                src.HelperEtabs.Point3D joint = new HelperEtabs.Point3D(row["UniqueName"], Convert.ToDouble(row["X"]), Convert.ToDouble(row["Y"]), Convert.ToDouble(row["Z"]));
-                jointList.Add(joint);
-            }
-
-            return jointList;
         }
 
         public static void GetJointReaction(List<ClassPadFootPlot.JointPadFootDetails> jointPadFootDetailsList, List<src.HelperEtabs.Point3D> jointList, src.HelperEtabs.DatabaseTable jointReactionTable,
