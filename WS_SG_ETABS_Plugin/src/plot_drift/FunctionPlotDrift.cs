@@ -145,14 +145,6 @@ namespace WS_SG_ETABS_Plugin.src.plot_drift
 
 
             }
-            DisplacementPlot.Plot.Title($"Lateral Deflection (Case: {outputCase}, Direction: {displacementDirection})", true, null, titleSize, "Arial Narrow");
-            DisplacementPlot.Plot.YAxis.Label("Height (m)", null, axisTitleSize, true, "Arial Narrow");
-            DisplacementPlot.Plot.XAxis.Label("Displacement (mm)", null, axisTitleSize, true, "Arial Narrow");
-            DisplacementPlot.Plot.XAxis.ManualTickSpacing(gridSpacingDisplacementX);
-            DriftPlot.Plot.XAxis.ManualTickSpacing(gridSpacingDriftX);
-            DisplacementPlot.Plot.YAxis.ManualTickSpacing(gridSpacingY);
-            DisplacementPlot.Plot.YAxis.TickLabelStyle(null, null, tickLabelSize, null, null);
-            DisplacementPlot.Plot.XAxis.TickLabelStyle(null, null, tickLabelSize, null, null);
 
             //X Axis adjustment to user limit
             if (displacementXAxisMaxType != "auto")
@@ -163,6 +155,15 @@ namespace WS_SG_ETABS_Plugin.src.plot_drift
             {
                 DriftPlot.Plot.SetAxisLimits(null, Convert.ToDouble(driftXAxisMax), null, null);
             }
+
+            DisplacementPlot.Plot.Title($"Lateral Deflection (Case: {outputCase}, Direction: {displacementDirection})", true, null, titleSize, "Arial Narrow");
+            DisplacementPlot.Plot.YAxis.Label("Height (m)", null, axisTitleSize, true, "Arial Narrow");
+            DisplacementPlot.Plot.XAxis.Label("Displacement (mm)", null, axisTitleSize, true, "Arial Narrow");
+            DisplacementPlot.Plot.XAxis.ManualTickSpacing(gridSpacingDisplacementX);
+            DriftPlot.Plot.XAxis.ManualTickSpacing(gridSpacingDriftX);
+            DisplacementPlot.Plot.YAxis.ManualTickSpacing(gridSpacingY);
+            DisplacementPlot.Plot.YAxis.TickLabelStyle(null, null, tickLabelSize, null, null);
+            DisplacementPlot.Plot.XAxis.TickLabelStyle(null, null, tickLabelSize, null, null);
 
             var displacementLegend = DisplacementPlot.Plot.Legend();
             displacementLegend.FontSize = legendTextSize;
