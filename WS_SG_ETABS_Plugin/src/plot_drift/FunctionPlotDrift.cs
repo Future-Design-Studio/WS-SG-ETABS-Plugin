@@ -1,13 +1,7 @@
-﻿using System;
+﻿using ScottPlot;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Documents;
-using System.Windows.Media;
-using ETABSv1;
-using Microsoft.Office.Interop.Excel;
-using ScottPlot;
 using WS_SG_ETABS_Plugin.src.pad_footing_plot;
 using static WS_SG_ETABS_Plugin.src.plot_drift.ClassDriftPlot;
 
@@ -15,9 +9,10 @@ namespace WS_SG_ETABS_Plugin.src.plot_drift
 {
     internal class FunctionDriftPlot
     {
-        public static bool PlotDrift(ETABSv1.cSapModel SapModel, ETABSv1.cPluginCallback Plugin, string outputCase, string displacementDirection, string maxDisplacementFactor, string choosenGroup,
+        public static bool PlotDrift(ETABSv1.cSapModel SapModel, ETABSv1.cPluginCallback Plugin, string outputCase, string displacementDirection, string maxAllowableDispType, string maxAllowableDisplacementFactor, string choosenGroup,
             int legendTextSize, int titleSize, int axisTitleSize, int tickLabelSize, double gridSpacingDisplacementX, double gridSpacingDriftX, double gridSpacingY, bool showMaxDisp,
-            List<src.HelperEtabs.DatabaseTable> databaseTableList, string fileName, string filePath, WpfPlot DriftPlot, WpfPlot DisplacementPlot)
+            List<src.HelperEtabs.DatabaseTable> databaseTableList, string fileName, string filePath, WpfPlot DriftPlot, WpfPlot DisplacementPlot, 
+            string displacementXAxisMaxType, string displacementXAxisMax, string driftXAxisMaxType, string driftXAxisMax)
         {
             bool isError = false;
             List<string> errorList = new List<string>();
@@ -58,16 +53,11 @@ namespace WS_SG_ETABS_Plugin.src.plot_drift
             //Check if case have multiple result for example seismic
             bool caseHaveMultipleResult = CheckCaseHaveMultipleResult(jointListFilteredByGroup, jointDisplacementsTable, outputCase);
 
+            double[] zCoordinateList;
+            double[] displacementList;
+            double[] driftList;
             if (caseHaveMultipleResult)
             {
-                //not implemented yet
-            }
-            else
-            {
-                double[] zCoordinateList;
-                double[] displacementList;
-                double[] driftList;
-
                 if (showMaxDisp)
                 {
                     //Get unique Z from the filtered joints
@@ -75,22 +65,69 @@ namespace WS_SG_ETABS_Plugin.src.plot_drift
                     List<HelperEtabs.Point3D> jointListFilteredZ = HelperEtabs.FilterPointBasedOnZCoord(jointList, uniqueZCoord);
 
 
-                    List<ClassDriftPlot.JointDisplacementDetail> jointMaxDisplacementDetailList = new List<ClassDriftPlot.JointDisplacementDetail>();
-                    List<ClassDriftPlot.JointDisplacementDetail> jointMinDisplacementDetailList = new List<ClassDriftPlot.JointDisplacementDetail>();
+                    List<ClassDriftPlot.JointDisplacementDetail> jointMaxDisplacementDetailEveryZList = new List<ClassDriftPlot.JointDisplacementDetail>();
+                    List<ClassDriftPlot.JointDisplacementDetail> jointMinDisplacementDetailEveryZList = new List<ClassDriftPlot.JointDisplacementDetail>();
 
-                    (jointMaxDisplacementDetailList, jointMinDisplacementDetailList) = GetMaxDisplacement(jointListFilteredZ, uniqueZCoord, jointDisplacementsTable, displacementDirection);
+                    (jointMaxDisplacementDetailEveryZList, jointMinDisplacementDetailEveryZList) = GetMaxDisplacement(jointListFilteredZ, uniqueZCoord, jointDisplacementsTable, displacementDirection);
 
                     //Plot max
-                    (zCoordinateList, displacementList, driftList) = ConvertToArray(jointMaxDisplacementDetailList);
-                    DisplacementPlot.Plot.AddScatterLines(displacementList, zCoordinateList, System.Drawing.ColorTranslator.FromHtml("#808080"), 1, LineStyle.DashDot, "Displacement Max (mm)");
+                    (zCoordinateList, displacementList, driftList) = ConvertToArray(jointMaxDisplacementDetailEveryZList);
+                    DisplacementPlot.Plot.AddScatterLines(displacementList, zCoordinateList, System.Drawing.ColorTranslator.FromHtml("#808080"), 1, LineStyle.DashDot, "Displacement Max/Min (mm)");
 
-                    (zCoordinateList, displacementList, driftList) = ConvertToArray(jointMinDisplacementDetailList);
-                    DisplacementPlot.Plot.AddScatterLines(displacementList, zCoordinateList, System.Drawing.ColorTranslator.FromHtml("#808080"), 1, LineStyle.DashDot, "Displacement Min (mm)");
-                    
+                    (zCoordinateList, displacementList, driftList) = ConvertToArray(jointMinDisplacementDetailEveryZList);
+                    DisplacementPlot.Plot.AddScatterLines(displacementList, zCoordinateList, System.Drawing.ColorTranslator.FromHtml("#808080"), 1, LineStyle.DashDot, null);
+
+                }
+
+                List<src.plot_drift.ClassDriftPlot.JointDisplacementDetail> jointMaxDisplacementDetailList = new List<JointDisplacementDetail>();
+                List<src.plot_drift.ClassDriftPlot.JointDisplacementDetail> jointMinDisplacementDetailList = new List<JointDisplacementDetail>();
+
+                (jointMinDisplacementDetailList, jointMaxDisplacementDetailList) = GetJointDisplacementMultiCase(jointListFilteredByGroup, jointDisplacementsTable, outputCase, displacementDirection);
+                List<src.plot_drift.ClassDriftPlot.JointDisplacementDetail> limitJointDisplacementDetailList = GetJointDisplacementLimit(jointListFilteredByGroup, maxAllowableDisplacementFactor);
+
+                //Plot displacement
+                (zCoordinateList, displacementList, driftList) = ConvertToArray(jointMinDisplacementDetailList);
+                DisplacementPlot.Plot.AddScatterLines(displacementList, zCoordinateList, System.Drawing.ColorTranslator.FromHtml("#ffce00"), 2, LineStyle.Solid, "Displacement (mm)");
+                DriftPlot.Plot.AddScatterLines(driftList, zCoordinateList, System.Drawing.ColorTranslator.FromHtml("#ffce00"), 2, LineStyle.Solid, "Inter-story drift");
+
+                //Plot displacement
+                (zCoordinateList, displacementList, driftList) = ConvertToArray(jointMaxDisplacementDetailList);
+                DisplacementPlot.Plot.AddScatterLines(displacementList, zCoordinateList, System.Drawing.ColorTranslator.FromHtml("#ffce00"), 2, LineStyle.Solid, null);
+                DriftPlot.Plot.AddScatterLines(driftList, zCoordinateList, System.Drawing.ColorTranslator.FromHtml("#ffce00"), 2, LineStyle.Solid, null);
+
+                //Plot limit
+                var denominator = maxAllowableDisplacementFactor.Split('/')[1];
+                (zCoordinateList, displacementList, driftList) = ConvertToArray(limitJointDisplacementDetailList);
+                DisplacementPlot.Plot.AddScatterLines(displacementList, zCoordinateList, System.Drawing.ColorTranslator.FromHtml("#FF0000"), 2, LineStyle.Dash, $"Limit H/{denominator}");
+                DriftPlot.Plot.AddScatterLines(driftList, zCoordinateList, System.Drawing.ColorTranslator.FromHtml("#FF0000"), 2, LineStyle.Dash, $"Limit h/{denominator}");
+
+
+            }
+            else
+            {
+                if (showMaxDisp)
+                {
+                    //Get unique Z from the filtered joints
+                    List<double> uniqueZCoord = GetUniqueZFromPointList(jointListFilteredByGroup);
+                    List<HelperEtabs.Point3D> jointListFilteredZ = HelperEtabs.FilterPointBasedOnZCoord(jointList, uniqueZCoord);
+
+
+                    List<ClassDriftPlot.JointDisplacementDetail> jointMaxDisplacementDetailEveryZList = new List<ClassDriftPlot.JointDisplacementDetail>();
+                    List<ClassDriftPlot.JointDisplacementDetail> jointMinDisplacementDetailEveryZList = new List<ClassDriftPlot.JointDisplacementDetail>();
+
+                    (jointMaxDisplacementDetailEveryZList, jointMinDisplacementDetailEveryZList) = GetMaxDisplacement(jointListFilteredZ, uniqueZCoord, jointDisplacementsTable, displacementDirection);
+
+                    //Plot max
+                    (zCoordinateList, displacementList, driftList) = ConvertToArray(jointMaxDisplacementDetailEveryZList);
+                    DisplacementPlot.Plot.AddScatterLines(displacementList, zCoordinateList, System.Drawing.ColorTranslator.FromHtml("#808080"), 1, LineStyle.DashDot, "Displacement Max/Min (mm)");
+
+                    (zCoordinateList, displacementList, driftList) = ConvertToArray(jointMinDisplacementDetailEveryZList);
+                    DisplacementPlot.Plot.AddScatterLines(displacementList, zCoordinateList, System.Drawing.ColorTranslator.FromHtml("#808080"), 1, LineStyle.DashDot, null);
+
                 }
 
                 List<src.plot_drift.ClassDriftPlot.JointDisplacementDetail> jointDisplacementDetailList = GetJointDisplacement(jointListFilteredByGroup, jointDisplacementsTable, outputCase, displacementDirection);
-                List<src.plot_drift.ClassDriftPlot.JointDisplacementDetail> limitJointDisplacementDetailList = GetJointDisplacementLimit(jointListFilteredByGroup, maxDisplacementFactor);
+                List<src.plot_drift.ClassDriftPlot.JointDisplacementDetail> limitJointDisplacementDetailList = GetJointDisplacementLimit(jointListFilteredByGroup, maxAllowableDisplacementFactor);
 
                 //Plot displacement
                 (zCoordinateList, displacementList, driftList) = ConvertToArray(jointDisplacementDetailList);
@@ -98,21 +135,36 @@ namespace WS_SG_ETABS_Plugin.src.plot_drift
                 DriftPlot.Plot.AddScatterLines(driftList, zCoordinateList, System.Drawing.ColorTranslator.FromHtml("#ffce00"), 2, LineStyle.Solid, "Inter-story drift");
 
                 //Plot limit
-                var denominator = maxDisplacementFactor.Split('/')[1];
-                (zCoordinateList, displacementList, driftList) = ConvertToArray(limitJointDisplacementDetailList);
-                DisplacementPlot.Plot.AddScatterLines(displacementList, zCoordinateList, System.Drawing.ColorTranslator.FromHtml("#FF0000"), 2, LineStyle.Dash, $"Limit H/{denominator}");
-                DriftPlot.Plot.AddScatterLines(driftList, zCoordinateList, System.Drawing.ColorTranslator.FromHtml("#FF0000"), 2, LineStyle.Dash, $"Limit h/{denominator}");
+                if (maxAllowableDispType != "hide")
+                {
+                    var denominator = maxAllowableDisplacementFactor.Split('/')[1];
+                    (zCoordinateList, displacementList, driftList) = ConvertToArray(limitJointDisplacementDetailList);
+                    DisplacementPlot.Plot.AddScatterLines(displacementList, zCoordinateList, System.Drawing.ColorTranslator.FromHtml("#FF0000"), 2, LineStyle.Dash, $"Limit H/{denominator}");
+                    DriftPlot.Plot.AddScatterLines(driftList, zCoordinateList, System.Drawing.ColorTranslator.FromHtml("#FF0000"), 2, LineStyle.Dash, $"Limit h/{denominator}");
+                }
+
 
             }
 
+            //X Axis adjustment to user limit
+            if (displacementXAxisMaxType != "auto")
+            {
+                DisplacementPlot.Plot.SetAxisLimits(null, Convert.ToDouble(displacementXAxisMax), null, null);
+            }
+            if (driftXAxisMaxType != "auto")
+            {
+                DriftPlot.Plot.SetAxisLimits(null, Convert.ToDouble(driftXAxisMax), null, null);
+            }
 
             DisplacementPlot.Plot.Title($"Lateral Deflection (Case: {outputCase}, Direction: {displacementDirection})", true, null, titleSize, "Arial Narrow");
             DisplacementPlot.Plot.YAxis.Label("Height (m)", null, axisTitleSize, true, "Arial Narrow");
             DisplacementPlot.Plot.XAxis.Label("Displacement (mm)", null, axisTitleSize, true, "Arial Narrow");
-            DisplacementPlot.Plot.YAxis.ManualTickSpacing(gridSpacingY);
             DisplacementPlot.Plot.XAxis.ManualTickSpacing(gridSpacingDisplacementX);
+            DriftPlot.Plot.XAxis.ManualTickSpacing(gridSpacingDriftX);
+            DisplacementPlot.Plot.YAxis.ManualTickSpacing(gridSpacingY);
             DisplacementPlot.Plot.YAxis.TickLabelStyle(null, null, tickLabelSize, null, null);
             DisplacementPlot.Plot.XAxis.TickLabelStyle(null, null, tickLabelSize, null, null);
+
             var displacementLegend = DisplacementPlot.Plot.Legend();
             displacementLegend.FontSize = legendTextSize;
 
@@ -174,7 +226,16 @@ namespace WS_SG_ETABS_Plugin.src.plot_drift
                 {
                     if (row["UniqueName"] == joint.UniqueName)
                     {
-                        double displacement = Convert.ToDouble(row[displacementDirection]) * 1000; //m to mm
+                        double displacement;
+
+                        if (displacementDirection == "Ux + Uy (SRSS)")
+                        {
+                            displacement = Math.Pow(Math.Pow(Convert.ToDouble(row["Ux"]), 2) + Math.Pow(Convert.ToDouble(row["Uy"]), 2), 0.5) * 1000; //m to mm
+                        }
+                        else
+                        {
+                            displacement = Math.Abs(Convert.ToDouble(row[displacementDirection])) * 1000; //m to mm
+                        }
 
                         ClassDriftPlot.JointDisplacementDetail jointDisplacementDetail = new ClassDriftPlot.JointDisplacementDetail(joint.UniqueName, joint.ZCoordinate, displacement);
                         jointDisplacementDetailList.Add(jointDisplacementDetail);
@@ -206,6 +267,87 @@ namespace WS_SG_ETABS_Plugin.src.plot_drift
             }
 
             return sortedJointDisplacementDetailList;
+        }
+
+        public static (List<ClassDriftPlot.JointDisplacementDetail>, List<ClassDriftPlot.JointDisplacementDetail>) GetJointDisplacementMultiCase(List<src.HelperEtabs.Point3D> jointList, src.HelperEtabs.DatabaseTable jointDisplacementsTable,
+    string outputCase, string displacementDirection)
+        {
+
+            List<ClassDriftPlot.JointDisplacementDetail> jointMaxDisplacementDetailList = new List<ClassDriftPlot.JointDisplacementDetail>();
+            List<ClassDriftPlot.JointDisplacementDetail> jointMinDisplacementDetailList = new List<ClassDriftPlot.JointDisplacementDetail>();
+
+            List<Dictionary<string, string>> tableInList = jointDisplacementsTable.TableInList;
+
+            double maxDisp = 0;
+            double minDisp = 0;
+            bool firstMatch = true;
+
+            foreach (HelperEtabs.Point3D joint in jointList)
+            {
+
+                Dictionary<string, string> rowMatch = new Dictionary<string, string>();
+                foreach (Dictionary<string, string> row in tableInList)
+                {
+                    if (row["UniqueName"] == joint.UniqueName)
+                    {
+                        double displacement = Convert.ToDouble(row[displacementDirection]) * 1000; //m to mm
+
+                        if (firstMatch)
+                        {
+                            maxDisp = displacement;
+                            minDisp = displacement;
+                            firstMatch = false;
+                        }
+                        else
+                        {
+                            if (displacement > maxDisp) { maxDisp = displacement;}
+                            if (displacement < minDisp) { minDisp = displacement;}
+                        }
+                    }
+                }
+                ClassDriftPlot.JointDisplacementDetail jointMinDisplacementDetail = new ClassDriftPlot.JointDisplacementDetail(joint.UniqueName, joint.ZCoordinate, minDisp);
+                jointMinDisplacementDetailList.Add(jointMinDisplacementDetail);
+                ClassDriftPlot.JointDisplacementDetail jointMaxDisplacementDetail = new ClassDriftPlot.JointDisplacementDetail(joint.UniqueName, joint.ZCoordinate, maxDisp);
+                jointMaxDisplacementDetailList.Add(jointMaxDisplacementDetail);
+
+
+            }
+
+            //Get the drift
+            //Sort from lowest Z
+            List<ClassDriftPlot.JointDisplacementDetail> sortedJointMinDisplacementDetailList = jointMinDisplacementDetailList.OrderBy(o => o.ZCoordinate).ToList();
+
+            int index = 0;
+            foreach (ClassDriftPlot.JointDisplacementDetail jointMinDisplacementDetail in sortedJointMinDisplacementDetailList)
+            {
+                if (index == 0)
+                {
+                    jointMinDisplacementDetail.Drift = 0;
+                }
+                else
+                {
+                    jointMinDisplacementDetail.Drift = ((jointMinDisplacementDetail.Displacement - sortedJointMinDisplacementDetailList[index - 1].Displacement) / 1000) / (jointMinDisplacementDetail.ZCoordinate - sortedJointMinDisplacementDetailList[index - 1].ZCoordinate);
+                }
+                index++;
+            }
+
+            List<ClassDriftPlot.JointDisplacementDetail> sortedJointMaxDisplacementDetailList = jointMaxDisplacementDetailList.OrderBy(o => o.ZCoordinate).ToList();
+
+            index = 0;
+            foreach (ClassDriftPlot.JointDisplacementDetail jointMaxDisplacementDetail in sortedJointMaxDisplacementDetailList)
+            {
+                if (index == 0)
+                {
+                    jointMaxDisplacementDetail.Drift = 0;
+                }
+                else
+                {
+                    jointMaxDisplacementDetail.Drift = ((jointMaxDisplacementDetail.Displacement - sortedJointMaxDisplacementDetailList[index - 1].Displacement) / 1000) / (jointMaxDisplacementDetail.ZCoordinate - sortedJointMaxDisplacementDetailList[index - 1].ZCoordinate);
+                }
+                index++;
+            }
+
+            return (sortedJointMinDisplacementDetailList, sortedJointMaxDisplacementDetailList);
         }
 
         public static List<ClassDriftPlot.JointDisplacementDetail> GetJointDisplacementLimit(List<src.HelperEtabs.Point3D> jointList, string maxDisplacementFactor)
@@ -287,7 +429,16 @@ namespace WS_SG_ETABS_Plugin.src.plot_drift
                         {
                             if (row["UniqueName"] == jointFilteredZ.UniqueName)
                             {
-                                double displacement = Convert.ToDouble(row[displacementDirection]) * 1000;
+                                double displacement;
+
+                                if (displacementDirection == "Ux + Uy (SRSS)")
+                                {
+                                    displacement = Math.Pow(Math.Pow(Convert.ToDouble(row["Ux"]), 2) + Math.Pow(Convert.ToDouble(row["Uy"]), 2), 0.5) * 1000; //m to mm
+                                }
+                                else
+                                {
+                                    displacement = Math.Abs(Convert.ToDouble(row[displacementDirection])) * 1000; //m to mm
+                                }
 
                                 if (firstMatch)
                                 {

@@ -26,33 +26,39 @@ namespace WS_SG_ETABS_Plugin.src.plot_drift
 
         List<src.HelperEtabs.DatabaseTable> databaseTableList = new List<src.HelperEtabs.DatabaseTable>();
 
-        public WindowDriftPlotLoading(cSapModel SapModel, cPluginCallback Plugin)
+        public WindowDriftPlotLoading(cSapModel SapModel, cPluginCallback Plugin, List<string> listChoosenLoadCase)
         {
             _SapModel = SapModel;
             _Plugin = Plugin;
 
-            //Check if model is locked
-            bool modelToLocked = _SapModel.GetModelIsLocked();
-
-            if (!modelToLocked)
-            {
-                MessageBox.Show("ETABS file is unlocked! Please run analysis first!");
-                return;
-            }
-
             InitializeComponent();
 
-            //Turn on all load
-            src.HelperEtabs.OnAllLoadDatabase(SapModel);
+            //Get currently showed load
+            List<string> loadCaseDisplayed = new List<string>();
+            List<string> loadCombinationDisplayed = new List<string>();
+            (loadCaseDisplayed, loadCombinationDisplayed) = HelperEtabs.GetAllLoadCaseAndComboDisplayedDatabase(SapModel);
+
+            List<string> originallyDisplayedLoadCaseAndComboList = new List<string>();
+            originallyDisplayedLoadCaseAndComboList.AddRange(loadCaseDisplayed);
+            originallyDisplayedLoadCaseAndComboList.AddRange(loadCombinationDisplayed);
+
+            //Turn on all load pattern
+            HelperEtabs.OnAllLoadPatternDatabase(SapModel);
+
+            ///Turn off all load case and combo displayed
+            HelperEtabs.OffAllLoadCaseAndComboDisplayedDatabase(SapModel);
+
+            //Turn on selected load case and combo displayed
+            HelperEtabs.OnLoadCaseAndComboDatabaseBasedOnList(SapModel, listChoosenLoadCase);
 
             //Get joint reaction database table
             List<string> tableKeys = new List<string> { "Point Object Connectivity", "Joint Displacements", "Group Assignments" };
-            loadDatabaseTable(SapModel, Plugin, tableKeys, databaseTableList);
+            loadDatabaseTable(SapModel, Plugin, tableKeys, databaseTableList, listChoosenLoadCase, originallyDisplayedLoadCaseAndComboList);
 
             ShowDialog();
         }
 
-        private async void loadDatabaseTable(cSapModel SapModel, cPluginCallback Plugin, List<string> tableKeys, List<src.HelperEtabs.DatabaseTable> databaseTableList)
+        private async void loadDatabaseTable(cSapModel SapModel, cPluginCallback Plugin, List<string> tableKeys, List<src.HelperEtabs.DatabaseTable> databaseTableList, List<string> listChoosenLoadCase, List<string> originallyDisplayedLoadCaseAndComboList)
         {
             bool isError = false;
 
@@ -112,8 +118,11 @@ namespace WS_SG_ETABS_Plugin.src.plot_drift
 
             if (!isError)
             {
+                //Turn on back load originally
+                HelperEtabs.OnLoadCaseAndComboDatabaseBasedOnList(SapModel, originallyDisplayedLoadCaseAndComboList);
+
                 //Call up window
-                src.plot_drift.WindowDriftPlotMain windowDriftPlotMain = new src.plot_drift.WindowDriftPlotMain(SapModel, Plugin, databaseTableList);
+                src.plot_drift.WindowDriftPlotMain windowDriftPlotMain = new src.plot_drift.WindowDriftPlotMain(SapModel, Plugin, databaseTableList, listChoosenLoadCase);
             }
 
         }

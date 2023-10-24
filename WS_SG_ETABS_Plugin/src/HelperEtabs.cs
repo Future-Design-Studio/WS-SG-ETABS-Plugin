@@ -1,4 +1,5 @@
-﻿using ETABSv1;
+﻿using Accord;
+using ETABSv1;
 using Microsoft.Office.Interop.Excel;
 //using SAFEv1;
 using ScottPlot.Drawing.Colormaps;
@@ -6,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
+using System.Xml.Linq;
 
 namespace WS_SG_ETABS_Plugin.src
 {
@@ -1035,7 +1037,6 @@ namespace WS_SG_ETABS_Plugin.src
 
             }
 
-
             bool FillImportLog = true;
             int NumFatalErrors = 0;
             int NumErrorMsgs = 0;
@@ -1072,6 +1073,16 @@ namespace WS_SG_ETABS_Plugin.src
             Ret = Sap.DatabaseTables.SetLoadCombinationsSelectedForDisplay(ref MyName);
         }
 
+        public static void OnAllLoadPatternDatabase(cSapModel Sap)
+        {
+            //Load Pattern
+            int NumberNames = 0;
+            string[] MyName = null;
+            Sap.LoadPatterns.GetNameList(ref NumberNames, ref MyName);
+            Ret = Sap.DatabaseTables.SetLoadPatternsSelectedForDisplay(ref MyName);
+
+        }
+
         public static void OnAllLoadDatabaseWithoutCombinations(cSapModel Sap)
         {
             //Load Pattern
@@ -1086,6 +1097,80 @@ namespace WS_SG_ETABS_Plugin.src
 
             //Load Combination
             MyName = new string[1] {""};
+            Ret = Sap.DatabaseTables.SetLoadCombinationsSelectedForDisplay(ref MyName);
+        }
+
+        public static void OnLoadCaseAndComboDatabaseBasedOnList(cSapModel Sap, List<string> loadCaseAndComboList)
+        {
+            //Load Case
+            int NumberNames = 0;
+            string[] MyName = null;
+            Sap.LoadCases.GetNameList(ref NumberNames, ref MyName);
+
+            List<string> loadToTurnOnList = new List<string>();
+            foreach(string loadCaseAndCombo in loadCaseAndComboList)
+            {
+                foreach (string name in MyName)
+                {
+                    if (loadCaseAndCombo == name)
+                    {
+                        loadToTurnOnList.Add(name);
+                    }
+                }
+            }
+            string[] loadToTurnOnArray = loadToTurnOnList.ToArray();
+
+            Ret = Sap.DatabaseTables.SetLoadCasesSelectedForDisplay(ref loadToTurnOnArray);
+
+            //Load Combination
+            Sap.RespCombo.GetNameList(ref NumberNames, ref MyName);
+
+            loadToTurnOnList = new List<string>();
+            foreach (string loadCaseAndCombo in loadCaseAndComboList)
+            {
+                foreach (string name in MyName)
+                {
+                    if (loadCaseAndCombo == name)
+                    {
+                        loadToTurnOnList.Add(name);
+                    }
+                }
+            }
+            loadToTurnOnArray = loadToTurnOnList.ToArray();
+
+            Ret = Sap.DatabaseTables.SetLoadCombinationsSelectedForDisplay(ref loadToTurnOnArray);
+        }
+
+        public static (List<string>, List<string>) GetAllLoadCaseAndComboDisplayedDatabase(cSapModel Sap)
+        {
+            /*
+            //Load Pattern
+            int NumberSelectedLoadPatterns = 0;
+            string[] LoadPatternList = null;
+            Ret = Sap.DatabaseTables.GetLoadPatternsSelectedForDisplay(ref NumberSelectedLoadPatterns, ref LoadPatternList);
+            */
+
+            //Load Case
+            int NumberSelectedLoadCases = 0;
+            string[] LoadCaseList = null;
+            Ret = Sap.DatabaseTables.GetLoadCasesSelectedForDisplay(ref NumberSelectedLoadCases, ref LoadCaseList);
+
+            //Load Combination
+            int NumberSelectedLoadCombinations = 0;
+            string[] LoadCombinationList = null;
+            Ret = Sap.DatabaseTables.GetLoadCombinationsSelectedForDisplay(ref NumberSelectedLoadCombinations, ref LoadCombinationList);
+
+            return (LoadCaseList.ToList(), LoadCombinationList.ToList());
+        }
+
+        public static void OffAllLoadCaseAndComboDisplayedDatabase(cSapModel Sap)
+        {
+            //Load Case
+            string[] MyName = new string[1] { "" };
+            Ret = Sap.DatabaseTables.SetLoadCasesSelectedForDisplay(ref MyName);
+
+            //Load Combination
+            MyName = new string[1] { "" };
             Ret = Sap.DatabaseTables.SetLoadCombinationsSelectedForDisplay(ref MyName);
         }
 
@@ -2505,6 +2590,12 @@ namespace WS_SG_ETABS_Plugin.src
         public static List<string> lateralDeflectionDirectionList = new List<string>()
         {
             "Ux", "Uy"
+        };
+
+
+        public static List<string> lateralDeflectionDirectionWithSRSSList = new List<string>()
+        {
+            "Ux", "Uy", "Ux + Uy (SRSS)"
         };
 
         #endregion

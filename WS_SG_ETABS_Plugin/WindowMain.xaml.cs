@@ -283,7 +283,7 @@ namespace WS_SG_ETABS_Plugin
         {
             IsEnabled = false;
             //Call up window
-            src.plot_drift.WindowDriftPlotLoading windowDriftPlotLoading = new src.plot_drift.WindowDriftPlotLoading(_SapModel, _Plugin);
+            src.plot_drift.WindowDriftPlotSelectLoad windowDriftPlotSelectLoad = new src.plot_drift.WindowDriftPlotSelectLoad(_SapModel, _Plugin);
             IsEnabled = true;
         }
 

@@ -28,7 +28,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_drift
         //List of tables to save joint reaction and grouping table
         List<src.HelperEtabs.DatabaseTable> databaseTableListGlobal = new List<HelperEtabs.DatabaseTable>();
 
-        public WindowDriftPlotMain(cSapModel SapModel, cPluginCallback Plugin, List<src.HelperEtabs.DatabaseTable> databaseTableList)
+        public WindowDriftPlotMain(cSapModel SapModel, cPluginCallback Plugin, List<src.HelperEtabs.DatabaseTable> databaseTableList, List<string> listChoosenLoadCase)
         {
             _SapModel = SapModel;
             _Plugin = Plugin;
@@ -43,13 +43,19 @@ namespace WS_SG_ETABS_Plugin.src.plot_drift
             textBoxFilePath.Text = modelPath;
 
             //Fill in combobox for output case
-            List<string> outputCasesList = src.HelperEtabs.GetLoadCaseAndComboList(_SapModel);
-            comBoxOutputCase.ItemsSource = outputCasesList;
+            comBoxOutputCase.ItemsSource = listChoosenLoadCase;
             comBoxOutputCase.SelectedIndex = 0;
 
             //Fill in combobox for direction
-            comBoxDirection.ItemsSource = src.HelperEtabs.lateralDeflectionDirectionList;
+            comBoxDirection.ItemsSource = src.HelperEtabs.lateralDeflectionDirectionWithSRSSList;
             comBoxDirection.SelectedIndex = 0;
+
+            //Check the default factor max allowable disp
+            radioButtonFactorMaxDisp.IsChecked = true;
+
+            //Check the default
+            radioButtonDispXAxisMaxAuto.IsChecked = true;
+            radioButtonDriftXAxisMaxAuto.IsChecked = true;
 
             //Save databaseTableList to global variable
             databaseTableListGlobal = databaseTableList;
@@ -101,7 +107,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_drift
                 string outputCase = comBoxOutputCase.SelectedValue.ToString();
                 string choosenGroup = comBoxGroup.Text;
                 string displacementDirection = comBoxDirection.SelectedValue.ToString();
-                string maxDisplacementFactor = textBoxDisplacementFactor.Text;
+                
 
                 int legendTextSize = Convert.ToInt32(textBoxLegendTextSize.Text);
                 int titleSize = Convert.ToInt32(textBoxTitleSize.Text);
@@ -111,6 +117,48 @@ namespace WS_SG_ETABS_Plugin.src.plot_drift
                 double gridSpacingDriftX = Convert.ToDouble(textBoxGridSpacingDriftX.Text);
                 int gridSpacingY = Convert.ToInt32(textBoxGridSpacingY.Text);
 
+                //Allowable max displacement 
+                string maxAllowableDispType = "";
+                string maxAllowableDisplacementFactor = textBoxFactorMaxDisp.Text;
+                if (radioButtonFactorMaxDisp.IsChecked == true)
+                {
+                    maxAllowableDispType = "factor";
+                    
+                }
+                else if (radioButtonHideMaxDisp.IsChecked == true)
+                {
+                    maxAllowableDispType = "hide";
+                }
+
+
+                //Max displacement X Axis
+                string displacementXAxisMaxType = "";
+                string displacementXAxisMax = textBoxDispXAxisMaxManual.Text;
+                if (radioButtonDispXAxisMaxAuto.IsChecked == true)
+                {
+                    displacementXAxisMaxType = "auto";
+
+                }
+                else if (radioButtonDriftXAxisMaxAuto.IsChecked == false)
+                {
+                    displacementXAxisMaxType = "manual";
+                }
+
+
+                //Max drift X Axis
+                string driftXAxisMaxType = "";
+                string driftXAxisMax = textBoxDriftXAxisMaxManual.Text;
+                if (radioButtonDriftXAxisMaxAuto.IsChecked == true)
+                {
+                    driftXAxisMaxType = "auto";
+
+                }
+                else if (radioButtonDriftXAxisMaxAuto.IsChecked == false)
+                {
+                    driftXAxisMaxType = "manual";
+                }
+
+                //Show max displacement for each z
                 bool showMaxDisp = new bool();
                 if (checkBoxMaxDisp.IsChecked == true)
                 {
@@ -123,8 +171,9 @@ namespace WS_SG_ETABS_Plugin.src.plot_drift
 
                 //Call up copy result window
                 src.plot_drift.WindowDriftPlotResult windowdriftPlotResult = new src.plot_drift.WindowDriftPlotResult(
-                    _SapModel, _Plugin, outputCase, displacementDirection, maxDisplacementFactor, choosenGroup, legendTextSize,
-                    titleSize, axisTitleSize, tickLabelSize, gridSpacingDisplacementX, gridSpacingDriftX, gridSpacingY, showMaxDisp, databaseTableListGlobal, fileName, filePath);
+                    _SapModel, _Plugin, outputCase, displacementDirection, maxAllowableDispType, maxAllowableDisplacementFactor, choosenGroup, legendTextSize,
+                    titleSize, axisTitleSize, tickLabelSize, gridSpacingDisplacementX, gridSpacingDriftX, gridSpacingY, showMaxDisp, databaseTableListGlobal, fileName, filePath, 
+                    displacementXAxisMaxType, displacementXAxisMax, driftXAxisMaxType, driftXAxisMax);
             }
 
             catch (Exception ex)
@@ -154,8 +203,38 @@ namespace WS_SG_ETABS_Plugin.src.plot_drift
             }
         }
 
+        private void radioButtonFactorMaxDisp_Checked(object sender, RoutedEventArgs e)
+        {
+            textBoxFactorMaxDisp.IsEnabled = true;
+        }
+
+        private void radioButtonHideMaxDisp_Checked(object sender, RoutedEventArgs e)
+        {
+            textBoxFactorMaxDisp.IsEnabled = false;
+        }
+
+
+
         #endregion
 
+        private void radioButtonDispXAxisMaxAuto_Checked(object sender, RoutedEventArgs e)
+        {
+            textBoxDispXAxisMaxManual.IsEnabled = false;
+        }
 
+        private void radioButtonDispXAxisMaxManual_Checked(object sender, RoutedEventArgs e)
+        {
+            textBoxDispXAxisMaxManual.IsEnabled = true;
+        }
+
+        private void radioButtonDriftXAxisMaxAuto_Checked(object sender, RoutedEventArgs e)
+        {
+            textBoxDriftXAxisMaxManual.IsEnabled = false;
+        }
+
+        private void radioButtonDriftXAxisMaxManual_Checked(object sender, RoutedEventArgs e)
+        {
+            textBoxDriftXAxisMaxManual.IsEnabled = true;
+        }
     }
 }
