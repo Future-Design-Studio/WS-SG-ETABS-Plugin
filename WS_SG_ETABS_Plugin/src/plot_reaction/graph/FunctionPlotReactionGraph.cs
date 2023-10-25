@@ -1,5 +1,7 @@
 ﻿using ETABSv1;
 using LiveCharts.Wpf.Charts.Base;
+using Rhino.FileIO;
+using Rhino.Geometry;
 using ScottPlot;
 using System;
 using System.Collections.Generic;
@@ -19,7 +21,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
         public static (bool, double, double, List<src.plot_reaction.graph.ClassPlotGraph.SumReactionPerGroup>) PlotReaction(cSapModel Sap, List<Dictionary<string, string>> groupAndColor, string outputCase, string reactionDirection,
             WpfPlot ReactionPlot, double forceFactor, double bubbleScaleFactor, int textSize, int titleSize, int axisTitleSize, double gridSpacingX, double gridSpacingY, string title, bool splitX, bool splitY,
             int divisionX, int divisionY, double offsetX, double offsetY, int sumTextSizeX, int sumTextSizeY, double separationX, double separationY, 
-            bool? includeAllJoints, string maxOrMin, List<src.HelperEtabs.DatabaseTable> databaseTableList)
+            bool? includeAllJoints, string maxOrMin, bool autoSplit, List<double> splitCoord, List<src.HelperEtabs.DatabaseTable> databaseTableList)
         {
             bool isError = false;
             bool showWarning = true;
@@ -173,6 +175,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
                     src.HelperPlot.BubblePlotter(ReactionPlot, bubbleSize, bubbleText, textSize, bubbleColor, xCoord, yCoord);
 
                     //Sum of reactions per group
+                    //sumReaction += Convert.ToDouble(reactionData["reaction"]);
                     sumReaction += reaction;
                 }
 
@@ -223,6 +226,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
             }
 
             //Summing up reaction
+            
             if (splitX || splitY)
             {
 
@@ -235,11 +239,48 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
                     double lowY = minYCoord;
                     double highY = minYCoord;
 
-                    for (int divisionYIndex = 0; divisionYIndex < 2; divisionYIndex++)
-                    {
-                        lowY = highY;
-                        highY = highY + (maxYCoord - minYCoord) / 2;
 
+                    //List down coordinate for splitting
+                    List<double> lowCoordUsed = new List<double>();
+                    List<double> highCoordUsed = new List<double>();
+                    if (!autoSplit)
+                    {
+                        List<double> splitCoordUsed = new List<double>();
+
+                        foreach (double eachSplitCoord in splitCoord)
+                        {
+                            if (eachSplitCoord > minXCoord && eachSplitCoord < maxXCoord)
+                            {
+                                splitCoordUsed.Add(eachSplitCoord);
+                            }
+                        }
+
+                        splitCoordUsed.Sort();
+
+                        //Start from minXCoord
+                        double lowX = minXCoord;
+                        double highX = minXCoord;
+
+                        foreach (double eachSplitCoordUsed in splitCoordUsed)
+                        {
+                            lowX = highX;
+
+                            highX = eachSplitCoordUsed;
+
+                            lowCoordUsed.Add(lowX);
+                            highCoordUsed.Add(highX);
+                        }
+
+                        //For 1 last split incorporating max X coord
+                        lowX = highX;
+                        highX = maxXCoord;
+
+                        lowCoordUsed.Add(lowX);
+                        highCoordUsed.Add(highX);
+                    }
+
+                    else
+                    {
                         //Start from minXCoord
                         double lowX = minXCoord;
                         double highX = minXCoord;
@@ -247,7 +288,24 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
                         for (int divisionXIndex = 0; divisionXIndex < divisionX; divisionXIndex++)
                         {
                             lowX = highX;
-                            highX = highX + (maxXCoord - minXCoord) / divisionX;
+
+                            highX = Math.Round(highX + (maxXCoord - minXCoord) / divisionX, 3);
+
+                            lowCoordUsed.Add(lowX);
+                            highCoordUsed.Add(highX);
+                        }
+                    }
+                    
+                    //Start summing up
+                    for (int divisionYIndex = 0; divisionYIndex < 2; divisionYIndex++)
+                    {
+                        lowY = highY;
+                        highY = Math.Round(highY + (maxYCoord - minYCoord) / 2, 3);
+
+                        for (int divisionXIndex = 0; divisionXIndex < divisionX; divisionXIndex++)
+                        {
+                            double lowX = lowCoordUsed[divisionXIndex];
+                            double highX = highCoordUsed[divisionXIndex];
 
                             //Inside each divison total reaction for each group
                             int groupSumIndex = 0;
@@ -284,15 +342,25 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
                                     textColor = System.Drawing.ColorTranslator.FromHtml(colorHex);
                                 }
 
-                                double reactionSum = new double();
+                                double reactionSum = 0;
+
+                                List<string> uniqueNameList = new List<string>();
 
                                 //Inside each group go through each point
                                 foreach (Dictionary<string, object> reactionData in compiledReactionData)
                                 {
+                                    /*
+                                    if (Convert.ToString(reactionData["uniqueName"]) == "ggGHn2329")
+                                    {
+                                        System.Diagnostics.Debugger.Break();
+                                    }
+                                    */
+                                       
+
                                     double yCoord = Convert.ToDouble(reactionData["yCoord"]);
                                     double xCoord = Convert.ToDouble(reactionData["xCoord"]);
 
-                                    //If it is last diviion x and not last division y
+                                    //If it is last division x and not last division y
                                     if (divisionXIndex == divisionX - 1 && divisionYIndex != 1)
                                     {
                                         //If the point is within grid, then add into reactionSum
@@ -300,10 +368,11 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
                                             && (Convert.ToString(reactionData["groupName"]) == groupName))
                                         {
                                             reactionSum += Convert.ToDouble(reactionData["reaction"]);
+                                            uniqueNameList.Add(Convert.ToString(reactionData["uniqueName"]));
                                         }
 
                                     }
-                                    //If it is last diviion y and not last division x
+                                    //If it is last division y and not last division x
                                     else if (divisionXIndex != divisionX - 1 && divisionYIndex == 1)
                                     {
                                         //If the point is within grid, then add into reactionSum
@@ -311,9 +380,10 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
                                             && (Convert.ToString(reactionData["groupName"]) == groupName))
                                         {
                                             reactionSum += Convert.ToDouble(reactionData["reaction"]);
+                                            uniqueNameList.Add(Convert.ToString(reactionData["uniqueName"]));
                                         }
                                     }
-                                    //If it is last of diviion y and last division x
+                                    //If it is last of division y and last division x
                                     else if (divisionXIndex == divisionX - 1 && divisionYIndex == 1)
                                     {
                                         //If the point is within grid, then add into reactionSum
@@ -321,6 +391,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
                                             && (Convert.ToString(reactionData["groupName"]) == groupName))
                                         {
                                             reactionSum += Convert.ToDouble(reactionData["reaction"]);
+                                            uniqueNameList.Add(Convert.ToString(reactionData["uniqueName"]));
                                         }
                                     }
                                     //If not both condition
@@ -331,9 +402,12 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
                                             && (Convert.ToString(reactionData["groupName"]) == groupName))
                                         {
                                             reactionSum += Convert.ToDouble(reactionData["reaction"]);
+                                            uniqueNameList.Add(Convert.ToString(reactionData["uniqueName"]));
                                         }
                                     }
                                 }
+
+                                uniqueNameList.Add("");
 
                                 //Put the sum inside plot
                                 if (divisionYIndex == 0)
@@ -373,7 +447,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
                     for (int divisionXIndex = 0; divisionXIndex < 2; divisionXIndex++)
                     {
                         lowX = highX;
-                        highX = highX + (maxXCoord - minXCoord) / 2;
+                        highX = Math.Round(highX + (maxXCoord - minXCoord) / 2, 3);
 
                         //Start from minXCoord
                         double lowY = minYCoord;
@@ -382,7 +456,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
                         for (int divisionYIndex = 0; divisionYIndex < divisionY; divisionYIndex++)
                         {
                             lowY = highY;
-                            highY = highY + (maxYCoord - minYCoord) / divisionY;
+                            highY = Math.Round(highY + (maxYCoord - minYCoord) / divisionY, 3);
 
                             //Inside each divison total reaction for each group
                             int groupSumIndex = 0;
