@@ -11,8 +11,9 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="0.8*"></RowDefinition>
-            <RowDefinition Height="*"></RowDefinition>
-            <RowDefinition Height="2.5*"></RowDefinition>
+            <RowDefinition Height="1.05*"></RowDefinition>
+            <RowDefinition Height="2.2*"></RowDefinition>
+            <RowDefinition Height="0.8*"></RowDefinition>
             <RowDefinition Height="0.35*"></RowDefinition>
         </Grid.RowDefinitions>
 
@@ -31,7 +32,7 @@
                     <ColumnDefinition Width="6*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
 
-                <Label Grid.Column="0" Margin="0 0 10 0" Content=".3dm file path:"></Label>
+                <Label Grid.Column="0" Margin="0 0 10 0" Content=".3dm file path:" FontSize="11"></Label>
 
                 <TextBox x:Name="textBoxFilePath" Grid.Column="1" IsEnabled="False"></TextBox>
 
@@ -43,7 +44,7 @@
                     <ColumnDefinition Width="6*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
 
-                <Label Grid.Column="0" Margin="0 0 10 0" Content=".3dm file name:"></Label>
+                <Label Grid.Column="0" Margin="0 0 10 0" Content=".3dm file name:" FontSize="11"></Label>
 
                 <TextBox x:Name="textBoxFileName" Grid.Column="1"></TextBox>
 
@@ -51,18 +52,48 @@
 
             <Grid Grid.Row="2">
                 <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
-                    <Button x:Name="buttonResetPath" Content="Reset path" Width="100" Click="buttonResetPath_Click"/>
-                    <Button x:Name="buttonModifyPath" Content="Modify path" Width="100" Click="buttonModifyPath_Click"/>
+                    <Button x:Name="buttonResetPath" Content="Reset path" Width="100" Click="buttonResetPath_Click" FontSize="11"/>
+                    <Button x:Name="buttonModifyPath" Content="Modify path" Width="100" Click="buttonModifyPath_Click" FontSize="11"/>
                 </StackPanel>
             </Grid>
 
         </Grid>
 
+        <Grid Grid.Row="3" Grid.Column="0" Margin="0 0 0 0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="20"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Row="0" Grid.Column="0" Margin="0 0 0 0" FontSize="10">
+                Settings:
+            </TextBlock>
+
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0">
+                    <CheckBox Name="checkBoxLineModel" Content="Include Line Model" IsChecked="True" IsEnabled="False" FontSize="9" VerticalContentAlignment="Center"></CheckBox>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1">
+                    <CheckBox Name="checkBoxFrameExtrusion" Content="Include Frame Extrusion" FontSize="9" VerticalContentAlignment="Center"></CheckBox>
+                    <CheckBox Name="checkBoxAreaExtrusion" Content="Include Area Extrusion" FontSize="9" VerticalContentAlignment="Center"></CheckBox>
+                </StackPanel>
+            </Grid>
+        </Grid>
+
         <TextBlock Grid.Row="2" Grid.Column="0" TextWrapping="Wrap" TextAlignment="Justify"  
                    FontSize="10">
                 How to use:<LineBreak/>
-                1. Adjust the output file path and name, then press the Export button to start the exporting process.<LineBreak/>
-                2. A new .3dm file will be created in the given file path.<LineBreak/><LineBreak/>
+                1. Adjust the output file path, name, and settings, then press the Export button to start the exporting process.<LineBreak/>
+                2. A new .3dm file will be created in the given file path.<LineBreak/>
+                <LineBreak/>
                 Note:<LineBreak/>
                 1. The resulting .3dm file contains all frame and area objects available in the etabs model.<LineBreak/>
                 2. Frame objects are represented as lines, with their properties attached as user string attributes.<LineBreak/>
@@ -73,7 +104,7 @@
 
         </TextBlock>
 
-        <Grid Grid.Row="3">
+        <Grid Grid.Row="4">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
@@ -85,11 +116,10 @@
 
             <Grid Grid.Column="1">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                    <Button x:Name="buttonCancel" Content="Cancel" Width="100" Click="buttonCancel_Click"/>
-                    <Button x:Name="buttonOk" Content="Export" Width="100" Click="buttonOk_Click"/>
+                    <Button x:Name="buttonCancel" Content="Cancel" Width="100" Click="buttonCancel_Click" FontSize="11"/>
+                    <Button x:Name="buttonOk" Content="Export" Width="100" Click="buttonOk_Click" FontSize="11"/>
                 </StackPanel>
             </Grid>
         </Grid>
-        
     </Grid>
 </Window>

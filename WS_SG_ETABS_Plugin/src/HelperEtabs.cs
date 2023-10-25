@@ -1,10 +1,13 @@
-﻿using ETABSv1;
+﻿using Accord;
+using ETABSv1;
 using Microsoft.Office.Interop.Excel;
+//using SAFEv1;
 using ScottPlot.Drawing.Colormaps;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
+using System.Xml.Linq;
 
 namespace WS_SG_ETABS_Plugin.src
 {
@@ -130,6 +133,7 @@ namespace WS_SG_ETABS_Plugin.src
             public double RatioLeftAv { get; set; }
             public double RatioMidAv { get; set; }
             public double RatioRightAv { get; set; }
+            public string Cluster { get; set; }
 
             public RcBeam(string name)
             {
@@ -147,6 +151,46 @@ namespace WS_SG_ETABS_Plugin.src
         {
 
             public ColumnPunchingShear(string name)
+            {
+                UniqueName = name;
+            }
+        }
+
+        public class RcColumn : Column
+        {
+            public double Height { get; set; }
+            public double Width { get; set; }
+            public double Diameter { get; set; }
+            public string Shape { get; set; }
+            public double As { get; set; }
+            public string Rebar { get; set; }
+            public double AvMajor { get; set; }
+            public double AvMinor { get; set; }
+            public string ShearLinksMajor { get; set; }
+            public string ShearLinksMinor { get; set; }
+            public double Fyk { get; set; }
+            public double Fck { get; set; }
+            public double AsMin { get; set; }
+            public double d { get; set; }
+            public double dCalculated { get; set; }
+            public double AsProv { get; set; }
+            public double AvMajorProv { get; set; }
+            public double AvMinorProv { get; set; }
+            public double RatioAs { get; set; }
+            public double RatioAvMajor { get; set; }
+            public double RatioAvMinor { get; set; }
+            public double Cover { get; set; }
+            public double CoverEtabs { get; set; }
+            public List<int> RebarDiameterList { get; set; }
+            public List<int> NoRebarPerLayer { get; set; }
+            public double ShearLinksDiameter { get; set; }
+            public double NumShearLinksLegMajor { get; set; }
+            public double NumShearLinksLegMinor { get; set; }
+            public double ShearLinksSpacing { get; set; }
+            public string AsEvaluationComment { get; set; }
+            public string AvEvaluationComment { get; set; }
+
+            public RcColumn(string name)
             {
                 UniqueName = name;
             }
@@ -993,7 +1037,6 @@ namespace WS_SG_ETABS_Plugin.src
 
             }
 
-
             bool FillImportLog = true;
             int NumFatalErrors = 0;
             int NumErrorMsgs = 0;
@@ -1030,6 +1073,16 @@ namespace WS_SG_ETABS_Plugin.src
             Ret = Sap.DatabaseTables.SetLoadCombinationsSelectedForDisplay(ref MyName);
         }
 
+        public static void OnAllLoadPatternDatabase(cSapModel Sap)
+        {
+            //Load Pattern
+            int NumberNames = 0;
+            string[] MyName = null;
+            Sap.LoadPatterns.GetNameList(ref NumberNames, ref MyName);
+            Ret = Sap.DatabaseTables.SetLoadPatternsSelectedForDisplay(ref MyName);
+
+        }
+
         public static void OnAllLoadDatabaseWithoutCombinations(cSapModel Sap)
         {
             //Load Pattern
@@ -1045,6 +1098,100 @@ namespace WS_SG_ETABS_Plugin.src
             //Load Combination
             MyName = new string[1] {""};
             Ret = Sap.DatabaseTables.SetLoadCombinationsSelectedForDisplay(ref MyName);
+        }
+
+        public static void OnLoadCaseAndComboDatabaseBasedOnList(cSapModel Sap, List<string> loadCaseAndComboList)
+        {
+            //Load Case
+            int NumberNames = 0;
+            string[] MyName = null;
+            Sap.LoadCases.GetNameList(ref NumberNames, ref MyName);
+
+            List<string> loadToTurnOnList = new List<string>();
+            foreach(string loadCaseAndCombo in loadCaseAndComboList)
+            {
+                foreach (string name in MyName)
+                {
+                    if (loadCaseAndCombo == name)
+                    {
+                        loadToTurnOnList.Add(name);
+                    }
+                }
+            }
+            string[] loadToTurnOnArray = loadToTurnOnList.ToArray();
+
+            Ret = Sap.DatabaseTables.SetLoadCasesSelectedForDisplay(ref loadToTurnOnArray);
+
+            //Load Combination
+            Sap.RespCombo.GetNameList(ref NumberNames, ref MyName);
+
+            loadToTurnOnList = new List<string>();
+            foreach (string loadCaseAndCombo in loadCaseAndComboList)
+            {
+                foreach (string name in MyName)
+                {
+                    if (loadCaseAndCombo == name)
+                    {
+                        loadToTurnOnList.Add(name);
+                    }
+                }
+            }
+            loadToTurnOnArray = loadToTurnOnList.ToArray();
+
+            Ret = Sap.DatabaseTables.SetLoadCombinationsSelectedForDisplay(ref loadToTurnOnArray);
+        }
+
+        public static (List<string>, List<string>) GetAllLoadCaseAndComboDisplayedDatabase(cSapModel Sap)
+        {
+            /*
+            //Load Pattern
+            int NumberSelectedLoadPatterns = 0;
+            string[] LoadPatternList = null;
+            Ret = Sap.DatabaseTables.GetLoadPatternsSelectedForDisplay(ref NumberSelectedLoadPatterns, ref LoadPatternList);
+            */
+
+            //Load Case
+            int NumberSelectedLoadCases = 0;
+            string[] LoadCaseList = null;
+            Ret = Sap.DatabaseTables.GetLoadCasesSelectedForDisplay(ref NumberSelectedLoadCases, ref LoadCaseList);
+
+            //Load Combination
+            int NumberSelectedLoadCombinations = 0;
+            string[] LoadCombinationList = null;
+            Ret = Sap.DatabaseTables.GetLoadCombinationsSelectedForDisplay(ref NumberSelectedLoadCombinations, ref LoadCombinationList);
+
+            return (LoadCaseList.ToList(), LoadCombinationList.ToList());
+        }
+
+        public static void OffAllLoadCaseAndComboDisplayedDatabase(cSapModel Sap)
+        {
+            //Load Case
+            string[] MyName = new string[1] { "" };
+            Ret = Sap.DatabaseTables.SetLoadCasesSelectedForDisplay(ref MyName);
+
+            //Load Combination
+            MyName = new string[1] { "" };
+            Ret = Sap.DatabaseTables.SetLoadCombinationsSelectedForDisplay(ref MyName);
+        }
+
+
+        public static List<src.HelperEtabs.Point3D> GetJointListFromGroup(src.HelperEtabs.DatabaseTable pointObjectConnectivityTable, src.HelperEtabs.DatabaseTable groupAssignmentsTable, string choosenGroup)
+        {
+            bool isError = false;
+            src.HelperEtabs.DatabaseTable filteredJointReactionTable = new HelperEtabs.DatabaseTable();
+            List<src.HelperEtabs.Point3D> jointList = new List<src.HelperEtabs.Point3D>();
+
+            //Get table from database
+            (isError, filteredJointReactionTable) = src.HelperEtabs.FilterDatabaseTableUniqueNameByGroup(pointObjectConnectivityTable, groupAssignmentsTable, choosenGroup);
+            List<Dictionary<string, string>> table = filteredJointReactionTable.TableInList;
+
+            foreach (Dictionary<string, string> row in table)
+            {
+                src.HelperEtabs.Point3D joint = new HelperEtabs.Point3D(row["UniqueName"], Convert.ToDouble(row["X"]), Convert.ToDouble(row["Y"]), Convert.ToDouble(row["Z"]));
+                jointList.Add(joint);
+            }
+
+            return jointList;
         }
 
         #endregion
@@ -1485,6 +1632,21 @@ namespace WS_SG_ETABS_Plugin.src
             return point3DList;
         }
 
+        public static List<Point3D> FilterPointBasedOnZCoord(List<Point3D> jointList, List<double> uniqueZCoordList)
+        {
+            List<Point3D> point3DList = new List<Point3D>();
+
+            foreach (Point3D joint in jointList)
+            {
+                if (uniqueZCoordList.Contains(joint.ZCoordinate))
+                {
+                    point3DList.Add(joint);
+                }
+
+            }
+
+            return point3DList;
+        }
 
         #endregion
 
@@ -2119,6 +2281,70 @@ namespace WS_SG_ETABS_Plugin.src
         }
 
         /// <summary>
+        /// Get (width, depth) of column circle or rectangle section property
+        /// </summary>
+        /// <param name="Sap"></param>
+        /// <param name="sectionPropName"></param>
+        /// <returns></returns>
+        public static (double, double, double, string, string) GetRcColumnDimensionAndConcreteMaterial(ETABSv1.cSapModel Sap, string sectionPropName)
+        {
+            //Get property type
+            ETABSv1.eFramePropType propType = new ETABSv1.eFramePropType();
+            string propTypeString = "";
+
+            Ret = Sap.PropFrame.GetTypeOAPI(sectionPropName, ref propType);
+            propTypeString = propType.ToString();
+
+            if (propTypeString == "Rectangular")
+            {
+                string FileName = "";
+                string MatProp = "";
+                double T3 = 0;
+                double T2 = 0;
+                int Color = 0;
+                string Notes = "";
+                string GUID = "";
+
+                Ret = Sap.PropFrame.GetRectangle(sectionPropName, ref FileName, ref MatProp, ref T3, ref T2, ref Color, ref Notes, ref GUID);
+
+                if (Ret == 0)
+                {
+                    return (T2, T3, 0, propTypeString, MatProp);
+                }
+                else
+                {
+                    return (0, 0, 0, "", "");
+                }
+            }
+            else if (propTypeString == "Circle")
+            {
+                string FileName = "";
+                string MatProp = "";
+                double T3 = 0;
+                int Color = 0;
+                string Notes = "";
+                string GUID = "";
+
+                Ret = Sap.PropFrame.GetCircle(sectionPropName, ref FileName, ref MatProp, ref T3, ref Color, ref Notes, ref GUID);
+
+                if (Ret == 0)
+                {
+                    return (0, 0, T3, propTypeString, MatProp);
+                }
+                else
+                {
+                    return (0, 0, 0, "", "");
+                }
+            }
+            else
+            {
+                MessageBox.Show("Only rectangular or circle shape is supported!");
+                return (0, 0, 0, "", "");
+            }
+
+        }
+
+        /// <summary>
         /// Get (cover top, cover bottom) of beam section property
         /// </summary>
         /// <param name="Sap"></param>
@@ -2144,6 +2370,43 @@ namespace WS_SG_ETABS_Plugin.src
             else
             {
                 return (0, 0, "");
+            }
+        }
+
+
+        /// <summary>
+        /// Get (cover top, cover bottom) of column section property
+        /// </summary>
+        /// <param name="Sap"></param>
+        /// <param name="sectionPropName"></param>
+        /// <returns></returns>
+        public static (double, double, double, string) GetRcColumnCoverAndRebarMaterial(cSapModel Sap, string sectionPropName)
+        {
+            string MatPropLong = "";
+            string MatPropConfine = "";
+            int Pattern = 0;
+            int ConfineType = 1;
+            double Cover = 0;
+            int NumberCBars = 0;
+            int NumberR3Bars = 0;
+            int NumberR2Bars = 0;
+            string RebarSize = "";
+            string TieSize = "";
+            double TieSpacingLongit = 0;
+            int Number3DirTieBars = 0;
+            int Number2DirTieBars = 0;
+            bool ToBeDesigned = false;
+
+            Ret = Sap.PropFrame.GetRebarColumn(sectionPropName, ref MatPropLong, ref MatPropConfine, ref Pattern, ref ConfineType, ref Cover, ref NumberCBars, ref NumberR3Bars, ref NumberR2Bars, 
+                ref RebarSize, ref TieSize, ref TieSpacingLongit, ref Number3DirTieBars, ref Number2DirTieBars, ref ToBeDesigned);
+
+            if (Ret == 0)
+            {
+                return (Cover, Convert.ToDouble(RebarSize), Convert.ToDouble(TieSize), MatPropLong);
+            }
+            else
+            {
+                return (0, 0, 0, "");
             }
         }
 
@@ -2322,6 +2585,17 @@ namespace WS_SG_ETABS_Plugin.src
         public static List<string> reactionDirectionList = new List<string>()
         {
             "FX", "FY", "FZ", "MX", "MY", "MZ"
+        };
+
+        public static List<string> lateralDeflectionDirectionList = new List<string>()
+        {
+            "Ux", "Uy"
+        };
+
+
+        public static List<string> lateralDeflectionDirectionWithSRSSList = new List<string>()
+        {
+            "Ux", "Uy", "Ux + Uy (SRSS)"
         };
 
         #endregion

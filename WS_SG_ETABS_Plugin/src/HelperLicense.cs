@@ -16,13 +16,33 @@ namespace WS_SG_ETABS_Plugin.src
         {
             bool licenseValid = true;
             string userComputerName = Environment.MachineName.ToString();
+            string licenseNumber;
 
             //Read license number
             try
             {
-                StreamReader sr = new StreamReader(@"C:\Program Files\Computers and Structures\ETABS 20\LMHOST.ini");
-                string licenseNumber = sr.ReadLine();
-                sr.Close();
+                //Support 3 versions of ETABS
+                try
+                {
+                    StreamReader sr = new StreamReader(@"C:\Program Files\Computers and Structures\ETABS 20\LMHOST.ini");
+                    licenseNumber = sr.ReadLine();
+                    sr.Close();
+                }
+                catch
+                {
+                    try
+                    {
+                        StreamReader sr = new StreamReader(@"C:\Program Files\Computers and Structures\ETABS 21\LMHOST.ini");
+                        licenseNumber = sr.ReadLine();
+                        sr.Close();
+                    }
+                    catch
+                    {
+                        StreamReader sr = new StreamReader(@"C:\Program Files\Computers and Structures\ETABS 22\LMHOST.ini");
+                        licenseNumber = sr.ReadLine();
+                        sr.Close();
+                    }
+                }
 
                 if (licenseNumber != "rwcphlice002")
                 {
@@ -36,6 +56,7 @@ namespace WS_SG_ETABS_Plugin.src
                 MessageBox.Show("Illegal license. Your PC ID " + userComputerName + " has been reported to Ramboll IT as well as Singapore Police.");
                 licenseValid = false;
                 return licenseValid;
+
             }
 
 
@@ -63,6 +84,7 @@ namespace WS_SG_ETABS_Plugin.src
                     {
                         if (today < expDateMonthYear)
                         {
+
                             List<List<string>> versionCsv = new List<List<string>>();
                             versionCsv = SplitCSV("https://raw.githubusercontent.com/stefano-ramboll/licensing/main/etabs_powerapps_allowed_versions.csv");
                             foreach (List<string> eachVersionCsv in versionCsv)
@@ -73,10 +95,12 @@ namespace WS_SG_ETABS_Plugin.src
                                     return licenseValid;
                                 }
                             }
-                            MessageBox.Show("Superseded version of ETABS PowerAPP detected! You will be redirected to download page for latest version of ETABS PowerAPP.");
+                            MessageBox.Show("Superseded version of ETABS PowerAPP detected! You will be redirected to download page for latest version of FDS PowerAPP.");
                             System.Diagnostics.Process.Start("https://tinyurl.com/ETABSPowerAPP");
                             licenseValid = false;
                             return licenseValid;
+
+                            
                         }
                         else
                         {

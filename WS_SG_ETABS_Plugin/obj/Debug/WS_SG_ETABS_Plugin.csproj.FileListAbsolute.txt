@@ -57,7 +57,6 @@ C:\Users\stefano\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws
 C:\Users\stefano\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\zh-Hans\Xceed.Wpf.AvalonDock.resources.dll
 C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\WS_SG_ETABS_Plugin.dll
 C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\WS_SG_ETABS_Plugin.pdb
-C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\ETABSv1.dll
 C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\LiveCharts.dll
 C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\LiveCharts.Wpf.dll
 C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\ScottPlot.dll
@@ -95,7 +94,6 @@ C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-s
 C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\copy_properties\WindowCopyPropMain.g.cs
 C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\copy_properties\WindowCopyPropResult.g.cs
 C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\plot_reaction\WindowPlotReactionMain.g.cs
-C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\plot_reaction\WindowPlotReactionResult.g.cs
 C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\shell_uni_orient\WindowShellUniMain.g.cs
 C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\shell_uni_orient\WindowShellUniResult.g.cs
 C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\WindowMain.g.cs
@@ -106,7 +104,6 @@ C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-s
 C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\copy_properties\WindowCopyPropMain.baml
 C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\copy_properties\WindowCopyPropResult.baml
 C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\plot_reaction\WindowPlotReactionMain.baml
-C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\plot_reaction\WindowPlotReactionResult.baml
 C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\shell_uni_orient\WindowShellUniMain.baml
 C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\shell_uni_orient\WindowShellUniResult.baml
 C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\WindowMain.baml
@@ -266,7 +263,6 @@ C:\Users\stefano\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws
 C:\Users\stefano\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\punching_shear_plot\WindowPunchShrPlotResult.baml
 C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\release_selected_node\WindowReleaseSelectedNodeMain.g.cs
 C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\release_selected_node\WindowReleaseSelectedNodeResult.g.cs
-C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\src\resources\Tools.pdf
 C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\release_selected_node\WindowReleaseSelectedNodeMain.baml
 C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\release_selected_node\WindowReleaseSelectedNodeResult.baml
 C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\punching_shear_plot\WindowPunchShrPlotLoading.g.cs
@@ -280,7 +276,6 @@ C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ET
 C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\punching_shear_plot\WindowPunchShrPlotResult.g.cs
 C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\release_selected_node\WindowReleaseSelectedNodeMain.g.cs
 C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\release_selected_node\WindowReleaseSelectedNodeResult.g.cs
-C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\src\resources\Tools.pdf
 C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\loads_etabs_etabs\WindowEtabsEtabsMain.baml
 C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\loads_etabs_etabs\WindowEtabsEtabsOpenFile.baml
 C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\loads_etabs_etabs\WindowEtabsEtabsOpenFileLoading.baml
@@ -327,3 +322,418 @@ C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws
 C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\loads_etabs_safe\WindowEtabsSafeResult.baml
 C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\pad_footing_plot\WindowPadFootLoading.baml
 C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\pad_footing_plot\WindowPadFootPlotMain.baml
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\rc_col_schedule\WindowRCCSchedMain.g.cs
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\rc_col_schedule\WindowRCCSchedResult.g.cs
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\rc_col_schedule\WindowRCCSchedMain.baml
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\rc_col_schedule\WindowRCCSchedResult.baml
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\librhino3dm_native.dylib
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\librhino3dm_native.so
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Win64\librhino3dm_native.dll
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Win32\librhino3dm_native.dll
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\src\resources\Tools.pdf
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Rhino3dm.dll
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\WS_SG_ETABS_Plugin.csproj.ResolveComReference.cache
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\pad_footing_plot\WindowPadFootPlotResult.baml
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\etabs_to_rhino\WindowEtabsToRhinoMain.g.cs
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\etabs_to_rhino\WindowEtabsToRhinoResult.g.cs
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\loads_etabs_etabs\WindowEtabsEtabsMain.g.cs
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\loads_etabs_etabs\WindowEtabsEtabsOpenFile.g.cs
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\loads_etabs_etabs\WindowEtabsEtabsOpenFileLoading.g.cs
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\loads_etabs_etabs\WindowEtabsEtabsResult.g.cs
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\loads_etabs_safe\WindowEtabsSafeMain.g.cs
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\loads_etabs_safe\WindowEtabsSafeOpenFile.g.cs
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\loads_etabs_safe\WindowEtabsSafeOpenFileLoading.g.cs
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\loads_etabs_safe\WindowEtabsSafeResult.g.cs
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\load_combo_EN\WindowChooseLoadCombiToGenerate.g.cs
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\load_combo_EN\WindowLoadComboMain.g.cs
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\load_combo_EN\WindowLoadComboResult.g.cs
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\pad_footing_plot\WindowPadFootLoading.g.cs
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\pad_footing_plot\WindowPadFootPlotMain.g.cs
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\pad_footing_plot\WindowPadFootPlotResult.g.cs
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\plot_reaction\graph\WindowPlotReactionGraphBaseReaction.g.cs
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\plot_reaction\graph\WindowPlotReactionGraphMain.g.cs
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\plot_reaction\graph\WindowPlotReactionGraphResult.g.cs
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\plot_reaction\table\WindowPlotReactionTableMain.g.cs
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\plot_reaction\table\WindowPlotReactionTableResult.g.cs
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\punching_shear_plot\WindowPunchShrPlotLoading.g.cs
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\punching_shear_plot\WindowPunchShrPlotMain.g.cs
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\punching_shear_plot\WindowPunchShrPlotResult.g.cs
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\rc_beam_schedule\WindowRCBSchedMain.g.cs
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\rc_beam_schedule\WindowRCBSchedResult.g.cs
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\rc_col_schedule\WindowRCCSchedMain.g.cs
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\rc_col_schedule\WindowRCCSchedResult.g.cs
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\release_selected_node\WindowReleaseSelectedNodeMain.g.cs
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\release_selected_node\WindowReleaseSelectedNodeResult.g.cs
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\select_uniquename\WindowSelUniqueNameMain.g.cs
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\select_uniquename\WindowSelUniqueNameResult.g.cs
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\transfer_midas\WindowTransferMidasMain.g.cs
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\transfer_midas\WindowTransferMidasProgress.g.cs
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\transfer_midas\WindowTransferMidasResult.g.cs
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\wind_coeff\WindowWindCoeffMain.g.cs
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\wind_coeff\WindowWindCoeffResult.g.cs
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\etabs_to_rhino\WindowEtabsToRhinoMain.baml
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\etabs_to_rhino\WindowEtabsToRhinoResult.baml
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\loads_etabs_etabs\WindowEtabsEtabsMain.baml
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\loads_etabs_etabs\WindowEtabsEtabsOpenFile.baml
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\loads_etabs_etabs\WindowEtabsEtabsOpenFileLoading.baml
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\loads_etabs_etabs\WindowEtabsEtabsResult.baml
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\loads_etabs_safe\WindowEtabsSafeMain.baml
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\loads_etabs_safe\WindowEtabsSafeOpenFile.baml
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\loads_etabs_safe\WindowEtabsSafeOpenFileLoading.baml
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\loads_etabs_safe\WindowEtabsSafeResult.baml
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\load_combo_EN\WindowChooseLoadCombiToGenerate.baml
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\load_combo_EN\WindowLoadComboMain.baml
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\load_combo_EN\WindowLoadComboResult.baml
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\pad_footing_plot\WindowPadFootLoading.baml
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\pad_footing_plot\WindowPadFootPlotMain.baml
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\plot_reaction\graph\WindowPlotReactionGraphBaseReaction.baml
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\plot_reaction\graph\WindowPlotReactionGraphMain.baml
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\plot_reaction\graph\WindowPlotReactionGraphResult.baml
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\plot_reaction\table\WindowPlotReactionTableMain.baml
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\plot_reaction\table\WindowPlotReactionTableResult.baml
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\punching_shear_plot\WindowPunchShrPlotLoading.baml
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\punching_shear_plot\WindowPunchShrPlotMain.baml
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\punching_shear_plot\WindowPunchShrPlotResult.baml
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\rc_beam_schedule\WindowRCBSchedMain.baml
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\rc_beam_schedule\WindowRCBSchedResult.baml
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\rc_col_schedule\WindowRCCSchedMain.baml
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\rc_col_schedule\WindowRCCSchedResult.baml
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\release_selected_node\WindowReleaseSelectedNodeMain.baml
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\release_selected_node\WindowReleaseSelectedNodeResult.baml
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\select_uniquename\WindowSelUniqueNameMain.baml
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\select_uniquename\WindowSelUniqueNameResult.baml
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\transfer_midas\WindowTransferMidasMain.baml
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\transfer_midas\WindowTransferMidasProgress.baml
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\transfer_midas\WindowTransferMidasResult.baml
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\wind_coeff\WindowWindCoeffMain.baml
+C:\Users\stefa\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\wind_coeff\WindowWindCoeffResult.baml
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Accord.dll.config
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\WS_SG_ETABS_Plugin.dll.config
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Accord.dll
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Accord.MachineLearning.dll
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Accord.Math.Core.dll
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Accord.Math.dll
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Accord.Statistics.dll
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Microsoft.ML.Core.dll
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Microsoft.ML.CpuMath.dll
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Microsoft.ML.Data.dll
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Microsoft.ML.DataView.dll
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Microsoft.ML.dll
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Microsoft.ML.KMeansClustering.dll
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Microsoft.ML.PCA.dll
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Microsoft.ML.StandardTrainers.dll
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Microsoft.ML.Transforms.dll
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Newtonsoft.Json.dll
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\SAFEv1.dll
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\System.Buffers.dll
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\System.CodeDom.dll
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\System.Collections.Immutable.dll
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\System.Memory.dll
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\System.Runtime.CompilerServices.Unsafe.dll
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\System.Threading.Channels.dll
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\System.Threading.Tasks.Extensions.dll
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Accord.xml
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Accord.MachineLearning.xml
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Accord.Math.xml
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Accord.Math.Core.xml
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Accord.Statistics.xml
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Microsoft.ML.xml
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Microsoft.ML.Core.xml
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Microsoft.ML.CpuMath.xml
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Microsoft.ML.Data.xml
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Microsoft.ML.DataView.xml
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Microsoft.ML.KMeansClustering.xml
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Microsoft.ML.PCA.xml
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Microsoft.ML.StandardTrainers.xml
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Microsoft.ML.Transforms.xml
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Newtonsoft.Json.xml
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\System.Buffers.xml
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\System.Collections.Immutable.xml
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\System.Memory.xml
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\System.Threading.Channels.xml
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\System.Threading.Tasks.Extensions.xml
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\rc_beam_schedule\ML\WindowRCBSchedKMeans.g.cs
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\rc_beam_schedule\WindowRCBSchedPCAResult.g.cs
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\rc_beam_schedule\ML\WindowRCBSchedKMeans.baml
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\rc_beam_schedule\WindowRCBSchedPCAResult.baml
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\etabs_to_rhino\WindowsEtabsToRhinoProgress.g.cs
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\etabs_to_rhino\WindowsEtabsToRhinoProgress.baml
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\etabs_to_rhino\WindowsEtabsToRhinoProgress.g.cs
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\rc_beam_schedule\ML\WindowRCBSchedKMeans.g.cs
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\rc_beam_schedule\WindowRCBSchedPCAResult.g.cs
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\rc_col_schedule\WindowRCCSchedMain.g.cs
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\rc_col_schedule\WindowRCCSchedResult.g.cs
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\tedds_main\precast_rc_column\WindowPrecastRCColumnLoading.g.cs
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\tedds_main\precast_rc_column\WindowPrecastRCColumnMain.g.cs
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\tedds_main\precast_rc_column\WindowPrecastRCColumnResult.g.cs
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\tedds_main\WindowTeddsMain.g.cs
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\WS_SG_ETABS_Plugin.dll.config
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Accord.dll
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Accord.MachineLearning.dll
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Accord.Math.Core.dll
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Accord.Math.dll
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Accord.Statistics.dll
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Microsoft.ML.Core.dll
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Microsoft.ML.CpuMath.dll
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Microsoft.ML.Data.dll
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Microsoft.ML.DataView.dll
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Microsoft.ML.dll
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Microsoft.ML.KMeansClustering.dll
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Microsoft.ML.PCA.dll
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Microsoft.ML.StandardTrainers.dll
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Microsoft.ML.Transforms.dll
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Newtonsoft.Json.dll
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\System.Buffers.dll
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\System.CodeDom.dll
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\System.Collections.Immutable.dll
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\System.Memory.dll
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\System.Runtime.CompilerServices.Unsafe.dll
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\System.Threading.Channels.dll
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\System.Threading.Tasks.Extensions.dll
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Accord.xml
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Accord.MachineLearning.xml
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Accord.Math.xml
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Accord.Math.Core.xml
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Accord.Statistics.xml
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Microsoft.ML.xml
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Microsoft.ML.Core.xml
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Microsoft.ML.CpuMath.xml
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Microsoft.ML.Data.xml
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Microsoft.ML.DataView.xml
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Microsoft.ML.KMeansClustering.xml
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Microsoft.ML.PCA.xml
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Microsoft.ML.StandardTrainers.xml
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Microsoft.ML.Transforms.xml
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Newtonsoft.Json.xml
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\System.Buffers.xml
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\System.Collections.Immutable.xml
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\System.Memory.xml
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\System.Threading.Channels.xml
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\System.Threading.Tasks.Extensions.xml
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\etabs_to_rhino\WindowsEtabsToRhinoProgress.baml
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\rc_beam_schedule\ML\WindowRCBSchedKMeans.baml
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\rc_beam_schedule\WindowRCBSchedPCAResult.baml
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\rc_col_schedule\WindowRCCSchedMain.baml
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\rc_col_schedule\WindowRCCSchedResult.baml
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\tedds_main\precast_rc_column\WindowPrecastRCColumnLoading.baml
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\tedds_main\precast_rc_column\WindowPrecastRCColumnMain.baml
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\tedds_main\precast_rc_column\WindowPrecastRCColumnResult.baml
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\tedds_main\WindowTeddsMain.baml
+C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Accord.dll.config
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\tedds_main\precast_rc_column\WindowPrecastRCColumnLoading.g.cs
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\tedds_main\precast_rc_column\WindowPrecastRCColumnMain.g.cs
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\tedds_main\precast_rc_column\WindowPrecastRCColumnResult.g.cs
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\tedds_main\WindowTeddsMain.g.cs
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\tedds_main\precast_rc_column\WindowPrecastRCColumnLoading.baml
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\tedds_main\precast_rc_column\WindowPrecastRCColumnMain.baml
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\tedds_main\precast_rc_column\WindowPrecastRCColumnResult.baml
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\tedds_main\WindowTeddsMain.baml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\librhino3dm_native.dylib
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\librhino3dm_native.so
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Win64\librhino3dm_native.dll
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Win32\librhino3dm_native.dll
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\WS_SG_ETABS_Plugin.dll.config
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\WS_SG_ETABS_Plugin.dll
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\WS_SG_ETABS_Plugin.pdb
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Accord.dll
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Accord.MachineLearning.dll
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Accord.Math.Core.dll
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Accord.Math.dll
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Accord.Statistics.dll
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\LiveCharts.dll
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\LiveCharts.Wpf.dll
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Microsoft.ML.Core.dll
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Microsoft.ML.CpuMath.dll
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Microsoft.ML.Data.dll
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Microsoft.ML.DataView.dll
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Microsoft.ML.dll
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Microsoft.ML.KMeansClustering.dll
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Microsoft.ML.PCA.dll
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Microsoft.ML.StandardTrainers.dll
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Microsoft.ML.Transforms.dll
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Newtonsoft.Json.dll
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Rhino3dm.dll
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\ScottPlot.dll
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\ScottPlot.WPF.dll
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\System.Buffers.dll
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\System.CodeDom.dll
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\System.Collections.Immutable.dll
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\System.Drawing.Common.dll
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\System.Memory.dll
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\System.Numerics.Vectors.dll
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\System.Runtime.CompilerServices.Unsafe.dll
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\System.Threading.Channels.dll
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\System.Threading.Tasks.Extensions.dll
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\System.ValueTuple.dll
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Xceed.Wpf.AvalonDock.dll
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Xceed.Wpf.AvalonDock.Themes.Aero.dll
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Xceed.Wpf.AvalonDock.Themes.Metro.dll
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Xceed.Wpf.AvalonDock.Themes.VS2010.dll
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Xceed.Wpf.Toolkit.dll
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Accord.xml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Accord.MachineLearning.xml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Accord.Math.xml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Accord.Math.Core.xml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Accord.Statistics.xml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\LiveCharts.pdb
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\LiveCharts.xml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\LiveCharts.Wpf.pdb
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\LiveCharts.Wpf.xml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Microsoft.ML.xml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Microsoft.ML.Core.xml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Microsoft.ML.CpuMath.xml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Microsoft.ML.Data.xml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Microsoft.ML.DataView.xml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Microsoft.ML.KMeansClustering.xml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Microsoft.ML.PCA.xml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Microsoft.ML.StandardTrainers.xml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Microsoft.ML.Transforms.xml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Newtonsoft.Json.xml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\ScottPlot.xml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\System.Buffers.xml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\System.Collections.Immutable.xml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\System.Memory.xml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\System.Numerics.Vectors.xml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\System.Threading.Channels.xml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\System.Threading.Tasks.Extensions.xml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\System.ValueTuple.xml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\cs-CZ\Xceed.Wpf.AvalonDock.resources.dll
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\de\Xceed.Wpf.AvalonDock.resources.dll
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\es\Xceed.Wpf.AvalonDock.resources.dll
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\fr\Xceed.Wpf.AvalonDock.resources.dll
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\hu\Xceed.Wpf.AvalonDock.resources.dll
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\it\Xceed.Wpf.AvalonDock.resources.dll
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\ja-JP\Xceed.Wpf.AvalonDock.resources.dll
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\pt-BR\Xceed.Wpf.AvalonDock.resources.dll
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\ro\Xceed.Wpf.AvalonDock.resources.dll
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\ru\Xceed.Wpf.AvalonDock.resources.dll
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\sv\Xceed.Wpf.AvalonDock.resources.dll
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\zh-Hans\Xceed.Wpf.AvalonDock.resources.dll
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\WS_SG_ETABS_Plugin.csproj.AssemblyReference.cache
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\WS_SG_ETABS_Plugin.csproj.ResolveComReference.cache
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\pad_footing_plot\WindowPadFootPlotResult.baml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\carbon\WindowCarbonMain.g.cs
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\carbon\WindowCarbonResult.g.cs
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\copy_properties\WindowCopyPropMain.g.cs
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\copy_properties\WindowCopyPropResult.g.cs
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\etabs_to_rhino\WindowEtabsToRhinoMain.g.cs
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\etabs_to_rhino\WindowEtabsToRhinoResult.g.cs
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\loads_etabs_etabs\WindowEtabsEtabsMain.g.cs
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\loads_etabs_etabs\WindowEtabsEtabsOpenFile.g.cs
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\loads_etabs_etabs\WindowEtabsEtabsOpenFileLoading.g.cs
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\loads_etabs_etabs\WindowEtabsEtabsResult.g.cs
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\loads_etabs_safe\WindowEtabsSafeMain.g.cs
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\loads_etabs_safe\WindowEtabsSafeOpenFile.g.cs
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\loads_etabs_safe\WindowEtabsSafeOpenFileLoading.g.cs
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\loads_etabs_safe\WindowEtabsSafeResult.g.cs
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\load_combo_EN\WindowChooseLoadCombiToGenerate.g.cs
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\load_combo_EN\WindowLoadComboMain.g.cs
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\load_combo_EN\WindowLoadComboResult.g.cs
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\pad_footing_plot\WindowPadFootLoading.g.cs
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\pad_footing_plot\WindowPadFootPlotMain.g.cs
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\pad_footing_plot\WindowPadFootPlotResult.g.cs
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\plot_reaction\graph\WindowPlotReactionGraphBaseReaction.g.cs
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\plot_reaction\graph\WindowPlotReactionGraphMain.g.cs
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\plot_reaction\graph\WindowPlotReactionGraphResult.g.cs
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\plot_reaction\table\WindowPlotReactionTableMain.g.cs
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\plot_reaction\table\WindowPlotReactionTableResult.g.cs
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\etabs_to_rhino\WindowsEtabsToRhinoProgress.g.cs
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\plot_reaction\WindowPlotReactionMain.g.cs
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\punching_shear_plot\WindowPunchShrPlotLoading.g.cs
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\punching_shear_plot\WindowPunchShrPlotMain.g.cs
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\punching_shear_plot\WindowPunchShrPlotResult.g.cs
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\rc_beam_schedule\ML\WindowRCBSchedKMeans.g.cs
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\rc_beam_schedule\WindowRCBSchedMain.g.cs
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\rc_beam_schedule\WindowRCBSchedPCAResult.g.cs
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\rc_beam_schedule\WindowRCBSchedResult.g.cs
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\rc_col_schedule\WindowRCCSchedMain.g.cs
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\rc_col_schedule\WindowRCCSchedResult.g.cs
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\release_selected_node\WindowReleaseSelectedNodeMain.g.cs
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\release_selected_node\WindowReleaseSelectedNodeResult.g.cs
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\select_uniquename\WindowSelUniqueNameMain.g.cs
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\select_uniquename\WindowSelUniqueNameResult.g.cs
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\shell_uni_orient\WindowShellUniMain.g.cs
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\shell_uni_orient\WindowShellUniResult.g.cs
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\tedds_main\precast_rc_column\WindowPrecastRCColumnLoading.g.cs
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\tedds_main\precast_rc_column\WindowPrecastRCColumnMain.g.cs
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\tedds_main\precast_rc_column\WindowPrecastRCColumnResult.g.cs
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\tedds_main\WindowTeddsMain.g.cs
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\transfer_midas\WindowTransferMidasMain.g.cs
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\transfer_midas\WindowTransferMidasProgress.g.cs
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\transfer_midas\WindowTransferMidasResult.g.cs
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\wind_coeff\WindowWindCoeffMain.g.cs
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\wind_coeff\WindowWindCoeffResult.g.cs
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\WindowMain.g.cs
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\WS_SG_ETABS_Plugin_MarkupCompile.cache
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\WS_SG_ETABS_Plugin_MarkupCompile.lref
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\carbon\WindowCarbonMain.baml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\carbon\WindowCarbonResult.baml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\copy_properties\WindowCopyPropMain.baml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\copy_properties\WindowCopyPropResult.baml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\etabs_to_rhino\WindowEtabsToRhinoMain.baml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\etabs_to_rhino\WindowEtabsToRhinoResult.baml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\loads_etabs_etabs\WindowEtabsEtabsMain.baml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\loads_etabs_etabs\WindowEtabsEtabsOpenFile.baml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\loads_etabs_etabs\WindowEtabsEtabsOpenFileLoading.baml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\loads_etabs_etabs\WindowEtabsEtabsResult.baml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\loads_etabs_safe\WindowEtabsSafeMain.baml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\loads_etabs_safe\WindowEtabsSafeOpenFile.baml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\loads_etabs_safe\WindowEtabsSafeOpenFileLoading.baml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\loads_etabs_safe\WindowEtabsSafeResult.baml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\load_combo_EN\WindowChooseLoadCombiToGenerate.baml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\load_combo_EN\WindowLoadComboMain.baml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\load_combo_EN\WindowLoadComboResult.baml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\pad_footing_plot\WindowPadFootLoading.baml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\pad_footing_plot\WindowPadFootPlotMain.baml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\plot_reaction\graph\WindowPlotReactionGraphBaseReaction.baml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\plot_reaction\graph\WindowPlotReactionGraphMain.baml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\plot_reaction\graph\WindowPlotReactionGraphResult.baml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\plot_reaction\table\WindowPlotReactionTableMain.baml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\plot_reaction\table\WindowPlotReactionTableResult.baml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\etabs_to_rhino\WindowsEtabsToRhinoProgress.baml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\plot_reaction\WindowPlotReactionMain.baml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\punching_shear_plot\WindowPunchShrPlotLoading.baml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\punching_shear_plot\WindowPunchShrPlotMain.baml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\punching_shear_plot\WindowPunchShrPlotResult.baml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\rc_beam_schedule\ML\WindowRCBSchedKMeans.baml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\rc_beam_schedule\WindowRCBSchedMain.baml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\rc_beam_schedule\WindowRCBSchedPCAResult.baml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\rc_beam_schedule\WindowRCBSchedResult.baml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\rc_col_schedule\WindowRCCSchedMain.baml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\rc_col_schedule\WindowRCCSchedResult.baml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\release_selected_node\WindowReleaseSelectedNodeMain.baml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\release_selected_node\WindowReleaseSelectedNodeResult.baml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\select_uniquename\WindowSelUniqueNameMain.baml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\select_uniquename\WindowSelUniqueNameResult.baml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\shell_uni_orient\WindowShellUniMain.baml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\shell_uni_orient\WindowShellUniResult.baml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\tedds_main\precast_rc_column\WindowPrecastRCColumnLoading.baml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\tedds_main\precast_rc_column\WindowPrecastRCColumnMain.baml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\tedds_main\precast_rc_column\WindowPrecastRCColumnResult.baml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\tedds_main\WindowTeddsMain.baml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\transfer_midas\WindowTransferMidasMain.baml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\transfer_midas\WindowTransferMidasProgress.baml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\transfer_midas\WindowTransferMidasResult.baml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\wind_coeff\WindowWindCoeffMain.baml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\wind_coeff\WindowWindCoeffResult.baml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\WindowMain.baml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\WS_SG_ETABS_Plugin.g.resources
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\WS_SG_ETABS_Plugin.csproj.CoreCompileInputs.cache
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\WS_SG_ETABS_Plugin.csproj.CopyComplete
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\WS_SG_ETABS_Plugin.dll
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\WS_SG_ETABS_Plugin.pdb
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\plot_drift\WindowDriftPlotLoading.g.cs
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\plot_drift\WindowDriftPlotMain.g.cs
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\plot_drift\WindowDriftPlotResult.g.cs
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\plot_drift\WindowDriftPlotLoading.baml
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\plot_drift\WindowDriftPlotMain.baml
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\plot_drift\WindowDriftPlotResult.baml
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\plot_sum_mass_participation\WindowSumParticipPlotMain.g.cs
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\plot_sum_mass_participation\WindowSumParticipPlotResult.g.cs
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\plot_sum_mass_participation\WindowSumParticipPlotMain.baml
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\plot_sum_mass_participation\WindowSumParticipPlotResult.baml
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\plot_drift\WindowDriftPlotSelectLoad.g.cs
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\plot_drift\WindowDriftPlotSelectLoad.baml
