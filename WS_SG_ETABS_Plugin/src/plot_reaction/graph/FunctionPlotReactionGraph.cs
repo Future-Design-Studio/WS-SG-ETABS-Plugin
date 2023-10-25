@@ -166,8 +166,8 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
                         {"uniqueName", uniqueName},
                         {"groupName", groupName},
                         {"reaction",  reaction * forceFactor},
-                        {"xCoord", xCoord},
-                        {"yCoord", yCoord}
+                        {"xCoord", Math.Round(xCoord, 3)},
+                        {"yCoord", Math.Round(yCoord, 3)}
                     };
 
                     compiledReactionData.Add(reactionData);
@@ -277,6 +277,8 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
 
                         lowCoordUsed.Add(lowX);
                         highCoordUsed.Add(highX);
+
+                        divisionX = lowCoordUsed.Count();
                     }
 
                     else
@@ -350,12 +352,12 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
                                 foreach (Dictionary<string, object> reactionData in compiledReactionData)
                                 {
                                     /*
-                                    if (Convert.ToString(reactionData["uniqueName"]) == "ggGHn2329")
+                                    if (Convert.ToString(reactionData["uniqueName"]) == "ggGHn30545")
                                     {
                                         System.Diagnostics.Debugger.Break();
                                     }
                                     */
-                                       
+                                    
 
                                     double yCoord = Convert.ToDouble(reactionData["yCoord"]);
                                     double xCoord = Convert.ToDouble(reactionData["xCoord"]);
@@ -406,6 +408,8 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
                                         }
                                     }
                                 }
+
+                                uniqueNameList.Add("");
 
                                 //Put the sum inside plot
                                 if (divisionYIndex == 0)
@@ -479,6 +483,8 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
 
                         lowCoordUsed.Add(lowY);
                         highCoordUsed.Add(highY);
+
+                        divisionY = lowCoordUsed.Count();
                     }
 
                     else
