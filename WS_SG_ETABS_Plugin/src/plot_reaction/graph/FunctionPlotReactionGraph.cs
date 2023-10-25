@@ -407,8 +407,6 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
                                     }
                                 }
 
-                                uniqueNameList.Add("");
-
                                 //Put the sum inside plot
                                 if (divisionYIndex == 0)
                                 {
@@ -444,6 +442,61 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
                     double lowX = minXCoord;
                     double highX = minXCoord;
 
+                    //List down coordinate for splitting
+                    List<double> lowCoordUsed = new List<double>();
+                    List<double> highCoordUsed = new List<double>();
+                    if (!autoSplit)
+                    {
+                        List<double> splitCoordUsed = new List<double>();
+
+                        foreach (double eachSplitCoord in splitCoord)
+                        {
+                            if (eachSplitCoord > minYCoord && eachSplitCoord < maxYCoord)
+                            {
+                                splitCoordUsed.Add(eachSplitCoord);
+                            }
+                        }
+
+                        splitCoordUsed.Sort();
+
+                        //Start from minXCoord
+                        double lowY = minYCoord;
+                        double highY = minYCoord;
+
+                        foreach (double eachSplitCoordUsed in splitCoordUsed)
+                        {
+                            lowY = highY;
+
+                            highY = eachSplitCoordUsed;
+
+                            lowCoordUsed.Add(lowY);
+                            highCoordUsed.Add(highY);
+                        }
+
+                        //For 1 last split incorporating max X coord
+                        lowY = highY;
+                        highY = maxYCoord;
+
+                        lowCoordUsed.Add(lowY);
+                        highCoordUsed.Add(highY);
+                    }
+
+                    else
+                    {
+                        //Start from minXCoord
+                        double lowY = minYCoord;
+                        double highY = minYCoord;
+
+                        for (int divisionYIndex = 0; divisionYIndex < divisionY; divisionYIndex++)
+                        {
+                            lowY = highY;
+                            highY = Math.Round(highY + (maxYCoord - minYCoord) / divisionY, 3);
+
+                            lowCoordUsed.Add(lowY);
+                            highCoordUsed.Add(highY);
+                        }
+                    }
+
                     for (int divisionXIndex = 0; divisionXIndex < 2; divisionXIndex++)
                     {
                         lowX = highX;
@@ -455,8 +508,8 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
 
                         for (int divisionYIndex = 0; divisionYIndex < divisionY; divisionYIndex++)
                         {
-                            lowY = highY;
-                            highY = Math.Round(highY + (maxYCoord - minYCoord) / divisionY, 3);
+                            lowY = lowCoordUsed[divisionYIndex];
+                            highY = highCoordUsed[divisionYIndex];
 
                             //Inside each divison total reaction for each group
                             int groupSumIndex = 0;
