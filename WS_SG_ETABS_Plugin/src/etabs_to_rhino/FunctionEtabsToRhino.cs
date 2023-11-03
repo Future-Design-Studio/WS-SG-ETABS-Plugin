@@ -88,12 +88,23 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
                 }
             }
 
+            //get area cardinal
+            bool isError = false;
+            HelperEtabs.DatabaseTable databaseTable = new HelperEtabs.DatabaseTable();
+            (isError,databaseTable) = HelperEtabs.GetTableDisplay(Sap, "Area Assignments - Insertion Point", false);
 
+            var cardinaldict = new Dictionary<string, string>();
+            foreach (Dictionary<string,string> row in databaseTable.TableInList)
+            {
+                var name = row["UniqueName"];
+                var cardinal = row["CardinalPt"];
+                cardinaldict[name] = cardinal;
+            }
 
 
             for (var i = 0; i < NumberNames; i++)
             {
-                var area = new AreaGeometry(MyName[i], DesignOrientaion[i], ptsGroup[i], Sap);
+                var area = new AreaGeometry(MyName[i], DesignOrientaion[i], ptsGroup[i], cardinaldict[MyName[i]], Sap);
                 if (area.DesignOrientation != "Null") allAreas.Add(area);
             }
 
@@ -677,6 +688,7 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
                     att.SetUserString("DesignOrientation", area.DesignOrientation);
                     att.SetUserString("IsOpening", area.IsOpening.ToString());
                     att.SetUserString("Thickness", area.Thickness.ToString());
+                    att.SetUserString("Cardinal", area.Cardinal);
 
                     att.LayerIndex = layerAreaObj;
 
