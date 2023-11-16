@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using System.Windows.Media.Animation;
 using System.Xml;
 using ETABSv1;
+using Microsoft.Office.Interop.Excel;
+using Rhino.DocObjects;
 using Rhino.FileIO;
 using Rhino.Geometry;
 
@@ -417,7 +419,7 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
             
             return outputFrameBreps;
         }
-        public static void IncludeFrameExtrusion(Rhino.FileIO.File3dm file3dm, List<FrameGeometry> allFrame, Dictionary<string, FrameGeometryProp> allFrameProp, List<AreaGeometry> allAreas)
+        public static void IncludeFrameExtrusion(Rhino.FileIO.File3dm file3dm, List<FrameGeometry> allFrame, Dictionary<string, FrameGeometryProp> allFrameProp, List<AreaGeometry> allAreas, List<string> framePropList)
         {
             ////////////////////////
             // CREATE PROFILE FOR EACH FRAME PROPERTY
@@ -443,7 +445,12 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
             ////////////////////////
             var outputPlanes = new List<Plane>();
             var outputLines = new List<LineCurve>();
-            var outputFrameBreps = new List<Brep>();
+            var outputFrameBreps = new Dictionary<string, List<Brep>>(); ;
+
+            foreach (var p in framePropList)
+            {
+                outputFrameBreps[p] = new List<Brep>();
+            }
 
             foreach (var frame in allFrame)
             {
@@ -494,7 +501,7 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
 
                         geo.Transform(t0);
                         geo.Transform(t1);
-                        outputFrameBreps.Add(geo);
+                        outputFrameBreps[frame.PropName].Add(geo);
                     }
                     
                     
@@ -509,24 +516,45 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
             // ADD EXTRUSION TO RHINO MODEL INSTANCE
             ////////////////////////
 
-            int frameExtrusionObj = file3dm.AllLayers.AddLayer("frameExtrusion", System.Drawing.Color.Blue);
+            Layer frameExtrusionObj = new Layer();
+            frameExtrusionObj.Name = "frameExtrusion";
+            frameExtrusionObj.Color = System.Drawing.Color.Black;
+            file3dm.AllLayers.Add(frameExtrusionObj);
+            Guid frameExtrusionObjId = file3dm.AllLayers.FindName("frameExtrusion", Guid.Empty).Id;
 
-            var att = new Rhino.DocObjects.ObjectAttributes();
-            att.LayerIndex = frameExtrusionObj;
 
-            foreach (var obj in outputFrameBreps)
+            var framePropLayer = new Dictionary<string, Layer>();
+            foreach (var p in outputFrameBreps)
             {
-                file3dm.Objects.AddBrep(obj, att);
+                framePropLayer[p.Key] = new Layer();
+                framePropLayer[p.Key].Name = p.Key;
+                framePropLayer[p.Key].ParentLayerId = frameExtrusionObjId;
+                framePropLayer[p.Key].Color = System.Drawing.Color.Blue;
+                file3dm.AllLayers.Add(framePropLayer[p.Key]);
+
+                var att = new Rhino.DocObjects.ObjectAttributes();
+                att.LayerIndex = file3dm.AllLayers.FindName(p.Key, frameExtrusionObjId).Index;
+
+                foreach (var obj in p.Value)
+                {
+                    file3dm.Objects.AddBrep(obj, att);
+                }
             }
             
         }
-        public static void IncludeAreaExtrusion(Rhino.FileIO.File3dm file3dm,  List<AreaGeometry> allAreas)
+        public static void IncludeAreaExtrusion(Rhino.FileIO.File3dm file3dm,  List<AreaGeometry> allAreas, List<string> areaPropList)
         {
             ////////////////////////
             // CREATE EXTRUSION FOR ALL AREA OBJECTS
             ////////////////////////
             var outputWallBreps = new List<Brep>();
             var outputFloorBreps = new List<Brep>();
+            var outputAreaBreps = new Dictionary<string, List<Brep>>();
+
+            foreach (var p in areaPropList)
+            {
+                outputAreaBreps[p] = new List<Brep>();
+            }
 
             for (var i = 0; i < allAreas.Count; i++)
             {
@@ -558,7 +586,7 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
 
                     wallExtrusion.Transform(t1);
 
-                    outputWallBreps.Add(wallExtrusion.ToBrep());
+                    outputAreaBreps[area.PropName].Add(wallExtrusion.ToBrep());
                 }
 
                 if(area.DesignOrientation == "Floor")
@@ -572,16 +600,16 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
 
                     var floorExtrusion = Extrusion.Create(crv, area.Thickness, true);
 
-                    outputFloorBreps.Add(floorExtrusion.ToBrep());
+                    outputAreaBreps[area.PropName].Add(floorExtrusion.ToBrep());
                 }
                 
             }
-            
+
 
             ////////////////////////
             // ADD EXTRUSION TO RHINO MODEL INSTANCE
             ////////////////////////
-
+            /*
             int wallExtrusionObj = file3dm.AllLayers.AddLayer("wallExtrusion", System.Drawing.Color.DarkGray);
 
             var att0 = new Rhino.DocObjects.ObjectAttributes();
@@ -601,6 +629,32 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
             {
                 file3dm.Objects.AddBrep(obj, att1);
             }
+            */
+
+            Layer areaExtrusionObj = new Layer();
+            areaExtrusionObj.Name = "areaExtrusion";
+            areaExtrusionObj.Color = System.Drawing.Color.Black;
+            file3dm.AllLayers.Add(areaExtrusionObj);
+            Guid areaExtrusionObjId = file3dm.AllLayers.FindName("areaExtrusion", Guid.Empty).Id;
+
+
+            var areaPropLayer = new Dictionary<string, Layer>();
+            foreach (var p in outputAreaBreps)
+            {
+                areaPropLayer[p.Key] = new Layer();
+                areaPropLayer[p.Key].Name = p.Key;
+                areaPropLayer[p.Key].ParentLayerId = areaExtrusionObjId;
+                areaPropLayer[p.Key].Color = System.Drawing.Color.Gray;
+                file3dm.AllLayers.Add(areaPropLayer[p.Key]);
+
+                var att = new Rhino.DocObjects.ObjectAttributes();
+                att.LayerIndex = file3dm.AllLayers.FindName(p.Key, areaExtrusionObjId).Index;
+
+                foreach (var obj in p.Value)
+                {
+                    file3dm.Objects.AddBrep(obj, att);
+                }
+            }
         }
 
         #endregion
@@ -615,8 +669,24 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
             newModel.Settings.ModelUnitSystem = Rhino.UnitSystem.Meters;
             newModel.Settings.ModelAbsoluteTolerance = 0.001;
 
-            int layerFrameObj = newModel.AllLayers.AddLayer("frameObj", System.Drawing.Color.Black);
-            int layerAreaObj = newModel.AllLayers.AddLayer("areaObj", System.Drawing.Color.Red);
+            //int layerFrameObj = newModel.AllLayers.AddLayer("FrameObj", System.Drawing.Color.Black);
+            //int layerAreaObj = newModel.AllLayers.AddLayer("AreaObj", System.Drawing.Color.Red);
+            
+            int emptyLayer = newModel.AllLayers.AddLayer("00_EMPTY", System.Drawing.Color.Black);
+
+            Layer layerFrameObj = new Layer();
+            layerFrameObj.Name = "frameLine";
+            layerFrameObj.Color = System.Drawing.Color.Black;
+            newModel.AllLayers.Add(layerFrameObj);
+            Guid layerFrameObjId = newModel.AllLayers.FindName("frameLine", Guid.Empty).Id;
+
+
+            Layer layerAreaObj = new Layer();
+            layerAreaObj.Name = "areaPerimeter";
+            layerAreaObj.Color = System.Drawing.Color.Black;
+            newModel.AllLayers.Add(layerAreaObj);
+            Guid layerAreaObjId = newModel.AllLayers.FindName("areaPerimeter", Guid.Empty).Id;
+
 
 
             //rebuild etabs frame objects 
@@ -624,17 +694,37 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
             var allFrames = GetAllFrames(Sap);
             var allFrameProp = GetAllFrameProperties(Sap);
 
+            var framePropList = new List<string>();
+            var areaPropList = new List<string>();
+
             progress.Report(20);
 
             if (allFrames != null && allFrameProp != null) 
             {
+                
+                var framePropLayer = new Dictionary<string, Layer>();
+
+                //find unique frame properties
+                foreach (var frame  in allFrames) 
+                {
+                    if (framePropList.Contains(frame.PropName)==false) framePropList.Add(frame.PropName);
+                }
+
+                //create a sublayer for each unique frame properties
+                foreach (var name in framePropList)
+                {
+                    framePropLayer[name] = new Layer();
+                    framePropLayer[name].Name = name;
+                    framePropLayer[name].ParentLayerId = layerFrameObjId;
+                    framePropLayer[name].Color = System.Drawing.Color.Black;
+                    newModel.AllLayers.Add(framePropLayer[name]);
+                }
+
                 for (var i = 0; i < allFrames.Count; i++)
                 {
 
                     var frame = allFrames[i];
                     string framePropName = frame.PropName;
-
-                    //if (allFrameProp.ContainsKey(framePropName) == false) continue;
 
                     FrameGeometryProp frameProp = allFrameProp[framePropName];
 
@@ -656,14 +746,13 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
                     att.SetUserString("tfb", frameProp.Tfb.ToString());
                     att.SetUserString("PropType", frameProp.PropType);
 
-
-                    att.LayerIndex = layerFrameObj;
+                    att.LayerIndex = newModel.AllLayers.FindName(framePropName,layerFrameObjId).Index;
 
 
                     newModel.Objects.AddLine(frame.Pt0, frame.Pt1, att);
                 }
             }
-            
+
 
             progress.Report(30);
 
@@ -677,6 +766,24 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
 
             if (allAreas != null)
             {
+                var areaPropLayer = new Dictionary<string, Layer>();
+
+                //find unique area properties
+                foreach (var a in allAreas) 
+                {
+                    if (areaPropList.Contains(a.PropName)==false) areaPropList.Add(a.PropName);
+                }
+
+                //create a sublayer for each unique area properties
+                foreach (var name in areaPropList)
+                {
+                    areaPropLayer[name] = new Layer();
+                    areaPropLayer[name].Name = name;
+                    areaPropLayer[name].ParentLayerId = layerAreaObjId;
+                    areaPropLayer[name].Color = System.Drawing.Color.Red;
+                    newModel.AllLayers.Add(areaPropLayer[name]);
+                }
+
                 for (var i = 0; i < allAreas.Count; i++)
                 {
                     var area = allAreas[i];
@@ -690,8 +797,8 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
                     att.SetUserString("Thickness", area.Thickness.ToString());
                     att.SetUserString("Cardinal", area.Cardinal);
 
-                    att.LayerIndex = layerAreaObj;
-
+                    //att.LayerIndex = newModel.AllLayers.FindName("AreaPerimeter", Guid.Empty).Index;
+                    att.LayerIndex = newModel.AllLayers.FindName(area.PropName, layerAreaObjId).Index;
 
                     var polyline = new Polyline();
 
@@ -717,12 +824,12 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
 
             if (includeFrameExtrusion && allFrames != null && allFrameProp != null)
             {
-                IncludeFrameExtrusion(newModel, allFrames, allFrameProp, allAreas);
+                IncludeFrameExtrusion(newModel, allFrames, allFrameProp, allAreas, framePropList);
             }
 
             if (includeAreaExtrusion && allAreas != null)
             {
-                IncludeAreaExtrusion(newModel, allAreas);
+                IncludeAreaExtrusion(newModel, allAreas, areaPropList);
             }
 
 
