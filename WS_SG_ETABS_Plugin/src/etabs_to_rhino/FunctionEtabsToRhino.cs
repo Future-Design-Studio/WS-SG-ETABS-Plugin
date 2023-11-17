@@ -419,7 +419,7 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
             
             return outputFrameBreps;
         }
-        public static void IncludeFrameExtrusion(Rhino.FileIO.File3dm file3dm, List<FrameGeometry> allFrame, Dictionary<string, FrameGeometryProp> allFrameProp, List<AreaGeometry> allAreas, List<string> framePropList)
+        public static void IncludeFrameExtrusion(Rhino.FileIO.File3dm file3dm, List<FrameGeometry> allFrame, Dictionary<string, FrameGeometryProp> allFrameProp, List<AreaGeometry> allAreas, List<string> framePropList, Dictionary<string, bool?> selectedItems)
         {
             ////////////////////////
             // CREATE PROFILE FOR EACH FRAME PROPERTY
@@ -492,12 +492,32 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
 
                     foreach(var geo in extrusions)
                     {
-                        if (frame.Cardinal == "TopCenter")
+                        if (selectedItems["frameExtrusionAuto"] ?? false)
                         {
-                            var vec = Vector3d.YAxis * frameprop.T3 / -2;
-                            var tf = Transform.Translation(vec);
-                            geo.Transform(tf);
+                            if (frame.DesignOrientation == "Beam")
+                            {
+                                var vec = Vector3d.YAxis * frameprop.T3 / -2;
+                                var tf = Transform.Translation(vec);
+                                geo.Transform(tf);
+                            }
                         }
+
+                        if (selectedItems["frameExtrusionManual"] ?? false)
+                        {
+                            if (frame.Cardinal == "TopCenter")
+                            {
+                                var vec = Vector3d.YAxis * frameprop.T3 / -2;
+                                var tf = Transform.Translation(vec);
+                                geo.Transform(tf);
+                            }
+                            else if (frame.Cardinal == "BottomCenter")
+                            {
+                                var vec = Vector3d.YAxis * frameprop.T3 / 2;
+                                var tf = Transform.Translation(vec);
+                                geo.Transform(tf);
+                            }
+                        }
+                        
 
                         geo.Transform(t0);
                         geo.Transform(t1);
@@ -542,7 +562,7 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
             }
             
         }
-        public static void IncludeAreaExtrusion(Rhino.FileIO.File3dm file3dm,  List<AreaGeometry> allAreas, List<string> areaPropList)
+        public static void IncludeAreaExtrusion(Rhino.FileIO.File3dm file3dm,  List<AreaGeometry> allAreas, List<string> areaPropList, Dictionary<string, bool?> selectedItems)
         {
             ////////////////////////
             // CREATE EXTRUSION FOR ALL AREA OBJECTS
@@ -578,30 +598,78 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
                 var t0 = Transform.PlanarProjection(plane0);
                 polyline.Transform(t0);
 
-                if (area.DesignOrientation == "Wall")
+                if (selectedItems["areaExtrusionAuto"] ?? false)
                 {
-                    var wallExtrusion = Extrusion.Create(polyline.ToPolylineCurve(), area.Thickness, true);
+                    if (area.DesignOrientation == "Wall")
+                    {
+                        var wallExtrusion = Extrusion.Create(polyline.ToPolylineCurve(), area.Thickness, true);
 
-                    var t1 = Transform.Translation(plane0.Normal * area.Thickness / -2);
+                        var t1 = Transform.Translation(plane0.Normal * area.Thickness / -2);
 
-                    wallExtrusion.Transform(t1);
+                        wallExtrusion.Transform(t1);
 
-                    outputAreaBreps[area.PropName].Add(wallExtrusion.ToBrep());
+                        outputAreaBreps[area.PropName].Add(wallExtrusion.ToBrep());
+                    }
+
+                    else if (area.DesignOrientation == "Floor")
+                    {
+                        var vec = plane0.Normal;
+
+                        var crv = polyline.ToPolylineCurve();
+                        var orientation = crv.ClosedCurveOrientation(Vector3d.ZAxis);
+
+                        if (orientation == CurveOrientation.CounterClockwise) crv.Reverse();
+
+                        var floorExtrusion = Extrusion.Create(crv, area.Thickness, true);
+
+                        outputAreaBreps[area.PropName].Add(floorExtrusion.ToBrep());
+                    }
                 }
 
-                if(area.DesignOrientation == "Floor")
+                if (selectedItems["areaExtrusionManual"] ?? false)
                 {
-                    var vec = plane0.Normal;
+                    if (area.Cardinal == "Middle")
+                    {
+                        var wallExtrusion = Extrusion.Create(polyline.ToPolylineCurve(), area.Thickness, true);
 
-                    var crv = polyline.ToPolylineCurve();
-                    var orientation = crv.ClosedCurveOrientation(Vector3d.ZAxis);
+                        var t1 = Transform.Translation(plane0.Normal * area.Thickness / -2);
 
-                    if(orientation == CurveOrientation.CounterClockwise) crv.Reverse();
+                        wallExtrusion.Transform(t1);
 
-                    var floorExtrusion = Extrusion.Create(crv, area.Thickness, true);
+                        outputAreaBreps[area.PropName].Add(wallExtrusion.ToBrep());
+                    }
 
-                    outputAreaBreps[area.PropName].Add(floorExtrusion.ToBrep());
+                    else if (area.Cardinal == "Top")
+                    {
+                        var vec = plane0.Normal;
+
+                        var crv = polyline.ToPolylineCurve();
+                        var orientation = crv.ClosedCurveOrientation(Vector3d.ZAxis);
+
+                        if (orientation == CurveOrientation.CounterClockwise) crv.Reverse();
+
+                        var floorExtrusion = Extrusion.Create(crv, area.Thickness, true);
+
+                        outputAreaBreps[area.PropName].Add(floorExtrusion.ToBrep());
+                    }
+
+                    else if (area.Cardinal == "Bottom")
+                    {
+                        var vec = plane0.Normal;
+
+                        var crv = polyline.ToPolylineCurve();
+                        var orientation = crv.ClosedCurveOrientation(Vector3d.ZAxis);
+
+                        if (orientation == CurveOrientation.CounterClockwise) crv.Reverse();
+                        crv.Reverse(); //force reverse to make curve face downwards
+
+                        var floorExtrusion = Extrusion.Create(crv, area.Thickness, true);
+
+                        outputAreaBreps[area.PropName].Add(floorExtrusion.ToBrep());
+                    }
                 }
+
+                
                 
             }
 
@@ -824,12 +892,12 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
 
             if (includeFrameExtrusion && allFrames != null && allFrameProp != null)
             {
-                IncludeFrameExtrusion(newModel, allFrames, allFrameProp, allAreas, framePropList);
+                IncludeFrameExtrusion(newModel, allFrames, allFrameProp, allAreas, framePropList, selectedItems);
             }
 
             if (includeAreaExtrusion && allAreas != null)
             {
-                IncludeAreaExtrusion(newModel, allAreas, areaPropList);
+                IncludeAreaExtrusion(newModel, allAreas, areaPropList, selectedItems);
             }
 
 
