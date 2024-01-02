@@ -256,6 +256,13 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
 
             return allFrameProp;
         }
+        public static int ProgressCalculator(int status, int count, int lb, int ub)
+        {
+            var spread = ub - lb;
+            var val = Math.Round((double)(status / count * spread)) + lb;
+            
+            return (int) val;
+        }
         public static void WriteRhinoFile(Rhino.FileIO.File3dm file3dm ,string path)
         {
             Rhino.FileIO.File3dmWriteOptions options = new Rhino.FileIO.File3dmWriteOptions();
@@ -728,11 +735,14 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
 
         #endregion
 
-        public static void ExportEtabsToRhino(cSapModel Sap, string filePath, string fileName, Dictionary<string, bool?> selectedItems, IProgress<int> progress)
+        public static void ExportEtabsToRhino(cSapModel Sap, string filePath, string fileName, Dictionary<string, bool?> selectedItems, IProgress<int> progressStatus, IProgress<string> progressDescription)
         {
-            //setup new rhino model instance
-            Console.WriteLine("Setting up new Rhino model...");
+            string message = "";
+            string newLine = "\n";
 
+            //setup new rhino model instance
+            message = "Setting up new Rhino model..." + newLine;
+            progressDescription.Report(message);
 
             var newModel = new Rhino.FileIO.File3dm();
             newModel.Settings.ModelUnitSystem = Rhino.UnitSystem.Meters;
@@ -780,13 +790,15 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
 
             //rebuild etabs frame objects 
             //attach etabs property as user text in thino
+            progressStatus.Report(10);
+            message = "Converting ETABS frame objects to Rhino geometries..." + newLine;
+            progressDescription.Report(message);
+
             var allFrames = GetAllFrames(Sap);
             var allFrameProp = GetAllFrameProperties(Sap);
 
             var framePropList = new List<string>();
             var areaPropList = new List<string>();
-
-            progress.Report(20);
 
             if (allFrames != null && allFrameProp != null) 
             {
@@ -850,19 +862,23 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
 
 
                     newModel.Objects.AddLine(frame.Pt0, frame.Pt1, att);
+
+                    //progressStatus.Report(ProgressCalculator(i, allFrames.Count, 21, 29));
                 }
             }
 
 
-            progress.Report(30);
+
 
 
 
             //rebuild etabs area objects in rhino
             //attach etabs property as user text in rhino
-            var allAreas = GetAllAreasWithProperties(Sap);
+            progressStatus.Report(30);
+            message = "Converting ETABS area objects to Rhino geometries..." + newLine;
+            progressDescription.Report(message);
 
-            progress.Report(70);
+            var allAreas = GetAllAreasWithProperties(Sap);
 
             if (allAreas != null)
             {
@@ -924,11 +940,14 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
                     polyline.Add(lastPt);
 
                     newModel.Objects.AddPolyline(polyline, att);
+
+
+                    //progressStatus.Report(ProgressCalculator(i, allAreas.Count, 51, 69));
                 }
             }
             
 
-            progress.Report(90);
+            
 
 
             bool includeFrameExtrusion = selectedItems["extrusionFrameModel"] ?? false;
@@ -936,11 +955,19 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
 
             if (includeFrameExtrusion && allFrames != null && allFrameProp != null)
             {
+                progressStatus.Report(70);
+                message = "Creating frame extrusions..." + newLine;
+                progressDescription.Report(message);
+
                 IncludeFrameExtrusion(newModel, allFrames, allFrameProp, allAreas, framePropList, selectedItems);
             }
 
             if (includeAreaExtrusion && allAreas != null)
             {
+                progressStatus.Report(80);
+                message = "Creating area extrusions..." + newLine;
+                progressDescription.Report(message);
+
                 IncludeAreaExtrusion(newModel, allAreas, areaPropList, selectedItems);
             }
 
@@ -949,7 +976,10 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
             var outputModelName = fileName;
             var rhinoModelPath = System.IO.Path.Combine(outputModelPath, outputModelName + ".3dm");
 
-            Console.WriteLine("Writing Rhino file...");
+            progressStatus.Report(90);
+            message = "Packaging Rhino file...";
+            progressDescription.Report(message);
+
             WriteRhinoFile(newModel, rhinoModelPath);
 
             

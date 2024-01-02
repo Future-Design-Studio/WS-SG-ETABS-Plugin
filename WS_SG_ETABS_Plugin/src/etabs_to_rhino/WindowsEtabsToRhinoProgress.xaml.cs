@@ -52,23 +52,33 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
         {
             pbStatus.Value = 0;
 
-            var progress = new Progress<int>(x => pbStatus.Value = x);
+            var progressStatus = new Progress<int>(x => pbStatus.Value = x);
+            var progressDescription = new Progress<string>(x => pbDescription.Text = x);
 
-            await Task.Run(() => src.etabs_to_rhino.FunctionEtabsToRhino.ExportEtabsToRhino(_SapModel, _filePath, _fileName, _selectedItems, progress));
+            await Task.Run(() => src.etabs_to_rhino.FunctionEtabsToRhino.ExportEtabsToRhino(_SapModel, _filePath, _fileName, _selectedItems, progressStatus, progressDescription));
 
             pbStatus.Value = 100;
+            pbDescription.Text = "Export completed successfully!";
 
             Thread.Sleep(500);
 
-            Close();
+            buttonOk.IsEnabled = true;
+            buttonOk.Opacity = 100;
+
+            //Close();
 
             
 
             //Call up export result window
-            src.etabs_to_rhino.WindowEtabsToRhinoResult windowEtabsToRhinoResult = new src.etabs_to_rhino.WindowEtabsToRhinoResult(_SapModel, _Plugin, _filePath, _fileName);
+            //src.etabs_to_rhino.WindowEtabsToRhinoResult windowEtabsToRhinoResult = new src.etabs_to_rhino.WindowEtabsToRhinoResult(_SapModel, _Plugin, _filePath, _fileName);
 
             
 
+        }
+
+        private void buttonOk_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
         }
     }
 }
