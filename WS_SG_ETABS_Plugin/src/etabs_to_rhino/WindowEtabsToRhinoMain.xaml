@@ -12,7 +12,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="60"></RowDefinition>
             <RowDefinition Height="90"></RowDefinition>
-            <RowDefinition Height="100"></RowDefinition>
+            <RowDefinition Height="110"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="30"></RowDefinition>
         </Grid.RowDefinitions>
@@ -73,6 +73,7 @@
                     <CheckBox Name="checkBoxLineModel" Content="Include Line Model" IsChecked="True" IsEnabled="False" FontSize="11" VerticalContentAlignment="Center"></CheckBox>
                     <CheckBox Name="checkBoxFrameExtrusion" Content="Include Frame Extrusion" Checked="checkBoxFrameExtrusion_Checked" Unchecked="checkBoxFrameExtrusion_Unchecked" FontSize="11" VerticalContentAlignment="Center"></CheckBox>
                     <CheckBox Name="checkBoxAreaExtrusion" Content="Include Area Extrusion" Checked="checkBoxAreaExtrusion_Checked" Unchecked="checkBoxAreaExtrusion_Unchecked" FontSize="11" VerticalContentAlignment="Center"></CheckBox>
+                    <CheckBox Name="checkBoxExportSelection" Content="Export Selected Only" IsChecked='False' FontSize="11" VerticalContentAlignment="Center"></CheckBox>
                 </StackPanel>
 
                 <StackPanel Grid.Column="1">

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Data;
 using System.Windows.Media.Animation;
 using System.Xml;
 using ETABSv1;
@@ -756,6 +757,26 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
             Guid layerAreaObjId = newModel.AllLayers.FindName("areaPerimeter", Guid.Empty).Id;
 
 
+            //check whether to export only selected items
+            bool exportSelected = selectedItems["exportSelected"] ?? false;
+            var frameNameSelected = new List<string>();
+            var areaNameSelected = new List<string>();
+
+            if (exportSelected) 
+            {
+                int numberItems = 0;
+                int[] ObjectType = null;
+                string[] ObjectName = null;
+
+                Sap.SelectObj.GetSelected(ref numberItems, ref ObjectType, ref ObjectName);
+                
+                for (var i  = 0; i < ObjectType.Length; i++)
+                {
+                    if (ObjectType[i] == 2) { frameNameSelected.Add(ObjectName[i]); }
+                    else if (ObjectType[i] == 5) { areaNameSelected.Add(ObjectName[i]); }
+                }
+            }
+
 
             //rebuild etabs frame objects 
             //attach etabs property as user text in thino
@@ -769,7 +790,18 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
 
             if (allFrames != null && allFrameProp != null) 
             {
-                
+                //check whether to export only selected items
+                var allFramesSelected = new List<FrameGeometry>();
+
+                if (exportSelected)
+                {
+                    foreach (var frame in allFrames)
+                    {
+                        if (frameNameSelected.Contains(frame.Name)) { allFramesSelected.Add(frame); }
+                    }
+                    allFrames = allFramesSelected;
+                }
+
                 var framePropLayer = new Dictionary<string, Layer>();
 
                 //find unique frame properties
@@ -834,6 +866,18 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
 
             if (allAreas != null)
             {
+                //check whether to export only selected items
+                var allAreasSelected = new List<AreaGeometry>();
+
+                if (exportSelected)
+                {
+                    foreach (var area in allAreas)
+                    {
+                        if (areaNameSelected.Contains(area.Name)) { allAreasSelected.Add(area); }
+                    }
+                    allAreas = allAreasSelected;
+                }
+
                 var areaPropLayer = new Dictionary<string, Layer>();
 
                 //find unique area properties

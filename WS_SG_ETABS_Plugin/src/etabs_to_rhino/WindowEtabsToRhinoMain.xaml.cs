@@ -120,6 +120,7 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
                 {"frameExtrusionManual", frameExtrusionManual.IsChecked },
                 {"areaExtrusionAuto", areaExtrusionAuto.IsChecked },
                 {"areaExtrusionManual", areaExtrusionManual.IsChecked },
+                {"exportSelected", checkBoxExportSelection.IsChecked }
             };
 
             IsEnabled = false;
@@ -135,9 +136,6 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
 
         #endregion
 
-        private void frameExtrusionAuto_Checked(object sender, RoutedEventArgs e)
-        {
-
-        }
+        
     }
 }
