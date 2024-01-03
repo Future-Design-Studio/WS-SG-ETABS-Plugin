@@ -114,6 +114,58 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
 
             return allAreas;
         }
+        public static List<AreaGeometry> GetAllSelectedAreasWithProperties(cSapModel Sap, List<string> names)
+        {
+            var selAreas = new List<AreaGeometry>();
+            List<List<Point3d>> ptsGroup = new List<List<Point3d>>();
+            var designOrientaion = new List<eAreaDesignOrientation>();
+
+
+            foreach (string name in names)
+            {
+                var pts = new List<Point3d>();
+                
+                int NumberPoints = 0;
+                string[] Point = null;
+                Sap.AreaObj.GetPoints(name, ref NumberPoints, ref Point);
+
+                foreach (var p in  Point)
+                {
+                    double X = 0, Y = 0, Z = 0;
+                    Sap.PointObj.GetCoordCartesian(p, ref X, ref Y, ref Z);
+
+                    pts.Add(new Point3d(X, Y, Z));
+                }
+                    
+                
+                ptsGroup.Add(pts);
+
+                eAreaDesignOrientation designOri  = eAreaDesignOrientation.Other;
+                Sap.AreaObj.GetDesignOrientation(name, ref designOri);
+                designOrientaion.Add(designOri);
+            }
+
+            //get area cardinal
+            bool isError = false;
+            HelperEtabs.DatabaseTable databaseTable = new HelperEtabs.DatabaseTable();
+            (isError, databaseTable) = HelperEtabs.GetTableDisplay(Sap, "Area Assignments - Insertion Point", false);
+
+            var cardinaldict = new Dictionary<string, string>();
+            foreach (Dictionary<string, string> row in databaseTable.TableInList)
+            {
+                var name = row["UniqueName"];
+                var cardinal = row["CardinalPt"];
+                cardinaldict[name] = cardinal;
+            }
+
+            for (int i = 0; i<names.Count; i++)
+            {
+                var area = new AreaGeometry(names[i], designOrientaion[i], ptsGroup[i], cardinaldict[names[i]], Sap);
+                if (area.DesignOrientation != "Null") selAreas.Add(area);
+            }
+
+            return selAreas;
+        }
         public static List<FrameGeometry> GetAllFrames(cSapModel Sap)
         {
             //pull frame data from etabs
@@ -737,6 +789,10 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
 
         public static void ExportEtabsToRhino(cSapModel Sap, string filePath, string fileName, Dictionary<string, bool?> selectedItems, IProgress<int> progressStatus, IProgress<string> progressDescription)
         {
+
+            var watch = System.Diagnostics.Stopwatch.StartNew(); //start timer to check tun time
+
+
             string message = "";
             string newLine = "\n";
 
@@ -779,6 +835,13 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
                 string[] ObjectName = null;
 
                 Sap.SelectObj.GetSelected(ref numberItems, ref ObjectType, ref ObjectName);
+
+                if(numberItems == 0)
+                {
+                    progressStatus.Report(0);
+                    progressDescription.Report("No objects selected! \nPlease select objects before deploying the plugin to use \nExport Selection Only setting.");
+                    return;
+                }
                 
                 for (var i  = 0; i < ObjectType.Length; i++)
                 {
@@ -878,7 +941,10 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
             message = "Converting ETABS area objects to Rhino geometries..." + newLine;
             progressDescription.Report(message);
 
-            var allAreas = GetAllAreasWithProperties(Sap);
+            var allAreas = new List<AreaGeometry>();
+            //if (exportSelected) { allAreas = GetAllSelectedAreasWithProperties(Sap, areaNameSelected); }
+            //else allAreas = GetAllAreasWithProperties(Sap);
+            allAreas = GetAllAreasWithProperties(Sap);
 
             if (allAreas != null)
             {
@@ -982,7 +1048,10 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
 
             WriteRhinoFile(newModel, rhinoModelPath);
 
-            
+            watch.Stop();
+            var duration = Math.Round((decimal)watch.ElapsedMilliseconds / 100);
+            duration /= 10;
+            progressDescription.Report("Export completed successfully in " + duration.ToString() +"s");
         }
     }
 }

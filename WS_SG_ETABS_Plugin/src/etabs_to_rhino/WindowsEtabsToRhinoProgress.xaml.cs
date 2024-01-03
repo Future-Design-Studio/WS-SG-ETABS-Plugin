@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.IO;
 
 namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
 {
@@ -26,6 +27,8 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
         cPluginCallback _Plugin;
         string _filePath;
         string _fileName;
+        string _errorMessage;
+        string _fullErrorMessage;
         Dictionary<string, bool?> _selectedItems;
 
         public WindowEtabsToRhinoProgress(cSapModel SapModel, cPluginCallback Plugin, string filePath, string fileName, Dictionary<string,bool?> selectedItems)
@@ -55,10 +58,30 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
             var progressStatus = new Progress<int>(x => pbStatus.Value = x);
             var progressDescription = new Progress<string>(x => pbDescription.Text = x);
 
-            await Task.Run(() => src.etabs_to_rhino.FunctionEtabsToRhino.ExportEtabsToRhino(_SapModel, _filePath, _fileName, _selectedItems, progressStatus, progressDescription));
+            try
+            {
+                await Task.Run(() => src.etabs_to_rhino.FunctionEtabsToRhino.ExportEtabsToRhino(_SapModel, _filePath, _fileName, _selectedItems, progressStatus, progressDescription));
+                textblockReceipt.Text = "Done!";
+            }
+            catch (Exception ex) 
+            {
+                _errorMessage = ex.Message;
+                _fullErrorMessage = ex.StackTrace;
+                buttonLog.IsEnabled = true;
+                buttonLog.Opacity = 100;
+
+                pbStatus.Value = 0;
+                pbDescription.Text = _errorMessage;
+            }
+
+            if (pbStatus.Value == 0) 
+            {
+                pbStatus.Foreground = Brushes.Red;
+                textblockReceipt.Text = "Error!";
+            }
 
             pbStatus.Value = 100;
-            pbDescription.Text = "Export completed successfully!";
+            
 
             Thread.Sleep(500);
 
@@ -79,6 +102,15 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
         private void buttonOk_Click(object sender, RoutedEventArgs e)
         {
             Close();
+        }
+        private void buttonLog_Click(object sender, RoutedEventArgs e)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine(_errorMessage);
+            sb.AppendLine(_fullErrorMessage);
+            File.AppendAllText(_filePath + _fileName + "_ErrorMessage.txt", sb.ToString());
+
+            textblockReceipt.Text = "Error Message saved!";
         }
     }
 }
