@@ -349,8 +349,14 @@
     <Compile Include="src\plot_reaction\table\WindowPlotReactionTableResult.xaml.cs">
       <DependentUpon>WindowPlotReactionTableResult.xaml</DependentUpon>
     </Compile>
+    <Compile Include="src\plot_reaction\WindowPlotReactionLoading.xaml.cs">
+      <DependentUpon>WindowPlotReactionLoading.xaml</DependentUpon>
+    </Compile>
     <Compile Include="src\plot_reaction\WindowPlotReactionMain.xaml.cs">
       <DependentUpon>WindowPlotReactionMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\plot_reaction\WindowPlotReactionSelectLoad.xaml.cs">
+      <DependentUpon>WindowPlotReactionSelectLoad.xaml</DependentUpon>
     </Compile>
     <Compile Include="src\plot_sum_mass_participation\FunctionSumParticipPlot.cs" />
     <Compile Include="src\plot_sum_mass_participation\WindowSumParticipPlotMain.xaml.cs">
@@ -571,9 +577,17 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="src\plot_reaction\WindowPlotReactionLoading.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="src\plot_reaction\WindowPlotReactionMain.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="src\plot_reaction\WindowPlotReactionSelectLoad.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="src\plot_sum_mass_participation\WindowSumParticipPlotMain.xaml">
       <SubType>Designer</SubType>

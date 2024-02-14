@@ -27,7 +27,9 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
         List<src.HelperEtabs.DatabaseTable> databaseTableListGlobal = new List<src.HelperEtabs.DatabaseTable>();
         List<Dictionary<string, string>> groupAndColorNotAll = new List<Dictionary<string, string>>();
 
-        public WindowPlotReactionGraphMain(cSapModel SapModel, cPluginCallback Plugin, List<src.HelperEtabs.DatabaseTable> databaseTableList)
+        public WindowPlotReactionGraphMain(cSapModel SapModel, cPluginCallback Plugin, 
+            List<src.HelperEtabs.DatabaseTable> databaseTableList, List<string> listChoosenLoadCase,
+            List<string> listChoosenGroup)
         {
             _SapModel = SapModel;
             _Plugin = Plugin;
@@ -38,11 +40,13 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
             textBoxTitle.Text = "Reaction Plot";
 
             //Fill in combobox for available groups
-            src.HelperUI.PopulateComboBoxAvailGroup(_SapModel, comBoxGroup);
+            //src.HelperUI.PopulateComboBoxAvailGroup(_SapModel, comBoxGroup);
+            comBoxGroup.ItemsSource = listChoosenGroup;
+            comBoxGroup.SelectedIndex = 0;
 
             //Fill in combobox for output case
-            List<string> outputCasesList = src.HelperEtabs.GetLoadCaseAndComboList(_SapModel);
-            comBoxOutputCase.ItemsSource = outputCasesList;
+            //List<string> outputCasesList = src.HelperEtabs.GetLoadCaseAndComboList(_SapModel);
+            comBoxOutputCase.ItemsSource = listChoosenLoadCase;
             comBoxOutputCase.SelectedIndex = 0;
 
             //Fill in combobox for direction
