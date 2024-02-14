@@ -27,15 +27,24 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
         cPluginCallback _Plugin;
 
         //List of tables to save joint reaction and grouping table
-        List<src.HelperEtabs.DatabaseTable> databaseTableList = new List<HelperEtabs.DatabaseTable>();
+        List<src.HelperEtabs.DatabaseTable> databaseTableListGlobal = new List<HelperEtabs.DatabaseTable>();
+        List<string> listChoosenLoadCaseGlobal = new List<string>();
+        List<string> listChoosenGroupGlobal = new List<string>();
 
-        public WindowPlotReactionMain(cSapModel SapModel, cPluginCallback Plugin)
+        public WindowPlotReactionMain(cSapModel SapModel, cPluginCallback Plugin, 
+            List<src.HelperEtabs.DatabaseTable> databaseTableList, List<string> listChoosenLoadCase, 
+            List<string> listChoosenGroup)
         {
             _SapModel = SapModel;
             _Plugin = Plugin;
 
             InitializeComponent();
 
+            databaseTableListGlobal = databaseTableList;
+            listChoosenLoadCaseGlobal = listChoosenLoadCase;
+            listChoosenGroupGlobal = listChoosenGroup;
+
+            /*
             //Turn on all load
             src.HelperEtabs.OnAllLoadDatabase(SapModel);
 
@@ -49,6 +58,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
                 MessageBox.Show("Error in retreiving joint reactions. Please make sure the model is run!");
                 return;
             }
+            */
 
             ShowDialog();
         }
@@ -56,14 +66,14 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction
         private void buttonPlotReaction_Click(object sender, RoutedEventArgs e)
         {
             IsEnabled = false;
-            src.plot_reaction.graph.WindowPlotReactionGraphMain windowPlotReactionGraphMain = new graph.WindowPlotReactionGraphMain(_SapModel, _Plugin, databaseTableList);
+            src.plot_reaction.graph.WindowPlotReactionGraphMain windowPlotReactionGraphMain = new graph.WindowPlotReactionGraphMain(_SapModel, _Plugin, databaseTableListGlobal, listChoosenLoadCaseGlobal, listChoosenGroupGlobal);
             IsEnabled = true;
         }
 
         private void buttonCreateExcel_Click(object sender, RoutedEventArgs e)
         {
             IsEnabled = false;
-            src.plot_reaction.table.WindowPlotReactionTableMain windowPlotReactionTableMain = new table.WindowPlotReactionTableMain(_SapModel, _Plugin, databaseTableList);
+            src.plot_reaction.table.WindowPlotReactionTableMain windowPlotReactionTableMain = new table.WindowPlotReactionTableMain(_SapModel, _Plugin, databaseTableListGlobal, listChoosenLoadCaseGlobal, listChoosenGroupGlobal);
             IsEnabled = true;
         }
     }

@@ -28,7 +28,9 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
         List<src.HelperEtabs.DatabaseTable> databaseTableListGlobal = new List<src.HelperEtabs.DatabaseTable>();
         List<Dictionary<string, string>> groupAndColorNotAll = new List<Dictionary<string, string>>();
 
-        public WindowPlotReactionTableMain(cSapModel SapModel, cPluginCallback Plugin, List<src.HelperEtabs.DatabaseTable> databaseTableList)
+        public WindowPlotReactionTableMain(cSapModel SapModel, cPluginCallback Plugin, 
+            List<src.HelperEtabs.DatabaseTable> databaseTableList, List<string> listChoosenLoadCase,
+            List<string> listChoosenGroup)
         {
             _SapModel = SapModel;
             _Plugin = Plugin;
@@ -43,10 +45,16 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
             textBoxFilePath.Text = modelPath;
 
             //Fill in combobox for available groups
-            src.HelperUI.PopulateComboBoxAvailGroup(_SapModel, comBoxGroup);
+            //src.HelperUI.PopulateComboBoxAvailGroup(_SapModel, comBoxGroup);
+            comBoxGroup.ItemsSource = listChoosenGroup;
+            comBoxGroup.SelectedIndex = 0;
 
             //Fill in load case list box
-            src.HelperUI.PopulateListBoxAvailLoadCase(_SapModel, listBoxAvailLoadCase);
+            //src.HelperUI.PopulateListBoxAvailLoadCase(_SapModel, listBoxAvailLoadCase);
+            foreach (string choosenLoadCase in listChoosenLoadCase)
+            {
+                listBoxAvailLoadCase.Items.Add(choosenLoadCase);
+            }
 
             databaseTableListGlobal = databaseTableList;
 

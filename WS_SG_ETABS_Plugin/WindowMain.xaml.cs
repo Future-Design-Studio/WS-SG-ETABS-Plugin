@@ -130,7 +130,7 @@ namespace WS_SG_ETABS_Plugin
         {
             IsEnabled = false;
             //Call up shell uniform window
-            src.plot_reaction.WindowPlotReactionMain windowPlotReactionMain = new src.plot_reaction.WindowPlotReactionMain(_SapModel, _Plugin);
+            src.plot_reaction.WindowPlotReactionSelectLoad windowPlotReactionSelectLoad = new src.plot_reaction.WindowPlotReactionSelectLoad(_SapModel, _Plugin);
             IsEnabled = true;
 
         }
