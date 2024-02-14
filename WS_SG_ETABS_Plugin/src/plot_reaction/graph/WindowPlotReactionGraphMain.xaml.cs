@@ -26,6 +26,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
 
         List<src.HelperEtabs.DatabaseTable> databaseTableListGlobal = new List<src.HelperEtabs.DatabaseTable>();
         List<Dictionary<string, string>> groupAndColorNotAll = new List<Dictionary<string, string>>();
+        bool massReportGlobal = false;
 
         public WindowPlotReactionGraphMain(cSapModel SapModel, cPluginCallback Plugin, 
             List<src.HelperEtabs.DatabaseTable> databaseTableList, List<string> listChoosenLoadCase,
@@ -35,6 +36,9 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
             _Plugin = Plugin;
 
             InitializeComponent();
+
+            //Check if mass report
+            massReportGlobal = massReport;
 
             //Fill in title
             textBoxTitle.Text = "Reaction Plot";
@@ -300,12 +304,22 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
                     autoSplit= true;
                 }
 
-                IsEnabled = false;
-                //Call up copy property result window
-                src.plot_reaction.graph.WindowPlotReactionGraphResult windowPlotReactionResult = new src.plot_reaction.graph.WindowPlotReactionGraphResult(_SapModel, _Plugin, groupAndColor,
-                    outputCase, reactionDirection, forceFactor, bubbleScaleFactor, textSize, titleSize, axisTitleSize, gridSpacingX, gridSpacingY, title, splitX, splitY, divisionX, divisionY, offsetX, offsetY,
-                    sumTextSizeX, sumTextSizeY, separationX, separationY, includeAllJoints, maxOrMin, autoSplit, splitCoord, databaseTableListGlobal);
-                IsEnabled = true;
+                //If not mass report call up result window
+                if (!massReportGlobal)
+                {
+                    IsEnabled = false;
+                    //Call up copy property result window
+                    src.plot_reaction.graph.WindowPlotReactionGraphResult windowPlotReactionResult = new src.plot_reaction.graph.WindowPlotReactionGraphResult(_SapModel, _Plugin, groupAndColor,
+                        outputCase, reactionDirection, forceFactor, bubbleScaleFactor, textSize, titleSize, axisTitleSize, gridSpacingX, gridSpacingY, title, splitX, splitY, divisionX, divisionY, offsetX, offsetY,
+                        sumTextSizeX, sumTextSizeY, separationX, separationY, includeAllJoints, maxOrMin, autoSplit, splitCoord, databaseTableListGlobal);
+                    IsEnabled = true;
+                }
+                else
+                {
+
+                }
+
+
             }
 
             catch (Exception ex)
