@@ -43,6 +43,9 @@ namespace WS_SG_ETABS_Plugin.src.plot_drift
             //Fill in load case list box
             src.HelperUI.PopulateListBoxAvailLoadCase(_SapModel, listBoxAvailLoadCase);
 
+            //Fill in group list box
+            src.HelperUI.PopulateListBoxAvailGroup(_SapModel, listBoxAvailGroup);
+
             ShowDialog();
         }
 
@@ -56,6 +59,16 @@ namespace WS_SG_ETABS_Plugin.src.plot_drift
             src.HelperUI.MoveItemsFromListBox(listBoxChoosenLoadCase, listBoxAvailLoadCase);
         }
 
+        private void buttonAddGroup_Click(object sender, RoutedEventArgs e)
+        {
+            src.HelperUI.MoveItemsFromListBox(listBoxAvailGroup, listBoxChoosenGroup);
+        }
+
+        private void buttonRemoveGroup_Click(object sender, RoutedEventArgs e)
+        {
+            src.HelperUI.MoveItemsFromListBox(listBoxChoosenGroup, listBoxAvailGroup);
+        }
+
         private void buttonOk_Click(object sender, RoutedEventArgs e)
         {
             IsEnabled = false;
@@ -64,9 +77,10 @@ namespace WS_SG_ETABS_Plugin.src.plot_drift
             {
                 //Casting listbox content to list
                 List<string> listChoosenLoadCase = listBoxChoosenLoadCase.Items.OfType<string>().ToList();
+                List<string> listChoosenGroup = listBoxChoosenGroup.Items.OfType<string>().ToList();
 
                 //Call up window
-                WindowDriftPlotLoading windowDriftPlotLoading = new WindowDriftPlotLoading(_SapModel, _Plugin, listChoosenLoadCase);
+                WindowDriftPlotLoading windowDriftPlotLoading = new WindowDriftPlotLoading(_SapModel, _Plugin, listChoosenLoadCase, listChoosenGroup);
             }
 
             catch (Exception ex)
