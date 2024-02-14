@@ -38,7 +38,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
             InitializeComponent();
 
             //Check if mass report
-            massReportGlobal = massReport;
+            //massReportGlobal = massReport;
 
             //Fill in title
             textBoxTitle.Text = "Reaction Plot";
