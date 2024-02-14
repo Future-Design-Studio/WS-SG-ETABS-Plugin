@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -28,7 +29,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_drift
         //List of tables to save joint reaction and grouping table
         List<src.HelperEtabs.DatabaseTable> databaseTableListGlobal = new List<HelperEtabs.DatabaseTable>();
 
-        public WindowDriftPlotMain(cSapModel SapModel, cPluginCallback Plugin, List<src.HelperEtabs.DatabaseTable> databaseTableList, List<string> listChoosenLoadCase)
+        public WindowDriftPlotMain(cSapModel SapModel, cPluginCallback Plugin, List<src.HelperEtabs.DatabaseTable> databaseTableList, List<string> listChoosenLoadCase, List<string> listChoosenGroup)
         {
             _SapModel = SapModel;
             _Plugin = Plugin;
@@ -42,9 +43,11 @@ namespace WS_SG_ETABS_Plugin.src.plot_drift
             modelPath = SapModel.GetModelFilepath();
             textBoxFilePath.Text = modelPath;
 
+            /*
             //Fill in combobox for output case
             comBoxOutputCase.ItemsSource = listChoosenLoadCase;
             comBoxOutputCase.SelectedIndex = 0;
+            */
 
             //Fill in combobox for direction
             comBoxDirection.ItemsSource = src.HelperEtabs.lateralDeflectionDirectionWithSRSSList;
@@ -64,9 +67,15 @@ namespace WS_SG_ETABS_Plugin.src.plot_drift
             //Fill in load case list box
             src.HelperUI.PopulateListBoxAvailLoadCase(_SapModel, listBoxAvailLoadCase);
             */
+            foreach (string choosenLoadCase in listChoosenLoadCase)
+            {
+                listBoxAvailLoadCase.Items.Add(choosenLoadCase);
+            }
 
             //Fill in combobox for available groups
-            src.HelperUI.PopulateComboBoxAvailGroup(_SapModel, comBoxGroup);
+            //src.HelperUI.PopulateComboBoxAvailGroup(_SapModel, comBoxGroup);
+            comBoxGroup.ItemsSource = listChoosenGroup;
+            comBoxGroup.SelectedIndex = 0;
 
             ShowDialog();
         }
@@ -76,6 +85,15 @@ namespace WS_SG_ETABS_Plugin.src.plot_drift
         private void buttonDefaultPath_Click(object sender, RoutedEventArgs e)
         {
             textBoxFilePath.Text = modelPath;
+        }
+        private void buttonAddLoadCase_Click(object sender, RoutedEventArgs e)
+        {
+            src.HelperUI.MoveItemsFromListBox(listBoxAvailLoadCase, listBoxChoosenLoadCase);
+        }
+
+        private void buttonRemoveLoadCase_Click(object sender, RoutedEventArgs e)
+        {
+            src.HelperUI.MoveItemsFromListBox(listBoxChoosenLoadCase, listBoxAvailLoadCase);
         }
 
         /*
@@ -104,11 +122,11 @@ namespace WS_SG_ETABS_Plugin.src.plot_drift
                 string fileName = textBoxFileName.Text;
                 string filePath = textBoxFilePath.Text;
 
-                string outputCase = comBoxOutputCase.SelectedValue.ToString();
+                //string outputCase = comBoxOutputCase.SelectedValue.ToString();
+                List<string> listOutputCase = listBoxChoosenLoadCase.Items.OfType<string>().ToList();
                 string choosenGroup = comBoxGroup.Text;
                 string displacementDirection = comBoxDirection.SelectedValue.ToString();
                 
-
                 int legendTextSize = Convert.ToInt32(textBoxLegendTextSize.Text);
                 int titleSize = Convert.ToInt32(textBoxTitleSize.Text);
                 int axisTitleSize = Convert.ToInt32(textBoxAxisTitleSize.Text);
@@ -171,7 +189,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_drift
 
                 //Call up copy result window
                 src.plot_drift.WindowDriftPlotResult windowdriftPlotResult = new src.plot_drift.WindowDriftPlotResult(
-                    _SapModel, _Plugin, outputCase, displacementDirection, maxAllowableDispType, maxAllowableDisplacementFactor, choosenGroup, legendTextSize,
+                    _SapModel, _Plugin, listOutputCase, displacementDirection, maxAllowableDispType, maxAllowableDisplacementFactor, choosenGroup, legendTextSize,
                     titleSize, axisTitleSize, tickLabelSize, gridSpacingDisplacementX, gridSpacingDriftX, gridSpacingY, showMaxDisp, databaseTableListGlobal, fileName, filePath, 
                     displacementXAxisMaxType, displacementXAxisMax, driftXAxisMaxType, driftXAxisMax);
             }

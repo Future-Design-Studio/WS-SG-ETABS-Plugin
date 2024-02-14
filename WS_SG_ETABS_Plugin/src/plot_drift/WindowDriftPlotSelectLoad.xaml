@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WS_SG_ETABS_Plugin.src.plot_drift"
-             mc:Ignorable="d" Height="450" Width="700">
+             mc:Ignorable="d" Height="700" Width="700">
 
     <Grid Margin="10">
         <Grid.RowDefinitions>
@@ -25,6 +25,8 @@
 
         <Grid Grid.Row="2" Grid.Column="1" Margin="10 0 10 0">
             <Grid.RowDefinitions>
+                <RowDefinition Height="0.2*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="0.2*"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
@@ -50,6 +52,23 @@
             </StackPanel>
 
             <ListBox Grid.Row="1" Grid.Column="2" x:Name="listBoxChoosenLoadCase" d:ItemsSource="{d:SampleData ItemCount=5}" VerticalAlignment="Stretch" SelectionMode="Extended"></ListBox>
+
+            <TextBlock Grid.Row="2" Grid.Column="0" TextWrapping="WrapWithOverflow" VerticalAlignment="Center">
+                Available group(s):
+            </TextBlock>
+
+            <TextBlock Grid.Row="2" Grid.Column="2" TextWrapping="WrapWithOverflow" VerticalAlignment="Center">
+                Selected group(s):
+            </TextBlock>
+
+            <ListBox Grid.Row="3" Grid.Column="0" x:Name="listBoxAvailGroup" d:ItemsSource="{d:SampleData ItemCount=5}" VerticalAlignment="Stretch" SelectionMode="Extended"></ListBox>
+
+            <StackPanel Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" Margin="10 0">
+                <Button x:Name="buttonAddGroup" Content=">>" Click="buttonAddGroup_Click"></Button>
+                <Button x:Name="buttonRemoveGroup" Content="&lt;&lt;" Click="buttonRemoveGroup_Click"></Button>
+            </StackPanel>
+
+            <ListBox Grid.Row="3" Grid.Column="2" x:Name="listBoxChoosenGroup" d:ItemsSource="{d:SampleData ItemCount=5}" VerticalAlignment="Stretch" SelectionMode="Extended"></ListBox>
 
         </Grid>
 
