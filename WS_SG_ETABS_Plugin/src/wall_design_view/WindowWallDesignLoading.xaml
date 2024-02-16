@@ -1,0 +1,44 @@
+﻿<Window x:Class="WS_SG_ETABS_Plugin.src.wall_design_view.WindowWallDesignLoading"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WS_SG_ETABS_Plugin.src.wall_design_view"
+             mc:Ignorable="d" Height="200" Width="350" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" WindowStyle="None">
+    <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="0.6*"></RowDefinition>
+            <RowDefinition Height="0.6*"></RowDefinition>
+            <RowDefinition Height="2*"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <Label Grid.Row="0" Grid.Column="0" Margin="0 -10 0 0" Content="Wall Design Viewer" FontSize="20"/>
+        <Label Grid.Row="1" Grid.Column="0" Margin="0 -10 0 0" Content="Loading ETABS database table..." FontSize="12"/>
+
+        <ProgressBar Grid.Row="2" Grid.Column="0" Margin="0 3 0 3" IsIndeterminate="True"></ProgressBar>
+
+        <Grid Grid.Row="3" Grid.Column="0" Margin=" 0 10 0 0">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <CheckBox Grid.Row="0" Grid.Column="0" Name="checkBoxWallObjectConnectivity" Content="Wall Object Connectivity" IsEnabled="False" IsChecked="False"></CheckBox>
+            <CheckBox Grid.Row="1" Grid.Column="0" Name="checkBoxGroupAssignments" Content="Group Assignments" IsEnabled="False" IsChecked="False"></CheckBox>
+            <CheckBox Grid.Row="2" Grid.Column="0" Name="checkBoxPierLabels" Content="Pier Labels" IsEnabled="False" IsChecked="False"></CheckBox>
+            <CheckBox Grid.Row="3" Grid.Column="0" Name="checkBoxSpandrelLabels" Content="Spandrel Labels" IsEnabled="False" IsChecked="False"></CheckBox>
+            <CheckBox Grid.Row="4" Grid.Column="0" Name="checkBoxPointObjectConnectivity" Content="Point Object Connectivity" IsEnabled="False" IsChecked="False"></CheckBox>
+            
+        </Grid>
+
+
+    </Grid>
+</Window>

@@ -47,12 +47,13 @@ namespace WS_SG_ETABS_Plugin.src
             }
         }
 
-        public static void RectanglePlotter(WpfPlot Plot, double xCenter, double yCenter, string text, int textSize, System.Drawing.Color color, double xWidth, double yWidth)
+        public static void RectanglePlotter(WpfPlot Plot, double xCenter, double yCenter, string text, int textSize, System.Drawing.Color color, double xWidth, double yWidth, 
+            double borderWidth, System.Drawing.Color borderColor)
         {
 
             double[] xs = { xCenter - xWidth / 2.0, xCenter + xWidth / 2.0, xCenter + xWidth / 2.0, xCenter - xWidth / 2.0 };
             double[] ys = { yCenter + yWidth / 2.0, yCenter + yWidth / 2.0, yCenter - yWidth / 2.0, yCenter - yWidth / 2.0 };
-            Plot.Plot.AddPolygon(xs, ys, color);
+            Plot.Plot.AddPolygon(xs, ys, color, borderWidth, borderColor);
 
             //Text for each bubble in kN
             if (!string.IsNullOrWhiteSpace(text))

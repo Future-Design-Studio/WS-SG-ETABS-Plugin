@@ -483,7 +483,7 @@ namespace WS_SG_ETABS_Plugin.src.pad_footing_plot
                                                         );
 
 
-                    src.HelperPlot.RectanglePlotter(ReactionPlot, xCenter, yCenter, text, textSize, color, width, width);
+                    src.HelperPlot.RectanglePlotter(ReactionPlot, xCenter, yCenter, text, textSize, color, width, width, 0, System.Drawing.ColorTranslator.FromHtml("black"));
                 }
 
             }
@@ -559,7 +559,7 @@ namespace WS_SG_ETABS_Plugin.src.pad_footing_plot
                     }
 
 
-                    src.HelperPlot.RectanglePlotter(ReactionPlot, xCenter, yCenter, text, textSize, color, width, width);
+                    src.HelperPlot.RectanglePlotter(ReactionPlot, xCenter, yCenter, text, textSize, color, width, width, 0, System.Drawing.ColorTranslator.FromHtml("black"));
                 }
 
 
