@@ -27,7 +27,7 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
                 PierLabel = pierLabel;
                 SpandrelLabel = spandrelLabel;
 
-                IsFail = false;
+                IsFail = null;
             }
         }
     }

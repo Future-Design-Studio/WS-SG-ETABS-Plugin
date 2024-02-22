@@ -25,7 +25,8 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
         {
             InitializeComponent();
 
-            FunctionWallDesignView.PlotWallDesignResult(databaseTableList, choosenGroup, typeOfFailure, tableInListPierDesignResult, tableInListSpandrelDesignResult);
+            bool isError = FunctionWallDesignView.PlotWallDesignResult(ResultPlot, databaseTableList, choosenGroup, typeOfFailure, tableInListPierDesignResult, tableInListSpandrelDesignResult);
+            if (isError) { return; }
 
             ShowDialog();
         }
