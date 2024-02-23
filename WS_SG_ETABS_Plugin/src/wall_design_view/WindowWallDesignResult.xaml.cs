@@ -20,15 +20,62 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
     /// </summary>
     public partial class WindowWallDesignResult : Window
     {
+        List<ClassWallDesign.WallDesignDetail> wallDesignDetailListGlobal = new List<ClassWallDesign.WallDesignDetail>();
+        List<double> uniqueXGlobal = new List<double>();
+        List<double> uniqueYGlobal = new List<double>();
+        double countPassGlobal = 0;
+        double countFailGlobal = 0;
+
+        int titleSizeGlobal = 0;
+        int axisTitleSizeGlobal = 0;
+        int tickLabelSizeGlobal = 0;
+
         public WindowWallDesignResult(List<src.HelperEtabs.DatabaseTable> databaseTableList, string choosenGroup, string typeOfFailure,
-            List<Dictionary<string, string>> tableInListPierDesignResult, List<Dictionary<string, string>> tableInListSpandrelDesignResult)
+            List<Dictionary<string, string>> tableInListPierDesignResult, List<Dictionary<string, string>> tableInListSpandrelDesignResult, int titleSize, int axisTitleSize,
+            int tickLabelSize)
         {
+            titleSizeGlobal = titleSize;
+            axisTitleSizeGlobal = axisTitleSize;
+            tickLabelSizeGlobal = tickLabelSize;
+
             InitializeComponent();
 
-            bool isError = FunctionWallDesignView.PlotWallDesignResult(ResultPlot, databaseTableList, choosenGroup, typeOfFailure, tableInListPierDesignResult, tableInListSpandrelDesignResult);
+            bool isError = false;
+
+            (isError, wallDesignDetailListGlobal, uniqueXGlobal, uniqueYGlobal, countPassGlobal, countFailGlobal) = FunctionWallDesignView.PlotWallDesignResult(ResultPlot, databaseTableList, 
+                choosenGroup, typeOfFailure, tableInListPierDesignResult, tableInListSpandrelDesignResult, titleSize, axisTitleSize,
+                tickLabelSize);
             if (isError) { return; }
 
             ShowDialog();
+
+
         }
+
+        private void checkBoxShowOk_Click(object sender, RoutedEventArgs e)
+        {
+            UpdatePlotBasedOnCheckBox();
+        }
+
+        private void checkBoxShowFail_Click(object sender, RoutedEventArgs e)
+        {
+            UpdatePlotBasedOnCheckBox();
+        }
+
+        private void checkBoxShowNull_Click(object sender, RoutedEventArgs e)
+        {
+            UpdatePlotBasedOnCheckBox();
+        }
+        
+        private void UpdatePlotBasedOnCheckBox()
+        {
+            bool? showOk = checkBoxShowOk.IsChecked;
+            bool? showFail = checkBoxShowFail.IsChecked;
+            bool? showNull = checkBoxShowNull.IsChecked;
+
+            FunctionWallDesignView.FilterWallDesignResult(ResultPlot, showOk, showFail, showNull, wallDesignDetailListGlobal, uniqueXGlobal, uniqueYGlobal, countPassGlobal, countFailGlobal, 
+                titleSizeGlobal, axisTitleSizeGlobal, tickLabelSizeGlobal);
+        }
+
     }
 }

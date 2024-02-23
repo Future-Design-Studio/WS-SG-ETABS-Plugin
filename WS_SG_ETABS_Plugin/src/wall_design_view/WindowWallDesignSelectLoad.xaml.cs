@@ -82,5 +82,8 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
         {
             Close();
         }
+
+
+        
     }
 }

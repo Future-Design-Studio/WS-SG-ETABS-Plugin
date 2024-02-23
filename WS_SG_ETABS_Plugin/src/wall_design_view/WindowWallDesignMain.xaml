@@ -87,45 +87,6 @@
 
         <Label Grid.Row="5" Grid.Column="0" Content="2. Select group of joint(s) to display" FontSize="14" FontWeight="Bold"/>
 
-        <Grid Grid.Row="6" Margin="10 0 10 0">
-            <!--
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="2*"></ColumnDefinition>
-                <ColumnDefinition Width="*"></ColumnDefinition>
-            </Grid.ColumnDefinitions>
-
-            <Label Grid.Column="0" VerticalAlignment="Center">Load case or combination to plot:</Label>
-            <ComboBox Grid.Column="1" x:Name="comBoxOutputCase" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" ></ComboBox>
-            -->
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="2*"></ColumnDefinition>
-                <ColumnDefinition Width="*"></ColumnDefinition>
-                <ColumnDefinition Width="2*"></ColumnDefinition>
-            </Grid.ColumnDefinitions>
-
-            <Grid.RowDefinitions>
-                <RowDefinition Height="0.5*"></RowDefinition>
-                <RowDefinition Height="2*"></RowDefinition>
-            </Grid.RowDefinitions>
-
-            <TextBlock Grid.Row="0" Grid.Column="0" TextWrapping="WrapWithOverflow" VerticalAlignment="Center">
-                Available load case(s) or combination(s):
-            </TextBlock>
-
-            <TextBlock Grid.Row="0" Grid.Column="2" TextWrapping="WrapWithOverflow" VerticalAlignment="Center">
-                Selected load case(s) or combination(s):
-            </TextBlock>
-
-            <ListBox Grid.Row="1" Grid.Column="0" x:Name="listBoxAvailLoadCase" d:ItemsSource="{d:SampleData ItemCount=5}" VerticalAlignment="Stretch" SelectionMode="Extended"></ListBox>
-
-            <StackPanel Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Margin="10 0">
-                <Button x:Name="buttonAddLoadCase" Content=">>" Click="buttonAddLoadCase_Click"></Button>
-                <Button x:Name="buttonRemoveLoadCase" Content="&lt;&lt;" Click="buttonRemoveLoadCase_Click"></Button>
-            </StackPanel>
-
-            <ListBox Grid.Row="1" Grid.Column="2" x:Name="listBoxChoosenLoadCase" d:ItemsSource="{d:SampleData ItemCount=5}" VerticalAlignment="Stretch" SelectionMode="Extended"></ListBox>
-
-        </Grid>
 
         <Grid Grid.Row="7" Margin="10 0 10 0">
             <Grid.ColumnDefinitions>
@@ -150,30 +111,10 @@
         </Grid>
 
 
-        <Grid Grid.Row="9"  Margin="10 -5 10 0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
-
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="2*"></ColumnDefinition>
-                <ColumnDefinition Width="*"></ColumnDefinition>
-            </Grid.ColumnDefinitions>
-
-            <Label Grid.Row="0" Grid.Column="0" Content="Maximum allowable displacement:"></Label>
-            <RadioButton Grid.Row="1" Grid.Column="0" GroupName="maxAllowableDisp" Content="Hide maximum allowable displacement" Name="radioButtonHideMaxDisp" Checked="radioButtonHideMaxDisp_Checked" 
-                         ></RadioButton>
-            <RadioButton Grid.Row="2" Grid.Column="0" GroupName="maxAllowableDisp" Content="Max displacement to building height factor" Name="radioButtonFactorMaxDisp" 
-                         Checked="radioButtonFactorMaxDisp_Checked"></RadioButton>
-
-            <TextBox x:Name="textBoxFactorMaxDisp" Grid.Row="2" Grid.Column="1" Text="1/350"></TextBox>
-        </Grid>
 
 
 
-        <Label Grid.Row="10" Grid.Column="0" Content="4. Chart graphic preferences" FontSize="14" FontWeight="Bold"/>
+        <Label Grid.Row="10" Grid.Column="0" Content="3. Chart graphic preferences" FontSize="14" FontWeight="Bold"/>
 
 
         <Grid Grid.Row="11" Margin="10 0 10 0">
@@ -215,100 +156,6 @@
 
             <Label Grid.Column="0" VerticalAlignment="Center" Grid.ColumnSpan="2">Tick label text size:</Label>
             <TextBox Grid.Column="1" x:Name="textBoxTickLabelSize" Grid.Row="0" TextAlignment="Center" Text="24" InputScope="Number"/>
-        </Grid>
-
-        <Grid Grid.Row="15" Margin="10 0 10 0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="2*"></ColumnDefinition>
-                <ColumnDefinition Width="*"></ColumnDefinition>
-            </Grid.ColumnDefinitions>
-
-            <Label Grid.Column="0" VerticalAlignment="Center" Grid.ColumnSpan="2">Displacement plot grid spacing x (mm):</Label>
-            <TextBox Grid.Column="1" x:Name="textBoxGridSpacingDisplacementX" Grid.Row="0" TextAlignment="Center" Text="100" InputScope="Digits"/>
-        </Grid>
-
-        <Grid Grid.Row="16"  Margin="10 -5 10 0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
-
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"></ColumnDefinition>
-                <ColumnDefinition Width="*"></ColumnDefinition>
-            </Grid.ColumnDefinitions>
-
-            <Label Grid.Row="0" Grid.Column="0" Content="Maximum displacement plot x axis label:"></Label>
-            <RadioButton Grid.Row="1" Grid.Column="0" GroupName="dispXAxisMax" Content="Auto" Name="radioButtonDispXAxisMaxAuto" 
-                         Checked="radioButtonDispXAxisMaxAuto_Checked" />
-            <Grid Grid.Row="1" Grid.Column="1">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="0.1*"></ColumnDefinition>
-                    <ColumnDefinition Width="*"></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-
-                <RadioButton Grid.Row="0" Grid.Column="0" GroupName="dispXAxisMax" Name="radioButtonDispXAxisMaxManual" 
-                         Checked="radioButtonDispXAxisMaxManual_Checked"/>
-
-                <TextBox x:Name="textBoxDispXAxisMaxManual" Grid.Row="1" Grid.Column="1" Text="1000"></TextBox>
-            </Grid>
-
-
-        </Grid>
-
-        <Grid Grid.Row="17" Margin="10 0 10 0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="2*"></ColumnDefinition>
-                <ColumnDefinition Width="*"></ColumnDefinition>
-            </Grid.ColumnDefinitions>
-
-            <Label Grid.Column="0" VerticalAlignment="Center" Grid.ColumnSpan="2">Drift plot grid spacing x:</Label>
-            <TextBox Grid.Column="1" x:Name="textBoxGridSpacingDriftX" Grid.Row="0" TextAlignment="Center" Text="0.001" InputScope="Number"/>
-        </Grid>
-
-        <Grid Grid.Row="18"  Margin="10 -5 10 0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
-
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"></ColumnDefinition>
-                <ColumnDefinition Width="*"></ColumnDefinition>
-            </Grid.ColumnDefinitions>
-
-            <Label Grid.Row="0" Grid.Column="0" Content="Maximum drift plot x axis label:"></Label>
-            <RadioButton Grid.Row="1" Grid.Column="0" GroupName="driftXAxisMax" Content="Auto" Name="radioButtonDriftXAxisMaxAuto" 
-                         Checked="radioButtonDriftXAxisMaxAuto_Checked" ></RadioButton>
-            <Grid Grid.Row="1" Grid.Column="1">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="0.1*"></ColumnDefinition>
-                    <ColumnDefinition Width="*"></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-
-                <RadioButton Grid.Row="0" Grid.Column="0" GroupName="driftXAxisMax" Name="radioButtonDriftXAxisMaxManual" 
-                         Checked="radioButtonDriftXAxisMaxManual_Checked"></RadioButton>
-
-                <TextBox x:Name="textBoxDriftXAxisMaxManual" Grid.Row="1" Grid.Column="1" Text="0.01"></TextBox>
-            </Grid>
-
-
-        </Grid>
-
-        <Grid Grid.Row="19" Margin="10 0 10 0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="2*"></ColumnDefinition>
-                <ColumnDefinition Width="*"></ColumnDefinition>
-            </Grid.ColumnDefinitions>
-
-            <Label Grid.Column="0" VerticalAlignment="Center" Grid.ColumnSpan="2">Plot grid spacing y:</Label>
-            <TextBox Grid.Column="1" x:Name="textBoxGridSpacingY" Grid.Row="0" TextAlignment="Center" Text="50" InputScope="Digits"/>
-        </Grid>
-
-        <Grid Grid.Row="20" Margin="10 0 10 0">
-
-            <CheckBox x:Name="checkBoxMaxDisp" Grid.Row="0">
-                Display max and min displacement of each storey for the selected load case (heavy computation)</CheckBox>
         </Grid>
 
 

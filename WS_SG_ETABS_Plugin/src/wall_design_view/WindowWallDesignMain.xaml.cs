@@ -39,7 +39,7 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
             InitializeComponent();
 
             //Fill in default excel result name
-            textBoxFileName.Text = "drift_plot";
+            textBoxFileName.Text = "wall_design_result";
 
             //Fill in model path (default path)
             modelPath = SapModel.GetModelFilepath();
@@ -54,13 +54,6 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
             //Fill in combobox for direction
             comBoxTypeOfFailure.ItemsSource = src.HelperEtabs.typeOfFailureList;
             comBoxTypeOfFailure.SelectedIndex = 0;
-
-            //Check the default factor max allowable disp
-            radioButtonFactorMaxDisp.IsChecked = true;
-
-            //Check the default
-            radioButtonDispXAxisMaxAuto.IsChecked = true;
-            radioButtonDriftXAxisMaxAuto.IsChecked = true;
 
             //Save databaseTableList to global variable
             databaseTableListGlobal = databaseTableList;
@@ -82,15 +75,6 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
         private void buttonDefaultPath_Click(object sender, RoutedEventArgs e)
         {
             textBoxFilePath.Text = modelPath;
-        }
-        private void buttonAddLoadCase_Click(object sender, RoutedEventArgs e)
-        {
-            src.HelperUI.MoveItemsFromListBox(listBoxAvailLoadCase, listBoxChoosenLoadCase);
-        }
-
-        private void buttonRemoveLoadCase_Click(object sender, RoutedEventArgs e)
-        {
-            src.HelperUI.MoveItemsFromListBox(listBoxChoosenLoadCase, listBoxAvailLoadCase);
         }
 
         /*
@@ -128,64 +112,10 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
                 int titleSize = Convert.ToInt32(textBoxTitleSize.Text);
                 int axisTitleSize = Convert.ToInt32(textBoxAxisTitleSize.Text);
                 int tickLabelSize = Convert.ToInt32(textBoxTickLabelSize.Text);
-                int gridSpacingDisplacementX = Convert.ToInt32(textBoxGridSpacingDisplacementX.Text);
-                double gridSpacingDriftX = Convert.ToDouble(textBoxGridSpacingDriftX.Text);
-                int gridSpacingY = Convert.ToInt32(textBoxGridSpacingY.Text);
-
-                //Allowable max displacement 
-                string maxAllowableDispType = "";
-                string maxAllowableDisplacementFactor = textBoxFactorMaxDisp.Text;
-                if (radioButtonFactorMaxDisp.IsChecked == true)
-                {
-                    maxAllowableDispType = "factor";
-
-                }
-                else if (radioButtonHideMaxDisp.IsChecked == true)
-                {
-                    maxAllowableDispType = "hide";
-                }
-
-
-                //Max displacement X Axis
-                string displacementXAxisMaxType = "";
-                string displacementXAxisMax = textBoxDispXAxisMaxManual.Text;
-                if (radioButtonDispXAxisMaxAuto.IsChecked == true)
-                {
-                    displacementXAxisMaxType = "auto";
-
-                }
-                else if (radioButtonDriftXAxisMaxAuto.IsChecked == false)
-                {
-                    displacementXAxisMaxType = "manual";
-                }
-
-
-                //Max drift X Axis
-                string driftXAxisMaxType = "";
-                string driftXAxisMax = textBoxDriftXAxisMaxManual.Text;
-                if (radioButtonDriftXAxisMaxAuto.IsChecked == true)
-                {
-                    driftXAxisMaxType = "auto";
-
-                }
-                else if (radioButtonDriftXAxisMaxAuto.IsChecked == false)
-                {
-                    driftXAxisMaxType = "manual";
-                }
-
-                //Show max displacement for each z
-                bool showMaxDisp = new bool();
-                if (checkBoxMaxDisp.IsChecked == true)
-                {
-                    showMaxDisp = true;
-                }
-                else
-                {
-                    showMaxDisp = false;
-                }
 
                 //Call up copy result window
-                WindowWallDesignResult windowWallDesignResult = new WindowWallDesignResult(databaseTableListGlobal, choosenGroup, typeOfFailure, tableInListPierDesignResultGlobal, tableInListSpandrelDesignResultGlobal);
+                WindowWallDesignResult windowWallDesignResult = new WindowWallDesignResult(databaseTableListGlobal, choosenGroup, typeOfFailure, tableInListPierDesignResultGlobal, 
+                    tableInListSpandrelDesignResultGlobal, titleSize, axisTitleSize, tickLabelSize);
             }
 
             catch (Exception ex)
@@ -229,24 +159,5 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
 
         #endregion
 
-        private void radioButtonDispXAxisMaxAuto_Checked(object sender, RoutedEventArgs e)
-        {
-            textBoxDispXAxisMaxManual.IsEnabled = false;
-        }
-
-        private void radioButtonDispXAxisMaxManual_Checked(object sender, RoutedEventArgs e)
-        {
-            textBoxDispXAxisMaxManual.IsEnabled = true;
-        }
-
-        private void radioButtonDriftXAxisMaxAuto_Checked(object sender, RoutedEventArgs e)
-        {
-            textBoxDriftXAxisMaxManual.IsEnabled = false;
-        }
-
-        private void radioButtonDriftXAxisMaxManual_Checked(object sender, RoutedEventArgs e)
-        {
-            textBoxDriftXAxisMaxManual.IsEnabled = true;
-        }
     }
 }

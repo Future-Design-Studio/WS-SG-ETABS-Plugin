@@ -76,9 +76,13 @@ namespace WS_SG_ETABS_Plugin.src
             Plot.Plot.AxisAuto(.2, .25); // zoom out to accommodate large bubbles
         }
 
-        public static void AddAnnotationToPlot(WpfPlot Plot, string annotationText, double textSize, double marginTopX, double marginTopY, System.Drawing.Color textColor, System.Drawing.Color backgroundColor)
+        public static void AddAnnotationToPlot(WpfPlot Plot, string annotationText, double textSize, double marginTopX, double marginTopY, double borderWidth, System.Drawing.Color textColor, 
+            System.Drawing.Color backgroundColor, bool isTextBold = false)
         {
             var text = Plot.Plot.AddAnnotation(annotationText, marginTopX, marginTopY);
+            text.Font.Bold = isTextBold;
+            text.BorderWidth = Convert.ToSingle(borderWidth);
+            text.Shadow = false;
             text.Font.Color = textColor;
             text.BackgroundColor = backgroundColor;
             text.Font.Size = Convert.ToSingle(textSize);

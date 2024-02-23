@@ -7,8 +7,23 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="0.1*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
 
         <WpfPlot Grid.Column ="0" Name="ResultPlot" />
+
+        <Grid Grid.Column="1">
+            <StackPanel>
+                <CheckBox Name="checkBoxShowOk" FontSize="20" VerticalContentAlignment="Center" IsChecked="True" Click="checkBoxShowOk_Click">Pass</CheckBox>
+                <CheckBox Name="checkBoxShowFail" FontSize="20" VerticalContentAlignment="Center" IsChecked="True" Click="checkBoxShowFail_Click">Fail</CheckBox>
+                <CheckBox Name="checkBoxShowNull" FontSize="20" VerticalContentAlignment="Center" IsChecked="True" Click="checkBoxShowNull_Click">Null</CheckBox>
+            </StackPanel>
+
+
+        </Grid>
+        
 
     </Grid>
 </Window>
