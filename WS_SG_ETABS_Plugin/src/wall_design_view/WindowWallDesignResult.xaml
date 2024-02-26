@@ -16,6 +16,7 @@
 
         <Grid Grid.Column="1">
             <StackPanel>
+                <Label FontSize="22" FontWeight="Bold">View Control</Label>
                 <CheckBox Name="checkBoxShowOk" FontSize="20" VerticalContentAlignment="Center" IsChecked="True" Click="checkBoxShowOk_Click">Pass</CheckBox>
                 <CheckBox Name="checkBoxShowFail" FontSize="20" VerticalContentAlignment="Center" IsChecked="True" Click="checkBoxShowFail_Click">Fail</CheckBox>
                 <CheckBox Name="checkBoxShowNull" FontSize="20" VerticalContentAlignment="Center" IsChecked="True" Click="checkBoxShowNull_Click">Null</CheckBox>

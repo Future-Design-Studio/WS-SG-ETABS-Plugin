@@ -104,7 +104,7 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
                 string filePath = textBoxFilePath.Text;
 
                 //string outputCase = comBoxOutputCase.SelectedValue.ToString();
-                List<string> listOutputCase = listBoxChoosenLoadCase.Items.OfType<string>().ToList();
+                //List<string> listOutputCase = listBoxChoosenLoadCase.Items.OfType<string>().ToList();
                 string choosenGroup = comBoxGroup.Text;
                 string typeOfFailure = comBoxTypeOfFailure.SelectedValue.ToString();
 
@@ -143,16 +143,6 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
             {
                 textBoxFilePath.Text = dialog.SelectedPath;
             }
-        }
-
-        private void radioButtonFactorMaxDisp_Checked(object sender, RoutedEventArgs e)
-        {
-            textBoxFactorMaxDisp.IsEnabled = true;
-        }
-
-        private void radioButtonHideMaxDisp_Checked(object sender, RoutedEventArgs e)
-        {
-            textBoxFactorMaxDisp.IsEnabled = false;
         }
 
 
