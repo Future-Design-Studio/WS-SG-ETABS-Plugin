@@ -51,6 +51,30 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
 
         #region Button Method
 
+        private void checkBoxFrameExtrusion_Checked(object sender, RoutedEventArgs e)
+        {
+            frameExtrusionAuto.IsEnabled = true;
+            frameExtrusionManual.IsEnabled = true;
+        }
+
+        private void checkBoxFrameExtrusion_Unchecked(object sender, RoutedEventArgs e)
+        {
+            frameExtrusionAuto.IsEnabled = false;
+            frameExtrusionManual.IsEnabled = false;
+        }
+
+        private void checkBoxAreaExtrusion_Checked(object sender, RoutedEventArgs e)
+        {
+            areaExtrusionAuto.IsEnabled = true;
+            areaExtrusionManual.IsEnabled = true;
+        }
+
+        private void checkBoxAreaExtrusion_Unchecked(object sender, RoutedEventArgs e)
+        {
+            areaExtrusionAuto.IsEnabled = false;
+            areaExtrusionManual.IsEnabled = false;
+        }
+
         private void buttonModifyPath_Click(object sender, RoutedEventArgs e)
         {
             var dialog = new System.Windows.Forms.FolderBrowserDialog();
@@ -91,7 +115,12 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
             Dictionary<string, bool?> selectedItems = new Dictionary<string, bool?>()
             {
                 {"extrusionFrameModel", checkBoxFrameExtrusion.IsChecked },
-                {"extrusionAreaModel", checkBoxAreaExtrusion.IsChecked }
+                {"extrusionAreaModel", checkBoxAreaExtrusion.IsChecked },
+                {"frameExtrusionAuto", frameExtrusionAuto.IsChecked },
+                {"frameExtrusionManual", frameExtrusionManual.IsChecked },
+                {"areaExtrusionAuto", areaExtrusionAuto.IsChecked },
+                {"areaExtrusionManual", areaExtrusionManual.IsChecked },
+                {"exportSelected", checkBoxExportSelection.IsChecked }
             };
 
             IsEnabled = false;
@@ -106,5 +135,7 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
 
 
         #endregion
+
+        
     }
 }

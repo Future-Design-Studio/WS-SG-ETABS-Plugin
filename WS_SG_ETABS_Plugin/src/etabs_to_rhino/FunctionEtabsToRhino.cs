@@ -4,9 +4,12 @@ using System.Linq;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Data;
 using System.Windows.Media.Animation;
 using System.Xml;
 using ETABSv1;
+using Microsoft.Office.Interop.Excel;
+using Rhino.DocObjects;
 using Rhino.FileIO;
 using Rhino.Geometry;
 
@@ -88,17 +91,80 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
                 }
             }
 
+            //get area cardinal
+            bool isError = false;
+            HelperEtabs.DatabaseTable databaseTable = new HelperEtabs.DatabaseTable();
+            (isError,databaseTable) = HelperEtabs.GetTableDisplay(Sap, "Area Assignments - Insertion Point", false);
 
+            var cardinaldict = new Dictionary<string, string>();
+            foreach (Dictionary<string,string> row in databaseTable.TableInList)
+            {
+                var name = row["UniqueName"];
+                var cardinal = row["CardinalPt"];
+                cardinaldict[name] = cardinal;
+            }
 
 
             for (var i = 0; i < NumberNames; i++)
             {
-                var area = new AreaGeometry(MyName[i], DesignOrientaion[i], ptsGroup[i], Sap);
+                var area = new AreaGeometry(MyName[i], DesignOrientaion[i], ptsGroup[i], cardinaldict[MyName[i]], Sap);
                 if (area.DesignOrientation != "Null") allAreas.Add(area);
             }
 
 
             return allAreas;
+        }
+        public static List<AreaGeometry> GetAllSelectedAreasWithProperties(cSapModel Sap, List<string> names)
+        {
+            var selAreas = new List<AreaGeometry>();
+            List<List<Point3d>> ptsGroup = new List<List<Point3d>>();
+            var designOrientaion = new List<eAreaDesignOrientation>();
+
+
+            foreach (string name in names)
+            {
+                var pts = new List<Point3d>();
+                
+                int NumberPoints = 0;
+                string[] Point = null;
+                Sap.AreaObj.GetPoints(name, ref NumberPoints, ref Point);
+
+                foreach (var p in  Point)
+                {
+                    double X = 0, Y = 0, Z = 0;
+                    Sap.PointObj.GetCoordCartesian(p, ref X, ref Y, ref Z);
+
+                    pts.Add(new Point3d(X, Y, Z));
+                }
+                    
+                
+                ptsGroup.Add(pts);
+
+                eAreaDesignOrientation designOri  = eAreaDesignOrientation.Other;
+                Sap.AreaObj.GetDesignOrientation(name, ref designOri);
+                designOrientaion.Add(designOri);
+            }
+
+            //get area cardinal
+            bool isError = false;
+            HelperEtabs.DatabaseTable databaseTable = new HelperEtabs.DatabaseTable();
+            (isError, databaseTable) = HelperEtabs.GetTableDisplay(Sap, "Area Assignments - Insertion Point", false);
+
+            var cardinaldict = new Dictionary<string, string>();
+            foreach (Dictionary<string, string> row in databaseTable.TableInList)
+            {
+                var name = row["UniqueName"];
+                var cardinal = row["CardinalPt"];
+                cardinaldict[name] = cardinal;
+            }
+
+            for (int i = 0; i<names.Count; i++)
+            {
+                var area = new AreaGeometry(names[i], designOrientaion[i], ptsGroup[i], cardinaldict[names[i]], Sap);
+                if (area.DesignOrientation != "Null") selAreas.Add(area);
+            }
+
+            return selAreas;
         }
         public static List<FrameGeometry> GetAllFrames(cSapModel Sap)
         {
@@ -241,6 +307,13 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
 
 
             return allFrameProp;
+        }
+        public static int ProgressCalculator(int status, int count, int lb, int ub)
+        {
+            var spread = ub - lb;
+            var val = Math.Round((double)(status / count * spread)) + lb;
+            
+            return (int) val;
         }
         public static void WriteRhinoFile(Rhino.FileIO.File3dm file3dm ,string path)
         {
@@ -406,7 +479,7 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
             
             return outputFrameBreps;
         }
-        public static void IncludeFrameExtrusion(Rhino.FileIO.File3dm file3dm, List<FrameGeometry> allFrame, Dictionary<string, FrameGeometryProp> allFrameProp, List<AreaGeometry> allAreas)
+        public static void IncludeFrameExtrusion(Rhino.FileIO.File3dm file3dm, List<FrameGeometry> allFrame, Dictionary<string, FrameGeometryProp> allFrameProp, List<AreaGeometry> allAreas, List<string> framePropList, Dictionary<string, bool?> selectedItems)
         {
             ////////////////////////
             // CREATE PROFILE FOR EACH FRAME PROPERTY
@@ -432,7 +505,12 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
             ////////////////////////
             var outputPlanes = new List<Plane>();
             var outputLines = new List<LineCurve>();
-            var outputFrameBreps = new List<Brep>();
+            var outputFrameBreps = new Dictionary<string, List<Brep>>(); ;
+
+            foreach (var p in framePropList)
+            {
+                outputFrameBreps[p] = new List<Brep>();
+            }
 
             foreach (var frame in allFrame)
             {
@@ -474,16 +552,36 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
 
                     foreach(var geo in extrusions)
                     {
-                        if (frame.Cardinal == "TopCenter")
+                        if (selectedItems["frameExtrusionAuto"] ?? false)
                         {
-                            var vec = Vector3d.YAxis * frameprop.T3 / -2;
-                            var tf = Transform.Translation(vec);
-                            geo.Transform(tf);
+                            if (frame.DesignOrientation == "Beam")
+                            {
+                                var vec = Vector3d.YAxis * frameprop.T3 / -2;
+                                var tf = Transform.Translation(vec);
+                                geo.Transform(tf);
+                            }
                         }
+
+                        if (selectedItems["frameExtrusionManual"] ?? false)
+                        {
+                            if (frame.Cardinal == "TopCenter")
+                            {
+                                var vec = Vector3d.YAxis * frameprop.T3 / -2;
+                                var tf = Transform.Translation(vec);
+                                geo.Transform(tf);
+                            }
+                            else if (frame.Cardinal == "BottomCenter")
+                            {
+                                var vec = Vector3d.YAxis * frameprop.T3 / 2;
+                                var tf = Transform.Translation(vec);
+                                geo.Transform(tf);
+                            }
+                        }
+                        
 
                         geo.Transform(t0);
                         geo.Transform(t1);
-                        outputFrameBreps.Add(geo);
+                        outputFrameBreps[frame.PropName].Add(geo);
                     }
                     
                     
@@ -498,24 +596,45 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
             // ADD EXTRUSION TO RHINO MODEL INSTANCE
             ////////////////////////
 
-            int frameExtrusionObj = file3dm.AllLayers.AddLayer("frameExtrusion", System.Drawing.Color.Blue);
+            Layer frameExtrusionObj = new Layer();
+            frameExtrusionObj.Name = "frameExtrusion";
+            frameExtrusionObj.Color = System.Drawing.Color.Black;
+            file3dm.AllLayers.Add(frameExtrusionObj);
+            Guid frameExtrusionObjId = file3dm.AllLayers.FindName("frameExtrusion", Guid.Empty).Id;
 
-            var att = new Rhino.DocObjects.ObjectAttributes();
-            att.LayerIndex = frameExtrusionObj;
 
-            foreach (var obj in outputFrameBreps)
+            var framePropLayer = new Dictionary<string, Layer>();
+            foreach (var p in outputFrameBreps)
             {
-                file3dm.Objects.AddBrep(obj, att);
+                framePropLayer[p.Key] = new Layer();
+                framePropLayer[p.Key].Name = p.Key;
+                framePropLayer[p.Key].ParentLayerId = frameExtrusionObjId;
+                framePropLayer[p.Key].Color = System.Drawing.Color.Blue;
+                file3dm.AllLayers.Add(framePropLayer[p.Key]);
+
+                var att = new Rhino.DocObjects.ObjectAttributes();
+                att.LayerIndex = file3dm.AllLayers.FindName(p.Key, frameExtrusionObjId).Index;
+
+                foreach (var obj in p.Value)
+                {
+                    file3dm.Objects.AddBrep(obj, att);
+                }
             }
             
         }
-        public static void IncludeAreaExtrusion(Rhino.FileIO.File3dm file3dm,  List<AreaGeometry> allAreas)
+        public static void IncludeAreaExtrusion(Rhino.FileIO.File3dm file3dm,  List<AreaGeometry> allAreas, List<string> areaPropList, Dictionary<string, bool?> selectedItems)
         {
             ////////////////////////
             // CREATE EXTRUSION FOR ALL AREA OBJECTS
             ////////////////////////
             var outputWallBreps = new List<Brep>();
             var outputFloorBreps = new List<Brep>();
+            var outputAreaBreps = new Dictionary<string, List<Brep>>();
+
+            foreach (var p in areaPropList)
+            {
+                outputAreaBreps[p] = new List<Brep>();
+            }
 
             for (var i = 0; i < allAreas.Count; i++)
             {
@@ -539,38 +658,86 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
                 var t0 = Transform.PlanarProjection(plane0);
                 polyline.Transform(t0);
 
-                if (area.DesignOrientation == "Wall")
+                if (selectedItems["areaExtrusionAuto"] ?? false)
                 {
-                    var wallExtrusion = Extrusion.Create(polyline.ToPolylineCurve(), area.Thickness, true);
+                    if (area.DesignOrientation == "Wall")
+                    {
+                        var wallExtrusion = Extrusion.Create(polyline.ToPolylineCurve(), area.Thickness, true);
 
-                    var t1 = Transform.Translation(plane0.Normal * area.Thickness / -2);
+                        var t1 = Transform.Translation(plane0.Normal * area.Thickness / -2);
 
-                    wallExtrusion.Transform(t1);
+                        wallExtrusion.Transform(t1);
 
-                    outputWallBreps.Add(wallExtrusion.ToBrep());
+                        outputAreaBreps[area.PropName].Add(wallExtrusion.ToBrep());
+                    }
+
+                    else if (area.DesignOrientation == "Floor")
+                    {
+                        var vec = plane0.Normal;
+
+                        var crv = polyline.ToPolylineCurve();
+                        var orientation = crv.ClosedCurveOrientation(Vector3d.ZAxis);
+
+                        if (orientation == CurveOrientation.CounterClockwise) crv.Reverse();
+
+                        var floorExtrusion = Extrusion.Create(crv, area.Thickness, true);
+
+                        outputAreaBreps[area.PropName].Add(floorExtrusion.ToBrep());
+                    }
                 }
 
-                if(area.DesignOrientation == "Floor")
+                if (selectedItems["areaExtrusionManual"] ?? false)
                 {
-                    var vec = plane0.Normal;
+                    if (area.Cardinal == "Middle")
+                    {
+                        var wallExtrusion = Extrusion.Create(polyline.ToPolylineCurve(), area.Thickness, true);
 
-                    var crv = polyline.ToPolylineCurve();
-                    var orientation = crv.ClosedCurveOrientation(Vector3d.ZAxis);
+                        var t1 = Transform.Translation(plane0.Normal * area.Thickness / -2);
 
-                    if(orientation == CurveOrientation.CounterClockwise) crv.Reverse();
+                        wallExtrusion.Transform(t1);
 
-                    var floorExtrusion = Extrusion.Create(crv, area.Thickness, true);
+                        outputAreaBreps[area.PropName].Add(wallExtrusion.ToBrep());
+                    }
 
-                    outputFloorBreps.Add(floorExtrusion.ToBrep());
+                    else if (area.Cardinal == "Top")
+                    {
+                        var vec = plane0.Normal;
+
+                        var crv = polyline.ToPolylineCurve();
+                        var orientation = crv.ClosedCurveOrientation(Vector3d.ZAxis);
+
+                        if (orientation == CurveOrientation.CounterClockwise) crv.Reverse();
+
+                        var floorExtrusion = Extrusion.Create(crv, area.Thickness, true);
+
+                        outputAreaBreps[area.PropName].Add(floorExtrusion.ToBrep());
+                    }
+
+                    else if (area.Cardinal == "Bottom")
+                    {
+                        var vec = plane0.Normal;
+
+                        var crv = polyline.ToPolylineCurve();
+                        var orientation = crv.ClosedCurveOrientation(Vector3d.ZAxis);
+
+                        if (orientation == CurveOrientation.CounterClockwise) crv.Reverse();
+                        crv.Reverse(); //force reverse to make curve face downwards
+
+                        var floorExtrusion = Extrusion.Create(crv, area.Thickness, true);
+
+                        outputAreaBreps[area.PropName].Add(floorExtrusion.ToBrep());
+                    }
                 }
+
+                
                 
             }
-            
+
 
             ////////////////////////
             // ADD EXTRUSION TO RHINO MODEL INSTANCE
             ////////////////////////
-
+            /*
             int wallExtrusionObj = file3dm.AllLayers.AddLayer("wallExtrusion", System.Drawing.Color.DarkGray);
 
             var att0 = new Rhino.DocObjects.ObjectAttributes();
@@ -590,40 +757,149 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
             {
                 file3dm.Objects.AddBrep(obj, att1);
             }
+            */
+
+            Layer areaExtrusionObj = new Layer();
+            areaExtrusionObj.Name = "areaExtrusion";
+            areaExtrusionObj.Color = System.Drawing.Color.Black;
+            file3dm.AllLayers.Add(areaExtrusionObj);
+            Guid areaExtrusionObjId = file3dm.AllLayers.FindName("areaExtrusion", Guid.Empty).Id;
+
+
+            var areaPropLayer = new Dictionary<string, Layer>();
+            foreach (var p in outputAreaBreps)
+            {
+                areaPropLayer[p.Key] = new Layer();
+                areaPropLayer[p.Key].Name = p.Key;
+                areaPropLayer[p.Key].ParentLayerId = areaExtrusionObjId;
+                areaPropLayer[p.Key].Color = System.Drawing.Color.Gray;
+                file3dm.AllLayers.Add(areaPropLayer[p.Key]);
+
+                var att = new Rhino.DocObjects.ObjectAttributes();
+                att.LayerIndex = file3dm.AllLayers.FindName(p.Key, areaExtrusionObjId).Index;
+
+                foreach (var obj in p.Value)
+                {
+                    file3dm.Objects.AddBrep(obj, att);
+                }
+            }
         }
 
         #endregion
 
-        public static void ExportEtabsToRhino(cSapModel Sap, string filePath, string fileName, Dictionary<string, bool?> selectedItems, IProgress<int> progress)
+        public static void ExportEtabsToRhino(cSapModel Sap, string filePath, string fileName, Dictionary<string, bool?> selectedItems, IProgress<int> progressStatus, IProgress<string> progressDescription)
         {
-            //setup new rhino model instance
-            Console.WriteLine("Setting up new Rhino model...");
 
+            var watch = System.Diagnostics.Stopwatch.StartNew(); //start timer to check tun time
+
+
+            string message = "";
+            string newLine = "\n";
+
+            //setup new rhino model instance
+            message = "Setting up new Rhino model..." + newLine;
+            progressDescription.Report(message);
 
             var newModel = new Rhino.FileIO.File3dm();
             newModel.Settings.ModelUnitSystem = Rhino.UnitSystem.Meters;
             newModel.Settings.ModelAbsoluteTolerance = 0.001;
 
-            int layerFrameObj = newModel.AllLayers.AddLayer("frameObj", System.Drawing.Color.Black);
-            int layerAreaObj = newModel.AllLayers.AddLayer("areaObj", System.Drawing.Color.Red);
+            //int layerFrameObj = newModel.AllLayers.AddLayer("FrameObj", System.Drawing.Color.Black);
+            //int layerAreaObj = newModel.AllLayers.AddLayer("AreaObj", System.Drawing.Color.Red);
+            
+            int emptyLayer = newModel.AllLayers.AddLayer("00_EMPTY", System.Drawing.Color.Black);
+
+            Layer layerFrameObj = new Layer();
+            layerFrameObj.Name = "frameLine";
+            layerFrameObj.Color = System.Drawing.Color.Black;
+            newModel.AllLayers.Add(layerFrameObj);
+            Guid layerFrameObjId = newModel.AllLayers.FindName("frameLine", Guid.Empty).Id;
+
+
+            Layer layerAreaObj = new Layer();
+            layerAreaObj.Name = "areaPerimeter";
+            layerAreaObj.Color = System.Drawing.Color.Black;
+            newModel.AllLayers.Add(layerAreaObj);
+            Guid layerAreaObjId = newModel.AllLayers.FindName("areaPerimeter", Guid.Empty).Id;
+
+
+            //check whether to export only selected items
+            bool exportSelected = selectedItems["exportSelected"] ?? false;
+            var frameNameSelected = new List<string>();
+            var areaNameSelected = new List<string>();
+
+            if (exportSelected) 
+            {
+                int numberItems = 0;
+                int[] ObjectType = null;
+                string[] ObjectName = null;
+
+                Sap.SelectObj.GetSelected(ref numberItems, ref ObjectType, ref ObjectName);
+
+                if(numberItems == 0)
+                {
+                    progressStatus.Report(0);
+                    progressDescription.Report("No objects selected! \nPlease select objects before deploying the plugin to use \nExport Selection Only setting.");
+                    return;
+                }
+                
+                for (var i  = 0; i < ObjectType.Length; i++)
+                {
+                    if (ObjectType[i] == 2) { frameNameSelected.Add(ObjectName[i]); }
+                    else if (ObjectType[i] == 5) { areaNameSelected.Add(ObjectName[i]); }
+                }
+            }
 
 
             //rebuild etabs frame objects 
             //attach etabs property as user text in thino
+            progressStatus.Report(10);
+            message = "Converting ETABS frame objects to Rhino geometries..." + newLine;
+            progressDescription.Report(message);
+
             var allFrames = GetAllFrames(Sap);
             var allFrameProp = GetAllFrameProperties(Sap);
 
-            progress.Report(20);
+            var framePropList = new List<string>();
+            var areaPropList = new List<string>();
 
             if (allFrames != null && allFrameProp != null) 
             {
+                //check whether to export only selected items
+                var allFramesSelected = new List<FrameGeometry>();
+
+                if (exportSelected)
+                {
+                    foreach (var frame in allFrames)
+                    {
+                        if (frameNameSelected.Contains(frame.Name)) { allFramesSelected.Add(frame); }
+                    }
+                    allFrames = allFramesSelected;
+                }
+
+                var framePropLayer = new Dictionary<string, Layer>();
+
+                //find unique frame properties
+                foreach (var frame  in allFrames) 
+                {
+                    if (framePropList.Contains(frame.PropName)==false) framePropList.Add(frame.PropName);
+                }
+
+                //create a sublayer for each unique frame properties
+                foreach (var name in framePropList)
+                {
+                    framePropLayer[name] = new Layer();
+                    framePropLayer[name].Name = name;
+                    framePropLayer[name].ParentLayerId = layerFrameObjId;
+                    framePropLayer[name].Color = System.Drawing.Color.Black;
+                    newModel.AllLayers.Add(framePropLayer[name]);
+                }
+
                 for (var i = 0; i < allFrames.Count; i++)
                 {
 
                     var frame = allFrames[i];
                     string framePropName = frame.PropName;
-
-                    //if (allFrameProp.ContainsKey(framePropName) == false) continue;
 
                     FrameGeometryProp frameProp = allFrameProp[framePropName];
 
@@ -645,27 +921,63 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
                     att.SetUserString("tfb", frameProp.Tfb.ToString());
                     att.SetUserString("PropType", frameProp.PropType);
 
-
-                    att.LayerIndex = layerFrameObj;
+                    att.LayerIndex = newModel.AllLayers.FindName(framePropName,layerFrameObjId).Index;
 
 
                     newModel.Objects.AddLine(frame.Pt0, frame.Pt1, att);
+
+                    //progressStatus.Report(ProgressCalculator(i, allFrames.Count, 21, 29));
                 }
             }
-            
 
-            progress.Report(30);
+
+
 
 
 
             //rebuild etabs area objects in rhino
             //attach etabs property as user text in rhino
-            var allAreas = GetAllAreasWithProperties(Sap);
+            progressStatus.Report(30);
+            message = "Converting ETABS area objects to Rhino geometries..." + newLine;
+            progressDescription.Report(message);
 
-            progress.Report(70);
+            var allAreas = new List<AreaGeometry>();
+            //if (exportSelected) { allAreas = GetAllSelectedAreasWithProperties(Sap, areaNameSelected); }
+            //else allAreas = GetAllAreasWithProperties(Sap);
+            allAreas = GetAllAreasWithProperties(Sap);
 
             if (allAreas != null)
             {
+                //check whether to export only selected items
+                var allAreasSelected = new List<AreaGeometry>();
+
+                if (exportSelected)
+                {
+                    foreach (var area in allAreas)
+                    {
+                        if (areaNameSelected.Contains(area.Name)) { allAreasSelected.Add(area); }
+                    }
+                    allAreas = allAreasSelected;
+                }
+
+                var areaPropLayer = new Dictionary<string, Layer>();
+
+                //find unique area properties
+                foreach (var a in allAreas) 
+                {
+                    if (areaPropList.Contains(a.PropName)==false) areaPropList.Add(a.PropName);
+                }
+
+                //create a sublayer for each unique area properties
+                foreach (var name in areaPropList)
+                {
+                    areaPropLayer[name] = new Layer();
+                    areaPropLayer[name].Name = name;
+                    areaPropLayer[name].ParentLayerId = layerAreaObjId;
+                    areaPropLayer[name].Color = System.Drawing.Color.Red;
+                    newModel.AllLayers.Add(areaPropLayer[name]);
+                }
+
                 for (var i = 0; i < allAreas.Count; i++)
                 {
                     var area = allAreas[i];
@@ -677,9 +989,10 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
                     att.SetUserString("DesignOrientation", area.DesignOrientation);
                     att.SetUserString("IsOpening", area.IsOpening.ToString());
                     att.SetUserString("Thickness", area.Thickness.ToString());
+                    att.SetUserString("Cardinal", area.Cardinal);
 
-                    att.LayerIndex = layerAreaObj;
-
+                    //att.LayerIndex = newModel.AllLayers.FindName("AreaPerimeter", Guid.Empty).Index;
+                    att.LayerIndex = newModel.AllLayers.FindName(area.PropName, layerAreaObjId).Index;
 
                     var polyline = new Polyline();
 
@@ -693,11 +1006,14 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
                     polyline.Add(lastPt);
 
                     newModel.Objects.AddPolyline(polyline, att);
+
+
+                    //progressStatus.Report(ProgressCalculator(i, allAreas.Count, 51, 69));
                 }
             }
             
 
-            progress.Report(90);
+            
 
 
             bool includeFrameExtrusion = selectedItems["extrusionFrameModel"] ?? false;
@@ -705,12 +1021,20 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
 
             if (includeFrameExtrusion && allFrames != null && allFrameProp != null)
             {
-                IncludeFrameExtrusion(newModel, allFrames, allFrameProp, allAreas);
+                progressStatus.Report(70);
+                message = "Creating frame extrusions..." + newLine;
+                progressDescription.Report(message);
+
+                IncludeFrameExtrusion(newModel, allFrames, allFrameProp, allAreas, framePropList, selectedItems);
             }
 
             if (includeAreaExtrusion && allAreas != null)
             {
-                IncludeAreaExtrusion(newModel, allAreas);
+                progressStatus.Report(80);
+                message = "Creating area extrusions..." + newLine;
+                progressDescription.Report(message);
+
+                IncludeAreaExtrusion(newModel, allAreas, areaPropList, selectedItems);
             }
 
 
@@ -718,10 +1042,16 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
             var outputModelName = fileName;
             var rhinoModelPath = System.IO.Path.Combine(outputModelPath, outputModelName + ".3dm");
 
-            Console.WriteLine("Writing Rhino file...");
+            progressStatus.Report(90);
+            message = "Packaging Rhino file...";
+            progressDescription.Report(message);
+
             WriteRhinoFile(newModel, rhinoModelPath);
 
-            
+            watch.Stop();
+            var duration = Math.Round((decimal)watch.ElapsedMilliseconds / 100);
+            duration /= 10;
+            progressDescription.Report("Export completed successfully in " + duration.ToString() +"s");
         }
     }
 }
