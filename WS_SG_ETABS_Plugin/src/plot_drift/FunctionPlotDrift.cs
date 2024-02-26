@@ -162,6 +162,10 @@ namespace WS_SG_ETABS_Plugin.src.plot_drift
                 {
                     DisplacementPlot.Plot.Title($"Lateral Displacement (Case: {outputCase})", true, null, titleSize, "Arial Narrow");
                 }
+                else if (displacementDirection == "Ux + Uy (SRSS)")
+                {
+                    DisplacementPlot.Plot.Title($"Lateral Displacement (Case: {outputCase}, {displacementDirection})", true, null, titleSize, "Arial Narrow");
+                }
                 else
                 {
                     char direction = char.ToUpper(displacementDirection[1]);
@@ -178,6 +182,10 @@ namespace WS_SG_ETABS_Plugin.src.plot_drift
                 else if (displacementDirection == "Ux and Uy (in one)")
                 {
                     DisplacementPlot.Plot.Title($"Lateral Displacement (Multi cases)", true, null, titleSize, "Arial Narrow");
+                }
+                else if (displacementDirection == "Ux + Uy (SRSS)")
+                {
+                    DisplacementPlot.Plot.Title($"Lateral Displacement (Multi cases, {displacementDirection})", true, null, titleSize, "Arial Narrow");
                 }
                 else
                 {
@@ -208,6 +216,10 @@ namespace WS_SG_ETABS_Plugin.src.plot_drift
                 {
                     DriftPlot.Plot.Title($"Inter-story Drift (Case: {outputCase})", true, null, titleSize, "Arial Narrow");
                 }
+                else if (displacementDirection == "Ux + Uy (SRSS)")
+                {
+                    DriftPlot.Plot.Title($"Inter-story Drift (Case: {outputCase}, {displacementDirection})", true, null, titleSize, "Arial Narrow");
+                }
                 else
                 {
                     char direction = char.ToUpper(displacementDirection[1]);
@@ -224,6 +236,10 @@ namespace WS_SG_ETABS_Plugin.src.plot_drift
                 else if (displacementDirection == "Ux and Uy (in one)")
                 {
                     DriftPlot.Plot.Title($"Inter-story Drift (Multi cases)", true, null, titleSize, "Arial Narrow");
+                }
+                else if (displacementDirection == "Ux + Uy (SRSS)")
+                {
+                    DriftPlot.Plot.Title($"Inter-story Drift (Multi cases, {displacementDirection})", true, null, titleSize, "Arial Narrow");
                 }
                 else
                 {
