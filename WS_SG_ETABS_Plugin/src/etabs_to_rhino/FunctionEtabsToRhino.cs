@@ -347,7 +347,7 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
                 output.Add(outerCircle.ToNurbsCurve());
             }
 
-            else if (frameProp.PropType == "Pipe")
+            else if (frameProp.PropType == "Pipe" || frameProp.PropType == "FilledPipe")
             {
                 double diameter = Convert.ToDouble(frameProp.T3);
                 double thickness = Convert.ToDouble(frameProp.Tw);
@@ -403,7 +403,7 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
                 output.Add(rect.ToPolylineCurve());
             }
 
-            else if (frameProp.PropType == "Box")
+            else if (frameProp.PropType == "Box" || frameProp.PropType == "FilledTube")
             {
                 double depth = Convert.ToDouble(frameProp.T3);
                 double width = Convert.ToDouble(frameProp.T2);
@@ -463,7 +463,9 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
             */
 
             else if (frameProp.PropType == "Box" ||
-                        frameProp.PropType == "Pipe") //NOT TESTED WITH ETABS YET, TESTED IN GRASSHHOPPER. IF IT WORKS CAN BE USED FOR "Pipe" TOO.
+                        frameProp.PropType == "Pipe" ||
+                        frameProp.PropType == "FilledTube" ||
+                        frameProp.PropType == "FilledPipe")
             {
                 var outerProfile = profile[0];
                 var innerProfile = profile[1];
@@ -485,7 +487,7 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
             // CREATE PROFILE FOR EACH FRAME PROPERTY
             ////////////////////////
 
-            var available_frametype = new List<string> { "Circle", "Pipe", "Rectangular", "I", "Box" };
+            var available_frametype = new List<string> { "Circle", "Pipe", "Rectangular", "I", "Box", "FilledTube", "FilledPipe" };
 
             var frameprop_profile = new Dictionary<string, List<Curve>>();
 
