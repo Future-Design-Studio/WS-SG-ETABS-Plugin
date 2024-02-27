@@ -62,29 +62,6 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
             HelperEtabs.OnLoadCaseAndComboDatabaseBasedOnList(SapModel, listChoosenLoadCase);
             */
 
-            //Get wall design result
-            List<Dictionary<string, string>> tableInListPierDesignResult = null;
-            List<Dictionary<string, string>> tableInListSpandrelDesignResult = null;
-            if (extractEtabs == true)
-            {
-                (tableInListPierDesignResult, tableInListSpandrelDesignResult) = HelperEtabs.GetWallDesignResult(SapModel);
-
-                if (tableInListPierDesignResult == null && tableInListSpandrelDesignResult == null)
-                {
-                    return;
-                }
-            }
-            else if (extractExcel == true)
-            {
-                (tableInListPierDesignResult, tableInListSpandrelDesignResult) = GetWallDesignResultFromExcel(excelFilePath);
-
-                if (tableInListPierDesignResult == null && tableInListSpandrelDesignResult == null)
-                {
-                    return;
-                }
-
-            }
-
 
             //Get database table
             List<string> tableKeys = new List<string> { "Wall Object Connectivity", "Group Assignments", "Area Assignments - Pier Labels", "Area Assignments - Spandrel Labels", "Point Object Connectivity" };
@@ -109,7 +86,7 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
             //Use all load case when loading database
             List<string> listChoosenLoadCase = src.HelperEtabs.GetLoadCaseAndComboList(SapModel);
 
-            loadDatabaseTable(SapModel, Plugin, tableKeys, databaseTableList, listChoosenGroup, tempListChoosenGroup, tableInListPierDesignResult, tableInListSpandrelDesignResult);
+            loadDatabaseTable(SapModel, Plugin, tableKeys, databaseTableList, listChoosenGroup, tempListChoosenGroup, excelFilePath, extractEtabs, extractExcel);
 
             ShowDialog();
         }
@@ -142,13 +119,50 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
         }
 
         private async void loadDatabaseTable(cSapModel SapModel, cPluginCallback Plugin, List<string> tableKeys, List<src.HelperEtabs.DatabaseTable> databaseTableList, 
-            List<string> listChoosenGroup, List<string> tempListChoosenGroup, List<Dictionary<string, string>> tableInListPierDesignResult, List<Dictionary<string, string>> 
-            tableInListSpandrelDesignResult)
+            List<string> listChoosenGroup, List<string> tempListChoosenGroup, string excelFilePath, bool? extractEtabs, bool? extractExcel)
         {
             bool isError = false;
             int ret;
 
+            List<Dictionary<string, string>> tableInListPierDesignResult = null;
+            List<Dictionary<string, string>> tableInListSpandrelDesignResult = null;
+
             await Task.Run(() => {
+
+                //Get wall design result
+
+                if (extractEtabs == true)
+                {
+                    (tableInListPierDesignResult, tableInListSpandrelDesignResult) = HelperEtabs.GetWallDesignResult(SapModel);
+
+                    if (tableInListPierDesignResult == null && tableInListSpandrelDesignResult == null)
+                    {
+                        isError = true;
+                    }
+                }
+                else if (extractExcel == true)
+                {
+                    (tableInListPierDesignResult, tableInListSpandrelDesignResult) = GetWallDesignResultFromExcel(excelFilePath);
+
+                    if (tableInListPierDesignResult == null && tableInListSpandrelDesignResult == null)
+                    {
+
+                        isError = true;
+                    }
+                }
+
+                if (isError)
+                {
+                    MessageBox.Show("There is no wall design result! Please wall design!");
+                    return;
+                }
+                else
+                {
+                    Dispatcher.Invoke((Action)(() =>
+                    {
+                        checkBoxWallDesign.IsChecked = true;
+                    }));
+                }
 
                 foreach (string tableKey in tableKeys)
                 {
