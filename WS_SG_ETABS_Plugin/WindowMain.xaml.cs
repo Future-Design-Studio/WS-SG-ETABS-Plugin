@@ -29,7 +29,7 @@ namespace WS_SG_ETABS_Plugin
 
         public WindowMain(ref cSapModel SapModel, ref cPluginCallback Plugin)
         {
-            string version = "1.2.0";
+            string version = "1.2.0c";
 
             _Plugin = Plugin;
             _SapModel = SapModel;
@@ -130,7 +130,7 @@ namespace WS_SG_ETABS_Plugin
         {
             IsEnabled = false;
             //Call up shell uniform window
-            src.plot_reaction.WindowPlotReactionMain windowPlotReactionMain = new src.plot_reaction.WindowPlotReactionMain(_SapModel, _Plugin);
+            src.plot_reaction.WindowPlotReactionSelectLoad windowPlotReactionSelectLoad = new src.plot_reaction.WindowPlotReactionSelectLoad(_SapModel, _Plugin);
             IsEnabled = true;
 
         }
@@ -276,6 +276,22 @@ namespace WS_SG_ETABS_Plugin
             IsEnabled = false;
             //Call up window
             src.tedds_main.WindowTeddsMain windowTeddsMain = new src.tedds_main.WindowTeddsMain(_SapModel, _Plugin);
+            IsEnabled = true;
+        }
+
+        private void buttonPlotDrift_Click(object sender, RoutedEventArgs e)
+        {
+            IsEnabled = false;
+            //Call up window
+            src.plot_drift.WindowDriftPlotSelectLoad windowDriftPlotSelectLoad = new src.plot_drift.WindowDriftPlotSelectLoad(_SapModel, _Plugin);
+            IsEnabled = true;
+        }
+
+        private void buttonPlotSumMassParticip_Click(object sender, RoutedEventArgs e)
+        {
+            IsEnabled = false;
+            //Call up window
+            src.plot_sum_mass_participation.WindowSumParticipPlotMain windowSumParticipPlotMain = new src.plot_sum_mass_participation.WindowSumParticipPlotMain(_SapModel, _Plugin);
             IsEnabled = true;
         }
     }
