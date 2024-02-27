@@ -25,10 +25,18 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
         cSapModel _SapModel;
         cPluginCallback _Plugin;
 
+        string modelPath;
+        bool firstPathAssigned = true;
+
         public WindowWallDesignSelectLoad(cSapModel SapModel, cPluginCallback Plugin)
         {
             _SapModel = SapModel;
             _Plugin = Plugin;
+
+            InitializeComponent();
+
+            //Get model path as a starting directory
+            modelPath = SapModel.GetModelFilepath();
 
             //Check if model is locked
             bool modelToLocked = _SapModel.GetModelIsLocked();
@@ -39,13 +47,26 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
                 return;
             }
 
-            InitializeComponent();
-
             //Fill in group list box
             src.HelperUI.PopulateListBoxAvailGroup(_SapModel, listBoxAvailGroup);
 
+            //Check extract from etabs
+            radioButtonExtractEtabs.IsChecked = true;
+
             ShowDialog();
         }
+
+        
+        private void radioButtonExtractExcel_Checked(object sender, RoutedEventArgs e)
+        {
+            buttonModifyPath.IsEnabled = true;
+        }
+
+        private void radioButtonExtractEtabs_Checked(object sender, RoutedEventArgs e)
+        {
+            buttonModifyPath.IsEnabled = false;
+        }
+        
 
         private void buttonAddGroup_Click(object sender, RoutedEventArgs e)
         {
@@ -66,8 +87,13 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
                 //Casting listbox content to list
                 List<string> listChoosenGroup = listBoxChoosenGroup.Items.OfType<string>().ToList();
 
+                //Check extraction data source
+                bool? extractEtabs = radioButtonExtractEtabs.IsChecked;
+                bool? extractExcel = radioButtonExtractExcel.IsChecked;
+                string excelFilePath = filePath.Text;
+
                 //Call up window
-                WindowWallDesignLoading windowWallDesignLoading = new WindowWallDesignLoading(_SapModel, _Plugin, listChoosenGroup);
+                WindowWallDesignLoading windowWallDesignLoading = new WindowWallDesignLoading(_SapModel, _Plugin, listChoosenGroup, extractEtabs, extractExcel, excelFilePath);
             }
 
             catch (Exception ex)
@@ -83,7 +109,32 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
             Close();
         }
 
+        private void buttonModifyPath_Click(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Forms.OpenFileDialog openFileDialog = new System.Windows.Forms.OpenFileDialog();
+            openFileDialog.Filter = "Excel files|*.xls;*.xlsx;*.xlsm";
 
-        
+            //For first time path assignment, initial directory is where model is. After that use current path as a initial directory
+            if (firstPathAssigned)
+            {
+                openFileDialog.InitialDirectory = modelPath;
+            }
+            else
+            {
+                openFileDialog.InitialDirectory = filePath.Text;
+            }
+
+
+            System.Windows.Forms.DialogResult result = openFileDialog.ShowDialog();
+
+            if (result == System.Windows.Forms.DialogResult.OK)
+            {
+                filePath.Text = openFileDialog.FileName;
+            }
+
+            //After first time assigning path, set this flag to false
+            firstPathAssigned = false;
+        }
+
     }
 }

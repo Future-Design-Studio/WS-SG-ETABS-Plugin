@@ -28,11 +28,17 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
 
         List<src.HelperEtabs.DatabaseTable> databaseTableList = new List<src.HelperEtabs.DatabaseTable>();
 
-        public WindowWallDesignLoading(cSapModel SapModel, cPluginCallback Plugin, List<string> listChoosenGroup)
+        bool? extractEtabsGlobal;
+        bool? extractExcelGlobal;
+
+        public WindowWallDesignLoading(cSapModel SapModel, cPluginCallback Plugin, List<string> listChoosenGroup, bool? extractEtabs, bool? extractExcel, string excelFilePath)
         {
             _SapModel = SapModel;
             _Plugin = Plugin;
             bool Ret;
+
+            extractEtabsGlobal = extractEtabs;
+            extractExcelGlobal = extractExcel;
 
             InitializeComponent();
 
@@ -57,14 +63,28 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
             */
 
             //Get wall design result
-            List<Dictionary<string, string>> tableInListPierDesignResult;
-            List<Dictionary<string, string>> tableInListSpandrelDesignResult;
-            (tableInListPierDesignResult, tableInListSpandrelDesignResult) = HelperEtabs.GetWallDesignResult(SapModel);
-
-            if (tableInListPierDesignResult == null && tableInListSpandrelDesignResult == null)
+            List<Dictionary<string, string>> tableInListPierDesignResult = null;
+            List<Dictionary<string, string>> tableInListSpandrelDesignResult = null;
+            if (extractEtabs == true)
             {
-                return;
+                (tableInListPierDesignResult, tableInListSpandrelDesignResult) = HelperEtabs.GetWallDesignResult(SapModel);
+
+                if (tableInListPierDesignResult == null && tableInListSpandrelDesignResult == null)
+                {
+                    return;
+                }
             }
+            else if (extractExcel == true)
+            {
+                (tableInListPierDesignResult, tableInListSpandrelDesignResult) = GetWallDesignResultFromExcel(excelFilePath);
+
+                if (tableInListPierDesignResult == null && tableInListSpandrelDesignResult == null)
+                {
+                    return;
+                }
+
+            }
+
 
             //Get database table
             List<string> tableKeys = new List<string> { "Wall Object Connectivity", "Group Assignments", "Area Assignments - Pier Labels", "Area Assignments - Spandrel Labels", "Point Object Connectivity" };
@@ -92,6 +112,33 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
             loadDatabaseTable(SapModel, Plugin, tableKeys, databaseTableList, listChoosenGroup, tempListChoosenGroup, tableInListPierDesignResult, tableInListSpandrelDesignResult);
 
             ShowDialog();
+        }
+
+        private static (List<Dictionary<string, string>>, List<Dictionary<string, string>>) GetWallDesignResultFromExcel(string excelFilePath)
+        {
+            List<Dictionary<string, string>> tableInListPierDesignResult = null;
+            List<Dictionary<string, string>> tableInListSpandrelDesignResult = null;
+
+            List<string> excelOutput;
+            bool isError = false;
+
+            //Get pier design
+            (isError, excelOutput) = HelperExcel.ReadExcel(excelFilePath, "Pier Dgn Sum", false);
+
+            List<string> columnKeys = excelOutput.GetRange(29, 29);
+            List<string> tableInList = excelOutput.GetRange(87, excelOutput.Count - 87);
+
+            tableInListPierDesignResult = HelperMethod.EtabsTableToDictionary(tableInList.ToArray(), columnKeys.ToArray());
+
+            //Get spandrel design
+            (isError, excelOutput) = HelperExcel.ReadExcel(excelFilePath, "Span Dgn Sum", false);
+
+            columnKeys = excelOutput.GetRange(21, 21);
+            tableInList = excelOutput.GetRange(63, excelOutput.Count - 63);
+
+            tableInListSpandrelDesignResult = HelperMethod.EtabsTableToDictionary(tableInList.ToArray(), columnKeys.ToArray());
+
+            return (tableInListPierDesignResult, tableInListSpandrelDesignResult);
         }
 
         private async void loadDatabaseTable(cSapModel SapModel, cPluginCallback Plugin, List<string> tableKeys, List<src.HelperEtabs.DatabaseTable> databaseTableList, 
@@ -233,7 +280,8 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
             if (!isError)
             {
                 //Call up window
-                WindowWallDesignMain windowWallDesignMain = new WindowWallDesignMain(SapModel, Plugin, databaseTableList, listChoosenGroup, tableInListPierDesignResult, tableInListSpandrelDesignResult);
+                WindowWallDesignMain windowWallDesignMain = new WindowWallDesignMain(SapModel, Plugin, databaseTableList, listChoosenGroup, tableInListPierDesignResult, tableInListSpandrelDesignResult
+                    , extractEtabsGlobal, extractExcelGlobal);
             }
 
         }

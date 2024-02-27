@@ -25,16 +25,22 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
         cPluginCallback _Plugin;
         string modelPath;
 
+        bool? extractEtabsGlobal;
+        bool? extractExcelGlobal;
+
         //List of tables to save joint reaction and grouping table
         List<src.HelperEtabs.DatabaseTable> databaseTableListGlobal = new List<HelperEtabs.DatabaseTable>();
         List<Dictionary<string, string>> tableInListPierDesignResultGlobal = new List<Dictionary<string, string>>();
             List<Dictionary<string, string>> tableInListSpandrelDesignResultGlobal = new List<Dictionary<string, string>>();
 
         public WindowWallDesignMain(cSapModel SapModel, cPluginCallback Plugin, List<src.HelperEtabs.DatabaseTable> databaseTableList, List<string> listChoosenGroup,
-            List<Dictionary<string, string>> tableInListPierDesignResult, List<Dictionary<string, string>> tableInListSpandrelDesignResult)
+            List<Dictionary<string, string>> tableInListPierDesignResult, List<Dictionary<string, string>> tableInListSpandrelDesignResult, bool? extractEtabs, bool? extractExcel)
         {
             _SapModel = SapModel;
             _Plugin = Plugin;
+
+            extractEtabsGlobal = extractEtabs;
+            extractExcelGlobal = extractExcel;
 
             InitializeComponent();
 
@@ -115,7 +121,7 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
 
                 //Call up copy result window
                 WindowWallDesignResult windowWallDesignResult = new WindowWallDesignResult(databaseTableListGlobal, choosenGroup, typeOfFailure, tableInListPierDesignResultGlobal, 
-                    tableInListSpandrelDesignResultGlobal, titleSize, axisTitleSize, tickLabelSize);
+                    tableInListSpandrelDesignResultGlobal, titleSize, axisTitleSize, tickLabelSize, extractEtabsGlobal, extractExcelGlobal);
             }
 
             catch (Exception ex)

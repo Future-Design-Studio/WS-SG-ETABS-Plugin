@@ -14,7 +14,7 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
     {
         public static (bool, List<ClassWallDesign.WallDesignDetail>, List<double>, List<double>, double, double) PlotWallDesignResult(WpfPlot ResultPlot, List<src.HelperEtabs.DatabaseTable> databaseTableList, string choosenGroup, string typeOfFailure,
             List<Dictionary<string, string>> tableInListPierDesignResult, List<Dictionary<string, string>> tableInListSpandrelDesignResult, int titleSize, int axisTitleSize,
-            int tickLabelSize)
+            int tickLabelSize, bool? extractEtabs, bool? extractExcel)
         {
             bool isError = false;
 
@@ -95,15 +95,15 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
                 bool? wallFail = null;
                 if (typeOfFailure == "All")
                 {
-                    wallFail = CheckIsAnyFail(wallDesignDetail, tableInListPierDesignResult, tableInListSpandrelDesignResult);
+                    wallFail = CheckIsAnyFail(wallDesignDetail, tableInListPierDesignResult, tableInListSpandrelDesignResult, extractEtabs, extractExcel);
                 }
                 else if (typeOfFailure == "PMN")
                 {
-                    wallFail = CheckIsPMNFail(wallDesignDetail, tableInListPierDesignResult, tableInListSpandrelDesignResult);
+                    wallFail = CheckIsPMNFail(wallDesignDetail, tableInListPierDesignResult, tableInListSpandrelDesignResult, extractEtabs, extractExcel);
                 }
                 else if (typeOfFailure == "Shear")
                 {
-                    wallFail = CheckIsShearFail(wallDesignDetail, tableInListPierDesignResult, tableInListSpandrelDesignResult);
+                    wallFail = CheckIsShearFail(wallDesignDetail, tableInListPierDesignResult, tableInListSpandrelDesignResult, extractEtabs, extractExcel);
                 }
 
                 wallDesignDetail.IsFail = wallFail;
@@ -199,40 +199,81 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
             return (isError, wallDesignDetailList, uniqueX, uniqueY, countPass, countFail);
         }
 
-        public static bool? CheckIsAnyFail(ClassWallDesign.WallDesignDetail wall, List<Dictionary<string, string>> tableInListPierDesignResult, List<Dictionary<string, string>> tableInListSpandrelDesignResult)
+        public static bool? CheckIsAnyFail(ClassWallDesign.WallDesignDetail wall, List<Dictionary<string, string>> tableInListPierDesignResult, 
+            List<Dictionary<string, string>> tableInListSpandrelDesignResult, bool? extractEtabs, bool? extractExcel)
         {
             bool wallExistInResult = false;
-            if (wall.PierLabel != null)
+
+            if (extractEtabs == true)
             {
-                
-                foreach (Dictionary<string, string> row in tableInListPierDesignResult)
+                if (wall.PierLabel != null)
                 {
-                    if (row["Story"] == wall.StoryLabel && row["PierLabel"] == wall.PierLabel)
+
+                    foreach (Dictionary<string, string> row in tableInListPierDesignResult)
                     {
-                        wallExistInResult = true;
-                        if (row["ErrMsg"] != "No Message")
+                        if (row["Story"] == wall.StoryLabel && row["PierLabel"] == wall.PierLabel)
                         {
-                            return true;
-                        }
-                    }
-                }
-                
-            }
-            else if (wall.SpandrelLabel != null)
-            {
-                foreach (Dictionary<string, string> row in tableInListSpandrelDesignResult)
-                {
-                    if (row["Story"] == wall.StoryLabel && row["Spandrel"] == wall.SpandrelLabel)
-                    {
-                        wallExistInResult = true;
-                        if (row["ErrMsg"] != "No Message")
-                        {
-                            return true;
+                            wallExistInResult = true;
+                            if (row["ErrMsg"] != "No Message")
+                            {
+                                return true;
+                            }
                         }
                     }
 
                 }
+                else if (wall.SpandrelLabel != null)
+                {
+                    foreach (Dictionary<string, string> row in tableInListSpandrelDesignResult)
+                    {
+                        if (row["Story"] == wall.StoryLabel && row["Spandrel"] == wall.SpandrelLabel)
+                        {
+                            wallExistInResult = true;
+                            if (row["ErrMsg"] != "No Message")
+                            {
+                                return true;
+                            }
+                        }
+
+                    }
+                }
             }
+            else if (extractExcel == true)
+            {
+                if (wall.PierLabel != null)
+                {
+
+                    foreach (Dictionary<string, string> row in tableInListPierDesignResult)
+                    {
+                        if (row["Story"] == wall.StoryLabel && row["Pier Label"] == wall.PierLabel)
+                        {
+                            wallExistInResult = true;
+                            if (row["Errors"] != "No Message")
+                            {
+                                return true;
+                            }
+                        }
+                    }
+
+                }
+                else if (wall.SpandrelLabel != null)
+                {
+                    foreach (Dictionary<string, string> row in tableInListSpandrelDesignResult)
+                    {
+                        if (row["Story"] == wall.StoryLabel && row["Spandrel"] == wall.SpandrelLabel)
+                        {
+                            wallExistInResult = true;
+                            if (row["Errors"] != "No Message")
+                            {
+                                return true;
+                            }
+                        }
+
+                    }
+                }
+            }
+
+
 
             if (wallExistInResult)
             {
@@ -246,37 +287,74 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
 
         
 
-        public static bool? CheckIsPMNFail(ClassWallDesign.WallDesignDetail wall, List<Dictionary<string, string>> tableInListPierDesignResult, List<Dictionary<string, string>> tableInListSpandrelDesignResult)
+        public static bool? CheckIsPMNFail(ClassWallDesign.WallDesignDetail wall, List<Dictionary<string, string>> tableInListPierDesignResult, 
+            List<Dictionary<string, string>> tableInListSpandrelDesignResult, bool? extractEtabs, bool? extractExcel)
         {
             bool wallExistInResult = false;
-            if (wall.PierLabel != null)
+
+            if (extractEtabs == true)
             {
-                foreach (Dictionary<string, string> row in tableInListPierDesignResult)
+                if (wall.PierLabel != null)
                 {
-                    if (row["Story"] == wall.StoryLabel && row["PierLabel"] == wall.PierLabel)
+                    foreach (Dictionary<string, string> row in tableInListPierDesignResult)
                     {
-                        wallExistInResult = true;
-                        if (row["ErrMsg"].Contains("flexural"))
+                        if (row["Story"] == wall.StoryLabel && row["PierLabel"] == wall.PierLabel)
                         {
-                            return true;
+                            wallExistInResult = true;
+                            if (row["ErrMsg"].Contains("flexural"))
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                }
+                else if (wall.SpandrelLabel != null)
+                {
+                    foreach (Dictionary<string, string> row in tableInListSpandrelDesignResult)
+                    {
+                        if (row["Story"] == wall.StoryLabel && row["Spandrel"] == wall.SpandrelLabel)
+                        {
+                            wallExistInResult = true;
+                            if (row["ErrMsg"].Contains("flexural"))
+                            {
+                                return true;
+                            }
                         }
                     }
                 }
             }
-            else if (wall.SpandrelLabel != null)
+            else if (extractExcel == true)
             {
-                foreach (Dictionary<string, string> row in tableInListSpandrelDesignResult)
+                if (wall.PierLabel != null)
                 {
-                    if (row["Story"] == wall.StoryLabel && row["Spandrel"] == wall.SpandrelLabel)
+                    foreach (Dictionary<string, string> row in tableInListPierDesignResult)
                     {
-                        wallExistInResult = true;
-                        if (row["ErrMsg"].Contains("flexural"))
+                        if (row["Story"] == wall.StoryLabel && row["Pier Label"] == wall.PierLabel)
                         {
-                            return true;
+                            wallExistInResult = true;
+                            if (row["Errors"].Contains("flexural"))
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                }
+                else if (wall.SpandrelLabel != null)
+                {
+                    foreach (Dictionary<string, string> row in tableInListSpandrelDesignResult)
+                    {
+                        if (row["Story"] == wall.StoryLabel && row["Spandrel"] == wall.SpandrelLabel)
+                        {
+                            wallExistInResult = true;
+                            if (row["Errors"].Contains("flexural"))
+                            {
+                                return true;
+                            }
                         }
                     }
                 }
             }
+
 
             if (wallExistInResult)
             {
@@ -289,33 +367,69 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
         }
 
         
-        public static bool? CheckIsShearFail(ClassWallDesign.WallDesignDetail wall, List<Dictionary<string, string>> tableInListPierDesignResult, List<Dictionary<string, string>> tableInListSpandrelDesignResult)
+        public static bool? CheckIsShearFail(ClassWallDesign.WallDesignDetail wall, List<Dictionary<string, string>> tableInListPierDesignResult, 
+            List<Dictionary<string, string>> tableInListSpandrelDesignResult, bool? extractEtabs, bool? extractExcel)
         {
             bool wallExistInResult = false;
-            if (wall.PierLabel != null)
+
+            if (extractEtabs == true)
             {
-                foreach (Dictionary<string, string> row in tableInListPierDesignResult)
+                if (wall.PierLabel != null)
                 {
-                    if (row["Story"] == wall.StoryLabel && row["PierLabel"] == wall.PierLabel)
+                    foreach (Dictionary<string, string> row in tableInListPierDesignResult)
                     {
-                        wallExistInResult = true;
-                        if (row["ErrMsg"].Contains("Shear"))
+                        if (row["Story"] == wall.StoryLabel && row["PierLabel"] == wall.PierLabel)
                         {
-                            return true;
+                            wallExistInResult = true;
+                            if (row["ErrMsg"].Contains("Shear"))
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                }
+                else if (wall.SpandrelLabel != null)
+                {
+                    foreach (Dictionary<string, string> row in tableInListSpandrelDesignResult)
+                    {
+                        if (row["Story"] == wall.StoryLabel && row["Spandrel"] == wall.SpandrelLabel)
+                        {
+                            wallExistInResult = true;
+                            if (row["ErrMsg"].Contains("Shear"))
+                            {
+                                return true;
+                            }
                         }
                     }
                 }
             }
-            else if (wall.SpandrelLabel != null)
+            else if ( extractExcel == true )
             {
-                foreach (Dictionary<string, string> row in tableInListSpandrelDesignResult)
+                if (wall.PierLabel != null)
                 {
-                    if (row["Story"] == wall.StoryLabel && row["Spandrel"] == wall.SpandrelLabel)
+                    foreach (Dictionary<string, string> row in tableInListPierDesignResult)
                     {
-                        wallExistInResult = true;
-                        if (row["ErrMsg"].Contains("Shear"))
+                        if (row["Story"] == wall.StoryLabel && row["Pier Label"] == wall.PierLabel)
                         {
-                            return true;
+                            wallExistInResult = true;
+                            if (row["Errors"].Contains("Shear"))
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                }
+                else if (wall.SpandrelLabel != null)
+                {
+                    foreach (Dictionary<string, string> row in tableInListSpandrelDesignResult)
+                    {
+                        if (row["Story"] == wall.StoryLabel && row["Spandrel"] == wall.SpandrelLabel)
+                        {
+                            wallExistInResult = true;
+                            if (row["Errors"].Contains("Shear"))
+                            {
+                                return true;
+                            }
                         }
                     }
                 }

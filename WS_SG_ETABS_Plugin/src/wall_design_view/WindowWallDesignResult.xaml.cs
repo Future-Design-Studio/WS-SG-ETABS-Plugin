@@ -32,7 +32,7 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
 
         public WindowWallDesignResult(List<src.HelperEtabs.DatabaseTable> databaseTableList, string choosenGroup, string typeOfFailure,
             List<Dictionary<string, string>> tableInListPierDesignResult, List<Dictionary<string, string>> tableInListSpandrelDesignResult, int titleSize, int axisTitleSize,
-            int tickLabelSize)
+            int tickLabelSize, bool? extractEtabs, bool? extractExcel)
         {
             titleSizeGlobal = titleSize;
             axisTitleSizeGlobal = axisTitleSize;
@@ -44,7 +44,7 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
 
             (isError, wallDesignDetailListGlobal, uniqueXGlobal, uniqueYGlobal, countPassGlobal, countFailGlobal) = FunctionWallDesignView.PlotWallDesignResult(ResultPlot, databaseTableList, 
                 choosenGroup, typeOfFailure, tableInListPierDesignResult, tableInListSpandrelDesignResult, titleSize, axisTitleSize,
-                tickLabelSize);
+                tickLabelSize, extractEtabs, extractExcel);
             if (isError) { return; }
 
             ShowDialog();

@@ -4,13 +4,14 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WS_SG_ETABS_Plugin.src.wall_design_view"
-             mc:Ignorable="d" Height="400" Width="700">
+             mc:Ignorable="d" Height="600" Width="700">
 
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="0.15*"></RowDefinition>
             <RowDefinition Height="0.15*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="0.6*"></RowDefinition>
             <RowDefinition Height="0.12*"></RowDefinition>
         </Grid.RowDefinitions>
 
@@ -50,6 +51,46 @@
             </StackPanel>
 
             <ListBox Grid.Row="3" Grid.Column="2" x:Name="listBoxChoosenGroup" d:ItemsSource="{d:SampleData ItemCount=5}" VerticalAlignment="Stretch" SelectionMode="Extended"></ListBox>
+
+        </Grid>
+
+        <Grid Margin="10" Grid.Row="3">
+ 
+
+            <StackPanel Grid.Column="2">
+                <TextBlock Grid.Row="0" Grid.Column="0" TextWrapping="WrapWithOverflow" VerticalAlignment="Center">
+                Select data source:
+                </TextBlock>
+                <RadioButton Name="radioButtonExtractEtabs" Checked="radioButtonExtractEtabs_Checked">Extract from ETABS</RadioButton>
+                <RadioButton Name="radioButtonExtractExcel" Checked="radioButtonExtractExcel_Checked">Extract from excel (excel file extracted from ETABS previously)</RadioButton>
+                <Label Margin ="15 -5 0 0">Note: Please do not modify the excel file in any way! It might cause error to the result!</Label>
+
+                <Grid Grid.Row="1" Grid.Column="0" Margin="0 0 0 0" Height="80">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="4.5*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+
+                    <Label Grid.Column="0" Margin="10 0 10 0" Content="Excel file path:"></Label>
+
+                    <Grid Grid.Column="2" Margin="0 10 0 10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"></RowDefinition>
+                            <RowDefinition Height="*"></RowDefinition>
+                        </Grid.RowDefinitions>
+
+                        <TextBox x:Name="filePath" Grid.Row="0" IsEnabled="False"/>
+
+                        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                            <Button Name="buttonModifyPath" Content="Modify path" Width="100" Click="buttonModifyPath_Click"/>
+                        </StackPanel>
+
+                    </Grid>
+
+                </Grid>
+
+            </StackPanel>
+
 
         </Grid>
 
