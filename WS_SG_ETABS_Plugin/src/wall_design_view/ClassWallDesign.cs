@@ -17,8 +17,9 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
             public string StoryLabel { get; set; }
             public string PierLabel { get; set; }
             public string SpandrelLabel { get; set; }
+            public string Group { get; set; }
 
-            public WallDesignDetail(string uniqueName, string label, List<HelperEtabs.Point3D> pointList, string storyLabel, string pierLabel, string spandrelLabel)
+            public WallDesignDetail(string uniqueName, string label, List<HelperEtabs.Point3D> pointList, string storyLabel, string pierLabel, string spandrelLabel, string group)
             {
                 UniqueName = uniqueName;
                 Label = label;
@@ -26,6 +27,7 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
                 StoryLabel = storyLabel;
                 PierLabel = pierLabel;
                 SpandrelLabel = spandrelLabel;
+                Group = group;
 
                 IsFail = null;
             }

@@ -28,6 +28,8 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
         bool? extractEtabsGlobal;
         bool? extractExcelGlobal;
 
+        List<string> listChoosenGroupGlobal;
+
         //List of tables to save joint reaction and grouping table
         List<src.HelperEtabs.DatabaseTable> databaseTableListGlobal = new List<HelperEtabs.DatabaseTable>();
         List<Dictionary<string, string>> tableInListPierDesignResultGlobal = new List<Dictionary<string, string>>();
@@ -41,6 +43,7 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
 
             extractEtabsGlobal = extractEtabs;
             extractExcelGlobal = extractExcel;
+            listChoosenGroupGlobal = listChoosenGroup;
 
             InitializeComponent();
 
@@ -57,9 +60,11 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
             comBoxOutputCase.SelectedIndex = 0;
             */
 
+            /*
             //Fill in combobox for direction
             comBoxTypeOfFailure.ItemsSource = src.HelperEtabs.typeOfFailureList;
             comBoxTypeOfFailure.SelectedIndex = 0;
+            */
 
             //Save databaseTableList to global variable
             databaseTableListGlobal = databaseTableList;
@@ -67,11 +72,6 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
             //Save tableInListPierDesignResult and tableInListSpandrelDesignResult to global variable
             tableInListPierDesignResultGlobal = tableInListPierDesignResult;
             tableInListSpandrelDesignResultGlobal = tableInListSpandrelDesignResult;
-
-            //Fill in combobox for available groups
-            //src.HelperUI.PopulateComboBoxAvailGroup(_SapModel, comBoxGroup);
-            comBoxGroup.ItemsSource = listChoosenGroup;
-            comBoxGroup.SelectedIndex = 0;
 
             ShowDialog();
         }
@@ -111,8 +111,8 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
 
                 //string outputCase = comBoxOutputCase.SelectedValue.ToString();
                 //List<string> listOutputCase = listBoxChoosenLoadCase.Items.OfType<string>().ToList();
-                string choosenGroup = comBoxGroup.Text;
-                string typeOfFailure = comBoxTypeOfFailure.SelectedValue.ToString();
+                //string choosenGroup = listChoosenGroupGlobal[0]; // First group
+                //string typeOfFailure = comBoxTypeOfFailure.SelectedValue.ToString();
 
                 int legendTextSize = Convert.ToInt32(textBoxLegendTextSize.Text);
                 int titleSize = Convert.ToInt32(textBoxTitleSize.Text);
@@ -120,7 +120,7 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
                 int tickLabelSize = Convert.ToInt32(textBoxTickLabelSize.Text);
 
                 //Call up copy result window
-                WindowWallDesignResult windowWallDesignResult = new WindowWallDesignResult(databaseTableListGlobal, choosenGroup, typeOfFailure, tableInListPierDesignResultGlobal, 
+                WindowWallDesignResult windowWallDesignResult = new WindowWallDesignResult(databaseTableListGlobal, listChoosenGroupGlobal, tableInListPierDesignResultGlobal, 
                     tableInListSpandrelDesignResultGlobal, titleSize, axisTitleSize, tickLabelSize, extractEtabsGlobal, extractExcelGlobal);
             }
 

@@ -48,7 +48,6 @@ namespace WS_SG_ETABS_Plugin.src
             //Get all worksheets name
             List<string> workSheetNameList = new List<string>();
 
-
             //Get the worksheet that user want
             if (findExactMatch == true)
             {
@@ -75,11 +74,13 @@ namespace WS_SG_ETABS_Plugin.src
             rw = range.Rows.Count;
             cl = range.Columns.Count;
 
+            object[,] values = range.Value2;
+
             for (rCnt = 1; rCnt <= rw; rCnt++)
             {
                 for (cCnt = 1; cCnt <= cl; cCnt++)
                 {
-                    string str = Convert.ToString((range.Cells[rCnt, cCnt] as Excel.Range).Value2);
+                    string str = Convert.ToString(values[rCnt, cCnt]);
                     excelOutput.Add(str);
                 }
             }

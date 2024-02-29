@@ -7,12 +7,14 @@ using System.Threading.Tasks;
 using System.Windows;
 using ScottPlot;
 using System.Windows.Media.TextFormatting;
+using static WS_SG_ETABS_Plugin.src.wall_design_view.ClassWallDesign;
 
 namespace WS_SG_ETABS_Plugin.src.wall_design_view
 {
     internal class FunctionWallDesignView
     {
-        public static (bool, List<ClassWallDesign.WallDesignDetail>, List<double>, List<double>, double, double) PlotWallDesignResult(WpfPlot ResultPlot, List<src.HelperEtabs.DatabaseTable> databaseTableList, string choosenGroup, string typeOfFailure,
+        public static (bool, List<ClassWallDesign.WallDesignDetail>, List<ClassWallDesign.WallDesignDetail>, List<double>, List<double>, double, double) PlotWallDesignResult(WpfPlot ResultPlot, 
+            List<src.HelperEtabs.DatabaseTable> databaseTableList, List<string> listChoosenGroup, string choosenGroup, string typeOfFailure,
             List<Dictionary<string, string>> tableInListPierDesignResult, List<Dictionary<string, string>> tableInListSpandrelDesignResult, int titleSize, int axisTitleSize,
             int tickLabelSize, bool? extractEtabs, bool? extractExcel)
         {
@@ -21,33 +23,45 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
             //Get the table
             src.HelperEtabs.DatabaseTable pointObjectConnectivityTable = new HelperEtabs.DatabaseTable();
             (isError, pointObjectConnectivityTable) = src.HelperEtabs.CallDatabaseTableByTableKey(databaseTableList, "Point Object Connectivity");
-            if (isError) { return (isError, null, null, null, 0, 0); }
+            if (isError) { return (isError, null, null, null, null, 0, 0); }
 
             src.HelperEtabs.DatabaseTable wallObjectConnectivityTable = new HelperEtabs.DatabaseTable();
             (isError, wallObjectConnectivityTable) = src.HelperEtabs.CallDatabaseTableByTableKey(databaseTableList, "Wall Object Connectivity");
-            if (isError) { return (isError, null, null, null, 0, 0); }
+            if (isError) { return (isError, null, null, null, null, 0, 0); }
 
             src.HelperEtabs.DatabaseTable groupAssignmentsTable = new HelperEtabs.DatabaseTable();
             (isError, groupAssignmentsTable) = src.HelperEtabs.CallDatabaseTableByTableKey(databaseTableList, "Group Assignments");
-            if (isError) { return (isError, null, null, null, 0, 0); }
+            if (isError) { return (isError, null, null, null, null, 0, 0); }
 
             src.HelperEtabs.DatabaseTable assignmentPierLabels = new HelperEtabs.DatabaseTable();
             (isError, assignmentPierLabels) = src.HelperEtabs.CallDatabaseTableByTableKey(databaseTableList, "Area Assignments - Pier Labels");
-            if (isError) { return (isError, null, null, null, 0, 0); }
+            if (isError) { return (isError, null, null, null, null, 0, 0); }
 
             src.HelperEtabs.DatabaseTable assignmentSpandrelLabels = new HelperEtabs.DatabaseTable();
             (isError, assignmentSpandrelLabels) = src.HelperEtabs.CallDatabaseTableByTableKey(databaseTableList, "Area Assignments - Spandrel Labels");
-            if (isError) { return (isError, null, null, null, 0, 0); }
+            if (isError) { return (isError, null, null, null, null, 0, 0); }
 
             //Filter group to only include area, to improve performance
             (isError, groupAssignmentsTable) = src.HelperEtabs.FilterDatabaseTable(groupAssignmentsTable, "ObjectType", "Area");
-            if (isError) { return (isError, null, null, null, 0, 0); }
+            if (isError) { return (isError, null, null, null, null, 0, 0); }
+
+            //Filter group to only include groups which are choosen, to improve performance
+            src.HelperEtabs.DatabaseTable groupAssignmentsTableFilteredGroupCompiled = new HelperEtabs.DatabaseTable();
+            groupAssignmentsTableFilteredGroupCompiled.TableInList = new List<Dictionary<string, string>>();
+            foreach (string group in listChoosenGroup)
+            {
+                src.HelperEtabs.DatabaseTable groupAssignmentsTableFilteredGroup = new HelperEtabs.DatabaseTable();
+                (isError, groupAssignmentsTableFilteredGroup) = src.HelperEtabs.FilterDatabaseTable(groupAssignmentsTable, "GroupName", group);
+                if (isError) { return (isError, null, null, null, null, 0, 0); }
+
+                groupAssignmentsTableFilteredGroupCompiled.TableInList.AddRange(groupAssignmentsTableFilteredGroup.TableInList);
+            }
 
             //Convert to point 3D
             List<HelperEtabs.Point3D> pointList = HelperEtabs.ConvertPointDatabaseToPoint3D(pointObjectConnectivityTable);
 
             //Filter by choosen group
-            (isError, wallObjectConnectivityTable) = src.HelperEtabs.FilterDatabaseTableUniqueNameByGroup(wallObjectConnectivityTable, groupAssignmentsTable, choosenGroup);
+            //(isError, wallObjectConnectivityTable) = src.HelperEtabs.FilterDatabaseTableUniqueNameByGroup(wallObjectConnectivityTable, groupAssignmentsTable, choosenGroup);
 
             //Get shell points
             List<HelperEtabs.Shell> shellList = HelperEtabs.GetShellsPoints(wallObjectConnectivityTable);
@@ -68,16 +82,6 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
                         if (shellPointUniqueName == point.UniqueName)
                         {
                             shellPointList.Add(point);
-
-                            //Take note of unique X and Y
-                            if (!uniqueX.Contains(point.XCoordinate))
-                            {
-                                uniqueX.Add(point.XCoordinate);
-                            }
-                            if (!uniqueY.Contains(point.YCoordinate))
-                            {
-                                uniqueY.Add(point.YCoordinate);
-                            }
                         }
                     }
                 }
@@ -89,7 +93,10 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
                 string pierLabel = GetPierLabel(shell.UniqueName, assignmentPierLabels);
                 string spandrelLabel = GetSpandrelLabel(shell.UniqueName, assignmentSpandrelLabels);
 
-                ClassWallDesign.WallDesignDetail wallDesignDetail = new ClassWallDesign.WallDesignDetail(shell.UniqueName, label, shellPointList, storyLabel, pierLabel, spandrelLabel);
+                //Get group name
+                string groupName = HelperEtabs.GetElementGroupName(groupAssignmentsTableFilteredGroupCompiled, shell.UniqueName, "Area");
+
+                ClassWallDesign.WallDesignDetail wallDesignDetail = new ClassWallDesign.WallDesignDetail(shell.UniqueName, label, shellPointList, storyLabel, pierLabel, spandrelLabel, groupName);
 
                 //Check for failure
                 bool? wallFail = null;
@@ -111,66 +118,86 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
                 wallDesignDetailList.Add(wallDesignDetail);
             }
 
-            //Check for planar
-            if (uniqueX.Count == 1 || uniqueY.Count == 1)
-            {
-                //is planar
-            }
-            else
-            {
-                MessageBox.Show("Chosen walls is not in 1 plane! Walls must be on either XZ or YZ plane!");
-                isError = true;
-                return (isError, null, null, null, 0, 0);
-            }
-
             //Draw plot
             double countFail = 0;
             double countPass = 0;
+            List<ClassWallDesign.WallDesignDetail> wallDesignDetailFilteredList = new List<ClassWallDesign.WallDesignDetail>();
             foreach (ClassWallDesign.WallDesignDetail wallDesignDetail in wallDesignDetailList)
             {
-
-                List<double> xCoordList = new List<double>();
-                List<double> yCoordList = new List<double>();
-                foreach(HelperEtabs.Point3D point in wallDesignDetail.PointList)
+                //Filter based on group
+                if (wallDesignDetail.Group == choosenGroup)
                 {
-                    //Decide which plane to use
-                    if (uniqueX.Count == 1)
+                    wallDesignDetailFilteredList.Add(wallDesignDetail);
+
+                    //Take note of unique coordinate
+                    foreach (HelperEtabs.Point3D point in wallDesignDetail.PointList)
                     {
-                        xCoordList.Add(point.YCoordinate);
+                        //Take note of unique X and Y
+                        if (!uniqueX.Contains(point.XCoordinate))
+                        {
+                            uniqueX.Add(point.XCoordinate);
+                        }
+                        if (!uniqueY.Contains(point.YCoordinate))
+                        {
+                            uniqueY.Add(point.YCoordinate);
+                        }
                     }
-                    else if (uniqueY.Count == 1)
+
+                    //Check for planar
+                    if (uniqueX.Count == 1 || uniqueY.Count == 1)
                     {
-                        xCoordList.Add(point.XCoordinate);
+                        //is planar
                     }
-                        
-                    yCoordList.Add(point.ZCoordinate);
-                }
+                    else
+                    {
+                        MessageBox.Show("Chosen walls is not in 1 plane! Walls must be on either XZ or YZ plane!");
+                        isError = true;
+                        return (isError, null, null, null, null, 0, 0);
+                    }
 
-                double xCenter = xCoordList.Average();
-                double yCenter = yCoordList.Average();
+                    List<double> xCoordList = new List<double>();
+                    List<double> yCoordList = new List<double>();
+                    foreach (HelperEtabs.Point3D point in wallDesignDetail.PointList)
+                    {
+                        //Decide which plane to use
+                        if (uniqueX.Count == 1)
+                        {
+                            xCoordList.Add(point.YCoordinate);
+                        }
+                        else if (uniqueY.Count == 1)
+                        {
+                            xCoordList.Add(point.XCoordinate);
+                        }
 
-                double xWidth = xCoordList.Max() - xCoordList.Min();
-                double yWidth = yCoordList.Max() - yCoordList.Min();
+                        yCoordList.Add(point.ZCoordinate);
+                    }
 
-                string color = "";
-                if (wallDesignDetail.IsFail == true)
-                {
-                    color = "red";
-                    countFail++;
-                }
-                else if (wallDesignDetail.IsFail == false)
-                {
-                    color = "green";
-                    countPass++;
-                }
-                else
-                {
-                    color = "#D3D3D3";
-                }
+                    double xCenter = xCoordList.Average();
+                    double yCenter = yCoordList.Average();
 
-                HelperPlot.RectanglePlotter(ResultPlot, xCenter, yCenter, "", 0, System.Drawing.ColorTranslator.FromHtml(color), xWidth, yWidth, 0.01, System.Drawing.ColorTranslator.FromHtml("#80D3D3D3"));
+                    double xWidth = xCoordList.Max() - xCoordList.Min();
+                    double yWidth = yCoordList.Max() - yCoordList.Min();
+
+                    string color = "";
+                    if (wallDesignDetail.IsFail == true)
+                    {
+                        color = "red";
+                        countFail++;
+                    }
+                    else if (wallDesignDetail.IsFail == false)
+                    {
+                        color = "green";
+                        countPass++;
+                    }
+                    else
+                    {
+                        color = "#D3D3D3";
+                    }
+
+                    HelperPlot.RectanglePlotter(ResultPlot, xCenter, yCenter, "", 0, System.Drawing.ColorTranslator.FromHtml(color), xWidth, yWidth, 0.01, System.Drawing.ColorTranslator.FromHtml("#80D3D3D3"));
+                }
             }
-
+            
             double percentPass = countPass / (countFail + countPass) * 100;
             percentPass = Math.Round(percentPass, 2);
             double percentFail = countFail / (countFail + countPass) * 100;
@@ -179,6 +206,7 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
             string percentPassText = $"Pass {percentPass}% ({countPass})";
             string percentFailText = $"Fail {percentFail}% ({countFail})";
 
+            
             //Add anotation
             HelperPlot.AddAnnotationToPlot(ResultPlot, Convert.ToString(percentPassText), 25, 10, 10, 1, System.Drawing.ColorTranslator.FromHtml("green"), 
                 System.Drawing.ColorTranslator.FromHtml("white"), true);
@@ -196,7 +224,7 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
             ResultPlot.Plot.XAxis.TickLabelStyle(null, null, tickLabelSize, null, null);
             ResultPlot.Refresh();
 
-            return (isError, wallDesignDetailList, uniqueX, uniqueY, countPass, countFail);
+            return (isError, wallDesignDetailList, wallDesignDetailFilteredList, uniqueX, uniqueY, countPass, countFail);
         }
 
         public static bool? CheckIsAnyFail(ClassWallDesign.WallDesignDetail wall, List<Dictionary<string, string>> tableInListPierDesignResult, 
@@ -525,6 +553,250 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
                 double xWidth = xCoordList.Max() - xCoordList.Min();
                 double yWidth = yCoordList.Max() - yCoordList.Min();
 
+
+                string color = "";
+                if ((wallDesignDetail.IsFail == false && showOk == true) || (wallDesignDetail.IsFail == true && showFail == true) || (wallDesignDetail.IsFail == null && showNull == true))
+                {
+                    if (wallDesignDetail.IsFail == true)
+                    {
+                        color = "red";
+                    }
+                    else if (wallDesignDetail.IsFail == false)
+                    {
+                        color = "green";
+                    }
+                    else
+                    {
+                        color = "#D3D3D3";
+                    }
+                }
+                else
+                {
+                    color = "#00FFFFFF";
+                }
+
+                HelperPlot.RectanglePlotter(ResultPlot, xCenter, yCenter, "", 0, System.Drawing.ColorTranslator.FromHtml(color), xWidth, yWidth, 0.01, System.Drawing.ColorTranslator.FromHtml("#80D3D3D3"));
+
+            }
+
+            double percentPass = countPass / (countFail + countPass) * 100;
+            percentPass = Math.Round(percentPass, 2);
+            double percentFail = countFail / (countFail + countPass) * 100;
+            percentFail = Math.Round(percentFail, 2);
+
+            string percentPassText = $"Pass {percentPass}% ({countPass})";
+            string percentFailText = $"Fail {percentFail}% ({countFail})";
+
+            //Add anotation
+            HelperPlot.AddAnnotationToPlot(ResultPlot, Convert.ToString(percentPassText), 25, 10, 10, 1, System.Drawing.ColorTranslator.FromHtml("green"),
+                System.Drawing.ColorTranslator.FromHtml("white"), true);
+            HelperPlot.AddAnnotationToPlot(ResultPlot, Convert.ToString(percentFailText), 25, 10, 50, 1, System.Drawing.ColorTranslator.FromHtml("red"),
+                System.Drawing.ColorTranslator.FromHtml("white"), true);
+
+            ResultPlot.Plot.AxisScaleLock(true);
+            ResultPlot.Plot.Title("Wall Design Result", true, null, titleSize, "Arial Narrow");
+
+            //Axis
+            ResultPlot.Plot.YAxis.Label("Y coordinate (m)", null, axisTitleSize, true, "Arial Narrow");
+            ResultPlot.Plot.XAxis.Label("X coordinate (m)", null, axisTitleSize, true, "Arial Narrow");
+            ResultPlot.Plot.YAxis.TickLabelStyle(null, null, tickLabelSize, null, null);
+            ResultPlot.Plot.XAxis.TickLabelStyle(null, null, tickLabelSize, null, null);
+
+            ResultPlot.Plot.SetAxisLimits(axisLimits);
+
+            ResultPlot.Refresh();
+        }
+
+        public static List<ClassWallDesign.WallDesignDetail> FilterWallDesignResultChangeGroup(WpfPlot ResultPlot, bool? showOk, bool? showFail, bool? showNull, List<ClassWallDesign.WallDesignDetail> wallDesignDetailList,
+            double countPass, double countFail, int titleSize, int axisTitleSize,
+            int tickLabelSize, string choosenGroup)
+        {
+            ScottPlot.AxisLimits axisLimits = ResultPlot.Plot.GetAxisLimits();
+            ResultPlot.Reset();
+
+            bool isError = false;
+
+            List<double> uniqueX = new List<double>();
+            List<double> uniqueY = new List<double>();
+
+            List<ClassWallDesign.WallDesignDetail> wallDesignDetailFilteredList = new List<ClassWallDesign.WallDesignDetail>();
+            foreach (ClassWallDesign.WallDesignDetail wallDesignDetail in wallDesignDetailList)
+            {
+                //Filter based on group
+                if (wallDesignDetail.Group == choosenGroup)
+                {
+                    wallDesignDetailFilteredList.Add(wallDesignDetail);
+
+                    //Take note of unique coordinate
+                    foreach (HelperEtabs.Point3D point in wallDesignDetail.PointList)
+                    {
+                        //Take note of unique X and Y
+                        if (!uniqueX.Contains(point.XCoordinate))
+                        {
+                            uniqueX.Add(point.XCoordinate);
+                        }
+                        if (!uniqueY.Contains(point.YCoordinate))
+                        {
+                            uniqueY.Add(point.YCoordinate);
+                        }
+                    }
+
+                    //Check for planar
+                    if (uniqueX.Count == 1 || uniqueY.Count == 1)
+                    {
+                        //is planar
+                    }
+                    else
+                    {
+                        MessageBox.Show("Chosen walls is not in 1 plane! Walls must be on either XZ or YZ plane!");
+                        isError = true;
+                        return wallDesignDetailFilteredList;
+                    }
+
+                    List<double> xCoordList = new List<double>();
+                    List<double> yCoordList = new List<double>();
+
+                    foreach (HelperEtabs.Point3D point in wallDesignDetail.PointList)
+                    {
+                        //Decide which plane to use
+                        if (uniqueX.Count == 1)
+                        {
+                            xCoordList.Add(point.YCoordinate);
+                        }
+                        else if (uniqueY.Count == 1)
+                        {
+                            xCoordList.Add(point.XCoordinate);
+                        }
+
+                        yCoordList.Add(point.ZCoordinate);
+                    }
+
+                    double xCenter = xCoordList.Average();
+                    double yCenter = yCoordList.Average();
+
+                    double xWidth = xCoordList.Max() - xCoordList.Min();
+                    double yWidth = yCoordList.Max() - yCoordList.Min();
+
+
+                    string color = "";
+                    if ((wallDesignDetail.IsFail == false && showOk == true) || (wallDesignDetail.IsFail == true && showFail == true) || (wallDesignDetail.IsFail == null && showNull == true))
+                    {
+                        if (wallDesignDetail.IsFail == true)
+                        {
+                            color = "red";
+                        }
+                        else if (wallDesignDetail.IsFail == false)
+                        {
+                            color = "green";
+                        }
+                        else
+                        {
+                            color = "#D3D3D3";
+                        }
+                    }
+                    else
+                    {
+                        color = "#00FFFFFF";
+                    }
+
+                    HelperPlot.RectanglePlotter(ResultPlot, xCenter, yCenter, "", 0, System.Drawing.ColorTranslator.FromHtml(color), xWidth, yWidth, 0.01, System.Drawing.ColorTranslator.FromHtml("#80D3D3D3"));
+
+                }
+                
+            }
+
+            double percentPass = countPass / (countFail + countPass) * 100;
+            percentPass = Math.Round(percentPass, 2);
+            double percentFail = countFail / (countFail + countPass) * 100;
+            percentFail = Math.Round(percentFail, 2);
+
+            string percentPassText = $"Pass {percentPass}% ({countPass})";
+            string percentFailText = $"Fail {percentFail}% ({countFail})";
+
+            //Add anotation
+            HelperPlot.AddAnnotationToPlot(ResultPlot, Convert.ToString(percentPassText), 25, 10, 10, 1, System.Drawing.ColorTranslator.FromHtml("green"),
+                System.Drawing.ColorTranslator.FromHtml("white"), true);
+            HelperPlot.AddAnnotationToPlot(ResultPlot, Convert.ToString(percentFailText), 25, 10, 50, 1, System.Drawing.ColorTranslator.FromHtml("red"),
+                System.Drawing.ColorTranslator.FromHtml("white"), true);
+
+            ResultPlot.Plot.AxisScaleLock(true);
+            ResultPlot.Plot.Title("Wall Design Result", true, null, titleSize, "Arial Narrow");
+
+            //Axis
+            ResultPlot.Plot.YAxis.Label("Y coordinate (m)", null, axisTitleSize, true, "Arial Narrow");
+            ResultPlot.Plot.XAxis.Label("X coordinate (m)", null, axisTitleSize, true, "Arial Narrow");
+            ResultPlot.Plot.YAxis.TickLabelStyle(null, null, tickLabelSize, null, null);
+            ResultPlot.Plot.XAxis.TickLabelStyle(null, null, tickLabelSize, null, null);
+
+            ResultPlot.Plot.SetAxisLimits(axisLimits);
+
+            ResultPlot.Refresh();
+
+            return wallDesignDetailFilteredList;
+        }
+
+        public static void FilterWallDesignResultChangeTypeOfFailure(WpfPlot ResultPlot, bool? showOk, bool? showFail, bool? showNull, List<ClassWallDesign.WallDesignDetail> wallDesignDetailList,
+            List<double> uniqueX, List<double> uniqueY, int titleSize, int axisTitleSize,
+            int tickLabelSize, string typeOfFailure, List<Dictionary<string, string>> tableInListPierDesignResult, List<Dictionary<string, string>> tableInListSpandrelDesignResult,
+            bool? extractEtabs, bool? extractExcel)
+        {
+            ScottPlot.AxisLimits axisLimits = ResultPlot.Plot.GetAxisLimits();
+            ResultPlot.Reset();
+
+            double countFail = 0;
+            double countPass = 0;
+            foreach (ClassWallDesign.WallDesignDetail wallDesignDetail in wallDesignDetailList)
+            {
+                //Check for failure
+                bool? wallFail = null;
+                if (typeOfFailure == "All")
+                {
+                    wallFail = CheckIsAnyFail(wallDesignDetail, tableInListPierDesignResult, tableInListSpandrelDesignResult, extractEtabs, extractExcel);
+                }
+                else if (typeOfFailure == "PMN")
+                {
+                    wallFail = CheckIsPMNFail(wallDesignDetail, tableInListPierDesignResult, tableInListSpandrelDesignResult, extractEtabs, extractExcel);
+                }
+                else if (typeOfFailure == "Shear")
+                {
+                    wallFail = CheckIsShearFail(wallDesignDetail, tableInListPierDesignResult, tableInListSpandrelDesignResult, extractEtabs, extractExcel);
+                }
+
+                wallDesignDetail.IsFail = wallFail;
+
+                //Count fail and pass
+                if (wallDesignDetail.IsFail == true)
+                {
+                    countFail++;
+                }
+                else if (wallDesignDetail.IsFail == false)
+                {
+                    countPass++;
+                }
+
+                List<double> xCoordList = new List<double>();
+                List<double> yCoordList = new List<double>();
+
+                foreach (HelperEtabs.Point3D point in wallDesignDetail.PointList)
+                {
+                    //Decide which plane to use
+                    if (uniqueX.Count == 1)
+                    {
+                        xCoordList.Add(point.YCoordinate);
+                    }
+                    else if (uniqueY.Count == 1)
+                    {
+                        xCoordList.Add(point.XCoordinate);
+                    }
+
+                    yCoordList.Add(point.ZCoordinate);
+                }
+
+                double xCenter = xCoordList.Average();
+                double yCenter = yCoordList.Average();
+
+                double xWidth = xCoordList.Max() - xCoordList.Min();
+                double yWidth = yCoordList.Max() - yCoordList.Min();
 
                 string color = "";
                 if ((wallDesignDetail.IsFail == false && showOk == true) || (wallDesignDetail.IsFail == true && showFail == true) || (wallDesignDetail.IsFail == null && showNull == true))

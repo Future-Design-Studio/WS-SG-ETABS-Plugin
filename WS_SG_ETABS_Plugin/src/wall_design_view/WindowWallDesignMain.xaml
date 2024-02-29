@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WS_SG_ETABS_Plugin.src.wall_design_view"
-             mc:Ignorable="d" Height="600" Width="600" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+             mc:Ignorable="d" Height="530" Width="600" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"></ColumnDefinition>
@@ -15,9 +15,6 @@
             <RowDefinition Height="0.5*"></RowDefinition>
             <RowDefinition Height="0.5*"></RowDefinition>
             <RowDefinition Height="1*"></RowDefinition>
-            <RowDefinition Height="0.5*"></RowDefinition>
-            <RowDefinition Height="0.5*"></RowDefinition>
-            <RowDefinition Height="0.5*"></RowDefinition>
             <RowDefinition Height="0.5*"></RowDefinition>
             <RowDefinition Height="0.5*"></RowDefinition>
             <RowDefinition Height="0.5*"></RowDefinition>
@@ -77,39 +74,13 @@
 
         </Grid>
 
-        <Label Grid.Row="5" Grid.Column="0" Content="2. Select group of joint(s) to display" FontSize="14" FontWeight="Bold"/>
+
+
+
+        <Label Grid.Row="5" Grid.Column="0" Content="2. Chart graphic preferences" FontSize="14" FontWeight="Bold"/>
 
 
         <Grid Grid.Row="6" Margin="10 0 10 0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="2*"></ColumnDefinition>
-                <ColumnDefinition Width="*"></ColumnDefinition>
-            </Grid.ColumnDefinitions>
-
-            <Label Grid.Column="0" VerticalAlignment="Center">Group of joint(s) to include in plot:</Label>
-            <ComboBox Grid.Column="1" x:Name="comBoxGroup" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" ></ComboBox>
-
-        </Grid>
-
-        <Grid Grid.Row="7" Margin="10 0 10 0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="2*"></ColumnDefinition>
-                <ColumnDefinition Width="*"></ColumnDefinition>
-            </Grid.ColumnDefinitions>
-
-            <Label Grid.Column="0" VerticalAlignment="Center">Type of failure shown:</Label>
-            <ComboBox Grid.Column="1" x:Name="comBoxTypeOfFailure" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" ></ComboBox>
-
-        </Grid>
-
-
-
-
-
-        <Label Grid.Row="8" Grid.Column="0" Content="3. Chart graphic preferences" FontSize="14" FontWeight="Bold"/>
-
-
-        <Grid Grid.Row="9" Margin="10 0 10 0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
@@ -119,7 +90,7 @@
             <TextBox Grid.Column="1" x:Name="textBoxTitleSize" Grid.Row="0" TextAlignment="Center" Text="36" InputScope="Number"/>
         </Grid>
 
-        <Grid Grid.Row="10" Margin="10 0 10 0">
+        <Grid Grid.Row="7" Margin="10 0 10 0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
@@ -130,7 +101,7 @@
         </Grid>
 
 
-        <Grid Grid.Row="11" Margin="10 0 10 0">
+        <Grid Grid.Row="8" Margin="10 0 10 0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
@@ -140,7 +111,7 @@
             <TextBox Grid.Column="1" x:Name="textBoxAxisTitleSize" Grid.Row="0" TextAlignment="Center" Text="28" InputScope="Number"/>
         </Grid>
 
-        <Grid Grid.Row="12" Margin="10 0 10 0">
+        <Grid Grid.Row="9" Margin="10 0 10 0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
@@ -151,7 +122,7 @@
         </Grid>
 
 
-        <Grid Grid.Row="21" Margin="0 5 0 0">
+        <Grid Grid.Row="10" Margin="0 5 0 0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>

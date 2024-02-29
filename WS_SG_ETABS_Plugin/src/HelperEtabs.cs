@@ -1631,6 +1631,24 @@ namespace WS_SG_ETABS_Plugin.src
             return (isError, maxValue);
         }
 
+        public static string GetElementGroupName(DatabaseTable groupDatabaseTable, string elementName, string elementType)
+        {
+            string groupName = "";
+
+            foreach(Dictionary<string, string> row in groupDatabaseTable.TableInList)
+            {
+                if (row["UniqueName"] == elementName)
+                {
+                    if (row["ObjectType"] == elementType)
+                    {
+                        groupName = row["GroupName"];
+                        return groupName;
+                    }
+                }
+            }
+
+            return groupName;
+        }
 
 
         #endregion
