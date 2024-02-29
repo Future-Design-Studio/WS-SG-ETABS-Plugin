@@ -6,13 +6,15 @@ using System.Threading.Tasks;
 
 namespace WS_SG_ETABS_Plugin.src.wall_design_view
 {
-    internal class ClassWallDesign
+    public class ClassWallDesign
     {
         public class WallDesignDetail
         {
             public string UniqueName { get; set; }
             public string Label { get; set; }
-            public bool? IsFail { get; set; }
+            public bool? IsFailAll { get; set; }
+            public bool? IsFailPMN { get; set; }
+            public bool? IsFailShear { get; set; }
             public List<HelperEtabs.Point3D> PointList { get; set; }
             public string StoryLabel { get; set; }
             public string PierLabel { get; set; }
@@ -29,7 +31,9 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
                 SpandrelLabel = spandrelLabel;
                 Group = group;
 
-                IsFail = null;
+                IsFailAll = null;
+                IsFailPMN = null;
+                IsFailShear = null;
             }
         }
     }

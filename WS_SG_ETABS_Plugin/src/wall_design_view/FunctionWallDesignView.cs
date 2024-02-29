@@ -13,13 +13,15 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
 {
     internal class FunctionWallDesignView
     {
+
         public static (bool, List<ClassWallDesign.WallDesignDetail>, List<ClassWallDesign.WallDesignDetail>, List<double>, List<double>, double, double) PlotWallDesignResult(WpfPlot ResultPlot, 
             List<src.HelperEtabs.DatabaseTable> databaseTableList, List<string> listChoosenGroup, string choosenGroup, string typeOfFailure,
             List<Dictionary<string, string>> tableInListPierDesignResult, List<Dictionary<string, string>> tableInListSpandrelDesignResult, int titleSize, int axisTitleSize,
-            int tickLabelSize, bool? extractEtabs, bool? extractExcel)
+            int tickLabelSize, bool? extractEtabs, bool? extractExcel, List<ClassWallDesign.WallDesignDetail> wallDesignDetailList, List<double> uniqueX, List<double> uniqueY)
         {
             bool isError = false;
 
+            /*
             //Get the table
             src.HelperEtabs.DatabaseTable pointObjectConnectivityTable = new HelperEtabs.DatabaseTable();
             (isError, pointObjectConnectivityTable) = src.HelperEtabs.CallDatabaseTableByTableKey(databaseTableList, "Point Object Connectivity");
@@ -117,6 +119,7 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
 
                 wallDesignDetailList.Add(wallDesignDetail);
             }
+            */
 
             //Draw plot
             double countFail = 0;
@@ -179,12 +182,14 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
                     double yWidth = yCoordList.Max() - yCoordList.Min();
 
                     string color = "";
-                    if (wallDesignDetail.IsFail == true)
+
+
+                    if (IsWallFail(typeOfFailure, wallDesignDetail) == true)
                     {
                         color = "red";
                         countFail++;
                     }
-                    else if (wallDesignDetail.IsFail == false)
+                    else if (IsWallFail(typeOfFailure, wallDesignDetail) == false)
                     {
                         color = "green";
                         countPass++;
@@ -227,25 +232,51 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
             return (isError, wallDesignDetailList, wallDesignDetailFilteredList, uniqueX, uniqueY, countPass, countFail);
         }
 
-        public static bool? CheckIsAnyFail(ClassWallDesign.WallDesignDetail wall, List<Dictionary<string, string>> tableInListPierDesignResult, 
+        public static bool? IsWallFail(string typeOfFailure, ClassWallDesign.WallDesignDetail wallDesignDetail)
+        {
+            //If no design exist
+            if (wallDesignDetail.IsFailAll == null || wallDesignDetail.IsFailPMN == null || wallDesignDetail.IsFailShear == null)
+            {
+                return null;
+            }
+
+
+            if (typeOfFailure == "All" && wallDesignDetail.IsFailAll == true)
+            {
+                return true;
+            }
+            else if (typeOfFailure == "PMN" && wallDesignDetail.IsFailPMN == true)
+            {
+                return true;
+            }
+            else if (typeOfFailure == "Shear" && wallDesignDetail.IsFailShear == true)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public static (bool?, bool?, bool?) CheckIsAnyFail(ClassWallDesign.WallDesignDetail wall, List<Dictionary<string, string>> tableInListPierDesignResult, 
             List<Dictionary<string, string>> tableInListSpandrelDesignResult, bool? extractEtabs, bool? extractExcel)
         {
-            bool wallExistInResult = false;
+            bool? failAll = null;
+            bool? failPMN = null;
+            bool? failShear = null;
 
+            bool wallExist = false;
+
+            //Check if wall design exist
             if (extractEtabs == true)
             {
                 if (wall.PierLabel != null)
                 {
-
                     foreach (Dictionary<string, string> row in tableInListPierDesignResult)
                     {
                         if (row["Story"] == wall.StoryLabel && row["PierLabel"] == wall.PierLabel)
                         {
-                            wallExistInResult = true;
-                            if (row["ErrMsg"] != "No Message")
-                            {
-                                return true;
-                            }
+                            wallExist = true;
+                            break;
                         }
                     }
 
@@ -256,11 +287,8 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
                     {
                         if (row["Story"] == wall.StoryLabel && row["Spandrel"] == wall.SpandrelLabel)
                         {
-                            wallExistInResult = true;
-                            if (row["ErrMsg"] != "No Message")
-                            {
-                                return true;
-                            }
+                            wallExist = true;
+                            break;
                         }
 
                     }
@@ -275,11 +303,8 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
                     {
                         if (row["Story"] == wall.StoryLabel && row["Pier Label"] == wall.PierLabel)
                         {
-                            wallExistInResult = true;
-                            if (row["Errors"] != "No Message")
-                            {
-                                return true;
-                            }
+                            wallExist = true;
+                            break;
                         }
                     }
 
@@ -290,10 +315,121 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
                     {
                         if (row["Story"] == wall.StoryLabel && row["Spandrel"] == wall.SpandrelLabel)
                         {
-                            wallExistInResult = true;
+                            wallExist = true;
+                            break;
+                        }
+
+                    }
+                }
+            }
+
+            if (wallExist)
+            {
+                failAll = false;
+                failPMN = false;
+                failShear = false;
+            }
+            else
+            {
+                return (failAll, failPMN, failShear);
+            }
+
+            if (extractEtabs == true)
+            {
+                if (wall.PierLabel != null)
+                {
+                    foreach (Dictionary<string, string> row in tableInListPierDesignResult)
+                    {
+                        if (row["Story"] == wall.StoryLabel && row["PierLabel"] == wall.PierLabel)
+                        {
+                            if (row["ErrMsg"] != "No Message")
+                            {
+                                failAll = true;
+                            }
+
+                            if (row["ErrMsg"].Contains("flexural"))
+                            {
+                                failPMN = true;
+                            }
+
+                            if (row["ErrMsg"].Contains("Shear"))
+                            {
+                                failShear = true;
+                            }
+
+                        }
+                    }
+
+                }
+                else if (wall.SpandrelLabel != null)
+                {
+                    foreach (Dictionary<string, string> row in tableInListSpandrelDesignResult)
+                    {
+                        if (row["Story"] == wall.StoryLabel && row["Spandrel"] == wall.SpandrelLabel)
+                        {
+                            if (row["ErrMsg"] != "No Message")
+                            {
+                                failAll = true;
+                            }
+
+                            if (row["ErrMsg"].Contains("flexural"))
+                            {
+                                failPMN = true;
+                            }
+
+                            if (row["ErrMsg"].Contains("Shear"))
+                            {
+                                failShear = true;
+                            }
+
+                        }
+
+                    }
+                }
+            }
+            else if (extractExcel == true)
+            {
+                if (wall.PierLabel != null)
+                {
+
+                    foreach (Dictionary<string, string> row in tableInListPierDesignResult)
+                    {
+                        if (row["Story"] == wall.StoryLabel && row["Pier Label"] == wall.PierLabel)
+                        {
                             if (row["Errors"] != "No Message")
                             {
-                                return true;
+                                failAll = true;
+                            }
+                            if (row["Errors"].Contains("flexural"))
+                            {
+                                failPMN = true;
+                            }
+                            if (row["Errors"].Contains("Shear"))
+                            {
+                                failShear = true;
+                            }
+
+                        }
+                    }
+
+                }
+                else if (wall.SpandrelLabel != null)
+                {
+                    foreach (Dictionary<string, string> row in tableInListSpandrelDesignResult)
+                    {
+                        if (row["Story"] == wall.StoryLabel && row["Spandrel"] == wall.SpandrelLabel)
+                        {
+                            if (row["Errors"] != "No Message")
+                            {
+                                failAll = true;
+                            }
+                            if (row["Errors"].Contains("flexural"))
+                            {
+                                failPMN = true;
+                            }
+                            if (row["Errors"].Contains("Shear"))
+                            {
+                                failShear = true;
                             }
                         }
 
@@ -301,16 +437,8 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
                 }
             }
 
+            return (failAll, failPMN, failShear);
 
-
-            if (wallExistInResult)
-            {
-                return false;
-            }
-            else
-            {
-                return null;
-            }
         }
 
         
@@ -519,8 +647,8 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
 
 
         public static void FilterWallDesignResult(WpfPlot ResultPlot, bool? showOk, bool? showFail, bool? showNull, List<ClassWallDesign.WallDesignDetail> wallDesignDetailList, 
-            List<double> uniqueX, List<double> uniqueY, double countPass, double countFail, int titleSize, int axisTitleSize,
-            int tickLabelSize)
+            List<double> uniqueX, List<double> uniqueY, int titleSize, int axisTitleSize,
+            int tickLabelSize, string typeOfFailure, double countPass, double countFail)
         {
             ScottPlot.AxisLimits axisLimits = ResultPlot.Plot.GetAxisLimits();
             ResultPlot.Reset();
@@ -555,13 +683,13 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
 
 
                 string color = "";
-                if ((wallDesignDetail.IsFail == false && showOk == true) || (wallDesignDetail.IsFail == true && showFail == true) || (wallDesignDetail.IsFail == null && showNull == true))
+                if ((IsWallFail(typeOfFailure, wallDesignDetail) == false && showOk == true) || (IsWallFail(typeOfFailure, wallDesignDetail) == true && showFail == true) || (IsWallFail(typeOfFailure, wallDesignDetail) == null && showNull == true))
                 {
-                    if (wallDesignDetail.IsFail == true)
+                    if (IsWallFail(typeOfFailure, wallDesignDetail) == true)
                     {
                         color = "red";
                     }
-                    else if (wallDesignDetail.IsFail == false)
+                    else if (IsWallFail(typeOfFailure, wallDesignDetail) == false)
                     {
                         color = "green";
                     }
@@ -607,12 +735,16 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
             ResultPlot.Refresh();
         }
 
-        public static List<ClassWallDesign.WallDesignDetail> FilterWallDesignResultChangeGroup(WpfPlot ResultPlot, bool? showOk, bool? showFail, bool? showNull, List<ClassWallDesign.WallDesignDetail> wallDesignDetailList,
-            double countPass, double countFail, int titleSize, int axisTitleSize,
-            int tickLabelSize, string choosenGroup)
+        public static List<ClassWallDesign.WallDesignDetail> FilterWallDesignResultChangeGroup(WpfPlot ResultPlot, bool? showOk, bool? showFail, bool? showNull, 
+            List<ClassWallDesign.WallDesignDetail> wallDesignDetailList,
+            int titleSize, int axisTitleSize,
+            int tickLabelSize, string choosenGroup, string typeOfFailure)
         {
             ScottPlot.AxisLimits axisLimits = ResultPlot.Plot.GetAxisLimits();
             ResultPlot.Reset();
+
+            int countPass = 0;
+            int countFail = 0;
 
             bool isError = false;
 
@@ -679,15 +811,17 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
 
 
                     string color = "";
-                    if ((wallDesignDetail.IsFail == false && showOk == true) || (wallDesignDetail.IsFail == true && showFail == true) || (wallDesignDetail.IsFail == null && showNull == true))
+                    if ((IsWallFail(typeOfFailure, wallDesignDetail) == false && showOk == true) || (IsWallFail(typeOfFailure, wallDesignDetail) == true && showFail == true) || (IsWallFail(typeOfFailure, wallDesignDetail) == null && showNull == true))
                     {
-                        if (wallDesignDetail.IsFail == true)
+                        if (IsWallFail(typeOfFailure, wallDesignDetail) == true)
                         {
                             color = "red";
+                            countFail++;
                         }
-                        else if (wallDesignDetail.IsFail == false)
+                        else if (IsWallFail(typeOfFailure, wallDesignDetail) == false)
                         {
                             color = "green";
+                            countPass++;
                         }
                         else
                         {
@@ -747,6 +881,7 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
             double countPass = 0;
             foreach (ClassWallDesign.WallDesignDetail wallDesignDetail in wallDesignDetailList)
             {
+                /*
                 //Check for failure
                 bool? wallFail = null;
                 if (typeOfFailure == "All")
@@ -761,15 +896,16 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
                 {
                     wallFail = CheckIsShearFail(wallDesignDetail, tableInListPierDesignResult, tableInListSpandrelDesignResult, extractEtabs, extractExcel);
                 }
+                */
 
-                wallDesignDetail.IsFail = wallFail;
+                //wallDesignDetail.IsFail = wallFail;
 
                 //Count fail and pass
-                if (wallDesignDetail.IsFail == true)
+                if (IsWallFail(typeOfFailure, wallDesignDetail) == true)
                 {
                     countFail++;
                 }
-                else if (wallDesignDetail.IsFail == false)
+                else if (IsWallFail(typeOfFailure, wallDesignDetail) == false)
                 {
                     countPass++;
                 }
@@ -799,13 +935,13 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
                 double yWidth = yCoordList.Max() - yCoordList.Min();
 
                 string color = "";
-                if ((wallDesignDetail.IsFail == false && showOk == true) || (wallDesignDetail.IsFail == true && showFail == true) || (wallDesignDetail.IsFail == null && showNull == true))
+                if ((IsWallFail(typeOfFailure, wallDesignDetail) == false && showOk == true) || (IsWallFail(typeOfFailure, wallDesignDetail) == true && showFail == true) || (IsWallFail(typeOfFailure, wallDesignDetail) == null && showNull == true))
                 {
-                    if (wallDesignDetail.IsFail == true)
+                    if (IsWallFail(typeOfFailure, wallDesignDetail) == true)
                     {
                         color = "red";
                     }
-                    else if (wallDesignDetail.IsFail == false)
+                    else if (IsWallFail(typeOfFailure, wallDesignDetail) == false)
                     {
                         color = "green";
                     }

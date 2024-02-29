@@ -119,8 +119,14 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
                 int axisTitleSize = Convert.ToInt32(textBoxAxisTitleSize.Text);
                 int tickLabelSize = Convert.ToInt32(textBoxTickLabelSize.Text);
 
+                /*
                 //Call up copy result window
                 WindowWallDesignResult windowWallDesignResult = new WindowWallDesignResult(databaseTableListGlobal, listChoosenGroupGlobal, tableInListPierDesignResultGlobal, 
+                    tableInListSpandrelDesignResultGlobal, titleSize, axisTitleSize, tickLabelSize, extractEtabsGlobal, extractExcelGlobal);
+                */
+
+                //Call up loading result window
+                WindowWallDesignResultLoading windowWallDesignResultLoading = new WindowWallDesignResultLoading(databaseTableListGlobal, listChoosenGroupGlobal, tableInListPierDesignResultGlobal,
                     tableInListSpandrelDesignResultGlobal, titleSize, axisTitleSize, tickLabelSize, extractEtabsGlobal, extractExcelGlobal);
             }
 

@@ -42,7 +42,7 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
 
         public WindowWallDesignResult(List<src.HelperEtabs.DatabaseTable> databaseTableList, List<string> listChoosenGroup,
             List<Dictionary<string, string>> tableInListPierDesignResult, List<Dictionary<string, string>> tableInListSpandrelDesignResult, int titleSize, int axisTitleSize,
-            int tickLabelSize, bool? extractEtabs, bool? extractExcel)
+            int tickLabelSize, bool? extractEtabs, bool? extractExcel, List<ClassWallDesign.WallDesignDetail> wallDesignDetailList, List<double> uniqueX, List<double> uniqueY)
         {
             titleSizeGlobal = titleSize;
             axisTitleSizeGlobal = axisTitleSize;
@@ -74,7 +74,7 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
 
             (isError, wallDesignDetailListGlobal, wallDesignDetailFilteredListGlobal, uniqueXGlobal, uniqueYGlobal, countPassGlobal, countFailGlobal) = FunctionWallDesignView.PlotWallDesignResult(ResultPlot, databaseTableList,
                 listChoosenGroup, choosenGroup, typeOfFailure, tableInListPierDesignResult, tableInListSpandrelDesignResult, titleSize, axisTitleSize,
-                tickLabelSize, extractEtabs, extractExcel);
+                tickLabelSize, extractEtabs, extractExcel, wallDesignDetailList, uniqueX, uniqueY);
 
             if (isError) { return; }
 
@@ -102,8 +102,10 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
             bool? showFail = checkBoxShowFail.IsChecked;
             bool? showNull = checkBoxShowNull.IsChecked;
 
-            FunctionWallDesignView.FilterWallDesignResult(ResultPlot, showOk, showFail, showNull, wallDesignDetailFilteredListGlobal, uniqueXGlobal, uniqueYGlobal, countPassGlobal, countFailGlobal,
-                titleSizeGlobal, axisTitleSizeGlobal, tickLabelSizeGlobal);
+            string typeOfFailure = comBoxTypeOfFailure.SelectedValue.ToString();
+
+            FunctionWallDesignView.FilterWallDesignResult(ResultPlot, showOk, showFail, showNull, wallDesignDetailFilteredListGlobal, uniqueXGlobal, uniqueYGlobal,
+                titleSizeGlobal, axisTitleSizeGlobal, tickLabelSizeGlobal, typeOfFailure, countPassGlobal, countFailGlobal);
         }
 
         private void comBoxGroup_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -116,8 +118,10 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
 
                 string choosenGroup = comBoxGroup.SelectedItem.ToString();
 
-                wallDesignDetailFilteredListGlobal = FunctionWallDesignView.FilterWallDesignResultChangeGroup(ResultPlot, showOk, showFail, showNull, wallDesignDetailListGlobal, countPassGlobal, countFailGlobal,
-                titleSizeGlobal, axisTitleSizeGlobal, tickLabelSizeGlobal, choosenGroup);
+                string typeOfFailure = comBoxTypeOfFailure.SelectedItem.ToString();
+
+                wallDesignDetailFilteredListGlobal = FunctionWallDesignView.FilterWallDesignResultChangeGroup(ResultPlot, showOk, showFail, showNull, wallDesignDetailListGlobal,
+                titleSizeGlobal, axisTitleSizeGlobal, tickLabelSizeGlobal, choosenGroup, typeOfFailure);
             }
             
         }

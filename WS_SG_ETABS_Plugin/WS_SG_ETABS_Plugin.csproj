@@ -454,11 +454,8 @@
     <Compile Include="src\wall_design_view\WindowWallDesignResult.xaml.cs">
       <DependentUpon>WindowWallDesignResult.xaml</DependentUpon>
     </Compile>
-    <Compile Include="src\wall_design_view\WindowWallDesignResultLoading.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="src\wall_design_view\WindowWallDesignResultLoading.Designer.cs">
-      <DependentUpon>WindowWallDesignResultLoading.cs</DependentUpon>
+    <Compile Include="src\wall_design_view\WindowWallDesignResultLoading.xaml.cs">
+      <DependentUpon>WindowWallDesignResultLoading.xaml</DependentUpon>
     </Compile>
     <Compile Include="src\wall_design_view\WindowWallDesignSelectLoad.xaml.cs">
       <DependentUpon>WindowWallDesignSelectLoad.xaml</DependentUpon>
@@ -714,6 +711,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="src\wall_design_view\WindowWallDesignResult.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\wall_design_view\WindowWallDesignResultLoading.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
