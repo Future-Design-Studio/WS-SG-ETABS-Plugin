@@ -88,8 +88,7 @@
       <HintPath>..\packages\Accord.Statistics.3.8.0\lib\net462\Accord.Statistics.dll</HintPath>
     </Reference>
     <Reference Include="ETABSv1">
-      <HintPath>C:\Program Files\Computers and Structures\ETABS 20\ETABSv1.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\..\..\..\..\..\Program Files\Computers and Structures\ETABS 21\ETABSv1.dll</HintPath>
     </Reference>
     <Reference Include="LiveCharts, Version=0.9.7.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL">
       <HintPath>..\packages\LiveCharts.0.9.7\lib\net45\LiveCharts.dll</HintPath>
@@ -328,6 +327,9 @@
     <Compile Include="src\plot_drift\WindowDriftPlotResult.xaml.cs">
       <DependentUpon>WindowDriftPlotResult.xaml</DependentUpon>
     </Compile>
+    <Compile Include="src\plot_drift\WindowDriftPlotSelectLoad.xaml.cs">
+      <DependentUpon>WindowDriftPlotSelectLoad.xaml</DependentUpon>
+    </Compile>
     <Compile Include="src\plot_reaction\graph\ClassPlotGraph.cs" />
     <Compile Include="src\plot_reaction\graph\FunctionPlotReactionGraph.cs" />
     <Compile Include="src\plot_reaction\graph\WindowPlotReactionGraphBaseReaction.xaml.cs">
@@ -346,8 +348,14 @@
     <Compile Include="src\plot_reaction\table\WindowPlotReactionTableResult.xaml.cs">
       <DependentUpon>WindowPlotReactionTableResult.xaml</DependentUpon>
     </Compile>
+    <Compile Include="src\plot_reaction\WindowPlotReactionLoading.xaml.cs">
+      <DependentUpon>WindowPlotReactionLoading.xaml</DependentUpon>
+    </Compile>
     <Compile Include="src\plot_reaction\WindowPlotReactionMain.xaml.cs">
       <DependentUpon>WindowPlotReactionMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\plot_reaction\WindowPlotReactionSelectLoad.xaml.cs">
+      <DependentUpon>WindowPlotReactionSelectLoad.xaml</DependentUpon>
     </Compile>
     <Compile Include="src\plot_sum_mass_participation\FunctionSumParticipPlot.cs" />
     <Compile Include="src\plot_sum_mass_participation\WindowSumParticipPlotMain.xaml.cs">
@@ -540,6 +548,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="src\plot_drift\WindowDriftPlotSelectLoad.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="src\plot_reaction\graph\WindowPlotReactionGraphBaseReaction.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -564,9 +576,17 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="src\plot_reaction\WindowPlotReactionLoading.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="src\plot_reaction\WindowPlotReactionMain.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="src\plot_reaction\WindowPlotReactionSelectLoad.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="src\plot_sum_mass_participation\WindowSumParticipPlotMain.xaml">
       <SubType>Designer</SubType>

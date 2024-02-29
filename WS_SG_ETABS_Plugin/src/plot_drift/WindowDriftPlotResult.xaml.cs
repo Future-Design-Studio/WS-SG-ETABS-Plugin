@@ -24,15 +24,16 @@ namespace WS_SG_ETABS_Plugin.src.plot_drift
     /// </summary>
     public partial class WindowDriftPlotResult : Window
     {
-        public WindowDriftPlotResult(ETABSv1.cSapModel SapModel, ETABSv1.cPluginCallback Plugin, string outputCase, string displacementDirection, string maxDisplacementFactor, string choosenGroup,
+        public WindowDriftPlotResult(ETABSv1.cSapModel SapModel, ETABSv1.cPluginCallback Plugin, List<string> listOutputCase, string displacementDirection, string maxAllowableDispType, string maxAllowableDisplacementFactor, string choosenGroup,
             int legendTextSize, int titleSize, int axisTitleSize, int tickLabelSize, double gridSpacingDisplacementX, double gridSpacingDriftX, double gridSpacingY, bool showMaxDisp,
-            List<src.HelperEtabs.DatabaseTable> databaseTableList, string fileName, string filePath)
+            List<src.HelperEtabs.DatabaseTable> databaseTableList, string fileName, string filePath, string displacementXAxisMaxType, string displacementXAxisMax, string driftXAxisMaxType, string driftXAxisMax)
 
         {
             InitializeComponent();
 
-            src.plot_drift.FunctionDriftPlot.PlotDrift(SapModel, Plugin, outputCase, displacementDirection, maxDisplacementFactor, choosenGroup, legendTextSize,
-                    titleSize, axisTitleSize, tickLabelSize, gridSpacingDisplacementX, gridSpacingDriftX, gridSpacingY, showMaxDisp, databaseTableList, fileName, filePath, DriftPlot, DisplacementPlot);
+            src.plot_drift.FunctionDriftPlot.PlotDrift(SapModel, Plugin, listOutputCase, displacementDirection, maxAllowableDispType, maxAllowableDisplacementFactor, choosenGroup, legendTextSize,
+                    titleSize, axisTitleSize, tickLabelSize, gridSpacingDisplacementX, gridSpacingDriftX, gridSpacingY, showMaxDisp, databaseTableList, fileName, filePath, DriftPlot, DisplacementPlot,
+                    displacementXAxisMaxType, displacementXAxisMax, driftXAxisMaxType, driftXAxisMax);
 
             ShowDialog();
         }
