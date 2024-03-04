@@ -442,6 +442,23 @@
     <Compile Include="src\transfer_midas\WindowTransferMidasResult.xaml.cs">
       <DependentUpon>WindowTransferMidasResult.xaml</DependentUpon>
     </Compile>
+    <Compile Include="src\wall_design_view\ClassWallDesign.cs" />
+    <Compile Include="src\wall_design_view\FunctionWallDesignView.cs" />
+    <Compile Include="src\wall_design_view\WindowWallDesignLoading.xaml.cs">
+      <DependentUpon>WindowWallDesignLoading.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\wall_design_view\WindowWallDesignMain.xaml.cs">
+      <DependentUpon>WindowWallDesignMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\wall_design_view\WindowWallDesignResult.xaml.cs">
+      <DependentUpon>WindowWallDesignResult.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\wall_design_view\WindowWallDesignResultLoading.xaml.cs">
+      <DependentUpon>WindowWallDesignResultLoading.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\wall_design_view\WindowWallDesignSelectLoad.xaml.cs">
+      <DependentUpon>WindowWallDesignSelectLoad.xaml</DependentUpon>
+    </Compile>
     <Compile Include="src\wind_coeff\ClassWindCoeff.cs" />
     <Compile Include="src\wind_coeff\FunctionWindCoeff.cs" />
     <Compile Include="src\wind_coeff\WindowWindCoeffMain.xaml.cs">
@@ -681,6 +698,26 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="src\transfer_midas\WindowTransferMidasResult.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\wall_design_view\WindowWallDesignLoading.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\wall_design_view\WindowWallDesignMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\wall_design_view\WindowWallDesignResult.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\wall_design_view\WindowWallDesignResultLoading.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\wall_design_view\WindowWallDesignSelectLoad.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
