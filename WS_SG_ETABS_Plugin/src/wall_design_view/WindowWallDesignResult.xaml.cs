@@ -72,7 +72,8 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
 
             firstRunGlobal = false;
 
-            (isError, wallDesignDetailListGlobal, wallDesignDetailFilteredListGlobal, uniqueXGlobal, uniqueYGlobal, countPassGlobal, countFailGlobal) = FunctionWallDesignView.PlotWallDesignResult(ResultPlot, databaseTableList,
+            (isError, wallDesignDetailListGlobal, wallDesignDetailFilteredListGlobal, uniqueXGlobal, uniqueYGlobal, countPassGlobal, countFailGlobal) = FunctionWallDesignView.PlotWallDesignResult(
+                ResultPlot, PlanViewPlot, databaseTableList,
                 listChoosenGroup, choosenGroup, typeOfFailure, tableInListPierDesignResult, tableInListSpandrelDesignResult, titleSize, axisTitleSize,
                 tickLabelSize, extractEtabs, extractExcel, wallDesignDetailList, uniqueX, uniqueY);
 
@@ -120,7 +121,7 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
 
                 string typeOfFailure = comBoxTypeOfFailure.SelectedItem.ToString();
 
-                wallDesignDetailFilteredListGlobal = FunctionWallDesignView.FilterWallDesignResultChangeGroup(ResultPlot, showOk, showFail, showNull, wallDesignDetailListGlobal,
+                (wallDesignDetailFilteredListGlobal, uniqueXGlobal, uniqueYGlobal, countPassGlobal, countFailGlobal) = FunctionWallDesignView.FilterWallDesignResultChangeGroup(ResultPlot, PlanViewPlot, showOk, showFail, showNull, wallDesignDetailListGlobal,
                 titleSizeGlobal, axisTitleSizeGlobal, tickLabelSizeGlobal, choosenGroup, typeOfFailure);
             }
             
@@ -136,7 +137,7 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
 
                 string typeOfFailure = comBoxTypeOfFailure.SelectedItem.ToString();
 
-                FunctionWallDesignView.FilterWallDesignResultChangeTypeOfFailure(ResultPlot, showOk, showFail, showNull, wallDesignDetailFilteredListGlobal, uniqueXGlobal, uniqueYGlobal,
+                (countPassGlobal, countFailGlobal) = FunctionWallDesignView.FilterWallDesignResultChangeTypeOfFailure(ResultPlot, showOk, showFail, showNull, wallDesignDetailFilteredListGlobal, uniqueXGlobal, uniqueYGlobal,
                 titleSizeGlobal, axisTitleSizeGlobal, tickLabelSizeGlobal, typeOfFailure, tableInListPierDesignResultGlobal, tableInListSpandrelDesignResultGlobal,
                 extractEtabsGlobal, extractExcelGlobal);
             }

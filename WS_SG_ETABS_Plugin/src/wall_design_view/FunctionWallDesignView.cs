@@ -14,8 +14,8 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
     internal class FunctionWallDesignView
     {
 
-        public static (bool, List<ClassWallDesign.WallDesignDetail>, List<ClassWallDesign.WallDesignDetail>, List<double>, List<double>, double, double) PlotWallDesignResult(WpfPlot ResultPlot, 
-            List<src.HelperEtabs.DatabaseTable> databaseTableList, List<string> listChoosenGroup, string choosenGroup, string typeOfFailure,
+        public static (bool, List<ClassWallDesign.WallDesignDetail>, List<ClassWallDesign.WallDesignDetail>, List<double>, List<double>, double, double) PlotWallDesignResult(WpfPlot ResultPlot,
+            WpfPlot PlanViewPlot, List<src.HelperEtabs.DatabaseTable> databaseTableList, List<string> listChoosenGroup, string choosenGroup, string typeOfFailure,
             List<Dictionary<string, string>> tableInListPierDesignResult, List<Dictionary<string, string>> tableInListSpandrelDesignResult, int titleSize, int axisTitleSize,
             int tickLabelSize, bool? extractEtabs, bool? extractExcel, List<ClassWallDesign.WallDesignDetail> wallDesignDetailList, List<double> uniqueX, List<double> uniqueY)
         {
@@ -127,6 +127,12 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
             List<ClassWallDesign.WallDesignDetail> wallDesignDetailFilteredList = new List<ClassWallDesign.WallDesignDetail>();
             foreach (ClassWallDesign.WallDesignDetail wallDesignDetail in wallDesignDetailList)
             {
+
+                List<double> xCoordListChoosenGroupPlanView = new List<double>();
+                List<double> yCoordListChoosenGroupPlanView = new List<double>();
+                List<double> xCoordListNotChoosenGroupPlanView = new List<double>();
+                List<double> yCoordListNotChoosenGroupPlanView = new List<double>();
+
                 //Filter based on group
                 if (wallDesignDetail.Group == choosenGroup)
                 {
@@ -160,6 +166,7 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
 
                     List<double> xCoordList = new List<double>();
                     List<double> yCoordList = new List<double>();
+
                     foreach (HelperEtabs.Point3D point in wallDesignDetail.PointList)
                     {
                         //Decide which plane to use
@@ -173,8 +180,19 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
                         }
 
                         yCoordList.Add(point.ZCoordinate);
+
+                        if (!xCoordListChoosenGroupPlanView.Contains(point.XCoordinate))
+                        {
+                            xCoordListChoosenGroupPlanView.Add(point.XCoordinate);
+                        }
+                        if (!yCoordListChoosenGroupPlanView.Contains(point.YCoordinate))
+                        {
+                            yCoordListChoosenGroupPlanView.Add(point.YCoordinate);
+                        }
+
                     }
 
+                    //For result plot
                     double xCenter = xCoordList.Average();
                     double yCenter = yCoordList.Average();
 
@@ -200,7 +218,44 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
                     }
 
                     HelperPlot.RectanglePlotter(ResultPlot, xCenter, yCenter, "", 0, System.Drawing.ColorTranslator.FromHtml(color), xWidth, yWidth, 0.01, System.Drawing.ColorTranslator.FromHtml("#80D3D3D3"));
+
+                    //Plot plan view
+                    double xCenterChoosenGroupPlanView = xCoordListChoosenGroupPlanView.Average();
+                    double yCenterChoosenGroupPlanView = yCoordListChoosenGroupPlanView.Average();
+                    double xWidthChoosenGroupPlanView = Math.Max(0.5, xCoordListChoosenGroupPlanView.Max() - xCoordListChoosenGroupPlanView.Min());
+                    double yWidthChoosenGroupPlanView = Math.Max(0.5, yCoordListChoosenGroupPlanView.Max() - yCoordListChoosenGroupPlanView.Min());
+
+                    HelperPlot.RectanglePlotter(PlanViewPlot, xCenterChoosenGroupPlanView, yCenterChoosenGroupPlanView, "", 0,
+                        System.Drawing.ColorTranslator.FromHtml("red"), xWidthChoosenGroupPlanView, yWidthChoosenGroupPlanView, 0.01,
+                        System.Drawing.ColorTranslator.FromHtml("red"));
                 }
+                else
+                {
+                    foreach (HelperEtabs.Point3D point in wallDesignDetail.PointList)
+                    {
+                        if (!xCoordListNotChoosenGroupPlanView.Contains(point.XCoordinate))
+                        {
+                            xCoordListNotChoosenGroupPlanView.Add(point.XCoordinate);
+                        }
+                        if (!yCoordListNotChoosenGroupPlanView.Contains(point.YCoordinate))
+                        {
+                            yCoordListNotChoosenGroupPlanView.Add(point.YCoordinate);
+                        }
+                    }
+
+
+                    //Plot plan view
+                    double xCenterNotChoosenGroupPlanView = xCoordListNotChoosenGroupPlanView.Average();
+                    double yCenterNotChoosenGroupPlanView = yCoordListNotChoosenGroupPlanView.Average();
+                    double xWidthNotChoosenGroupPlanView = Math.Max(0.1, xCoordListNotChoosenGroupPlanView.Max() - xCoordListNotChoosenGroupPlanView.Min());
+                    double yWidthNotChoosenGroupPlanView = Math.Max(0.1, yCoordListNotChoosenGroupPlanView.Max() - yCoordListNotChoosenGroupPlanView.Min());
+
+                    HelperPlot.RectanglePlotter(PlanViewPlot, xCenterNotChoosenGroupPlanView, yCenterNotChoosenGroupPlanView, "", 0,
+                        System.Drawing.ColorTranslator.FromHtml("#80D3D3D3"), xWidthNotChoosenGroupPlanView, yWidthNotChoosenGroupPlanView, 0.01,
+                        System.Drawing.ColorTranslator.FromHtml("#80D3D3D3"));
+
+                }
+                
             }
             
             double percentPass = countPass / (countFail + countPass) * 100;
@@ -228,6 +283,9 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
             ResultPlot.Plot.YAxis.TickLabelStyle(null, null, tickLabelSize, null, null);
             ResultPlot.Plot.XAxis.TickLabelStyle(null, null, tickLabelSize, null, null);
             ResultPlot.Refresh();
+
+            PlanViewPlot.Plot.AxisScaleLock(true);
+            PlanViewPlot.Refresh();
 
             return (isError, wallDesignDetailList, wallDesignDetailFilteredList, uniqueX, uniqueY, countPass, countFail);
         }
@@ -735,16 +793,19 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
             ResultPlot.Refresh();
         }
 
-        public static List<ClassWallDesign.WallDesignDetail> FilterWallDesignResultChangeGroup(WpfPlot ResultPlot, bool? showOk, bool? showFail, bool? showNull, 
+        public static (List<ClassWallDesign.WallDesignDetail>, List<double>, List<double>, double, double) FilterWallDesignResultChangeGroup(WpfPlot ResultPlot, WpfPlot PlanViewPlot, bool? showOk, bool? showFail, bool? showNull, 
             List<ClassWallDesign.WallDesignDetail> wallDesignDetailList,
             int titleSize, int axisTitleSize,
             int tickLabelSize, string choosenGroup, string typeOfFailure)
         {
-            ScottPlot.AxisLimits axisLimits = ResultPlot.Plot.GetAxisLimits();
+            ScottPlot.AxisLimits axisLimitsResultPlot = ResultPlot.Plot.GetAxisLimits();
             ResultPlot.Reset();
 
-            int countPass = 0;
-            int countFail = 0;
+            ScottPlot.AxisLimits axisLimitsPlanViewPlot = PlanViewPlot.Plot.GetAxisLimits();
+            PlanViewPlot.Reset();
+
+            double countPass = 0;
+            double countFail = 0;
 
             bool isError = false;
 
@@ -754,6 +815,11 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
             List<ClassWallDesign.WallDesignDetail> wallDesignDetailFilteredList = new List<ClassWallDesign.WallDesignDetail>();
             foreach (ClassWallDesign.WallDesignDetail wallDesignDetail in wallDesignDetailList)
             {
+                List<double> xCoordListChoosenGroupPlanView = new List<double>();
+                List<double> yCoordListChoosenGroupPlanView = new List<double>();
+                List<double> xCoordListNotChoosenGroupPlanView = new List<double>();
+                List<double> yCoordListNotChoosenGroupPlanView = new List<double>();
+
                 //Filter based on group
                 if (wallDesignDetail.Group == choosenGroup)
                 {
@@ -782,7 +848,7 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
                     {
                         MessageBox.Show("Chosen walls is not in 1 plane! Walls must be on either XZ or YZ plane!");
                         isError = true;
-                        return wallDesignDetailFilteredList;
+                        return (wallDesignDetailFilteredList, null, null, 0, 0);
                     }
 
                     List<double> xCoordList = new List<double>();
@@ -801,6 +867,15 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
                         }
 
                         yCoordList.Add(point.ZCoordinate);
+
+                        if (!xCoordListChoosenGroupPlanView.Contains(point.XCoordinate))
+                        {
+                            xCoordListChoosenGroupPlanView.Add(point.XCoordinate);
+                        }
+                        if (!yCoordListChoosenGroupPlanView.Contains(point.YCoordinate))
+                        {
+                            yCoordListChoosenGroupPlanView.Add(point.YCoordinate);
+                        }
                     }
 
                     double xCenter = xCoordList.Average();
@@ -816,12 +891,10 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
                         if (IsWallFail(typeOfFailure, wallDesignDetail) == true)
                         {
                             color = "red";
-                            countFail++;
                         }
                         else if (IsWallFail(typeOfFailure, wallDesignDetail) == false)
                         {
                             color = "green";
-                            countPass++;
                         }
                         else
                         {
@@ -833,10 +906,57 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
                         color = "#00FFFFFF";
                     }
 
+
+                    if (IsWallFail(typeOfFailure, wallDesignDetail) == true)
+                    {
+                        countFail++;
+                    }
+                    else if (IsWallFail(typeOfFailure, wallDesignDetail) == false)
+                    {
+                        countPass++;
+                    }
+
+
                     HelperPlot.RectanglePlotter(ResultPlot, xCenter, yCenter, "", 0, System.Drawing.ColorTranslator.FromHtml(color), xWidth, yWidth, 0.01, System.Drawing.ColorTranslator.FromHtml("#80D3D3D3"));
 
+                    //Plot plan view
+                    double xCenterChoosenGroupPlanView = xCoordListChoosenGroupPlanView.Average();
+                    double yCenterChoosenGroupPlanView = yCoordListChoosenGroupPlanView.Average();
+                    double xWidthChoosenGroupPlanView = Math.Max(0.5, xCoordListChoosenGroupPlanView.Max() - xCoordListChoosenGroupPlanView.Min());
+                    double yWidthChoosenGroupPlanView = Math.Max(0.5, yCoordListChoosenGroupPlanView.Max() - yCoordListChoosenGroupPlanView.Min());
+
+                    HelperPlot.RectanglePlotter(PlanViewPlot, xCenterChoosenGroupPlanView, yCenterChoosenGroupPlanView, "", 0,
+                        System.Drawing.ColorTranslator.FromHtml("red"), xWidthChoosenGroupPlanView, yWidthChoosenGroupPlanView, 0.01,
+                        System.Drawing.ColorTranslator.FromHtml("red"));
+
                 }
-                
+                else
+                {
+                    foreach (HelperEtabs.Point3D point in wallDesignDetail.PointList)
+                    {
+                        if (!xCoordListNotChoosenGroupPlanView.Contains(point.XCoordinate))
+                        {
+                            xCoordListNotChoosenGroupPlanView.Add(point.XCoordinate);
+                        }
+                        if (!yCoordListNotChoosenGroupPlanView.Contains(point.YCoordinate))
+                        {
+                            yCoordListNotChoosenGroupPlanView.Add(point.YCoordinate);
+                        }
+                    }
+
+
+                    //Plot plan view
+                    double xCenterNotChoosenGroupPlanView = xCoordListNotChoosenGroupPlanView.Average();
+                    double yCenterNotChoosenGroupPlanView = yCoordListNotChoosenGroupPlanView.Average();
+                    double xWidthNotChoosenGroupPlanView = Math.Max(0.1, xCoordListNotChoosenGroupPlanView.Max() - xCoordListNotChoosenGroupPlanView.Min());
+                    double yWidthNotChoosenGroupPlanView = Math.Max(0.1, yCoordListNotChoosenGroupPlanView.Max() - yCoordListNotChoosenGroupPlanView.Min());
+
+                    HelperPlot.RectanglePlotter(PlanViewPlot, xCenterNotChoosenGroupPlanView, yCenterNotChoosenGroupPlanView, "", 0,
+                        System.Drawing.ColorTranslator.FromHtml("#80D3D3D3"), xWidthNotChoosenGroupPlanView, yWidthNotChoosenGroupPlanView, 0.01,
+                        System.Drawing.ColorTranslator.FromHtml("#80D3D3D3"));
+
+                }
+
             }
 
             double percentPass = countPass / (countFail + countPass) * 100;
@@ -862,14 +982,18 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
             ResultPlot.Plot.YAxis.TickLabelStyle(null, null, tickLabelSize, null, null);
             ResultPlot.Plot.XAxis.TickLabelStyle(null, null, tickLabelSize, null, null);
 
-            ResultPlot.Plot.SetAxisLimits(axisLimits);
+            ResultPlot.Plot.SetAxisLimits(axisLimitsResultPlot);
 
             ResultPlot.Refresh();
 
-            return wallDesignDetailFilteredList;
+            PlanViewPlot.Plot.SetAxisLimits(axisLimitsPlanViewPlot);
+            PlanViewPlot.Plot.AxisScaleLock(true);
+            PlanViewPlot.Refresh();
+
+            return (wallDesignDetailFilteredList, uniqueX, uniqueY, countPass, countFail);
         }
 
-        public static void FilterWallDesignResultChangeTypeOfFailure(WpfPlot ResultPlot, bool? showOk, bool? showFail, bool? showNull, List<ClassWallDesign.WallDesignDetail> wallDesignDetailList,
+        public static (double, double) FilterWallDesignResultChangeTypeOfFailure(WpfPlot ResultPlot, bool? showOk, bool? showFail, bool? showNull, List<ClassWallDesign.WallDesignDetail> wallDesignDetailList,
             List<double> uniqueX, List<double> uniqueY, int titleSize, int axisTitleSize,
             int tickLabelSize, string typeOfFailure, List<Dictionary<string, string>> tableInListPierDesignResult, List<Dictionary<string, string>> tableInListSpandrelDesignResult,
             bool? extractEtabs, bool? extractExcel)
@@ -985,6 +1109,8 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
             ResultPlot.Plot.SetAxisLimits(axisLimits);
 
             ResultPlot.Refresh();
+
+            return (countPass, countFail);
         }
 
     }

@@ -9,7 +9,7 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"></ColumnDefinition>
-            <ColumnDefinition Width="0.1*"></ColumnDefinition>
+            <ColumnDefinition Width="0.15*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
         <WpfPlot Grid.Column ="0" Name="ResultPlot" />
@@ -20,18 +20,21 @@
 
                 <Label Grid.Column="0" VerticalAlignment="Center" FontSize="20">Group to plot:</Label>
                 <ComboBox Grid.Column="1" x:Name="comBoxGroup" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" 
-                          SelectionChanged="comBoxGroup_SelectionChanged"  FontSize="20"></ComboBox>
+                          SelectionChanged="comBoxGroup_SelectionChanged"  FontSize="12"></ComboBox>
                 <Label></Label>
 
                 <Label Grid.Column="0" VerticalAlignment="Center" FontSize="20">Type of failure:</Label>
                 <ComboBox Grid.Column="1" x:Name="comBoxTypeOfFailure" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" 
-                          SelectionChanged="comBoxTypeOfFailure_SelectionChanged"  FontSize="20"></ComboBox>
+                          SelectionChanged="comBoxTypeOfFailure_SelectionChanged"  FontSize="12"></ComboBox>
                 <Label></Label>
 
                 <Label Grid.Column="0" VerticalAlignment="Center" FontSize="20">Filter:</Label>
                 <CheckBox Name="checkBoxShowOk" FontSize="20" VerticalContentAlignment="Center" IsChecked="True" Click="checkBoxShowOk_Click">Pass</CheckBox>
                 <CheckBox Name="checkBoxShowFail" FontSize="20" VerticalContentAlignment="Center" IsChecked="True" Click="checkBoxShowFail_Click">Fail</CheckBox>
                 <CheckBox Name="checkBoxShowNull" FontSize="20" VerticalContentAlignment="Center" IsChecked="True" Click="checkBoxShowNull_Click">Null</CheckBox>
+
+                <Label Grid.Column="0" VerticalAlignment="Center" FontSize="20">Plan view:</Label>
+                <WpfPlot Grid.Column ="0" Name="PlanViewPlot" Margin="-20 0 0 0"/>
             </StackPanel>
 
 
