@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WS_SG_ETABS_Plugin.src.wall_design_view"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="1200">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"></ColumnDefinition>
@@ -23,15 +23,31 @@
                           SelectionChanged="comBoxGroup_SelectionChanged"  FontSize="12"></ComboBox>
                 <Label></Label>
 
-                <Label Grid.Column="0" VerticalAlignment="Center" FontSize="20">Type of failure:</Label>
+                <Label Grid.Column="0" VerticalAlignment="Center" FontSize="20">View Type:</Label>
                 <ComboBox Grid.Column="1" x:Name="comBoxTypeOfFailure" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" 
                           SelectionChanged="comBoxTypeOfFailure_SelectionChanged"  FontSize="12"></ComboBox>
                 <Label></Label>
+                
+                <Label Grid.Column="0" VerticalAlignment="Center" FontSize="20">Filter failure:</Label>
+                <CheckBox Name="checkBoxShowOk" FontSize="16" VerticalContentAlignment="Center" IsChecked="True" Click="checkBoxShowOk_Click">Pass</CheckBox>
+                <CheckBox Name="checkBoxShowFail" FontSize="16" VerticalContentAlignment="Center" IsChecked="True" Click="checkBoxShowFail_Click">Fail</CheckBox>
+                <CheckBox Name="checkBoxShowNull" FontSize="16" VerticalContentAlignment="Center" IsChecked="True" Click="checkBoxShowNull_Click">Null</CheckBox>
+                <Label></Label>
 
-                <Label Grid.Column="0" VerticalAlignment="Center" FontSize="20">Filter:</Label>
-                <CheckBox Name="checkBoxShowOk" FontSize="20" VerticalContentAlignment="Center" IsChecked="True" Click="checkBoxShowOk_Click">Pass</CheckBox>
-                <CheckBox Name="checkBoxShowFail" FontSize="20" VerticalContentAlignment="Center" IsChecked="True" Click="checkBoxShowFail_Click">Fail</CheckBox>
-                <CheckBox Name="checkBoxShowNull" FontSize="20" VerticalContentAlignment="Center" IsChecked="True" Click="checkBoxShowNull_Click">Null</CheckBox>
+                <Label Grid.Column="0" VerticalAlignment="Center" FontSize="20">Reinforcement color bar:</Label>
+                
+                <DockPanel>
+                    <Label Grid.Column="0" VerticalAlignment="Center" FontSize="16">Max reinf %:</Label>
+                    <TextBox Name="textBoxMaxReinf" FontSize="16" TextChanged="textBoxMaxReinf_TextChanged">4</TextBox>
+                </DockPanel>
+
+                <DockPanel>
+                    <Label Grid.Column="0" VerticalAlignment="Center" FontSize="16" Margin="0 0 3 0">Min reinf %:</Label>
+                    <TextBox Name="textBoxMinReinf" FontSize="16" TextChanged="textBoxMinReinf_TextChanged">0</TextBox>
+                </DockPanel>
+
+
+                <Label></Label>
 
                 <Label Grid.Column="0" VerticalAlignment="Center" FontSize="20">Plan view:</Label>
                 <WpfPlot Grid.Column ="0" Name="PlanViewPlot" Margin="-20 0 0 0"/>
