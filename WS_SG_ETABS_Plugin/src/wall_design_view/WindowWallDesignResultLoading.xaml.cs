@@ -44,8 +44,6 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
         {
             //Create wall result instance
             List<ClassWallDesign.WallDesignDetail> wallDesignDetailList = new List<ClassWallDesign.WallDesignDetail>();
-            List<double> uniqueX = new List<double>();
-            List<double> uniqueY = new List<double>();
 
             await Task.Run(() => {
                 bool isError = false;
@@ -148,17 +146,15 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
                         }));
                     }
 
-
                 }
-
 
             });
 
             Close();
 
             //Call up result window
-            WindowWallDesignResult windowWallDesignResult = new WindowWallDesignResult(databaseTableList, listChoosenGroup, tableInListPierDesignResult,
-                    tableInListSpandrelDesignResult, titleSize, axisTitleSize, tickLabelSize, extractEtabs, extractExcel, wallDesignDetailList, uniqueX, uniqueY);
+            WindowWallDesignResult windowWallDesignResult = new WindowWallDesignResult(listChoosenGroup, tableInListPierDesignResult,
+                    tableInListSpandrelDesignResult, titleSize, axisTitleSize, tickLabelSize, extractEtabs, extractExcel, wallDesignDetailList);
         }
         
 

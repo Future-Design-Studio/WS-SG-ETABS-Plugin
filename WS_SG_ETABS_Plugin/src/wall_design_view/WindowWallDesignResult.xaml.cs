@@ -41,9 +41,9 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
 
         bool firstRunGlobal = true;
 
-        public WindowWallDesignResult(List<src.HelperEtabs.DatabaseTable> databaseTableList, List<string> listChoosenGroup,
+        public WindowWallDesignResult(List<string> listChoosenGroup,
             List<Dictionary<string, string>> tableInListPierDesignResult, List<Dictionary<string, string>> tableInListSpandrelDesignResult, int titleSize, int axisTitleSize,
-            int tickLabelSize, bool? extractEtabs, bool? extractExcel, List<ClassWallDesign.WallDesignDetail> wallDesignDetailList, List<double> uniqueX, List<double> uniqueY)
+            int tickLabelSize, bool? extractEtabs, bool? extractExcel, List<ClassWallDesign.WallDesignDetail> wallDesignDetailList)
         {
             titleSizeGlobal = titleSize;
             axisTitleSizeGlobal = axisTitleSize;
@@ -76,10 +76,16 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
 
             firstRunGlobal = false;
 
+            bool? showOk = checkBoxShowOk.IsChecked;
+            bool? showFail = checkBoxShowFail.IsChecked;
+            bool? showNull = checkBoxShowNull.IsChecked;
+
+            double minReinfPercent = Convert.ToDouble(textBoxMinReinf.Text);
+            double maxReinfPercent = Convert.ToDouble(textBoxMaxReinf.Text);
+
             (isError, wallDesignDetailListGlobal, wallDesignDetailFilteredListGlobal, uniqueXGlobal, uniqueYGlobal, countPassGlobal, countFailGlobal) = FunctionWallDesignView.PlotWallDesignResult(
-                ResultPlot, PlanViewPlot, databaseTableList,
-                listChoosenGroup, choosenGroup, typeOfFailure, tableInListPierDesignResult, tableInListSpandrelDesignResult, titleSize, axisTitleSize,
-                tickLabelSize, extractEtabs, extractExcel, wallDesignDetailList, uniqueX, uniqueY);
+                ResultPlot, PlanViewPlot, choosenGroup, typeOfFailure, titleSize, axisTitleSize,
+                tickLabelSize, wallDesignDetailList, showOk, showFail, showNull, minReinfPercent, maxReinfPercent);
 
             if (isError) { return; }
 
@@ -121,8 +127,11 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
 
             string typeOfFailure = comBoxTypeOfFailure.SelectedValue.ToString();
 
-            FunctionWallDesignView.FilterWallDesignResult(ResultPlot, showOk, showFail, showNull, wallDesignDetailFilteredListGlobal, uniqueXGlobal, uniqueYGlobal,
-                titleSizeGlobal, axisTitleSizeGlobal, tickLabelSizeGlobal, typeOfFailure, countPassGlobal, countFailGlobal);
+            double minReinfPercent = Convert.ToDouble(textBoxMinReinf.Text);
+            double maxReinfPercent = Convert.ToDouble(textBoxMaxReinf.Text);
+
+            FunctionWallDesignView.FilterWallDesignResultChangeFailure(ResultPlot, showOk, showFail, showNull, wallDesignDetailFilteredListGlobal, uniqueXGlobal, uniqueYGlobal,
+                titleSizeGlobal, axisTitleSizeGlobal, tickLabelSizeGlobal, typeOfFailure, countPassGlobal, countFailGlobal, minReinfPercent, maxReinfPercent);
 
         }
 
