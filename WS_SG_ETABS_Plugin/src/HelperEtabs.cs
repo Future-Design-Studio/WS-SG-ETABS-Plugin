@@ -2832,9 +2832,9 @@ namespace WS_SG_ETABS_Plugin.src
             "Ux", "Uy", "Ux + Uy (SRSS)", "Ux and Uy (in one)", "Uz"
         };
 
-        public static List<string> typeOfFailureList = new List<string>()
+        public static List<string> typeOfViewWallDesign = new List<string>()
         {
-            "All", "PMN", "Shear"
+            "All Failure", "PMN Failure", "Shear Failure", "Pier Req. Rebar %"
         };
 
         #endregion

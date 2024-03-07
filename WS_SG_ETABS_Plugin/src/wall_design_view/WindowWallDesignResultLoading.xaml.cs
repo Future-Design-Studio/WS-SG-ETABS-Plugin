@@ -44,8 +44,6 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
         {
             //Create wall result instance
             List<ClassWallDesign.WallDesignDetail> wallDesignDetailList = new List<ClassWallDesign.WallDesignDetail>();
-            List<double> uniqueX = new List<double>();
-            List<double> uniqueY = new List<double>();
 
             await Task.Run(() => {
                 bool isError = false;
@@ -128,7 +126,7 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
                     ClassWallDesign.WallDesignDetail wallDesignDetail = new ClassWallDesign.WallDesignDetail(shell.UniqueName, label, shellPointList, storyLabel, pierLabel, spandrelLabel, groupName);
 
                     //Check for failure
-                    (wallDesignDetail.IsFailAll, wallDesignDetail.IsFailPMN, wallDesignDetail.IsFailShear) = FunctionWallDesignView.CheckIsAnyFail(wallDesignDetail, 
+                    (wallDesignDetail.IsFailAll, wallDesignDetail.IsFailPMN, wallDesignDetail.IsFailShear, wallDesignDetail.PierReinfPercent) = GetWallDesignResult(wallDesignDetail, 
                         tableInListPierDesignResult, tableInListSpandrelDesignResult, extractEtabs, extractExcel);
                   
 
@@ -148,17 +146,15 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
                         }));
                     }
 
-
                 }
-
 
             });
 
             Close();
 
             //Call up result window
-            WindowWallDesignResult windowWallDesignResult = new WindowWallDesignResult(databaseTableList, listChoosenGroup, tableInListPierDesignResult,
-                    tableInListSpandrelDesignResult, titleSize, axisTitleSize, tickLabelSize, extractEtabs, extractExcel, wallDesignDetailList, uniqueX, uniqueY);
+            WindowWallDesignResult windowWallDesignResult = new WindowWallDesignResult(listChoosenGroup, tableInListPierDesignResult,
+                    tableInListSpandrelDesignResult, titleSize, axisTitleSize, tickLabelSize, extractEtabs, extractExcel, wallDesignDetailList);
         }
         
 
@@ -204,6 +200,202 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
                 }
             }
             return null;
+        }
+
+        public static (bool?, bool?, bool?, double) GetWallDesignResult(ClassWallDesign.WallDesignDetail wall, List<Dictionary<string, string>> tableInListPierDesignResult,
+    List<Dictionary<string, string>> tableInListSpandrelDesignResult, bool? extractEtabs, bool? extractExcel)
+        {
+            bool? failAll = null;
+            bool? failPMN = null;
+            bool? failShear = null;
+            double pierReinfPercent = -1;
+
+            bool wallExist = false;
+
+            //Check if wall design exist
+            if (extractEtabs == true)
+            {
+                if (wall.PierLabel != null)
+                {
+                    foreach (Dictionary<string, string> row in tableInListPierDesignResult)
+                    {
+                        if (row["Story"] == wall.StoryLabel && row["PierLabel"] == wall.PierLabel)
+                        {
+                            wallExist = true;
+                            break;
+                        }
+                    }
+
+                }
+                else if (wall.SpandrelLabel != null)
+                {
+                    foreach (Dictionary<string, string> row in tableInListSpandrelDesignResult)
+                    {
+                        if (row["Story"] == wall.StoryLabel && row["Spandrel"] == wall.SpandrelLabel)
+                        {
+                            wallExist = true;
+                            break;
+                        }
+
+                    }
+                }
+            }
+            else if (extractExcel == true)
+            {
+                if (wall.PierLabel != null)
+                {
+
+                    foreach (Dictionary<string, string> row in tableInListPierDesignResult)
+                    {
+                        if (row["Story"] == wall.StoryLabel && row["Pier Label"] == wall.PierLabel)
+                        {
+                            wallExist = true;
+                            break;
+                        }
+                    }
+
+                }
+                else if (wall.SpandrelLabel != null)
+                {
+                    foreach (Dictionary<string, string> row in tableInListSpandrelDesignResult)
+                    {
+                        if (row["Story"] == wall.StoryLabel && row["Spandrel"] == wall.SpandrelLabel)
+                        {
+                            wallExist = true;
+                            break;
+                        }
+
+                    }
+                }
+            }
+
+            if (wallExist)
+            {
+                failAll = false;
+                failPMN = false;
+                failShear = false;
+                pierReinfPercent = 0;
+            }
+            else
+            {
+                return (failAll, failPMN, failShear, pierReinfPercent);
+            }
+
+            //Start extracting result
+            if (extractEtabs == true)
+            {
+                if (wall.PierLabel != null)
+                {
+                    foreach (Dictionary<string, string> row in tableInListPierDesignResult)
+                    {
+                        if (row["Story"] == wall.StoryLabel && row["PierLabel"] == wall.PierLabel)
+                        {
+                            if (row["ErrMsg"] != "No Message")
+                            {
+                                failAll = true;
+                            }
+
+                            if (row["ErrMsg"].Contains("flexural"))
+                            {
+                                failPMN = true;
+                            }
+
+                            if (row["ErrMsg"].Contains("Shear"))
+                            {
+                                failShear = true;
+                            }
+
+                            if (pierReinfPercent < Convert.ToDouble(row["ReinfPcent"]))
+                            {
+                                pierReinfPercent = Convert.ToDouble(row["ReinfPcent"]);
+                            }
+
+                        }
+                    }
+
+                }
+                else if (wall.SpandrelLabel != null)
+                {
+                    foreach (Dictionary<string, string> row in tableInListSpandrelDesignResult)
+                    {
+                        if (row["Story"] == wall.StoryLabel && row["Spandrel"] == wall.SpandrelLabel)
+                        {
+                            if (row["ErrMsg"] != "No Message")
+                            {
+                                failAll = true;
+                            }
+
+                            if (row["ErrMsg"].Contains("flexural"))
+                            {
+                                failPMN = true;
+                            }
+
+                            if (row["ErrMsg"].Contains("Shear"))
+                            {
+                                failShear = true;
+                            }
+
+                        }
+
+                    }
+                }
+            }
+            else if (extractExcel == true)
+            {
+                if (wall.PierLabel != null)
+                {
+
+                    foreach (Dictionary<string, string> row in tableInListPierDesignResult)
+                    {
+                        if (row["Story"] == wall.StoryLabel && row["Pier Label"] == wall.PierLabel)
+                        {
+                            if (row["Errors"] != "No Message")
+                            {
+                                failAll = true;
+                            }
+                            if (row["Errors"].Contains("flexural"))
+                            {
+                                failPMN = true;
+                            }
+                            if (row["Errors"].Contains("Shear"))
+                            {
+                                failShear = true;
+                            }
+
+                            if (pierReinfPercent < Convert.ToDouble(row["Required Reinf. Percentage"]))
+                            {
+                                pierReinfPercent = Convert.ToDouble(row["Required Reinf. Percentage"]);
+                            }
+                        }
+                    }
+
+                }
+                else if (wall.SpandrelLabel != null)
+                {
+                    foreach (Dictionary<string, string> row in tableInListSpandrelDesignResult)
+                    {
+                        if (row["Story"] == wall.StoryLabel && row["Spandrel"] == wall.SpandrelLabel)
+                        {
+                            if (row["Errors"] != "No Message")
+                            {
+                                failAll = true;
+                            }
+                            if (row["Errors"].Contains("flexural"))
+                            {
+                                failPMN = true;
+                            }
+                            if (row["Errors"].Contains("Shear"))
+                            {
+                                failShear = true;
+                            }
+                        }
+
+                    }
+                }
+            }
+
+            return (failAll, failPMN, failShear, pierReinfPercent);
+
         }
 
     }

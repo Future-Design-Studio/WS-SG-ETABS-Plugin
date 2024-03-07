@@ -20,6 +20,7 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
             public string PierLabel { get; set; }
             public string SpandrelLabel { get; set; }
             public string Group { get; set; }
+            public double PierReinfPercent { get; set; }
 
             public WallDesignDetail(string uniqueName, string label, List<HelperEtabs.Point3D> pointList, string storyLabel, string pierLabel, string spandrelLabel, string group)
             {
@@ -34,6 +35,7 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
                 IsFailAll = null;
                 IsFailPMN = null;
                 IsFailShear = null;
+                PierReinfPercent = -1;
             }
         }
     }
