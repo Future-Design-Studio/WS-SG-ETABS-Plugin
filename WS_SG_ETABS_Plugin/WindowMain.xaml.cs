@@ -29,7 +29,7 @@ namespace WS_SG_ETABS_Plugin
 
         public WindowMain(ref cSapModel SapModel, ref cPluginCallback Plugin)
         {
-            string version = "1.2.0c";
+            string version = "1.2.0d";
 
             _Plugin = Plugin;
             _SapModel = SapModel;
