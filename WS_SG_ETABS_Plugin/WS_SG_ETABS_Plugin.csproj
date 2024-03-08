@@ -88,7 +88,7 @@
       <HintPath>..\packages\Accord.Statistics.3.8.0\lib\net462\Accord.Statistics.dll</HintPath>
     </Reference>
     <Reference Include="ETABSv1">
-      <HintPath>..\..\..\..\..\..\Program Files\Computers and Structures\ETABS 21\ETABSv1.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\Program Files\Computers and Structures\ETABS 21\ETABSv1.dll</HintPath>
     </Reference>
     <Reference Include="LiveCharts, Version=0.9.7.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL">
       <HintPath>..\packages\LiveCharts.0.9.7\lib\net45\LiveCharts.dll</HintPath>
@@ -739,13 +739,13 @@
     <None Include="packages.config" />
     <None Include="src\rc_beam_schedule\FlowchartConvertAsToRebar.drawio" />
     <Resource Include="src\resources\TEDDS_API.pdf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
     <Resource Include="src\resources\TEDDS_by_Future_Design_Studio.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="src\resources\Tools.pdf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
   <ItemGroup>

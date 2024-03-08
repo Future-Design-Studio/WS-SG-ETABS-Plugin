@@ -15,7 +15,7 @@ using System.Windows.Shapes;
 using System.Reflection;
 using ETABSv1;
 using System.IO;
-
+using System.Data;
 
 namespace WS_SG_ETABS_Plugin
 {
@@ -29,7 +29,7 @@ namespace WS_SG_ETABS_Plugin
 
         public WindowMain(ref cSapModel SapModel, ref cPluginCallback Plugin)
         {
-            string version = "1.2.0c";
+            string version = "1.2.0d";
 
             _Plugin = Plugin;
             _SapModel = SapModel;
@@ -67,8 +67,9 @@ namespace WS_SG_ETABS_Plugin
             }
             */
 
-            bool licenseValid = src.HelperLicense.CheckLicense(version);
             
+            (bool licenseValid, string[] listofallowedPlugins) = src.HelperLicense.CheckLicense(version);
+           
             if (!licenseValid)
             {
                 Close();
@@ -79,9 +80,41 @@ namespace WS_SG_ETABS_Plugin
 
                 labelVersion.Content = "version " + version;
 
-                ShowDialog();
-            }
+                if (listofallowedPlugins[0] != "all")
+                {
+                    List<string> listofButtons = new List<string>
+                    {
+                        "buttonRCBeamSchedule", "buttonCopyProperties", "buttonPlotReaction", "buttonLoadCombo", "buttonPadFooting", "buttonPunchingShear", "buttonTedds", "buttonRCColSchedule", "buttonPlotDrift", "buttonPlotSumMassParticip", "buttonWallDesignViewer",
+                        "buttonShellUni", "buttonSelUniqueName", "buttonEtabsToRhino", "buttonWindCoeff", "buttonReleaseSelectedNode", "buttonTrfEtabsLoads", "buttonTrfEtabstoSafe",
+                        "buttonCarbon",
+                        "buttonTransferMidas", "buttonTrussGrouping", "buttonDeleteFrames", "buttonColOptimizer", "buttonSteelTrussOptimizer", "buttonCircCrack", "buttonPreWarning"
+                    };
 
+                    foreach (string buttonName in listofButtons)
+                    {
+                        object buttonObject = FindName(buttonName);
+                        if(buttonObject is Button)
+                        {
+                            Button buttonButton = (Button)buttonObject;
+                            if (listofallowedPlugins.Contains(buttonName))
+                            {
+                                continue;
+                            }
+                            else
+                            {
+                                buttonButton.IsEnabled = false;
+                            }
+                        }
+                        else
+                        {
+                            MessageBox.Show("Error in list of buttons code, please contact FDS to rectify.");
+                            Close();
+                        }
+                    }
+                }
+                ShowDialog();
+
+            }
 
         }
 
