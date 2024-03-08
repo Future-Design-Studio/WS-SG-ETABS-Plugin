@@ -56,6 +56,11 @@ FC:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_E
 FC:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\src\transfer_midas\WindowTransferMidasMain.xaml;;
 FC:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\src\transfer_midas\WindowTransferMidasProgress.xaml;;
 FC:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\src\transfer_midas\WindowTransferMidasResult.xaml;;
+FC:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\src\wall_design_view\WindowWallDesignLoading.xaml;;
+FC:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\src\wall_design_view\WindowWallDesignMain.xaml;;
+FC:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\src\wall_design_view\WindowWallDesignResult.xaml;;
+FC:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\src\wall_design_view\WindowWallDesignResultLoading.xaml;;
+FC:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\src\wall_design_view\WindowWallDesignSelectLoad.xaml;;
 FC:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\src\wind_coeff\WindowWindCoeffMain.xaml;;
 FC:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\src\wind_coeff\WindowWindCoeffResult.xaml;;
 FC:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\WindowMain.xaml;;
