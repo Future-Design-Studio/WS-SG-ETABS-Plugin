@@ -67,6 +67,7 @@ namespace WS_SG_ETABS_Plugin
             }
             */
 
+            
             bool licenseValid = src.HelperLicense.CheckLicense(version);
             
             if (!licenseValid)
@@ -81,7 +82,6 @@ namespace WS_SG_ETABS_Plugin
 
                 ShowDialog();
             }
-
 
         }
 

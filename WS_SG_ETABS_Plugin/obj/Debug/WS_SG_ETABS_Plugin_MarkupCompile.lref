@@ -22,13 +22,16 @@ FC:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_E
 FC:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\src\plot_drift\WindowDriftPlotLoading.xaml;;
 FC:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\src\plot_drift\WindowDriftPlotMain.xaml;;
 FC:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\src\plot_drift\WindowDriftPlotResult.xaml;;
+FC:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\src\plot_drift\WindowDriftPlotSelectLoad.xaml;;
 FC:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\src\plot_reaction\graph\WindowPlotReactionGraphBaseReaction.xaml;;
 FC:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\src\plot_reaction\graph\WindowPlotReactionGraphMain.xaml;;
 FC:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\src\plot_reaction\graph\WindowPlotReactionGraphResult.xaml;;
 FC:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\src\plot_reaction\table\WindowPlotReactionTableMain.xaml;;
 FC:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\src\plot_reaction\table\WindowPlotReactionTableResult.xaml;;
 FC:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\src\etabs_to_rhino\WindowsEtabsToRhinoProgress.xaml;;
+FC:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\src\plot_reaction\WindowPlotReactionLoading.xaml;;
 FC:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\src\plot_reaction\WindowPlotReactionMain.xaml;;
+FC:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\src\plot_reaction\WindowPlotReactionSelectLoad.xaml;;
 FC:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\src\plot_sum_mass_participation\WindowSumParticipPlotMain.xaml;;
 FC:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\src\plot_sum_mass_participation\WindowSumParticipPlotResult.xaml;;
 FC:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\src\punching_shear_plot\WindowPunchShrPlotLoading.xaml;;
