@@ -29,7 +29,7 @@ namespace WS_SG_ETABS_Plugin
 
         public WindowMain(ref cSapModel SapModel, ref cPluginCallback Plugin)
         {
-            string version = "1.2.0c";
+            string version = "1.2.0d";
 
             _Plugin = Plugin;
             _SapModel = SapModel;
@@ -292,6 +292,14 @@ namespace WS_SG_ETABS_Plugin
             IsEnabled = false;
             //Call up window
             src.plot_sum_mass_participation.WindowSumParticipPlotMain windowSumParticipPlotMain = new src.plot_sum_mass_participation.WindowSumParticipPlotMain(_SapModel, _Plugin);
+            IsEnabled = true;
+        }
+
+        private void buttonWallDesignViewer_Click(object sender, RoutedEventArgs e)
+        {
+            IsEnabled = false;
+            //Call up window
+            src.wall_design_view.WindowWallDesignSelectLoad windowWallDesignSelectLoad = new src.wall_design_view.WindowWallDesignSelectLoad(_SapModel, _Plugin);
             IsEnabled = true;
         }
     }
