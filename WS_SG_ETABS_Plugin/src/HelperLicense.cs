@@ -12,30 +12,52 @@ namespace WS_SG_ETABS_Plugin.src
 {
     internal class HelperLicense
     {
-        public static bool CheckLicense(string version)
+        public static (bool, string[]) CheckLicense(string version)
         {
             bool licenseValid = true;
             string userComputerName = Environment.MachineName.ToString();
+            string licenseNumber;
+            List<string> allowedPlugins = new List<string>();
 
             //Read license number
             try
             {
-                StreamReader sr = new StreamReader(@"C:\Program Files\Computers and Structures\ETABS 20\LMHOST.ini");
-                string licenseNumber = sr.ReadLine();
-                sr.Close();
+                //Support 3 versions of ETABS
+                try
+                {
+                    StreamReader sr = new StreamReader(@"C:\Program Files\Computers and Structures\ETABS 20\LMHOST.ini");
+                    licenseNumber = sr.ReadLine();
+                    sr.Close();
+                }
+                catch
+                {
+                    try
+                    {
+                        StreamReader sr = new StreamReader(@"C:\Program Files\Computers and Structures\ETABS 21\LMHOST.ini");
+                        licenseNumber = sr.ReadLine();
+                        sr.Close();
+                    }
+                    catch
+                    {
+                        StreamReader sr = new StreamReader(@"C:\Program Files\Computers and Structures\ETABS 22\LMHOST.ini");
+                        licenseNumber = sr.ReadLine();
+                        sr.Close();
+                    }
+                }
 
                 if (licenseNumber != "rwcphlice002")
                 {
                     MessageBox.Show("Illegal license. Your PC ID " + userComputerName + " has been reported to Ramboll IT as well as Singapore Police.");
                     licenseValid = false;
-                    return licenseValid;
+                    return (licenseValid,null);
                 }
             }
             catch
             {
                 MessageBox.Show("Illegal license. Your PC ID " + userComputerName + " has been reported to Ramboll IT as well as Singapore Police.");
                 licenseValid = false;
-                return licenseValid;
+                return (licenseValid, null);
+
             }
 
 
@@ -50,6 +72,7 @@ namespace WS_SG_ETABS_Plugin.src
                 {
                     string computerName = eachLicenseCsv[1];
                     string[] expDateMonthYearString = eachLicenseCsv[2].Split('/');
+                    string[] allowedPluginsString = eachLicenseCsv[3].Split('_');
 
                     int expDate = Convert.ToInt32(expDateMonthYearString[0]);
                     int expMonth = Convert.ToInt32(expDateMonthYearString[1]);
@@ -63,6 +86,7 @@ namespace WS_SG_ETABS_Plugin.src
                     {
                         if (today < expDateMonthYear)
                         {
+
                             List<List<string>> versionCsv = new List<List<string>>();
                             versionCsv = SplitCSV("https://raw.githubusercontent.com/stefano-ramboll/licensing/main/etabs_powerapps_allowed_versions.csv");
                             foreach (List<string> eachVersionCsv in versionCsv)
@@ -70,33 +94,35 @@ namespace WS_SG_ETABS_Plugin.src
                                 string versionCSV = eachVersionCsv[0];
                                 if (versionCSV == version)
                                 {
-                                    return licenseValid;
+                                    return (licenseValid, allowedPluginsString);
                                 }
                             }
-                            MessageBox.Show("Superseded version of ETABS PowerAPP detected! You will be redirected to download page for latest version of ETABS PowerAPP.");
-                            System.Diagnostics.Process.Start("https://tinyurl.com/ETABSPowerAPP");
+                            MessageBox.Show("Superseded version of ETABS PowerAPP detected! You will be redirected to download page for latest version of FDS PowerAPP.");
+                            System.Diagnostics.Process.Start("https://ramboll.sharepoint.com/:f:/s/WSSGProgramsDevelopment/EjfGNYy_5t5BgD26_na9in0BwuU48Fhd36oCEbPDjeoUjQ?e=6piTdy");
                             licenseValid = false;
-                            return licenseValid;
+                            return (licenseValid, null);
+
+                            
                         }
                         else
                         {
                             MessageBox.Show("License has expired! Please contact FDS to renew / extend your license!");
                             licenseValid = false;
-                            return licenseValid;
+                            return (licenseValid, null);
                         }
 
                     }
                 }
                 MessageBox.Show("License not available for your PC ID. Please contact FDS with your PC ID " + userComputerName + " to request for a license.");
                 licenseValid = false;
-                return licenseValid;
+                return (licenseValid, null);
             }
             catch
             {
                 MessageBox.Show("Unable to read license file! Please check Internet connection!");
 
                 licenseValid = false;
-                return licenseValid;
+                return (licenseValid, null);
             }
         }
 

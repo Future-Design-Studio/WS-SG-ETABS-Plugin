@@ -26,28 +26,41 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
 
         List<src.HelperEtabs.DatabaseTable> databaseTableListGlobal = new List<src.HelperEtabs.DatabaseTable>();
         List<Dictionary<string, string>> groupAndColorNotAll = new List<Dictionary<string, string>>();
+        bool massReportGlobal = false;
 
-        public WindowPlotReactionGraphMain(cSapModel SapModel, cPluginCallback Plugin, List<src.HelperEtabs.DatabaseTable> databaseTableList)
+        public WindowPlotReactionGraphMain(cSapModel SapModel, cPluginCallback Plugin, 
+            List<src.HelperEtabs.DatabaseTable> databaseTableList, List<string> listChoosenLoadCase,
+            List<string> listChoosenGroup)
         {
             _SapModel = SapModel;
             _Plugin = Plugin;
 
             InitializeComponent();
 
+            //Check if mass report
+            //massReportGlobal = massReport;
+
             //Fill in title
             textBoxTitle.Text = "Reaction Plot";
 
             //Fill in combobox for available groups
-            src.HelperUI.PopulateComboBoxAvailGroup(_SapModel, comBoxGroup);
+            //src.HelperUI.PopulateComboBoxAvailGroup(_SapModel, comBoxGroup);
+            comBoxGroup.ItemsSource = listChoosenGroup;
+            comBoxGroup.SelectedIndex = 0;
 
             //Fill in combobox for output case
-            List<string> outputCasesList = src.HelperEtabs.GetLoadCaseAndComboList(_SapModel);
-            comBoxOutputCase.ItemsSource = outputCasesList;
+            //List<string> outputCasesList = src.HelperEtabs.GetLoadCaseAndComboList(_SapModel);
+            comBoxOutputCase.ItemsSource = listChoosenLoadCase;
             comBoxOutputCase.SelectedIndex = 0;
 
             //Fill in combobox for direction
             comBoxReactionDirection.ItemsSource = src.HelperEtabs.reactionDirectionList;
             comBoxReactionDirection.SelectedIndex = 2;
+
+            //Fill in combobox for max or min
+            List<string> maxOrMinList = new List<string>() {"Max", "Min"};
+            comBoxMaxOrMin.ItemsSource = maxOrMinList;
+            comBoxMaxOrMin.SelectedIndex = 0;
 
             databaseTableListGlobal = databaseTableList;
 
@@ -58,6 +71,23 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
 
         private void buttonAdd_Click(object sender, RoutedEventArgs e)
         {
+            //If there is no group, selectedIndex = -1, then return
+            if (comBoxGroup.SelectedIndex == -1)
+            {
+                MessageBox.Show("Please select a group!");
+                return;
+            }
+
+            //If group already selected
+            foreach (Dictionary<string, string> eachGroupAndColorNotAll in groupAndColorNotAll)
+            {
+                if (eachGroupAndColorNotAll["groupName"] == comBoxGroup.Text)
+                {
+                    MessageBox.Show("Group is already selected!");
+                    return;
+                }
+            }
+
             //src.HelperUI.MoveItemsFromListBox(listBoxAvailGroup, listBoxChoosenGroup);
             if (checkBoxDefault.IsChecked == true)
             {
@@ -209,6 +239,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
                 string outputCase = comBoxOutputCase.SelectedValue.ToString();
                 string reactionDirection = comBoxReactionDirection.SelectedValue.ToString();
                 double forceFactor = Convert.ToDouble(textBoxForceFactor.Text);
+                string maxOrMin = comBoxMaxOrMin.SelectedValue.ToString();
                 double bubbleScaleFactor = Convert.ToDouble(textBoxBubbleScaleFactor.Text);
                 int textSize = Convert.ToInt32(textBoxTextSize.Text);
                 int titleSize = Convert.ToInt32(textBoxTitleSize.Text);
@@ -219,6 +250,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
                 //Splitting x or y
                 bool splitX = new bool();
                 bool splitY = new bool();
+                bool autoSplit = new bool();
                 int divisionX = Convert.ToInt32(textBoxDivisionX.Text);
                 int divisionY = Convert.ToInt32(textBoxDivisionY.Text);
                 double offsetX = Convert.ToDouble(textBoxOffsetX.Text);
@@ -227,6 +259,8 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
                 int sumTextSizeY = Convert.ToInt32(textBoxSumTextSizeY.Text);
                 double separationX = Convert.ToInt32(textBoxSeparationX.Text);
                 double separationY = Convert.ToInt32(textBoxSeparationY.Text);
+                List<double> splitCoord = new List<double>();
+
                 if (radioButtonSplitX.IsChecked == true)
                 {
                     splitX = true;
@@ -243,12 +277,49 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
                     splitY = false;
                 }
 
-                IsEnabled = false;
-                //Call up copy property result window
-                src.plot_reaction.graph.WindowPlotReactionGraphResult windowPlotReactionResult = new src.plot_reaction.graph.WindowPlotReactionGraphResult(_SapModel, _Plugin, groupAndColor,
-                    outputCase, reactionDirection, forceFactor, bubbleScaleFactor, textSize, titleSize, axisTitleSize, gridSpacingX, gridSpacingY, title, splitX, splitY, divisionX, divisionY, offsetX, offsetY,
-                    sumTextSizeX, sumTextSizeY, separationX, separationY, includeAllJoints, databaseTableListGlobal);
-                IsEnabled = true;
+                if (radioButtonManualSplitX.IsChecked == true || radioButtonManualSplitY.IsChecked == true)
+                {
+                    autoSplit = false;
+                    string coordListToSplit = "";
+                    List<string> splitCoordString = new List<string>();
+
+                    if (splitX)
+                    {
+                        coordListToSplit = textBoxDivisionXCoord.Text;
+                    }
+                    else if (splitY)
+                    {
+                        coordListToSplit = textBoxDivisionYCoord.Text;
+                    }
+
+                    splitCoordString = coordListToSplit.Split(',').ToList();
+
+                    foreach (string coordString in splitCoordString)
+                    {
+                        splitCoord.Add(Convert.ToDouble(coordString));  
+                    }
+                }
+                else
+                {
+                    autoSplit= true;
+                }
+
+                //If not mass report call up result window
+                if (!massReportGlobal)
+                {
+                    IsEnabled = false;
+                    //Call up copy property result window
+                    src.plot_reaction.graph.WindowPlotReactionGraphResult windowPlotReactionResult = new src.plot_reaction.graph.WindowPlotReactionGraphResult(_SapModel, _Plugin, groupAndColor,
+                        outputCase, reactionDirection, forceFactor, bubbleScaleFactor, textSize, titleSize, axisTitleSize, gridSpacingX, gridSpacingY, title, splitX, splitY, divisionX, divisionY, offsetX, offsetY,
+                        sumTextSizeX, sumTextSizeY, separationX, separationY, includeAllJoints, maxOrMin, autoSplit, splitCoord, databaseTableListGlobal);
+                    IsEnabled = true;
+                }
+                else
+                {
+
+                }
+
+
             }
 
             catch (Exception ex)
@@ -278,6 +349,8 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
         {
             radioButtonSplitX.IsEnabled = true;
             radioButtonSplitY.IsEnabled = true;
+
+            radioButtonSplitX.IsChecked = true;
         }
 
         private void checkBoxSum_Unchecked(object sender, RoutedEventArgs e)
@@ -291,34 +364,93 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
 
         private void radioButtonSplitX_Checked(object sender, RoutedEventArgs e)
         {
-            textBoxDivisionX.IsEnabled = true;
+            radioButtonAutoSplitX.IsEnabled = true;
+            radioButtonManualSplitX.IsEnabled = true;
+
             textBoxOffsetX.IsEnabled = true;
             textBoxSumTextSizeX.IsEnabled = true;
             textBoxSeparationX.IsEnabled = true;
+
+            radioButtonAutoSplitX.IsChecked = true;
+
         }
 
         private void radioButtonSplitX_Unchecked(object sender, RoutedEventArgs e)
         {
-            textBoxDivisionX.IsEnabled = false;
+            radioButtonAutoSplitX.IsChecked = false;
+            radioButtonManualSplitX.IsChecked = false;
+
+            radioButtonAutoSplitX.IsEnabled = false;
+            radioButtonManualSplitX.IsEnabled = false;
+
             textBoxOffsetX.IsEnabled = false;
             textBoxSumTextSizeX.IsEnabled = false;
             textBoxSeparationX.IsEnabled = false;
         }
 
+        private void radioButtonAutoSplitX_Checked(object sender, RoutedEventArgs e)
+        {
+            textBoxDivisionX.IsEnabled = true;
+        }
+
+        private void radioButtonAutoSplitX_Unchecked(object sender, RoutedEventArgs e)
+        {
+            textBoxDivisionX.IsEnabled = false;
+        }
+
+        private void radioButtonManualSplitX_Checked(object sender, RoutedEventArgs e)
+        {
+            textBoxDivisionXCoord.IsEnabled = true;
+        }
+
+        private void radioButtonManualSplitX_Unchecked(object sender, RoutedEventArgs e)
+        {
+            textBoxDivisionXCoord.IsEnabled = false;
+        }
+
         private void radioButtonSplitY_Checked(object sender, RoutedEventArgs e)
         {
-            textBoxDivisionY.IsEnabled = true;
+            radioButtonAutoSplitY.IsEnabled = true;
+            radioButtonManualSplitY.IsEnabled = true;
+
             textBoxOffsetY.IsEnabled = true;
             textBoxSumTextSizeY.IsEnabled = true;
             textBoxSeparationY.IsEnabled = true;
+
+            radioButtonAutoSplitY.IsChecked = true;
         }
 
         private void radioButtonSplitY_Unchecked(object sender, RoutedEventArgs e)
         {
-            textBoxDivisionY.IsEnabled = false;
+            radioButtonAutoSplitY.IsChecked = false;
+            radioButtonManualSplitY.IsChecked = false;
+
+            radioButtonAutoSplitY.IsEnabled = false;
+            radioButtonManualSplitY.IsEnabled = false;
+
             textBoxOffsetY.IsEnabled = false;
             textBoxSumTextSizeY.IsEnabled = false;
             textBoxSeparationY.IsEnabled = false;
+        }
+
+        private void radioButtonAutoSplitY_Checked(object sender, RoutedEventArgs e)
+        {
+            textBoxDivisionY.IsEnabled = true;
+        }
+
+        private void radioButtonAutoSplitY_Unchecked(object sender, RoutedEventArgs e)
+        {
+            textBoxDivisionY.IsEnabled = false;
+        }
+
+        private void radioButtonManualSplitY_Checked(object sender, RoutedEventArgs e)
+        {
+            textBoxDivisionYCoord.IsEnabled = true;
+        }
+
+        private void radioButtonManualSplitY_Unchecked(object sender, RoutedEventArgs e)
+        {
+            textBoxDivisionYCoord.IsEnabled = false;
         }
 
         private void checkBoxAllJoints_Checked(object sender, RoutedEventArgs e)

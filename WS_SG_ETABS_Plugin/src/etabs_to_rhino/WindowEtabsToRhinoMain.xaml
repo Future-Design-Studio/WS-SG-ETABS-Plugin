@@ -4,16 +4,17 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WS_SG_ETABS_Plugin.src.etabs_to_rhino"
-             mc:Ignorable="d" Height="400" Width="800" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+             mc:Ignorable="d" Height="500" Width="900" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="0.8*"></RowDefinition>
+            <RowDefinition Height="60"></RowDefinition>
+            <RowDefinition Height="90"></RowDefinition>
+            <RowDefinition Height="110"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
-            <RowDefinition Height="2.5*"></RowDefinition>
-            <RowDefinition Height="0.35*"></RowDefinition>
+            <RowDefinition Height="30"></RowDefinition>
         </Grid.RowDefinitions>
 
         <Label Grid.Row="0" Grid.Column="0" Content="Export to Rhino" FontSize="28"/>
@@ -31,9 +32,9 @@
                     <ColumnDefinition Width="6*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
 
-                <Label Grid.Column="0" Margin="0 0 10 0" Content=".3dm file path:"></Label>
+                <Label Grid.Column="0" Margin="0 0 10 0" Content="Rhino file path:" FontSize="14" VerticalAlignment="Center"></Label>
 
-                <TextBox x:Name="textBoxFilePath" Grid.Column="1" IsEnabled="False"></TextBox>
+                <TextBox x:Name="textBoxFilePath" Grid.Column="1" IsEnabled="False" VerticalContentAlignment="Center" FontSize="14"></TextBox>
 
             </Grid>
 
@@ -43,37 +44,77 @@
                     <ColumnDefinition Width="6*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
 
-                <Label Grid.Column="0" Margin="0 0 10 0" Content=".3dm file name:"></Label>
+                <Label Grid.Column="0" Margin="0 0 10 0" Content="Rhino file name:" FontSize="14" VerticalAlignment="Center"></Label>
 
-                <TextBox x:Name="textBoxFileName" Grid.Column="1"></TextBox>
+                <TextBox x:Name="textBoxFileName" Grid.Column="1" VerticalContentAlignment="Center" FontSize="14"></TextBox>
 
             </Grid>
 
             <Grid Grid.Row="2">
                 <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
-                    <Button x:Name="buttonResetPath" Content="Reset path" Width="100" Click="buttonResetPath_Click"/>
-                    <Button x:Name="buttonModifyPath" Content="Modify path" Width="100" Click="buttonModifyPath_Click"/>
+                    <Button x:Name="buttonResetPath" Content="Reset path" Width="100" Click="buttonResetPath_Click" FontSize="12"/>
+                    <Button x:Name="buttonModifyPath" Content="Modify path" Width="100" Click="buttonModifyPath_Click" FontSize="12"/>
                 </StackPanel>
             </Grid>
 
         </Grid>
 
-        <TextBlock Grid.Row="2" Grid.Column="0" TextWrapping="Wrap" TextAlignment="Justify"  
-                   FontSize="10">
+        <Grid Grid.Row="2" Grid.Column="0" Margin="0 10 0 0">
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1.3*"></ColumnDefinition>
+                    <ColumnDefinition Width="2.2*"></ColumnDefinition>
+                    <ColumnDefinition Width="2*"></ColumnDefinition>
+                    <ColumnDefinition Width="100"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0">
+                    <TextBlock Text="Export Setting:" FontSize="14" Margin="0 0 0 5"></TextBlock>
+                    <CheckBox Name="checkBoxLineModel" Content="Include Line Model" IsChecked="True" IsEnabled="False" FontSize="11" VerticalContentAlignment="Center"></CheckBox>
+                    <CheckBox Name="checkBoxFrameExtrusion" Content="Include Frame Extrusion" Checked="checkBoxFrameExtrusion_Checked" Unchecked="checkBoxFrameExtrusion_Unchecked" FontSize="11" VerticalContentAlignment="Center"></CheckBox>
+                    <CheckBox Name="checkBoxAreaExtrusion" Content="Include Area Extrusion" Checked="checkBoxAreaExtrusion_Checked" Unchecked="checkBoxAreaExtrusion_Unchecked" FontSize="11" VerticalContentAlignment="Center"></CheckBox>
+                    <CheckBox Name="checkBoxExportSelection" Content="Export Selected Only" IsChecked='False' FontSize="11" VerticalContentAlignment="Center"></CheckBox>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1">
+                    <TextBlock Text="Frame Extrusion Setting:" FontSize="14" Margin="0 0 0 5"></TextBlock>
+                    <RadioButton Name="frameExtrusionAuto" GroupName="frameExtrusionSetting" IsEnabled="False" IsChecked="True" FontSize="11">
+                        Auto (Columns - Middle Center, Beams - Top Center)
+                    </RadioButton>
+                    <RadioButton Name="frameExtrusionManual" GroupName="frameExtrusionSetting" IsEnabled="False" FontSize="11">
+                        Manual (Per individual definition in Etabs)
+                    </RadioButton>
+                </StackPanel>
+
+                <StackPanel Grid.Column="2">
+                    <TextBlock Text="Area Extrusion Setting:" FontSize="14" Margin="0 0 0 5"></TextBlock>
+                    <RadioButton Name="areaExtrusionAuto" GroupName="areaExtrusionSetting" IsEnabled="False" IsChecked="True" FontSize="11">
+                        Auto (Walls - Middle, Floors - Top)
+                    </RadioButton>
+                    <RadioButton Name="areaExtrusionManual" GroupName="areaExtrusionSetting" IsEnabled="False" FontSize="11">
+                        Manual (Per individual definition in Etabs)
+                    </RadioButton>
+                </StackPanel>
+            </Grid>
+        </Grid>
+
+        <TextBlock Grid.Row="3" Grid.Column="0" TextWrapping="Wrap" TextAlignment="Justify" Margin="0 5 0 0" 
+                   FontSize="11">
                 How to use:<LineBreak/>
-                1. Adjust the output file path and name, then press the Export button to start the exporting process.<LineBreak/>
-                2. A new .3dm file will be created in the given file path.<LineBreak/><LineBreak/>
+                1. Adjust the output file path, name, and settings, then press the Export button to start the exporting process.<LineBreak/>
+                2. A new Rhino(.3dm) file will be created in the given file path, with the default path being the location of this Etabs file.<LineBreak/>
+                <LineBreak/>
                 Note:<LineBreak/>
-                1. The resulting .3dm file contains all frame and area objects available in the etabs model.<LineBreak/>
+                1. The resulting Rhino(.3dm) file contains all frame and area objects available in the etabs model.<LineBreak/>
                 2. Frame objects are represented as lines, with their properties attached as user string attributes.<LineBreak/>
                 3. Area objects are represented as closed polylines, with their properties attached as user string attributes.<LineBreak/>
-                4. The exporting process should take a few seconds to finish in most cases, but might take up to a few minutes depending on the size of the model. <LineBreak/>
-                5. The resulting model units is in milimeters by default.<LineBreak/>
+                5. The resulting Rhino model units is in meters.<LineBreak/>
+                6. Manual Setting for Extrusion Export only allows middle, top, and bottom cardinal in this release version.
                 <LineBreak/>
 
         </TextBlock>
 
-        <Grid Grid.Row="3">
+        <Grid Grid.Row="4" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
@@ -85,11 +126,10 @@
 
             <Grid Grid.Column="1">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                    <Button x:Name="buttonCancel" Content="Cancel" Width="100" Click="buttonCancel_Click"/>
-                    <Button x:Name="buttonOk" Content="Export" Width="100" Click="buttonOk_Click"/>
+                    <Button x:Name="buttonCancel" Content="Cancel" Width="100" Click="buttonCancel_Click" FontSize="12"/>
+                    <Button x:Name="buttonOk" Content="Export" Width="100" Click="buttonOk_Click" FontSize="12"/>
                 </StackPanel>
             </Grid>
         </Grid>
-        
     </Grid>
 </Window>

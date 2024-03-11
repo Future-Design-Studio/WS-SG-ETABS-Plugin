@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WS_SG_ETABS_Plugin.src.plot_reaction.graph"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-             mc:Ignorable="d" Height="1020" Width="600" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+             mc:Ignorable="d" Height="1200" Width="600" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"></ColumnDefinition>
@@ -28,8 +28,9 @@
             <RowDefinition Height="0.5*"></RowDefinition>
             <RowDefinition Height="0.5*"></RowDefinition>
             <RowDefinition Height="0.5*"></RowDefinition>
-            <RowDefinition Height="3.5*"></RowDefinition>
-            <RowDefinition Height="0.4*"></RowDefinition>
+            <RowDefinition Height="0.5*"></RowDefinition>
+            <RowDefinition Height="3.9*"></RowDefinition>
+            <RowDefinition Height="0.45*"></RowDefinition>
         </Grid.RowDefinitions>
 
         <Label Grid.Row="0" Grid.Column="0" Margin="0 -10 0 0" Content="Plot Reaction Bubble Chart" FontSize="28"/>
@@ -157,11 +158,23 @@
 
             <Label Grid.Column="0" VerticalAlignment="Center" Grid.ColumnSpan="2">Reaction force or moment direction to plot:</Label>
             <ComboBox Grid.Column="1" x:Name="comBoxReactionDirection" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"></ComboBox>
+
         </Grid>
 
-        <Label Grid.Row="8" Grid.Column="0" Content="3.Chart graphic preferences" FontSize="14" FontWeight="Bold"/>
+        <Grid Grid.Row="8" Margin="10 0 10 0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
 
-        <Grid Grid.Row="9" Margin="10 0 10 0">
+            <Label Grid.Column="0" VerticalAlignment="Center" Grid.ColumnSpan="2">For load case with multiple reactions, show max or min?</Label>
+            <ComboBox Grid.Column="1" x:Name="comBoxMaxOrMin" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"></ComboBox>
+
+        </Grid>
+
+        <Label Grid.Row="9" Grid.Column="0" Content="3.Chart graphic preferences" FontSize="14" FontWeight="Bold"/>
+
+        <Grid Grid.Row="10" Margin="10 0 10 0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
@@ -171,7 +184,7 @@
             <TextBox Grid.Column="1" x:Name="textBoxForceFactor" Grid.Row="0" TextAlignment="Center" Text="1" InputScope="Digits"/>
         </Grid>
 
-        <Grid Grid.Row="10" Margin="10 0 10 0">
+        <Grid Grid.Row="11" Margin="10 0 10 0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
@@ -181,7 +194,7 @@
             <TextBox Grid.Column="1" x:Name="textBoxBubbleScaleFactor" Grid.Row="0" TextAlignment="Center" Text="0.01" InputScope="Digits"/>
         </Grid>
 
-        <Grid Grid.Row="11" Margin="10 0 10 0">
+        <Grid Grid.Row="12" Margin="10 0 10 0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
@@ -191,7 +204,7 @@
             <TextBox Grid.Column="1" x:Name="textBoxTextSize" Grid.Row="0" TextAlignment="Center" Text="12" InputScope="Number"/>
         </Grid>
 
-        <Grid Grid.Row="12" Margin="10 0 10 0">
+        <Grid Grid.Row="13" Margin="10 0 10 0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
@@ -201,7 +214,7 @@
             <TextBox Grid.Column="1" x:Name="textBoxTitleSize" Grid.Row="0" TextAlignment="Center" Text="36" InputScope="Number"/>
         </Grid>
 
-        <Grid Grid.Row="13" Margin="10 0 10 0">
+        <Grid Grid.Row="14" Margin="10 0 10 0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
@@ -211,7 +224,7 @@
             <TextBox Grid.Column="1" x:Name="textBoxAxisTitleSize" Grid.Row="0" TextAlignment="Center" Text="28" InputScope="Number"/>
         </Grid>
 
-        <Grid Grid.Row="14" Margin="10 0 10 0">
+        <Grid Grid.Row="15" Margin="10 0 10 0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
@@ -221,7 +234,7 @@
             <TextBox Grid.Column="1" x:Name="textBoxGridSpacingX" Grid.Row="0" TextAlignment="Center" Text="50" InputScope="Digits"/>
         </Grid>
 
-        <Grid Grid.Row="15" Margin="10 0 10 0">
+        <Grid Grid.Row="16" Margin="10 0 10 0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
@@ -232,13 +245,17 @@
         </Grid>
 
 
-        <Label Grid.Row="16" Grid.Column="0" Content="4. Display sum of reactions" FontSize="14" FontWeight="Bold"/>
+        <Label Grid.Row="17" Grid.Column="0" Content="4. Display sum of reactions" FontSize="14" FontWeight="Bold"/>
 
-        <Grid Grid.Row="17" Margin="10 10 10 10">
+        <Grid Grid.Row="18" Margin="10 10 10 10">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="4*"></RowDefinition>
+                <RowDefinition Height="0.6*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="0.6*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="3*"></RowDefinition>
             </Grid.RowDefinitions>
 
             <CheckBox x:Name="checkBoxSum" Checked="checkBoxSum_Checked" Unchecked="checkBoxSum_Unchecked" Grid.Row="0">
@@ -258,7 +275,104 @@
                 </RadioButton>
             </Grid>
 
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+
+                <RadioButton x:Name="radioButtonAutoSplitX" Grid.Column="0" GroupName="radioAutoSplitX" IsEnabled="False" Checked="radioButtonAutoSplitX_Checked" Unchecked="radioButtonAutoSplitX_Unchecked">
+                    Auto
+                </RadioButton>
+                <RadioButton x:Name="radioButtonAutoSplitY" Grid.Column="1" GroupName="radioAutoSplitX" IsEnabled="False" Checked="radioButtonAutoSplitY_Checked" Unchecked="radioButtonAutoSplitY_Unchecked">
+                    Auto
+                </RadioButton>
+            </Grid>
+
             <Grid Grid.Row="3">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+
+                <Grid Grid.Column="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+
+
+                    <Label Grid.Column="0" Grid.Row="0" Content="Division of X axis:"></Label>
+
+                    <TextBox x:Name="textBoxDivisionX" Grid.Column="1" Grid.Row="0" IsEnabled="False" InputScope="Number" Text="4"></TextBox>
+
+                </Grid>
+
+                <Grid Grid.Column="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+
+                    <Label Grid.Column="0" Grid.Row="0" Content="Division of Y axis:"></Label>
+
+                    <TextBox x:Name="textBoxDivisionY" Grid.Column="1" Grid.Row="0" IsEnabled="False" InputScope="Number" Text="4"></TextBox>
+
+                </Grid>
+            </Grid>
+
+            <Grid Grid.Row="4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+
+                <RadioButton x:Name="radioButtonManualSplitX" Grid.Column="0" GroupName="radioAutoSplitX" IsEnabled="False" Checked="radioButtonManualSplitX_Checked" Unchecked="radioButtonManualSplitX_Unchecked">
+                    Manual
+                </RadioButton>
+                <RadioButton x:Name="radioButtonManualSplitY" Grid.Column="1" GroupName="radioAutoSplitX" IsEnabled="False" Checked="radioButtonManualSplitY_Checked" Unchecked="radioButtonManualSplitY_Unchecked">
+                    Manual
+                </RadioButton>
+            </Grid>
+
+            <Grid Grid.Row="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+
+                <Grid Grid.Column="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"></RowDefinition>
+                    </Grid.RowDefinitions>
+
+                    <Label Grid.Column="0" Grid.Row="0" Content="X (comma seperated):"></Label>
+
+                    <TextBox x:Name="textBoxDivisionXCoord" Grid.Column="1" Grid.Row="0" IsEnabled="False" Text="0, 100"></TextBox>
+                </Grid>
+
+                <Grid Grid.Column="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"></RowDefinition>
+                    </Grid.RowDefinitions>
+
+                    <Label Grid.Column="0" Grid.Row="0" Content="Y (comma seperated):"></Label>
+
+                    <TextBox x:Name="textBoxDivisionYCoord" Grid.Column="1" Grid.Row="0" IsEnabled="False" Text="0, 100"></TextBox>
+                </Grid>
+            </Grid>
+
+            <Grid Grid.Row="6">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"></ColumnDefinition>
                     <ColumnDefinition Width="*"></ColumnDefinition>
@@ -274,18 +388,15 @@
                         <RowDefinition Height="*"></RowDefinition>
                         <RowDefinition Height="*"></RowDefinition>
                         <RowDefinition Height="*"></RowDefinition>
-                        <RowDefinition Height="*"></RowDefinition>
                     </Grid.RowDefinitions>
 
-                    <Label Grid.Column="0" Grid.Row="0" Content="Division of X axis:"></Label>
-                    <Label Grid.Column="0" Grid.Row="1" Content="Offset of sum label in Y (m):"></Label>
-                    <Label Grid.Column="0" Grid.Row="2" Content="Text size (to show total):"></Label>
-                    <Label Grid.Column="0" Grid.Row="3" Content="Separation each group label in Y (m):"></Label>
+                    <Label Grid.Column="0" Grid.Row="0" Content="Offset of sum label in Y (m):"></Label>
+                    <Label Grid.Column="0" Grid.Row="1" Content="Text size (to show total):"></Label>
+                    <Label Grid.Column="0" Grid.Row="2" Content="Separation each group label in Y (m):"></Label>
 
-                    <TextBox x:Name="textBoxDivisionX" Grid.Column="1" Grid.Row="0" IsEnabled="False" InputScope="Number" Text="4"></TextBox>
-                    <TextBox x:Name="textBoxOffsetX" Grid.Column="1" Grid.Row="1" IsEnabled="False" InputScope="Number" Text="10"></TextBox>
-                    <TextBox x:Name="textBoxSumTextSizeX" Grid.Column="1" Grid.Row="2" IsEnabled="False" InputScope="Number" Text="20"></TextBox>
-                    <TextBox x:Name="textBoxSeparationX" Grid.Column="1" Grid.Row="3" IsEnabled="False" InputScope="Number" Text="8"></TextBox>
+                    <TextBox x:Name="textBoxOffsetX" Grid.Column="1" Grid.Row="0" IsEnabled="False" InputScope="Number" Text="10"></TextBox>
+                    <TextBox x:Name="textBoxSumTextSizeX" Grid.Column="1" Grid.Row="1" IsEnabled="False" InputScope="Number" Text="20"></TextBox>
+                    <TextBox x:Name="textBoxSeparationX" Grid.Column="1" Grid.Row="2" IsEnabled="False" InputScope="Number" Text="8"></TextBox>
 
                 </Grid>
 
@@ -299,21 +410,21 @@
                         <RowDefinition Height="*"></RowDefinition>
                         <RowDefinition Height="*"></RowDefinition>
                         <RowDefinition Height="*"></RowDefinition>
-                        <RowDefinition Height="*"></RowDefinition>
                     </Grid.RowDefinitions>
 
-                    <Label Grid.Column="0" Grid.Row="0" Content="Division of Y axis:"></Label>
-                    <Label Grid.Column="0" Grid.Row="1" Content="Offset of sum label in X (m):"></Label>
-                    <Label Grid.Column="0" Grid.Row="2" Content="Text size (to show total):"></Label>
-                    <Label Grid.Column="0" Grid.Row="3" Content="Separation each group label in Y (m):"></Label>
+                    <Label Grid.Column="0" Grid.Row="0" Content="Offset of sum label in X (m):"></Label>
+                    <Label Grid.Column="0" Grid.Row="1" Content="Text size (to show total):"></Label>
+                    <Label Grid.Column="0" Grid.Row="2" Content="Separation each group label in Y (m):"></Label>
 
-                    <TextBox x:Name="textBoxDivisionY" Grid.Column="1" Grid.Row="0" IsEnabled="False" InputScope="Number" Text="4"></TextBox>
-                    <TextBox x:Name="textBoxOffsetY" Grid.Column="1" Grid.Row="1" IsEnabled="False" InputScope="Number" Text="10"></TextBox>
-                    <TextBox x:Name="textBoxSumTextSizeY" Grid.Column="1" Grid.Row="2" IsEnabled="False" InputScope="Number" Text="20"></TextBox>
-                    <TextBox x:Name="textBoxSeparationY" Grid.Column="1" Grid.Row="3" IsEnabled="False" InputScope="Number" Text="8"></TextBox>
+                    <TextBox x:Name="textBoxOffsetY" Grid.Column="1" Grid.Row="0" IsEnabled="False" InputScope="Number" Text="10"></TextBox>
+                    <TextBox x:Name="textBoxSumTextSizeY" Grid.Column="1" Grid.Row="1" IsEnabled="False" InputScope="Number" Text="20"></TextBox>
+                    <TextBox x:Name="textBoxSeparationY" Grid.Column="1" Grid.Row="2" IsEnabled="False" InputScope="Number" Text="8"></TextBox>
 
                 </Grid>
             </Grid>
+
+
+
         </Grid>
 
         <Grid Grid.Row="19">

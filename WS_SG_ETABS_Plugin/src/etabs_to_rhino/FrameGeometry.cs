@@ -1,4 +1,5 @@
-﻿using Rhino.Geometry;
+﻿using ETABSv1;
+using Rhino.Geometry;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,8 +18,9 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
         private Point3d _pt1;
         private double _angle;
         private int _cardinal;
+        private eFrameDesignOrientation _designOrientation;
 
-        public FrameGeometry(string name, string propName, string storyName, Point3d pt0, Point3d pt1, double angle, int cardinal)
+        public FrameGeometry(string name, string propName, string storyName, Point3d pt0, Point3d pt1, double angle, int cardinal, cSapModel Sap)
         {
             _name = name;
             _propName = propName;
@@ -27,6 +29,8 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
             _pt1 = pt1;
             _angle = angle;
             _cardinal = cardinal;
+
+            var result1 = Sap.FrameObj.GetDesignOrientation(name, ref _designOrientation);
         }
 
         private string GetCardinalText() 
@@ -55,6 +59,7 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
         public Point3d Pt1 => _pt1;
         public double Angle => _angle;
         public string Cardinal => GetCardinalText();
+        public string DesignOrientation => _designOrientation.ToString();
        
     }
 }
