@@ -47,12 +47,13 @@ namespace WS_SG_ETABS_Plugin.src
             }
         }
 
-        public static void RectanglePlotter(WpfPlot Plot, double xCenter, double yCenter, string text, int textSize, System.Drawing.Color color, double xWidth, double yWidth)
+        public static void RectanglePlotter(WpfPlot Plot, double xCenter, double yCenter, string text, int textSize, System.Drawing.Color color, double xWidth, double yWidth, 
+            double borderWidth, System.Drawing.Color borderColor)
         {
 
             double[] xs = { xCenter - xWidth / 2.0, xCenter + xWidth / 2.0, xCenter + xWidth / 2.0, xCenter - xWidth / 2.0 };
             double[] ys = { yCenter + yWidth / 2.0, yCenter + yWidth / 2.0, yCenter - yWidth / 2.0, yCenter - yWidth / 2.0 };
-            Plot.Plot.AddPolygon(xs, ys, color);
+            Plot.Plot.AddPolygon(xs, ys, color, borderWidth, borderColor);
 
             //Text for each bubble in kN
             if (!string.IsNullOrWhiteSpace(text))
@@ -73,6 +74,18 @@ namespace WS_SG_ETABS_Plugin.src
         public static void ResetZoom(WpfPlot Plot)
         {
             Plot.Plot.AxisAuto(.2, .25); // zoom out to accommodate large bubbles
+        }
+
+        public static void AddAnnotationToPlot(WpfPlot Plot, string annotationText, double textSize, double marginTopX, double marginTopY, double borderWidth, System.Drawing.Color textColor, 
+            System.Drawing.Color backgroundColor, bool isTextBold = false)
+        {
+            var text = Plot.Plot.AddAnnotation(annotationText, marginTopX, marginTopY);
+            text.Font.Bold = isTextBold;
+            text.BorderWidth = Convert.ToSingle(borderWidth);
+            text.Shadow = false;
+            text.Font.Color = textColor;
+            text.BackgroundColor = backgroundColor;
+            text.Font.Size = Convert.ToSingle(textSize);
         }
     }
 }

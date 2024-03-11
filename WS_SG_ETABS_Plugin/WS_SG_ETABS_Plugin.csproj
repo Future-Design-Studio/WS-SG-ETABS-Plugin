@@ -87,8 +87,9 @@
     <Reference Include="Accord.Statistics, Version=3.8.0.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
       <HintPath>..\packages\Accord.Statistics.3.8.0\lib\net462\Accord.Statistics.dll</HintPath>
     </Reference>
-    <Reference Include="ETABSv1">
-      <HintPath>..\..\..\..\..\..\Program Files\Computers and Structures\ETABS 21\ETABSv1.dll</HintPath>
+    <Reference Include="ETABSv1, Version=1.0.0.0, Culture=neutral, PublicKeyToken=453d728ef24c6f5e, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\Program Files\Computers and Structures\ETABS 21\ETABSv1.dll</HintPath>
     </Reference>
     <Reference Include="LiveCharts, Version=0.9.7.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL">
       <HintPath>..\packages\LiveCharts.0.9.7\lib\net45\LiveCharts.dll</HintPath>
@@ -133,7 +134,7 @@
     </Reference>
     <Reference Include="SAFEv1, Version=1.0.0.0, Culture=neutral, PublicKeyToken=453d728ef24c6f5e, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\..\..\..\Program Files\Computers and Structures\SAFE 20\SAFEv1.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\Program Files\Computers and Structures\SAFE 21\SAFEv1.dll</HintPath>
     </Reference>
     <Reference Include="ScottPlot, Version=4.1.59.0, Culture=neutral, PublicKeyToken=86698dc10387c39e, processorArchitecture=MSIL">
       <HintPath>..\packages\ScottPlot.4.1.59\lib\net462\ScottPlot.dll</HintPath>
@@ -442,6 +443,23 @@
     <Compile Include="src\transfer_midas\WindowTransferMidasResult.xaml.cs">
       <DependentUpon>WindowTransferMidasResult.xaml</DependentUpon>
     </Compile>
+    <Compile Include="src\wall_design_view\ClassWallDesign.cs" />
+    <Compile Include="src\wall_design_view\FunctionWallDesignView.cs" />
+    <Compile Include="src\wall_design_view\WindowWallDesignLoading.xaml.cs">
+      <DependentUpon>WindowWallDesignLoading.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\wall_design_view\WindowWallDesignMain.xaml.cs">
+      <DependentUpon>WindowWallDesignMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\wall_design_view\WindowWallDesignResult.xaml.cs">
+      <DependentUpon>WindowWallDesignResult.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\wall_design_view\WindowWallDesignResultLoading.xaml.cs">
+      <DependentUpon>WindowWallDesignResultLoading.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\wall_design_view\WindowWallDesignSelectLoad.xaml.cs">
+      <DependentUpon>WindowWallDesignSelectLoad.xaml</DependentUpon>
+    </Compile>
     <Compile Include="src\wind_coeff\ClassWindCoeff.cs" />
     <Compile Include="src\wind_coeff\FunctionWindCoeff.cs" />
     <Compile Include="src\wind_coeff\WindowWindCoeffMain.xaml.cs">
@@ -684,6 +702,26 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="src\wall_design_view\WindowWallDesignLoading.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\wall_design_view\WindowWallDesignMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\wall_design_view\WindowWallDesignResult.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\wall_design_view\WindowWallDesignResultLoading.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\wall_design_view\WindowWallDesignSelectLoad.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="src\wind_coeff\WindowWindCoeffMain.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -708,7 +746,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="src\resources\Tools.pdf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
   <ItemGroup>
