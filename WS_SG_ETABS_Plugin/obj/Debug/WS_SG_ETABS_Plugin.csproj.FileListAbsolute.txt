@@ -767,3 +767,32 @@ C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ET
 C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\wall_design_view\WindowWallDesignResult.baml
 C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\wall_design_view\WindowWallDesignResultLoading.baml
 C:\Users\manikandan\OneDrive - Ramboll\Python\PLUGIN\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\wall_design_view\WindowWallDesignSelectLoad.baml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\Accord.dll.config
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\ETABSv1.dll
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\SAFEv1.dll
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\plot_drift\WindowDriftPlotLoading.g.cs
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\plot_drift\WindowDriftPlotMain.g.cs
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\plot_drift\WindowDriftPlotResult.g.cs
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\plot_drift\WindowDriftPlotSelectLoad.g.cs
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\plot_reaction\WindowPlotReactionLoading.g.cs
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\plot_reaction\WindowPlotReactionSelectLoad.g.cs
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\plot_sum_mass_participation\WindowSumParticipPlotMain.g.cs
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\plot_sum_mass_participation\WindowSumParticipPlotResult.g.cs
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\wall_design_view\WindowWallDesignLoading.g.cs
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\wall_design_view\WindowWallDesignMain.g.cs
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\wall_design_view\WindowWallDesignResult.g.cs
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\wall_design_view\WindowWallDesignResultLoading.g.cs
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\wall_design_view\WindowWallDesignSelectLoad.g.cs
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\plot_drift\WindowDriftPlotLoading.baml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\plot_drift\WindowDriftPlotMain.baml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\plot_drift\WindowDriftPlotResult.baml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\plot_drift\WindowDriftPlotSelectLoad.baml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\plot_reaction\WindowPlotReactionLoading.baml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\plot_reaction\WindowPlotReactionSelectLoad.baml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\plot_sum_mass_participation\WindowSumParticipPlotMain.baml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\plot_sum_mass_participation\WindowSumParticipPlotResult.baml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\wall_design_view\WindowWallDesignLoading.baml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\wall_design_view\WindowWallDesignMain.baml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\wall_design_view\WindowWallDesignResult.baml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\wall_design_view\WindowWallDesignResultLoading.baml
+C:\Users\samuel\Documents\Scripts\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\wall_design_view\WindowWallDesignSelectLoad.baml
