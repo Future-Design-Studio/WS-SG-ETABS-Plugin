@@ -1,11 +1,14 @@
-﻿using ETABSv1;
+﻿using Accord;
+using ETABSv1;
 using Microsoft.Office.Interop.Excel;
 //using SAFEv1;
 using ScottPlot.Drawing.Colormaps;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Policy;
 using System.Windows;
+using System.Xml.Linq;
 
 namespace WS_SG_ETABS_Plugin.src
 {
@@ -1035,7 +1038,6 @@ namespace WS_SG_ETABS_Plugin.src
 
             }
 
-
             bool FillImportLog = true;
             int NumFatalErrors = 0;
             int NumErrorMsgs = 0;
@@ -1072,6 +1074,16 @@ namespace WS_SG_ETABS_Plugin.src
             Ret = Sap.DatabaseTables.SetLoadCombinationsSelectedForDisplay(ref MyName);
         }
 
+        public static void OnAllLoadPatternDatabase(cSapModel Sap)
+        {
+            //Load Pattern
+            int NumberNames = 0;
+            string[] MyName = null;
+            Sap.LoadPatterns.GetNameList(ref NumberNames, ref MyName);
+            Ret = Sap.DatabaseTables.SetLoadPatternsSelectedForDisplay(ref MyName);
+
+        }
+
         public static void OnAllLoadDatabaseWithoutCombinations(cSapModel Sap)
         {
             //Load Pattern
@@ -1087,6 +1099,100 @@ namespace WS_SG_ETABS_Plugin.src
             //Load Combination
             MyName = new string[1] {""};
             Ret = Sap.DatabaseTables.SetLoadCombinationsSelectedForDisplay(ref MyName);
+        }
+
+        public static void OnLoadCaseAndComboDatabaseBasedOnList(cSapModel Sap, List<string> loadCaseAndComboList)
+        {
+            //Load Case
+            int NumberNames = 0;
+            string[] MyName = null;
+            Sap.LoadCases.GetNameList(ref NumberNames, ref MyName);
+
+            List<string> loadToTurnOnList = new List<string>();
+            foreach(string loadCaseAndCombo in loadCaseAndComboList)
+            {
+                foreach (string name in MyName)
+                {
+                    if (loadCaseAndCombo == name)
+                    {
+                        loadToTurnOnList.Add(name);
+                    }
+                }
+            }
+            string[] loadToTurnOnArray = loadToTurnOnList.ToArray();
+
+            Ret = Sap.DatabaseTables.SetLoadCasesSelectedForDisplay(ref loadToTurnOnArray);
+
+            //Load Combination
+            Sap.RespCombo.GetNameList(ref NumberNames, ref MyName);
+
+            loadToTurnOnList = new List<string>();
+            foreach (string loadCaseAndCombo in loadCaseAndComboList)
+            {
+                foreach (string name in MyName)
+                {
+                    if (loadCaseAndCombo == name)
+                    {
+                        loadToTurnOnList.Add(name);
+                    }
+                }
+            }
+            loadToTurnOnArray = loadToTurnOnList.ToArray();
+
+            Ret = Sap.DatabaseTables.SetLoadCombinationsSelectedForDisplay(ref loadToTurnOnArray);
+        }
+
+        public static (List<string>, List<string>) GetAllLoadCaseAndComboDisplayedDatabase(cSapModel Sap)
+        {
+            /*
+            //Load Pattern
+            int NumberSelectedLoadPatterns = 0;
+            string[] LoadPatternList = null;
+            Ret = Sap.DatabaseTables.GetLoadPatternsSelectedForDisplay(ref NumberSelectedLoadPatterns, ref LoadPatternList);
+            */
+
+            //Load Case
+            int NumberSelectedLoadCases = 0;
+            string[] LoadCaseList = null;
+            Ret = Sap.DatabaseTables.GetLoadCasesSelectedForDisplay(ref NumberSelectedLoadCases, ref LoadCaseList);
+
+            //Load Combination
+            int NumberSelectedLoadCombinations = 0;
+            string[] LoadCombinationList = null;
+            Ret = Sap.DatabaseTables.GetLoadCombinationsSelectedForDisplay(ref NumberSelectedLoadCombinations, ref LoadCombinationList);
+
+            return (LoadCaseList.ToList(), LoadCombinationList.ToList());
+        }
+
+        public static void OffAllLoadCaseAndComboDisplayedDatabase(cSapModel Sap)
+        {
+            //Load Case
+            string[] MyName = new string[1] { "" };
+            Ret = Sap.DatabaseTables.SetLoadCasesSelectedForDisplay(ref MyName);
+
+            //Load Combination
+            MyName = new string[1] { "" };
+            Ret = Sap.DatabaseTables.SetLoadCombinationsSelectedForDisplay(ref MyName);
+        }
+
+
+        public static List<src.HelperEtabs.Point3D> GetJointListFromGroup(src.HelperEtabs.DatabaseTable pointObjectConnectivityTable, src.HelperEtabs.DatabaseTable groupAssignmentsTable, string choosenGroup)
+        {
+            bool isError = false;
+            src.HelperEtabs.DatabaseTable filteredJointTable = new HelperEtabs.DatabaseTable();
+            List<src.HelperEtabs.Point3D> jointList = new List<src.HelperEtabs.Point3D>();
+
+            //Get table from database
+            (isError, filteredJointTable) = src.HelperEtabs.FilterDatabaseTableUniqueNameByGroup(pointObjectConnectivityTable, groupAssignmentsTable, choosenGroup);
+            List<Dictionary<string, string>> table = filteredJointTable.TableInList;
+
+            foreach (Dictionary<string, string> row in table)
+            {
+                src.HelperEtabs.Point3D joint = new HelperEtabs.Point3D(row["UniqueName"], Convert.ToDouble(row["X"]), Convert.ToDouble(row["Y"]), Convert.ToDouble(row["Z"]));
+                jointList.Add(joint);
+            }
+
+            return jointList;
         }
 
         #endregion
@@ -1159,6 +1265,26 @@ namespace WS_SG_ETABS_Plugin.src
             foreach (string points in listofPoints)
             {
                 Ret = Sap.PointObj.SetGroupAssign(points, groupName);
+                if (Ret != 0)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Takes in list of areas and group name and assigns the list of points inside the group
+        /// </summary>
+        /// <param name="Sap"></param>
+        /// <param name="listofPoints"></param>
+        /// <param name="groupName"></param>
+        /// <returns></returns>
+        public static bool AddAreaInsideGroup(cSapModel Sap, List<string> listofAreas, string groupName)
+        {
+            foreach (string areas in listofAreas)
+            {
+                Ret = Sap.AreaObj.SetGroupAssign(areas, groupName);
                 if (Ret != 0)
                 {
                     return true;
@@ -1374,6 +1500,13 @@ namespace WS_SG_ETABS_Plugin.src
             //Save table in list to DatabaseTable
             databaseTableFiltered.TableInList = tableInListFiltered;
 
+            //Return all the properties
+            databaseTableFiltered.FieldsKeysIncluded = databaseTableToFilter.FieldsKeysIncluded;
+            databaseTableFiltered.GroupName = databaseTableToFilter.GroupName;
+            databaseTableFiltered.NumberRecords = databaseTableToFilter.NumberRecords;
+            databaseTableFiltered.TableKey = databaseTableToFilter.TableKey;
+            databaseTableFiltered.TableVersion = databaseTableToFilter.TableVersion;
+
             return (isError, databaseTableFiltered);
         }
 
@@ -1498,6 +1631,24 @@ namespace WS_SG_ETABS_Plugin.src
             return (isError, maxValue);
         }
 
+        public static string GetElementGroupName(DatabaseTable groupDatabaseTable, string elementName, string elementType)
+        {
+            string groupName = "";
+
+            foreach(Dictionary<string, string> row in groupDatabaseTable.TableInList)
+            {
+                if (row["UniqueName"] == elementName)
+                {
+                    if (row["ObjectType"] == elementType)
+                    {
+                        groupName = row["GroupName"];
+                        return groupName;
+                    }
+                }
+            }
+
+            return groupName;
+        }
 
 
         #endregion
@@ -1527,6 +1678,21 @@ namespace WS_SG_ETABS_Plugin.src
             return point3DList;
         }
 
+        public static List<Point3D> FilterPointBasedOnZCoord(List<Point3D> jointList, List<double> uniqueZCoordList)
+        {
+            List<Point3D> point3DList = new List<Point3D>();
+
+            foreach (Point3D joint in jointList)
+            {
+                if (uniqueZCoordList.Contains(joint.ZCoordinate))
+                {
+                    point3DList.Add(joint);
+                }
+
+            }
+
+            return point3DList;
+        }
 
         #endregion
 
@@ -2030,7 +2196,7 @@ namespace WS_SG_ETABS_Plugin.src
 
         #endregion
 
-        #region shell method
+        #region Shell method
 
         /// <summary>
         /// Parsing shell edge points from ETABS database
@@ -2112,6 +2278,194 @@ namespace WS_SG_ETABS_Plugin.src
             }
 
             return shellList;
+        }
+
+        /// <summary>
+        /// Get wall design result
+        /// </summary>
+        /// <param name="Sap"></param>
+        /// <returns></returns>
+        public static (List<Dictionary<string, string>>, List<Dictionary<string, string>>) GetWallDesignResult(cSapModel Sap)
+        {
+            List<Dictionary<string, string>>  tableInListPierDesignResult = GetPierDesignResult(Sap);
+            List<Dictionary<string, string>> tableInListSpandrelDesignResult = GetSpandrelDesignResult(Sap);
+
+            //If both null means no wall design
+            if (tableInListPierDesignResult == null && tableInListSpandrelDesignResult == null)
+            {
+                MessageBox.Show("No wall design is found! Please run wall design first!");
+                return (null, null);
+            }
+
+            return (tableInListPierDesignResult, tableInListSpandrelDesignResult);
+
+        }
+
+        public static List<Dictionary<string, string>> GetPierDesignResult(cSapModel Sap)
+        {
+            //Get pier result
+            string[] Story = null;
+            string[] PierLabel = null;
+            string[] Station = null;
+            string[] DesignType = null;
+            string[] PierSecType = null;
+            string[] EdgeBar = null;
+            string[] EndBar = null;
+            double[] BarSpacing = null;
+            double[] ReinfPercent = null;
+            double[] CurrPercent = null;
+            double[] DCRatio = null;
+            string[] PierLeg = null;
+            double[] LegX1 = null;
+            double[] LegY1 = null;
+            double[] LegX2 = null;
+            double[] LegY2 = null;
+            double[] EdgeLeft = null;
+            double[] EdgeRight = null;
+            double[] AsLeft = null;
+            double[] AsRight = null;
+            double[] ShearAv = null;
+            double[] StressCompLeft = null;
+            double[] StressCompRight = null;
+            double[] StressLimitLeft = null;
+            double[] StressLimitRight = null;
+            double[] CDepthLeft = null;
+            double[] CLimitLeft = null;
+            double[] CDepthRight = null;
+            double[] CLimitRight = null;
+            double[] InelasticRotDemand = null;
+            double[] InelasticRotCapacity = null;
+            double[] NormCompStress = null;
+            double[] NormCompStressLimit = null;
+            double[] CDepth = null;
+            double[] BZoneL = null;
+            double[] BZoneR = null;
+            double[] BZoneLength = null;
+            string[] WarnMsg = null;
+            string[] ErrMsg = null;
+
+            Ret = Sap.DesignShearWall.GetPierSummaryResults(ref Story, ref PierLabel, ref Station, ref DesignType, ref PierSecType, ref EdgeBar, ref EndBar, ref BarSpacing,
+                ref ReinfPercent, ref CurrPercent, ref DCRatio, ref PierLeg, ref LegX1, ref LegY1, ref LegX2, ref LegY2, ref EdgeLeft, ref EdgeRight, ref AsLeft, ref AsRight,
+                ref ShearAv, ref StressCompLeft, ref StressCompRight, ref StressLimitLeft, ref StressLimitRight, ref CDepthLeft, ref CLimitLeft, ref CDepthRight, ref CLimitRight,
+                ref InelasticRotDemand, ref InelasticRotCapacity, ref NormCompStress, ref NormCompStressLimit, ref CDepth, ref BZoneL, ref BZoneR, ref BZoneLength, ref WarnMsg,
+                ref ErrMsg);
+
+            //If error
+            if (Ret == 1)
+            {
+                MessageBox.Show("No pier design is found!");
+                return null;
+            }
+            else
+            {
+                //Convert to string array
+                string[] BarSpacingString = HelperMethod.ConvertDoubleToStringArray(BarSpacing);
+                string[] ReinfPercentString = HelperMethod.ConvertDoubleToStringArray(ReinfPercent);
+                string[] CurrPercentString = HelperMethod.ConvertDoubleToStringArray(CurrPercent);
+                string[] DCRatioString = HelperMethod.ConvertDoubleToStringArray(DCRatio);
+                string[] LegX1String = HelperMethod.ConvertDoubleToStringArray(LegX1);
+                string[] LegY1String = HelperMethod.ConvertDoubleToStringArray(LegY1);
+                string[] LegX2String = HelperMethod.ConvertDoubleToStringArray(LegX2);
+                string[] LegY2String = HelperMethod.ConvertDoubleToStringArray(LegY2);
+                string[] EdgeLeftString = HelperMethod.ConvertDoubleToStringArray(EdgeLeft);
+                string[] EdgeRightString = HelperMethod.ConvertDoubleToStringArray(EdgeRight);
+                string[] AsLeftString = HelperMethod.ConvertDoubleToStringArray(AsLeft);
+                string[] AsRightString = HelperMethod.ConvertDoubleToStringArray(AsRight);
+                string[] ShearAvString = HelperMethod.ConvertDoubleToStringArray(ShearAv);
+                string[] StressCompLeftString = HelperMethod.ConvertDoubleToStringArray(StressCompLeft);
+                string[] StressCompRightString = HelperMethod.ConvertDoubleToStringArray(StressCompRight);
+                string[] StressLimitLeftString = HelperMethod.ConvertDoubleToStringArray(StressLimitLeft);
+                string[] StressLimitRightString = HelperMethod.ConvertDoubleToStringArray(StressLimitRight);
+                string[] CDepthLeftString = HelperMethod.ConvertDoubleToStringArray(CDepthLeft);
+                string[] CLimitLeftString = HelperMethod.ConvertDoubleToStringArray(CLimitLeft);
+                string[] CDepthRightString = HelperMethod.ConvertDoubleToStringArray(CDepthRight);
+                string[] CLimitRightString = HelperMethod.ConvertDoubleToStringArray(CLimitRight);
+                string[] InelasticRotDemandString = HelperMethod.ConvertDoubleToStringArray(InelasticRotDemand);
+                string[] InelasticRotCapacityString = HelperMethod.ConvertDoubleToStringArray(InelasticRotCapacity);
+                string[] NormCompStressString = HelperMethod.ConvertDoubleToStringArray(NormCompStress);
+                string[] NormCompStressLimitString = HelperMethod.ConvertDoubleToStringArray(NormCompStressLimit);
+                string[] CDepthString = HelperMethod.ConvertDoubleToStringArray(CDepth);
+                string[] BZoneLString = HelperMethod.ConvertDoubleToStringArray(BZoneL);
+                string[] BZoneRString = HelperMethod.ConvertDoubleToStringArray(BZoneR);
+                string[] BZoneLengthString = HelperMethod.ConvertDoubleToStringArray(BZoneLength);
+
+                //Combine arrays into 1
+                string[] combinedArray = Story.Concat(PierLabel).Concat(Station).Concat(DesignType).Concat(PierSecType).Concat(EdgeBar).Concat(EndBar).Concat(BarSpacingString).Concat(ReinfPercentString).Concat(CurrPercentString).Concat(DCRatioString).
+                    Concat(PierLeg).Concat(LegX1String).Concat(LegY1String).Concat(LegX2String).Concat(LegY2String).Concat(EdgeLeftString).Concat(EdgeRightString).Concat(AsLeftString).Concat(AsRightString).Concat(ShearAvString).Concat(StressCompLeftString)
+                    .Concat(StressCompRightString).Concat(StressLimitLeftString).Concat(StressLimitRightString).Concat(CDepthLeftString).Concat(CLimitLeftString).Concat(CDepthRightString).Concat(CLimitRightString).Concat(InelasticRotDemandString).Concat(InelasticRotCapacityString)
+                    .Concat(NormCompStressString).Concat(NormCompStressLimitString).Concat(CDepthString).Concat(BZoneLString).Concat(BZoneRString).Concat(BZoneLengthString).Concat(WarnMsg).Concat(ErrMsg).ToArray();
+
+                string[] columnKeys = { "Story", "PierLabel","Station","DesignType","PierSecType","EdgeBar","EndBar","BarSpacing","ReinfPercent","CurrPercent","DCRatio","PierLeg","LegX1","LegY1","LegX2","LegY2","EdgeLeft","EdgeRight","AsLeft","AsRight","ShearAv",
+                "StressCompLeft","StressCompRight","StressLimitLeft","StressLimitRight","CDepthLeft","CLimitLeft","CDepthRight","CLimitRight","InelasticRotDemand","InelasticRotCapacity","NormCompStress","NormCompStressLimit","CDepth","BZoneL","BZoneR","BZoneLength","WarnMsg","ErrMsg" };
+
+                List<Dictionary<string, string>> tableInListPierDesignResult = HelperMethod.TransposedEtabsTableToDictionary(combinedArray, columnKeys);
+
+                return tableInListPierDesignResult;
+            }
+
+
+        }
+
+        public static List<Dictionary<string, string>> GetSpandrelDesignResult(cSapModel Sap)
+        {
+            //Get spandrel result
+            string[] Story = null;
+            string[] Spandrel = null;
+            string[] Station = null;
+            double[] TopRebar = null;
+            double[] TopRebarRatio = null;
+            string[] TopRebarCombo = null;
+            double[] MuTop = null;
+            double[] BotRebar = null;
+            double[] BotRebarRatio = null;
+            string[] BotRebarCombo = null;
+            double[] MuBot = null;
+            double[] AVert = null;
+            double[] AHorz = null;
+            string[] ShearCombo = null;
+            double[] Vu = null;
+            double[] ADiag = null;
+            string[] ShearDiagCombo = null;
+            double[] VuDiag = null;
+            string[] WarnMsg = null;
+            string[] ErrMsg = null;
+
+            Ret = Sap.DesignShearWall.GetSpandrelSummaryResults(ref Story, ref Spandrel, ref Station, ref TopRebar, ref TopRebarRatio, ref TopRebarCombo, ref MuTop, ref BotRebar,
+            ref BotRebarRatio, ref BotRebarCombo, ref MuBot, ref AVert, ref AHorz, ref ShearCombo, ref Vu, ref ADiag, ref ShearDiagCombo, ref VuDiag, ref WarnMsg, ref ErrMsg);
+
+            //If error
+            if (Ret == 1)
+            {
+                MessageBox.Show("No spandrel design is found!");
+                return null;
+            }
+            else
+            {
+                //Convert to string array
+                string[] TopRebarString = HelperMethod.ConvertDoubleToStringArray(TopRebar);
+                string[] TopRebarRatioString = HelperMethod.ConvertDoubleToStringArray(TopRebarRatio);
+                string[] MuTopString = HelperMethod.ConvertDoubleToStringArray(MuTop);
+                string[] BotRebarString = HelperMethod.ConvertDoubleToStringArray(BotRebar);
+                string[] BotRebarRatioString = HelperMethod.ConvertDoubleToStringArray(BotRebarRatio);
+                string[] MuBotString = HelperMethod.ConvertDoubleToStringArray(MuBot);
+                string[] AVertString = HelperMethod.ConvertDoubleToStringArray(AVert);
+                string[] AHorzString = HelperMethod.ConvertDoubleToStringArray(AHorz);
+                string[] VuString = HelperMethod.ConvertDoubleToStringArray(Vu);
+                string[] ADiagString = HelperMethod.ConvertDoubleToStringArray(ADiag);
+                string[] VuDiagString = HelperMethod.ConvertDoubleToStringArray(VuDiag);
+
+                //Combine arrays into 1
+                string[] combinedArray = Story.Concat(Spandrel).Concat(Station).Concat(TopRebarString).Concat(TopRebarRatioString).Concat(TopRebarCombo).Concat(MuTopString).Concat(BotRebarString).Concat(BotRebarRatioString).Concat(BotRebarCombo).Concat(MuBotString).
+                    Concat(AVertString).Concat(AHorzString).Concat(ShearCombo).Concat(VuString).Concat(ADiagString).Concat(ShearDiagCombo).Concat(VuDiagString).Concat(WarnMsg).Concat(ErrMsg).ToArray();
+
+                string[] columnKeys = { "Story", "Spandrel", "Station", "TopRebar", "TopRebarRatio", "TopRebarCombo", "MuTop", "BotRebar", "BotRebarRatio", "BotRebarCombo", "MuBot", "AVert", "AHorz", "ShearCombo", "Vu", "ADiag", "ShearDiagCombo", "VuDiag", "WarnMsg", "ErrMsg" };
+
+                List<Dictionary<string, string>> tableInListSpandrelDesignResult = HelperMethod.TransposedEtabsTableToDictionary(combinedArray, columnKeys);
+
+                return tableInListSpandrelDesignResult;
+            }
+
+
         }
 
         #endregion
@@ -2465,6 +2819,22 @@ namespace WS_SG_ETABS_Plugin.src
         public static List<string> reactionDirectionList = new List<string>()
         {
             "FX", "FY", "FZ", "MX", "MY", "MZ"
+        };
+
+        public static List<string> lateralDeflectionDirectionList = new List<string>()
+        {
+            "Ux", "Uy"
+        };
+
+
+        public static List<string> lateralDeflectionDirectionWithSRSSList = new List<string>()
+        {
+            "Ux", "Uy", "Ux + Uy (SRSS)", "Ux and Uy (in one)", "Uz"
+        };
+
+        public static List<string> typeOfViewWallDesign = new List<string>()
+        {
+            "All Failure", "PMN Failure", "Shear Failure", "Pier Req. Rebar %"
         };
 
         #endregion
