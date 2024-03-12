@@ -115,7 +115,7 @@ namespace WS_SG_ETABS_Plugin.src.loads_etabs_safe
             {
                 foreach (Dictionary<string, string> row in jointforcesFrameTable.TableInList)
                 {
-                    if (storyLevelsList.Contains(row["Story"]) && pointUniqueNameToRemove.Contains(row["Joint"]))
+                    if (storyLevelsList.Contains(row["Story"]) && pointUniqueNameFromAll.Contains(row["Joint"]))
                     {
                         jointforcesFrameTableFiltered.Add(row);
                     }
@@ -131,7 +131,7 @@ namespace WS_SG_ETABS_Plugin.src.loads_etabs_safe
             {
                 foreach (Dictionary<string, string> row in jointforcesShellTable.TableInList)
                 {
-                    if (storyLevelsList.Contains(row["Story"]) && pointUniqueNameToRemove.Contains(row["Joint"]))
+                    if (storyLevelsList.Contains(row["Story"]) && pointUniqueNameFromAll.Contains(row["Joint"]))
                     {
                         jointforcesShellTableFiltered.Add(row);
                     }
@@ -146,7 +146,7 @@ namespace WS_SG_ETABS_Plugin.src.loads_etabs_safe
             {
                 foreach (Dictionary<string, string> row in jointforcesLinkTable.TableInList)
                 {
-                    if (storyLevelsList.Contains(row["Story"]) && pointUniqueNameToRemove.Contains(row["Joint"]))
+                    if (storyLevelsList.Contains(row["Story"]) && pointUniqueNameFromAll.Contains(row["Joint"]))
                     {
                         jointforcesLinkTableFiltered.Add(row);
                     }
@@ -220,6 +220,7 @@ namespace WS_SG_ETABS_Plugin.src.loads_etabs_safe
             List<Dictionary<string, string>> jointforcesShellTableFilteredLoads = new List<Dictionary<string, string>>();
             List<Dictionary<string, string>> jointforcesLinkTableFilteredLoads = new List<Dictionary<string, string>>();
 
+            /*
             foreach (Dictionary<string, string> row in jointreactionDatabaseFiltered)
             {
                 if (row["StepNumber"] != null)
@@ -241,6 +242,7 @@ namespace WS_SG_ETABS_Plugin.src.loads_etabs_safe
                     }
                 }
             }
+            */
 
             try
             {

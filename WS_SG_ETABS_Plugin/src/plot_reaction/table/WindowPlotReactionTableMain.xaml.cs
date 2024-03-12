@@ -28,7 +28,9 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
         List<src.HelperEtabs.DatabaseTable> databaseTableListGlobal = new List<src.HelperEtabs.DatabaseTable>();
         List<Dictionary<string, string>> groupAndColorNotAll = new List<Dictionary<string, string>>();
 
-        public WindowPlotReactionTableMain(cSapModel SapModel, cPluginCallback Plugin, List<src.HelperEtabs.DatabaseTable> databaseTableList)
+        public WindowPlotReactionTableMain(cSapModel SapModel, cPluginCallback Plugin, 
+            List<src.HelperEtabs.DatabaseTable> databaseTableList, List<string> listChoosenLoadCase,
+            List<string> listChoosenGroup)
         {
             _SapModel = SapModel;
             _Plugin = Plugin;
@@ -43,10 +45,16 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
             textBoxFilePath.Text = modelPath;
 
             //Fill in combobox for available groups
-            src.HelperUI.PopulateComboBoxAvailGroup(_SapModel, comBoxGroup);
+            //src.HelperUI.PopulateComboBoxAvailGroup(_SapModel, comBoxGroup);
+            comBoxGroup.ItemsSource = listChoosenGroup;
+            comBoxGroup.SelectedIndex = 0;
 
             //Fill in load case list box
-            src.HelperUI.PopulateListBoxAvailLoadCase(_SapModel, listBoxAvailLoadCase);
+            //src.HelperUI.PopulateListBoxAvailLoadCase(_SapModel, listBoxAvailLoadCase);
+            foreach (string choosenLoadCase in listChoosenLoadCase)
+            {
+                listBoxAvailLoadCase.Items.Add(choosenLoadCase);
+            }
 
             databaseTableListGlobal = databaseTableList;
 
@@ -86,6 +94,23 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
 
         private void buttonAddGroup_Click(object sender, RoutedEventArgs e)
         {
+            //If there is no group, selectedIndex = -1, then return
+            if (comBoxGroup.SelectedIndex == -1)
+            {
+                MessageBox.Show("Please select a group!");
+                return;
+            }
+
+            //If group already selected
+            foreach (Dictionary<string, string> eachGroupAndColorNotAll in groupAndColorNotAll)
+            {
+                if (eachGroupAndColorNotAll["groupName"] == comBoxGroup.Text)
+                {
+                    MessageBox.Show("Group is already selected!");
+                    return;
+                }
+            }
+
             //src.HelperUI.MoveItemsFromListBox(listBoxAvailGroup, listBoxChoosenGroup);
             if (checkBoxDefault.IsChecked == true)
             {
@@ -267,7 +292,7 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
         {
             comBoxGroup.IsEnabled = true;
             listBoxChoosenGroup.IsEnabled = true;
-            buttonAddGroup.IsEnabled = true;
+            buttonRemoveGroup.IsEnabled = true;
             buttonAddGroup.IsEnabled = true;
         }
 
