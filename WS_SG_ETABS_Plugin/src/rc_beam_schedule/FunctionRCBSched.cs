@@ -91,7 +91,7 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
             GetRcBeamRebarArea(Sap, rcBeamDesignSummary, rcBeamList, leftLength, midLength, rightLength, cantileverLeftLength, cantileverRightLength);
 
             //Get forces from etabs for self design
-            GetForcesEnvelope(Sap, rcBeamList, groupAndBeamType);
+            //GetForcesEnvelope(Sap, rcBeamList, groupAndBeamType);
 
             //Convert area to rebar
             DesignRcBeamRebar(rcBeamList, rebarSpc, rebarSpcPreference, maxShearLinksSpacing, minShearLinksSpacing, shearLinksSpacingStep, rebarDiameterList, shearLinksDiameterList, maxNoLayer);
@@ -1642,6 +1642,7 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
                 string groupName = groupWithBeamType["groupName"];
                 groupNameList.Add(groupName);
             }
+
 
             //Extraction of forces list using database
             src.HelperEtabs.DatabaseTable elementForceBeamDatabase = new src.HelperEtabs.DatabaseTable();

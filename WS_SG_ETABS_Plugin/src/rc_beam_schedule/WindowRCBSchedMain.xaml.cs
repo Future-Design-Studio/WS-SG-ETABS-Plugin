@@ -82,7 +82,7 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
 
             if (result == System.Windows.Forms.DialogResult.OK)
             {
-                filePath.Text = dialog.SelectedPath;
+                filePath.Text = dialog.SelectedPath + "\\";
             }
 
         }
