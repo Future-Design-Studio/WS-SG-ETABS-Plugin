@@ -16,6 +16,7 @@ using Accord.Math;
 using Accord.Statistics.Analysis;
 using Accord.Statistics.Kernels;
 using System.Windows.Markup;
+using static WS_SG_ETABS_Plugin.src.HelperEtabs;
 
 namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
 {
@@ -68,9 +69,15 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
 
             if (isError) { return isError; }
 
+            //Get group database table
+            src.HelperEtabs.DatabaseTable groupDatabaseTable = new HelperEtabs.DatabaseTable();
+            (isError, groupDatabaseTable) = src.HelperEtabs.GetTableDisplay(Sap, "Group Assignments", false);
+
+            if (isError) { return isError; }
+
             //Get list of beams
             List<src.HelperEtabs.RcBeam> rcBeamList = new List<src.HelperEtabs.RcBeam>();
-            (isError, rcBeamList) = GetRcBeamListSpecificGroup(Sap, rcBeamDesignSummary, groupAndBeamType);
+            (isError, rcBeamList) = GetRcBeamListSpecificGroup(Sap, rcBeamDesignSummary, groupAndBeamType, groupDatabaseTable);
 
             if (isError) {return isError;}
 
@@ -83,8 +90,14 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
             //Get rebar required from etabs design
             GetRcBeamRebarArea(Sap, rcBeamDesignSummary, rcBeamList, leftLength, midLength, rightLength, cantileverLeftLength, cantileverRightLength);
 
+            //Get forces from etabs for self design
+            //GetForcesEnvelope(Sap, rcBeamList, groupAndBeamType);
+
             //Convert area to rebar
             DesignRcBeamRebar(rcBeamList, rebarSpc, rebarSpcPreference, maxShearLinksSpacing, minShearLinksSpacing, shearLinksSpacingStep, rebarDiameterList, shearLinksDiameterList, maxNoLayer);
+
+            //Check warning and error message from ETABS
+            CheckMessageRcBeamRebar(rcBeamList, rcBeamDesignSummary);
 
             //Get d from rebar
             CalculateDFromRebar(rcBeamList);
@@ -101,8 +114,11 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
             //Compile data to 2d array
             var result = CompileResutRcBeamToArray(rcBeamList);
 
+            //Compile data self design to 2d array
+            var result2 = CompileResutRcBeamSelfDesignToArray(rcBeamList);
+
             //Write to excel
-            WriteResultRcBeamToExcel(result, fileName, filePath);
+            WriteResultRcBeamToExcel(result, result2, fileName, filePath);
 
             //Set back to original units
             src.HelperEtabs.SetOutputUnit(Sap, forceUnits, lengthUnits, temperatureUnits);
@@ -163,16 +179,12 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
             return (isError, rcBeamDesignSummary);
         }
 
-        public static (bool, List<src.HelperEtabs.RcBeam>) GetRcBeamListSpecificGroup(cSapModel Sap, src.HelperEtabs.DatabaseTable rcBeamDesignSummary, List<Dictionary<string, string>> groupAndBeamType)
+        public static (bool, List<src.HelperEtabs.RcBeam>) GetRcBeamListSpecificGroup(cSapModel Sap, src.HelperEtabs.DatabaseTable rcBeamDesignSummary, List<Dictionary<string, string>> groupAndBeamType, src.HelperEtabs.DatabaseTable groupDatabaseTable)
         {
             bool isError = false;
 
             //To return
             List<src.HelperEtabs.RcBeam> rcBeamList = new List<HelperEtabs.RcBeam>();
-
-            //Get group database table
-            src.HelperEtabs.DatabaseTable groupDatabaseTable = new HelperEtabs.DatabaseTable();
-            (isError, groupDatabaseTable) = src.HelperEtabs.GetTableDisplay(Sap, "Group Assignments", false);
 
             //Filter group to only include line, to improve performance
             (isError, groupDatabaseTable) = src.HelperEtabs.FilterDatabaseTable(groupDatabaseTable, "ObjectType", "Line");
@@ -368,8 +380,13 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
 
                 foreach (Dictionary<string, string> row in rcBeamDesignSummaryTable)
                 {
+                    //Single or multispan
                     if (row["UniqueName"] == rcBeam.UniqueName && rcBeam.BeamType == "Single/multi span")
                     {
+                        //Saving station information
+                        rcBeam.LeftStation = leftStation;
+                        rcBeam.RightStation = rightStation;
+
                         if (Convert.ToDouble(row["Station"]) <= leftStation)
                         {
                             if (firstLeft)
@@ -457,8 +474,12 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
 
                         }
                     }
+                    //Cantilever
                     else if (row["UniqueName"] == rcBeam.UniqueName && rcBeam.BeamType == "Cantilever")
                     {
+                        //Saving station information
+                        rcBeam.LeftStation = cantileverLeftStation;
+
                         if (Convert.ToDouble(row["Station"]) <= cantileverLeftStation)
                         {
                             if (firstLeft)
@@ -1094,7 +1115,7 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
                 , "Left Av Prov (mm2/m)", "Mid Av Prov (mm2/m)", "Right Av Prov (mm2/m)"
                 , "Left Top As Ratio", "Mid Top As Ratio", "Right Top As Ratio", "Left Bottom As Ratio", "Mid Bottom As Ratio", "Right Bottom As Ratio"
                 , "Left Av Ratio", "Mid Av Ratio", "Right Av Ratio"
-                , "Rebar warning", "Shear links warning",
+                , "ETABS warning", "Rebar warning", "Shear links warning",
                 "Cluster"
             };
 
@@ -1168,10 +1189,11 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
                 result[i, 43] = rcBeam.RatioMidAv;
                 result[i, 44] = rcBeam.RatioRightAv;
 
-                result[i, 45] = rcBeam.AsEvaluationComment;
-                result[i, 46] = rcBeam.AvEvaluationComment;
+                result[i, 45] = rcBeam.EtabsComment;
+                result[i, 46] = rcBeam.AsEvaluationComment;
+                result[i, 47] = rcBeam.AvEvaluationComment;
 
-                result[i, 47] = rcBeam.Cluster;
+                result[i, 48] = rcBeam.Cluster;
 
                 i++;
             }
@@ -1179,7 +1201,76 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
             return result;
         }
 
-        public static void WriteResultRcBeamToExcel(object[,] result, string fileName, string filePath)
+        private static object[,] CompileResutRcBeamSelfDesignToArray(List<src.HelperEtabs.RcBeam> rcBeamList)
+        {
+            List<string> colTitles = new List<string>()
+            {
+                "UniqueName", "Width (mm)", "Height (mm)", "fyk (Mpa)", "fck (Mpa)", "d (ETABS) (mm)", "d calculated (mm)", "Beam type", "As Min(mm2)", "Load case"
+                , "Left Moment (-) (kNm)", "Mid Moment (-) (kNm)", "Right Moment (-) (kNm)", "Left Moment (+) (kNm)", "Mid Moment (+) (kNm)", "Right Moment (+) (kNm)"
+                , "Left Shear (kN)", "Mid Shear (kN)", "Right Shear (kN)"
+                , "Left Top As (mm2)", "Mid Top As (mm2)", "Right Top As (mm2)", "Left Bottom As (mm2)", "Mid Bottom As (mm2)", "Right Bottom As (mm2)"
+                , "Left Av (mm2/m)", "Mid Av (mm2/m)", "Right Av (mm2/m)"
+                , "Left Top Rebar", "Mid Top Rebar", "Right Top Rebar", "Left Bottom Rebar", "Mid Bottom Rebar", "Right Bottom Rebar"
+                , "Left Shear Links", "Mid Shear Links", "Right Shear Links"
+                , "Left Top As Prov (mm2)", "Mid Top As Prov (mm2)", "Right Top As Prov (mm2)", "Left Bottom As  Prov (mm2)", "Mid Bottom As Prov (mm2)", "Right Bottom As Prov (mm2)"
+                , "Left Av Prov (mm2/m)", "Mid Av Prov (mm2/m)", "Right Av Prov (mm2/m)"
+                , "Left Top As Ratio", "Mid Top As Ratio", "Right Top As Ratio", "Left Bottom As Ratio", "Mid Bottom As Ratio", "Right Bottom As Ratio"
+                , "Left Av Ratio", "Mid Av Ratio", "Right Av Ratio"
+                , "ETABS warning", "Rebar warning", "Shear links warning",
+                "Cluster"
+            };
+
+            int numOfRow = rcBeamList.Count() * rcBeamList[0].FrameForceEachCaseList.Count();
+            int numOfCol = colTitles.Count();
+
+            object[,] result = new object[numOfRow + 1, numOfCol];
+
+            //First row
+            int j = 0;
+            foreach (string colTitle in colTitles)
+            {
+                result[0, j] = colTitle;
+                j++;
+            }
+
+            int i = 1;
+            foreach (src.HelperEtabs.RcBeam rcBeam in rcBeamList)
+            {
+                foreach (src.HelperEtabs.FrameForceEachCase frameForceEachCase in rcBeam.FrameForceEachCaseList)
+                {
+                    result[i, 0] = rcBeam.UniqueName;
+                    result[i, 1] = rcBeam.Width;
+                    result[i, 2] = rcBeam.Height;
+                    result[i, 3] = rcBeam.Fyk;
+                    result[i, 4] = rcBeam.Fck;
+                    result[i, 5] = rcBeam.d;
+                    result[i, 6] = rcBeam.dCalculated;
+                    result[i, 7] = rcBeam.BeamType;
+                    result[i, 8] = rcBeam.AsMin;
+
+                    result[i, 9] = frameForceEachCase.LoadCaseName;
+
+                    result[i, 10] = frameForceEachCase.LeftMomentNeg;
+                    result[i, 11] = frameForceEachCase.MidMomentNeg;
+                    result[i, 12] = frameForceEachCase.RightMomentNeg;
+                    result[i, 13] = frameForceEachCase.LeftMomentPos;
+                    result[i, 14] = frameForceEachCase.MidMomentPos;
+                    result[i, 15] = frameForceEachCase.RightMomentPos;
+
+                    result[i, 16] = frameForceEachCase.LeftShear;
+                    result[i, 17] = frameForceEachCase.MidShear;
+                    result[i, 18] = frameForceEachCase.RightShear;
+
+                    i++;
+                    Console.WriteLine(i);
+                }
+
+            }
+
+            return result;
+        }
+
+        public static void WriteResultRcBeamToExcel(object[,] result, object[,] result2, string fileName, string filePath)
         {
             Microsoft.Office.Interop.Excel.Application xlApp = new Microsoft.Office.Interop.Excel.Application();
 
@@ -1194,20 +1285,39 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
             object misValue = System.Reflection.Missing.Value;
 
             xlWorkBook = xlApp.Workbooks.Add(misValue);
+
+            //Add worksheets
+            xlWorkBook.Sheets.Add(); //Self design
+
+            //Sheet 1
             xlWorkSheet = (Microsoft.Office.Interop.Excel.Worksheet)xlWorkBook.Worksheets.get_Item(1);
+
+            xlWorkSheet.Name = "ETABS design";
 
             int numOfRow = result.GetLength(0);
             int numOfCol = result.GetLength(1);
 
             string alphabetOfCol = src.HelperExcel.GetExcelColumnName(numOfCol);
-            //char aplhabethOfColFromManual = alphabet[numOfCol - 1];
-
-            //string lastCellRange = alphabet[numOfCol - 1] + Convert.ToString(numOfRow - 1 + 1);
             string lastCellRange = alphabetOfCol + Convert.ToString(numOfRow - 1 + 1);
 
             Microsoft.Office.Interop.Excel.Range rng = xlWorkSheet.UsedRange.Range["A1", lastCellRange];
 
             rng.Value2 = result;
+
+            //Sheet 2
+            xlWorkSheet = (Microsoft.Office.Interop.Excel.Worksheet)xlWorkBook.Worksheets.get_Item(2);
+
+            xlWorkSheet.Name = "Force envelope";
+
+            numOfRow = result2.GetLength(0);
+            numOfCol = result2.GetLength(1);
+
+            alphabetOfCol = src.HelperExcel.GetExcelColumnName(numOfCol);
+            lastCellRange = alphabetOfCol + Convert.ToString(numOfRow - 1 + 1);
+
+            rng = xlWorkSheet.UsedRange.Range["A1", lastCellRange];
+
+            rng.Value2 = result2;
 
             //Here saving the file in xlsx
             string excelPath = filePath + fileName + ".xlsx";
@@ -1247,14 +1357,13 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
             //Min As
             double asMin = minRebarPercentage * width * effDepth;
 
-            return asMin;
+            return Math.Ceiling(asMin);
         }
 
         public static void CompareToMinimumRcBeamRebar(src.HelperEtabs.RcBeam rcBeam)
         {
             double asMin = 0;
             asMin = GetMinimumRcBeamRebarEC(rcBeam.Fck, rcBeam.Fyk, rcBeam.Width, rcBeam.d);
-            rcBeam.AsMin = Math.Ceiling(asMin);
 
             if (rcBeam.BeamType == "Single/multi span")
             {
@@ -1271,6 +1380,61 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
                 rcBeam.RightTopAs = Math.Max(rcBeam.RightTopAs, asMin);
                 rcBeam.LeftBottomAs = Math.Max(rcBeam.LeftBottomAs, asMin);
                 rcBeam.RightBottomAs = Math.Max(rcBeam.RightBottomAs, asMin);
+            }
+        }
+
+        public static void CheckMessageRcBeamRebar(List<src.HelperEtabs.RcBeam> rcBeamList, src.HelperEtabs.DatabaseTable rcBeamDesignSummary)
+        {
+            //Get table
+            List<Dictionary<string, string>> rcBeamDesignSummaryTable = rcBeamDesignSummary.TableInList;
+
+            bool popUpShown = false;
+
+            //Getting message for each beam
+            foreach (src.HelperEtabs.RcBeam rcBeam in rcBeamList)
+            {
+                bool messageTaken = false;
+                double length = 0;
+
+                rcBeam.EtabsComment = "";
+
+                foreach (Dictionary<string, string> row in rcBeamDesignSummaryTable)
+                {
+
+                    if (row["UniqueName"] == rcBeam.UniqueName)
+                    {
+                        if (row["WarnMsg"] != "No Message")
+                        {
+                            rcBeam.EtabsComment += row["WarnMsg"];
+                            messageTaken = true;
+
+                            //Show warning if ETABS has warning!
+                            if (!popUpShown)
+                            {
+                                MessageBox.Show($"Warning! ETABS has warning message!");
+                                popUpShown = true;
+                            }
+                        }
+
+                        if (row["ErrMsg"] != "No Message")
+                        {
+                            rcBeam.EtabsComment += row["ErrMsg"];
+                            messageTaken = true;
+
+                            //Show warning if ETABS has warning!
+                            if (!popUpShown)
+                            {
+                                MessageBox.Show($"Warning! ETABS has warning message!");
+                                popUpShown = true;
+                            }
+                        }
+
+                        if (messageTaken)
+                        {
+                            break;
+                        }
+                    }
+                }
             }
         }
 
@@ -1323,7 +1487,7 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
                 {
                     if (rcBeam.AsEvaluationComment == null)
                     {
-                        rcBeam.AsEvaluationComment = "d calculated < d ETABS";
+                        rcBeam.AsEvaluationComment += "d calculated < d ETABS";
                     }
                     else
                     {
@@ -1446,6 +1610,263 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
                 return centroid;
             }
 
+        }
+
+        public static void GetForcesEnvelope(cSapModel Sap, List<HelperEtabs.RcBeam> rcBeamList, 
+            List<Dictionary<string, string>> groupAndBeamType)
+        {
+            //List to save list of load combo used in rc design
+            List<string> rcFrameDesignLoadComboList = new List<string>();
+
+            //Extraction of load combo list using database
+            src.HelperEtabs.DatabaseTable rcDesignLoadComboDatabase = new src.HelperEtabs.DatabaseTable();
+            bool isError;
+
+            string tableKey = "Concrete Frame Design Load Combination Data";
+            (isError, rcDesignLoadComboDatabase) = src.HelperEtabs.GetTableDisplay(Sap, tableKey, false);
+
+            List<Dictionary<string, string>> rcDesignLoadComboTable = rcDesignLoadComboDatabase.TableInList;
+
+            foreach (Dictionary<string, string> row in rcDesignLoadComboTable)
+            {
+                if (row["ComboType"] == "Strength")
+                {
+                    rcFrameDesignLoadComboList.Add(row["ComboName"]);
+                }
+            }
+
+            //Get group to use to filter database so not very long
+            List<string> groupNameList = new List<string>();
+            foreach (Dictionary<string, string> groupWithBeamType in groupAndBeamType)
+            {
+                string groupName = groupWithBeamType["groupName"];
+                groupNameList.Add(groupName);
+            }
+
+
+            //Extraction of forces list using database
+            src.HelperEtabs.DatabaseTable elementForceBeamDatabase = new src.HelperEtabs.DatabaseTable();
+
+            tableKey = "Element Forces - Beams";
+            (isError, elementForceBeamDatabase) = src.HelperEtabs.GetTableDisplaySpecificGroup(Sap, tableKey, groupNameList, false);
+
+            List<Dictionary<string, string>> elementForceBeamTable = elementForceBeamDatabase.TableInList;
+
+            //Getting force envelope for each beam
+            foreach (src.HelperEtabs.RcBeam rcBeam in rcBeamList)
+            {
+
+                //Getting force envelope for each combo
+                foreach (string rcFrameDesignLoadCombo in rcFrameDesignLoadComboList)
+                {
+                    src.HelperEtabs.FrameForceEachCase frameForceEachCase = new HelperEtabs.FrameForceEachCase(rcFrameDesignLoadCombo);
+
+                    double leftMomentNeg = 0;
+                    double leftMomentPos = 0;
+                    double midMomentNeg = 0;
+                    double midMomentPos = 0;
+                    double rightMomentNeg = 0;
+                    double rightMomentPos = 0;
+
+                    double leftShear = 0;
+                    double midShear = 0;
+                    double rightShear = 0;
+
+                    bool firstLeft = true;
+                    bool firstMid = true;
+                    bool firstRight = true;
+
+                    //if mid is not found, means is short beam
+                    bool midNotFound = true;
+
+                    foreach (Dictionary<string, string> row in elementForceBeamTable)
+                    {
+                        //Single or multispan
+                        if (row["UniqueName"] == rcBeam.UniqueName && rcBeam.BeamType == "Single/multi span" && rcFrameDesignLoadCombo == row["OutputCase"])
+                        {
+                            if (Convert.ToDouble(row["Station"]) <= rcBeam.LeftStation)
+                            {
+                                if (firstLeft)
+                                {
+                                    leftMomentNeg = Convert.ToDouble(row["M3"]);
+                                    leftMomentPos = Convert.ToDouble(row["M3"]);
+                                    leftShear = Math.Abs(Convert.ToDouble(row["V2"]));
+
+                                    firstLeft = false;
+                                }
+                                else
+                                {
+                                    if (Convert.ToDouble(row["M3"]) < leftMomentNeg)
+                                    {
+                                        leftMomentNeg = Convert.ToDouble(row["M3"]);
+                                    }
+
+                                    if (Convert.ToDouble(row["M3"]) > leftMomentPos)
+                                    {
+                                        leftMomentPos = Convert.ToDouble(row["M3"]);
+                                    }
+
+                                    if (Math.Abs(Convert.ToDouble(row["V2"])) > leftShear)
+                                    {
+                                        leftShear = Math.Abs(Convert.ToDouble(row["V2"]));
+                                    }
+                                }
+                            }
+                            else if (Convert.ToDouble(row["Station"]) >= rcBeam.RightStation)
+                            {
+                                if (firstRight)
+                                {
+                                    rightMomentNeg = Convert.ToDouble(row["M3"]);
+                                    rightMomentPos = Convert.ToDouble(row["M3"]);
+                                    rightShear = Math.Abs(Convert.ToDouble(row["V2"]));
+
+                                    firstRight = false;
+                                }
+                                else
+                                {
+                                    if (Convert.ToDouble(row["M3"]) < rightMomentNeg)
+                                    {
+                                        rightMomentNeg = Convert.ToDouble(row["M3"]);
+                                    }
+
+                                    if (Convert.ToDouble(row["M3"]) > rightMomentPos)
+                                    {
+                                        rightMomentPos = Convert.ToDouble(row["M3"]);
+                                    }
+
+                                    if (Math.Abs(Convert.ToDouble(row["V2"])) > rightShear)
+                                    {
+                                        rightShear = Math.Abs(Convert.ToDouble(row["V2"]));
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                if (firstMid)
+                                {
+                                    midMomentNeg = Convert.ToDouble(row["M3"]);
+                                    midMomentPos = Convert.ToDouble(row["M3"]);
+                                    midShear = Math.Abs(Convert.ToDouble(row["V2"]));
+
+                                    firstMid = false;
+                                    midNotFound = false;
+                                }
+                                else
+                                {
+                                    if (Convert.ToDouble(row["M3"]) < midMomentNeg)
+                                    {
+                                        midMomentNeg = Convert.ToDouble(row["M3"]);
+                                    }
+
+                                    if (Convert.ToDouble(row["M3"]) > midMomentPos)
+                                    {
+                                        midMomentPos = Convert.ToDouble(row["M3"]);
+                                    }
+
+                                    if (Math.Abs(Convert.ToDouble(row["V2"])) > midShear)
+                                    {
+                                        midShear = Math.Abs(Convert.ToDouble(row["V2"]));
+                                    }
+                                }
+
+                            }
+                        }
+                        //Cantilever
+                        else if (row["UniqueName"] == rcBeam.UniqueName && rcBeam.BeamType == "Cantilever" && rcFrameDesignLoadCombo == row["OutputCase"])
+                        {
+
+                            if (Convert.ToDouble(row["Station"]) <= rcBeam.LeftStation)
+                            {
+                                if (firstLeft)
+                                {
+                                    leftMomentNeg = Convert.ToDouble(row["M3"]);
+                                    leftMomentPos = Convert.ToDouble(row["M3"]);
+                                    leftShear = Math.Abs(Convert.ToDouble(row["V2"]));
+
+                                    firstLeft = false;
+                                }
+                                else
+                                {
+                                    if (Convert.ToDouble(row["M3"]) < leftMomentNeg)
+                                    {
+                                        leftMomentNeg = Convert.ToDouble(row["M3"]);
+                                    }
+
+                                    if (Convert.ToDouble(row["M3"]) > leftMomentPos)
+                                    {
+                                        leftMomentPos = Convert.ToDouble(row["M3"]);
+                                    }
+
+                                    if (Math.Abs(Convert.ToDouble(row["V2"])) > leftShear)
+                                    {
+                                        leftShear = Math.Abs(Convert.ToDouble(row["V2"]));
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                if (firstRight)
+                                {
+                                    rightMomentNeg = Convert.ToDouble(row["M3"]);
+                                    rightMomentPos = Convert.ToDouble(row["M3"]);
+                                    rightShear = Math.Abs(Convert.ToDouble(row["V2"]));
+
+                                    firstRight = false;
+                                }
+                                else
+                                {
+                                    if (Convert.ToDouble(row["M3"]) < rightMomentNeg)
+                                    {
+                                        rightMomentNeg = Convert.ToDouble(row["M3"]);
+                                    }
+
+                                    if (Convert.ToDouble(row["M3"]) > rightMomentPos)
+                                    {
+                                        rightMomentPos = Convert.ToDouble(row["M3"]);
+                                    }
+
+                                    if (Math.Abs(Convert.ToDouble(row["V2"])) > rightShear)
+                                    {
+                                        rightShear = Math.Abs(Convert.ToDouble(row["V2"]));
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+
+                    //if short beam
+                    if (midNotFound && rcBeam.BeamType == "Single/multi span")
+                    {
+                        frameForceEachCase.LeftMomentNeg = Math.Ceiling(leftMomentNeg * Math.Pow(10, -6)); //Nmm to kNm
+                        frameForceEachCase.LeftMomentPos = Math.Ceiling(leftMomentPos * Math.Pow(10, -6));
+                        frameForceEachCase.MidMomentNeg = Math.Ceiling(Math.Max(leftMomentNeg, rightMomentNeg) * Math.Pow(10, -6));
+                        frameForceEachCase.MidMomentPos = Math.Ceiling(Math.Max(leftMomentPos, rightMomentPos) * Math.Pow(10, -6));
+                        frameForceEachCase.RightMomentNeg = Math.Ceiling(rightMomentNeg * Math.Pow(10, -6));
+                        frameForceEachCase.RightMomentPos = Math.Ceiling(rightMomentPos * Math.Pow(10, -6));
+
+                        frameForceEachCase.LeftShear = Math.Ceiling(leftShear * Math.Pow(10, -3)); //N to kN
+                        frameForceEachCase.MidShear = Math.Ceiling(Math.Max(leftShear, rightShear) * Math.Pow(10, -3));
+                        frameForceEachCase.RightShear = Math.Ceiling(rightShear * Math.Pow(10, -3));
+                    }
+                    else
+                    {
+                        frameForceEachCase.LeftMomentNeg = Math.Ceiling(leftMomentNeg * Math.Pow(10, -6));
+                        frameForceEachCase.LeftMomentPos = Math.Ceiling(leftMomentPos * Math.Pow(10, -6));
+                        frameForceEachCase.MidMomentNeg = Math.Ceiling(midMomentNeg * Math.Pow(10, -6));
+                        frameForceEachCase.MidMomentPos = Math.Ceiling(midMomentPos * Math.Pow(10, -6));
+                        frameForceEachCase.RightMomentNeg = Math.Ceiling(rightMomentNeg * Math.Pow(10, -6));
+                        frameForceEachCase.RightMomentPos = Math.Ceiling(rightMomentPos * Math.Pow(10, -6));
+
+                        frameForceEachCase.LeftShear = Math.Ceiling(leftShear * Math.Pow(10, -3));
+                        frameForceEachCase.MidShear = Math.Ceiling(midShear * Math.Pow(10, -3));
+                        frameForceEachCase.RightShear = Math.Ceiling(rightShear * Math.Pow(10, -3));
+                    }
+
+                    //Save force each case to rcbeam
+                    rcBeam.FrameForceEachCaseList.Add(frameForceEachCase);
+                }
+            }
         }
 
         public static void RcBeamClusteringUsingKMeans(List<src.HelperEtabs.RcBeam> rcBeamList)
