@@ -2861,6 +2861,16 @@ namespace WS_SG_ETABS_Plugin.src
             "All Failure", "PMN Failure", "Shear Failure", "Pier Req. Rebar %"
         };
 
+        public static List<string> typeLoadCombo = new List<string>()
+        {
+            "Linear Additive", "Envelope", "Absolute Additive", "SRSS", "Range Additive"
+        };
+
+        public static List<string> ifAlreadyExist = new List<string>()
+        {
+            "Modify", "Overwrite"
+        };
+
         #endregion
 
     }

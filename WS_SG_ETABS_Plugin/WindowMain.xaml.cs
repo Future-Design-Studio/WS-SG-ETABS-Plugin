@@ -335,5 +335,12 @@ namespace WS_SG_ETABS_Plugin
             src.wall_design_view.WindowWallDesignSelectLoad windowWallDesignSelectLoad = new src.wall_design_view.WindowWallDesignSelectLoad(_SapModel, _Plugin);
             IsEnabled = true;
         }
+
+        private void buttonAddLoadCombo_Click(object sender, RoutedEventArgs e)
+        {
+            //Call up window
+            src.add_load_combo.WindowAddLoadComboMain windowAddLoadComboMain = new src.add_load_combo.WindowAddLoadComboMain(_SapModel, _Plugin);
+            IsEnabled = true;
+        }
     }
 }

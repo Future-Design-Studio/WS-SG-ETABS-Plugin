@@ -216,6 +216,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="NotYetImplemented.cs" />
+    <Compile Include="src\add_load_combo\FunctionAddLoadCombo.cs" />
+    <Compile Include="src\add_load_combo\WindowAddLoadComboMain.xaml.cs">
+      <DependentUpon>WindowAddLoadComboMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\add_load_combo\WindowAddLoadComboResult.xaml.cs">
+      <DependentUpon>WindowAddLoadComboResult.xaml</DependentUpon>
+    </Compile>
     <Compile Include="src\carbon\WindowCarbonMain.xaml.cs">
       <DependentUpon>WindowCarbonMain.xaml</DependentUpon>
     </Compile>
@@ -474,6 +481,14 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="src\add_load_combo\WindowAddLoadComboMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\add_load_combo\WindowAddLoadComboResult.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="src\carbon\WindowCarbonMain.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
