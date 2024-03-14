@@ -342,5 +342,10 @@ namespace WS_SG_ETABS_Plugin
             src.add_load_combo.WindowAddLoadComboMain windowAddLoadComboMain = new src.add_load_combo.WindowAddLoadComboMain(_SapModel, _Plugin);
             IsEnabled = true;
         }
+
+        private void buttonApplyModifier_Click()
+        {
+
+        }
     }
 }
