@@ -40,8 +40,6 @@ namespace WS_SG_ETABS_Plugin.src.apply_modifier
             //Datagrid
             dataGridModifier.ItemsSource = modifierDefinitionList;
 
-            
-
             ShowDialog();
 
             dataGridModifier.Columns[0].Header = "Group";

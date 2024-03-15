@@ -231,6 +231,14 @@
     <Compile Include="src\apply_modifier\WindowApplyModifierResult.xaml.cs">
       <DependentUpon>WindowApplyModifierResult.xaml</DependentUpon>
     </Compile>
+    <Compile Include="src\apply_section_property\ClassApplySectProp.cs" />
+    <Compile Include="src\apply_section_property\FunctionApplySectProp.cs" />
+    <Compile Include="src\apply_section_property\WindowApplySectPropMain.xaml.cs">
+      <DependentUpon>WindowApplySectPropMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\apply_section_property\WindowApplySectPropResult.xaml.cs">
+      <DependentUpon>WindowApplySectPropResult.xaml</DependentUpon>
+    </Compile>
     <Compile Include="src\carbon\WindowCarbonMain.xaml.cs">
       <DependentUpon>WindowCarbonMain.xaml</DependentUpon>
     </Compile>
@@ -502,6 +510,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="src\apply_modifier\WindowApplyModifierResult.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\apply_section_property\WindowApplySectPropMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\apply_section_property\WindowApplySectPropResult.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
