@@ -351,5 +351,13 @@ namespace WS_SG_ETABS_Plugin
             src.apply_modifier.WindowApplyModifierMain windowApplyModifierMain = new src.apply_modifier.WindowApplyModifierMain(_SapModel, _Plugin);
             IsEnabled = true;
         }
+
+        private void buttonApplySectProp_Click(object sender, RoutedEventArgs e)
+        {
+            IsEnabled = false;
+            //Call up window
+            src.apply_section_property.WindowApplySectPropMain windowApplySectPropMain = new src.apply_section_property.WindowApplySectPropMain(_SapModel, _Plugin);
+            IsEnabled = true;
+        }
     }
 }
