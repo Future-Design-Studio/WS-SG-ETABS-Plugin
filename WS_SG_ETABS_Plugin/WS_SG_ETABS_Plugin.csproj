@@ -223,6 +223,14 @@
     <Compile Include="src\add_load_combo\WindowAddLoadComboResult.xaml.cs">
       <DependentUpon>WindowAddLoadComboResult.xaml</DependentUpon>
     </Compile>
+    <Compile Include="src\apply_modifier\ClassApplyModifier.cs" />
+    <Compile Include="src\apply_modifier\FunctionApplyModifier.cs" />
+    <Compile Include="src\apply_modifier\WindowApplyModifierMain.xaml.cs">
+      <DependentUpon>WindowApplyModifierMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\apply_modifier\WindowApplyModifierResult.xaml.cs">
+      <DependentUpon>WindowApplyModifierResult.xaml</DependentUpon>
+    </Compile>
     <Compile Include="src\carbon\WindowCarbonMain.xaml.cs">
       <DependentUpon>WindowCarbonMain.xaml</DependentUpon>
     </Compile>
@@ -486,6 +494,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="src\add_load_combo\WindowAddLoadComboResult.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\apply_modifier\WindowApplyModifierMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\apply_modifier\WindowApplyModifierResult.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
