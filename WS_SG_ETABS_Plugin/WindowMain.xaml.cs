@@ -338,14 +338,18 @@ namespace WS_SG_ETABS_Plugin
 
         private void buttonAddLoadCombo_Click(object sender, RoutedEventArgs e)
         {
+            IsEnabled = false;
             //Call up window
             src.add_load_combo.WindowAddLoadComboMain windowAddLoadComboMain = new src.add_load_combo.WindowAddLoadComboMain(_SapModel, _Plugin);
             IsEnabled = true;
         }
 
-        private void buttonApplyModifier_Click()
+        private void buttonApplyModifier_Click(object sender, RoutedEventArgs e)
         {
-
+            IsEnabled = false;
+            //Call up window
+            src.apply_modifier.WindowApplyModifierMain windowApplyModifierMain = new src.apply_modifier.WindowApplyModifierMain(_SapModel, _Plugin);
+            IsEnabled = true;
         }
     }
 }

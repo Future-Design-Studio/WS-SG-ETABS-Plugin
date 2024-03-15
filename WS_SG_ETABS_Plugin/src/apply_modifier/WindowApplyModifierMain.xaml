@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WS_SG_ETABS_Plugin.src.apply_modifier"
-             mc:Ignorable="d" Height="700" Width="600" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+             mc:Ignorable="d" Height="800" Width="700" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"></ColumnDefinition>
@@ -13,9 +13,13 @@
             <RowDefinition Height="0.7*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="0.5*"></RowDefinition>
-            <RowDefinition Height="3.6*"></RowDefinition>
+            <RowDefinition Height="0.5*"></RowDefinition>
             <RowDefinition Height="0.5*"></RowDefinition>
             <RowDefinition Height="5*"></RowDefinition>
+            <RowDefinition Height="0.5*"></RowDefinition>
+            <RowDefinition Height="0.5*"></RowDefinition>
+            <RowDefinition Height="3*"></RowDefinition>
+            <RowDefinition Height="0.5*"></RowDefinition>
             <RowDefinition Height="0.6*"></RowDefinition>
         </Grid.RowDefinitions>
 
@@ -32,32 +36,8 @@
 
 
         <Grid Grid.Row="3" Grid.Column="1" Margin="10 0 10 0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="0.2*"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"></ColumnDefinition>
-                <ColumnDefinition Width="0.5*"></ColumnDefinition>
-                <ColumnDefinition Width="*"></ColumnDefinition>
-            </Grid.ColumnDefinitions>
 
-            <TextBlock Grid.Row="0" Grid.Column="0" TextWrapping="WrapWithOverflow" VerticalAlignment="Center">
-        Available group(s):
-            </TextBlock>
-
-            <TextBlock Grid.Row="0" Grid.Column="2" TextWrapping="WrapWithOverflow" VerticalAlignment="Center">
-        Selected group(s):
-            </TextBlock>
-
-            <ListBox Grid.Row="1" Grid.Column="0" x:Name="listBoxAvailLoadCase" d:ItemsSource="{d:SampleData ItemCount=5}" VerticalAlignment="Stretch" SelectionMode="Extended"></ListBox>
-
-            <StackPanel Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Margin="10 0">
-                <Button x:Name="buttonAddLoadCase" Content=">>" Click="buttonAddLoadCase_Click"></Button>
-                <Button x:Name="buttonRemoveLoadCase" Content="&lt;&lt;" Click="buttonRemoveLoadCase_Click"></Button>
-            </StackPanel>
-
-            <ListBox Grid.Row="1" Grid.Column="2" x:Name="listBoxChoosenLoadCase" d:ItemsSource="{d:SampleData ItemCount=5}" VerticalAlignment="Stretch" SelectionMode="Extended"></ListBox>
+            <ComboBox Grid.Column="1" x:Name="comBoxGroup" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" ></ComboBox>
 
         </Grid>
 
@@ -82,25 +62,25 @@
                     </Grid.ColumnDefinitions>
 
                     <StackPanel Grid.Column="0">
-                        <TextBlock Margin="0 2 0 5">Cross-section (axial) area</TextBlock>
-                        <TextBlock Margin="0 2 0 5">Shear Area in 2 direction</TextBlock>
-                        <TextBlock Margin="0 2 0 5">Shear Area in 3 direction</TextBlock>
-                        <TextBlock Margin="0 2 0 5">Torsional Constant</TextBlock>
-                        <TextBlock Margin="0 2 0 5">Moment of Inertia about 2 axis</TextBlock>
-                        <TextBlock Margin="0 2 0 5">Moment of Inertia about 3 axis</TextBlock>
+                        <TextBlock Margin="0 2 0 5">Cross-section (axial) area (A)</TextBlock>
+                        <TextBlock Margin="0 2 0 5">Shear Area in 2 direction (V2)</TextBlock>
+                        <TextBlock Margin="0 2 0 5">Shear Area in 3 direction (V3)</TextBlock>
+                        <TextBlock Margin="0 2 0 5">Torsional Constant (T)</TextBlock>
+                        <TextBlock Margin="0 2 0 5">Moment of Inertia about 2 axis (M2)</TextBlock>
+                        <TextBlock Margin="0 2 0 5">Moment of Inertia about 3 axis (M3)</TextBlock>
                         <TextBlock Margin="0 2 0 5">Mass</TextBlock>
                         <TextBlock Margin="0 2 0 5">Weight</TextBlock>
                     </StackPanel>
 
                     <StackPanel Grid.Column="1">
-                        <TextBox Text="1" Name="frameModA" TextAlignment="Center" Margin="0 0 0 5"></TextBox>
-                        <TextBox Text="1" Name="frameModV2" TextAlignment="Center" Margin="0 0 0 5"></TextBox>
-                        <TextBox Text="1" Name="frameModV3" TextAlignment="Center" Margin="0 0 0 5"></TextBox>
-                        <TextBox Text="1" Name="frameModT" TextAlignment="Center" Margin="0 0 0 5"></TextBox>
-                        <TextBox Text="1" Name="frameModM2" TextAlignment="Center"  Margin="0 0 0 5"></TextBox>
-                        <TextBox Text="1" Name="frameModM3" TextAlignment="Center"  Margin="0 0 0 5"></TextBox>
-                        <TextBox Text="1" Name="frameModMass" TextAlignment="Center"  Margin="0 0 0 5"></TextBox>
-                        <TextBox Text="1" Name="frameModWeight" TextAlignment="Center"  Margin="0 0 0 5"></TextBox>
+                        <TextBox Text="1" Name="textBoxFrameModA" TextAlignment="Center" Margin="0 0 0 5"></TextBox>
+                        <TextBox Text="1" Name="textBoxFrameModV2" TextAlignment="Center" Margin="0 0 0 5"></TextBox>
+                        <TextBox Text="1" Name="textBoxFrameModV3" TextAlignment="Center" Margin="0 0 0 5"></TextBox>
+                        <TextBox Text="1" Name="textBoxFrameModT" TextAlignment="Center" Margin="0 0 0 5"></TextBox>
+                        <TextBox Text="1" Name="textBoxFrameModM2" TextAlignment="Center"  Margin="0 0 0 5"></TextBox>
+                        <TextBox Text="1" Name="textBoxFrameModM3" TextAlignment="Center"  Margin="0 0 0 5"></TextBox>
+                        <TextBox Text="1" Name="textBoxFrameModMass" TextAlignment="Center"  Margin="0 0 0 5"></TextBox>
+                        <TextBox Text="1" Name="textBoxFrameModWeight" TextAlignment="Center"  Margin="0 0 0 5"></TextBox>
                     </StackPanel>
 
                 </Grid>
@@ -117,29 +97,29 @@
                     </Grid.ColumnDefinitions>
 
                     <StackPanel Grid.Column="0">
-                        <TextBlock Margin="0 2 0 5">Membrane f11 direction</TextBlock>
-                        <TextBlock Margin="0 2 0 5">Membrane f22 direction</TextBlock>
-                        <TextBlock Margin="0 2 0 5">Membrane f12 direction</TextBlock>
-                        <TextBlock Margin="0 2 0 5">Bending m11 direction</TextBlock>
-                        <TextBlock Margin="0 2 0 5">Bending m22 direction</TextBlock>
-                        <TextBlock Margin="0 2 0 5">Bending m12 direction</TextBlock>
-                        <TextBlock Margin="0 2 0 5">Shear v13 direction</TextBlock>
-                        <TextBlock Margin="0 2 0 5">Shear v23 direction</TextBlock>
+                        <TextBlock Margin="0 2 0 5">Membrane f11 direction (F11)</TextBlock>
+                        <TextBlock Margin="0 2 0 5">Membrane f22 direction (F22)</TextBlock>
+                        <TextBlock Margin="0 2 0 5">Membrane f12 direction (F12)</TextBlock>
+                        <TextBlock Margin="0 2 0 5">Bending m11 direction (M11)</TextBlock>
+                        <TextBlock Margin="0 2 0 5">Bending m22 direction (M22)</TextBlock>
+                        <TextBlock Margin="0 2 0 5">Bending m12 direction (M12)</TextBlock>
+                        <TextBlock Margin="0 2 0 5">Shear v13 direction (V13)</TextBlock>
+                        <TextBlock Margin="0 2 0 5">Shear v23 direction (V23)</TextBlock>
                         <TextBlock Margin="0 2 0 5">Mass</TextBlock>
                         <TextBlock Margin="0 2 0 5">Weight</TextBlock>
                     </StackPanel>
 
                     <StackPanel Grid.Column="1">
-                        <TextBox Text="1" Name="areaModF11" TextAlignment="Center" Margin="0 0 0 5"></TextBox>
-                        <TextBox Text="1" Name="areaModF22" TextAlignment="Center" Margin="0 0 0 5"></TextBox>
-                        <TextBox Text="1" Name="areaModF12" TextAlignment="Center" Margin="0 0 0 5"></TextBox>
-                        <TextBox Text="1" Name="areaModM11" TextAlignment="Center" Margin="0 0 0 5"></TextBox>
-                        <TextBox Text="1" Name="areaModM22" TextAlignment="Center" Margin="0 0 0 5"></TextBox>
-                        <TextBox Text="1" Name="areaModM12" TextAlignment="Center" Margin="0 0 0 5"></TextBox>
-                        <TextBox Text="1" Name="areaModV13" TextAlignment="Center" Margin="0 0 0 5"></TextBox>
-                        <TextBox Text="1" Name="areaModV23" TextAlignment="Center" Margin="0 0 0 5"></TextBox>
-                        <TextBox Text="1" Name="areaModMass" TextAlignment="Center" Margin="0 0 0 5"></TextBox>
-                        <TextBox Text="1" Name="areaModWeight" TextAlignment="Center" Margin="0 0 0 5"></TextBox>
+                        <TextBox Text="1" Name="textBoxAreaModF11" TextAlignment="Center" Margin="0 0 0 5"></TextBox>
+                        <TextBox Text="1" Name="textBoxAreaModF22" TextAlignment="Center" Margin="0 0 0 5"></TextBox>
+                        <TextBox Text="1" Name="textBoxAreaModF12" TextAlignment="Center" Margin="0 0 0 5"></TextBox>
+                        <TextBox Text="1" Name="textBoxAreaModM11" TextAlignment="Center" Margin="0 0 0 5"></TextBox>
+                        <TextBox Text="1" Name="textBoxAreaModM22" TextAlignment="Center" Margin="0 0 0 5"></TextBox>
+                        <TextBox Text="1" Name="textBoxAreaModM12" TextAlignment="Center" Margin="0 0 0 5"></TextBox>
+                        <TextBox Text="1" Name="textBoxAreaModV13" TextAlignment="Center" Margin="0 0 0 5"></TextBox>
+                        <TextBox Text="1" Name="textBoxAreaModV23" TextAlignment="Center" Margin="0 0 0 5"></TextBox>
+                        <TextBox Text="1" Name="textBoxAreaModMass" TextAlignment="Center" Margin="0 0 0 5"></TextBox>
+                        <TextBox Text="1" Name="textBoxAreaModWeight" TextAlignment="Center" Margin="0 0 0 5"></TextBox>
                     </StackPanel>
 
                 </Grid>
@@ -151,13 +131,17 @@
 
         </Grid>
 
+        <Button Grid.Row="6" x:Name="buttonAdd" Content="Add" Width="100" Click="buttonAdd_Click"/>
+
+        <Label Grid.Row="7" Grid.Column="0" Content="3. Added group(s) and element modifier factor" FontSize="14" FontWeight="Bold"/>
+
+        <DataGrid Grid.Row="8" FrozenColumnCount="1" Name="dataGridModifier" IsReadOnly="True" Margin="0 0 0 10"></DataGrid>
+
+        <Button Grid.Row="9" x:Name="buttonRemove" Content="Remove" Width="100" Click="buttonRemove_Click"/>
 
 
 
-
-
-
-        <Grid Grid.Row="9" Margin="0 5 0 0">
+        <Grid Grid.Row="10" Margin="0 5 0 0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
