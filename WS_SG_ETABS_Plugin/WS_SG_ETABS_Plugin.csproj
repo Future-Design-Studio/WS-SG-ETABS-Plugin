@@ -87,9 +87,9 @@
     <Reference Include="Accord.Statistics, Version=3.8.0.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
       <HintPath>..\packages\Accord.Statistics.3.8.0\lib\net462\Accord.Statistics.dll</HintPath>
     </Reference>
-    <Reference Include="ETABSv1">
-      <HintPath>C:\Program Files\Computers and Structures\ETABS 20\ETABSv1.dll</HintPath>
-      <Private>False</Private>
+    <Reference Include="ETABSv1, Version=1.0.0.0, Culture=neutral, PublicKeyToken=453d728ef24c6f5e, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\Program Files\Computers and Structures\ETABS 21\ETABSv1.dll</HintPath>
     </Reference>
     <Reference Include="LiveCharts, Version=0.9.7.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL">
       <HintPath>..\packages\LiveCharts.0.9.7\lib\net45\LiveCharts.dll</HintPath>
@@ -134,7 +134,7 @@
     </Reference>
     <Reference Include="SAFEv1, Version=1.0.0.0, Culture=neutral, PublicKeyToken=453d728ef24c6f5e, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\..\..\..\Program Files\Computers and Structures\SAFE 20\SAFEv1.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\Program Files\Computers and Structures\SAFE 21\SAFEv1.dll</HintPath>
     </Reference>
     <Reference Include="ScottPlot, Version=4.1.59.0, Culture=neutral, PublicKeyToken=86698dc10387c39e, processorArchitecture=MSIL">
       <HintPath>..\packages\ScottPlot.4.1.59\lib\net462\ScottPlot.dll</HintPath>
@@ -216,6 +216,29 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="NotYetImplemented.cs" />
+    <Compile Include="src\add_load_combo\FunctionAddLoadCombo.cs" />
+    <Compile Include="src\add_load_combo\WindowAddLoadComboMain.xaml.cs">
+      <DependentUpon>WindowAddLoadComboMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\add_load_combo\WindowAddLoadComboResult.xaml.cs">
+      <DependentUpon>WindowAddLoadComboResult.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\apply_modifier\ClassApplyModifier.cs" />
+    <Compile Include="src\apply_modifier\FunctionApplyModifier.cs" />
+    <Compile Include="src\apply_modifier\WindowApplyModifierMain.xaml.cs">
+      <DependentUpon>WindowApplyModifierMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\apply_modifier\WindowApplyModifierResult.xaml.cs">
+      <DependentUpon>WindowApplyModifierResult.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\apply_section_property\ClassApplySectProp.cs" />
+    <Compile Include="src\apply_section_property\FunctionApplySectProp.cs" />
+    <Compile Include="src\apply_section_property\WindowApplySectPropMain.xaml.cs">
+      <DependentUpon>WindowApplySectPropMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\apply_section_property\WindowApplySectPropResult.xaml.cs">
+      <DependentUpon>WindowApplySectPropResult.xaml</DependentUpon>
+    </Compile>
     <Compile Include="src\carbon\WindowCarbonMain.xaml.cs">
       <DependentUpon>WindowCarbonMain.xaml</DependentUpon>
     </Compile>
@@ -474,6 +497,30 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="src\add_load_combo\WindowAddLoadComboMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\add_load_combo\WindowAddLoadComboResult.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\apply_modifier\WindowApplyModifierMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\apply_modifier\WindowApplyModifierResult.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\apply_section_property\WindowApplySectPropMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\apply_section_property\WindowApplySectPropResult.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="src\carbon\WindowCarbonMain.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -740,13 +787,13 @@
     <None Include="packages.config" />
     <None Include="src\rc_beam_schedule\FlowchartConvertAsToRebar.drawio" />
     <Resource Include="src\resources\TEDDS_API.pdf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
     <Resource Include="src\resources\TEDDS_by_Future_Design_Studio.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="src\resources\Tools.pdf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
   <ItemGroup>

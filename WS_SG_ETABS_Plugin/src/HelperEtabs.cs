@@ -125,6 +125,7 @@ namespace WS_SG_ETABS_Plugin.src
             public double Cover { get; set; }
             public string AsEvaluationComment { get; set; }
             public string AvEvaluationComment { get; set; }
+            public string EtabsComment { get; set; }
             public double RatioLeftTopAs { get; set; }
             public double RatioLeftBottomAs { get; set; }
             public double RatioMidTopAs { get; set; }
@@ -135,11 +136,34 @@ namespace WS_SG_ETABS_Plugin.src
             public double RatioMidAv { get; set; }
             public double RatioRightAv { get; set; }
             public string Cluster { get; set; }
+            public double LeftStation { get; set; }
+            public double RightStation { get; set; }
+            public List<FrameForceEachCase> FrameForceEachCaseList { get; set;}
 
             public RcBeam(string name)
             {
                 UniqueName = name;
+                FrameForceEachCaseList = new List<FrameForceEachCase>();
             }
+        }
+
+        public class FrameForceEachCase
+        {
+            public FrameForceEachCase(string name)
+            {
+                LoadCaseName = name;
+            }
+
+            public string LoadCaseName { get; set; }
+            public double LeftMomentNeg { get; set; }
+            public double LeftMomentPos { get; set; }
+            public double LeftShear { get; set; }
+            public double MidMomentNeg { get; set; }
+            public double MidMomentPos { get; set; }
+            public double MidShear { get; set; }
+            public double RightMomentNeg { get; set; }
+            public double RightMomentPos { get; set; }
+            public double RightShear { get; set; }
         }
 
         public class Column
@@ -175,6 +199,7 @@ namespace WS_SG_ETABS_Plugin.src
             public double d { get; set; }
             public double dCalculated { get; set; }
             public double AsProv { get; set; }
+            public double AsProvPercentage { get; set; }
             public double AvMajorProv { get; set; }
             public double AvMinorProv { get; set; }
             public double RatioAs { get; set; }
@@ -190,6 +215,7 @@ namespace WS_SG_ETABS_Plugin.src
             public double ShearLinksSpacing { get; set; }
             public string AsEvaluationComment { get; set; }
             public string AvEvaluationComment { get; set; }
+            public string EtabsComment { get; set; }
 
             public RcColumn(string name)
             {
@@ -2494,24 +2520,41 @@ namespace WS_SG_ETABS_Plugin.src
         /// <returns></returns>
         public static (double, double, string) GetRcBeamDimensionAndConcreteMaterial (cSapModel Sap, string sectionPropName)
         {
-            string FileName = "";
-	        string MatProp = "";
-            double T3 = 0;
-            double T2 = 0;
-            int Color = 0;
-            string Notes = "";
-            string GUID = "";
+            //Get property type
+            ETABSv1.eFramePropType propType = new ETABSv1.eFramePropType();
+            string propTypeString = "";
 
-            Ret = Sap.PropFrame.GetRectangle(sectionPropName, ref FileName, ref MatProp, ref T3, ref T2, ref Color, ref Notes, ref GUID);
+            Ret = Sap.PropFrame.GetTypeOAPI(sectionPropName, ref propType);
+            propTypeString = propType.ToString();
 
-            if (Ret == 0)
+            if (propTypeString == "Rectangular")
             {
-                return (T2, T3, MatProp);
+                string FileName = "";
+                string MatProp = "";
+                double T3 = 0;
+                double T2 = 0;
+                int Color = 0;
+                string Notes = "";
+                string GUID = "";
+
+                Ret = Sap.PropFrame.GetRectangle(sectionPropName, ref FileName, ref MatProp, ref T3, ref T2, ref Color, ref Notes, ref GUID);
+
+                if (Ret == 0)
+                {
+                    return (T2, T3, MatProp);
+                }
+                else
+                {
+                    return (0, 0, "");
+                }
             }
             else
             {
+                MessageBox.Show($"Error extracting {sectionPropName} property! Only rectangular shape is supported!");
                 return (0, 0, "");
             }
+
+
         }
 
         /// <summary>
@@ -2572,7 +2615,7 @@ namespace WS_SG_ETABS_Plugin.src
             }
             else
             {
-                MessageBox.Show("Only rectangular or circle shape is supported!");
+                MessageBox.Show($"Error extracting {sectionPropName} property! Only rectangular or circle shape is supported!");
                 return (0, 0, 0, "", "");
             }
 
@@ -2829,12 +2872,22 @@ namespace WS_SG_ETABS_Plugin.src
 
         public static List<string> lateralDeflectionDirectionWithSRSSList = new List<string>()
         {
-            "Ux", "Uy", "Ux + Uy (SRSS)", "Ux and Uy (in one)"
+            "Ux", "Uy", "Ux + Uy (SRSS)", "Ux and Uy (in one)", "Uz"
         };
 
         public static List<string> typeOfViewWallDesign = new List<string>()
         {
             "All Failure", "PMN Failure", "Shear Failure", "Pier Req. Rebar %"
+        };
+
+        public static List<string> typeLoadCombo = new List<string>()
+        {
+            "Linear Additive", "Envelope", "Absolute Additive", "SRSS", "Range Additive"
+        };
+
+        public static List<string> ifAlreadyExist = new List<string>()
+        {
+            "Modify", "Overwrite"
         };
 
         #endregion
