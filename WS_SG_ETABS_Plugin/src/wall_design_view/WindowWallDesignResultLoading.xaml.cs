@@ -30,7 +30,6 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
         {
             InitializeComponent();
 
-
             ProcessWallDesignData(databaseTableList, listChoosenGroup, tableInListPierDesignResult,
                     tableInListSpandrelDesignResult, titleSize, axisTitleSize, tickLabelSize, extractEtabs, extractExcel);
 
