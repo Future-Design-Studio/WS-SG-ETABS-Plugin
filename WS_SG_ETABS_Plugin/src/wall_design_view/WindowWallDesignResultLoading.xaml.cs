@@ -305,9 +305,9 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
                                 failShear = true;
                             }
 
-                            if (pierReinfPercent < Convert.ToDouble(row["ReinfPcent"]))
+                            if (pierReinfPercent < Convert.ToDouble(row["ReinfPercent"]))
                             {
-                                pierReinfPercent = Convert.ToDouble(row["ReinfPcent"]);
+                                pierReinfPercent = Convert.ToDouble(row["ReinfPercent"]);
                             }
 
                         }
