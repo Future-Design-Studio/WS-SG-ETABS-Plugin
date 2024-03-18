@@ -241,8 +241,19 @@ namespace WS_SG_ETABS_Plugin.src.rc_col_schedule
                         rcColumn.CoverEtabs = coverEtabs;
                         rcColumn.Cover = cover;
 
-                        double d = height - coverEtabs - shearLinksDiameterEtabs - 0.5 * rebarDiameterEtabs;
-                        rcColumn.d = d;
+                        //Calculate d
+                        double d = 0;
+                        switch (shape)
+                        {
+                            case "Rectangular":
+                                d = height - coverEtabs - shearLinksDiameterEtabs - 0.5 * rebarDiameterEtabs;
+                                rcColumn.d = d;
+                                break;
+                            case "Circle":
+                                d = diameter - coverEtabs - shearLinksDiameterEtabs - 0.5 * rebarDiameterEtabs;
+                                rcColumn.d = d;
+                                break;
+                        }
 
                         //Get fyk
                         double fyk = 0;
@@ -318,7 +329,7 @@ namespace WS_SG_ETABS_Plugin.src.rc_col_schedule
                 rcColumn.Length = length;
             }
 
-            //Getting rebar area for each beam
+            //Getting rebar area for each column
             foreach (src.HelperEtabs.RcColumn rcColumn in rcColumnList)
             {
                 double As = 0;
@@ -385,6 +396,9 @@ namespace WS_SG_ETABS_Plugin.src.rc_col_schedule
                 double avMinor = rcColumn.AvMinor;
                 double width = rcColumn.Width;
                 double height = rcColumn.Height;
+                double diameter = rcColumn.Diameter;
+
+                string shape = rcColumn.Shape;
 
                 double numRebarLayer = 0;
                 List<int> numRebarPerLayer = new List<int>();
@@ -401,7 +415,7 @@ namespace WS_SG_ETABS_Plugin.src.rc_col_schedule
 
                 (numRebarLayer, numRebarPerLayer, rebarDiameter, asEvaluationComment, numShearLinksLegMajor, numShearLinksLegMinor, shearLinksDiameter, shearLinksSpacing,
                     avEvaluationComment, warningRebarDiameterTooBigShown) = ConvertRcColumnAreaToRebar(
-                    As, avReqMajor, avMinor, width, height, rebarSpc, rebarSpcPreference, maxShearLinksSpacing, minShearLinksSpacing, shearLinksSpacingStep, cover, shearLinksDiameterList,
+                    As, avReqMajor, avMinor, width, height, diameter, shape, rebarSpc, rebarSpcPreference, maxShearLinksSpacing, minShearLinksSpacing, shearLinksSpacingStep, cover, shearLinksDiameterList,
                     rebarDiameterList, maxNoLayer, rcColumn.UniqueName, warningRebarDiameterTooBigShown);
                 
                 rcColumn.Rebar = "";
@@ -443,8 +457,9 @@ namespace WS_SG_ETABS_Plugin.src.rc_col_schedule
             }
         }
         
-        private static (double, List<int>, List<int>, string, double, double, double, double, string, bool) ConvertRcColumnAreaToRebar(double asReq, double avReqMajor, double avReqMinor, double width, double height, double rebarSpc, string rebarSpcPreference, double maxShearLinksSpacing,
-            double minShearLinksSpacing, double shearLinksSpacingStep, double cover, int[] shearLinksDiameterList, int[] rebarDiameterList, int maxNoLayer, string uniqueName, bool warningRebarDiameterTooBigShown)
+        private static (double, List<int>, List<int>, string, double, double, double, double, string, bool) ConvertRcColumnAreaToRebar(double asReq, double avReqMajor, double avReqMinor, double width, double height,
+            double diameter, string shape, double rebarSpc, string rebarSpcPreference, double maxShearLinksSpacing, double minShearLinksSpacing, double shearLinksSpacingStep, double cover, int[] shearLinksDiameterList, 
+            int[] rebarDiameterList, int maxNoLayer, string uniqueName, bool warningRebarDiameterTooBigShown)
         {
             int shearLinksDiameterIndex = 0;
             double shearLinksDiameter = 0;
@@ -468,6 +483,9 @@ namespace WS_SG_ETABS_Plugin.src.rc_col_schedule
             double heightNoRebar = 0;
             double widthSpace = 0;
             double heightSpace = 0;
+
+            double diameterSpace = 0;
+            double circumferenceSpace = 0;
 
             //Keep looping if not both satisfied
             while (shearLinksDiameterIndex <= shearLinksDiameterList.Count() - 1 && !shearLinksMajorSatisfied && !shearLinksMinorSatisfied)
@@ -498,40 +516,79 @@ namespace WS_SG_ETABS_Plugin.src.rc_col_schedule
                         maxRebarDiameterInAllLayer = rebarDiameterPerLayer.Max();
 
                         //Calculating how many rebar per layer based on rebar spc preference
-                        if (rebarSpcPreference == "clear")
+                        switch (shape)
                         {
-                            widthSpace = width - cover * 2 - shearLinksDiameter * 2 - maxRebarDiameterInAllLayer;
-                            heightSpace = height - cover * 2 - shearLinksDiameter * 2 - maxRebarDiameterInAllLayer;
-                            widthNoRebar = Math.Floor(widthSpace / (rebarSpc + maxRebarDiameterInAllLayer) + 1);
-                            heightNoRebar = Math.Floor(heightSpace / (rebarSpc + maxRebarDiameterInAllLayer) + 1);
-                            maxNoRebarPerLayer = Convert.ToInt32(widthNoRebar * 2 + heightNoRebar * 2 - 4);
+                            case "Rectangular":
+
+                                switch (rebarSpcPreference)
+                                {
+                                    case "clear":
+                                        widthSpace = width - cover * 2 - shearLinksDiameter * 2 - maxRebarDiameterInAllLayer;
+                                        heightSpace = height - cover * 2 - shearLinksDiameter * 2 - maxRebarDiameterInAllLayer;
+                                        widthNoRebar = Math.Floor(widthSpace / (rebarSpc + maxRebarDiameterInAllLayer) + 1);
+                                        heightNoRebar = Math.Floor(heightSpace / (rebarSpc + maxRebarDiameterInAllLayer) + 1);
+                                        maxNoRebarPerLayer = Convert.ToInt32(widthNoRebar * 2 + heightNoRebar * 2 - 4);
+                                        break;
+
+                                    case "ctoc":
+                                        widthSpace = width - cover * 2 - shearLinksDiameter * 2 - maxRebarDiameterInAllLayer;
+                                        heightSpace = height - cover * 2 - shearLinksDiameter * 2 - maxRebarDiameterInAllLayer;
+                                        widthNoRebar = Math.Floor(widthSpace / (rebarSpc) + 1);
+                                        heightNoRebar = Math.Floor(heightSpace / (rebarSpc) + 1);
+                                        maxNoRebarPerLayer = Convert.ToInt32(widthNoRebar * 2 + heightNoRebar * 2 - 4);
+                                        break;
+
+                                    case "auto":
+                                        rebarSpc = Math.Max(25, maxRebarDiameterInAllLayer);
+                                        widthSpace = width - cover * 2 - shearLinksDiameter * 2 - maxRebarDiameterInAllLayer;
+                                        heightSpace = height - cover * 2 - shearLinksDiameter * 2 - maxRebarDiameterInAllLayer;
+                                        widthNoRebar = Math.Floor(widthSpace / (rebarSpc + maxRebarDiameterInAllLayer) + 1);
+                                        heightNoRebar = Math.Floor(heightSpace / (rebarSpc + maxRebarDiameterInAllLayer) + 1);
+                                        maxNoRebarPerLayer = Convert.ToInt32(widthNoRebar * 2 + heightNoRebar * 2 - 4);
+                                        break;
+
+                                    case "autoRamboll":
+                                        widthSpace = width - cover * 2 - shearLinksDiameter * 2 - maxRebarDiameterInAllLayer;
+                                        heightSpace = height - cover * 2 - shearLinksDiameter * 2 - maxRebarDiameterInAllLayer;
+                                        widthNoRebar = Math.Floor(width / 100);
+                                        heightNoRebar = Math.Floor(height / 100);
+                                        maxNoRebarPerLayer = Convert.ToInt32(widthNoRebar * 2 + heightNoRebar * 2 - 4);
+                                        break;
+                                }
+
+                                break;
+
+                            case "Circle":
+
+                                switch (rebarSpcPreference)
+                                {
+                                    case "clear":
+                                        diameterSpace = diameter - cover * 2 - shearLinksDiameter * 2 - maxRebarDiameterInAllLayer;
+                                        circumferenceSpace = Math.PI * diameterSpace;
+                                        maxNoRebarPerLayer = Convert.ToInt32(Math.Floor(circumferenceSpace / (rebarSpc + maxRebarDiameterInAllLayer) + 1));
+                                        break;
+
+                                    case "ctoc":
+                                        diameterSpace = diameter - cover * 2 - shearLinksDiameter * 2 - maxRebarDiameterInAllLayer;
+                                        circumferenceSpace = Math.PI * diameterSpace;
+                                        maxNoRebarPerLayer = Convert.ToInt32(Math.Floor(circumferenceSpace / (rebarSpc) + 1));
+                                        break;
+
+                                    case "auto":
+                                        rebarSpc = Math.Max(25, maxRebarDiameterInAllLayer);
+                                        diameterSpace = diameter - cover * 2 - shearLinksDiameter * 2 - maxRebarDiameterInAllLayer;
+                                        circumferenceSpace = Math.PI * diameterSpace;
+                                        maxNoRebarPerLayer = Convert.ToInt32(Math.Floor(circumferenceSpace / (rebarSpc + maxRebarDiameterInAllLayer) + 1));
+                                        break;
+
+                                    case "autoRamboll":
+                                        circumferenceSpace = Math.PI * diameter;
+                                        maxNoRebarPerLayer = Convert.ToInt32(Math.Floor(circumferenceSpace / 100));
+                                        break;
+                                }
+                                break;
                         }
-                        else if (rebarSpcPreference == "ctoc")
-                        {
-                            widthSpace = width - cover * 2 - shearLinksDiameter * 2 - maxRebarDiameterInAllLayer;
-                            heightSpace = height - cover * 2 - shearLinksDiameter * 2 - maxRebarDiameterInAllLayer;
-                            widthNoRebar = Math.Floor(widthSpace / (rebarSpc) + 1);
-                            heightNoRebar = Math.Floor(heightSpace / (rebarSpc) + 1);
-                            maxNoRebarPerLayer = Convert.ToInt32(widthNoRebar * 2 + heightNoRebar * 2 - 4);
-                        }
-                        else if (rebarSpcPreference == "auto")
-                        {
-                            rebarSpc = Math.Max(25, maxRebarDiameterInAllLayer);
-                            widthSpace = width - cover * 2 - shearLinksDiameter * 2 - maxRebarDiameterInAllLayer;
-                            heightSpace = height - cover * 2 - shearLinksDiameter * 2 - maxRebarDiameterInAllLayer;
-                            widthNoRebar = Math.Floor(widthSpace / (rebarSpc + maxRebarDiameterInAllLayer) + 1);
-                            heightNoRebar = Math.Floor(heightSpace / (rebarSpc + maxRebarDiameterInAllLayer) + 1);
-                            maxNoRebarPerLayer = Convert.ToInt32(widthNoRebar * 2 + heightNoRebar * 2 - 4);
-                        }
-                        else if (rebarSpcPreference == "autoRamboll")
-                        {
-                            rebarSpc = Math.Max(25, maxRebarDiameterInAllLayer);
-                            widthSpace = width - cover * 2 - shearLinksDiameter * 2 - maxRebarDiameterInAllLayer;
-                            heightSpace = height - cover * 2 - shearLinksDiameter * 2 - maxRebarDiameterInAllLayer;
-                            widthNoRebar = Math.Floor(width / 100);
-                            heightNoRebar = Math.Floor(height / 100);
-                            maxNoRebarPerLayer = Convert.ToInt32(widthNoRebar * 2 + heightNoRebar * 2 - 4);
-                        }
+
 
                         //Set no of rebar per layer to minimum
                         //For column number of max and min rebar per layer is set to be same
@@ -581,6 +638,7 @@ namespace WS_SG_ETABS_Plugin.src.rc_col_schedule
                             }
                             else
                             {
+                                //Increase no of rebar in the specific layer
                                 noRebarCurrentLayer += 2;
                                 noRebarPerLayer[currentLayer] = noRebarCurrentLayer;
                             }
@@ -597,6 +655,7 @@ namespace WS_SG_ETABS_Plugin.src.rc_col_schedule
                         }
                         else
                         {
+                            //Increase rebar diameter
                             rebarDiameterIndexCurrentLayer += 1;
                             rebarDiameterIndexPerLayer[currentLayer] = rebarDiameterIndexCurrentLayer;
                         }
@@ -613,6 +672,7 @@ namespace WS_SG_ETABS_Plugin.src.rc_col_schedule
                     }
                     else
                     {
+                        //Add 1 more rebar layer
                         noRebarLayer += 1;
                     }
                 }
@@ -651,48 +711,99 @@ namespace WS_SG_ETABS_Plugin.src.rc_col_schedule
                 noShearLinksLeg = 2 + additionalShearLinksLeg;
                 */
 
-                //Calculate minimum number of shear links leg based on 150mm max distance compression rebar from confined rebar
-                double minNoShearLinksLegWidth = Math.Ceiling(widthSpace / 300) - 1 + 2; //+2 for the link
-                double minNoShearLinksLegHeight = Math.Ceiling(heightSpace / 300) - 1 + 2; //+2 for the link
-
-                //Evaluate local axis based on width and height dimension
-                double noRebarMajor = 0;
-                double noRebarMinor = 0;
-                double minNoShearLinksLegMajor = 0;
-                double minNoShearLinksLegMinor = 0;
-                if (width > height)
+                switch (shape)
                 {
-                    noRebarMajor = heightNoRebar;
-                    noRebarMinor = widthNoRebar;
-                    minNoShearLinksLegMajor = minNoShearLinksLegHeight;
-                    minNoShearLinksLegMinor = minNoShearLinksLegWidth;
-                }
-                else
-                {
-                    noRebarMajor = widthNoRebar;
-                    noRebarMinor = heightNoRebar;
-                    minNoShearLinksLegMajor = minNoShearLinksLegWidth;
-                    minNoShearLinksLegMinor = minNoShearLinksLegHeight;
-                }
-                    
+                    case "Rectangular":
 
-                noShearLinksLegMajor = minNoShearLinksLegMajor;
-                noShearLinksLegMinor = minNoShearLinksLegMinor;
+                        //Calculate minimum number of shear links leg based on 150mm max distance compression rebar from confined rebar
+                        double minNoShearLinksLegWidth = Math.Ceiling(widthSpace / 300) - 1 + 2; //+2 for the link
+                        double minNoShearLinksLegHeight = Math.Ceiling(heightSpace / 300) - 1 + 2; //+2 for the link
 
-                //Shear links design
-                while ((noShearLinksLegMajor <= noRebarMajor && noShearLinksLegMinor <= noRebarMinor) && (!shearLinksMajorSatisfied || !shearLinksMinorSatisfied))
-                {
-                    shearLinksSpacing = maxShearLinksSpacing;
-
-                    while (shearLinksSpacing >= minShearLinksSpacing && (!shearLinksMajorSatisfied || !shearLinksMinorSatisfied))
-                    {
-                        double avMajorFromCurrentShearLinks = 0.25 * Math.PI * Math.Pow(shearLinksDiameter, 2) * noShearLinksLegMajor * (1000 / shearLinksSpacing);
-                        double avMinorFromCurrentShearLinks = 0.25 * Math.PI * Math.Pow(shearLinksDiameter, 2) * noShearLinksLegMinor * (1000 / shearLinksSpacing);
-
-                        if (avMajorFromCurrentShearLinks >= avReqMajor && avMinorFromCurrentShearLinks >= avReqMinor)
+                        //Evaluate local axis based on width and height dimension
+                        double noRebarMajor = 0;
+                        double noRebarMinor = 0;
+                        double minNoShearLinksLegMajor = 0;
+                        double minNoShearLinksLegMinor = 0;
+                        if (width > height)
                         {
-                            shearLinksMajorSatisfied = true;
-                            shearLinksMinorSatisfied = true;
+                            noRebarMajor = heightNoRebar;
+                            noRebarMinor = widthNoRebar;
+                            minNoShearLinksLegMajor = minNoShearLinksLegHeight;
+                            minNoShearLinksLegMinor = minNoShearLinksLegWidth;
+                        }
+                        else
+                        {
+                            noRebarMajor = widthNoRebar;
+                            noRebarMinor = heightNoRebar;
+                            minNoShearLinksLegMajor = minNoShearLinksLegWidth;
+                            minNoShearLinksLegMinor = minNoShearLinksLegHeight;
+                        }
+
+
+                        noShearLinksLegMajor = minNoShearLinksLegMajor;
+                        noShearLinksLegMinor = minNoShearLinksLegMinor;
+
+                        //Shear links design
+                        while ((noShearLinksLegMajor <= noRebarMajor && noShearLinksLegMinor <= noRebarMinor) && (!shearLinksMajorSatisfied || !shearLinksMinorSatisfied))
+                        {
+                            shearLinksSpacing = maxShearLinksSpacing;
+
+                            while (shearLinksSpacing >= minShearLinksSpacing && (!shearLinksMajorSatisfied || !shearLinksMinorSatisfied))
+                            {
+                                double avMajorFromCurrentShearLinks = 0.25 * Math.PI * Math.Pow(shearLinksDiameter, 2) * noShearLinksLegMajor * (1000 / shearLinksSpacing);
+                                double avMinorFromCurrentShearLinks = 0.25 * Math.PI * Math.Pow(shearLinksDiameter, 2) * noShearLinksLegMinor * (1000 / shearLinksSpacing);
+
+                                if (avMajorFromCurrentShearLinks >= avReqMajor && avMinorFromCurrentShearLinks >= avReqMinor)
+                                {
+                                    shearLinksMajorSatisfied = true;
+                                    shearLinksMinorSatisfied = true;
+                                }
+
+                                //Check
+                                if (shearLinksMajorSatisfied && shearLinksMinorSatisfied)
+                                {
+                                    //do nothing
+                                }
+                                else if (shearLinksSpacing <= minShearLinksSpacing)
+                                {
+                                    break;
+                                }
+                                else
+                                {
+                                    //Reduce spacing
+                                    shearLinksSpacing -= shearLinksSpacingStep;
+                                }
+                            }
+
+                            //Check
+                            if (shearLinksMajorSatisfied)
+                            {
+                                //do nothing
+                            }
+                            else if (noShearLinksLegMajor == noRebarMajor)
+                            {
+                                break;
+                            }
+                            else
+                            {
+                                //Increase no of leg
+                                noShearLinksLegMajor += 1;
+                            }
+
+                            //Check
+                            if (shearLinksMinorSatisfied)
+                            {
+                                //do nothing
+                            }
+                            else if (noShearLinksLegMinor == noRebarMinor)
+                            {
+                                break;
+                            }
+                            else
+                            {
+                                //Increase no of leg
+                                noShearLinksLegMinor += 1;
+                            }
                         }
 
                         //Check
@@ -700,58 +811,96 @@ namespace WS_SG_ETABS_Plugin.src.rc_col_schedule
                         {
                             //do nothing
                         }
-                        else if (shearLinksSpacing <= minShearLinksSpacing)
+                        else if (shearLinksDiameterIndex == shearLinksDiameterList.Count() - 1)
                         {
                             break;
                         }
                         else
                         {
-                            shearLinksSpacing -= shearLinksSpacingStep;
+                            //Increase shear links diameter
+                            shearLinksDiameterIndex += 1;
                         }
-                    }
 
-                    //Check
-                    if (shearLinksMajorSatisfied)
-                    {
-                        //do nothing
-                    }
-                    else if (noShearLinksLegMajor == noRebarMajor)
-                    {
                         break;
-                    }
-                    else
-                    {
-                        noShearLinksLegMajor += 1;
-                    }
 
-                    //Check
-                    if (shearLinksMinorSatisfied)
-                    {
-                        //do nothing
-                    }
-                    else if (noShearLinksLegMinor == noRebarMinor)
-                    {
+
+                    case "Circle":
+
+                        //Calculate minimum number of shear links leg based on 150mm max distance compression rebar from confined rebar
+                        double minNoShearLinks = 2; //2 legs for circular, cannot add more
+                        noShearLinksLegMajor = minNoShearLinks;
+                        noShearLinksLegMinor = minNoShearLinks;
+
+                        //Shear links design
+                        while ((noShearLinksLegMajor <= 2 && noShearLinksLegMinor <= 2) && (!shearLinksMajorSatisfied || !shearLinksMajorSatisfied))
+                        {
+                            shearLinksSpacing = maxShearLinksSpacing;
+
+                            while (shearLinksSpacing >= minShearLinksSpacing && (!shearLinksMajorSatisfied || !shearLinksMajorSatisfied))
+                            {
+                                double avMajorFromCurrentShearLinks = 0.25 * Math.PI * Math.Pow(shearLinksDiameter, 2) * noShearLinksLegMajor * (1000 / shearLinksSpacing);
+                                double avMinorFromCurrentShearLinks = 0.25 * Math.PI * Math.Pow(shearLinksDiameter, 2) * noShearLinksLegMinor * (1000 / shearLinksSpacing);
+
+                                double avFromCurrentShearLinks = Math.Min(avMajorFromCurrentShearLinks, avMinorFromCurrentShearLinks);
+
+                                if (avFromCurrentShearLinks >= avReqMajor && avFromCurrentShearLinks >= avReqMinor)
+                                {
+                                    shearLinksMajorSatisfied = true;
+                                    shearLinksMinorSatisfied = true;
+                                }
+
+                                //Check
+                                if (shearLinksMajorSatisfied && shearLinksMinorSatisfied)
+                                {
+                                    //do nothing
+                                }
+                                else if (shearLinksSpacing <= minShearLinksSpacing)
+                                {
+                                    break;
+                                }
+                                else
+                                {
+                                    //Reduce spacing
+                                    shearLinksSpacing -= shearLinksSpacingStep;
+                                }
+                            }
+
+                            //Check
+                            if (shearLinksMajorSatisfied && shearLinksMinorSatisfied)
+                            {
+                                //do nothing
+                            }
+                            else if (noShearLinksLegMajor == 2 || noShearLinksLegMinor == 2)
+                            {
+                                break;
+                            }
+                            else
+                            {
+                                //Increase no of leg
+                                noShearLinksLegMajor += 1;
+                                noShearLinksLegMinor += 1;
+                            }
+                        }
+
+                        //Check
+                        if (shearLinksMajorSatisfied && shearLinksMinorSatisfied)
+                        {
+                            //do nothing
+                        }
+                        else if (shearLinksDiameterIndex == shearLinksDiameterList.Count() - 1)
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            //Increase shear links diameter
+                            shearLinksDiameterIndex += 1;
+                        }
+
                         break;
-                    }
-                    else
-                    {
-                        noShearLinksLegMinor += 1;
-                    }
                 }
 
-                //Check
-                if (shearLinksMajorSatisfied && shearLinksMinorSatisfied)
-                {
-                    //do nothing
-                }
-                else if (shearLinksDiameterIndex == shearLinksDiameterList.Count() - 1)
-                {
-                    break;
-                }
-                else
-                {
-                    shearLinksDiameterIndex += 1;
-                }
+
             }
 
             string asEvaluationComment = "";
@@ -827,7 +976,7 @@ namespace WS_SG_ETABS_Plugin.src.rc_col_schedule
         {
             List<string> colTitles = new List<string>()
             {
-                "UniqueName", "Width (mm)", "Height (mm)", "fyk (Mpa)", "fck (Mpa)", "d (ETABS) (mm)", "d calculated (mm)", "As Min(mm2)"
+                "UniqueName", "Shape", "Width (mm)", "Height (mm)", "Diameter (mm)", "fyk (Mpa)", "fck (Mpa)", "d (ETABS) (mm)", "d calculated (mm)", "As Min(mm2)"
                 , "As (mm2)","Av Major (mm2/m)","Av Minor (mm2/m)"
                 , "Rebar", "Shear Links Major", "Shear Links Minor"
                 , "As Prov (mm2)", "As Prov (%)"
@@ -856,34 +1005,38 @@ namespace WS_SG_ETABS_Plugin.src.rc_col_schedule
             foreach (src.HelperEtabs.RcColumn rcColumn in rcColumnList)
             {
                 result[i, 0] = rcColumn.UniqueName;
-                result[i, 1] = rcColumn.Width;
-                result[i, 2] = rcColumn.Height;
-                result[i, 3] = rcColumn.Fyk;
-                result[i, 4] = rcColumn.Fck;
-                result[i, 5] = rcColumn.d;
-                result[i, 6] = rcColumn.dCalculated;
-                result[i, 7] = rcColumn.AsMin;
+                result[i, 1] = rcColumn.Shape;
 
-                result[i, 8] = rcColumn.As;
+                result[i, 2] = rcColumn.Width;
+                result[i, 3] = rcColumn.Height;
+                result[i, 4] = rcColumn.Diameter;
 
-                result[i, 9] = rcColumn.AvMajor;
-                result[i, 10] = rcColumn.AvMinor;
+                result[i, 5] = rcColumn.Fyk;
+                result[i, 6] = rcColumn.Fck;
+                result[i, 7] = rcColumn.d;
+                result[i, 8] = rcColumn.dCalculated;
+                result[i, 9] = rcColumn.AsMin;
 
-                result[i, 11] = rcColumn.Rebar;
-                result[i, 12] = rcColumn.ShearLinksMajor;
-                result[i, 13] = rcColumn.ShearLinksMinor;
+                result[i, 10] = rcColumn.As;
 
-                result[i, 14] = rcColumn.AsProv;
-                result[i, 15] = rcColumn.AsProvPercentage;
-                result[i, 16] = rcColumn.AvMajorProv;
-                result[i, 17] = rcColumn.AvMinorProv;
-                result[i, 18] = rcColumn.RatioAs;
-                result[i, 19] = rcColumn.RatioAvMajor;
-                result[i, 20] = rcColumn.RatioAvMinor;
+                result[i, 11] = rcColumn.AvMajor;
+                result[i, 12] = rcColumn.AvMinor;
 
-                result[i, 21] = rcColumn.EtabsComment;
-                result[i, 22] = rcColumn.AsEvaluationComment;
-                result[i, 23] = rcColumn.AvEvaluationComment;
+                result[i, 13] = rcColumn.Rebar;
+                result[i, 14] = rcColumn.ShearLinksMajor;
+                result[i, 15] = rcColumn.ShearLinksMinor;
+
+                result[i, 16] = rcColumn.AsProv;
+                result[i, 17] = rcColumn.AsProvPercentage;
+                result[i, 18] = rcColumn.AvMajorProv;
+                result[i, 19] = rcColumn.AvMinorProv;
+                result[i, 20] = rcColumn.RatioAs;
+                result[i, 21] = rcColumn.RatioAvMajor;
+                result[i, 22] = rcColumn.RatioAvMinor;
+
+                result[i, 23] = rcColumn.EtabsComment;
+                result[i, 24] = rcColumn.AsEvaluationComment;
+                result[i, 25] = rcColumn.AvEvaluationComment;
 
                 i++;
             }
@@ -959,16 +1112,22 @@ namespace WS_SG_ETABS_Plugin.src.rc_col_schedule
             foreach (src.HelperEtabs.RcColumn rcColumn in rcColumnList)
             {
                 double coverToRebarCentroid = 0;
-                double maxCoverToRebarCentroid = 0;
                 double centroidFromFirstRebarCentroid = 0;
 
-                //Left top
                 centroidFromFirstRebarCentroid = GetCentroidFromRebarDiameterList(rcColumn.RebarDiameterList, rcColumn.NoRebarPerLayer);
                 coverToRebarCentroid = rcColumn.Cover + rcColumn.ShearLinksDiameter + 0.5 * rcColumn.RebarDiameterList[0] + centroidFromFirstRebarCentroid;
-                maxCoverToRebarCentroid = Math.Max(coverToRebarCentroid, maxCoverToRebarCentroid);
 
                 //Save d calcualated
-                rcColumn.dCalculated = Math.Floor(rcColumn.Height - maxCoverToRebarCentroid);
+                switch (rcColumn.Shape)
+                {
+                    case ("Rectangular"):
+                        rcColumn.dCalculated = Math.Floor(rcColumn.Height - coverToRebarCentroid);
+                        break;
+                    case ("Circle"):
+                        rcColumn.dCalculated = Math.Floor(rcColumn.Diameter - coverToRebarCentroid);
+                        break;
+                }
+
 
                 //Give warning if d calculated < d ETABS
                 if (rcColumn.dCalculated < rcColumn.d)
@@ -1045,7 +1204,18 @@ namespace WS_SG_ETABS_Plugin.src.rc_col_schedule
             foreach (src.HelperEtabs.RcColumn rcColumn in rcColumnList)
             {
                 rcColumn.AsProv = CalculateAsProvFromRebarList(rcColumn.RebarDiameterList, rcColumn.NoRebarPerLayer);
-                rcColumn.AsProvPercentage = Math.Round(rcColumn.AsProv / (rcColumn.Height * rcColumn.Width) * 100, 2); //in %
+
+                switch (rcColumn.Shape)
+                {
+                    case ("Rectangular"):
+                        rcColumn.AsProvPercentage = Math.Round(rcColumn.AsProv / (rcColumn.Height * rcColumn.Width) * 100, 2); //in %
+                        break;
+                    case ("Circle"):
+                        double concreteArea = 0.25 * Math.PI * Math.Pow(rcColumn.Diameter, 2);
+                        rcColumn.AsProvPercentage = Math.Round(rcColumn.AsProv / concreteArea * 100, 2); //in %
+                        break;
+                }
+                
                 rcColumn.RatioAs = Math.Round(rcColumn.As / rcColumn.AsProv, 3);
 
                 //Give warning if Asprov > 4%
