@@ -15,7 +15,7 @@ using System.Windows.Shapes;
 using System.Reflection;
 using ETABSv1;
 using System.IO;
-
+using System.Data;
 
 namespace WS_SG_ETABS_Plugin
 {
@@ -29,7 +29,7 @@ namespace WS_SG_ETABS_Plugin
 
         public WindowMain(ref cSapModel SapModel, ref cPluginCallback Plugin)
         {
-            string version = "1.1.0";
+            string version = "1.2.0d";
 
             _Plugin = Plugin;
             _SapModel = SapModel;
@@ -67,8 +67,9 @@ namespace WS_SG_ETABS_Plugin
             }
             */
 
-            bool licenseValid = src.HelperLicense.CheckLicense(version);
             
+            (bool licenseValid, string[] listofallowedPlugins) = src.HelperLicense.CheckLicense(version);
+           
             if (!licenseValid)
             {
                 Close();
@@ -79,9 +80,41 @@ namespace WS_SG_ETABS_Plugin
 
                 labelVersion.Content = "version " + version;
 
-                ShowDialog();
-            }
+                if (listofallowedPlugins[0] != "all")
+                {
+                    List<string> listofButtons = new List<string>
+                    {
+                        "buttonRCBeamSchedule", "buttonCopyProperties", "buttonPlotReaction", "buttonLoadCombo", "buttonPadFooting", "buttonPunchingShear", "buttonTedds", "buttonRCColSchedule", "buttonPlotDrift", 
+                        "buttonPlotSumMassParticip", "buttonWallDesignViewer", "buttonShellUni", "buttonSelUniqueName", "buttonEtabsToRhino", "buttonWindCoeff", "buttonReleaseSelectedNode", "buttonTrfEtabsLoads", 
+                        "buttonTrfEtabstoSafe", "buttonCarbon", "buttonTransferMidas", "buttonTrussGrouping", "buttonDeleteFrames", "buttonColOptimizer", "buttonSteelTrussOptimizer", "buttonCircCrack", 
+                        "buttonPreWarning", "buttonAddLoadCombo", "buttonApplyModifier"
+                    };
 
+                    foreach (string buttonName in listofButtons)
+                    {
+                        object buttonObject = FindName(buttonName);
+                        if(buttonObject is Button)
+                        {
+                            Button buttonButton = (Button)buttonObject;
+                            if (listofallowedPlugins.Contains(buttonName))
+                            {
+                                continue;
+                            }
+                            else
+                            {
+                                buttonButton.IsEnabled = false;
+                            }
+                        }
+                        else
+                        {
+                            MessageBox.Show("Error in list of buttons code, please contact FDS to rectify.");
+                            Close();
+                        }
+                    }
+                }
+                ShowDialog();
+
+            }
 
         }
 
@@ -130,7 +163,7 @@ namespace WS_SG_ETABS_Plugin
         {
             IsEnabled = false;
             //Call up shell uniform window
-            src.plot_reaction.WindowPlotReactionMain windowPlotReactionMain = new src.plot_reaction.WindowPlotReactionMain(_SapModel, _Plugin);
+            src.plot_reaction.WindowPlotReactionSelectLoad windowPlotReactionSelectLoad = new src.plot_reaction.WindowPlotReactionSelectLoad(_SapModel, _Plugin);
             IsEnabled = true;
 
         }
@@ -264,6 +297,66 @@ namespace WS_SG_ETABS_Plugin
             IsEnabled = false;
             //Call up window
             src.rc_col_schedule.WindowRCCSchedMain windowRCCSchedMain = new src.rc_col_schedule.WindowRCCSchedMain(_SapModel, _Plugin);
+            IsEnabled = true;
+        }
+
+        private void buttonSafeCopyProperties_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+        private void buttonTrfTedds_Click(object sender, RoutedEventArgs e)
+        {
+            IsEnabled = false;
+            //Call up window
+            src.tedds_main.WindowTeddsMain windowTeddsMain = new src.tedds_main.WindowTeddsMain(_SapModel, _Plugin);
+            IsEnabled = true;
+        }
+
+        private void buttonPlotDrift_Click(object sender, RoutedEventArgs e)
+        {
+            IsEnabled = false;
+            //Call up window
+            src.plot_drift.WindowDriftPlotSelectLoad windowDriftPlotSelectLoad = new src.plot_drift.WindowDriftPlotSelectLoad(_SapModel, _Plugin);
+            IsEnabled = true;
+        }
+
+        private void buttonPlotSumMassParticip_Click(object sender, RoutedEventArgs e)
+        {
+            IsEnabled = false;
+            //Call up window
+            src.plot_sum_mass_participation.WindowSumParticipPlotMain windowSumParticipPlotMain = new src.plot_sum_mass_participation.WindowSumParticipPlotMain(_SapModel, _Plugin);
+            IsEnabled = true;
+        }
+
+        private void buttonWallDesignViewer_Click(object sender, RoutedEventArgs e)
+        {
+            IsEnabled = false;
+            //Call up window
+            src.wall_design_view.WindowWallDesignSelectLoad windowWallDesignSelectLoad = new src.wall_design_view.WindowWallDesignSelectLoad(_SapModel, _Plugin);
+            IsEnabled = true;
+        }
+
+        private void buttonAddLoadCombo_Click(object sender, RoutedEventArgs e)
+        {
+            IsEnabled = false;
+            //Call up window
+            src.add_load_combo.WindowAddLoadComboMain windowAddLoadComboMain = new src.add_load_combo.WindowAddLoadComboMain(_SapModel, _Plugin);
+            IsEnabled = true;
+        }
+
+        private void buttonApplyModifier_Click(object sender, RoutedEventArgs e)
+        {
+            IsEnabled = false;
+            //Call up window
+            src.apply_modifier.WindowApplyModifierMain windowApplyModifierMain = new src.apply_modifier.WindowApplyModifierMain(_SapModel, _Plugin);
+            IsEnabled = true;
+        }
+
+        private void buttonApplySectProp_Click(object sender, RoutedEventArgs e)
+        {
+            IsEnabled = false;
+            //Call up window
+            src.apply_section_property.WindowApplySectPropMain windowApplySectPropMain = new src.apply_section_property.WindowApplySectPropMain(_SapModel, _Plugin);
             IsEnabled = true;
         }
     }

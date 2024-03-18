@@ -82,7 +82,7 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
 
             if (result == System.Windows.Forms.DialogResult.OK)
             {
-                filePath.Text = dialog.SelectedPath;
+                filePath.Text = dialog.SelectedPath + "\\";
             }
 
         }
@@ -228,6 +228,16 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
                 listBoxChoosenGroup.Items.RemoveAt(selectedIndex);
                 groupAndBeamType.RemoveAt(selectedIndex);
             }
+        }
+
+        private void textBoxCover_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+        }
+
+        private void filePath_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
         }
     }
 }

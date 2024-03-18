@@ -143,5 +143,46 @@ namespace WS_SG_ETABS_Plugin.src
             }
         }
 
+
+        /// <summary>
+        /// Populate listBox with available frame section properties
+        /// </summary>
+        /// <param name="SapModel"></param>
+        /// <param name="listBox"></param>
+        public static void PopulateComboBoxAvailFrameSectProp(cSapModel SapModel, ComboBox comboBox)
+        {
+            int NumberNames = 0;
+            string[] frameSectPropList = null;
+
+            int ret = SapModel.PropFrame.GetNameList(ref NumberNames, ref frameSectPropList);
+
+            foreach (string frameSectProp in frameSectPropList)
+            {
+                comboBox.Items.Add(frameSectProp);
+            }
+
+            comboBox.SelectedIndex = 0;
+        }
+
+        /// <summary>
+        /// Populate listBox with available area section properties
+        /// </summary>
+        /// <param name="SapModel"></param>
+        /// <param name="listBox"></param>
+        public static void PopulateComboBoxAvailAreaSectProp(cSapModel SapModel, ComboBox comboBox)
+        {
+            int NumberNames = 0;
+            string[] areaSectPropList = null;
+
+            int ret = SapModel.PropArea.GetNameList(ref NumberNames, ref areaSectPropList);
+
+            foreach (string areaSectProp in areaSectPropList)
+            {
+                comboBox.Items.Add(areaSectProp);
+            }
+
+            comboBox.SelectedIndex = 0;
+        }
+
     }
 }

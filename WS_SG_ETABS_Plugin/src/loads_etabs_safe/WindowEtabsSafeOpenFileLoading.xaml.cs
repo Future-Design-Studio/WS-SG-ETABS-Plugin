@@ -57,9 +57,9 @@ namespace WS_SG_ETABS_Plugin.src.loads_etabs_safe
             src.HelperSafe.SetOutputUnit(SapModelSAFE, forceUnitSAFE, lengthUnitSAFE, temperatureUnitSAFE);
 
             //Check if modelFrom is locked
-            bool modelFromLocked = SapModelEtabs.GetModelIsLocked();
+            bool modelToLocked = SapModelSAFE.GetModelIsLocked();
 
-            if (!modelFromLocked)
+            if (modelToLocked)
             {
                 mySAFEObject.ApplicationExit(false);
                 MessageBox.Show("SAFE file is locked! Please unlock the model!");

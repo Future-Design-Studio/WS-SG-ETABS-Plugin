@@ -87,9 +87,9 @@
     <Reference Include="Accord.Statistics, Version=3.8.0.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
       <HintPath>..\packages\Accord.Statistics.3.8.0\lib\net462\Accord.Statistics.dll</HintPath>
     </Reference>
-    <Reference Include="ETABSv1">
-      <HintPath>..\..\..\..\..\..\..\..\..\Program Files\Computers and Structures\ETABS 20\ETABSv1.dll</HintPath>
-      <Private>False</Private>
+    <Reference Include="ETABSv1, Version=1.0.0.0, Culture=neutral, PublicKeyToken=453d728ef24c6f5e, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\Program Files\Computers and Structures\ETABS 21\ETABSv1.dll</HintPath>
     </Reference>
     <Reference Include="LiveCharts, Version=0.9.7.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL">
       <HintPath>..\packages\LiveCharts.0.9.7\lib\net45\LiveCharts.dll</HintPath>
@@ -134,7 +134,7 @@
     </Reference>
     <Reference Include="SAFEv1, Version=1.0.0.0, Culture=neutral, PublicKeyToken=453d728ef24c6f5e, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\..\..\..\Program Files\Computers and Structures\SAFE 20\SAFEv1.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\Program Files\Computers and Structures\SAFE 21\SAFEv1.dll</HintPath>
     </Reference>
     <Reference Include="ScottPlot, Version=4.1.59.0, Culture=neutral, PublicKeyToken=86698dc10387c39e, processorArchitecture=MSIL">
       <HintPath>..\packages\ScottPlot.4.1.59\lib\net462\ScottPlot.dll</HintPath>
@@ -189,6 +189,14 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="Tedds.TeddsCalcIA, Version=25.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\TeklaTeddsAPI.25.0.0\lib\net\Tedds.TeddsCalcIA.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Tedds.TeddsIA, Version=25.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\TeklaTeddsAPI.25.0.0\lib\net\Tedds.TeddsIA.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="Xceed.Wpf.AvalonDock, Version=4.4.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
       <HintPath>..\packages\Extended.Wpf.Toolkit.4.4.0\lib\net40\Xceed.Wpf.AvalonDock.dll</HintPath>
@@ -208,6 +216,29 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="NotYetImplemented.cs" />
+    <Compile Include="src\add_load_combo\FunctionAddLoadCombo.cs" />
+    <Compile Include="src\add_load_combo\WindowAddLoadComboMain.xaml.cs">
+      <DependentUpon>WindowAddLoadComboMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\add_load_combo\WindowAddLoadComboResult.xaml.cs">
+      <DependentUpon>WindowAddLoadComboResult.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\apply_modifier\ClassApplyModifier.cs" />
+    <Compile Include="src\apply_modifier\FunctionApplyModifier.cs" />
+    <Compile Include="src\apply_modifier\WindowApplyModifierMain.xaml.cs">
+      <DependentUpon>WindowApplyModifierMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\apply_modifier\WindowApplyModifierResult.xaml.cs">
+      <DependentUpon>WindowApplyModifierResult.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\apply_section_property\ClassApplySectProp.cs" />
+    <Compile Include="src\apply_section_property\FunctionApplySectProp.cs" />
+    <Compile Include="src\apply_section_property\WindowApplySectPropMain.xaml.cs">
+      <DependentUpon>WindowApplySectPropMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\apply_section_property\WindowApplySectPropResult.xaml.cs">
+      <DependentUpon>WindowApplySectPropResult.xaml</DependentUpon>
+    </Compile>
     <Compile Include="src\carbon\WindowCarbonMain.xaml.cs">
       <DependentUpon>WindowCarbonMain.xaml</DependentUpon>
     </Compile>
@@ -231,6 +262,9 @@
     <Compile Include="src\etabs_to_rhino\WindowEtabsToRhinoResult.xaml.cs">
       <DependentUpon>WindowEtabsToRhinoResult.xaml</DependentUpon>
     </Compile>
+    <Compile Include="src\etabs_to_rhino\WindowsEtabsToRhinoProgress.xaml.cs">
+      <DependentUpon>WindowsEtabsToRhinoProgress.xaml</DependentUpon>
+    </Compile>
     <Compile Include="src\HelperExcel.cs" />
     <Compile Include="src\HelperLicense.cs" />
     <Compile Include="src\HelperMethod.cs" />
@@ -238,6 +272,12 @@
     <Compile Include="src\carbon\FunctionCarbon.cs" />
     <Compile Include="cPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="src\HelperPDFOpen.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="src\HelperPDFOpen.Designer.cs">
+      <DependentUpon>HelperPDFOpen.cs</DependentUpon>
+    </Compile>
     <Compile Include="src\HelperML.cs" />
     <Compile Include="src\HelperPlot.cs" />
     <Compile Include="src\HelperSafe.cs" />
@@ -300,6 +340,20 @@
     <Compile Include="src\pad_footing_plot\WindowPadFootPlotResult.xaml.cs">
       <DependentUpon>WindowPadFootPlotResult.xaml</DependentUpon>
     </Compile>
+    <Compile Include="src\plot_drift\ClassPlotDrift.cs" />
+    <Compile Include="src\plot_drift\FunctionPlotDrift.cs" />
+    <Compile Include="src\plot_drift\WindowDriftPlotLoading.xaml.cs">
+      <DependentUpon>WindowDriftPlotLoading.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\plot_drift\WindowDriftPlotMain.xaml.cs">
+      <DependentUpon>WindowDriftPlotMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\plot_drift\WindowDriftPlotResult.xaml.cs">
+      <DependentUpon>WindowDriftPlotResult.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\plot_drift\WindowDriftPlotSelectLoad.xaml.cs">
+      <DependentUpon>WindowDriftPlotSelectLoad.xaml</DependentUpon>
+    </Compile>
     <Compile Include="src\plot_reaction\graph\ClassPlotGraph.cs" />
     <Compile Include="src\plot_reaction\graph\FunctionPlotReactionGraph.cs" />
     <Compile Include="src\plot_reaction\graph\WindowPlotReactionGraphBaseReaction.xaml.cs">
@@ -318,8 +372,21 @@
     <Compile Include="src\plot_reaction\table\WindowPlotReactionTableResult.xaml.cs">
       <DependentUpon>WindowPlotReactionTableResult.xaml</DependentUpon>
     </Compile>
+    <Compile Include="src\plot_reaction\WindowPlotReactionLoading.xaml.cs">
+      <DependentUpon>WindowPlotReactionLoading.xaml</DependentUpon>
+    </Compile>
     <Compile Include="src\plot_reaction\WindowPlotReactionMain.xaml.cs">
       <DependentUpon>WindowPlotReactionMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\plot_reaction\WindowPlotReactionSelectLoad.xaml.cs">
+      <DependentUpon>WindowPlotReactionSelectLoad.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\plot_sum_mass_participation\FunctionSumParticipPlot.cs" />
+    <Compile Include="src\plot_sum_mass_participation\WindowSumParticipPlotMain.xaml.cs">
+      <DependentUpon>WindowSumParticipPlotMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\plot_sum_mass_participation\WindowSumParticipPlotResult.xaml.cs">
+      <DependentUpon>WindowSumParticipPlotResult.xaml</DependentUpon>
     </Compile>
     <Compile Include="src\punching_shear_plot\ClassPunchingShrPlot.cs" />
     <Compile Include="src\punching_shear_plot\FunctionPunchingShrPlot.cs" />
@@ -375,6 +442,20 @@
     <Compile Include="src\shell_uni_orient\WindowShellUniResult.xaml.cs">
       <DependentUpon>WindowShellUniResult.xaml</DependentUpon>
     </Compile>
+    <Compile Include="src\tedds_main\precast_rc_column\ClassPrecastRCColumn.cs" />
+    <Compile Include="src\tedds_main\precast_rc_column\FunctionPrecastRCColumn.cs" />
+    <Compile Include="src\tedds_main\precast_rc_column\WindowPrecastRCColumnLoading.xaml.cs">
+      <DependentUpon>WindowPrecastRCColumnLoading.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\tedds_main\precast_rc_column\WindowPrecastRCColumnMain.xaml.cs">
+      <DependentUpon>WindowPrecastRCColumnMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\tedds_main\precast_rc_column\WindowPrecastRCColumnResult.xaml.cs">
+      <DependentUpon>WindowPrecastRCColumnResult.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\tedds_main\WindowTeddsMain.xaml.cs">
+      <DependentUpon>WindowTeddsMain.xaml</DependentUpon>
+    </Compile>
     <Compile Include="src\transfer_midas\FunctionTransferMidas.cs" />
     <Compile Include="src\transfer_midas\WindowTransferMidasMain.xaml.cs">
       <DependentUpon>WindowTransferMidasMain.xaml</DependentUpon>
@@ -384,6 +465,23 @@
     </Compile>
     <Compile Include="src\transfer_midas\WindowTransferMidasResult.xaml.cs">
       <DependentUpon>WindowTransferMidasResult.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\wall_design_view\ClassWallDesign.cs" />
+    <Compile Include="src\wall_design_view\FunctionWallDesignView.cs" />
+    <Compile Include="src\wall_design_view\WindowWallDesignLoading.xaml.cs">
+      <DependentUpon>WindowWallDesignLoading.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\wall_design_view\WindowWallDesignMain.xaml.cs">
+      <DependentUpon>WindowWallDesignMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\wall_design_view\WindowWallDesignResult.xaml.cs">
+      <DependentUpon>WindowWallDesignResult.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\wall_design_view\WindowWallDesignResultLoading.xaml.cs">
+      <DependentUpon>WindowWallDesignResultLoading.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\wall_design_view\WindowWallDesignSelectLoad.xaml.cs">
+      <DependentUpon>WindowWallDesignSelectLoad.xaml</DependentUpon>
     </Compile>
     <Compile Include="src\wind_coeff\ClassWindCoeff.cs" />
     <Compile Include="src\wind_coeff\FunctionWindCoeff.cs" />
@@ -399,6 +497,30 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="src\add_load_combo\WindowAddLoadComboMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\add_load_combo\WindowAddLoadComboResult.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\apply_modifier\WindowApplyModifierMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\apply_modifier\WindowApplyModifierResult.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\apply_section_property\WindowApplySectPropMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\apply_section_property\WindowApplySectPropResult.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="src\carbon\WindowCarbonMain.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -479,6 +601,22 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="src\plot_drift\WindowDriftPlotLoading.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\plot_drift\WindowDriftPlotMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\plot_drift\WindowDriftPlotResult.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\plot_drift\WindowDriftPlotSelectLoad.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="src\plot_reaction\graph\WindowPlotReactionGraphBaseReaction.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -499,9 +637,29 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="src\etabs_to_rhino\WindowsEtabsToRhinoProgress.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\plot_reaction\WindowPlotReactionLoading.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="src\plot_reaction\WindowPlotReactionMain.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="src\plot_reaction\WindowPlotReactionSelectLoad.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\plot_sum_mass_participation\WindowSumParticipPlotMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\plot_sum_mass_participation\WindowSumParticipPlotResult.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="src\punching_shear_plot\WindowPunchShrPlotLoading.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -563,6 +721,22 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="src\tedds_main\precast_rc_column\WindowPrecastRCColumnLoading.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\tedds_main\precast_rc_column\WindowPrecastRCColumnMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\tedds_main\precast_rc_column\WindowPrecastRCColumnResult.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\tedds_main\WindowTeddsMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="src\transfer_midas\WindowTransferMidasMain.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -572,6 +746,26 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="src\transfer_midas\WindowTransferMidasResult.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\wall_design_view\WindowWallDesignLoading.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\wall_design_view\WindowWallDesignMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\wall_design_view\WindowWallDesignResult.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\wall_design_view\WindowWallDesignResultLoading.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\wall_design_view\WindowWallDesignSelectLoad.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -592,11 +786,19 @@
     <None Include="app.config" />
     <None Include="packages.config" />
     <None Include="src\rc_beam_schedule\FlowchartConvertAsToRebar.drawio" />
-    <Content Include="src\resources\Tools.pdf">
+    <Resource Include="src\resources\TEDDS_API.pdf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    </Resource>
+    <Resource Include="src\resources\TEDDS_by_Future_Design_Studio.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="src\resources\Tools.pdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="src\group_rc_beam_by_force\" />
+    <Folder Include="src\plot_displacement\" />
     <Folder Include="src\steel_optimization\" />
   </ItemGroup>
   <ItemGroup>

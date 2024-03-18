@@ -1,0 +1,159 @@
+﻿<Window x:Class="WS_SG_ETABS_Plugin.src.apply_modifier.WindowApplyModifierMain"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WS_SG_ETABS_Plugin.src.apply_modifier"
+             mc:Ignorable="d" Height="800" Width="700" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+    <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.7*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="0.5*"></RowDefinition>
+            <RowDefinition Height="0.5*"></RowDefinition>
+            <RowDefinition Height="0.5*"></RowDefinition>
+            <RowDefinition Height="5*"></RowDefinition>
+            <RowDefinition Height="0.5*"></RowDefinition>
+            <RowDefinition Height="0.5*"></RowDefinition>
+            <RowDefinition Height="3*"></RowDefinition>
+            <RowDefinition Height="0.5*"></RowDefinition>
+            <RowDefinition Height="0.6*"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <Label Grid.Row="0" Grid.Column="0" Margin="0 -10 0 0" Content="Apply Element Modifier" FontSize="28"/>
+
+        <TextBlock Grid.Row="1" Grid.Column="0" TextWrapping="Wrap" TextAlignment="Justify"  
+                   Margin="10 0 10 0" FontSize="10">
+                How to use:<LineBreak/>
+                1. Select groups to be applied element modifier<LineBreak/>
+                2. Modify element modifier<LineBreak/>
+        </TextBlock>
+
+        <Label Grid.Row="2" Grid.Column="0" Content="1. Select group(s)" FontSize="14" FontWeight="Bold"/>
+
+
+        <Grid Grid.Row="3" Grid.Column="1" Margin="10 0 10 0">
+
+            <ComboBox Grid.Column="1" x:Name="comBoxGroup" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" ></ComboBox>
+
+        </Grid>
+
+
+
+
+        <Label Grid.Row="4" Grid.Column="0" Content="2. Element modifier factor" FontSize="14" FontWeight="Bold"/>
+
+        <Grid Grid.Row="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="0" Margin="10">
+                <TextBlock FontWeight="Bold">Frame modifier</TextBlock>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0">
+                        <TextBlock Margin="0 2 0 5">Cross-section (axial) area (A)</TextBlock>
+                        <TextBlock Margin="0 2 0 5">Shear Area in 2 direction (V2)</TextBlock>
+                        <TextBlock Margin="0 2 0 5">Shear Area in 3 direction (V3)</TextBlock>
+                        <TextBlock Margin="0 2 0 5">Torsional Constant (T)</TextBlock>
+                        <TextBlock Margin="0 2 0 5">Moment of Inertia about 2 axis (M2)</TextBlock>
+                        <TextBlock Margin="0 2 0 5">Moment of Inertia about 3 axis (M3)</TextBlock>
+                        <TextBlock Margin="0 2 0 5">Mass</TextBlock>
+                        <TextBlock Margin="0 2 0 5">Weight</TextBlock>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="1">
+                        <TextBox Text="1" Name="textBoxFrameModA" TextAlignment="Center" Margin="0 0 0 5"></TextBox>
+                        <TextBox Text="1" Name="textBoxFrameModV2" TextAlignment="Center" Margin="0 0 0 5"></TextBox>
+                        <TextBox Text="1" Name="textBoxFrameModV3" TextAlignment="Center" Margin="0 0 0 5"></TextBox>
+                        <TextBox Text="1" Name="textBoxFrameModT" TextAlignment="Center" Margin="0 0 0 5"></TextBox>
+                        <TextBox Text="1" Name="textBoxFrameModM2" TextAlignment="Center"  Margin="0 0 0 5"></TextBox>
+                        <TextBox Text="1" Name="textBoxFrameModM3" TextAlignment="Center"  Margin="0 0 0 5"></TextBox>
+                        <TextBox Text="1" Name="textBoxFrameModMass" TextAlignment="Center"  Margin="0 0 0 5"></TextBox>
+                        <TextBox Text="1" Name="textBoxFrameModWeight" TextAlignment="Center"  Margin="0 0 0 5"></TextBox>
+                    </StackPanel>
+
+                </Grid>
+                
+            </StackPanel>
+
+            <StackPanel Grid.Column="1"  Margin="10">
+                <TextBlock FontWeight="Bold">Area modifier</TextBlock>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0">
+                        <TextBlock Margin="0 2 0 5">Membrane f11 direction (F11)</TextBlock>
+                        <TextBlock Margin="0 2 0 5">Membrane f22 direction (F22)</TextBlock>
+                        <TextBlock Margin="0 2 0 5">Membrane f12 direction (F12)</TextBlock>
+                        <TextBlock Margin="0 2 0 5">Bending m11 direction (M11)</TextBlock>
+                        <TextBlock Margin="0 2 0 5">Bending m22 direction (M22)</TextBlock>
+                        <TextBlock Margin="0 2 0 5">Bending m12 direction (M12)</TextBlock>
+                        <TextBlock Margin="0 2 0 5">Shear v13 direction (V13)</TextBlock>
+                        <TextBlock Margin="0 2 0 5">Shear v23 direction (V23)</TextBlock>
+                        <TextBlock Margin="0 2 0 5">Mass</TextBlock>
+                        <TextBlock Margin="0 2 0 5">Weight</TextBlock>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="1">
+                        <TextBox Text="1" Name="textBoxAreaModF11" TextAlignment="Center" Margin="0 0 0 5"></TextBox>
+                        <TextBox Text="1" Name="textBoxAreaModF22" TextAlignment="Center" Margin="0 0 0 5"></TextBox>
+                        <TextBox Text="1" Name="textBoxAreaModF12" TextAlignment="Center" Margin="0 0 0 5"></TextBox>
+                        <TextBox Text="1" Name="textBoxAreaModM11" TextAlignment="Center" Margin="0 0 0 5"></TextBox>
+                        <TextBox Text="1" Name="textBoxAreaModM22" TextAlignment="Center" Margin="0 0 0 5"></TextBox>
+                        <TextBox Text="1" Name="textBoxAreaModM12" TextAlignment="Center" Margin="0 0 0 5"></TextBox>
+                        <TextBox Text="1" Name="textBoxAreaModV13" TextAlignment="Center" Margin="0 0 0 5"></TextBox>
+                        <TextBox Text="1" Name="textBoxAreaModV23" TextAlignment="Center" Margin="0 0 0 5"></TextBox>
+                        <TextBox Text="1" Name="textBoxAreaModMass" TextAlignment="Center" Margin="0 0 0 5"></TextBox>
+                        <TextBox Text="1" Name="textBoxAreaModWeight" TextAlignment="Center" Margin="0 0 0 5"></TextBox>
+                    </StackPanel>
+
+                </Grid>
+
+            </StackPanel>
+
+
+
+
+        </Grid>
+
+        <Button Grid.Row="6" x:Name="buttonAdd" Content="Add" Width="100" Click="buttonAdd_Click"/>
+
+        <Label Grid.Row="7" Grid.Column="0" Content="3. Added group(s) and element modifier factor" FontSize="14" FontWeight="Bold"/>
+
+        <DataGrid Grid.Row="8" FrozenColumnCount="1" Name="dataGridModifier" IsReadOnly="True" Margin="0 0 0 10"></DataGrid>
+
+        <Button Grid.Row="9" x:Name="buttonRemove" Content="Remove" Width="100" Click="buttonRemove_Click"/>
+
+
+
+        <Grid Grid.Row="10" Margin="0 5 0 0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <Image Margin ="0 7 -70 7" HorizontalAlignment="Right" Source="/WS_SG_ETABS_Plugin;component/src/resources/by_Future_Design_Studio_no_powerapp.PNG" />
+
+            <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button x:Name="buttonCancel" Content="Cancel" Width="100" Click="buttonCancel_Click"/>
+                <Button x:Name="buttonOk" Content="OK" Width="100" Click="buttonOk_Click"/>
+            </StackPanel>
+
+        </Grid>
+    </Grid>
+</Window>

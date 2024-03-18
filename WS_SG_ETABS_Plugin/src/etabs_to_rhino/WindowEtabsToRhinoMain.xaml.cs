@@ -41,13 +41,39 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
             textBoxFilePath.Text = modelPath;
 
             //Fill in model name (default path)
+            
             modelName = SapModel.GetModelFilename(false);
+            modelName = System.IO.Path.GetFileNameWithoutExtension(modelName);
             textBoxFileName.Text = modelName;
 
             ShowDialog();
         }
 
         #region Button Method
+
+        private void checkBoxFrameExtrusion_Checked(object sender, RoutedEventArgs e)
+        {
+            frameExtrusionAuto.IsEnabled = true;
+            frameExtrusionManual.IsEnabled = true;
+        }
+
+        private void checkBoxFrameExtrusion_Unchecked(object sender, RoutedEventArgs e)
+        {
+            frameExtrusionAuto.IsEnabled = false;
+            frameExtrusionManual.IsEnabled = false;
+        }
+
+        private void checkBoxAreaExtrusion_Checked(object sender, RoutedEventArgs e)
+        {
+            areaExtrusionAuto.IsEnabled = true;
+            areaExtrusionManual.IsEnabled = true;
+        }
+
+        private void checkBoxAreaExtrusion_Unchecked(object sender, RoutedEventArgs e)
+        {
+            areaExtrusionAuto.IsEnabled = false;
+            areaExtrusionManual.IsEnabled = false;
+        }
 
         private void buttonModifyPath_Click(object sender, RoutedEventArgs e)
         {
@@ -85,14 +111,31 @@ namespace WS_SG_ETABS_Plugin.src.etabs_to_rhino
             string filePath = textBoxFilePath.Text;
             string fileName = textBoxFileName.Text;
 
+            //Collect which boxes are selected
+            Dictionary<string, bool?> selectedItems = new Dictionary<string, bool?>()
+            {
+                {"extrusionFrameModel", checkBoxFrameExtrusion.IsChecked },
+                {"extrusionAreaModel", checkBoxAreaExtrusion.IsChecked },
+                {"frameExtrusionAuto", frameExtrusionAuto.IsChecked },
+                {"frameExtrusionManual", frameExtrusionManual.IsChecked },
+                {"areaExtrusionAuto", areaExtrusionAuto.IsChecked },
+                {"areaExtrusionManual", areaExtrusionManual.IsChecked },
+                {"exportSelected", checkBoxExportSelection.IsChecked }
+            };
+
             IsEnabled = false;
 
-            //Call up export result window
-            src.etabs_to_rhino.WindowEtabsToRhinoResult windowEtabsToRhinoResult = new src.etabs_to_rhino.WindowEtabsToRhinoResult(_SapModel, _Plugin, filePath, fileName);
-            
+            //Call up progress result window
+            src.etabs_to_rhino.WindowEtabsToRhinoProgress windowEtabsToRhinoProgress = new src.etabs_to_rhino.WindowEtabsToRhinoProgress(_SapModel, _Plugin, filePath, fileName, selectedItems);
+
             IsEnabled = true;
+
+            Close();
         }
 
+
         #endregion
+
+        
     }
 }
