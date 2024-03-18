@@ -190,7 +190,7 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
                         List<string> pointConnectedToShellList = new List<string>();
                         foreach (HelperEtabs.Shell shell in shellList)
                         {
-                            foreach (string pointUniqueName in shell.Points)
+                            foreach (string pointUniqueName in shell.PointUniqueNameList)
                             {
                                 pointConnectedToShellList.Add(pointUniqueName);
                             }

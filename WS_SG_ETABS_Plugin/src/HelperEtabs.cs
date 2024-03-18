@@ -41,13 +41,20 @@ namespace WS_SG_ETABS_Plugin.src
         public class Shell
         {
             public string UniqueName { get; set; }
-            public List<string> Points { get; set; }
+            public List<string> PointUniqueNameList { get; set; }
             public Dictionary<string, double> NormalDirection { get; set; }
+            public List<Point3D> Points { get; set; } 
 
-            public Shell(string name, List<string> pointsList)
+            public Shell(string name, List<string> pointUniqueNameList)
             {
                 UniqueName = name;
-                Points = pointsList;
+                PointUniqueNameList = pointUniqueNameList;
+            }
+
+            public Shell(string name, List<Point3D> points)
+            {
+                UniqueName = name;
+                Points = Points;
             }
         }
 
@@ -439,7 +446,7 @@ namespace WS_SG_ETABS_Plugin.src
         public static void RecreateExistingAreaByPoints(cSapModel Sap, Shell shell)
         {
 
-            string[] points = shell.Points.ToArray();
+            string[] points = shell.PointUniqueNameList.ToArray();
             int numOfPoints = points.Count();
             string name = "";
             string userName = shell.UniqueName;

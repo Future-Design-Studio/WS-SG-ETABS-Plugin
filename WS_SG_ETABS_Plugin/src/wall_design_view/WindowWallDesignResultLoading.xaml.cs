@@ -102,7 +102,7 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
                     //Collect all the points
                     List<HelperEtabs.Point3D> shellPointList = new List<HelperEtabs.Point3D>();
 
-                    foreach (string shellPointUniqueName in shell.Points)
+                    foreach (string shellPointUniqueName in shell.PointUniqueNameList)
                     {
                         foreach (HelperEtabs.Point3D point in pointList)
                         {
