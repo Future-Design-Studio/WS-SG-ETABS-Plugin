@@ -2520,24 +2520,41 @@ namespace WS_SG_ETABS_Plugin.src
         /// <returns></returns>
         public static (double, double, string) GetRcBeamDimensionAndConcreteMaterial (cSapModel Sap, string sectionPropName)
         {
-            string FileName = "";
-	        string MatProp = "";
-            double T3 = 0;
-            double T2 = 0;
-            int Color = 0;
-            string Notes = "";
-            string GUID = "";
+            //Get property type
+            ETABSv1.eFramePropType propType = new ETABSv1.eFramePropType();
+            string propTypeString = "";
 
-            Ret = Sap.PropFrame.GetRectangle(sectionPropName, ref FileName, ref MatProp, ref T3, ref T2, ref Color, ref Notes, ref GUID);
+            Ret = Sap.PropFrame.GetTypeOAPI(sectionPropName, ref propType);
+            propTypeString = propType.ToString();
 
-            if (Ret == 0)
+            if (propTypeString == "Rectangular")
             {
-                return (T2, T3, MatProp);
+                string FileName = "";
+                string MatProp = "";
+                double T3 = 0;
+                double T2 = 0;
+                int Color = 0;
+                string Notes = "";
+                string GUID = "";
+
+                Ret = Sap.PropFrame.GetRectangle(sectionPropName, ref FileName, ref MatProp, ref T3, ref T2, ref Color, ref Notes, ref GUID);
+
+                if (Ret == 0)
+                {
+                    return (T2, T3, MatProp);
+                }
+                else
+                {
+                    return (0, 0, "");
+                }
             }
             else
             {
+                MessageBox.Show($"Error extracting {sectionPropName} property! Only rectangular shape is supported!");
                 return (0, 0, "");
             }
+
+
         }
 
         /// <summary>
@@ -2598,7 +2615,7 @@ namespace WS_SG_ETABS_Plugin.src
             }
             else
             {
-                MessageBox.Show("Only rectangular or circle shape is supported!");
+                MessageBox.Show($"Error extracting {sectionPropName} property! Only rectangular or circle shape is supported!");
                 return (0, 0, 0, "", "");
             }
 
