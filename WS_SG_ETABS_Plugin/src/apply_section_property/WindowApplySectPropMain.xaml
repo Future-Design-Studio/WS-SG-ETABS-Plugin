@@ -28,7 +28,7 @@
         <TextBlock Grid.Row="1" Grid.Column="0" TextWrapping="Wrap" TextAlignment="Justify"  
                    Margin="10 0 10 0" FontSize="10">
                 How to use:<LineBreak/>
-                1. Select groups to be applied element modifier<LineBreak/>
+                1. Select group(s) to be applied section property<LineBreak/>
                 2. Select section property to be applied<LineBreak/>
         </TextBlock>
 
