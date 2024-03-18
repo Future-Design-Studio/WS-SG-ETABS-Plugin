@@ -2550,7 +2550,7 @@ namespace WS_SG_ETABS_Plugin.src
             }
             else
             {
-                MessageBox.Show("Only rectangular shape is supported!");
+                MessageBox.Show($"Error extracting {sectionPropName} property! Only rectangular shape is supported!");
                 return (0, 0, "");
             }
 
@@ -2615,7 +2615,7 @@ namespace WS_SG_ETABS_Plugin.src
             }
             else
             {
-                MessageBox.Show("Only rectangular or circle shape is supported!");
+                MessageBox.Show($"Error extracting {sectionPropName} property! Only rectangular or circle shape is supported!");
                 return (0, 0, 0, "", "");
             }
 
