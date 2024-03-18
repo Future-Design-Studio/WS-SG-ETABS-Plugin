@@ -777,3 +777,15 @@ C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws
 C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\wall_design_view\WindowWallDesignResult.baml
 C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\wall_design_view\WindowWallDesignResultLoading.baml
 C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\wall_design_view\WindowWallDesignSelectLoad.baml
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\add_load_combo\WindowAddLoadComboMain.g.cs
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\add_load_combo\WindowAddLoadComboMain.baml
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\add_load_combo\WindowAddLoadComboResult.g.cs
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\add_load_combo\WindowAddLoadComboResult.baml
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\apply_modifier\WindowApplyModifierMain.g.cs
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\apply_modifier\WindowApplyModifierMain.baml
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\apply_modifier\WindowApplyModifierResult.g.cs
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\apply_modifier\WindowApplyModifierResult.baml
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\apply_section_property\WindowApplySectPropMain.g.cs
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\apply_section_property\WindowApplySectPropMain.baml
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\apply_section_property\WindowApplySectPropResult.g.cs
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\apply_section_property\WindowApplySectPropResult.baml

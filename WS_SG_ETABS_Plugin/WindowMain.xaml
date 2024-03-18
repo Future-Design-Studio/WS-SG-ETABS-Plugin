@@ -61,7 +61,9 @@
         <Button Grid.Row="7" Grid.Column="1" x:Name="buttonReleaseSelectedNode" Content="Release Frames at Specific Nodes (Beta Version)" FontSize="16" Click="buttonReleaseSelectedNode_Click" IsEnabled="True"/>
         <Button Grid.Row="8" Grid.Column="1" x:Name="buttonTrfEtabsLoads" Content="Transfer Joint Reaction as Load Applied (Beta Version)" Click="buttonTrfEtabsLoads_Click" FontSize="16" IsEnabled="True"/>
         <Button Grid.Row="9" Grid.Column="1" x:Name="buttonTrfEtabstoSafe" Content="Transfer ETABS Reaction to SAFE (Beta Version)" Click="buttonTrfEtabstoSafe_Click" FontSize="16" IsEnabled="True"/>
-
+        <Button Grid.Row="10" Grid.Column="1" x:Name="buttonAddLoadCombo" Content="Add Load Combo (Beta Version)" Click="buttonAddLoadCombo_Click" FontSize="16" IsEnabled="True"/>
+        <Button Grid.Row="11" Grid.Column="1" x:Name="buttonApplyModifier" Content="Apply Element Modifier (Beta Version)" Click="buttonApplyModifier_Click" FontSize="16" IsEnabled="True"/>
+        <Button Grid.Row="12" Grid.Column="1" x:Name="buttonApplySectProp" Content="Apply Section Property (Beta Version)" Click="buttonApplySectProp_Click" FontSize="16" IsEnabled="True"/>
 
         <!-- Upcoming -->
         <Button Grid.Row="3" Grid.Column="2" x:Name="buttonCarbon" Content="Carbon Calulator" Click="buttonCarbon_Click" FontSize="16" IsEnabled="False"/>

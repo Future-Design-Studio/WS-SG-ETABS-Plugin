@@ -199,6 +199,7 @@ namespace WS_SG_ETABS_Plugin.src
             public double d { get; set; }
             public double dCalculated { get; set; }
             public double AsProv { get; set; }
+            public double AsProvPercentage { get; set; }
             public double AvMajorProv { get; set; }
             public double AvMinorProv { get; set; }
             public double RatioAs { get; set; }
@@ -214,6 +215,7 @@ namespace WS_SG_ETABS_Plugin.src
             public double ShearLinksSpacing { get; set; }
             public string AsEvaluationComment { get; set; }
             public string AvEvaluationComment { get; set; }
+            public string EtabsComment { get; set; }
 
             public RcColumn(string name)
             {
@@ -2859,6 +2861,16 @@ namespace WS_SG_ETABS_Plugin.src
         public static List<string> typeOfViewWallDesign = new List<string>()
         {
             "All Failure", "PMN Failure", "Shear Failure", "Pier Req. Rebar %"
+        };
+
+        public static List<string> typeLoadCombo = new List<string>()
+        {
+            "Linear Additive", "Envelope", "Absolute Additive", "SRSS", "Range Additive"
+        };
+
+        public static List<string> ifAlreadyExist = new List<string>()
+        {
+            "Modify", "Overwrite"
         };
 
         #endregion

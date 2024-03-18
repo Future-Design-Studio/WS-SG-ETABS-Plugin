@@ -84,10 +84,10 @@ namespace WS_SG_ETABS_Plugin
                 {
                     List<string> listofButtons = new List<string>
                     {
-                        "buttonRCBeamSchedule", "buttonCopyProperties", "buttonPlotReaction", "buttonLoadCombo", "buttonPadFooting", "buttonPunchingShear", "buttonTedds", "buttonRCColSchedule", "buttonPlotDrift", "buttonPlotSumMassParticip", "buttonWallDesignViewer",
-                        "buttonShellUni", "buttonSelUniqueName", "buttonEtabsToRhino", "buttonWindCoeff", "buttonReleaseSelectedNode", "buttonTrfEtabsLoads", "buttonTrfEtabstoSafe",
-                        "buttonCarbon",
-                        "buttonTransferMidas", "buttonTrussGrouping", "buttonDeleteFrames", "buttonColOptimizer", "buttonSteelTrussOptimizer", "buttonCircCrack", "buttonPreWarning"
+                        "buttonRCBeamSchedule", "buttonCopyProperties", "buttonPlotReaction", "buttonLoadCombo", "buttonPadFooting", "buttonPunchingShear", "buttonTedds", "buttonRCColSchedule", "buttonPlotDrift", 
+                        "buttonPlotSumMassParticip", "buttonWallDesignViewer", "buttonShellUni", "buttonSelUniqueName", "buttonEtabsToRhino", "buttonWindCoeff", "buttonReleaseSelectedNode", "buttonTrfEtabsLoads", 
+                        "buttonTrfEtabstoSafe", "buttonCarbon", "buttonTransferMidas", "buttonTrussGrouping", "buttonDeleteFrames", "buttonColOptimizer", "buttonSteelTrussOptimizer", "buttonCircCrack", 
+                        "buttonPreWarning", "buttonAddLoadCombo", "buttonApplyModifier"
                     };
 
                     foreach (string buttonName in listofButtons)
@@ -333,6 +333,30 @@ namespace WS_SG_ETABS_Plugin
             IsEnabled = false;
             //Call up window
             src.wall_design_view.WindowWallDesignSelectLoad windowWallDesignSelectLoad = new src.wall_design_view.WindowWallDesignSelectLoad(_SapModel, _Plugin);
+            IsEnabled = true;
+        }
+
+        private void buttonAddLoadCombo_Click(object sender, RoutedEventArgs e)
+        {
+            IsEnabled = false;
+            //Call up window
+            src.add_load_combo.WindowAddLoadComboMain windowAddLoadComboMain = new src.add_load_combo.WindowAddLoadComboMain(_SapModel, _Plugin);
+            IsEnabled = true;
+        }
+
+        private void buttonApplyModifier_Click(object sender, RoutedEventArgs e)
+        {
+            IsEnabled = false;
+            //Call up window
+            src.apply_modifier.WindowApplyModifierMain windowApplyModifierMain = new src.apply_modifier.WindowApplyModifierMain(_SapModel, _Plugin);
+            IsEnabled = true;
+        }
+
+        private void buttonApplySectProp_Click(object sender, RoutedEventArgs e)
+        {
+            IsEnabled = false;
+            //Call up window
+            src.apply_section_property.WindowApplySectPropMain windowApplySectPropMain = new src.apply_section_property.WindowApplySectPropMain(_SapModel, _Plugin);
             IsEnabled = true;
         }
     }

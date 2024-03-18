@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WS_SG_ETABS_Plugin.src.rc_col_schedule"
-             mc:Ignorable="d" Height="900" Width="600" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+             mc:Ignorable="d" Height="920" Width="600" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"></ColumnDefinition>
@@ -143,10 +143,10 @@
             <TextBox x:Name="textBoxMinimumRebar" Grid.Row="0" Grid.Column="1" Text="0.2"></TextBox>
             <TextBox x:Name="textBoxCover" Grid.Row="1" Grid.Column="1" Text="35"></TextBox>
             <TextBox x:Name="textBoxMaxNoLayer" Grid.Row="2" Grid.Column="1" Text="3"></TextBox>
-            <TextBox x:Name="textBoxMaxShearLinksSpacing" Grid.Row="3" Grid.Column="1" Text="300"></TextBox>
+            <TextBox x:Name="textBoxMaxShearLinksSpacing" Grid.Row="3" Grid.Column="1" Text="150"></TextBox>
             <TextBox x:Name="textBoxMinShearLinksSpacing" Grid.Row="4" Grid.Column="1" Text="100"></TextBox>
             <TextBox x:Name="textBoxShearLinksSpacingStep" Grid.Row="5" Grid.Column="1" Text="50"></TextBox>
-            <TextBox x:Name="textBoxRebarDiameterList" Grid.Row="6" Grid.Column="1" Text="12, 16, 20, 25, 32, 40"></TextBox>
+            <TextBox x:Name="textBoxRebarDiameterList" Grid.Row="6" Grid.Column="1" Text="13, 16, 20, 25, 32, 40"></TextBox>
             <TextBox x:Name="textBoxShearLinksDiameterList" Grid.Row="7" Grid.Column="1" Text="10, 12, 16, 20"></TextBox>
         </Grid>
 
@@ -170,7 +170,7 @@
             <RadioButton Grid.Row="2" Grid.Column="0" GroupName="rebarSpc" Content="Min center to center spacing between rebar (mm)" Name="radioButtonSpcCToC" 
                          Checked="radioButtonSpcCToC_Checked"></RadioButton>
             <RadioButton Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" GroupName="rebarSpc" Content="Auto (use EC rules, clear spacing = max[25mm, rebar dia])" Name="radioButtonSpcAuto"></RadioButton>
-            <RadioButton Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" GroupName="rebarSpc" Content="Auto (use Ramboll standard practice, no of rebar = width (in mm)/100 )" Name="radioButtonSpcAutoRamboll"></RadioButton>
+            <RadioButton Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" GroupName="rebarSpc" Content="Auto (use Ramboll standard practice, no of rebar = circumeference (in mm)/100 )" Name="radioButtonSpcAutoRamboll"></RadioButton>
             
             <TextBox x:Name="textBoxSpcClearSpc" Grid.Row="1" Grid.Column="1" Text="50" IsEnabled="False"></TextBox>
             <TextBox x:Name="textBoxSpcCToC" Grid.Row="2" Grid.Column="1" Text="80" IsEnabled="False"></TextBox>
