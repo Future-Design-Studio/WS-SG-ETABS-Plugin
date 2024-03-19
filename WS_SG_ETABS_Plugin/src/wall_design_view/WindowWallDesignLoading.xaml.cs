@@ -185,12 +185,12 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
                         (isError, wallObjectConnectivityTable) = src.HelperEtabs.CallDatabaseTableByTableKey(databaseTableList, "Wall Object Connectivity");
                         if (isError) { return; }
 
-                        List<HelperEtabs.Shell> shellList = HelperEtabs.GetShellsPoints(wallObjectConnectivityTable);
+                        List<HelperEtabs.Shell> shellList = HelperEtabs.GetShellsPointsUniqueName(wallObjectConnectivityTable);
 
                         List<string> pointConnectedToShellList = new List<string>();
                         foreach (HelperEtabs.Shell shell in shellList)
                         {
-                            foreach (string pointUniqueName in shell.Points)
+                            foreach (string pointUniqueName in shell.PointUniqueNameList)
                             {
                                 pointConnectedToShellList.Add(pointUniqueName);
                             }

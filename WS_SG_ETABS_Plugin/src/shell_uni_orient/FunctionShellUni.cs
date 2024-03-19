@@ -122,7 +122,7 @@ namespace WS_SG_ETABS_Plugin.src.shell_uni_orient
             if (floorObjConnectivity != null)
             {
                 //Parse floor points from ETABS database to Shell type
-                floorList = src.HelperEtabs.GetShellsPoints(floorObjConnectivity);
+                floorList = src.HelperEtabs.GetShellsPointsUniqueName(floorObjConnectivity);
 
                 //Getting floor normal directions
                 foreach (src.HelperEtabs.Shell floor in floorList)
@@ -149,7 +149,7 @@ namespace WS_SG_ETABS_Plugin.src.shell_uni_orient
             if (wallObjConnectivity != null)
             {
                 //Parse wall points from ETABS database to Shell
-                wallList = src.HelperEtabs.GetShellsPoints(wallObjConnectivity);
+                wallList = src.HelperEtabs.GetShellsPointsUniqueName(wallObjConnectivity);
 
                 //Getting floor normal directions
                 foreach (src.HelperEtabs.Shell wall in wallList)
@@ -176,7 +176,7 @@ namespace WS_SG_ETABS_Plugin.src.shell_uni_orient
             if (nullAreaObjConnectivity != null)
             {
                 //Parse wall points from ETABS database to Shell
-                nullAreaList = src.HelperEtabs.GetShellsPoints(nullAreaObjConnectivity);
+                nullAreaList = src.HelperEtabs.GetShellsPointsUniqueName(nullAreaObjConnectivity);
 
                 //Getting floor normal directions
                 foreach (src.HelperEtabs.Shell nullArea in nullAreaList)
@@ -261,9 +261,9 @@ namespace WS_SG_ETABS_Plugin.src.shell_uni_orient
             List<Dictionary<string, string>> shellPointList = new List<Dictionary<string, string>>();
 
             //Only look at point 0 1 2
-            shellPointList.Add(new Dictionary<string, string>(){  { "Unique Name", shell.Points[0] } });
-            shellPointList.Add(new Dictionary<string, string>() { { "Unique Name", shell.Points[1] } });
-            shellPointList.Add(new Dictionary<string, string>() { { "Unique Name", shell.Points[2] } });
+            shellPointList.Add(new Dictionary<string, string>(){  { "Unique Name", shell.PointUniqueNameList[0] } });
+            shellPointList.Add(new Dictionary<string, string>() { { "Unique Name", shell.PointUniqueNameList[1] } });
+            shellPointList.Add(new Dictionary<string, string>() { { "Unique Name", shell.PointUniqueNameList[2] } });
 
             //Finding coordinate for point 0 1 2
             foreach (Dictionary<string, string> shellPoint in shellPointList)
@@ -325,7 +325,7 @@ namespace WS_SG_ETABS_Plugin.src.shell_uni_orient
                 flipped = true;
 
                 //Flipping axis
-                shell.Points.Reverse();
+                shell.PointUniqueNameList.Reverse();
 
                 HelperEtabs.DeleteArea(Sap, shell);
                 HelperEtabs.RecreateExistingAreaByPoints(Sap, shell);
@@ -341,18 +341,18 @@ namespace WS_SG_ETABS_Plugin.src.shell_uni_orient
             foreach (src.HelperEtabs.Shell floor in floorList)
             {
                 int index = 0;
-                while (index < floor.Points.Count)
+                while (index < floor.PointUniqueNameList.Count)
                 {
                     Dictionary<string, string> row = new Dictionary<string, string>();
                     row["Unique Name"] = floor.UniqueName;
 
-                    if (index < floor.Points.Count) { row["UniquePt1"] = floor.Points[index]; }
+                    if (index < floor.PointUniqueNameList.Count) { row["UniquePt1"] = floor.PointUniqueNameList[index]; }
                     index++;
-                    if (index < floor.Points.Count) { row["UniquePt2"] = floor.Points[index]; }
+                    if (index < floor.PointUniqueNameList.Count) { row["UniquePt2"] = floor.PointUniqueNameList[index]; }
                     index++;
-                    if (index < floor.Points.Count) { row["UniquePt3"] = floor.Points[index]; }
+                    if (index < floor.PointUniqueNameList.Count) { row["UniquePt3"] = floor.PointUniqueNameList[index]; }
                     index++;
-                    if (index < floor.Points.Count) { row["UniquePt4"] = floor.Points[index]; }
+                    if (index < floor.PointUniqueNameList.Count) { row["UniquePt4"] = floor.PointUniqueNameList[index]; }
                     index++;
 
                     floorObjConnectivityEdit.Add(row);
