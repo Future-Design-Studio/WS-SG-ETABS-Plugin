@@ -2292,7 +2292,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                 if (databaseTable.TableKey == "Wall Object Connectivity" || databaseTable.TableKey == "Floor Object Connectivity")
                 {
                     //Getting area list parsed as Shell type
-                    List<src.HelperEtabs.Shell> areaList = src.HelperEtabs.GetShellsPoints(databaseTable);
+                    List<src.HelperEtabs.Shell> areaList = src.HelperEtabs.GetShellsPointsUniqueName(databaseTable);
 
                     //MGTHeader
                     textMgt.Add("*ELEMENT");
@@ -2396,7 +2396,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                 else if (databaseTable.TableKey == "Null Area Object Connectivity")
                 {
                     //Getting area list parsed as Shell type
-                    List<src.HelperEtabs.Shell> areaList = src.HelperEtabs.GetShellsPoints(databaseTable);
+                    List<src.HelperEtabs.Shell> areaList = src.HelperEtabs.GetShellsPointsUniqueName(databaseTable);
 
                     //MGTHeader
                     textMgt.Add("*ELEMENT");
@@ -3157,15 +3157,15 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                             //Get area list
                             src.HelperEtabs.DatabaseTable floorObjConnectivity = new HelperEtabs.DatabaseTable();
                             (isError, floorObjConnectivity) = src.HelperEtabs.GetTableDisplay(Sap, "Floor Object Connectivity", false);
-                            areaList = src.HelperEtabs.GetShellsPoints(floorObjConnectivity);
+                            areaList = src.HelperEtabs.GetShellsPointsUniqueName(floorObjConnectivity);
 
                             src.HelperEtabs.DatabaseTable wallObjConnectivity = new HelperEtabs.DatabaseTable();
                             (isError, wallObjConnectivity) = src.HelperEtabs.GetTableDisplay(Sap, "Wall Object Connectivity", false);
-                            areaList.AddRange(src.HelperEtabs.GetShellsPoints(wallObjConnectivity));
+                            areaList.AddRange(src.HelperEtabs.GetShellsPointsUniqueName(wallObjConnectivity));
 
                             src.HelperEtabs.DatabaseTable nullAreaObjConnectivity = new HelperEtabs.DatabaseTable();
                             (isError, nullAreaObjConnectivity) = src.HelperEtabs.GetTableDisplay(Sap, "Null Area Object Connectivity", false);
-                            areaList.AddRange(src.HelperEtabs.GetShellsPoints(nullAreaObjConnectivity));
+                            areaList.AddRange(src.HelperEtabs.GetShellsPointsUniqueName(nullAreaObjConnectivity));
 
                             //Get node coordinate
                             src.HelperEtabs.DatabaseTable pointObjConnectivity = new HelperEtabs.DatabaseTable();

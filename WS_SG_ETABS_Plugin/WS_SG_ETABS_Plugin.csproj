@@ -245,7 +245,13 @@
     <Compile Include="src\carbon\WindowCarbonResult.xaml.cs">
       <DependentUpon>WindowCarbonResult.xaml</DependentUpon>
     </Compile>
-    <Compile Include="src\copy_elements\WindowCopyElementsMain.cs" />
+    <Compile Include="src\copy_elements\FunctionCopyElements.cs" />
+    <Compile Include="src\copy_elements\WindowCopyElementsMain.xaml.cs">
+      <DependentUpon>WindowCopyElementsMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\copy_elements\WindowCopyElementsResult.xaml.cs">
+      <DependentUpon>WindowCopyElementsResult.xaml</DependentUpon>
+    </Compile>
     <Compile Include="src\copy_properties\FunctionCopyProp.cs" />
     <Compile Include="src\copy_properties\WindowCopyPropMain.xaml.cs">
       <DependentUpon>WindowCopyPropMain.xaml</DependentUpon>
@@ -527,6 +533,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="src\carbon\WindowCarbonResult.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\copy_elements\WindowCopyElementsMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\copy_elements\WindowCopyElementsResult.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

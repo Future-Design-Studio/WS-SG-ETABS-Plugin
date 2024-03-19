@@ -91,7 +91,7 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
                 //(isError, wallObjectConnectivityTable) = src.HelperEtabs.FilterDatabaseTableUniqueNameByGroup(wallObjectConnectivityTable, groupAssignmentsTable, choosenGroup);
 
                 //Get shell points
-                List<HelperEtabs.Shell> shellList = HelperEtabs.GetShellsPoints(wallObjectConnectivityTable);
+                List<HelperEtabs.Shell> shellList = HelperEtabs.GetShellsPointsUniqueName(wallObjectConnectivityTable);
 
                 double numOfWalls = shellList.Count();
 

@@ -122,7 +122,7 @@ namespace WS_SG_ETABS_Plugin.src.shell_uni_orient
             if (floorObjConnectivity != null)
             {
                 //Parse floor points from ETABS database to Shell type
-                floorList = src.HelperEtabs.GetShellsPoints(floorObjConnectivity);
+                floorList = src.HelperEtabs.GetShellsPointsUniqueName(floorObjConnectivity);
 
                 //Getting floor normal directions
                 foreach (src.HelperEtabs.Shell floor in floorList)
@@ -149,7 +149,7 @@ namespace WS_SG_ETABS_Plugin.src.shell_uni_orient
             if (wallObjConnectivity != null)
             {
                 //Parse wall points from ETABS database to Shell
-                wallList = src.HelperEtabs.GetShellsPoints(wallObjConnectivity);
+                wallList = src.HelperEtabs.GetShellsPointsUniqueName(wallObjConnectivity);
 
                 //Getting floor normal directions
                 foreach (src.HelperEtabs.Shell wall in wallList)
@@ -176,7 +176,7 @@ namespace WS_SG_ETABS_Plugin.src.shell_uni_orient
             if (nullAreaObjConnectivity != null)
             {
                 //Parse wall points from ETABS database to Shell
-                nullAreaList = src.HelperEtabs.GetShellsPoints(nullAreaObjConnectivity);
+                nullAreaList = src.HelperEtabs.GetShellsPointsUniqueName(nullAreaObjConnectivity);
 
                 //Getting floor normal directions
                 foreach (src.HelperEtabs.Shell nullArea in nullAreaList)

@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Policy;
+using System.Threading;
 using System.Windows;
 using System.Xml.Linq;
 
@@ -57,6 +58,26 @@ namespace WS_SG_ETABS_Plugin.src
                 Points = Points;
             }
         }
+
+        public class Frame
+        {
+            public string UniqueName { get; set; }
+            public List<string> PointUniqueNameList { get; set; }
+            public List<Point3D> Points { get; set; }
+
+            public Frame(string name, List<string> pointUniqueNameList)
+            {
+                UniqueName = name;
+                PointUniqueNameList = pointUniqueNameList;
+            }
+
+            public Frame(string name, List<Point3D> points)
+            {
+                UniqueName = name;
+                Points = Points;
+            }
+        }
+
 
         public class Beam
         {
@@ -1727,6 +1748,22 @@ namespace WS_SG_ETABS_Plugin.src
             return point3DList;
         }
 
+        public static (bool, Point3D) GetSpecificPoint3D (string uniqueName, List<Point3D> allPointList)
+        {
+            bool isError = false;
+
+            foreach(Point3D point in allPointList)
+            {
+                if (point.UniqueName == uniqueName)
+                {
+                    return (isError, point);
+                }
+            }
+
+            isError = true;
+            return (isError, null);
+        }
+
         #endregion
 
         #region Material Method
@@ -2232,11 +2269,11 @@ namespace WS_SG_ETABS_Plugin.src
         #region Shell method
 
         /// <summary>
-        /// Parsing shell edge points from ETABS database
+        /// Parsing shell edge points from ETABS database. Will return points unique name
         /// </summary>
         /// <param name="shellObjConnectivity"></param>
         /// <returns></returns>
-        public static List<Shell> GetShellsPoints(DatabaseTable shellObjConnectivity)
+        public static List<Shell> GetShellsPointsUniqueName(DatabaseTable shellObjConnectivity)
         {
             int index = 0;
             List<Shell> shellList = new List<Shell>();
@@ -2314,11 +2351,115 @@ namespace WS_SG_ETABS_Plugin.src
         }
 
         /// <summary>
+        /// Parsing shell edge points from ETABS database. Will return Point3D
+        /// </summary>
+        /// <param name="shellObjConnectivity"></param>
+        /// <param name="pointObjConnectivity"></param>
+        /// <returns></returns>
+        public static (bool, List<Shell>) GetShellsPoints(DatabaseTable shellObjConnectivity, DatabaseTable pointObjConnectivity)
+        {
+            int index = 0;
+            List<Shell> shellList = new List<Shell>();
+            bool isError = false;
+
+            if (shellObjConnectivity != null && shellObjConnectivity.NumberRecords != 0)
+            {
+                //Convert point connectivity database to Point3D
+                List<Point3D> allPointList = ConvertPointDatabaseToPoint3D(pointObjConnectivity);
+
+                while (index < shellObjConnectivity.TableInList.Count)
+                {
+                    List<string> pointList = new List<string>();
+                    List<Point3D> point3DList = new List<Point3D>();
+                    
+                    //Assume that row below is same shell so can enter while loop
+                    bool rowBelowIsSameShell = true;
+
+                    while (rowBelowIsSameShell)
+                    {
+                        if (shellObjConnectivity.TableInList[index]["UniquePt1"] != null)
+                        {
+                            //Only add if no duplicate points
+                            if (!pointList.Contains(shellObjConnectivity.TableInList[index]["UniquePt1"]))
+                            {
+                                pointList.Add(shellObjConnectivity.TableInList[index]["UniquePt1"]);
+
+                                Point3D point = null;
+                                (isError, point) = GetSpecificPoint3D(shellObjConnectivity.TableInList[index]["UniquePt1"], allPointList);
+                                if (!isError) { point3DList.Add(point); } else { return (isError, null); }
+                            }
+
+                        }
+                        if (shellObjConnectivity.TableInList[index]["UniquePt2"] != null)
+                        {
+                            //Only add if no duplicate points
+                            if (!pointList.Contains(shellObjConnectivity.TableInList[index]["UniquePt2"]))
+                            {
+                                pointList.Add(shellObjConnectivity.TableInList[index]["UniquePt2"]);
+
+                                Point3D point = null;
+                                (isError, point) = GetSpecificPoint3D(shellObjConnectivity.TableInList[index]["UniquePt2"], allPointList);
+                                if (!isError) { point3DList.Add(point); } else { return (isError, null); }
+                            }
+                        }
+                        if (shellObjConnectivity.TableInList[index]["UniquePt3"] != null)
+                        {
+                            //Only add if no duplicate points
+                            if (!pointList.Contains(shellObjConnectivity.TableInList[index]["UniquePt3"]))
+                            {
+                                pointList.Add(shellObjConnectivity.TableInList[index]["UniquePt3"]);
+
+                                Point3D point = null;
+                                (isError, point) = GetSpecificPoint3D(shellObjConnectivity.TableInList[index]["UniquePt3"], allPointList);
+                                if (!isError) { point3DList.Add(point); } else { return (isError, null); }
+                            }
+                        }
+
+                        //Check if UniquePt4 key exist, if exist take UniquePt4 else skip
+                        bool keyExists = shellObjConnectivity.TableInList[index].ContainsKey("UniquePt4");
+                        if (keyExists)
+                        {
+                            if (shellObjConnectivity.TableInList[index]["UniquePt4"] != null)
+                            {
+                                //Only add if no duplicate points
+                                if (!pointList.Contains(shellObjConnectivity.TableInList[index]["UniquePt4"]))
+                                {
+                                    pointList.Add(shellObjConnectivity.TableInList[index]["UniquePt4"]);
+
+                                    Point3D point = null;
+                                    (isError, point) = GetSpecificPoint3D(shellObjConnectivity.TableInList[index]["UniquePt4"], allPointList);
+                                    if (!isError) { point3DList.Add(point); } else { return (isError, null); }
+                                }
+                            }
+                        }
+
+                        //If this is not last row and below this row still the same shell, go to next row, loop again to get more points
+                        if (index < shellObjConnectivity.TableInList.Count - 1 && shellObjConnectivity.TableInList[index]["UniqueName"] == shellObjConnectivity.TableInList[index + 1]["UniqueName"])
+                        {
+                            index++;
+                        }
+                        //else go out the loop and save points
+                        else
+                        {
+                            rowBelowIsSameShell = false;
+                        }
+                    }
+                    Shell shell = new Shell(shellObjConnectivity.TableInList[index]["UniqueName"], point3DList);
+                    shellList.Add(shell);
+
+                    index++;
+                }
+            }
+
+            return (isError, shellList);
+        }
+
+        /// <summary>
         /// Get wall design result
         /// </summary>
         /// <param name="Sap"></param>
         /// <returns></returns>
-        public static (List<Dictionary<string, string>>, List<Dictionary<string, string>>) GetWallDesignResult(cSapModel Sap)
+            public static (List<Dictionary<string, string>>, List<Dictionary<string, string>>) GetWallDesignResult(cSapModel Sap)
         {
             List<Dictionary<string, string>>  tableInListPierDesignResult = GetPierDesignResult(Sap);
             List<Dictionary<string, string>> tableInListSpandrelDesignResult = GetSpandrelDesignResult(Sap);
