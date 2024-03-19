@@ -1,11 +1,13 @@
 ﻿using Accord;
 using ETABSv1;
 using Microsoft.Office.Interop.Excel;
+using Rhino.Collections;
 //using SAFEv1;
 using ScottPlot.Drawing.Colormaps;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Security.Policy;
 using System.Threading;
 using System.Windows;
@@ -45,6 +47,7 @@ namespace WS_SG_ETABS_Plugin.src
             public List<string> PointUniqueNameList { get; set; }
             public Dictionary<string, double> NormalDirection { get; set; }
             public List<Point3D> Points { get; set; } 
+            public string Group { get; set; }
 
             public Shell(string name, List<string> pointUniqueNameList)
             {
@@ -55,7 +58,7 @@ namespace WS_SG_ETABS_Plugin.src
             public Shell(string name, List<Point3D> points)
             {
                 UniqueName = name;
-                Points = Points;
+                Points = points;
             }
         }
 
@@ -64,6 +67,7 @@ namespace WS_SG_ETABS_Plugin.src
             public string UniqueName { get; set; }
             public List<string> PointUniqueNameList { get; set; }
             public List<Point3D> Points { get; set; }
+            public string Group { get; set; }
 
             public Frame(string name, List<string> pointUniqueNameList)
             {
@@ -74,7 +78,7 @@ namespace WS_SG_ETABS_Plugin.src
             public Frame(string name, List<Point3D> points)
             {
                 UniqueName = name;
-                Points = Points;
+                Points = points;
             }
         }
 
@@ -1249,6 +1253,127 @@ namespace WS_SG_ETABS_Plugin.src
             return jointList;
         }
 
+        public static (bool, DatabaseTable) FilterDatabaseTable(DatabaseTable databaseTableToFilter, string columnKeyToFilter, string valueToFind)
+        {
+            bool isError = false;
+            DatabaseTable databaseTableFiltered = new DatabaseTable();
+
+            //Check if table to filter contains column key
+            //First row only
+            List<Dictionary<string, string>> tableInListToFilter = databaseTableToFilter.TableInList;
+
+            //Check if input table is not empty
+            if (tableInListToFilter.Count == 0)
+            {
+                MessageBox.Show($"Table {databaseTableToFilter.TableKey} is empty!");
+                DatabaseTable emptyDatabaseTable = new DatabaseTable();
+                isError = true;
+                return (isError, emptyDatabaseTable);
+            }
+
+            if (!tableInListToFilter[0].ContainsKey(columnKeyToFilter))
+            {
+                MessageBox.Show($"Table {databaseTableToFilter.TableKey} does not contain {columnKeyToFilter}!");
+                DatabaseTable emptyDatabaseTable = new DatabaseTable();
+                isError = true;
+                return (isError, emptyDatabaseTable);
+            }
+
+            List<Dictionary<string, string>> tableInListFiltered = new List<Dictionary<string, string>>();
+            foreach (Dictionary<string, string> row in tableInListToFilter)
+            {
+                if (row[columnKeyToFilter] == valueToFind)
+                {
+                    tableInListFiltered.Add(row);
+                }
+            }
+
+            //Save table in list to DatabaseTable
+            databaseTableFiltered.TableInList = tableInListFiltered;
+
+            return (isError, databaseTableFiltered);
+        }
+
+        public static (bool, double) FindMinValueInDatabaseTable(DatabaseTable databaseTableToFilter, string columnKey)
+        {
+            bool isError = false;
+            DatabaseTable databaseTableFiltered = new DatabaseTable();
+
+            //Check if table to filter contains column key
+            //First row only
+            List<Dictionary<string, string>> tableInListToFilter = databaseTableToFilter.TableInList;
+            if (!tableInListToFilter[0].ContainsKey(columnKey))
+            {
+                MessageBox.Show($"Table {databaseTableToFilter.TableKey} does not contain {columnKey}!");
+                DatabaseTable emptyDatabaseTable = new DatabaseTable();
+                isError = true;
+                return (isError, 0);
+            }
+
+            bool firstLoop = true;
+            double minValue = 0;
+            List<Dictionary<string, string>> tableInListFiltered = new List<Dictionary<string, string>>();
+            foreach (Dictionary<string, string> row in tableInListToFilter)
+            {
+                if (firstLoop)
+                {
+                    minValue = Convert.ToDouble(row[columnKey]);
+                    firstLoop = false;
+                }
+                else
+                {
+                    if (minValue > Convert.ToDouble(row[columnKey]))
+                    {
+                        minValue = Convert.ToDouble(row[columnKey]);
+                    }
+                }
+            }
+            //Save table in list to DatabaseTable
+            databaseTableFiltered.TableInList = tableInListFiltered;
+
+            return (isError, minValue);
+        }
+
+        public static (bool, double) FindMaxValueInDatabaseTable(DatabaseTable databaseTableToFilter, string columnKey)
+        {
+            bool isError = false;
+            DatabaseTable databaseTableFiltered = new DatabaseTable();
+
+            //Check if table to filter contains column key
+            //First row only
+            List<Dictionary<string, string>> tableInListToFilter = databaseTableToFilter.TableInList;
+            if (!tableInListToFilter[0].ContainsKey(columnKey))
+            {
+                MessageBox.Show($"Table {databaseTableToFilter.TableKey} does not contain {columnKey}!");
+                DatabaseTable emptyDatabaseTable = new DatabaseTable();
+                isError = true;
+                return (isError, 0);
+            }
+
+            bool firstLoop = true;
+            double maxValue = 0;
+            List<Dictionary<string, string>> tableInListFiltered = new List<Dictionary<string, string>>();
+            foreach (Dictionary<string, string> row in tableInListToFilter)
+            {
+                if (firstLoop)
+                {
+                    maxValue = Convert.ToDouble(row[columnKey]);
+                    firstLoop = false;
+                }
+                else
+                {
+                    if (maxValue < Convert.ToDouble(row[columnKey]))
+                    {
+                        maxValue = Convert.ToDouble(row[columnKey]);
+                    }
+                }
+            }
+            //Save table in list to DatabaseTable
+            databaseTableFiltered.TableInList = tableInListFiltered;
+
+            return (isError, maxValue);
+        }
+
         #endregion
 
         #region Group Method
@@ -1564,130 +1689,9 @@ namespace WS_SG_ETABS_Plugin.src
             return (isError, databaseTableFiltered);
         }
 
-        public static (bool, DatabaseTable) FilterDatabaseTable(DatabaseTable databaseTableToFilter, string columnKeyToFilter, string valueToFind)
-        {
-            bool isError = false;
-            DatabaseTable databaseTableFiltered = new DatabaseTable();
-
-            //Check if table to filter contains column key
-            //First row only
-            List<Dictionary<string, string>> tableInListToFilter = databaseTableToFilter.TableInList;
-
-            //Check if input table is not empty
-            if (tableInListToFilter.Count == 0)
-            {
-                MessageBox.Show($"Table {databaseTableToFilter.TableKey} is empty!");
-                DatabaseTable emptyDatabaseTable = new DatabaseTable();
-                isError = true;
-                return (isError, emptyDatabaseTable);
-            }
-
-            if (!tableInListToFilter[0].ContainsKey(columnKeyToFilter))
-            {
-                MessageBox.Show($"Table {databaseTableToFilter.TableKey} does not contain {columnKeyToFilter}!");
-                DatabaseTable emptyDatabaseTable = new DatabaseTable();
-                isError = true;
-                return (isError, emptyDatabaseTable);
-            }
-
-            List<Dictionary<string, string>> tableInListFiltered = new List<Dictionary<string, string>>();
-            foreach (Dictionary<string, string> row in tableInListToFilter)
-            {
-                if (row[columnKeyToFilter] == valueToFind)
-                {
-                    tableInListFiltered.Add(row);
-                }
-            }
-
-            //Save table in list to DatabaseTable
-            databaseTableFiltered.TableInList = tableInListFiltered;
-
-            return (isError, databaseTableFiltered);
-        }
-
-        public static (bool, double) FindMinValueInDatabaseTable(DatabaseTable databaseTableToFilter, string columnKey)
-        {
-            bool isError = false;
-            DatabaseTable databaseTableFiltered = new DatabaseTable();
-
-            //Check if table to filter contains column key
-            //First row only
-            List<Dictionary<string, string>> tableInListToFilter = databaseTableToFilter.TableInList;
-            if (!tableInListToFilter[0].ContainsKey(columnKey))
-            {
-                MessageBox.Show($"Table {databaseTableToFilter.TableKey} does not contain {columnKey}!");
-                DatabaseTable emptyDatabaseTable = new DatabaseTable();
-                isError = true;
-                return (isError, 0);
-            }
-
-            bool firstLoop = true;
-            double minValue = 0;
-            List<Dictionary<string, string>> tableInListFiltered = new List<Dictionary<string, string>>();
-            foreach (Dictionary<string, string> row in tableInListToFilter)
-            {
-                if (firstLoop)
-                {
-                    minValue = Convert.ToDouble(row[columnKey]);
-                    firstLoop = false;
-                }
-                else
-                {
-                    if (minValue > Convert.ToDouble(row[columnKey]))
-                    {
-                        minValue = Convert.ToDouble(row[columnKey]);
-                    }
-                }
-            }
-            //Save table in list to DatabaseTable
-            databaseTableFiltered.TableInList = tableInListFiltered;
-
-            return (isError, minValue);
-        }
-
-        public static (bool, double) FindMaxValueInDatabaseTable(DatabaseTable databaseTableToFilter, string columnKey)
-        {
-            bool isError = false;
-            DatabaseTable databaseTableFiltered = new DatabaseTable();
-
-            //Check if table to filter contains column key
-            //First row only
-            List<Dictionary<string, string>> tableInListToFilter = databaseTableToFilter.TableInList;
-            if (!tableInListToFilter[0].ContainsKey(columnKey))
-            {
-                MessageBox.Show($"Table {databaseTableToFilter.TableKey} does not contain {columnKey}!");
-                DatabaseTable emptyDatabaseTable = new DatabaseTable();
-                isError = true;
-                return (isError, 0);
-            }
-
-            bool firstLoop = true;
-            double maxValue = 0;
-            List<Dictionary<string, string>> tableInListFiltered = new List<Dictionary<string, string>>();
-            foreach (Dictionary<string, string> row in tableInListToFilter)
-            {
-                if (firstLoop)
-                {
-                    maxValue = Convert.ToDouble(row[columnKey]);
-                    firstLoop = false;
-                }
-                else
-                {
-                    if (maxValue < Convert.ToDouble(row[columnKey]))
-                    {
-                        maxValue = Convert.ToDouble(row[columnKey]);
-                    }
-                }
-            }
-            //Save table in list to DatabaseTable
-            databaseTableFiltered.TableInList = tableInListFiltered;
-
-            return (isError, maxValue);
-        }
-
         public static string GetElementGroupName(DatabaseTable groupDatabaseTable, string elementName, string elementType)
         {
-            string groupName = "";
+            string groupName = null;
 
             foreach(Dictionary<string, string> row in groupDatabaseTable.TableInList)
             {
@@ -2972,12 +2976,12 @@ namespace WS_SG_ETABS_Plugin.src
         /// <param name="Sap"></param>
         /// <param name="sectionPropName"></param>
         /// <returns></returns>
-        public static (string, string, bool) GetEndPointsFrame(cSapModel Sap, string sectionPropName)
+        public static (string, string, bool) GetEndPointsFrame(cSapModel Sap, string frameName)
         {
             string pointI = "";
             string pointJ = "";
 
-            Ret = Sap.FrameObj.GetPoints(sectionPropName, ref pointI, ref pointJ);
+            Ret = Sap.FrameObj.GetPoints(frameName, ref pointI, ref pointJ);
 
             if (Ret == 0)
             {
@@ -2987,6 +2991,35 @@ namespace WS_SG_ETABS_Plugin.src
             {
                 return ("", "", true);
             }
+        }
+
+        public static (bool, List<Frame>) GetFramesPoints(DatabaseTable frameObjConnectivity, DatabaseTable pointObjConnectivity)
+        {
+            List<Frame> framelList = new List<Frame>();
+            bool isError = false;
+
+            if(frameObjConnectivity != null && frameObjConnectivity.NumberRecords != 0)
+            {
+                //Convert point connectivity database to Point3D
+                List<Point3D> allPointList = ConvertPointDatabaseToPoint3D(pointObjConnectivity);
+
+                foreach (Dictionary<string, string> row in frameObjConnectivity.TableInList)
+                {
+                    List<Point3D> point3DList = new List<Point3D>();
+
+                    Point3D point = null;
+                    (isError, point) = GetSpecificPoint3D(row["UniquePtI"], allPointList);
+                    if (!isError) { point3DList.Add(point); } else { return (isError, null); }
+
+                    (isError, point) = GetSpecificPoint3D(row["UniquePtJ"], allPointList);
+                    if (!isError) { point3DList.Add(point); } else { return (isError, null); }
+
+                    Frame frame = new Frame(row["UniqueName"], point3DList);
+                    framelList.Add(frame);
+                }
+            }
+
+            return (isError, framelList);
         }
 
         #endregion
@@ -3039,6 +3072,8 @@ namespace WS_SG_ETABS_Plugin.src
         };
 
         #endregion
+
+
 
     }
 

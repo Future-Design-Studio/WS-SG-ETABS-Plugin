@@ -252,6 +252,9 @@
     <Compile Include="src\copy_elements\WindowCopyElementsResult.xaml.cs">
       <DependentUpon>WindowCopyElementsResult.xaml</DependentUpon>
     </Compile>
+    <Compile Include="src\copy_elements\WindowCopyElementsResultLoading.xaml.cs">
+      <DependentUpon>WindowCopyElementsResultLoading.xaml</DependentUpon>
+    </Compile>
     <Compile Include="src\copy_properties\FunctionCopyProp.cs" />
     <Compile Include="src\copy_properties\WindowCopyPropMain.xaml.cs">
       <DependentUpon>WindowCopyPropMain.xaml</DependentUpon>
@@ -541,6 +544,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="src\copy_elements\WindowCopyElementsResult.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\copy_elements\WindowCopyElementsResultLoading.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
