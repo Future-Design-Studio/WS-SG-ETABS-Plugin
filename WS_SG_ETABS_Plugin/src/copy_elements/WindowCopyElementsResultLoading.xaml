@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WS_SG_ETABS_Plugin.src.copy_elements"
-             mc:Ignorable="d" Height="200" Width="350" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" WindowStyle="None">
+             mc:Ignorable="d" Height="250" Width="350" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" WindowStyle="None">
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"></ColumnDefinition>
@@ -29,6 +29,7 @@
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
 
             <CheckBox Grid.Row="0" Grid.Column="0" Name="checkBoxExtractTable" Content="Extracting database table from ETABS" IsEnabled="False" IsChecked="False"></CheckBox>
@@ -36,6 +37,7 @@
             <CheckBox Grid.Row="2" Grid.Column="0" Name="checkBoxProcessGroupName" Content="Processing elements group name" IsEnabled="False" IsChecked="False"></CheckBox>
             <CheckBox Grid.Row="3" Grid.Column="0" Name="checkBoxCreateGroups" Content="Creating groups in ETABS" IsEnabled="False" IsChecked="False"></CheckBox>
             <CheckBox Grid.Row="4" Grid.Column="0" Name="checkBoxCreateElements" Content="Creating elements in ETABS" IsEnabled="False" IsChecked="False"></CheckBox>
+            <ProgressBar Grid.Row="5" Grid.Column="0" Margin="0 3 0 3" Name="progressBarCreateElements"></ProgressBar>
 
         </Grid>
 

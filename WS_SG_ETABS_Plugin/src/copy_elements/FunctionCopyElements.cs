@@ -10,6 +10,9 @@ using ETABSv1;
 using Microsoft.Office.Interop.Excel;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 using Newtonsoft.Json.Linq;
+using System.Windows.Controls;
+using System.Windows.Threading;
+using System.IO;
 
 namespace WS_SG_ETABS_Plugin.src.copy_elements
 {
@@ -217,62 +220,74 @@ namespace WS_SG_ETABS_Plugin.src.copy_elements
             return translatedGroupNames;
         }
 
-        public static void CreateElements(cSapModel SapModel, List<HelperEtabs.Shell> shellList, List<HelperEtabs.Frame> frameList, Dictionary<string, string> translatedGroupNames)
+        public static void WriteTxtFile(cSapModel SapModel, List<string> shellFailToCreate, List<string> frameFailToCreate)
         {
-            int ret = 0;
+            string filePath = SapModel.GetModelFilepath();
+            string fileName = filePath + @"\copy_elements_warning.txt";
 
-            foreach (HelperEtabs.Shell shell in shellList)
+            try
             {
-                List<string> pointUniqueNameForShellList = new List<string>();
-
-                /*
-                //Create points
-                foreach(HelperEtabs.Point3D point3D in shell.Points)
+                // Check if file already exists. If yes, delete it.
+                if (File.Exists(fileName))
                 {
-                    string pointUniqueName = "";
-                    ret = SapModel.PointObj.AddCartesian(point3D.XCoordinate, point3D.YCoordinate, point3D.ZCoordinate, ref pointUniqueName);
-
-                    pointUniqueNameForShellList.Add(pointUniqueName);
-                }
-                */
-                List<double> xList = new List<double>();
-                List<double> yList = new List<double>();
-                List<double> zList = new List<double>();
-                foreach (HelperEtabs.Point3D point3D in shell.Points)
-                {
-                    xList.Add(point3D.XCoordinate);
-                    yList.Add(point3D.YCoordinate);
-                    zList.Add(point3D.ZCoordinate);
+                    File.Delete(fileName);
                 }
 
-                double[] xArray = xList.ToArray();
-                double[] yArray = yList.ToArray();
-                double[] zArray = zList.ToArray();
+                // Create a new file
+                using (FileStream fs = File.Create(fileName))
+                {
+                    // Add some text to file
+                    Byte[] title = new UTF8Encoding(true).GetBytes($"Area unique name fail to create (total = {shellFailToCreate.Count()}):");
+                    fs.Write(title, 0, title.Length);
+                    //New line
+                    Byte[] newline = Encoding.ASCII.GetBytes(Environment.NewLine);
+                    fs.Write(newline, 0, newline.Length);
 
-                //Create shell
-                string shellUniqueName = "";
-                ret = SapModel.AreaObj.AddByCoord(xList.Count(), ref xArray, ref yArray, ref zArray, ref shellUniqueName);
+                    foreach (string shell in shellFailToCreate)
+                    {
+                        // Add some text to file
+                        title = new UTF8Encoding(true).GetBytes($"{shell},");
+                        fs.Write(title, 0, title.Length);
+                    }
 
-                ret = SapModel.AreaObj.SetGroupAssign(shellUniqueName, translatedGroupNames[shell.Group]);
+                    //New line
+                    newline = Encoding.ASCII.GetBytes(Environment.NewLine);
+                    fs.Write(newline, 0, newline.Length);
 
+                    // Add some text to file
+                    title = new UTF8Encoding(true).GetBytes($"Frame unique name fail to create (total = {frameFailToCreate.Count()}):");
+                    fs.Write(title, 0, title.Length);
+                    //New line
+                    newline = Encoding.ASCII.GetBytes(Environment.NewLine);
+                    fs.Write(newline, 0, newline.Length);
+
+                    foreach (string frame in frameFailToCreate)
+                    {
+                        // Add some text to file
+                        title = new UTF8Encoding(true).GetBytes($"{frame},");
+                        fs.Write(title, 0, title.Length);
+                        //New line
+                        newline = Encoding.ASCII.GetBytes(Environment.NewLine);
+                        fs.Write(newline, 0, newline.Length);
+                    }
+
+                }
+
+                // Open the stream and read it back.
+                using (StreamReader sr = File.OpenText(fileName))
+                {
+                    string s = "";
+                    while ((s = sr.ReadLine()) != null)
+                    {
+                        Console.WriteLine(s);
+                    }
+                }
             }
-
-            foreach (HelperEtabs.Frame frame in frameList)
+            catch (Exception Ex)
             {
-                double xI = frame.Points[0].XCoordinate;
-                double yI = frame.Points[0].YCoordinate;
-                double zI = frame.Points[0].ZCoordinate;
-
-                double xJ = frame.Points[1].XCoordinate;
-                double yJ = frame.Points[1].YCoordinate;
-                double zJ = frame.Points[1].ZCoordinate;
-
-                //Create frame
-                string frameUniqueName = "";
-                ret = SapModel.FrameObj.AddByCoord(xI, yI, zI, xJ, yJ, zJ, ref frameUniqueName);
-
-                ret = SapModel.AreaObj.SetGroupAssign(frameUniqueName, translatedGroupNames[frame.Group]);
+                Console.WriteLine(Ex.ToString());
             }
         }
+
     }
 }
