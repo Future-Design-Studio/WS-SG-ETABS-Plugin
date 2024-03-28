@@ -95,6 +95,8 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
         {
             List<Dictionary<string, string>> tableInListPierDesignResult = null;
             List<Dictionary<string, string>> tableInListSpandrelDesignResult = null;
+            List<string> columnKeys = null;
+            List<string> tableInList = null;
 
             List<string> excelOutput;
             bool isError = false;
@@ -102,18 +104,24 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
             //Get pier design
             (isError, excelOutput) = HelperExcel.ReadExcel(excelFilePath, "Pier Dgn Sum", false);
 
-            List<string> columnKeys = excelOutput.GetRange(29, 29);
-            List<string> tableInList = excelOutput.GetRange(87, excelOutput.Count - 87);
+            if (!isError)
+            {
+                columnKeys = excelOutput.GetRange(29, 29);
+                tableInList = excelOutput.GetRange(87, excelOutput.Count - 87);
 
-            tableInListPierDesignResult = HelperMethod.EtabsTableToDictionary(tableInList.ToArray(), columnKeys.ToArray());
+                tableInListPierDesignResult = HelperMethod.EtabsTableToDictionary(tableInList.ToArray(), columnKeys.ToArray());
+            }
 
             //Get spandrel design
             (isError, excelOutput) = HelperExcel.ReadExcel(excelFilePath, "Span Dgn Sum", false);
 
-            columnKeys = excelOutput.GetRange(21, 21);
-            tableInList = excelOutput.GetRange(63, excelOutput.Count - 63);
+            if (!isError)
+            {
+                columnKeys = excelOutput.GetRange(21, 21);
+                tableInList = excelOutput.GetRange(63, excelOutput.Count - 63);
 
-            tableInListSpandrelDesignResult = HelperMethod.EtabsTableToDictionary(tableInList.ToArray(), columnKeys.ToArray());
+                tableInListSpandrelDesignResult = HelperMethod.EtabsTableToDictionary(tableInList.ToArray(), columnKeys.ToArray());
+            }
 
             return (tableInListPierDesignResult, tableInListSpandrelDesignResult);
         }
@@ -185,12 +193,12 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
                         (isError, wallObjectConnectivityTable) = src.HelperEtabs.CallDatabaseTableByTableKey(databaseTableList, "Wall Object Connectivity");
                         if (isError) { return; }
 
-                        List<HelperEtabs.Shell> shellList = HelperEtabs.GetShellsPoints(wallObjectConnectivityTable);
+                        List<HelperEtabs.Shell> shellList = HelperEtabs.GetShellsPointsUniqueName(wallObjectConnectivityTable);
 
                         List<string> pointConnectedToShellList = new List<string>();
                         foreach (HelperEtabs.Shell shell in shellList)
                         {
-                            foreach (string pointUniqueName in shell.Points)
+                            foreach (string pointUniqueName in shell.PointUniqueNameList)
                             {
                                 pointConnectedToShellList.Add(pointUniqueName);
                             }
