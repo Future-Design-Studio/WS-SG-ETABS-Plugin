@@ -44,7 +44,7 @@
                     
                 </Grid>
                 <!-- plot sillouetthe method and elbow method-->
-                <Button x:Name="buttonPlotWCCS" Click="buttonPlotWCCS_Click">Plot sillouetthe score and WCCS (elbow method)</Button>
+                <Button x:Name="buttonPlotWCCS" Click="buttonPlotWCCS_Click">Plot sillouetthe score and WCSS (elbow method)</Button>
             </StackPanel>
 
         </Grid>

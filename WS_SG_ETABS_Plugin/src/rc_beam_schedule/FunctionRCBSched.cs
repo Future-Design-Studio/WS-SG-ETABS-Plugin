@@ -1885,13 +1885,20 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
             //Convert RcBeam to RcBeamForML
             foreach(src.HelperEtabs.RcBeam rcBeam in rcBeamList)
             {
+                
                 ClassFunctionRCBSched.RcBeamForMLInput rcBeamForML = new ClassFunctionRCBSched.RcBeamForMLInput(rcBeam.UniqueName, (float)rcBeam.Height, (float)rcBeam.Width, (float)rcBeam.LeftTopAs, (float)rcBeam.MidTopAs,
                     (float)rcBeam.RightTopAs, (float)rcBeam.LeftBottomAs, (float)rcBeam.MidBottomAs, (float)rcBeam.RightBottomAs, (float)rcBeam.LeftAv, (float)rcBeam.MidAv, (float)rcBeam.RightAv);
                 rcBeamForMLInputList.Add(rcBeamForML);
+                
+                /*
+                ClassFunctionRCBSched.RcBeamForMLInput rcBeamForML = new ClassFunctionRCBSched.RcBeamForMLInput(rcBeam.UniqueName, (float)rcBeam.Height, (float)rcBeam.Width, (float)rcBeam.LeftTopAsProv, (float)rcBeam.MidTopAsProv,
+                (float)rcBeam.RightTopAsProv, (float)rcBeam.LeftBottomAsProv, (float)rcBeam.MidBottomAsProv, (float)rcBeam.RightBottomAsProv, (float)rcBeam.LeftAvProv, (float)rcBeam.MidAvProv, (float)rcBeam.RightAvProv);
+                rcBeamForMLInputList.Add(rcBeamForML);
+                */
             }
 
             //Normalize data
-            NormalizeData(rcBeamForMLInputList);
+            StandardizeData(rcBeamForMLInputList);
 
 
             //Prepare data for ML
@@ -2069,7 +2076,7 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
             //WindowRCBSchedPCAResult windowRCBSchedPCAResult = new WindowRCBSchedPCAResult(rcBeamForMLInputList, numClusters);
         }
 
-        public static void NormalizeData(List<ClassFunctionRCBSched.RcBeamForMLInput> rcBeamForMLInputList)
+        public static void StandardizeData(List<ClassFunctionRCBSched.RcBeamForMLInput> rcBeamForMLInputList)
         {
             string[] properties = { "Height", "Width",
             "LeftTopAs",

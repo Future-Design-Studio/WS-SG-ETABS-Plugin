@@ -37,9 +37,11 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
 
             SillouettheScorePlot.Plot.AxisAuto(.2, .25); // zoom out to accommodate large bubbles
             SillouettheScorePlot.Plot.Title("Sillouetthe Coefficient");
+            SillouettheScorePlot.Plot.XLabel("Number of clusters");
 
             WCCSPlot.Plot.AxisAuto(.2, .25); // zoom out to accommodate large bubbles
-            WCCSPlot.Plot.Title("WCCS");
+            WCCSPlot.Plot.Title("Within-Cluster Sum of Squares (WCSS)");
+            WCCSPlot.Plot.XLabel("Number of clusters");
 
             SillouettheScorePlot.Refresh();
             WCCSPlot.Refresh();

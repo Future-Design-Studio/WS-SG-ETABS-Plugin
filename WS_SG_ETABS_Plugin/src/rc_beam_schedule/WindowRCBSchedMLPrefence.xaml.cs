@@ -33,7 +33,7 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
             _labels = new int[observations.Count()];
 
             textBoxMinNumClusters.Text = "2";
-            textBoxMaxNumClusters.Text = observations.Count().ToString();
+            textBoxMaxNumClusters.Text = (observations.Count() - 1).ToString();
             
             ShowDialog();
         }
@@ -77,6 +77,7 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
+                return;
             }
 
 

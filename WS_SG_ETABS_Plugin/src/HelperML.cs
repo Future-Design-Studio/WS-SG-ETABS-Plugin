@@ -32,6 +32,7 @@ namespace WS_SG_ETABS_Plugin.src
                     (labels, centroids, covariances) = RunKMeans(observations, numClusters);
 
                     numOfClustersList.Add(numClusters);
+                    //sillouettheCoefficientList.Add(GetSillouettheCoefficientMedoids(observations, labels, numClusters, centroids));
                     sillouettheCoefficientList.Add(GetSillouettheCoefficient(observations, labels, numClusters, centroids));
                     WCCSList.Add(GetWCCS(observations, labels, numClusters, centroids));
                 }
@@ -40,7 +41,7 @@ namespace WS_SG_ETABS_Plugin.src
             return (numOfClustersList, sillouettheCoefficientList, WCCSList);
         }
 
-        public static double GetSillouettheCoefficient(double[][] observations, int[] clusterLabels, int numClusters, double[][] clusterCentroids)
+        public static double GetSillouettheCoefficientMedoids(double[][] observations, int[] clusterLabels, int numClusters, double[][] clusterCentroids)
         {
             double[][] distanceBetweenClusters = GetDistanceBetweenClusters(observations, clusterLabels, numClusters, clusterCentroids);
             double sumSillouettheScore = 0;
@@ -92,7 +93,7 @@ namespace WS_SG_ETABS_Plugin.src
                     if (dataClusterSelf.Count() > 1)
                     {
                         double sumDistance = 0;
-                        for (int i = 1; i < dataClusterSelf.Count(); i++)
+                        for (int i = 0; i < dataClusterSelf.Count(); i++)
                         {
                             sumDistance += HelperMethod.GetEcludianDistance(choosenDataClusterSelf, dataClusterSelf[i]);
                         }
@@ -150,6 +151,100 @@ namespace WS_SG_ETABS_Plugin.src
             }
 
             return sumSillouettheScore / numClusters;
+        }
+
+        public static double GetSillouettheCoefficient(double[][] observations, int[] clusterLabels, int numClusters, double[][] clusterCentroids)
+        {
+            //double[][] distanceBetweenClusters = GetDistanceBetweenClusters(observations, clusterLabels, numClusters, clusterCentroids);
+            double sumSillouettheScore = 0;
+            double counter = 0;
+
+            //Loop through all the clusters
+            //CLuster label starts from 0
+            for (int clusterSelf = 0; clusterSelf < numClusters; clusterSelf++)
+            {
+                //Loop through all data to split between cluster and not cluster
+                List<double[]> dataClusterSelf = new List<double[]>();
+                for (int i = 0; i < observations.Count(); i++)
+                {
+                    if (clusterLabels[i] == clusterSelf)
+                    {
+                        dataClusterSelf.Add(observations[i]);
+                    }
+                }
+
+                //Pick any 1 point inside the cluster and calculate a and b
+                //Calculate distance between points within cluster to its own centroid (cohession)
+                if (dataClusterSelf.Count() > 0)
+                {
+                    double a = 0;
+                    if (dataClusterSelf.Count() > 1)
+                    {
+                        for (int i = 0; i < dataClusterSelf.Count(); i++)
+                        {
+                            double sumDistanceA = 0;
+                            for (int j = 0; j < dataClusterSelf.Count(); j++)
+                            {
+                                if (i != j)
+                                {
+                                    sumDistanceA += HelperMethod.GetEcludianDistance(dataClusterSelf[i], dataClusterSelf[j]);
+                                }
+                            }
+
+                            //Because we use 1 point as a reference to total count is minus 1
+                            a = sumDistanceA / (dataClusterSelf.Count() - 1);
+
+                            //Go through other cluster to find the min avg distance
+                            List<double> bList = new List<double>();
+                            for (int clusterNotSelf = 0; clusterNotSelf < numClusters; clusterNotSelf++)
+                            {
+                                //Make sure cluster index is different
+                                if (clusterNotSelf != clusterSelf)
+                                {
+                                    List<double[]> dataClusterNotSelf = new List<double[]>();
+                                    for (int iteratorDataNotSelf = 0; iteratorDataNotSelf < observations.Count(); iteratorDataNotSelf++)
+                                    {
+                                        if (clusterLabels[iteratorDataNotSelf] == clusterNotSelf)
+                                        {
+                                            dataClusterNotSelf.Add(observations[iteratorDataNotSelf]);
+                                        }
+                                    }
+
+                                    //If no data is found with this clusterNotSelf index
+                                    if (dataClusterNotSelf.Count() > 0)
+                                    {
+                                        //Calculate distance to selected point outside cluster
+                                        double sumDistanceB = 0;
+                                        for (int iteratorDataNotSelf = 0; iteratorDataNotSelf < dataClusterNotSelf.Count(); iteratorDataNotSelf++)
+                                        {
+                                            sumDistanceB += HelperMethod.GetEcludianDistance(dataClusterSelf[i], dataClusterNotSelf[iteratorDataNotSelf]);
+                                        }
+
+                                        bList.Add(sumDistanceB / dataClusterNotSelf.Count());
+                                    }
+                                    else
+                                    {
+                                        //do nothing
+                                    }
+                                }
+                            }
+                            double b = bList.Min();
+
+                            sumSillouettheScore += (b - a) / Math.Max(a, b);
+                            counter++;
+                        }
+
+                    }
+                    else
+                    {
+                        sumSillouettheScore += 0;
+                        counter++;
+                    }
+                }
+
+            }
+
+            return sumSillouettheScore / counter;
         }
 
         public static double GetWCCS(double[][] observations, int[] clusterLabels, int numClusters, double[][] clusterCentroids)
