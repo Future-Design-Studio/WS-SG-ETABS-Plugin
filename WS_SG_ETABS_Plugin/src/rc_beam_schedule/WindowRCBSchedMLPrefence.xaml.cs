@@ -50,7 +50,7 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
             (numOfClustersList, sillouettheCoefficientList, WCCSList) = HelperML.CalculateOptimalNumOfClusters(_observations, minNumClusters, maxNumClusters);
 
             IsEnabled = false;
-            WindowRCBSchedWCCSResult windowRCBSchedWCCSResult = new WindowRCBSchedWCCSResult(numOfClustersList, sillouettheCoefficientList, WCCSList);
+            WindowRCBSchedWCSSResult windowRCBSchedWCCSResult = new WindowRCBSchedWCSSResult(numOfClustersList, sillouettheCoefficientList, WCCSList);
             IsEnabled = true;
         }
 

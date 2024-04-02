@@ -1420,7 +1420,7 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
                             //Show warning if ETABS has warning!
                             if (!popUpShown)
                             {
-                                MessageBox.Show($"Warning! ETABS has warning message!");
+                                MessageBox.Show($"Warning! ETABS RC beam design has warning a message(s)!");
                                 popUpShown = true;
                             }
                         }
@@ -1433,7 +1433,7 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
                             //Show warning if ETABS has warning!
                             if (!popUpShown)
                             {
-                                MessageBox.Show($"Warning! ETABS has warning message!");
+                                MessageBox.Show($"Warning! ETABS RC beam design has warning a message(s)!");
                                 popUpShown = true;
                             }
                         }
