@@ -1,0 +1,111 @@
+﻿<Window x:Class="WS_SG_ETABS_Plugin.src.rc_beam_schedule.WindowRCBSchedMLPrefence"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WS_SG_ETABS_Plugin.src.rc_beam_schedule"
+             mc:Ignorable="d" Height="450" Width="450" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+
+    <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.5*"></RowDefinition>
+            <RowDefinition Height="0.4*"></RowDefinition>
+            <RowDefinition Height="1.5*"></RowDefinition>
+            <RowDefinition Height="0.4*"></RowDefinition>
+            <RowDefinition Height="1.8*"></RowDefinition>
+            <RowDefinition Height="0.4*"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <Label Grid.Row="0" Grid.Column="0" Margin="0 -10 0 0" Content="RC Beam Clustering" FontSize="28"/>
+
+        <Label Grid.Row="1" Grid.Column="0" Content="1. Decide number of clusters" FontSize="14" FontWeight="Bold"/>
+        
+        <!-- setting for sillouetthe method, min num of cluster and max num of clusters-->
+        <Grid Grid.Row="2">
+
+            <StackPanel Grid.Column="0">
+                <Label>Sillouetthe method</Label>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0">
+                        <Label>Min number of cluster</Label>
+                        <Label>Max number of cluster</Label>
+                    </StackPanel>
+                    <StackPanel Grid.Column="1">
+                        <TextBox Margin="0 5 0 0" Name="textBoxMinNumClusters"></TextBox>
+                        <TextBox Margin="0 5 0 0" Name="textBoxMaxNumClusters"></TextBox>
+                    </StackPanel>
+                    
+                </Grid>
+                <!-- plot sillouetthe method and elbow method-->
+                <Button x:Name="buttonPlotWCCS" Click="buttonPlotWCCS_Click">Plot sillouetthe score and WCCS (elbow method)</Button>
+            </StackPanel>
+
+        </Grid>
+
+        <Label Grid.Row="3" Grid.Column="0" Content="2. Clustering properties" FontSize="14" FontWeight="Bold"/>
+
+        <Grid Grid.Row="4">
+
+            <!-- num of clusters-->
+            <!-- TSNE perplexity-->
+            <!-- plot-->
+
+            <StackPanel Grid.Column="0">
+                <Label>K-Means (clustering)</Label>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0">
+                        <Label>Number of cluster</Label>
+                    </StackPanel>
+                    <StackPanel Grid.Column="1">
+                        <TextBox Margin="0 5 0 0" Name="textBoxNumClusters"></TextBox>
+                    </StackPanel>
+                </Grid>
+                <Label>TSNE (dimensionality reduction for plotting)</Label>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0">
+                        <Label>Perplexity</Label>
+                    </StackPanel>
+                    <StackPanel Grid.Column="1">
+                        <TextBox Margin="0 5 0 0" Name="textBoxPerplexity"></TextBox>
+                    </StackPanel>
+                </Grid>
+                <!-- plot sillouetthe method and elbow method-->
+                <Button x:Name="buttonPlotClusters" Click="buttonPlotClusters_Click">Plot clusters</Button>
+            </StackPanel>
+
+        </Grid>
+
+        <!-- run k means-->
+
+        <Grid Grid.Row="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <Image Margin ="0 10 10 7" HorizontalAlignment="Right" Source="/WS_SG_ETABS_Plugin;component/src/resources/by_Future_Design_Studio_no_powerapp.PNG" />
+
+            <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button x:Name="buttonCancel" Content="Cancel" Width="100" Click="buttonCancel_Click"/>
+                <Button x:Name="buttonOk" Content="OK" Width="100" Click="buttonOk_Click"/>
+            </StackPanel>
+
+        </Grid>
+
+    </Grid>
+</Window>
