@@ -29,7 +29,7 @@ namespace WS_SG_ETABS_Plugin
 
         public WindowMain(ref cSapModel SapModel, ref cPluginCallback Plugin)
         {
-            string version = "1.2.0d";
+            string version = "1.2.0e";
 
             _Plugin = Plugin;
             _SapModel = SapModel;
@@ -359,5 +359,16 @@ namespace WS_SG_ETABS_Plugin
             src.apply_section_property.WindowApplySectPropMain windowApplySectPropMain = new src.apply_section_property.WindowApplySectPropMain(_SapModel, _Plugin);
             IsEnabled = true;
         }
+
+        private void buttonCopyElements_Click(object sender, RoutedEventArgs e)
+        {
+            IsEnabled = false;
+            //Call up window
+            src.copy_elements.WindowCopyElementsMain windowCopyElementsMain = new src.copy_elements.WindowCopyElementsMain(_SapModel, _Plugin);
+            IsEnabled = true;
+        }
+
+
+        
     }
 }
