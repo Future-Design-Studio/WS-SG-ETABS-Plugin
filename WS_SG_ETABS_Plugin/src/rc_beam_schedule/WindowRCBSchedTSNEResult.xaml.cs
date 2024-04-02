@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ScottPlot;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,11 +17,11 @@ using System.Windows.Shapes;
 namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
 {
     /// <summary>
-    /// Interaction logic for WindowRCBSchedPCAResult.xaml
+    /// Interaction logic for WindowRCBSchedTSNEResult.xaml
     /// </summary>
-    public partial class WindowRCBSchedPCAResult : Window
+    public partial class WindowRCBSchedTSNEResult : Window
     {
-        public WindowRCBSchedPCAResult(List<ClassFunctionRCBSched.RcBeamForMLInput> rcBeamForMLInputList, int numClusters)
+        public WindowRCBSchedTSNEResult(int numClusters, int[] labels, double[][] TSNEresults)
         {
             InitializeComponent();
 
@@ -29,20 +30,17 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
                 List<double> xList = new List<double>();
                 List<double> yList = new List<double>();
 
-                foreach (ClassFunctionRCBSched.RcBeamForMLInput rcBeamForMLInput in rcBeamForMLInputList)
+                for (int i = 0; i < labels.Count(); i++)
                 {
-                    //rcBeamForMLInput.Cluster is from 1 to num of cluster
-                    if (rcBeamForMLInput.Cluster == Convert.ToString(cluster))
+                    if (labels[i] == cluster)
                     {
-                        xList.Add(rcBeamForMLInput.PC1);
-                        yList.Add(rcBeamForMLInput.PC2);
+                        xList.Add(TSNEresults[i][0]);
+                        yList.Add(TSNEresults[i][1]);
                     }
-
                 }
 
                 double[] xArray = xList.ToArray();
                 double[] yArray = yList.ToArray();
-
                 Plot.Plot.AddScatter(xArray, yArray, markerSize: 10, lineWidth: 0, label: $"Cluster {cluster}");
             }
 

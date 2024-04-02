@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using System.Text;
@@ -14,6 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using ETABSv1;
+using Xceed.Wpf.AvalonDock.Layout;
 
 namespace WS_SG_ETABS_Plugin.src
 {
@@ -185,6 +187,26 @@ namespace WS_SG_ETABS_Plugin.src
                 result = Math.Sqrt((sum) / sequence.Count());
             }
             return result;
+        }
+
+        public static double GetEcludianDistance(double[] dataA, double[] dataB)
+        {
+            if (dataA.Length != dataB.Length)
+            {
+                MessageBox.Show("Ecludian distance requires both data to have the same dimension!");
+                return 0;
+            }
+            else
+            {
+                double sumDimension = 0;
+                for (int indexData = 0;  indexData < dataA.Count(); indexData++)
+                {
+                    double dimension = Math.Pow(dataA[indexData] - dataB[indexData], 2);
+                    sumDimension += dimension;
+                }
+
+                return Math.Sqrt(sumDimension);
+            }
         }
 
 

@@ -17,6 +17,7 @@ using Accord.Statistics.Analysis;
 using Accord.Statistics.Kernels;
 using System.Windows.Markup;
 using static WS_SG_ETABS_Plugin.src.HelperEtabs;
+using static WS_SG_ETABS_Plugin.src.HelperSafe;
 
 namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
 {
@@ -25,9 +26,9 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
 
         private static int Ret;
 
-        public static bool GetRCBeamSchedule(cSapModel Sap, string fileName, string filePath, double leftLength, double midLength, double rightLength, double cantileverLeftLength, double cantileverRightLength,
+        public static bool GetRCBeamSchedule(cSapModel Sap, double leftLength, double midLength, double rightLength, double cantileverLeftLength, double cantileverRightLength,
             double rebarSpc, string rebarSpcPreference, double maxShearLinksSpacing, double minShearLinksSpacing, double shearLinksSpacingStep, double cover, int maxNoLayer, int[] rebarDiameterList, int[] shearLinksDiameterList,
-            List<Dictionary<string, string>> groupAndBeamType)
+            List<Dictionary<string, string>> groupAndBeamType, bool? doML)
         {
             bool isError = false;
 
@@ -109,7 +110,11 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
             CalculateAvProv(rcBeamList);
 
             //do kmeans
-            //RcBeamClusteringUsingKMeans(rcBeamList);
+            if (doML == true)
+            {
+                RcBeamClusteringUsingKMeans(rcBeamList);
+            }
+            
 
             //Compile data to 2d array
             var result = CompileResutRcBeamToArray(rcBeamList);
@@ -118,7 +123,7 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
             var result2 = CompileResutRcBeamSelfDesignToArray(rcBeamList);
 
             //Write to excel
-            WriteResultRcBeamToExcel(result, result2, fileName, filePath);
+            WriteResultRcBeamToExcel(result, result2);
 
             //Set back to original units
             src.HelperEtabs.SetOutputUnit(Sap, forceUnits, lengthUnits, temperatureUnits);
@@ -1270,9 +1275,11 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
             return result;
         }
 
-        public static void WriteResultRcBeamToExcel(object[,] result, object[,] result2, string fileName, string filePath)
+        public static void WriteResultRcBeamToExcel(object[,] result, object[,] result2)
         {
             Microsoft.Office.Interop.Excel.Application xlApp = new Microsoft.Office.Interop.Excel.Application();
+
+            xlApp.Visible = true;
 
             if (xlApp == null)
             {
@@ -1319,6 +1326,7 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
 
             rng.Value2 = result2;
 
+            /*
             //Here saving the file in xlsx
             string excelPath = filePath + fileName + ".xlsx";
 
@@ -1333,6 +1341,7 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
             
             xlWorkBook.Close(true, misValue, misValue);
             xlApp.Quit();
+            */
         }
 
         public static double GetMinimumRcBeamRebarEC(double fck, double fyk, double width, double effDepth)
@@ -1876,19 +1885,84 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
             //Convert RcBeam to RcBeamForML
             foreach(src.HelperEtabs.RcBeam rcBeam in rcBeamList)
             {
+                
                 ClassFunctionRCBSched.RcBeamForMLInput rcBeamForML = new ClassFunctionRCBSched.RcBeamForMLInput(rcBeam.UniqueName, (float)rcBeam.Height, (float)rcBeam.Width, (float)rcBeam.LeftTopAs, (float)rcBeam.MidTopAs,
-                    (float)rcBeam.RightTopAs, (float)rcBeam.LeftBottomAs, (float)rcBeam.MidBottomAs, (float)rcBeam.RightBottomAs, (float)rcBeam.LeftAv, (float)rcBeam.RightAv);
+                    (float)rcBeam.RightTopAs, (float)rcBeam.LeftBottomAs, (float)rcBeam.MidBottomAs, (float)rcBeam.RightBottomAs, (float)rcBeam.LeftAv, (float)rcBeam.MidAv, (float)rcBeam.RightAv);
                 rcBeamForMLInputList.Add(rcBeamForML);
+                
+                /*
+                ClassFunctionRCBSched.RcBeamForMLInput rcBeamForML = new ClassFunctionRCBSched.RcBeamForMLInput(rcBeam.UniqueName, (float)rcBeam.Height, (float)rcBeam.Width, (float)rcBeam.LeftTopAsProv, (float)rcBeam.MidTopAsProv,
+                (float)rcBeam.RightTopAsProv, (float)rcBeam.LeftBottomAsProv, (float)rcBeam.MidBottomAsProv, (float)rcBeam.RightBottomAsProv, (float)rcBeam.LeftAvProv, (float)rcBeam.MidAvProv, (float)rcBeam.RightAvProv);
+                rcBeamForMLInputList.Add(rcBeamForML);
+                */
             }
 
             //Normalize data
-            NormalizeData(rcBeamForMLInputList);
+            StandardizeData(rcBeamForMLInputList);
 
 
-            MLContext mlContext = new MLContext();
+            //Prepare data for ML
+            double[][] observations = new double[rcBeamForMLInputList.Count()][];
+
+            int index = 0;
+            foreach(ClassFunctionRCBSched.RcBeamForMLInput rcBeamForMLInput in rcBeamForMLInputList)
+            {
+                observations[index] = new double[]
+                {
+                    rcBeamForMLInput.Width,
+                    rcBeamForMLInput.Height,
+                    rcBeamForMLInput.LeftTopAs,
+                    rcBeamForMLInput.MidTopAs,
+                    rcBeamForMLInput.RightTopAs,
+                    rcBeamForMLInput.LeftBottomAs,
+                    rcBeamForMLInput.MidBottomAs,
+                    rcBeamForMLInput.RightBottomAs,
+                    rcBeamForMLInput.LeftAv,
+                    rcBeamForMLInput.MidAv,
+                    rcBeamForMLInput.RightAv,
+                };
+                index++;
+            }
+
+            //Call up ML preference window
+            WindowRCBSchedMLPrefence windowRCBSchedMLPrefence = new WindowRCBSchedMLPrefence(observations);
+            int[] labels = windowRCBSchedMLPrefence.GetLabels();
+
+            /*
+            //TEST---------------------------------------------
+
+            double[] x = new double[] { -3,-4,-3,-4,-5,-4,-10,-12,-9,-13,-10,-9,10,12,14,15,13,15,10,12,15,14,13,14 };
+            double[] y = new double[] { 3,4,5,6,7,4,-10,-10,-8,-12,-9,-10,-3,-4,-7,-5,-4,-1,10,12,15,14,13,15 };
+
+            observations = new double[x.Count()][];
+
+            rcBeamForMLInputList = new List<ClassFunctionRCBSched.RcBeamForMLInput>();
+            rcBeamList = new List<HelperEtabs.RcBeam>();
+
+            index = 0;
+            foreach (double xi in x)
+            {
+                observations[index] = new double[]
+                {
+                    x[index], y[index]
+                };
+                index++;
+                ClassFunctionRCBSched.RcBeamForMLInput rcBeamForML = new ClassFunctionRCBSched.RcBeamForMLInput("A", 0, 0, 0, 0,
+                    0, 0, 0, 0, 0, 0);
+                rcBeamForMLInputList.Add(rcBeamForML);
+
+            }
+
+            //------------------------------------------------
+            */
+
+            //Get optimal num of clusters
+            //HelperML.CalculateOptimalNumOfClusters(observations);
 
             /*
             //PCA to 2 axis
+
+            MLContext mlContext = new MLContext();
 
             IDataView dataView = mlContext.Data.LoadFromEnumerable(rcBeamForMLInputList);
 
@@ -1912,28 +1986,6 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
                 index++;
             }
             */
-
-            //Prepare data for ML
-            double[][] observations = new double[rcBeamForMLInputList.Count()][];
-
-            int index = 0;
-            foreach(ClassFunctionRCBSched.RcBeamForMLInput rcBeamForMLInput in rcBeamForMLInputList)
-            {
-                observations[index] = new double[]
-                {
-                    rcBeamForMLInput.Width,
-                    rcBeamForMLInput.Height,
-                    rcBeamForMLInput.LeftTopAs,
-                    rcBeamForMLInput.MidTopAs,
-                    rcBeamForMLInput.RightTopAs,
-                    rcBeamForMLInput.LeftBottomAs,
-                    rcBeamForMLInput.MidBottomAs,
-                    rcBeamForMLInput.RightBottomAs,
-                    rcBeamForMLInput.LeftAv,
-                    rcBeamForMLInput.RightAv,
-                };
-                index++;
-            }
 
             /*
             //PCA to 2 axis
@@ -1974,41 +2026,6 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
             ML.WindowRCBSchedKMeans windowRCBSchedKMeans = new ML.WindowRCBSchedKMeans(numClusterList, errorList);
             */
 
-            //TSNE to 2 axis
-            Accord.Math.Random.Generator.Seed = 0;
-            Accord.MachineLearning.Clustering.TSNE tSNE = new Accord.MachineLearning.Clustering.TSNE()
-            {
-                NumberOfOutputs = 2,
-                //Perplexity = Math.Floor((double) rcBeamForMLInputList.Count() / 3)
-                Perplexity = 25
-            };
-            
-
-            double[][] TSNEresults = tSNE.Transform(observations);
-
-            index = 0;
-            foreach (var result in TSNEresults)
-            {
-                rcBeamForMLInputList[index].PC1 = (float) result[0];
-                rcBeamForMLInputList[index].PC2 = (float) result[1];
-                index++;
-            }
-
-            
-            int numClusters = 4;
-
-            //Accord KMeans
-            KMeans kmeans = new KMeans(k: numClusters);
-            var clusters = kmeans.Learn(observations);
-            int[] labels = clusters.Decide(observations);
-
-            //Parsing cluster back to rcBeamListForML
-            index = 0;
-            foreach (ClassFunctionRCBSched.RcBeamForMLInput rcBeamForMLInput in rcBeamForMLInputList)
-            {
-                rcBeamForMLInput.Cluster = Convert.ToString(labels[index]);
-                index++;
-            }
 
             //Parsing cluster back to rcBeamList
             index = 0;
@@ -2019,6 +2036,7 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
             }
             
 
+         
             /*
             //ML.NET KMeans
             int numClusters = 10;
@@ -2055,10 +2073,10 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
             }
             */
 
-            WindowRCBSchedPCAResult windowRCBSchedPCAResult = new WindowRCBSchedPCAResult(rcBeamForMLInputList, numClusters);
+            //WindowRCBSchedPCAResult windowRCBSchedPCAResult = new WindowRCBSchedPCAResult(rcBeamForMLInputList, numClusters);
         }
 
-        public static void NormalizeData(List<ClassFunctionRCBSched.RcBeamForMLInput> rcBeamForMLInputList)
+        public static void StandardizeData(List<ClassFunctionRCBSched.RcBeamForMLInput> rcBeamForMLInputList)
         {
             string[] properties = { "Height", "Width",
             "LeftTopAs",
@@ -2068,6 +2086,7 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
             "MidBottomAs",
             "RightBottomAs",
             "LeftAv",
+            "MidAv",
             "RightAv" };
 
             foreach (string  property in properties)
