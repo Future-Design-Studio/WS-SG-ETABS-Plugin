@@ -426,8 +426,8 @@
     <Compile Include="src\rc_beam_schedule\WindowRCBSchedTSNEResult.xaml.cs">
       <DependentUpon>WindowRCBSchedTSNEResult.xaml</DependentUpon>
     </Compile>
-    <Compile Include="src\rc_beam_schedule\WindowRCBSchedWCCSResult.xaml.cs">
-      <DependentUpon>WindowRCBSchedWCCSResult.xaml</DependentUpon>
+    <Compile Include="src\rc_beam_schedule\WindowRCBSchedWCSSResult.xaml.cs">
+      <DependentUpon>WindowRCBSchedWCSSResult.xaml</DependentUpon>
     </Compile>
     <Compile Include="src\rc_col_schedule\FunctionRCCSched.cs" />
     <Compile Include="src\rc_col_schedule\WindowRCCSchedMain.xaml.cs">
@@ -721,7 +721,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="src\rc_beam_schedule\WindowRCBSchedWCCSResult.xaml">
+    <Page Include="src\rc_beam_schedule\WindowRCBSchedWCSSResult.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

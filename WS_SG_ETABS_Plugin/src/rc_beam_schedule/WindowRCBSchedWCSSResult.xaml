@@ -1,4 +1,4 @@
-﻿<Window x:Class="WS_SG_ETABS_Plugin.src.rc_beam_schedule.WindowRCBSchedWCCSResult"
+﻿<Window x:Class="WS_SG_ETABS_Plugin.src.rc_beam_schedule.WindowRCBSchedWCSSResult"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 

@@ -20,9 +20,9 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
     /// <summary>
     /// Interaction logic for WindowRCBSchedWCCSResult.xaml
     /// </summary>
-    public partial class WindowRCBSchedWCCSResult : Window
+    public partial class WindowRCBSchedWCSSResult : Window
     {
-        public WindowRCBSchedWCCSResult(List<int> numOfClustersList, List<double> sillouettheCoefficientList, List<double> WCCSList)
+        public WindowRCBSchedWCSSResult(List<int> numOfClustersList, List<double> sillouettheCoefficientList, List<double> WCCSList)
         {
             InitializeComponent();
 
