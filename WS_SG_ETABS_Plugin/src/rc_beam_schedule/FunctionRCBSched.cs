@@ -1897,8 +1897,19 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
                 */
             }
 
+            string[] properties = { "Height", "Width",
+            "LeftTopAs",
+            "MidTopAs",
+            "RightTopAs",
+            "LeftBottomAs",
+            "MidBottomAs",
+            "RightBottomAs",
+            "LeftAv",
+            "MidAv",
+            "RightAv" };
+
             //Normalize data
-            StandardizeData(rcBeamForMLInputList);
+            StandardizeData(rcBeamForMLInputList, properties);
 
 
             //Prepare data for ML
@@ -2076,18 +2087,8 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
             //WindowRCBSchedPCAResult windowRCBSchedPCAResult = new WindowRCBSchedPCAResult(rcBeamForMLInputList, numClusters);
         }
 
-        public static void StandardizeData(List<ClassFunctionRCBSched.RcBeamForMLInput> rcBeamForMLInputList)
+        public static void StandardizeData(List<ClassFunctionRCBSched.RcBeamForMLInput> rcBeamForMLInputList , string[] properties)
         {
-            string[] properties = { "Height", "Width",
-            "LeftTopAs",
-            "MidTopAs",
-            "RightTopAs",
-            "LeftBottomAs",
-            "MidBottomAs",
-            "RightBottomAs",
-            "LeftAv",
-            "MidAv",
-            "RightAv" };
 
             foreach (string  property in properties)
             {
