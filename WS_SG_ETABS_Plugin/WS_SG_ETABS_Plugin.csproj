@@ -339,6 +339,15 @@
     <Compile Include="src\load_combo_EN\WindowLoadComboResult.xaml.cs">
       <DependentUpon>WindowLoadComboResult.xaml</DependentUpon>
     </Compile>
+    <Compile Include="src\ML\WindowMLPrefence.xaml.cs">
+      <DependentUpon>WindowMLPrefence.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\ML\WindowMLTSNEResult.xaml.cs">
+      <DependentUpon>WindowMLTSNEResult.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\ML\WindowMLWCSSResult.xaml.cs">
+      <DependentUpon>WindowMLWCSSResult.xaml</DependentUpon>
+    </Compile>
     <Compile Include="src\pad_footing_plot\ClassPadFootPlot.cs" />
     <Compile Include="src\pad_footing_plot\FunctionPadFootPlot.cs" />
     <Compile Include="src\pad_footing_plot\WindowPadFootLoading.xaml.cs">
@@ -616,6 +625,18 @@
     <Page Include="src\load_combo_EN\WindowLoadComboResult.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\ML\WindowMLPrefence.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="src\ML\WindowMLTSNEResult.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="src\ML\WindowMLWCSSResult.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="src\pad_footing_plot\WindowPadFootLoading.xaml">
       <Generator>MSBuild:Compile</Generator>

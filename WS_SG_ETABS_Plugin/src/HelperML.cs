@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WS_SG_ETABS_Plugin.src.rc_beam_schedule;
+using static WS_SG_ETABS_Plugin.src.rc_beam_schedule.ClassFunctionRCBSched;
 
 namespace WS_SG_ETABS_Plugin.src
 {
@@ -78,7 +80,7 @@ namespace WS_SG_ETABS_Plugin.src
                         }
                         else
                         {
-                            if(HelperMethod.GetEcludianDistance(dataClusterSelf[i], clusterCentroids[clusterSelf]) < minDistanceToCentroid)
+                            if (HelperMethod.GetEcludianDistance(dataClusterSelf[i], clusterCentroids[clusterSelf]) < minDistanceToCentroid)
                             {
                                 minDistanceToCentroid = HelperMethod.GetEcludianDistance(dataClusterSelf[i], clusterCentroids[clusterSelf]);
                                 minDistanceDataIndex = i;
@@ -259,7 +261,7 @@ namespace WS_SG_ETABS_Plugin.src
                     {
                         WCCS += Math.Pow(HelperMethod.GetEcludianDistance(observations[i], clusterCentroids[clusterIndex]), 2);
                     }
-                    
+
                 }
             }
             return WCCS;
@@ -311,6 +313,58 @@ namespace WS_SG_ETABS_Plugin.src
             double[][][] covariance = clusters.Covariances;
 
             return (labels, centroids, covariance);
+        }
+
+        public static double[][] StandardizeData(double[][] observations)
+        {
+            List<double[]> standardizedObservations = new List<double[]>();
+
+            List<double> meanList = new List<double>();
+            List<double> stdDevList = new List<double>();
+
+            //Get how many dimensions
+            int numOfDimension = observations[0].Count();
+
+            for (int dimensionIndex = 0; dimensionIndex < numOfDimension; dimensionIndex++)
+            {
+                List<double> listOfValues = new List<double>();
+
+                for (int observationIndex = 0; observationIndex < observations.Count(); observationIndex++)
+                {
+                    double originalValue = observations[observationIndex][dimensionIndex];
+                    float logTransformedValue = (float)Math.Log(originalValue + 1);
+                    listOfValues.Add(logTransformedValue);
+                }
+
+                //Caculate mean and std dev
+                double mean = listOfValues.Average();
+                double stdDev = HelperMethod.GetStandardDeviation(listOfValues);
+
+                if (stdDev == 0)
+                {
+                    stdDev = 0.001;
+                }
+
+                meanList.Add(mean);
+                stdDevList.Add(stdDev);
+            }
+
+            for (int observationIndex = 0; observationIndex < observations.Count(); observationIndex++)
+            {
+                List<double> listOfStandardizedValues = new List<double>();
+                for (int dimensionIndex = 0; dimensionIndex < numOfDimension; dimensionIndex++)
+                {
+                    double originalValue = observations[observationIndex][dimensionIndex];
+                    float logTransformedValue = (float)Math.Log(originalValue + 1);
+                    float standardizedValue = (float)((logTransformedValue - meanList[dimensionIndex]) / stdDevList[dimensionIndex]);
+
+                    listOfStandardizedValues.Add(standardizedValue);
+                }
+
+                standardizedObservations.Add(listOfStandardizedValues.ToArray());
+            }
+
+            return standardizedObservations.ToArray();
         }
     }
 }

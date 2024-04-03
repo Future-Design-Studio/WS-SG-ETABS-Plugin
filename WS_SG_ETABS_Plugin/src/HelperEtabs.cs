@@ -248,6 +248,7 @@ namespace WS_SG_ETABS_Plugin.src
             public string AsEvaluationComment { get; set; }
             public string AvEvaluationComment { get; set; }
             public string EtabsComment { get; set; }
+            public string Cluster { get; set; }
 
             public RcColumn(string name)
             {
