@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using WS_SG_ETABS_Plugin.src.ML;
+using WS_SG_ETABS_Plugin.src.rc_beam_schedule;
 
 namespace WS_SG_ETABS_Plugin.src.rc_col_schedule
 {
@@ -11,9 +13,9 @@ namespace WS_SG_ETABS_Plugin.src.rc_col_schedule
 
         private static int Ret;
 
-        public static bool GetRCColumnSchedule(cSapModel Sap, cPluginCallback Plugin, string fileName, string filePath, double rebarSpc, string rebarSpcPreference, double maxShearLinksSpacing,
+        public static bool GetRCColumnSchedule(cSapModel Sap, cPluginCallback Plugin, double rebarSpc, string rebarSpcPreference, double maxShearLinksSpacing,
             double minShearLinksSpacing, double shearLinksSpacingStep, double minimumRebarPercentage, double cover, int maxNoLayer, int[] rebarDiameterList, int[] shearLinksDiameterList,
-            List<string> listChoosenGroupName)
+            List<string> listChoosenGroupName, bool? doCluster)
         {
             bool isError = false;
 
@@ -82,11 +84,18 @@ namespace WS_SG_ETABS_Plugin.src.rc_col_schedule
             //Calculate Av provided
             CalculateAvProv(rcColumnList);
 
+            //Do ML
+            if (doCluster == true)
+            {
+                //RcColClusteringUsingKMeans(rcColumnList);
+                RcColClustering(rcColumnList);
+            }
+
             //Compile data to 2d array
             var result = CompileResutRcBeamToArray(rcColumnList);
             
             //Write to excel
-            WriteResultRcColumnToExcel(result, fileName, filePath);
+            WriteResultRcColumnToExcel(result);
            
             //Set back to original units
             src.HelperEtabs.SetOutputUnit(Sap, forceUnits, lengthUnits, temperatureUnits);
@@ -986,6 +995,7 @@ namespace WS_SG_ETABS_Plugin.src.rc_col_schedule
                 , "Av Major Ratio"
                 , "Av Minor Ratio"
                 , "ETABS warning", "Rebar warning", "Shear links warning"
+                , "Cluster"
             };
 
             int numOfRow = rcColumnList.Count();
@@ -1038,15 +1048,19 @@ namespace WS_SG_ETABS_Plugin.src.rc_col_schedule
                 result[i, 24] = rcColumn.AsEvaluationComment;
                 result[i, 25] = rcColumn.AvEvaluationComment;
 
+                result[i, 26] = rcColumn.Cluster;
+
                 i++;
             }
 
             return result;
         }
 
-        public static void WriteResultRcColumnToExcel(object[,] result, string fileName, string filePath)
+        public static void WriteResultRcColumnToExcel(object[,] result)
         {
             Microsoft.Office.Interop.Excel.Application xlApp = new Microsoft.Office.Interop.Excel.Application();
+
+            xlApp.Visible = true;
 
             if (xlApp == null)
             {
@@ -1074,6 +1088,7 @@ namespace WS_SG_ETABS_Plugin.src.rc_col_schedule
 
             rng.Value2 = result;
 
+            /*
             //Here saving the file in xlsx
             string excelPath = filePath + fileName + ".xlsx";
 
@@ -1088,6 +1103,7 @@ namespace WS_SG_ETABS_Plugin.src.rc_col_schedule
 
             xlWorkBook.Close(true, misValue, misValue);
             xlApp.Quit();
+            */
         }
 
         public static double GetMinimumRcColumnRebarEC( double width, double height, double minimumRebarPercentage)
@@ -1293,6 +1309,138 @@ namespace WS_SG_ETABS_Plugin.src.rc_col_schedule
                 return centroid;
             }
 
+        }
+
+        public static void RcColClusteringUsingKMeans(List<src.HelperEtabs.RcColumn> rcColumnList)
+        {
+
+            //Prepare data for ML
+            double[][] observations = new double[rcColumnList.Count()][];
+
+            int index = 0;
+            foreach (src.HelperEtabs.RcColumn rcColumn in rcColumnList)
+            {
+                observations[index] = new double[]
+                {
+                    rcColumn.Width,
+                    rcColumn.Height,
+                    rcColumn.Diameter,
+                    rcColumn.AsProv,
+                    rcColumn.AvMajorProv,
+                    rcColumn.AvMinorProv,
+                };
+                index++;
+            }
+
+            //Standardize data
+            observations = HelperML.StandardizeData(observations);
+
+            //Call up ML preference window
+            src.ML.WindowMLPrefence windowMLPrefence = new WindowMLPrefence(observations);
+            int[] labels = windowMLPrefence.GetLabels();
+
+            //Parsing cluster back to rcBeamList
+            index = 0;
+            foreach (src.HelperEtabs.RcColumn rcColumn in rcColumnList)
+            {
+                rcColumn.Cluster = Convert.ToString(labels[index]);
+                index++;
+            }
+
+
+        }
+
+        public static void RcColClustering(List<src.HelperEtabs.RcColumn> rcColumnList)
+        {
+
+            //Prepare data for clustering
+            double[][] observations = new double[rcColumnList.Count()][];
+
+            int index = 0;
+            foreach (src.HelperEtabs.RcColumn rcColumn in rcColumnList)
+            {
+                observations[index] = new double[]
+                {
+                    rcColumn.Width,
+                    rcColumn.Height,
+                    rcColumn.Diameter,
+                    rcColumn.AsProv,
+                    rcColumn.AvMajorProv,
+                    rcColumn.AvMinorProv,
+                };
+                index++;
+            }
+
+            List<double[]> uniqueObservations = new List<double[]>();
+            int indexUnique = 0;
+            List<int> labels = new List<int>();
+            bool firstLoop = true;
+            foreach (double[] observation in observations)
+            {
+                if (firstLoop)
+                {
+                    uniqueObservations.Add(observation);
+                    firstLoop = false;
+                    labels.Add(indexUnique);
+                    indexUnique++;
+                }
+                else
+                {
+                    bool isArrayExistInAlready = false;
+                    int indexInUniqueObservations = 0;
+                    (isArrayExistInAlready, indexInUniqueObservations) = IsArrayExistedInAlready(observation, uniqueObservations);
+
+                    if (!isArrayExistInAlready)
+                    {
+                        uniqueObservations.Add(observation);
+                        labels.Add(indexUnique);
+                        indexUnique++;
+                    }
+                    else
+                    {
+                        labels.Add(indexInUniqueObservations);
+                    }
+                }
+                
+            }
+
+            //Parsing cluster back to rcBeamList
+            index = 0;
+            foreach (src.HelperEtabs.RcColumn rcColumn in rcColumnList)
+            {
+                rcColumn.Cluster = Convert.ToString(labels[index]);
+                index++;
+            }
+
+
+
+        }
+
+        public static (bool, int) IsArrayExistedInAlready(double[] observationsA, List<double[]> uniqueObservations)
+        {
+            int indexUnique = 0;
+            foreach (double[] uniqueObservation in uniqueObservations)
+            {
+                //Check if size same
+                if (observationsA.Count() == uniqueObservation.Count())
+                {
+                    bool eachComponentMatch = true;
+                    for (int i = 0; i < observationsA.Count(); i++)
+                    {
+                        if (observationsA[i] != uniqueObservation[i])
+                        {
+                            eachComponentMatch = false;
+                            break;
+                        }
+                    }
+                    if (eachComponentMatch)
+                    {
+                        return (true, indexUnique);
+                    }
+                }
+                indexUnique++;
+            }
+            return (false, -1);
         }
     }
 }

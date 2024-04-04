@@ -47,12 +47,14 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
 
             InitializeComponent();
 
+            /*
             //Fill in default excel result name
             fileName.Text = "rc_beam_schedule";
 
             //Fill in model path (default path)
             modelPath = SapModel.GetModelFilepath();
             filePath.Text = modelPath;
+            */
 
             //Fill in combobox for available groups
             src.HelperUI.PopulateComboBoxAvailGroup(_SapModel, comBoxGroup);
@@ -68,6 +70,7 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
             ShowDialog();
         }
 
+        /*
         private void buttonDefaultPath_Click(object sender, RoutedEventArgs e)
         {
             filePath.Text = modelPath;
@@ -86,16 +89,12 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
             }
 
         }
-
-
+        */
 
         private void buttonOk_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                string name = fileName.Text;
-                string path = filePath.Text;
-
                 double leftLength = Convert.ToDouble(textBoxLengthLeft.Text);
                 double midLength = Convert.ToDouble(textBoxLengthMid.Text);
                 double rightLength = Convert.ToDouble(textBoxLengthRight.Text);
@@ -142,6 +141,9 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
                 //Casting listbox content to list
                 List<string> listChoosenGroup = listBoxChoosenGroup.Items.OfType<string>().ToList();
 
+                //ML checkbox
+                bool? doML = checkBoxML.IsChecked;
+
                 //Check if total = 1, else will show warning
                 double totalLength = leftLength + midLength + rightLength;
                 double totalCantileverLength = cantileverLeftLength + cantileverRightLength;
@@ -160,8 +162,8 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
                 {
                     IsEnabled = false;
                     //Call up carbon result window
-                    src.rc_beam_schedule.WindowRCBSchedResult windowRCBSchedResult = new src.rc_beam_schedule.WindowRCBSchedResult(_SapModel, _Plugin, name, path, leftLength, midLength, rightLength, cantileverLeftLength, cantileverRightLength,
-                        rebarSpc, rebarSpcPreference, maxShearLinksSpacing, minShearLinksSpacing, shearLinksSpacingStep, cover, maxNoLayer, rebarDiameterList, shearLinksDiameterList, groupAndBeamType);
+                    src.rc_beam_schedule.WindowRCBSchedResult windowRCBSchedResult = new src.rc_beam_schedule.WindowRCBSchedResult(_SapModel, _Plugin, leftLength, midLength, rightLength, cantileverLeftLength, cantileverRightLength,
+                        rebarSpc, rebarSpcPreference, maxShearLinksSpacing, minShearLinksSpacing, shearLinksSpacingStep, cover, maxNoLayer, rebarDiameterList, shearLinksDiameterList, groupAndBeamType, doML);
                     IsEnabled = true;
                 }
             }
