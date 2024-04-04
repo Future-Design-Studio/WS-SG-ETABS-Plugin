@@ -1,16 +1,18 @@
 ﻿  using ETABSv1;
+using Microsoft.Office.Interop.Excel;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Windows.Forms;
+using System.Windows.Shapes;
 using WS_SG_ETABS_Plugin.src.ML;
-using WS_SG_ETABS_Plugin.src.rc_beam_schedule;
 
 namespace WS_SG_ETABS_Plugin.src.rc_col_schedule
 {
     internal class FunctionRCCSched
     {
-
         private static int Ret;
 
         public static bool GetRCColumnSchedule(cSapModel Sap, cPluginCallback Plugin, double rebarSpc, string rebarSpcPreference, double maxShearLinksSpacing,
@@ -99,6 +101,9 @@ namespace WS_SG_ETABS_Plugin.src.rc_col_schedule
            
             //Set back to original units
             src.HelperEtabs.SetOutputUnit(Sap, forceUnits, lengthUnits, temperatureUnits);
+
+            //Draw Acad
+            DrawAcad(Sap);
 
             return isError;
         }
@@ -1442,5 +1447,58 @@ namespace WS_SG_ETABS_Plugin.src.rc_col_schedule
             }
             return (false, -1);
         }
+
+        private static void DrawAcad(cSapModel Sap)
+        {
+            List<string> lisp = new List<string>();
+            List<double> xCoords = new List<double> { 0, 10 };
+            List<double> yCoords = new List<double> { 0, 10 };
+
+            HelperAutoLisp.DrawLine(ref lisp, xCoords, yCoords);
+
+            HelperAutoLisp.DrawCircle(ref lisp, -10, -10, 5, true);
+
+            WriteTxtFile(Sap, lisp);
+        }
+
+        public static void WriteTxtFile(cSapModel SapModel, List<string> lisp)
+        {
+            string filePath = SapModel.GetModelFilepath();
+            string fileName = filePath + @"\rc_column_autolisp";
+            string fileExtension = ".lsp";
+
+            try
+            {
+                // Check if file already exists. If yes, delete it.
+                while (File.Exists(fileName + fileExtension))
+                {
+                    fileName += "_1";
+                }
+
+                //Add extension
+                fileName += fileExtension;
+
+                // Create a new file
+                using (FileStream fs = File.Create(fileName))
+                {
+                    foreach (string line in lisp)
+                    {
+                        // Add some text to file
+                        Byte[] text = new UTF8Encoding(true).GetBytes($"{line}");
+                        fs.Write(text, 0, text.Length);
+
+                        //New line
+                        Byte[] newline = Encoding.ASCII.GetBytes(Environment.NewLine);
+                        fs.Write(newline, 0, newline.Length);
+                    }
+
+                }
+            }
+            catch (Exception Ex)
+            {
+                Console.WriteLine(Ex.ToString());
+            }
+        }
+
     }
 }
