@@ -423,20 +423,8 @@
     <Compile Include="src\rc_beam_schedule\WindowRCBSchedMain.xaml.cs">
       <DependentUpon>WindowRCBSchedMain.xaml</DependentUpon>
     </Compile>
-    <Compile Include="src\rc_beam_schedule\WindowRCBSchedMLPrefence.xaml.cs">
-      <DependentUpon>WindowRCBSchedMLPrefence.xaml</DependentUpon>
-    </Compile>
     <Compile Include="src\rc_beam_schedule\WindowRCBSchedResult.xaml.cs">
       <DependentUpon>WindowRCBSchedResult.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="src\rc_beam_schedule\WindowRCBSchedSillouettheScore.xaml.cs">
-      <DependentUpon>WindowRCBSchedSillouettheScore.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="src\rc_beam_schedule\WindowRCBSchedTSNEResult.xaml.cs">
-      <DependentUpon>WindowRCBSchedTSNEResult.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="src\rc_beam_schedule\WindowRCBSchedWCSSResult.xaml.cs">
-      <DependentUpon>WindowRCBSchedWCSSResult.xaml</DependentUpon>
     </Compile>
     <Compile Include="src\rc_col_schedule\FunctionRCCSched.cs" />
     <Compile Include="src\rc_col_schedule\WindowRCCSchedMain.xaml.cs">
@@ -726,25 +714,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="src\rc_beam_schedule\WindowRCBSchedMLPrefence.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="src\rc_beam_schedule\WindowRCBSchedResult.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="src\rc_beam_schedule\WindowRCBSchedSillouettheScore.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="src\rc_beam_schedule\WindowRCBSchedTSNEResult.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="src\rc_beam_schedule\WindowRCBSchedWCSSResult.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="src\rc_col_schedule\WindowRCCSchedMain.xaml">
       <SubType>Designer</SubType>
