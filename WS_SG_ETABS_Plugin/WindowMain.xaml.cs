@@ -368,7 +368,12 @@ namespace WS_SG_ETABS_Plugin
             IsEnabled = true;
         }
 
-
-        
+        private void buttonJointForcesExtractor_Click(object sender, RoutedEventArgs e)
+        {
+            IsEnabled = false;
+            //Call up window
+            src.joint_forces_extractor.WindowJointForcesExtractor windowJointForcesExtractor = new src.joint_forces_extractor.WindowJointForcesExtractor(_SapModel, _Plugin);
+            IsEnabled = true;
+        }
     }
 }
