@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WS_SG_ETABS_Plugin.src.joint_forces_extractor"
-             mc:Ignorable="d" Height="200" Width="350" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" WindowStyle="None">
+             mc:Ignorable="d" Height="150" Width="350" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" WindowStyle="None">
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"></ColumnDefinition>
@@ -13,7 +13,7 @@
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="0.6*"></RowDefinition>
             <RowDefinition Height="0.6*"></RowDefinition>
-            <RowDefinition Height="2*"></RowDefinition>
+            <RowDefinition Height="1*"></RowDefinition>
         </Grid.RowDefinitions>
 
         <Label Grid.Row="0" Grid.Column="0" Margin="0 -10 0 0" Content="Joint Force Extractor" FontSize="20"/>
@@ -25,11 +25,9 @@
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
 
-            <CheckBox Grid.Row="0" Grid.Column="0" Name="checkBoxGroupAssignments" Content="Group Assignments" IsEnabled="False" IsChecked="False" Checked="checkBoxGroupAssignments_Checked"></CheckBox>
-            <CheckBox Grid.Row="1" Grid.Column="0" Name="checkBoxJointForcesFrames" Content="Element Joint Forces - Frame" IsEnabled="False" IsChecked="False"></CheckBox>
+            <CheckBox Name="checkBoxJointForcesFrames" Content="Element Joint Forces - Frame" IsEnabled="False" IsChecked="False"></CheckBox>
 
 
         </Grid>
