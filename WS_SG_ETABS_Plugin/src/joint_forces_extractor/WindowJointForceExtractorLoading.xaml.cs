@@ -46,7 +46,7 @@ namespace WS_SG_ETABS_Plugin.src.joint_forces_extractor
             InitializeComponent();
 
             //Get database table
-            List<string> tableKeys = new List<string> { "Element Joint Forces - Frame" };
+            List<string> tableKeys = new List<string> {"Group Assignments", "Element Joint Forces - Frame"};
             loadDatabaseTable(SapModel, Plugin, tableKeys, databaseTableList);
 
             ShowDialog();
@@ -69,25 +69,11 @@ namespace WS_SG_ETABS_Plugin.src.joint_forces_extractor
                         isError = false;
                     }
                     //Update loading UI
-                    if (tableKey == "Point Object Connectivity")
+                    if (tableKey == "Group Assignments")
                     {
                         Dispatcher.Invoke((Action)(() =>
                         {
-                            checkBoxPointObjectConnectivity.IsChecked = true;
-                        }));
-                    }
-                    else if (tableKey == "Joint Reactions")
-                    {
-                        Dispatcher.Invoke((Action)(() =>
-                        {
-                            checkBoxJointReaction.IsChecked = true;
-                        }));
-                    }
-                    else if (tableKey == "Story Definitions")
-                    {
-                        Dispatcher.Invoke((Action)(() =>
-                        {
-                            checkBoxStorydefin.IsChecked = true;
+                            checkBoxGroupAssignment.IsChecked = true;
                         }));
                     }
                     else if (tableKey == "Element Joint Forces - Frame")
@@ -95,20 +81,6 @@ namespace WS_SG_ETABS_Plugin.src.joint_forces_extractor
                         Dispatcher.Invoke((Action)(() =>
                         {
                             checkBoxJointForcesFrames.IsChecked = true;
-                        }));
-                    }
-                    else if (tableKey == "Element Joint Forces - Shells")
-                    {
-                        Dispatcher.Invoke((Action)(() =>
-                        {
-                            checkBoxJointForcesShell.IsChecked = true;
-                        }));
-                    }
-                    else if (tableKey == "Element Joint Forces - Links")
-                    {
-                        Dispatcher.Invoke((Action)(() =>
-                        {
-                            checkBoxJointForcesLink.IsChecked = true;
                         }));
                     }
                     databaseTableList.Add(databaseTable);
@@ -120,7 +92,7 @@ namespace WS_SG_ETABS_Plugin.src.joint_forces_extractor
             if (!isError)
             {
                 //Call up window
-                src.loads_etabs_safe.WindowEtabsSafeMain windowEtabsSafeMain = new src.loads_etabs_safe.WindowEtabsSafeMain(SapModelEtabs, SapModelSAFE, PluginEtabs, databaseTableListETABS);
+                src.joint_forces_extractor.WindowJointForcesExtractorMain windowJointForcesExtractorMain = new src.joint_forces_extractor.WindowJointForcesExtractorMain(SapModel, Plugin, databaseTableList);
             }
 
         }
