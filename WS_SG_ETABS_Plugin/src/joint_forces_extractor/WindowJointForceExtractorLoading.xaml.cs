@@ -66,7 +66,7 @@ namespace WS_SG_ETABS_Plugin.src.joint_forces_extractor
                     if (isError)
                     {
                         MessageBox.Show("Error in retreiving table for " + tableKey + ". It is possible this table doesn't exist or model is not run, please double check.");
-                        isError = false;
+                        isError = true;
                     }
                     //Update loading UI
                     if (tableKey == "Group Assignments")
