@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace WS_SG_ETABS_Plugin.src.joint_forces_extractor
 {
     /// <summary>
-    /// Interaction logic for WindowJointForcesExtractor.xaml
+    /// Interaction logic for WindowJointForceExtractorLoading.xaml
     /// </summary>
-    public partial class WindowJointForcesExtractor : UserControl
+    public partial class WindowJointForceExtractorLoading : UserControl
     {
-        public WindowJointForcesExtractor()
+        public WindowJointForceExtractorLoading()
         {
             InitializeComponent();
         }

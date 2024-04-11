@@ -292,6 +292,16 @@
     <Compile Include="src\HelperPlot.cs" />
     <Compile Include="src\HelperSafe.cs" />
     <Compile Include="src\HelperUI.cs" />
+    <Compile Include="src\joint_forces_extractor\FunctionJointForcesExtractorMain.cs" />
+    <Compile Include="src\joint_forces_extractor\WindowJointForceExtractorLoading.xaml.cs">
+      <DependentUpon>WindowJointForceExtractorLoading.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\joint_forces_extractor\WindowJointForcesExtractorMain.xaml.cs">
+      <DependentUpon>WindowJointForcesExtractorMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\joint_forces_extractor\WindowJointForcesExtractorResult.xaml.cs">
+      <DependentUpon>WindowJointForcesExtractorResult.xaml</DependentUpon>
+    </Compile>
     <Compile Include="src\loads_etabs_etabs\ClassEtabsEtabs.cs" />
     <Compile Include="src\loads_etabs_etabs\FunctionEtabsEtabsMain.cs" />
     <Compile Include="src\loads_etabs_etabs\WindowEtabsEtabsMain.xaml.cs">
@@ -569,6 +579,18 @@
     <Page Include="src\etabs_to_rhino\WindowEtabsToRhinoResult.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="src\joint_forces_extractor\WindowJointForceExtractorLoading.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\joint_forces_extractor\WindowJointForcesExtractorMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\joint_forces_extractor\WindowJointForcesExtractorResult.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="src\loads_etabs_etabs\WindowEtabsEtabsMain.xaml">
       <Generator>MSBuild:Compile</Generator>

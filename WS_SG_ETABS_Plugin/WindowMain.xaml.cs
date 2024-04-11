@@ -372,7 +372,7 @@ namespace WS_SG_ETABS_Plugin
         {
             IsEnabled = false;
             //Call up window
-            src.joint_forces_extractor.WindowJointForcesExtractor windowJointForcesExtractor = new src.joint_forces_extractor.WindowJointForcesExtractor(_SapModel, _Plugin);
+            src.joint_forces_extractor.WindowJointForcesExtractorMain windowJointForcesExtractorMain = new src.joint_forces_extractor.WindowJointForcesExtractorMain(_SapModel, _Plugin);
             IsEnabled = true;
         }
     }
