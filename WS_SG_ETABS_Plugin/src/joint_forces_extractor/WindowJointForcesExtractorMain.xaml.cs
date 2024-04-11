@@ -112,9 +112,11 @@ namespace WS_SG_ETABS_Plugin.src.joint_forces_extractor
                     List<string> listChoosenGroup = listBoxChoosenGroup.Items.OfType<string>().ToList();
                     //Casting file path
                     string filePath = textBoxFilePath.Text;
+                    //Casting file name
+                    string fileName = textBoxFileName.Text;
 
                     //Call up window
-                    src.joint_forces_extractor.WindowJointForcesExtractorResult windowJointForceExtractorResult = new src.joint_forces_extractor.WindowJointForcesExtractorResult(_SapModel, _Plugin, databaseTableListGlobal, listChoosenLoadCase, listChoosenGroup, filePath);
+                    src.joint_forces_extractor.WindowJointForcesExtractorResult windowJointForceExtractorResult = new src.joint_forces_extractor.WindowJointForcesExtractorResult(_SapModel, _Plugin, databaseTableListGlobal, listChoosenLoadCase, listChoosenGroup, filePath, fileName);
                 }
                 else
                 {

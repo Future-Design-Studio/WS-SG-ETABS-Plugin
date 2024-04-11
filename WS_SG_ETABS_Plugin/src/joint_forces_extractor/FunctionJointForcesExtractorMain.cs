@@ -14,7 +14,7 @@ namespace WS_SG_ETABS_Plugin.src.joint_forces_extractor
     internal class FunctionJointForcesExtractorMain
     {
 
-        public static bool ExtractJointForcesExcel(cSapModel SapModel, cPluginCallback Plugin, List<src.HelperEtabs.DatabaseTable> databaseTableList, List<string> listChoosenLoadCase, List<string> listChoosenGroup, string filePath)
+        public static bool ExtractJointForcesExcel(cSapModel SapModel, cPluginCallback Plugin, List<src.HelperEtabs.DatabaseTable> databaseTableList, List<string> listChoosenLoadCase, List<string> listChoosenGroup, string filePath, string fileName)
         {
 
             bool isError = false;
@@ -77,22 +77,31 @@ namespace WS_SG_ETABS_Plugin.src.joint_forces_extractor
                 }
             }
 
+            if (frameEndForcesTableFiltered.Count == 0)
+            {
+                MessageBox.Show("Error, please ensure the load case/combination you have selected have analysis results run.");
+                return true;
+            }
 
+            List<string> colTitles = new List<string>()
+            {
+                "Joint Unique Name", "Frame Unique Name", "Load Case/Combi", "Step Type", "Axial (kN)", "Shear Minor (kN)", "Shear Major (kN)", "Moment Minor (kN)", "Moment Major (kN)", "Torsion (kN)"
+            };
             List<Dictionary<string, string>> finalTableToExcel = new List<Dictionary<string, string>>();
             foreach (Dictionary<string, string> row in frameEndForcesTableFiltered)
             {
                 Dictionary<string, string> rowinternal = new Dictionary<string, string>
                 {
-                    {"Joint Unique Name", row["Joint"]},
-                    {"Frame Unique Name", row["UniqueName"]},
-                    {"Load Case/Combi", row["OutputCase"]},
-                    {"Step Type", row["StepType"]},
-                    {"Axial (kN)", row["F1"]},
-                    {"Shear Minor (kN)", row["F2"]},
-                    {"Shear Major (kN)", row["F3"]},
-                    {"Moment Minor (kN)", row["M1"]},
-                    {"Moment Major (kN)", row["M2"]},
-                    {"Torsion (kN)", row["M3"]},
+                    {colTitles[0], row["Joint"]},
+                    {colTitles[1], row["UniqueName"]},
+                    {colTitles[2], row["OutputCase"]},
+                    {colTitles[3], row["StepType"]},
+                    {colTitles[4], row["F1"]},
+                    {colTitles[5], row["F2"]},
+                    {colTitles[6], row["F3"]},
+                    {colTitles[7], row["M1"]},
+                    {colTitles[8], row["M2"]},
+                    {colTitles[9], row["M3"]},
                 };
                 finalTableToExcel.Add(rowinternal);
             }
@@ -103,24 +112,7 @@ namespace WS_SG_ETABS_Plugin.src.joint_forces_extractor
 
             //here to create object MANI
 
-            List<string> colTitles = new List<string>()
-            {
-                "UniqueName", "Width (mm)", "Height (mm)", "fyk (Mpa)", "fck (Mpa)", "d (ETABS) (mm)", "d calculated (mm)", "Beam type", "As Min(mm2)", "Load case"
-                , "Left Moment (-) (kNm)", "Mid Moment (-) (kNm)", "Right Moment (-) (kNm)", "Left Moment (+) (kNm)", "Mid Moment (+) (kNm)", "Right Moment (+) (kNm)"
-                , "Left Shear (kN)", "Mid Shear (kN)", "Right Shear (kN)"
-                , "Left Top As (mm2)", "Mid Top As (mm2)", "Right Top As (mm2)", "Left Bottom As (mm2)", "Mid Bottom As (mm2)", "Right Bottom As (mm2)"
-                , "Left Av (mm2/m)", "Mid Av (mm2/m)", "Right Av (mm2/m)"
-                , "Left Top Rebar", "Mid Top Rebar", "Right Top Rebar", "Left Bottom Rebar", "Mid Bottom Rebar", "Right Bottom Rebar"
-                , "Left Shear Links", "Mid Shear Links", "Right Shear Links"
-                , "Left Top As Prov (mm2)", "Mid Top As Prov (mm2)", "Right Top As Prov (mm2)", "Left Bottom As  Prov (mm2)", "Mid Bottom As Prov (mm2)", "Right Bottom As Prov (mm2)"
-                , "Left Av Prov (mm2/m)", "Mid Av Prov (mm2/m)", "Right Av Prov (mm2/m)"
-                , "Left Top As Ratio", "Mid Top As Ratio", "Right Top As Ratio", "Left Bottom As Ratio", "Mid Bottom As Ratio", "Right Bottom As Ratio"
-                , "Left Av Ratio", "Mid Av Ratio", "Right Av Ratio"
-                , "ETABS warning", "Rebar warning", "Shear links warning",
-                "Cluster"
-            };
-
-            int numOfRow = rcBeamList.Count() * rcBeamList[0].FrameForceEachCaseList.Count();
+            int numOfRow = finalTableToExcel.Count();
             int numOfCol = colTitles.Count();
 
             object[,] result = new object[numOfRow + 1, numOfCol];
@@ -134,43 +126,22 @@ namespace WS_SG_ETABS_Plugin.src.joint_forces_extractor
             }
 
             int i = 1;
-            foreach (src.HelperEtabs.RcBeam rcBeam in rcBeamList)
+            foreach (Dictionary<string, string> row in finalTableToExcel)
             {
-                foreach (src.HelperEtabs.FrameForceEachCase frameForceEachCase in rcBeam.FrameForceEachCaseList)
-                {
-                    result[i, 0] = rcBeam.UniqueName;
-                    result[i, 1] = rcBeam.Width;
-                    result[i, 2] = rcBeam.Height;
-                    result[i, 3] = rcBeam.Fyk;
-                    result[i, 4] = rcBeam.Fck;
-                    result[i, 5] = rcBeam.d;
-                    result[i, 6] = rcBeam.dCalculated;
-                    result[i, 7] = rcBeam.BeamType;
-                    result[i, 8] = rcBeam.AsMin;
-
-                    result[i, 9] = frameForceEachCase.LoadCaseName;
-
-                    result[i, 10] = frameForceEachCase.LeftMomentNeg;
-                    result[i, 11] = frameForceEachCase.MidMomentNeg;
-                    result[i, 12] = frameForceEachCase.RightMomentNeg;
-                    result[i, 13] = frameForceEachCase.LeftMomentPos;
-                    result[i, 14] = frameForceEachCase.MidMomentPos;
-                    result[i, 15] = frameForceEachCase.RightMomentPos;
-
-                    result[i, 16] = frameForceEachCase.LeftShear;
-                    result[i, 17] = frameForceEachCase.MidShear;
-                    result[i, 18] = frameForceEachCase.RightShear;
-
-                    i++;
-                    Console.WriteLine(i);
-                }
-
+                result[i, 0] = row[colTitles[0]];
+                result[i, 1] = row[colTitles[1]];
+                result[i, 2] = row[colTitles[2]];
+                result[i, 3] = row[colTitles[3]];
+                result[i, 4] = row[colTitles[4]];
+                result[i, 5] = row[colTitles[5]];
+                result[i, 6] = row[colTitles[6]];
+                result[i, 7] = row[colTitles[7]];
+                result[i, 8] = row[colTitles[8]];
+                result[i, 9] = row[colTitles[9]];
+                i++;
             }
 
-            return result;
-
-
-
+            
             //HERE TO WRITE TO EXCEL MANI
 
             Microsoft.Office.Interop.Excel.Application xlApp = new Microsoft.Office.Interop.Excel.Application();
@@ -180,7 +151,7 @@ namespace WS_SG_ETABS_Plugin.src.joint_forces_extractor
             if (xlApp == null)
             {
                 MessageBox.Show("Excel is not properly installed!!");
-                return;
+                return true;
             }
 
             Microsoft.Office.Interop.Excel.Workbook xlWorkBook;
@@ -195,10 +166,10 @@ namespace WS_SG_ETABS_Plugin.src.joint_forces_extractor
             //Sheet 1
             xlWorkSheet = (Microsoft.Office.Interop.Excel.Worksheet)xlWorkBook.Worksheets.get_Item(1);
 
-            xlWorkSheet.Name = "ETABS design";
+            xlWorkSheet.Name = "Output Etabs";
 
-            int numOfRow = result.GetLength(0);
-            int numOfCol = result.GetLength(1);
+            numOfRow = result.GetLength(0);
+            numOfCol = result.GetLength(1);
 
             string alphabetOfCol = src.HelperExcel.GetExcelColumnName(numOfCol);
             string lastCellRange = alphabetOfCol + Convert.ToString(numOfRow - 1 + 1);
@@ -207,22 +178,6 @@ namespace WS_SG_ETABS_Plugin.src.joint_forces_extractor
 
             rng.Value2 = result;
 
-            //Sheet 2
-            xlWorkSheet = (Microsoft.Office.Interop.Excel.Worksheet)xlWorkBook.Worksheets.get_Item(2);
-
-            xlWorkSheet.Name = "Force envelope";
-
-            numOfRow = result2.GetLength(0);
-            numOfCol = result2.GetLength(1);
-
-            alphabetOfCol = src.HelperExcel.GetExcelColumnName(numOfCol);
-            lastCellRange = alphabetOfCol + Convert.ToString(numOfRow - 1 + 1);
-
-            rng = xlWorkSheet.UsedRange.Range["A1", lastCellRange];
-
-            rng.Value2 = result2;
-
-            
             //Here saving the file in xlsx
             string excelPath = filePath + fileName + ".xlsx";
 
@@ -237,14 +192,6 @@ namespace WS_SG_ETABS_Plugin.src.joint_forces_extractor
             
             xlWorkBook.Close(true, misValue, misValue);
             xlApp.Quit();
-
-
-
-
-            
-
-
-
 
 
             return false;
