@@ -105,15 +105,21 @@ namespace WS_SG_ETABS_Plugin.src.joint_forces_extractor
 
             try
             {
-                //Casting listbox content to list
-                List<string> listChoosenLoadCase = listBoxChoosenLoadCase.Items.OfType<string>().ToList();
-                List<string> listChoosenGroup = listBoxChoosenGroup.Items.OfType<string>().ToList();
+                if (listBoxChoosenGroup.Items.Count > 0 && listBoxChoosenLoadCase.Items.Count > 0)
+                {
+                    //Casting listbox content to list
+                    List<string> listChoosenLoadCase = listBoxChoosenLoadCase.Items.OfType<string>().ToList();
+                    List<string> listChoosenGroup = listBoxChoosenGroup.Items.OfType<string>().ToList();
+                    //Casting file path
+                    string filePath = textBoxFilePath.Text;
 
-                //Casting file path
-                string filePath = textBoxFilePath.Text;
-
-                //Call up window
-                src.joint_forces_extractor.WindowJointForcesExtractorResult windowJointForceExtractorResult = new src.joint_forces_extractor.WindowJointForcesExtractorResult(_SapModel, _Plugin, databaseTableListGlobal, listChoosenLoadCase, listChoosenGroup, filePath);
+                    //Call up window
+                    src.joint_forces_extractor.WindowJointForcesExtractorResult windowJointForceExtractorResult = new src.joint_forces_extractor.WindowJointForcesExtractorResult(_SapModel, _Plugin, databaseTableListGlobal, listChoosenLoadCase, listChoosenGroup, filePath);
+                }
+                else
+                {
+                    MessageBox.Show("Please select at least 1 group and 1 load case/combination.");
+                }  
             }
 
             catch (Exception ex)

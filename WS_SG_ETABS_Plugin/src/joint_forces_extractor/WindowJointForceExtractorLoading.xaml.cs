@@ -41,6 +41,9 @@ namespace WS_SG_ETABS_Plugin.src.joint_forces_extractor
             //Set unit in Etabs
             src.HelperEtabs.SetOutputUnit(SapModel, forceUnit, lengthUnit, temperatureUnit);
 
+            //Turn on all load
+            src.HelperEtabs.OnAllLoadDatabase(SapModel);
+
             List<src.HelperEtabs.DatabaseTable> databaseTableList = new List<HelperEtabs.DatabaseTable>();
 
             InitializeComponent();
