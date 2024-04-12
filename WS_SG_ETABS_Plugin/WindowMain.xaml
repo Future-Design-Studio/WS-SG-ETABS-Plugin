@@ -53,7 +53,7 @@
         <Button Grid.Row="11" Grid.Column="0" x:Name="buttonPlotDrift" Content="Plot Drift (Beta Version)" Click="buttonPlotDrift_Click" FontSize="16"/>
         <Button Grid.Row="12" Grid.Column="0" x:Name="buttonPlotSumMassParticip" Content="Plot Sum Mass Participation (Beta Version)" Click="buttonPlotSumMassParticip_Click" FontSize="16"/>
         <Button Grid.Row="13" Grid.Column="0" x:Name="buttonWallDesignViewer" Content="Wall Design Viewer (Beta Version)" Click="buttonWallDesignViewer_Click" FontSize="16"/>
-        <Button Grid.Row="14" Grid.Column="0" x:Name="buttonJointForcesExtractor" Content="Joint Forces Extractor (Beta Version)" Click="buttonJointForcesExtractor_Click" FontSize="16"/>
+        <Button Grid.Row="14" Grid.Column="0" x:Name="buttonJointForcesExtractor" Content="Frame End Forces Extractor (Beta Version)" Click="buttonJointForcesExtractor_Click" FontSize="16"/>
         
         <!-- Specific Use Case -->
         <Button Grid.Row="3" Grid.Column="1" x:Name="buttonShellUni" Content="Shell Orientation (Local-3) (Beta Version)" FontSize="16" Click="buttonShellUni_Click" IsEnabled="True"/>
