@@ -19,10 +19,19 @@ namespace WS_SG_ETABS_Plugin.src.joint_forces_extractor
     /// <summary>
     /// Interaction logic for WindowJointForceExtractorLoading.xaml
     /// </summary>
+
     public partial class WindowJointForceExtractorLoading : Window
-    {
-        public WindowJointForceExtractorLoading(cSapModel SapModel, cPluginCallback Plugin)
+    {   
+        List<string> ListChoosenLoadCase = new List<string>();
+        List<string> ListChoosenGroup = new List<string>();
+        string FilePath;
+        string FileName;
+        public WindowJointForceExtractorLoading(cSapModel SapModel, cPluginCallback Plugin, List<string> listChoosenLoadCase, List<string> listChoosenGroup, string filePath, string fileName)
         {
+            ListChoosenLoadCase = listChoosenLoadCase;
+            ListChoosenGroup = listChoosenGroup;
+            FileName = fileName;
+            FilePath = filePath;
 
             //Check if model is locked
             bool modelToLocked = SapModel.GetModelIsLocked();
@@ -41,20 +50,23 @@ namespace WS_SG_ETABS_Plugin.src.joint_forces_extractor
             //Set unit in Etabs
             src.HelperEtabs.SetOutputUnit(SapModel, forceUnit, lengthUnit, temperatureUnit);
 
-            //Turn on all load
-            src.HelperEtabs.OnAllLoadDatabase(SapModel);
+            ///Turn off all load case and combo displayed
+            HelperEtabs.OffAllLoadCaseAndComboDisplayedDatabase(SapModel);
+
+            //Turn on load case and combo based on list
+            src.HelperEtabs.OnLoadCaseAndComboDatabaseBasedOnList(SapModel, ListChoosenLoadCase);
 
             List<src.HelperEtabs.DatabaseTable> databaseTableList = new List<HelperEtabs.DatabaseTable>();
 
             InitializeComponent();
 
             //Get database table
-            List<string> tableKeys = new List<string> {"Group Assignments", "Element Joint Forces - Frame"};
+            List<string> tableKeys = new List<string> {"Group Assignments", "Beam Object Connectivity", "Column Object Connectivity", "Brace Object Connectivity", "Element Forces - Columns", "Element Forces - Beams", "Element Forces - Braces"};
             loadDatabaseTable(SapModel, Plugin, tableKeys, databaseTableList);
 
             ShowDialog();
         }
-        private async void loadDatabaseTable(ETABSv1.cSapModel SapModel, ETABSv1.cPluginCallback Plugin, List<string> tableKeys, List<src.HelperEtabs.DatabaseTable> databaseTableList)
+        private async void loadDatabaseTable(cSapModel SapModel, cPluginCallback Plugin, List<string> tableKeys, List<src.HelperEtabs.DatabaseTable> databaseTableList)
         {
             bool isError = false;
 
@@ -79,11 +91,46 @@ namespace WS_SG_ETABS_Plugin.src.joint_forces_extractor
                             checkBoxGroupAssignment.IsChecked = true;
                         }));
                     }
-                    else if (tableKey == "Element Joint Forces - Frame")
+                    else if (tableKey == "Beam Object Connectivity")
                     {
                         Dispatcher.Invoke((Action)(() =>
                         {
-                            checkBoxJointForcesFrames.IsChecked = true;
+                            checkBoxBeamConnectivity.IsChecked = true;
+                        }));
+                    }
+                    else if (tableKey == "Column Object Connectivity")
+                    {
+                        Dispatcher.Invoke((Action)(() =>
+                        {
+                            checkBoxColumnConnectivity.IsChecked = true;
+                        }));
+                    }
+                    else if (tableKey == "Brace Object Connectivity")
+                    {
+                        Dispatcher.Invoke((Action)(() =>
+                        {
+                            checkBoxBraceConnectivity.IsChecked = true;
+                        }));
+                    }
+                    else if (tableKey == "Element Forces - Columns")
+                    {
+                        Dispatcher.Invoke((Action)(() =>
+                        {
+                            checkBoxColumnForces.IsChecked = true;
+                        }));
+                    }
+                    else if (tableKey == "Element Forces - Beams")
+                    {
+                        Dispatcher.Invoke((Action)(() =>
+                        {
+                            checkBoxBeamForces.IsChecked = true;
+                        }));
+                    }
+                    else if (tableKey == "Element Forces - Braces")
+                    {
+                        Dispatcher.Invoke((Action)(() =>
+                        {
+                            checkBoxBraceForces.IsChecked = true;
                         }));
                     }
                     databaseTableList.Add(databaseTable);
@@ -95,7 +142,7 @@ namespace WS_SG_ETABS_Plugin.src.joint_forces_extractor
             if (!isError)
             {
                 //Call up window
-                src.joint_forces_extractor.WindowJointForcesExtractorMain windowJointForcesExtractorMain = new src.joint_forces_extractor.WindowJointForcesExtractorMain(SapModel, Plugin, databaseTableList);
+                src.joint_forces_extractor.WindowJointForcesExtractorResult windowJointForcesExtractorResult = new src.joint_forces_extractor.WindowJointForcesExtractorResult(SapModel, Plugin, databaseTableList, ListChoosenLoadCase, ListChoosenGroup, FilePath, FileName);
             }
 
         }

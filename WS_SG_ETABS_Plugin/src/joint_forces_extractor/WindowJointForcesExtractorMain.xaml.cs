@@ -25,11 +25,7 @@ namespace WS_SG_ETABS_Plugin.src.joint_forces_extractor
         cSapModel _SapModel;
         cPluginCallback _Plugin;
 
-        //List of tables to save joint reaction and grouping table
-        List<src.HelperEtabs.DatabaseTable> databaseTableListGlobal = new List<HelperEtabs.DatabaseTable>();
-
-        public WindowJointForcesExtractorMain(cSapModel SapModel, cPluginCallback Plugin,
-            List<src.HelperEtabs.DatabaseTable> databaseTableList)
+        public WindowJointForcesExtractorMain(cSapModel SapModel, cPluginCallback Plugin)
         {   
             InitializeComponent();
             _SapModel = SapModel;
@@ -48,7 +44,6 @@ namespace WS_SG_ETABS_Plugin.src.joint_forces_extractor
             //Fill in load case list box
             src.HelperUI.PopulateListBoxAvailLoadCase(SapModel, listBoxAvailLoadCase);
 
-            databaseTableListGlobal = databaseTableList;
 
             ShowDialog();
         }
@@ -105,7 +100,7 @@ namespace WS_SG_ETABS_Plugin.src.joint_forces_extractor
 
             try
             {
-                if (listBoxChoosenGroup.Items.Count > 0 && listBoxChoosenLoadCase.Items.Count > 0)
+                if (listBoxChoosenGroup.Items.Count > 0 && listBoxChoosenLoadCase.Items.Count > 0 && textBoxFileName.Text.Length > 0 && textBoxFilePath.Text.Length > 0)
                 {
                     //Casting listbox content to list
                     List<string> listChoosenLoadCase = listBoxChoosenLoadCase.Items.OfType<string>().ToList();
@@ -116,11 +111,11 @@ namespace WS_SG_ETABS_Plugin.src.joint_forces_extractor
                     string fileName = textBoxFileName.Text;
 
                     //Call up window
-                    src.joint_forces_extractor.WindowJointForcesExtractorResult windowJointForceExtractorResult = new src.joint_forces_extractor.WindowJointForcesExtractorResult(_SapModel, _Plugin, databaseTableListGlobal, listChoosenLoadCase, listChoosenGroup, filePath, fileName);
+                    src.joint_forces_extractor.WindowJointForceExtractorLoading windowJointForceExtractorLoading = new src.joint_forces_extractor.WindowJointForceExtractorLoading(_SapModel, _Plugin, listChoosenLoadCase, listChoosenGroup, filePath, fileName);
                 }
                 else
                 {
-                    MessageBox.Show("Please select at least 1 group and 1 load case/combination.");
+                    MessageBox.Show("Please select at least 1 group, 1 load case/combination, input file name and input file path.");
                 }  
             }
 

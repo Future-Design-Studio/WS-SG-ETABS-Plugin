@@ -19,21 +19,66 @@ namespace WS_SG_ETABS_Plugin.src.joint_forces_extractor
 
             bool isError = false;
             src.HelperEtabs.DatabaseTable groupAssignmentTable = new HelperEtabs.DatabaseTable();
-            src.HelperEtabs.DatabaseTable frameEndForcesTable = new HelperEtabs.DatabaseTable();
+            src.HelperEtabs.DatabaseTable beamConnectivityTable = new HelperEtabs.DatabaseTable();
+            src.HelperEtabs.DatabaseTable columnConnectivityTable = new HelperEtabs.DatabaseTable();
+            src.HelperEtabs.DatabaseTable braceConnectivityTable = new HelperEtabs.DatabaseTable();
+            src.HelperEtabs.DatabaseTable columnForcesTable = new HelperEtabs.DatabaseTable();
+            src.HelperEtabs.DatabaseTable beamForcesTable = new HelperEtabs.DatabaseTable();
+            src.HelperEtabs.DatabaseTable braceForcesTable = new HelperEtabs.DatabaseTable();
 
             foreach (src.HelperEtabs.DatabaseTable table in databaseTableList)
             {
                 if (table.TableKey == "Group Assignments")
                 {
-                    (isError, groupAssignmentTable) = src.HelperEtabs.CallDatabaseTableByTableKey(databaseTableList, "Group Assignments");
+                    (isError, groupAssignmentTable) = src.HelperEtabs.CallDatabaseTableByTableKey(databaseTableList, table.TableKey);
                     if (isError)
                     {
                         return isError;
                     }
                 }
-                else if (table.TableKey == "Element Joint Forces - Frame")
+                else if (table.TableKey == "Beam Object Connectivity")
                 {
-                    (isError, frameEndForcesTable) = src.HelperEtabs.CallDatabaseTableByTableKey(databaseTableList, "Element Joint Forces - Frame");
+                    (isError, beamConnectivityTable) = src.HelperEtabs.CallDatabaseTableByTableKey(databaseTableList, table.TableKey);
+                    if (isError)
+                    {
+                        return isError;
+                    }
+                }
+                else if (table.TableKey == "Column Object Connectivity")
+                {
+                    (isError, columnConnectivityTable) = src.HelperEtabs.CallDatabaseTableByTableKey(databaseTableList, table.TableKey);
+                    if (isError)
+                    {
+                        return isError;
+                    }
+                }
+                else if (table.TableKey == "Brace Object Connectivity")
+                {
+                    (isError, braceConnectivityTable) = src.HelperEtabs.CallDatabaseTableByTableKey(databaseTableList, table.TableKey);
+                    if (isError)
+                    {
+                        return isError;
+                    }
+                }
+                else if (table.TableKey == "Element Forces - Columns")
+                {
+                    (isError, columnForcesTable) = src.HelperEtabs.CallDatabaseTableByTableKey(databaseTableList, table.TableKey);
+                    if (isError)
+                    {
+                        return isError;
+                    }
+                }
+                else if (table.TableKey == "Element Forces - Beams")
+                {
+                    (isError, beamForcesTable) = src.HelperEtabs.CallDatabaseTableByTableKey(databaseTableList, table.TableKey);
+                    if (isError)
+                    {
+                        return isError;
+                    }
+                }
+                else if (table.TableKey == "Element Forces - Braces")
+                {
+                    (isError, braceForcesTable) = src.HelperEtabs.CallDatabaseTableByTableKey(databaseTableList, table.TableKey);
                     if (isError)
                     {
                         return isError;
@@ -41,7 +86,7 @@ namespace WS_SG_ETABS_Plugin.src.joint_forces_extractor
                 }
                 else
                 {
-                    MessageBox.Show("Error, list of database tables do not match, please check that you have ");
+                    MessageBox.Show("Error, list of database tables do not match. Please revert to FDS");
                 }
             }
 
@@ -85,7 +130,7 @@ namespace WS_SG_ETABS_Plugin.src.joint_forces_extractor
 
             List<string> colTitles = new List<string>()
             {
-                "Joint Unique Name", "Frame Unique Name", "Load Case/Combi", "Step Type", "Axial (kN)", "Shear Minor (kN)", "Shear Major (kN)", "Moment Minor (kN)", "Moment Major (kN)", "Torsion (kN)"
+                "Joint Unique Name", "Frame Unique Name", "Load Case/Combi", "Step Type", "Axial (kN)", "Shear Major (kN)", "Shear Minor (kN)", "Torsion (kN)", "Moment Minor (kN)", "Moment Major (kN)"
             };
             List<Dictionary<string, string>> finalTableToExcel = new List<Dictionary<string, string>>();
             foreach (Dictionary<string, string> row in frameEndForcesTableFiltered)
