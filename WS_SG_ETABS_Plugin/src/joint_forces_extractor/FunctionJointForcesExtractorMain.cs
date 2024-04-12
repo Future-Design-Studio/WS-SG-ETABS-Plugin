@@ -330,9 +330,267 @@ namespace WS_SG_ETABS_Plugin.src.joint_forces_extractor
             }
             #endregion
 
+            #region Beam forces
+            //first for column forces
+            foreach (Dictionary<string, string> row in beamForcesTable.TableInList)
+            {
+                #region I end
+                //Check for frames with only I end first
+                if (frameUniqueNameI.Contains(row["UniqueName"]))
+                {
+                    //Filter based on frame unique name
+                    src.HelperEtabs.DatabaseTable temporaryFilteredForcesTable = new HelperEtabs.DatabaseTable();
+                    src.HelperEtabs.DatabaseTable temporaryFilteredForcesTableMinimum = new HelperEtabs.DatabaseTable();
+                    (isError, temporaryFilteredForcesTable) = src.HelperEtabs.FilterDatabaseTable(beamForcesTable, "UniqueName", row["UniqueName"]);
+
+                    //find for minimum station value
+                    double station = 1000.0;
+                    foreach (Dictionary<string, string> row2 in temporaryFilteredForcesTable.TableInList)
+                    {
+                        if (Convert.ToDouble(row2["Station"]) < station)
+                        {
+                            station = Convert.ToDouble(row2["Station"]);
+                        }
+                    }
+
+                    //filter based on minimum station value
+                    (isError, temporaryFilteredForcesTableMinimum) = src.HelperEtabs.FilterDatabaseTable(temporaryFilteredForcesTable, "Station", Convert.ToString(station));
+
+                    //Add into frameforcestablefiltered
+                    foreach (Dictionary<string, string> row3 in temporaryFilteredForcesTableMinimum.TableInList)
+                    {
+                        row3.Add("JointUniqueName", jointUniqueNameI[row3["UniqueName"]]);
+                        frameForcesTableFiltered.Add(row3);
+                    }
+
+                    //remove from frameUniqueNameI list so that it doesnt go into multiple loops for the same frame
+                    frameUniqueNameI.Remove(row["UniqueName"]);
+                }
+                #endregion
+
+                #region J end
+                //Check for frames with only J end next
+                else if (frameUniqueNameJ.Contains(row["UniqueName"]))
+                {
+                    //Filter based on frame unique name
+                    src.HelperEtabs.DatabaseTable temporaryFilteredForcesTable = new HelperEtabs.DatabaseTable();
+                    src.HelperEtabs.DatabaseTable temporaryFilteredForcesTableMaximum = new HelperEtabs.DatabaseTable();
+                    (isError, temporaryFilteredForcesTable) = src.HelperEtabs.FilterDatabaseTable(beamForcesTable, "UniqueName", row["UniqueName"]);
+
+                    //find for maximum station value
+                    double station = 0.0;
+                    foreach (Dictionary<string, string> row2 in temporaryFilteredForcesTable.TableInList)
+                    {
+                        if (Convert.ToDouble(row2["Station"]) > station)
+                        {
+                            station = Convert.ToDouble(row2["Station"]);
+                        }
+                    }
+
+                    //filter based on maximum station value
+                    (isError, temporaryFilteredForcesTableMaximum) = src.HelperEtabs.FilterDatabaseTable(temporaryFilteredForcesTable, "Station", Convert.ToString(station));
+
+                    //Add into frameforcestablefiltered
+                    foreach (Dictionary<string, string> row3 in temporaryFilteredForcesTableMaximum.TableInList)
+                    {
+                        row3.Add("JointUniqueName", jointUniqueNameJ[row3["UniqueName"]]);
+                        frameForcesTableFiltered.Add(row3);
+                    }
+
+                    //remove from frameUniqueNameJ list so that it doesnt go into multiple loops for the same frame
+                    frameUniqueNameJ.Remove(row["UniqueName"]);
+                }
+                #endregion
+
+                #region I & J end
+                //Check for frames with both end finally
+                else if (frameUniqueNameIJ.Contains(row["UniqueName"]))
+                {
+                    //Filter based on frame unique name
+                    src.HelperEtabs.DatabaseTable temporaryFilteredForcesTable = new HelperEtabs.DatabaseTable();
+                    src.HelperEtabs.DatabaseTable temporaryFilteredForcesTableMaximum = new HelperEtabs.DatabaseTable();
+                    src.HelperEtabs.DatabaseTable temporaryFilteredForcesTableMinimum = new HelperEtabs.DatabaseTable();
+                    (isError, temporaryFilteredForcesTable) = src.HelperEtabs.FilterDatabaseTable(beamForcesTable, "UniqueName", row["UniqueName"]);
+
+                    //find for maximum station value
+                    double station = 0.0;
+                    foreach (Dictionary<string, string> row2 in temporaryFilteredForcesTable.TableInList)
+                    {
+                        if (Convert.ToDouble(row2["Station"]) > station)
+                        {
+                            station = Convert.ToDouble(row2["Station"]);
+                        }
+                    }
+
+                    //filter based on maximum station value
+                    (isError, temporaryFilteredForcesTableMaximum) = src.HelperEtabs.FilterDatabaseTable(temporaryFilteredForcesTable, "Station", Convert.ToString(station));
+
+                    //Add into frameforcestablefiltered
+                    foreach (Dictionary<string, string> row3 in temporaryFilteredForcesTableMaximum.TableInList)
+                    {
+                        row3.Add("JointUniqueName", jointUniqueNameIJJ[row3["UniqueName"]]);
+                        frameForcesTableFiltered.Add(row3);
+                    }
 
 
 
+                    //find for minimum station value
+                    station = 1000.0;
+                    foreach (Dictionary<string, string> row4 in temporaryFilteredForcesTable.TableInList)
+                    {
+                        if (Convert.ToDouble(row4["Station"]) < station)
+                        {
+                            station = Convert.ToDouble(row4["Station"]);
+                        }
+                    }
+
+                    //filter based on minimum station value
+                    (isError, temporaryFilteredForcesTableMinimum) = src.HelperEtabs.FilterDatabaseTable(temporaryFilteredForcesTable, "Station", Convert.ToString(station));
+
+                    //Add into frameforcestablefiltered
+                    foreach (Dictionary<string, string> row5 in temporaryFilteredForcesTableMinimum.TableInList)
+                    {
+                        row5.Add("JointUniqueName", jointUniqueNameIJI[row5["UniqueName"]]);
+                        frameForcesTableFiltered.Add(row5);
+                    }
+
+                    //remove from frameUniqueNameIJ list so that it doesnt go into multiple loops for the same frame
+                    frameUniqueNameIJ.Remove(row["UniqueName"]);
+                }
+                #endregion
+            }
+            #endregion
+
+            #region Brace forces
+            //first for column forces
+            foreach (Dictionary<string, string> row in braceForcesTable.TableInList)
+            {
+                #region I end
+                //Check for frames with only I end first
+                if (frameUniqueNameI.Contains(row["UniqueName"]))
+                {
+                    //Filter based on frame unique name
+                    src.HelperEtabs.DatabaseTable temporaryFilteredForcesTable = new HelperEtabs.DatabaseTable();
+                    src.HelperEtabs.DatabaseTable temporaryFilteredForcesTableMinimum = new HelperEtabs.DatabaseTable();
+                    (isError, temporaryFilteredForcesTable) = src.HelperEtabs.FilterDatabaseTable(braceForcesTable, "UniqueName", row["UniqueName"]);
+
+                    //find for minimum station value
+                    double station = 1000.0;
+                    foreach (Dictionary<string, string> row2 in temporaryFilteredForcesTable.TableInList)
+                    {
+                        if (Convert.ToDouble(row2["Station"]) < station)
+                        {
+                            station = Convert.ToDouble(row2["Station"]);
+                        }
+                    }
+
+                    //filter based on minimum station value
+                    (isError, temporaryFilteredForcesTableMinimum) = src.HelperEtabs.FilterDatabaseTable(temporaryFilteredForcesTable, "Station", Convert.ToString(station));
+
+                    //Add into frameforcestablefiltered
+                    foreach (Dictionary<string, string> row3 in temporaryFilteredForcesTableMinimum.TableInList)
+                    {
+                        row3.Add("JointUniqueName", jointUniqueNameI[row3["UniqueName"]]);
+                        frameForcesTableFiltered.Add(row3);
+                    }
+
+                    //remove from frameUniqueNameI list so that it doesnt go into multiple loops for the same frame
+                    frameUniqueNameI.Remove(row["UniqueName"]);
+                }
+                #endregion
+
+                #region J end
+                //Check for frames with only J end next
+                else if (frameUniqueNameJ.Contains(row["UniqueName"]))
+                {
+                    //Filter based on frame unique name
+                    src.HelperEtabs.DatabaseTable temporaryFilteredForcesTable = new HelperEtabs.DatabaseTable();
+                    src.HelperEtabs.DatabaseTable temporaryFilteredForcesTableMaximum = new HelperEtabs.DatabaseTable();
+                    (isError, temporaryFilteredForcesTable) = src.HelperEtabs.FilterDatabaseTable(braceForcesTable, "UniqueName", row["UniqueName"]);
+
+                    //find for maximum station value
+                    double station = 0.0;
+                    foreach (Dictionary<string, string> row2 in temporaryFilteredForcesTable.TableInList)
+                    {
+                        if (Convert.ToDouble(row2["Station"]) > station)
+                        {
+                            station = Convert.ToDouble(row2["Station"]);
+                        }
+                    }
+
+                    //filter based on maximum station value
+                    (isError, temporaryFilteredForcesTableMaximum) = src.HelperEtabs.FilterDatabaseTable(temporaryFilteredForcesTable, "Station", Convert.ToString(station));
+
+                    //Add into frameforcestablefiltered
+                    foreach (Dictionary<string, string> row3 in temporaryFilteredForcesTableMaximum.TableInList)
+                    {
+                        row3.Add("JointUniqueName", jointUniqueNameJ[row3["UniqueName"]]);
+                        frameForcesTableFiltered.Add(row3);
+                    }
+
+                    //remove from frameUniqueNameJ list so that it doesnt go into multiple loops for the same frame
+                    frameUniqueNameJ.Remove(row["UniqueName"]);
+                }
+                #endregion
+
+                #region I & J end
+                //Check for frames with both end finally
+                else if (frameUniqueNameIJ.Contains(row["UniqueName"]))
+                {
+                    //Filter based on frame unique name
+                    src.HelperEtabs.DatabaseTable temporaryFilteredForcesTable = new HelperEtabs.DatabaseTable();
+                    src.HelperEtabs.DatabaseTable temporaryFilteredForcesTableMaximum = new HelperEtabs.DatabaseTable();
+                    src.HelperEtabs.DatabaseTable temporaryFilteredForcesTableMinimum = new HelperEtabs.DatabaseTable();
+                    (isError, temporaryFilteredForcesTable) = src.HelperEtabs.FilterDatabaseTable(braceForcesTable, "UniqueName", row["UniqueName"]);
+
+                    //find for maximum station value
+                    double station = 0.0;
+                    foreach (Dictionary<string, string> row2 in temporaryFilteredForcesTable.TableInList)
+                    {
+                        if (Convert.ToDouble(row2["Station"]) > station)
+                        {
+                            station = Convert.ToDouble(row2["Station"]);
+                        }
+                    }
+
+                    //filter based on maximum station value
+                    (isError, temporaryFilteredForcesTableMaximum) = src.HelperEtabs.FilterDatabaseTable(temporaryFilteredForcesTable, "Station", Convert.ToString(station));
+
+                    //Add into frameforcestablefiltered
+                    foreach (Dictionary<string, string> row3 in temporaryFilteredForcesTableMaximum.TableInList)
+                    {
+                        row3.Add("JointUniqueName", jointUniqueNameIJJ[row3["UniqueName"]]);
+                        frameForcesTableFiltered.Add(row3);
+                    }
+
+
+
+                    //find for minimum station value
+                    station = 1000.0;
+                    foreach (Dictionary<string, string> row4 in temporaryFilteredForcesTable.TableInList)
+                    {
+                        if (Convert.ToDouble(row4["Station"]) < station)
+                        {
+                            station = Convert.ToDouble(row4["Station"]);
+                        }
+                    }
+
+                    //filter based on minimum station value
+                    (isError, temporaryFilteredForcesTableMinimum) = src.HelperEtabs.FilterDatabaseTable(temporaryFilteredForcesTable, "Station", Convert.ToString(station));
+
+                    //Add into frameforcestablefiltered
+                    foreach (Dictionary<string, string> row5 in temporaryFilteredForcesTableMinimum.TableInList)
+                    {
+                        row5.Add("JointUniqueName", jointUniqueNameIJI[row5["UniqueName"]]);
+                        frameForcesTableFiltered.Add(row5);
+                    }
+
+                    //remove from frameUniqueNameIJ list so that it doesnt go into multiple loops for the same frame
+                    frameUniqueNameIJ.Remove(row["UniqueName"]);
+                }
+                #endregion
+            }
+            #endregion
 
 
 
