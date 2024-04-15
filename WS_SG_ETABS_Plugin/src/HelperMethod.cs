@@ -299,6 +299,23 @@ namespace WS_SG_ETABS_Plugin.src
 
         #endregion
 
+        #region Rebar method
+
+        public static double GetRebarBendingRadius (int rebarDiameter)
+        {
+            if (rebarDiameter < 20)
+            {
+                return rebarDiameter * 2;
+            }
+            else
+            {
+                return rebarDiameter * 3.5;
+            }
+        }
+
+
+        #endregion
+
     }
 
 

@@ -65,5 +65,23 @@ namespace WS_SG_ETABS_Plugin.src
 
             return isError;
         }
+
+        public static bool DrawArc(ref List<string> lisp, List<double> xCoords, List<double> yCoords)
+        {
+            bool isError = false;
+
+            //Must be 3 points
+            if (xCoords.Count() != 3 || yCoords.Count() != 3)
+            {
+                isError = true;
+                return isError;
+            }
+
+            string line = $"(command \"arc\" '({xCoords[0]} {yCoords[0]}) '({xCoords[1]} {yCoords[1]}) '({xCoords[2]} {yCoords[2]})) ";
+
+            lisp.Add(line);
+
+            return isError;
+        }
     }
 }
