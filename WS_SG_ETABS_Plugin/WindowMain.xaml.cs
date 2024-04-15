@@ -87,7 +87,7 @@ namespace WS_SG_ETABS_Plugin
                         "buttonRCBeamSchedule", "buttonCopyProperties", "buttonPlotReaction", "buttonLoadCombo", "buttonPadFooting", "buttonPunchingShear", "buttonTedds", "buttonRCColSchedule", "buttonPlotDrift", 
                         "buttonPlotSumMassParticip", "buttonWallDesignViewer", "buttonShellUni", "buttonSelUniqueName", "buttonEtabsToRhino", "buttonWindCoeff", "buttonReleaseSelectedNode", "buttonTrfEtabsLoads", 
                         "buttonTrfEtabstoSafe", "buttonCarbon", "buttonTransferMidas", "buttonTrussGrouping", "buttonDeleteFrames", "buttonColOptimizer", "buttonSteelTrussOptimizer", "buttonCircCrack", 
-                        "buttonPreWarning", "buttonAddLoadCombo", "buttonApplyModifier"
+                        "buttonPreWarning", "buttonAddLoadCombo", "buttonApplyModifier", "buttonJointForcesExtractor", "buttonApplySectProp", "buttonCopyElements"
                     };
 
                     foreach (string buttonName in listofButtons)
