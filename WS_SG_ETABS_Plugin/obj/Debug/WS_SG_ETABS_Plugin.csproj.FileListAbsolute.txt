@@ -797,3 +797,9 @@ C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws
 C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\WS_SG_ETABS_Plugin.csproj.CopyComplete
 C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\WS_SG_ETABS_Plugin.dll
 C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\WS_SG_ETABS_Plugin.pdb
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\joint_forces_extractor\WindowJointForceExtractorLoading.g.cs
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\joint_forces_extractor\WindowJointForcesExtractorMain.g.cs
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\joint_forces_extractor\WindowJointForcesExtractorResult.g.cs
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\joint_forces_extractor\WindowJointForceExtractorLoading.baml
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\joint_forces_extractor\WindowJointForcesExtractorMain.baml
+C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\joint_forces_extractor\WindowJointForcesExtractorResult.baml

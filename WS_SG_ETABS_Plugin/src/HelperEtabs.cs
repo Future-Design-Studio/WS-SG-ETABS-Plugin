@@ -3000,7 +3000,7 @@ namespace WS_SG_ETABS_Plugin.src
             }
         }
 
-        public static (bool, List<Frame>) GetFramesPoints(DatabaseTable frameObjConnectivity, DatabaseTable pointObjConnectivity)
+        public static (bool, List<Frame>) GetFramesPointsUniqueName(DatabaseTable frameObjConnectivity, DatabaseTable pointObjConnectivity)
         {
             List<Frame> framelList = new List<Frame>();
             bool isError = false;

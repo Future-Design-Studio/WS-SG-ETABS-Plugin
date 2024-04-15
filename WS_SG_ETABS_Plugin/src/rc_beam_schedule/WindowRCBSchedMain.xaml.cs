@@ -141,6 +141,9 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
                 //Casting listbox content to list
                 List<string> listChoosenGroup = listBoxChoosenGroup.Items.OfType<string>().ToList();
 
+                //Rename checkbox
+                bool? doRename = checkBoxRename.IsChecked;
+
                 //ML checkbox
                 bool? doML = checkBoxML.IsChecked;
 
@@ -163,7 +166,7 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
                     IsEnabled = false;
                     //Call up carbon result window
                     src.rc_beam_schedule.WindowRCBSchedResult windowRCBSchedResult = new src.rc_beam_schedule.WindowRCBSchedResult(_SapModel, _Plugin, leftLength, midLength, rightLength, cantileverLeftLength, cantileverRightLength,
-                        rebarSpc, rebarSpcPreference, maxShearLinksSpacing, minShearLinksSpacing, shearLinksSpacingStep, cover, maxNoLayer, rebarDiameterList, shearLinksDiameterList, groupAndBeamType, doML);
+                        rebarSpc, rebarSpcPreference, maxShearLinksSpacing, minShearLinksSpacing, shearLinksSpacingStep, cover, maxNoLayer, rebarDiameterList, shearLinksDiameterList, groupAndBeamType, doML, doRename);
                     IsEnabled = true;
                 }
             }

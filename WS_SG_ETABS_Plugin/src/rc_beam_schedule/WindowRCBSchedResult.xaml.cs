@@ -26,7 +26,7 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
 
         public WindowRCBSchedResult(cSapModel SapModel, cPluginCallback Plugin, double leftLength, double midLength, double rightLength, double cantileverLeftLength, double cantileverRightLength,
             double rebarSpc, string rebarSpcPreference, double maxShearLinksSpacing, double minShearLinksSpacing, double shearLinksSpacingStep, double cover, int maxNoLayer, int[] rebarDiameterList, int[] shearLinksDiameterList, 
-            List<Dictionary<string,string>> groupAndBeamType, bool? doML)
+            List<Dictionary<string,string>> groupAndBeamType, bool? doML, bool? doRename)
         {
             _SapModel = SapModel;
             _Plugin = Plugin;
@@ -46,7 +46,7 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
 
             //Main logic
             bool isError = src.rc_beam_schedule.FunctionRCBSched.GetRCBeamSchedule(_SapModel, leftLength, midLength, rightLength, cantileverLeftLength, cantileverRightLength, 
-                rebarSpc, rebarSpcPreference, maxShearLinksSpacing, minShearLinksSpacing, shearLinksSpacingStep, cover, maxNoLayer, rebarDiameterList, shearLinksDiameterList, groupAndBeamType, doML);
+                rebarSpc, rebarSpcPreference, maxShearLinksSpacing, minShearLinksSpacing, shearLinksSpacingStep, cover, maxNoLayer, rebarDiameterList, shearLinksDiameterList, groupAndBeamType, doML, doRename);
 
             if (isError)
             {

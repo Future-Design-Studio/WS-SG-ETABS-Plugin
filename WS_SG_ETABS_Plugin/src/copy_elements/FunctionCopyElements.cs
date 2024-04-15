@@ -114,28 +114,28 @@ namespace WS_SG_ETABS_Plugin.src.copy_elements
             if (databaseTableDict.ContainsKey("Beam Object Connectivity") && databaseTableDict.ContainsKey("Point Object Connectivity"))
             {
                 List<HelperEtabs.Frame> beamList = null;
-                (isError, beamList) = HelperEtabs.GetFramesPoints(databaseTableDict["Beam Object Connectivity"], databaseTableDict["Point Object Connectivity"]);
+                (isError, beamList) = HelperEtabs.GetFramesPointsUniqueName(databaseTableDict["Beam Object Connectivity"], databaseTableDict["Point Object Connectivity"]);
                 if (!isError) { frameList.AddRange(beamList); };
             }
 
             if (databaseTableDict.ContainsKey("Column Object Connectivity") && databaseTableDict.ContainsKey("Point Object Connectivity"))
             {
                 List<HelperEtabs.Frame> columnList = null;
-                (isError, columnList) = HelperEtabs.GetFramesPoints(databaseTableDict["Column Object Connectivity"], databaseTableDict["Point Object Connectivity"]);
+                (isError, columnList) = HelperEtabs.GetFramesPointsUniqueName(databaseTableDict["Column Object Connectivity"], databaseTableDict["Point Object Connectivity"]);
                 if (!isError) { frameList.AddRange(columnList); };
             }
 
             if (databaseTableDict.ContainsKey("Brace Object Connectivity") && databaseTableDict.ContainsKey("Point Object Connectivity"))
             {
                 List<HelperEtabs.Frame> braceList = null;
-                (isError, braceList) = HelperEtabs.GetFramesPoints(databaseTableDict["Brace Object Connectivity"], databaseTableDict["Point Object Connectivity"]);
+                (isError, braceList) = HelperEtabs.GetFramesPointsUniqueName(databaseTableDict["Brace Object Connectivity"], databaseTableDict["Point Object Connectivity"]);
                 if (!isError) { frameList.AddRange(braceList); };
             }
 
             if (databaseTableDict.ContainsKey("Null Line Object Connectivity") && databaseTableDict.ContainsKey("Point Object Connectivity"))
             {
                 List<HelperEtabs.Frame> nullLineList = null;
-                (isError, nullLineList) = HelperEtabs.GetFramesPoints(databaseTableDict["Null Line Object Connectivity"], databaseTableDict["Point Object Connectivity"]);
+                (isError, nullLineList) = HelperEtabs.GetFramesPointsUniqueName(databaseTableDict["Null Line Object Connectivity"], databaseTableDict["Point Object Connectivity"]);
                 if (!isError) { frameList.AddRange(nullLineList); };
             }
 
