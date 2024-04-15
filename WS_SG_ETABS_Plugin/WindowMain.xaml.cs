@@ -375,5 +375,11 @@ namespace WS_SG_ETABS_Plugin
             src.joint_forces_extractor.WindowJointForcesExtractorMain windowJointForcesExtractorMain = new src.joint_forces_extractor.WindowJointForcesExtractorMain(_SapModel, _Plugin);
             IsEnabled = true;
         }
+
+        private void buttonRcBeamRename_Click(object sender, RoutedEventArgs e)
+        {
+            IsEnabled = false;
+            //Call up window
+            src.beam_rename.WindowBeamRenameMain WindowBeamRenameMain = new src.beam_rename.WindowBeamRenameMain();
     }
 }

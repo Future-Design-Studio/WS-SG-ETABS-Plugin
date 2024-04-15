@@ -67,6 +67,7 @@
         <Button Grid.Row="11" Grid.Column="1" x:Name="buttonApplyModifier" Content="Apply Element Modifier (Beta Version)" Click="buttonApplyModifier_Click" FontSize="16" IsEnabled="True"/>
         <Button Grid.Row="12" Grid.Column="1" x:Name="buttonApplySectProp" Content="Apply Section Property (Beta Version)" Click="buttonApplySectProp_Click" FontSize="16" IsEnabled="True"/>
         <Button Grid.Row="13" Grid.Column="1" x:Name="buttonCopyElements" Content="Copy Elements (Beta Version)" Click="buttonCopyElements_Click" FontSize="16" IsEnabled="True"/>
+        <Button Grid.Row="14" Grid.Column="1" x:Name="buttonRcBeamRename" Content="RC Beam Rename (Beta Version)" Click="buttonRcBeamRename_Click" FontSize="16" IsEnabled="True"/>
 
         <!-- Upcoming -->
         <Button Grid.Row="3" Grid.Column="2" x:Name="buttonCarbon" Content="Carbon Calulator" Click="buttonCarbon_Click" FontSize="16" IsEnabled="False"/>

@@ -239,6 +239,12 @@
     <Compile Include="src\apply_section_property\WindowApplySectPropResult.xaml.cs">
       <DependentUpon>WindowApplySectPropResult.xaml</DependentUpon>
     </Compile>
+    <Compile Include="src\beam_rename\WindowBeamRenameMain.xaml.cs">
+      <DependentUpon>WindowBeamRenameMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\beam_rename\WindowBeamRenameResult.xaml.cs">
+      <DependentUpon>WindowBeamRenameResult.xaml</DependentUpon>
+    </Compile>
     <Compile Include="src\carbon\WindowCarbonMain.xaml.cs">
       <DependentUpon>WindowCarbonMain.xaml</DependentUpon>
     </Compile>
@@ -429,6 +435,7 @@
     <Compile Include="src\punching_shear_plot\WindowPunchShrPlotResult.xaml.cs">
       <DependentUpon>WindowPunchShrPlotResult.xaml</DependentUpon>
     </Compile>
+    <Compile Include="src\beam_rename\FunctionBeamRename.cs" />
     <Compile Include="src\rc_beam_schedule\ClassFunctionRCBSched.cs" />
     <Compile Include="src\rc_beam_schedule\FunctionRCBSched.cs" />
     <Compile Include="src\rc_beam_schedule\WindowRCBSchedMain.xaml.cs">
@@ -542,6 +549,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="src\apply_section_property\WindowApplySectPropResult.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\beam_rename\WindowBeamRenameMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\beam_rename\WindowBeamRenameResult.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
