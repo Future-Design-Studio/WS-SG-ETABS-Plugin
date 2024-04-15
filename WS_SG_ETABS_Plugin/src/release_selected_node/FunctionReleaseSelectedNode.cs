@@ -28,7 +28,7 @@ namespace WS_SG_ETABS_Plugin.src.release_selected_node
 
                 foreach (string framename in frameUniqueName)
                 {
-                    (endIname, endJname, isError) = src.HelperEtabs.GetEndPointsFrame(SapModel, framename);
+                    (endIname, endJname, isError) = src.HelperEtabs.GetFramePointsUniqueName(SapModel, framename);
 
                     if (jointUniqueName.Contains(endIname) && jointUniqueName.Contains(endJname))
                     {

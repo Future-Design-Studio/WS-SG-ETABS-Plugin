@@ -88,7 +88,7 @@ namespace WS_SG_ETABS_Plugin.src.ML
             int[] labels = clusters.Decide(_observations);
 
             IsEnabled = false;
-            WindowMLTSNEResult windowMLTSNEResult = new WindowMLTSNEResult(numClusters, labels, TSNEresults);
+            WindowMLTSNEResult windowMLTSNEResult = new WindowMLTSNEResult(numClusters, labels, TSNEresults, _observations);
             IsEnabled = true;
 
         }
@@ -125,7 +125,7 @@ namespace WS_SG_ETABS_Plugin.src.ML
             int[] labels = clusters.Decide(_observations);
 
             IsEnabled = false;
-            WindowMLTSNEResult windowMLTSNEResult = new WindowMLTSNEResult(numClusters, labels, TSNEresults);
+            WindowMLTSNEResult windowMLTSNEResult = new WindowMLTSNEResult(numClusters, labels, TSNEresults, _observations);
             IsEnabled = true;
 
             _labels = labels;

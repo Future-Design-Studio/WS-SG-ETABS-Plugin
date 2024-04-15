@@ -609,11 +609,7 @@ C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws
 C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\punching_shear_plot\WindowPunchShrPlotMain.g.cs
 C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\punching_shear_plot\WindowPunchShrPlotResult.g.cs
 C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\rc_beam_schedule\WindowRCBSchedMain.g.cs
-C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\rc_beam_schedule\WindowRCBSchedMLPrefence.g.cs
 C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\rc_beam_schedule\WindowRCBSchedResult.g.cs
-C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\rc_beam_schedule\WindowRCBSchedSillouettheScore.g.cs
-C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\rc_beam_schedule\WindowRCBSchedTSNEResult.g.cs
-C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\rc_beam_schedule\WindowRCBSchedWCSSResult.g.cs
 C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\rc_col_schedule\WindowRCCSchedMain.g.cs
 C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\rc_col_schedule\WindowRCCSchedResult.g.cs
 C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\release_selected_node\WindowReleaseSelectedNodeMain.g.cs
@@ -772,11 +768,7 @@ C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws
 C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\punching_shear_plot\WindowPunchShrPlotMain.baml
 C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\punching_shear_plot\WindowPunchShrPlotResult.baml
 C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\rc_beam_schedule\WindowRCBSchedMain.baml
-C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\rc_beam_schedule\WindowRCBSchedMLPrefence.baml
 C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\rc_beam_schedule\WindowRCBSchedResult.baml
-C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\rc_beam_schedule\WindowRCBSchedSillouettheScore.baml
-C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\rc_beam_schedule\WindowRCBSchedTSNEResult.baml
-C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\rc_beam_schedule\WindowRCBSchedWCSSResult.baml
 C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\rc_col_schedule\WindowRCCSchedMain.baml
 C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\rc_col_schedule\WindowRCCSchedResult.baml
 C:\Users\STEFANO\OneDrive - Ramboll\Projects\0. Script\1. Plugin\ETABS plugin\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\release_selected_node\WindowReleaseSelectedNodeMain.baml

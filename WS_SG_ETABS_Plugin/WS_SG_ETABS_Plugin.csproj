@@ -275,6 +275,7 @@
     <Compile Include="src\etabs_to_rhino\WindowsEtabsToRhinoProgress.xaml.cs">
       <DependentUpon>WindowsEtabsToRhinoProgress.xaml</DependentUpon>
     </Compile>
+    <Compile Include="src\HelperAutoLisp.cs" />
     <Compile Include="src\HelperExcel.cs" />
     <Compile Include="src\HelperLicense.cs" />
     <Compile Include="src\HelperMethod.cs" />
@@ -292,6 +293,16 @@
     <Compile Include="src\HelperPlot.cs" />
     <Compile Include="src\HelperSafe.cs" />
     <Compile Include="src\HelperUI.cs" />
+    <Compile Include="src\joint_forces_extractor\FunctionJointForcesExtractorMain.cs" />
+    <Compile Include="src\joint_forces_extractor\WindowJointForceExtractorLoading.xaml.cs">
+      <DependentUpon>WindowJointForceExtractorLoading.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\joint_forces_extractor\WindowJointForcesExtractorMain.xaml.cs">
+      <DependentUpon>WindowJointForcesExtractorMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\joint_forces_extractor\WindowJointForcesExtractorResult.xaml.cs">
+      <DependentUpon>WindowJointForcesExtractorResult.xaml</DependentUpon>
+    </Compile>
     <Compile Include="src\loads_etabs_etabs\ClassEtabsEtabs.cs" />
     <Compile Include="src\loads_etabs_etabs\FunctionEtabsEtabsMain.cs" />
     <Compile Include="src\loads_etabs_etabs\WindowEtabsEtabsMain.xaml.cs">
@@ -423,20 +434,8 @@
     <Compile Include="src\rc_beam_schedule\WindowRCBSchedMain.xaml.cs">
       <DependentUpon>WindowRCBSchedMain.xaml</DependentUpon>
     </Compile>
-    <Compile Include="src\rc_beam_schedule\WindowRCBSchedMLPrefence.xaml.cs">
-      <DependentUpon>WindowRCBSchedMLPrefence.xaml</DependentUpon>
-    </Compile>
     <Compile Include="src\rc_beam_schedule\WindowRCBSchedResult.xaml.cs">
       <DependentUpon>WindowRCBSchedResult.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="src\rc_beam_schedule\WindowRCBSchedSillouettheScore.xaml.cs">
-      <DependentUpon>WindowRCBSchedSillouettheScore.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="src\rc_beam_schedule\WindowRCBSchedTSNEResult.xaml.cs">
-      <DependentUpon>WindowRCBSchedTSNEResult.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="src\rc_beam_schedule\WindowRCBSchedWCSSResult.xaml.cs">
-      <DependentUpon>WindowRCBSchedWCSSResult.xaml</DependentUpon>
     </Compile>
     <Compile Include="src\rc_col_schedule\FunctionRCCSched.cs" />
     <Compile Include="src\rc_col_schedule\WindowRCCSchedMain.xaml.cs">
@@ -582,6 +581,18 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="src\joint_forces_extractor\WindowJointForceExtractorLoading.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\joint_forces_extractor\WindowJointForcesExtractorMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\joint_forces_extractor\WindowJointForcesExtractorResult.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="src\loads_etabs_etabs\WindowEtabsEtabsMain.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -726,25 +737,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="src\rc_beam_schedule\WindowRCBSchedMLPrefence.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="src\rc_beam_schedule\WindowRCBSchedResult.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="src\rc_beam_schedule\WindowRCBSchedSillouettheScore.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="src\rc_beam_schedule\WindowRCBSchedTSNEResult.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="src\rc_beam_schedule\WindowRCBSchedWCSSResult.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="src\rc_col_schedule\WindowRCCSchedMain.xaml">
       <SubType>Designer</SubType>

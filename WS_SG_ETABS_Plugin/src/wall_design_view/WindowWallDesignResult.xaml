@@ -24,7 +24,7 @@
                 <Label></Label>
 
                 <Label Grid.Column="0" VerticalAlignment="Center" FontSize="20">View Type:</Label>
-                <ComboBox Grid.Column="1" x:Name="comBoxTypeOfFailure" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" 
+                <ComboBox Grid.Column="1" x:Name="comBoxViewType" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" 
                           SelectionChanged="comBoxTypeOfFailure_SelectionChanged"  FontSize="12"></ComboBox>
                 <Label></Label>
                 
@@ -32,6 +32,11 @@
                 <CheckBox Name="checkBoxShowOk" FontSize="16" VerticalContentAlignment="Center" IsChecked="True" Click="checkBoxShowOk_Click">Pass</CheckBox>
                 <CheckBox Name="checkBoxShowFail" FontSize="16" VerticalContentAlignment="Center" IsChecked="True" Click="checkBoxShowFail_Click">Fail</CheckBox>
                 <CheckBox Name="checkBoxShowNull" FontSize="16" VerticalContentAlignment="Center" IsChecked="True" Click="checkBoxShowNull_Click">Null</CheckBox>
+                <Label></Label>
+
+                <Label Grid.Column="0" VerticalAlignment="Center" FontSize="20">Wall type:</Label>
+                <CheckBox Name="checkBoxShowPier" FontSize="16" VerticalContentAlignment="Center" IsChecked="True" Click="checkBoxShowPier_Click">Pier</CheckBox>
+                <CheckBox Name="checkBoxShowSpandrel" FontSize="16" VerticalContentAlignment="Center" IsChecked="True" Click="checkBoxShowSpandrel_Click">Spandrel</CheckBox>
                 <Label></Label>
 
                 <Label Grid.Column="0" VerticalAlignment="Center" FontSize="20">Reinforcement color bar:</Label>

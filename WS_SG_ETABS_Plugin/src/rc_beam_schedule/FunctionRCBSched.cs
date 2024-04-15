@@ -18,6 +18,7 @@ using Accord.Statistics.Kernels;
 using System.Windows.Markup;
 using static WS_SG_ETABS_Plugin.src.HelperEtabs;
 using static WS_SG_ETABS_Plugin.src.HelperSafe;
+using WS_SG_ETABS_Plugin.src.ML;
 
 namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
 {
@@ -1880,64 +1881,36 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
 
         public static void RcBeamClusteringUsingKMeans(List<src.HelperEtabs.RcBeam> rcBeamList)
         {
-            List<ClassFunctionRCBSched.RcBeamForMLInput> rcBeamForMLInputList = new List<ClassFunctionRCBSched.RcBeamForMLInput>();
-
-            //Convert RcBeam to RcBeamForML
-            foreach(src.HelperEtabs.RcBeam rcBeam in rcBeamList)
-            {
-                
-                ClassFunctionRCBSched.RcBeamForMLInput rcBeamForML = new ClassFunctionRCBSched.RcBeamForMLInput(rcBeam.UniqueName, (float)rcBeam.Height, (float)rcBeam.Width, (float)rcBeam.LeftTopAs, (float)rcBeam.MidTopAs,
-                    (float)rcBeam.RightTopAs, (float)rcBeam.LeftBottomAs, (float)rcBeam.MidBottomAs, (float)rcBeam.RightBottomAs, (float)rcBeam.LeftAv, (float)rcBeam.MidAv, (float)rcBeam.RightAv);
-                rcBeamForMLInputList.Add(rcBeamForML);
-                
-                /*
-                ClassFunctionRCBSched.RcBeamForMLInput rcBeamForML = new ClassFunctionRCBSched.RcBeamForMLInput(rcBeam.UniqueName, (float)rcBeam.Height, (float)rcBeam.Width, (float)rcBeam.LeftTopAsProv, (float)rcBeam.MidTopAsProv,
-                (float)rcBeam.RightTopAsProv, (float)rcBeam.LeftBottomAsProv, (float)rcBeam.MidBottomAsProv, (float)rcBeam.RightBottomAsProv, (float)rcBeam.LeftAvProv, (float)rcBeam.MidAvProv, (float)rcBeam.RightAvProv);
-                rcBeamForMLInputList.Add(rcBeamForML);
-                */
-            }
-
-            string[] properties = { "Height", "Width",
-            "LeftTopAs",
-            "MidTopAs",
-            "RightTopAs",
-            "LeftBottomAs",
-            "MidBottomAs",
-            "RightBottomAs",
-            "LeftAv",
-            "MidAv",
-            "RightAv" };
-
-            //Normalize data
-            StandardizeData(rcBeamForMLInputList, properties);
-
 
             //Prepare data for ML
-            double[][] observations = new double[rcBeamForMLInputList.Count()][];
+            double[][] observations = new double[rcBeamList.Count()][];
 
             int index = 0;
-            foreach(ClassFunctionRCBSched.RcBeamForMLInput rcBeamForMLInput in rcBeamForMLInputList)
+            foreach(src.HelperEtabs.RcBeam rcBeam in rcBeamList)
             {
                 observations[index] = new double[]
                 {
-                    rcBeamForMLInput.Width,
-                    rcBeamForMLInput.Height,
-                    rcBeamForMLInput.LeftTopAs,
-                    rcBeamForMLInput.MidTopAs,
-                    rcBeamForMLInput.RightTopAs,
-                    rcBeamForMLInput.LeftBottomAs,
-                    rcBeamForMLInput.MidBottomAs,
-                    rcBeamForMLInput.RightBottomAs,
-                    rcBeamForMLInput.LeftAv,
-                    rcBeamForMLInput.MidAv,
-                    rcBeamForMLInput.RightAv,
+                    rcBeam.Width,
+                    rcBeam.Height,
+                    rcBeam.LeftTopAs,
+                    rcBeam.MidTopAs,
+                    rcBeam.RightTopAs,
+                    rcBeam.LeftBottomAs,
+                    rcBeam.MidBottomAs,
+                    rcBeam.RightBottomAs,
+                    rcBeam.LeftAv,
+                    rcBeam.MidAv,
+                    rcBeam.RightAv,
                 };
                 index++;
             }
 
+            //Normalize data
+            observations = HelperML.StandardizeData(observations);
+
             //Call up ML preference window
-            WindowRCBSchedMLPrefence windowRCBSchedMLPrefence = new WindowRCBSchedMLPrefence(observations);
-            int[] labels = windowRCBSchedMLPrefence.GetLabels();
+            src.ML.WindowMLPrefence windowMLPrefence = new WindowMLPrefence(observations);
+            int[] labels = windowMLPrefence.GetLabels();
 
             /*
             //TEST---------------------------------------------
