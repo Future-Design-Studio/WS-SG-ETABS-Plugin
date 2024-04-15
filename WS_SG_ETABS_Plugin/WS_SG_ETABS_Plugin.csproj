@@ -275,6 +275,7 @@
     <Compile Include="src\etabs_to_rhino\WindowsEtabsToRhinoProgress.xaml.cs">
       <DependentUpon>WindowsEtabsToRhinoProgress.xaml</DependentUpon>
     </Compile>
+    <Compile Include="src\HelperAutoLisp.cs" />
     <Compile Include="src\HelperExcel.cs" />
     <Compile Include="src\HelperLicense.cs" />
     <Compile Include="src\HelperMethod.cs" />
