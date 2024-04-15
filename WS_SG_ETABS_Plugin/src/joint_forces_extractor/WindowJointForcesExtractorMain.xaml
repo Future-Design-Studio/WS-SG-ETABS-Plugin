@@ -1,0 +1,139 @@
+﻿<Window x:Class="WS_SG_ETABS_Plugin.src.joint_forces_extractor.WindowJointForcesExtractorMain"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WS_SG_ETABS_Plugin.src.joint_forces_extractor"
+             mc:Ignorable="d" Height="850" Width="600" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+
+    <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.4*"></RowDefinition>
+            <RowDefinition Height="0.9*"></RowDefinition>
+            <RowDefinition Height="0.3*"></RowDefinition>
+            <RowDefinition Height="0.7*"></RowDefinition>
+            <RowDefinition Height="5*"></RowDefinition>
+            <RowDefinition Height="0.3*"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <Label Grid.Row="0" Grid.Column="0" Margin="0 -10 0 0" Content="Frame End Forces Extractor" FontSize="28"/>
+
+        <TextBlock Grid.Row="1" Grid.Column="0" TextWrapping="Wrap" TextAlignment="Justify"  
+                       Margin="10 0 10 0" FontSize="10">                    
+                    How to use:<LineBreak/>
+                    1. Choose an excel file name to save excel<LineBreak/>
+                    2. Specify a path or use default path which is ETABS file location to save the excel file at<LineBreak/>
+                    3. Choose group(s) with all the joints that you want frame end loads at to include in the excel<LineBreak/>
+                    4. Select respective load combination or case to extract frame end loads for and click Add<LineBreak/>
+                    5. Press OK once all respective load combination/cases and groups have been selected
+        </TextBlock>
+
+        <Label Grid.Row="2" Grid.Column="0" Content="1.Select excel save file location" FontSize="14" FontWeight="Bold"/>
+
+        <Grid Grid.Row="3" Grid.Column="0" Margin="0 0 0 0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="4*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Column="0" Margin="10 0 10 0" Content="Excel file name:"></Label>
+                <TextBox x:Name="textBoxFileName" Grid.Column="1" ></TextBox>
+
+            </Grid>
+
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="4*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Column="0" Margin="10 0 10 0" Content="Excel file path:"></Label>
+                <TextBox x:Name="textBoxFilePath" Grid.Column="1" IsEnabled="False"></TextBox>
+
+            </Grid>
+
+            <Grid Grid.Row="2">
+                <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button x:Name="buttonDefaultPath" Content="Default path" Width="100" Click="buttonDefaultPath_Click"/>
+                    <Button x:Name="buttonModifyPath" Content="Modify path" Width="100" Click="buttonModifyPath_Click"/>
+                </StackPanel>
+            </Grid>
+        </Grid>
+
+        <Grid Grid.Row="4" Grid.Column="1" Margin="10 0 10 0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.2*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="0.2*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="0.5*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Row="0" Grid.Column="0" TextWrapping="WrapWithOverflow" VerticalAlignment="Center">
+                Available load case(s) or combination(s):
+            </TextBlock>
+
+            <TextBlock Grid.Row="0" Grid.Column="2" TextWrapping="WrapWithOverflow" VerticalAlignment="Center">
+                Selected load case(s) or combination(s):
+            </TextBlock>
+
+            <ListBox Grid.Row="1" Grid.Column="0" x:Name="listBoxAvailLoadCase" d:ItemsSource="{d:SampleData ItemCount=5}" VerticalAlignment="Stretch" SelectionMode="Extended"></ListBox>
+
+            <StackPanel Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Margin="10 0">
+                <Button x:Name="buttonAddLoadCase" Content=">>" Click="buttonAddLoadCase_Click"></Button>
+                <Button x:Name="buttonRemoveLoadCase" Content="&lt;&lt;" Click="buttonRemoveLoadCase_Click"></Button>
+            </StackPanel>
+
+            <ListBox Grid.Row="1" Grid.Column="2" x:Name="listBoxChoosenLoadCase" d:ItemsSource="{d:SampleData ItemCount=5}" VerticalAlignment="Stretch" SelectionMode="Extended"></ListBox>
+
+            <TextBlock Grid.Row="2" Grid.Column="0" TextWrapping="WrapWithOverflow" VerticalAlignment="Center">
+                Available group(s):
+            </TextBlock>
+
+            <TextBlock Grid.Row="2" Grid.Column="2" TextWrapping="WrapWithOverflow" VerticalAlignment="Center">
+                Selected group(s):
+            </TextBlock>
+
+            <ListBox Grid.Row="3" Grid.Column="0" x:Name="listBoxAvailGroup" d:ItemsSource="{d:SampleData ItemCount=5}" VerticalAlignment="Stretch" SelectionMode="Extended"></ListBox>
+
+            <StackPanel Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" Margin="10 0">
+                <Button x:Name="buttonAddGroup" Content=">>" Click="buttonAddGroup_Click"></Button>
+                <Button x:Name="buttonRemoveGroup" Content="&lt;&lt;" Click="buttonRemoveGroup_Click"></Button>
+            </StackPanel>
+
+            <ListBox Grid.Row="3" Grid.Column="2" x:Name="listBoxChoosenGroup" d:ItemsSource="{d:SampleData ItemCount=5}" VerticalAlignment="Stretch" SelectionMode="Extended"></ListBox>
+
+        </Grid>
+
+
+        <Grid Grid.Row="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <Image Margin ="0 7 -70 7" HorizontalAlignment="Right" Source="/WS_SG_ETABS_Plugin;component/src/resources/by_Future_Design_Studio_no_powerapp.PNG" />
+
+            <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin ="0 0 10 0">
+                <Button x:Name="buttonCancel" Content="Cancel" Width="100" Click="buttonCancel_Click"/>
+                <Button x:Name="buttonOk" Content="OK" Width="100" Click="buttonOk_Click"/>
+            </StackPanel>
+
+        </Grid>
+
+    </Grid>
+</Window>
