@@ -613,20 +613,42 @@ namespace WS_SG_ETABS_Plugin.src.joint_forces_extractor
             List<Dictionary<string, string>> finalTableToExcel = new List<Dictionary<string, string>>();
             foreach (Dictionary<string, string> row in frameForcesTableFiltered)
             {
-                Dictionary<string, string> rowinternal = new Dictionary<string, string>
+                if (row.ContainsKey("StepType"))
                 {
-                    {colTitles[0], row["JointUniqueName"]},
-                    {colTitles[1], row["UniqueName"]},
-                    {colTitles[2], row["OutputCase"]},
-                    {colTitles[3], row["StepType"]},
-                    {colTitles[4], row["P"]},
-                    {colTitles[5], row["V2"]},
-                    {colTitles[6], row["V3"]},
-                    {colTitles[7], row["T"]},
-                    {colTitles[8], row["M2"]},
-                    {colTitles[9], row["M3"]},
-                };
-                finalTableToExcel.Add(rowinternal);
+                    Dictionary<string, string> rowinternal = new Dictionary<string, string>
+                    {
+                        {colTitles[0], row["JointUniqueName"]},
+                        {colTitles[1], row["UniqueName"]},
+                        {colTitles[2], row["OutputCase"]},
+                        {colTitles[3], row["StepType"]},
+                        {colTitles[4], row["P"]},
+                        {colTitles[5], row["V2"]},
+                        {colTitles[6], row["V3"]},
+                        {colTitles[7], row["T"]},
+                        {colTitles[8], row["M2"]},
+                        {colTitles[9], row["M3"]},
+                    };
+                    finalTableToExcel.Add(rowinternal);
+                }
+                else
+                {
+                    row.Add("StepType", " ");
+                    Dictionary<string, string> rowinternal = new Dictionary<string, string>
+                    {
+                        {colTitles[0], row["JointUniqueName"]},
+                        {colTitles[1], row["UniqueName"]},
+                        {colTitles[2], row["OutputCase"]},
+                        {colTitles[3], row["StepType"]},
+                        {colTitles[4], row["P"]},
+                        {colTitles[5], row["V2"]},
+                        {colTitles[6], row["V3"]},
+                        {colTitles[7], row["T"]},
+                        {colTitles[8], row["M2"]},
+                        {colTitles[9], row["M3"]},
+                    };
+                    finalTableToExcel.Add(rowinternal);
+                }
+                
             }
 
 
