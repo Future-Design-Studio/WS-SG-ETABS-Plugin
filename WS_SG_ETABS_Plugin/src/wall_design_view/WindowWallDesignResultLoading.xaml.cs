@@ -30,7 +30,6 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
         {
             InitializeComponent();
 
-
             ProcessWallDesignData(databaseTableList, listChoosenGroup, tableInListPierDesignResult,
                     tableInListSpandrelDesignResult, titleSize, axisTitleSize, tickLabelSize, extractEtabs, extractExcel);
 
@@ -92,7 +91,7 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
                 //(isError, wallObjectConnectivityTable) = src.HelperEtabs.FilterDatabaseTableUniqueNameByGroup(wallObjectConnectivityTable, groupAssignmentsTable, choosenGroup);
 
                 //Get shell points
-                List<HelperEtabs.Shell> shellList = HelperEtabs.GetShellsPoints(wallObjectConnectivityTable);
+                List<HelperEtabs.Shell> shellList = HelperEtabs.GetShellsPointsUniqueName(wallObjectConnectivityTable);
 
                 double numOfWalls = shellList.Count();
 
@@ -102,7 +101,7 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
                     //Collect all the points
                     List<HelperEtabs.Point3D> shellPointList = new List<HelperEtabs.Point3D>();
 
-                    foreach (string shellPointUniqueName in shell.Points)
+                    foreach (string shellPointUniqueName in shell.PointUniqueNameList)
                     {
                         foreach (HelperEtabs.Point3D point in pointList)
                         {
@@ -242,7 +241,7 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
             }
             else if (extractExcel == true)
             {
-                if (wall.PierLabel != null)
+                if (wall.PierLabel != null && tableInListPierDesignResult != null)
                 {
 
                     foreach (Dictionary<string, string> row in tableInListPierDesignResult)
@@ -255,7 +254,7 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
                     }
 
                 }
-                else if (wall.SpandrelLabel != null)
+                else if (wall.SpandrelLabel != null && tableInListSpandrelDesignResult != null)
                 {
                     foreach (Dictionary<string, string> row in tableInListSpandrelDesignResult)
                     {
@@ -305,9 +304,9 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
                                 failShear = true;
                             }
 
-                            if (pierReinfPercent < Convert.ToDouble(row["ReinfPcent"]))
+                            if (pierReinfPercent < Convert.ToDouble(row["ReinfPercent"]))
                             {
-                                pierReinfPercent = Convert.ToDouble(row["ReinfPcent"]);
+                                pierReinfPercent = Convert.ToDouble(row["ReinfPercent"]);
                             }
 
                         }

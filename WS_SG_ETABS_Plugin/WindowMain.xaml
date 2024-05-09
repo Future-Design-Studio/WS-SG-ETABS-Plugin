@@ -4,9 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WS_SG_ETABS_Plugin.src"
-             mc:Ignorable="d" Height="600" Width="1700" Closed="WindowMain_Closed" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Name="WindowMainz">
+             mc:Ignorable="d" Height="700" Width="1700" Closed="WindowMain_Closed" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Name="WindowMainz">
     <Grid Margin="10 0 10 0">
         <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
@@ -52,6 +53,7 @@
         <Button Grid.Row="11" Grid.Column="0" x:Name="buttonPlotDrift" Content="Plot Drift (Beta Version)" Click="buttonPlotDrift_Click" FontSize="16"/>
         <Button Grid.Row="12" Grid.Column="0" x:Name="buttonPlotSumMassParticip" Content="Plot Sum Mass Participation (Beta Version)" Click="buttonPlotSumMassParticip_Click" FontSize="16"/>
         <Button Grid.Row="13" Grid.Column="0" x:Name="buttonWallDesignViewer" Content="Wall Design Viewer (Beta Version)" Click="buttonWallDesignViewer_Click" FontSize="16"/>
+        <Button Grid.Row="14" Grid.Column="0" x:Name="buttonJointForcesExtractor" Content="Frame End Forces Extractor (Beta Version)" Click="buttonJointForcesExtractor_Click" FontSize="16"/>
         
         <!-- Specific Use Case -->
         <Button Grid.Row="3" Grid.Column="1" x:Name="buttonShellUni" Content="Shell Orientation (Local-3) (Beta Version)" FontSize="16" Click="buttonShellUni_Click" IsEnabled="True"/>
@@ -61,7 +63,10 @@
         <Button Grid.Row="7" Grid.Column="1" x:Name="buttonReleaseSelectedNode" Content="Release Frames at Specific Nodes (Beta Version)" FontSize="16" Click="buttonReleaseSelectedNode_Click" IsEnabled="True"/>
         <Button Grid.Row="8" Grid.Column="1" x:Name="buttonTrfEtabsLoads" Content="Transfer Joint Reaction as Load Applied (Beta Version)" Click="buttonTrfEtabsLoads_Click" FontSize="16" IsEnabled="True"/>
         <Button Grid.Row="9" Grid.Column="1" x:Name="buttonTrfEtabstoSafe" Content="Transfer ETABS Reaction to SAFE (Beta Version)" Click="buttonTrfEtabstoSafe_Click" FontSize="16" IsEnabled="True"/>
-
+        <Button Grid.Row="10" Grid.Column="1" x:Name="buttonAddLoadCombo" Content="Add Load Combo (Beta Version)" Click="buttonAddLoadCombo_Click" FontSize="16" IsEnabled="True"/>
+        <Button Grid.Row="11" Grid.Column="1" x:Name="buttonApplyModifier" Content="Apply Element Modifier (Beta Version)" Click="buttonApplyModifier_Click" FontSize="16" IsEnabled="True"/>
+        <Button Grid.Row="12" Grid.Column="1" x:Name="buttonApplySectProp" Content="Apply Section Property (Beta Version)" Click="buttonApplySectProp_Click" FontSize="16" IsEnabled="True"/>
+        <Button Grid.Row="13" Grid.Column="1" x:Name="buttonCopyElements" Content="Copy Elements (Beta Version)" Click="buttonCopyElements_Click" FontSize="16" IsEnabled="True"/>
 
         <!-- Upcoming -->
         <Button Grid.Row="3" Grid.Column="2" x:Name="buttonCarbon" Content="Carbon Calulator" Click="buttonCarbon_Click" FontSize="16" IsEnabled="False"/>

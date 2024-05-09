@@ -1,0 +1,63 @@
+﻿<Window x:Class="WS_SG_ETABS_Plugin.src.select_uniquename.WindowSelUniqueNameMain"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WS_SG_ETABS_Plugin.src.select_uniquename"
+             mc:Ignorable="d" Height="500" Width="800" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+    <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.2*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="0.1*"></RowDefinition>
+            <RowDefinition Height="0.1*"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <Label Grid.Row="0" Grid.Column="0" Content="Select by Unique Name" FontSize="28"/>
+
+        <Grid Grid.Row="1" Grid.Column="0" Margin="0 0 0 0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.2*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <Label Grid.Row="0" Grid.Column="0" Content="Point unique name:" FontSize="12"/>
+            <Label Grid.Row="1" Grid.Column="0" Content="Frame unique name:" FontSize="12"/>
+            <Label Grid.Row="2" Grid.Column="0" Content="Area unique name:" FontSize="12"/>
+
+            <TextBox Grid.Row="0" Grid.Column="1" Name="textBoxPoint" TextWrapping="Wrap"></TextBox>
+            <TextBox Grid.Row="1" Grid.Column="1" Name="textBoxFrame" TextWrapping="Wrap"></TextBox>
+            <TextBox Grid.Row="2" Grid.Column="1" Name="textBoxArea" TextWrapping="Wrap"></TextBox>
+            
+        </Grid>
+
+        <TextBlock Grid.Row="2" Grid.Column="0" TextWrapping="Wrap" TextAlignment="Justify"  
+                   FontSize="10">Note:<LineBreak/>
+                1. Use comma seperator to select multiple unique name
+        </TextBlock>
+
+        <Grid Grid.Row="6">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <Image Margin ="0 8 -45 8" HorizontalAlignment="Right" Source="/WS_SG_ETABS_Plugin;component/src/resources/by_Future_Design_Studio_no_powerapp.PNG" />
+
+            <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button x:Name="buttonCancel" Content="Cancel" Width="100" Click="buttonCancel_Click"/>
+                <Button x:Name="buttonOk" Content="OK" Width="100" Click="buttonOk_Click"/>
+            </StackPanel>
+
+        </Grid>
+
+    </Grid>
+</Window>

@@ -63,11 +63,11 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
             comBoxGroup.SelectedIndex = 0;
 
             //Fill in combobox for type of failure
-            comBoxTypeOfFailure.ItemsSource = src.HelperEtabs.typeOfViewWallDesign;
-            comBoxTypeOfFailure.SelectedIndex = 0;
+            comBoxViewType.ItemsSource = src.HelperEtabs.typeOfViewWallDesign;
+            comBoxViewType.SelectedIndex = 0;
 
             string choosenGroup = comBoxGroup.SelectedValue.ToString();
-            string typeOfFailure = comBoxTypeOfFailure.SelectedValue.ToString();
+            string viewType = comBoxViewType.SelectedValue.ToString();
 
             textBoxMinReinf.IsEnabled = false;
             textBoxMaxReinf.IsEnabled = false;
@@ -84,7 +84,7 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
             double maxReinfPercent = Convert.ToDouble(textBoxMaxReinf.Text);
 
             (isError, wallDesignDetailListGlobal, wallDesignDetailFilteredListGlobal, uniqueXGlobal, uniqueYGlobal, countPassGlobal, countFailGlobal) = FunctionWallDesignView.PlotWallDesignResult(
-                ResultPlot, PlanViewPlot, choosenGroup, typeOfFailure, titleSize, axisTitleSize,
+                ResultPlot, PlanViewPlot, choosenGroup, viewType, titleSize, axisTitleSize,
                 tickLabelSize, wallDesignDetailList, showOk, showFail, showNull, minReinfPercent, maxReinfPercent);
 
             if (isError) { return; }
@@ -118,6 +118,16 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
             UpdateReinfPercent();
         }
 
+        private void checkBoxShowPier_Click(object sender, RoutedEventArgs e)
+        {
+            UpdatePlotBasedOnCheckBoxWallType();
+        }
+
+        private void checkBoxShowSpandrel_Click(object sender, RoutedEventArgs e)
+        {
+            UpdatePlotBasedOnCheckBoxWallType();
+        }
+
         private void UpdatePlotBasedOnCheckBox()
         {
 
@@ -125,13 +135,36 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
             bool? showFail = checkBoxShowFail.IsChecked;
             bool? showNull = checkBoxShowNull.IsChecked;
 
-            string typeOfFailure = comBoxTypeOfFailure.SelectedValue.ToString();
+            bool? showPier = checkBoxShowPier.IsChecked;
+            bool? showSpandrel = checkBoxShowSpandrel.IsChecked;
+
+            string typeOfFailure = comBoxViewType.SelectedValue.ToString();
 
             double minReinfPercent = Convert.ToDouble(textBoxMinReinf.Text);
             double maxReinfPercent = Convert.ToDouble(textBoxMaxReinf.Text);
 
-            FunctionWallDesignView.FilterWallDesignResultChangeFailure(ResultPlot, showOk, showFail, showNull, wallDesignDetailFilteredListGlobal, uniqueXGlobal, uniqueYGlobal,
-                titleSizeGlobal, axisTitleSizeGlobal, tickLabelSizeGlobal, typeOfFailure, countPassGlobal, countFailGlobal, minReinfPercent, maxReinfPercent);
+            FunctionWallDesignView.FilterWallDesignResultChangeViewType(ResultPlot, showOk, showFail, showNull, wallDesignDetailFilteredListGlobal, uniqueXGlobal, uniqueYGlobal,
+                titleSizeGlobal, axisTitleSizeGlobal, tickLabelSizeGlobal, typeOfFailure, minReinfPercent, maxReinfPercent, showPier, showSpandrel);
+
+        }
+
+        private void UpdatePlotBasedOnCheckBoxWallType()
+        {
+            bool? showOk = checkBoxShowOk.IsChecked;
+            bool? showFail = checkBoxShowFail.IsChecked;
+            bool? showNull = checkBoxShowNull.IsChecked;
+
+            bool? showPier = checkBoxShowPier.IsChecked;
+            bool? showSpandrel = checkBoxShowSpandrel.IsChecked;
+
+            string typeOfFailure = comBoxViewType.SelectedValue.ToString();
+
+            double minReinfPercent = Convert.ToDouble(textBoxMinReinf.Text);
+            double maxReinfPercent = Convert.ToDouble(textBoxMaxReinf.Text);
+
+            FunctionWallDesignView.FilterWallDesignResultChangeViewType(ResultPlot, showOk, showFail, showNull, wallDesignDetailFilteredListGlobal, 
+                                                    uniqueXGlobal, uniqueYGlobal,
+                                                    titleSizeGlobal, axisTitleSizeGlobal, tickLabelSizeGlobal, typeOfFailure, minReinfPercent, maxReinfPercent, showPier, showSpandrel);
 
         }
 
@@ -146,21 +179,24 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
                     bool? showFail = checkBoxShowFail.IsChecked;
                     bool? showNull = checkBoxShowNull.IsChecked;
 
+                    bool? showPier = checkBoxShowPier.IsChecked;
+                    bool? showSpandrel = checkBoxShowSpandrel.IsChecked;
+
                     double minReinfPercent = Convert.ToDouble(textBoxMinReinf.Text);
                     double maxReinfPercent = Convert.ToDouble(textBoxMaxReinf.Text);
 
-                    string typeOfFailure = comBoxTypeOfFailure.SelectedItem.ToString();
+                    string typeOfFailure = comBoxViewType.SelectedItem.ToString();
 
                     if (minReinfPercent < maxReinfPercent)
                     {
-                        (countPassGlobal, countFailGlobal) = FunctionWallDesignView.FilterWallDesignResultChangeViewType(ResultPlot, showOk, showFail, showNull, wallDesignDetailFilteredListGlobal, uniqueXGlobal, uniqueYGlobal,
-                        titleSizeGlobal, axisTitleSizeGlobal, tickLabelSizeGlobal, typeOfFailure, minReinfPercent, maxReinfPercent);
+                        FunctionWallDesignView.FilterWallDesignResultChangeViewType(ResultPlot, showOk, showFail, showNull, wallDesignDetailFilteredListGlobal, uniqueXGlobal, uniqueYGlobal,
+                            titleSizeGlobal, axisTitleSizeGlobal, tickLabelSizeGlobal, typeOfFailure, minReinfPercent, maxReinfPercent, showPier, showSpandrel);
                     }
                     else
                     {
                         MessageBox.Show("Min reinforcement must be smaller than max reinforcement!");
+                        textBoxMinReinf.Text = Convert.ToString(Convert.ToDouble(textBoxMaxReinf.Text) - 0.1);
                     }
-
 
                 }
 
@@ -178,22 +214,16 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
 
                 string choosenGroup = comBoxGroup.SelectedItem.ToString();
 
+                bool? showPier = checkBoxShowPier.IsChecked;
+                bool? showSpandrel = checkBoxShowSpandrel.IsChecked;
+
                 double minReinfPercent = Convert.ToDouble(textBoxMinReinf.Text);
                 double maxReinfPercent = Convert.ToDouble(textBoxMaxReinf.Text);
 
-                string typeOfFailure = comBoxTypeOfFailure.SelectedItem.ToString();
+                string typeOfFailure = comBoxViewType.SelectedItem.ToString();
 
-                if (minReinfPercent < maxReinfPercent)
-                {
-                    (wallDesignDetailFilteredListGlobal, uniqueXGlobal, uniqueYGlobal, countPassGlobal, countFailGlobal) = FunctionWallDesignView.FilterWallDesignResultChangeGroup(ResultPlot, PlanViewPlot, showOk, showFail, showNull, wallDesignDetailListGlobal,
-                    titleSizeGlobal, axisTitleSizeGlobal, tickLabelSizeGlobal, choosenGroup, typeOfFailure, minReinfPercent, maxReinfPercent);
-                }
-                else
-                {
-                    MessageBox.Show("Min reinforcement must be smaller than max reinforcement!");
-                }
-
-
+                (wallDesignDetailFilteredListGlobal, uniqueXGlobal, uniqueYGlobal) = FunctionWallDesignView.FilterWallDesignResultChangeGroup(ResultPlot, PlanViewPlot, showOk, showFail, showNull, 
+                    wallDesignDetailListGlobal, titleSizeGlobal, axisTitleSizeGlobal, tickLabelSizeGlobal, choosenGroup, typeOfFailure, minReinfPercent, maxReinfPercent, showPier, showSpandrel);
             }
             
         }
@@ -206,41 +236,35 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
                 bool? showFail = checkBoxShowFail.IsChecked;
                 bool? showNull = checkBoxShowNull.IsChecked;
 
+                bool? showPier = checkBoxShowPier.IsChecked;
+                bool? showSpandrel = checkBoxShowSpandrel.IsChecked;
+
                 double minReinfPercent = Convert.ToDouble(textBoxMinReinf.Text);
                 double maxReinfPercent = Convert.ToDouble(textBoxMaxReinf.Text);
 
-                string typeOfFailure = comBoxTypeOfFailure.SelectedItem.ToString();
+                string typeOfFailure = comBoxViewType.SelectedItem.ToString();
 
-                if (minReinfPercent < maxReinfPercent)
+                FunctionWallDesignView.FilterWallDesignResultChangeViewType(ResultPlot, showOk, showFail, showNull, wallDesignDetailFilteredListGlobal, uniqueXGlobal, uniqueYGlobal,
+                titleSizeGlobal, axisTitleSizeGlobal, tickLabelSizeGlobal, typeOfFailure, minReinfPercent, maxReinfPercent, showPier, showSpandrel);
+
+                if (typeOfFailure != "Pier Req. Rebar %")
                 {
-                    (countPassGlobal, countFailGlobal) = FunctionWallDesignView.FilterWallDesignResultChangeViewType(ResultPlot, showOk, showFail, showNull, wallDesignDetailFilteredListGlobal, uniqueXGlobal, uniqueYGlobal,
-                    titleSizeGlobal, axisTitleSizeGlobal, tickLabelSizeGlobal, typeOfFailure, minReinfPercent, maxReinfPercent);
+                    checkBoxShowOk.IsEnabled = true;
+                    checkBoxShowFail.IsEnabled = true;
+                    checkBoxShowNull.IsEnabled = true;
 
-                    if (typeOfFailure != "Pier Req. Rebar %")
-                    {
-                        checkBoxShowOk.IsEnabled = true;
-                        checkBoxShowFail.IsEnabled = true;
-                        checkBoxShowNull.IsEnabled = true;
-
-                        textBoxMinReinf.IsEnabled = false;
-                        textBoxMaxReinf.IsEnabled = false;
-                    }
-                    else
-                    {
-                        checkBoxShowOk.IsEnabled = false;
-                        checkBoxShowFail.IsEnabled = false;
-                        checkBoxShowNull.IsEnabled = false;
-
-                        textBoxMinReinf.IsEnabled = true;
-                        textBoxMaxReinf.IsEnabled = true;
-                    }
+                    textBoxMinReinf.IsEnabled = false;
+                    textBoxMaxReinf.IsEnabled = false;
                 }
                 else
                 {
-                    MessageBox.Show("Min reinforcement must be smaller than max reinforcement!");
-                }
+                    checkBoxShowOk.IsEnabled = false;
+                    checkBoxShowFail.IsEnabled = false;
+                    checkBoxShowNull.IsEnabled = false;
 
-            
+                    textBoxMinReinf.IsEnabled = true;
+                    textBoxMaxReinf.IsEnabled = true;
+                }            
             }
         }
 
