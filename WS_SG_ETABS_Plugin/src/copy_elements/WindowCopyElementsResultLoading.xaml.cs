@@ -139,7 +139,7 @@ namespace WS_SG_ETABS_Plugin.src.copy_elements
                     ret = SapModel.FrameObj.AddByCoord(xI, yI, zI, xJ, yJ, zJ, ref frameUniqueName);
                     if (ret != 0) { frameFailToCreate.Add(frame.UniqueName); }
 
-                    ret = SapModel.AreaObj.SetGroupAssign(frameUniqueName, translatedGroupNames[frame.Group]);
+                    ret = SapModel.FrameObj.SetGroupAssign(frameUniqueName, translatedGroupNames[frame.Group]);
 
                     elementsIterator++;
                     double progressPercent = Math.Round(elementsIterator / totalElements * 100);
