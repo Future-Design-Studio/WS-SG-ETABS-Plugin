@@ -216,11 +216,44 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="NotYetImplemented.cs" />
+    <Compile Include="src\add_load_combo\FunctionAddLoadCombo.cs" />
+    <Compile Include="src\add_load_combo\WindowAddLoadComboMain.xaml.cs">
+      <DependentUpon>WindowAddLoadComboMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\add_load_combo\WindowAddLoadComboResult.xaml.cs">
+      <DependentUpon>WindowAddLoadComboResult.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\apply_modifier\ClassApplyModifier.cs" />
+    <Compile Include="src\apply_modifier\FunctionApplyModifier.cs" />
+    <Compile Include="src\apply_modifier\WindowApplyModifierMain.xaml.cs">
+      <DependentUpon>WindowApplyModifierMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\apply_modifier\WindowApplyModifierResult.xaml.cs">
+      <DependentUpon>WindowApplyModifierResult.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\apply_section_property\ClassApplySectProp.cs" />
+    <Compile Include="src\apply_section_property\FunctionApplySectProp.cs" />
+    <Compile Include="src\apply_section_property\WindowApplySectPropMain.xaml.cs">
+      <DependentUpon>WindowApplySectPropMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\apply_section_property\WindowApplySectPropResult.xaml.cs">
+      <DependentUpon>WindowApplySectPropResult.xaml</DependentUpon>
+    </Compile>
     <Compile Include="src\carbon\WindowCarbonMain.xaml.cs">
       <DependentUpon>WindowCarbonMain.xaml</DependentUpon>
     </Compile>
     <Compile Include="src\carbon\WindowCarbonResult.xaml.cs">
       <DependentUpon>WindowCarbonResult.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\copy_elements\FunctionCopyElements.cs" />
+    <Compile Include="src\copy_elements\WindowCopyElementsMain.xaml.cs">
+      <DependentUpon>WindowCopyElementsMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\copy_elements\WindowCopyElementsResult.xaml.cs">
+      <DependentUpon>WindowCopyElementsResult.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\copy_elements\WindowCopyElementsResultLoading.xaml.cs">
+      <DependentUpon>WindowCopyElementsResultLoading.xaml</DependentUpon>
     </Compile>
     <Compile Include="src\copy_properties\FunctionCopyProp.cs" />
     <Compile Include="src\copy_properties\WindowCopyPropMain.xaml.cs">
@@ -242,6 +275,7 @@
     <Compile Include="src\etabs_to_rhino\WindowsEtabsToRhinoProgress.xaml.cs">
       <DependentUpon>WindowsEtabsToRhinoProgress.xaml</DependentUpon>
     </Compile>
+    <Compile Include="src\HelperAutoLisp.cs" />
     <Compile Include="src\HelperExcel.cs" />
     <Compile Include="src\HelperLicense.cs" />
     <Compile Include="src\HelperMethod.cs" />
@@ -259,6 +293,16 @@
     <Compile Include="src\HelperPlot.cs" />
     <Compile Include="src\HelperSafe.cs" />
     <Compile Include="src\HelperUI.cs" />
+    <Compile Include="src\joint_forces_extractor\FunctionJointForcesExtractorMain.cs" />
+    <Compile Include="src\joint_forces_extractor\WindowJointForceExtractorLoading.xaml.cs">
+      <DependentUpon>WindowJointForceExtractorLoading.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\joint_forces_extractor\WindowJointForcesExtractorMain.xaml.cs">
+      <DependentUpon>WindowJointForcesExtractorMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\joint_forces_extractor\WindowJointForcesExtractorResult.xaml.cs">
+      <DependentUpon>WindowJointForcesExtractorResult.xaml</DependentUpon>
+    </Compile>
     <Compile Include="src\loads_etabs_etabs\ClassEtabsEtabs.cs" />
     <Compile Include="src\loads_etabs_etabs\FunctionEtabsEtabsMain.cs" />
     <Compile Include="src\loads_etabs_etabs\WindowEtabsEtabsMain.xaml.cs">
@@ -305,6 +349,15 @@
     </Compile>
     <Compile Include="src\load_combo_EN\WindowLoadComboResult.xaml.cs">
       <DependentUpon>WindowLoadComboResult.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\ML\WindowMLPrefence.xaml.cs">
+      <DependentUpon>WindowMLPrefence.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\ML\WindowMLTSNEResult.xaml.cs">
+      <DependentUpon>WindowMLTSNEResult.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\ML\WindowMLWCSSResult.xaml.cs">
+      <DependentUpon>WindowMLWCSSResult.xaml</DependentUpon>
     </Compile>
     <Compile Include="src\pad_footing_plot\ClassPadFootPlot.cs" />
     <Compile Include="src\pad_footing_plot\FunctionPadFootPlot.cs" />
@@ -378,14 +431,8 @@
     </Compile>
     <Compile Include="src\rc_beam_schedule\ClassFunctionRCBSched.cs" />
     <Compile Include="src\rc_beam_schedule\FunctionRCBSched.cs" />
-    <Compile Include="src\rc_beam_schedule\ML\WindowRCBSchedKMeans.xaml.cs">
-      <DependentUpon>WindowRCBSchedKMeans.xaml</DependentUpon>
-    </Compile>
     <Compile Include="src\rc_beam_schedule\WindowRCBSchedMain.xaml.cs">
       <DependentUpon>WindowRCBSchedMain.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="src\rc_beam_schedule\WindowRCBSchedPCAResult.xaml.cs">
-      <DependentUpon>WindowRCBSchedPCAResult.xaml</DependentUpon>
     </Compile>
     <Compile Include="src\rc_beam_schedule\WindowRCBSchedResult.xaml.cs">
       <DependentUpon>WindowRCBSchedResult.xaml</DependentUpon>
@@ -474,11 +521,47 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="src\add_load_combo\WindowAddLoadComboMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\add_load_combo\WindowAddLoadComboResult.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\apply_modifier\WindowApplyModifierMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\apply_modifier\WindowApplyModifierResult.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\apply_section_property\WindowApplySectPropMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\apply_section_property\WindowApplySectPropResult.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="src\carbon\WindowCarbonMain.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="src\carbon\WindowCarbonResult.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\copy_elements\WindowCopyElementsMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\copy_elements\WindowCopyElementsResult.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\copy_elements\WindowCopyElementsResultLoading.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -497,6 +580,18 @@
     <Page Include="src\etabs_to_rhino\WindowEtabsToRhinoResult.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="src\joint_forces_extractor\WindowJointForceExtractorLoading.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\joint_forces_extractor\WindowJointForcesExtractorMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\joint_forces_extractor\WindowJointForcesExtractorResult.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="src\loads_etabs_etabs\WindowEtabsEtabsMain.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -541,6 +636,18 @@
     <Page Include="src\load_combo_EN\WindowLoadComboResult.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\ML\WindowMLPrefence.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="src\ML\WindowMLTSNEResult.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="src\ML\WindowMLWCSSResult.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="src\pad_footing_plot\WindowPadFootLoading.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -626,17 +733,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="src\rc_beam_schedule\ML\WindowRCBSchedKMeans.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="src\rc_beam_schedule\WindowRCBSchedMain.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="src\rc_beam_schedule\WindowRCBSchedPCAResult.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="src\rc_beam_schedule\WindowRCBSchedResult.xaml">
       <Generator>MSBuild:Compile</Generator>

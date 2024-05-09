@@ -22,6 +22,7 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
             public float MidBottomAs { get; set; }
             public float RightBottomAs { get; set; }
             public float LeftAv { get; set; }
+            public float MidAv { get; set; }
             public float RightAv { get; set; }
 
             public string Cluster { get; set; }
@@ -29,7 +30,7 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
             public float PC2 { get; set; }
 
             public RcBeamForMLInput(string uniqueName, float height, float width, float leftTopAs, float midTopAs,
-                float rightTopAs, float leftBottomAs, float midBottomAs, float rightBottomAs, float leftAv, float rightAv)
+                float rightTopAs, float leftBottomAs, float midBottomAs, float rightBottomAs, float leftAv, float midAv, float rightAv)
             {
                 UniqueName = uniqueName;
                 Height = height;
@@ -41,6 +42,7 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
                 MidBottomAs = midBottomAs;
                 RightBottomAs = rightBottomAs;
                 LeftAv = leftAv;
+                MidAv = midAv;
                 RightAv = rightAv;
             }
 

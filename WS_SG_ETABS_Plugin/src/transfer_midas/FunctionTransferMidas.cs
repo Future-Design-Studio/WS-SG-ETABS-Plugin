@@ -2292,7 +2292,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                 if (databaseTable.TableKey == "Wall Object Connectivity" || databaseTable.TableKey == "Floor Object Connectivity")
                 {
                     //Getting area list parsed as Shell type
-                    List<src.HelperEtabs.Shell> areaList = src.HelperEtabs.GetShellsPoints(databaseTable);
+                    List<src.HelperEtabs.Shell> areaList = src.HelperEtabs.GetShellsPointsUniqueName(databaseTable);
 
                     //MGTHeader
                     textMgt.Add("*ELEMENT");
@@ -2308,7 +2308,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                     foreach (src.HelperEtabs.Shell area in areaList)
                     {
                         //Show warning if there are more than 4 points
-                        if (area.Points.Count > 4)
+                        if (area.PointUniqueNameList.Count > 4)
                         {
                             string warning = "";
 
@@ -2320,7 +2320,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                                 moreThan4NodesWarningShown = true;
                             }
 
-                            warning = $"Area {area.UniqueName} (in ETABS) or {index} (in MIDAS) has {area.Points.Count} nodes! Max node number in MIDAS is 4!";
+                            warning = $"Area {area.UniqueName} (in ETABS) or {index} (in MIDAS) has {area.PointUniqueNameList.Count} nodes! Max node number in MIDAS is 4!";
                             //MessageBox.Show(warning);
                             textWarning.Add(warning);
                         }
@@ -2359,20 +2359,20 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                         string indexPt2 = "0";
                         string indexPt3 = "0";
                         string indexPt4 = "0";
-                        if (area.Points.Count == 3 || area.Points.Count == 4)
+                        if (area.PointUniqueNameList.Count == 3 || area.PointUniqueNameList.Count == 4)
                         {
-                            string pt1 = area.Points[0];
+                            string pt1 = area.PointUniqueNameList[0];
                             indexPt1 = nameIndexNode[pt1];
 
-                            string pt2 = area.Points[1];
+                            string pt2 = area.PointUniqueNameList[1];
                             indexPt2 = nameIndexNode[pt2];
 
-                            string pt3 = area.Points[2];
+                            string pt3 = area.PointUniqueNameList[2];
                             indexPt3 = nameIndexNode[pt3];
 
-                            if (area.Points.Count == 4)
+                            if (area.PointUniqueNameList.Count == 4)
                             {
-                                string pt4 = area.Points[3];
+                                string pt4 = area.PointUniqueNameList[3];
                                 indexPt4 = nameIndexNode[pt4];
                             };
 
@@ -2396,7 +2396,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                 else if (databaseTable.TableKey == "Null Area Object Connectivity")
                 {
                     //Getting area list parsed as Shell type
-                    List<src.HelperEtabs.Shell> areaList = src.HelperEtabs.GetShellsPoints(databaseTable);
+                    List<src.HelperEtabs.Shell> areaList = src.HelperEtabs.GetShellsPointsUniqueName(databaseTable);
 
                     //MGTHeader
                     textMgt.Add("*ELEMENT");
@@ -2405,7 +2405,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                     foreach (src.HelperEtabs.Shell area in areaList)
                     {
                         //Show warning if there are more than 4 points
-                        if (area.Points.Count > 4)
+                        if (area.PointUniqueNameList.Count > 4)
                         {
                             string warning = "";
 
@@ -2417,7 +2417,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                                 moreThan4NodesWarningShown = true;
                             }
 
-                            warning = $"Area {area.UniqueName} (in ETABS) or {index} (in MIDAS) has {area.Points.Count} nodes! Max node number in MIDAS is 4!";
+                            warning = $"Area {area.UniqueName} (in ETABS) or {index} (in MIDAS) has {area.PointUniqueNameList.Count} nodes! Max node number in MIDAS is 4!";
                             //MessageBox.Show(warning);
                             textWarning.Add(warning);
                         }
@@ -2456,20 +2456,20 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                         string indexPt2 = "0";
                         string indexPt3 = "0";
                         string indexPt4 = "0";
-                        if (area.Points.Count == 3 || area.Points.Count == 4)
+                        if (area.PointUniqueNameList.Count == 3 || area.PointUniqueNameList.Count == 4)
                         {
-                            string pt1 = area.Points[0];
+                            string pt1 = area.PointUniqueNameList[0];
                             indexPt1 = nameIndexNode[pt1];
 
-                            string pt2 = area.Points[1];
+                            string pt2 = area.PointUniqueNameList[1];
                             indexPt2 = nameIndexNode[pt2];
 
-                            string pt3 = area.Points[2];
+                            string pt3 = area.PointUniqueNameList[2];
                             indexPt3 = nameIndexNode[pt3];
 
-                            if (area.Points.Count == 4)
+                            if (area.PointUniqueNameList.Count == 4)
                             {
-                                string pt4 = area.Points[3];
+                                string pt4 = area.PointUniqueNameList[3];
                                 indexPt4 = nameIndexNode[pt4];
                             };
 
@@ -3157,15 +3157,15 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                             //Get area list
                             src.HelperEtabs.DatabaseTable floorObjConnectivity = new HelperEtabs.DatabaseTable();
                             (isError, floorObjConnectivity) = src.HelperEtabs.GetTableDisplay(Sap, "Floor Object Connectivity", false);
-                            areaList = src.HelperEtabs.GetShellsPoints(floorObjConnectivity);
+                            areaList = src.HelperEtabs.GetShellsPointsUniqueName(floorObjConnectivity);
 
                             src.HelperEtabs.DatabaseTable wallObjConnectivity = new HelperEtabs.DatabaseTable();
                             (isError, wallObjConnectivity) = src.HelperEtabs.GetTableDisplay(Sap, "Wall Object Connectivity", false);
-                            areaList.AddRange(src.HelperEtabs.GetShellsPoints(wallObjConnectivity));
+                            areaList.AddRange(src.HelperEtabs.GetShellsPointsUniqueName(wallObjConnectivity));
 
                             src.HelperEtabs.DatabaseTable nullAreaObjConnectivity = new HelperEtabs.DatabaseTable();
                             (isError, nullAreaObjConnectivity) = src.HelperEtabs.GetTableDisplay(Sap, "Null Area Object Connectivity", false);
-                            areaList.AddRange(src.HelperEtabs.GetShellsPoints(nullAreaObjConnectivity));
+                            areaList.AddRange(src.HelperEtabs.GetShellsPointsUniqueName(nullAreaObjConnectivity));
 
                             //Get node coordinate
                             src.HelperEtabs.DatabaseTable pointObjConnectivity = new HelperEtabs.DatabaseTable();
@@ -3195,7 +3195,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
                                 {
                                     if (area.UniqueName == row["UniqueName"])
                                     {
-                                        areaPointUniqueNameList = area.Points;
+                                        areaPointUniqueNameList = area.PointUniqueNameList;
                                         break;
                                     }
                                 }
@@ -4836,7 +4836,7 @@ namespace WS_SG_ETABS_Plugin.src.transfer_midas
             double angleFromGlobalX = 0;
             List<src.HelperEtabs.Point3D> point3DList = new List<src.HelperEtabs.Point3D>();
 
-            foreach (string point in area.Points)
+            foreach (string point in area.PointUniqueNameList)
             {
                 foreach(Dictionary<string, string> row in tableNodeCoordinate)
                 {

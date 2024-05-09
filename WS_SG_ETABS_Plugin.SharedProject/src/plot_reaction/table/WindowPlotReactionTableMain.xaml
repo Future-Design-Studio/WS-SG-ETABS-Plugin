@@ -1,0 +1,279 @@
+﻿<Window x:Class="WS_SG_ETABS_Plugin.src.plot_reaction.table.WindowPlotReactionTableMain"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WS_SG_ETABS_Plugin.src.plot_reaction.table"
+            xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+              mc:Ignorable="d" Height="1000" Width="650" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+    <Grid Margin="10">
+        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.15*"></RowDefinition>
+            <RowDefinition Height="0.3*"></RowDefinition>
+            <RowDefinition Height="0.1*"></RowDefinition>
+            <RowDefinition Height="0.3*"></RowDefinition>
+            <RowDefinition Height="0.1*"></RowDefinition>
+            <RowDefinition Height="0.8*"></RowDefinition>
+            <RowDefinition Height="0.1*"></RowDefinition>
+            <RowDefinition Height="0.4*"></RowDefinition>
+            <RowDefinition Height="0.1*"></RowDefinition>
+            <RowDefinition Height="0.7*"></RowDefinition>
+            <RowDefinition Height="0.1*"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <Label Grid.Row="0" Grid.Column="0" Margin="0 -10 0 0" Content="Create Reaction Excel And Keyplan" FontSize="28"/>
+
+        <TextBlock Grid.Row="1" Grid.Column="0" TextWrapping="Wrap" TextAlignment="Justify"  
+                       Margin="10 0 10 0" FontSize="10">
+                    How to use:<LineBreak/>
+                    1. Select excel save file location (by default it will be in the same folder as ETABS file)<LineBreak/>
+                    2. Select group(s) to include in keyplan<LineBreak/>
+                    3. Choose load case(s) and combination(s) to include in excel<LineBreak/>
+                    4. Adjust keyplan graphic preferences accordingly<LineBreak/>
+                    5. Press OK to proceed
+        </TextBlock>
+
+        <Label Grid.Row="2" Grid.Column="0" Content="1.Select excel save file location" FontSize="14" FontWeight="Bold"/>
+
+        <Grid Grid.Row="3" Grid.Column="0" Margin="0 0 0 0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="4*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Column="0" Margin="10 0 10 0" Content="Excel file name:"></Label>
+                <TextBox x:Name="textBoxFileName" Grid.Column="1" ></TextBox>
+
+            </Grid>
+
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="4*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Column="0" Margin="10 0 10 0" Content="Excel file path:"></Label>
+                <TextBox x:Name="textBoxFilePath" Grid.Column="1" IsEnabled="False"></TextBox>
+                
+            </Grid>
+
+            <Grid Grid.Row="2">
+                <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button x:Name="buttonDefaultPath" Content="Default path" Width="100" Click="buttonDefaultPath_Click"/>
+                    <Button x:Name="buttonModifyPath" Content="Modify path" Width="100" Click="buttonModifyPath_Click"/>
+                </StackPanel>
+            </Grid>
+        </Grid>
+
+        <Label Grid.Row="4" Grid.Column="0" Content="2.Select group(s) to include in keyplan" FontSize="14" FontWeight="Bold"/>
+
+        <Grid Grid.Row="5" Grid.Column="1" Margin="10 0 10 0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.8*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="4*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <CheckBox x:Name="checkBoxAllJoints" Grid.Row="0" Grid.Column="0"
+                      Checked="checkBoxAllJoints_Checked" Unchecked="checkBoxAllJoints_UnChecked" 
+                      VerticalAlignment="Center">
+                Include all joints in the keyplan
+            </CheckBox>
+
+            <Label Grid.Row="1" Grid.Column="0" Content="Group"/>
+            <Label Grid.Row="1" Grid.Column="1" Content="Color"/>
+
+            <ComboBox  Grid.Row="2" Grid.Column="0" x:Name="comBoxGroup" 
+                       VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+                       Text="0.5" InputScope="Digits">
+            </ComboBox>
+
+            <xctk:ColorPicker Grid.Row="2" Grid.Column="1" Name="ClrPcker" 
+                              SelectedColorChanged="ClrPcker_SelectedColorChanged"
+                              Margin="5 0 5 0" IsEnabled="False">
+            </xctk:ColorPicker>
+
+            <CheckBox x:Name="checkBoxDefault" Grid.Row="3" Grid.Column="1"  Grid.ColumnSpan="2"
+                      Checked="checkBoxDefault_Checked" Unchecked="checkBoxDefault_UnChecked" 
+                      VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="True">
+                Use default color and opacity
+            </CheckBox>
+
+            <Label Grid.Row="3" Grid.Column="0" Content="Selected groups:"/>
+
+            <ListBox x:Name="listBoxChoosenGroup" Grid.Row="4" Grid.ColumnSpan="2" 
+                     d:ItemsSource="{d:SampleData ItemCount=5}" SelectionMode="Single"
+                     Margin="0 10 0 10">
+            </ListBox>
+
+            <Button x:Name="buttonRemoveGroup" Grid.Row="5" Grid.Column="0" 
+                    Content="Remove" Click="buttonRemoveGroup_Click"></Button>
+
+            <Button x:Name="buttonAddGroup" Grid.Row="5" Grid.Column="1" 
+                    Content="Add" Click="buttonAddGroup_Click"></Button>
+
+        </Grid>
+
+        <Label Grid.Row="6" Grid.Column="0" Content="3. Select load case(s) and combination(s) to include in excel" FontSize="14" FontWeight="Bold"/>
+        
+        <Grid Grid.Row="7" Grid.Column="0" Margin="10 0 10 0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="4*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="4*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <DockPanel Grid.Column="0" Margin="10 0 10 0">
+                <Label DockPanel.Dock="Top">Available Load Case</Label>
+                <ListBox x:Name="listBoxAvailLoadCase" d:ItemsSource="{d:SampleData ItemCount=5}" VerticalAlignment="Stretch" SelectionMode="Multiple"></ListBox>
+            </DockPanel>
+
+            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                <Button x:Name="buttonAddLoadCase" Content=">>" Click="buttonAddLoadCase_Click"></Button>
+                <Button x:Name="buttonRemoveLoadCase" Content="&lt;&lt;" Click="buttonRemoveLoadCase_Click"></Button>
+            </StackPanel>
+
+            <DockPanel Grid.Column="2"  Margin="10 0 10 0">
+                <Label DockPanel.Dock="Top">Selected Load Case</Label>
+                <ListBox x:Name="listBoxChoosenLoadCase" d:ItemsSource="{d:SampleData ItemCount=5}" SelectionMode="Multiple"></ListBox>
+            </DockPanel>
+
+        </Grid>
+
+        <Label Grid.Row="8" Grid.Column="0" Content="4. Keyplan graphic preferences" FontSize="14" FontWeight="Bold"/>
+
+        <Grid Grid.Row="9">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0" Margin="10 0 10 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Column="0" VerticalAlignment="Center" Grid.ColumnSpan="2">Keyplan title:</Label>
+                <TextBox Grid.Column="1" x:Name="textBoxPlotTitle" Grid.Row="0" TextAlignment="Center" Text="Keyplan"/>
+            </Grid>
+
+            <Grid Grid.Row="1" Margin="10 0 10 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Column="0" VerticalAlignment="Center" Grid.ColumnSpan="2">Joints scale factor:</Label>
+                <TextBox Grid.Column="1" x:Name="textBoxBubbleScaleFactor" Grid.Row="0" TextAlignment="Center" Text="5" InputScope="Digits"/>
+            </Grid>
+
+            <Grid Grid.Row="2" Margin="10 0 10 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Column="0" VerticalAlignment="Center" Grid.ColumnSpan="2">Text size:</Label>
+                <TextBox Grid.Column="1" x:Name="textBoxTextSize" Grid.Row="0" TextAlignment="Center" Text="12" InputScope="Number"/>
+            </Grid>
+
+            <Grid Grid.Row="3" Margin="10 0 10 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Column="0" VerticalAlignment="Center" Grid.ColumnSpan="2">Title size:</Label>
+                <TextBox Grid.Column="1" x:Name="textBoxTitleSize" Grid.Row="0" TextAlignment="Center" Text="36" InputScope="Number"/>
+            </Grid>
+
+            <Grid Grid.Row="4" Margin="10 0 10 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Column="0" VerticalAlignment="Center" Grid.ColumnSpan="2">Axis title size:</Label>
+                <TextBox Grid.Column="1" x:Name="textBoxAxisTitleSize" Grid.Row="0" TextAlignment="Center" Text="28" InputScope="Number"/>
+            </Grid>
+
+            <Grid Grid.Row="5" Margin="10 0 10 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Column="0" VerticalAlignment="Center" Grid.ColumnSpan="2">Grid spacing x (m):</Label>
+                <TextBox Grid.Column="1" x:Name="textBoxGridSpacingX" Grid.Row="0" TextAlignment="Center" Text="50" InputScope="Digits"/>
+            </Grid>
+
+            <Grid Grid.Row="6" Margin="10 0 10 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Column="0" VerticalAlignment="Center" Grid.ColumnSpan="2">Grid spacing y (m):</Label>
+                <TextBox Grid.Column="1" x:Name="textBoxGridSpacingY" Grid.Row="0" TextAlignment="Center" Text="50" InputScope="Digits"/>
+            </Grid>
+
+            <Grid Grid.Row="7"  Margin="10 0 10 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+
+                <RadioButton x:Name="radioButtonShowRenumber" Grid.Column="0" GroupName="radioSum" IsChecked="True">
+                    Show sequenced number joints in keyplan
+                </RadioButton>
+                <RadioButton x:Name="radioButtonShowUniqueName" Grid.Column="1" GroupName="radioSum">
+                    Show unique name from ETABS in keyplan
+                </RadioButton>
+            </Grid>
+        </Grid>
+
+        <Grid Grid.Row="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <Image Margin ="0 7 -100 7" HorizontalAlignment="Right" Source="/WS_SG_ETABS_Plugin;component/src/resources/by_Future_Design_Studio_no_powerapp.PNG" />
+            
+            <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button x:Name="buttonCancel" Content="Cancel" Width="100" Click="buttonCancel_Click"/>
+                <Button x:Name="buttonOk" Content="OK" Width="100" Click="buttonOk_Click"/>
+            </StackPanel>
+
+        </Grid>
+        
+
+
+    </Grid>
+</Window>

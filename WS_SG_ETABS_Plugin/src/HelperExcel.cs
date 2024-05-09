@@ -85,7 +85,7 @@ namespace WS_SG_ETABS_Plugin.src
                 }
             }
 
-            xlWorkBook.Close(true, null, null);
+            xlWorkBook.Close(false, null, null);
             xlApp.Quit();
 
             Marshal.ReleaseComObject(xlWorkSheet);
