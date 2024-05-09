@@ -1,0 +1,240 @@
+﻿<Window x:Class="WS_SG_ETABS_Plugin.src.rc_beam_schedule.WindowRCBSchedMain"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WS_SG_ETABS_Plugin.src.rc_beam_schedule"
+             mc:Ignorable="d" Height="1050" Width="600" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+
+    <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.5*"></RowDefinition>
+            <RowDefinition Height="1.1*"></RowDefinition>
+            <RowDefinition Height="0.4*"></RowDefinition>
+            <RowDefinition Height="0.4*"></RowDefinition>
+            <RowDefinition Height="0.7*"></RowDefinition>
+            <RowDefinition Height="0.4*"></RowDefinition>
+            <RowDefinition Height="3*"></RowDefinition>
+            <RowDefinition Height="0.4*"></RowDefinition>
+            <RowDefinition Height="2*"></RowDefinition>
+            <RowDefinition Height="0.4*"></RowDefinition>
+            <RowDefinition Height="2.7*"></RowDefinition>
+            <RowDefinition Height="1.8*"></RowDefinition>
+            <RowDefinition Height="0.4*"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <Label Grid.Row="0" Grid.Column="0" Margin="0 -10 0 0" Content="RC Beam Schedule" FontSize="28"/>
+
+        <TextBlock Grid.Row="1" Grid.Column="0" TextWrapping="Wrap" TextAlignment="Justify"  
+                       Margin="10 0 10 0" FontSize="10">                    
+                    How to use:<LineBreak/>
+                    1. Select excel save file location (by default it will be in the same folder as ETABS file)<LineBreak/>
+                    2. Choose group(s) and beam type(s) associated with each group(s) to include in the excel<LineBreak/>
+                    3. Adjust rebar division preference<LineBreak/>
+                    4. Adjust cover, rebar diameter and rebar spacing preference<LineBreak/>
+                    5. Press OK to proceed
+        </TextBlock>
+
+        <Label Grid.Row="2" Grid.Column="0" Content="1. Select excel save file location" FontSize="14" FontWeight="Bold"/>
+
+        <Grid Grid.Row="3" Grid.Column="0" Margin="10 0 10 0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="4*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <Label Grid.Column="0" Content="Excel file name"></Label>
+            <TextBox x:Name="fileName" Grid.Column="1"/>
+
+        </Grid>
+
+        <Grid Grid.Row="4" Grid.Column="0" Margin="10 0 10 0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="4*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <Label Grid.Column="0" Content="Excel file path"></Label>
+
+            <Grid Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+
+                <TextBox x:Name="filePath" Grid.Row="0" IsEnabled="False"></TextBox>
+
+                <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button x:Name="buttonDefaultPath" Content="Default path" Width="100" Click="buttonDefaultPath_Click"/>
+                    <Button x:Name="buttonModifyPath" Content="Modify path" Width="100" Click="buttonModifyPath_Click"/>
+                </StackPanel>
+
+            </Grid>
+
+        </Grid>
+
+        <Label Grid.Row="5" Grid.Column="0" Content="2. Select groups(s) to include in the excel" FontSize="14" FontWeight="Bold"/>
+
+        <Grid Grid.Row="6" Margin="10 -10 10 0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="4.5*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <Label Grid.Row="0" Grid.Column="0" Content="Group"/>
+            <Label Grid.Row="0" Grid.Column="1" Content="Simply supported/Cantilever"/>
+
+            <ComboBox  Grid.Row="1" Grid.Column="0" x:Name="comBoxGroup" 
+                       VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+                       Text="0.5" InputScope="Digits">
+            </ComboBox>
+
+            <ComboBox  Grid.Row="1" Grid.Column="1" x:Name="comBoxBeamType" 
+                       VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+                       Text="0.5" InputScope="Digits">
+            </ComboBox>
+
+            <Label Grid.Row="2" Grid.Column="0" Content="Selected groups:"/>
+
+            <ListBox x:Name="listBoxChoosenGroup" Grid.Row="3" Grid.ColumnSpan="2" 
+                     d:ItemsSource="{d:SampleData ItemCount=5}" SelectionMode="Single"
+                     Margin="0 10 0 10">
+            </ListBox>
+
+            <Button x:Name="buttonRemove" Grid.Row="4" Grid.Column="0" 
+                    Content="Remove" Click="buttonRemove_Click"></Button>
+
+            <Button x:Name="buttonAdd" Grid.Row="4" Grid.Column="1" 
+                    Content="Add" Click="buttonAdd_Click"></Button>
+
+        </Grid>
+
+        <Label Grid.Row="7" Grid.Column="0" Content="3. Rebar zone division preferences" FontSize="14" FontWeight="Bold"/>
+
+        <Grid Grid.Row="8" Grid.Column="0" Margin="10 -10 10 0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Row="0" Grid.ColumnSpan="2">
+                <Label Content="Simply supported rebar zone division (left mid right):"></Label>
+            </Grid>
+
+            <Label Grid.Row="1" Grid.Column="0" Content="Left"></Label>
+            <Label Grid.Row="1" Grid.Column="1" Content="Mid"></Label>
+            <Label Grid.Row="1" Grid.Column="2" Content="Right"></Label>
+
+            <TextBox x:Name="textBoxLengthLeft" Grid.Row="2" Grid.Column="0" Text="0.25"></TextBox>
+            <TextBox x:Name="textBoxLengthMid" Grid.Row="2" Grid.Column="1" Text="0.5"></TextBox>
+            <TextBox x:Name="textBoxLengthRight" Grid.Row="2" Grid.Column="2" Text="0.25"></TextBox>
+
+            <Grid Grid.Row="3" Grid.ColumnSpan="2">
+                <Label Content="Cantilever rebar zone division (left mid right):"></Label>
+            </Grid>
+
+            <Label Grid.Row="4" Grid.Column="0" Content="Left"></Label>
+            <Label Grid.Row="4" Grid.Column="1" Content="Right"></Label>
+
+            <TextBox x:Name="textBoxCantileverLengthLeft" Grid.Row="5" Grid.Column="0" Text="0.5"></TextBox>
+            <TextBox x:Name="textBoxCantileverLengthRight" Grid.Row="5" Grid.Column="1" Text="0.5"></TextBox>
+
+        </Grid>
+
+        <Label Grid.Row="9" Grid.Column="0" Content="4. Cover, rebar diameter and rebar spacing preferences" FontSize="14" FontWeight="Bold"/>
+
+        <Grid Grid.Row="10" Margin="10 0 10 0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1.2*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <Label Grid.Row="0" Grid.Column="0" Content="Cover (outside to edge of shear links) (mm): "></Label>
+            <Label Grid.Row="1" Grid.Column="0" Content="Maximum number of rebar layers: "></Label>
+            <Label Grid.Row="2" Grid.Column="0" Content="Maximum shear links spacing (mm): "></Label>
+            <Label Grid.Row="3" Grid.Column="0" Content="Minimum shear links spacing (mm): "></Label>
+            <Label Grid.Row="4" Grid.Column="0" Content="Shear links spacing steps (will run from max) (mm): "></Label>
+            <Label Grid.Row="5" Grid.Column="0" Content="List rebar diameter (comma seperated): "></Label>
+            <Label Grid.Row="6" Grid.Column="0" Content="List shear links diameter (comma seperated): "></Label>
+
+            <TextBox x:Name="textBoxCover" Grid.Row="0" Grid.Column="1" Text="35"></TextBox>
+            <TextBox x:Name="textBoxMaxNoLayer" Grid.Row="1" Grid.Column="1" Text="3"></TextBox>
+            <TextBox x:Name="textBoxMaxShearLinksSpacing" Grid.Row="2" Grid.Column="1" Text="300"></TextBox>
+            <TextBox x:Name="textBoxMinShearLinksSpacing" Grid.Row="3" Grid.Column="1" Text="100"></TextBox>
+            <TextBox x:Name="textBoxShearLinksSpacingStep" Grid.Row="4" Grid.Column="1" Text="50"></TextBox>
+            <TextBox x:Name="textBoxRebarDiameterList" Grid.Row="5" Grid.Column="1" Text="16, 20, 25, 32, 40"></TextBox>
+            <TextBox x:Name="textBoxShearLinksDiameterList" Grid.Row="6" Grid.Column="1" Text="10, 12, 16, 20"></TextBox>
+        </Grid>
+
+        <Grid Grid.Row="11"  Margin="10 -5 10 0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1.2*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <Label Grid.Row="0" Grid.Column="0" Content="Minimum spacing between rebar:"></Label>
+            <RadioButton Grid.Row="1" Grid.Column="0" GroupName="rebarSpc" Content="Min clear spacing between rebar (mm)" Name="radioButtonSpcClearSpc" 
+                         Checked="radioButtonSpcClearSpc_Checked"></RadioButton>
+            <RadioButton Grid.Row="2" Grid.Column="0" GroupName="rebarSpc" Content="Min center to center spacing between rebar (mm)" Name="radioButtonSpcCToC" 
+                         Checked="radioButtonSpcCToC_Checked"></RadioButton>
+            <RadioButton Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" GroupName="rebarSpc" Content="Auto (use EC rules, clear spacing = max[25mm, rebar dia])" Name="radioButtonSpcAuto"></RadioButton>
+            <RadioButton Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" GroupName="rebarSpc" Content="Auto (use Ramboll standard practice, no of rebar = width (in mm)/100 )" Name="radioButtonSpcAutoRamboll"></RadioButton>
+            
+            <TextBox x:Name="textBoxSpcClearSpc" Grid.Row="1" Grid.Column="1" Text="50" IsEnabled="False"></TextBox>
+            <TextBox x:Name="textBoxSpcCToC" Grid.Row="2" Grid.Column="1" Text="80" IsEnabled="False"></TextBox>
+        </Grid>
+        
+        <Grid Grid.Row="12">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <Image Margin ="0 7 -70 7" HorizontalAlignment="Right" Source="/WS_SG_ETABS_Plugin;component/src/resources/by_Future_Design_Studio_no_powerapp.PNG" />
+
+            <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button x:Name="buttonCancel" Content="Cancel" Width="100" Click="buttonCancel_Click"/>
+                <Button x:Name="buttonOk" Content="OK" Width="100" Click="buttonOk_Click"/>
+            </StackPanel>
+
+        </Grid>
+
+    </Grid>
+</Window>

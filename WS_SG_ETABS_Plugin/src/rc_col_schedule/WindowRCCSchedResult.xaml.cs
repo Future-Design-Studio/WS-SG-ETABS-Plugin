@@ -25,9 +25,9 @@ namespace WS_SG_ETABS_Plugin.src.rc_col_schedule
         cSapModel _SapModel;
         cPluginCallback _Plugin;
 
-        public WindowRCCSchedResult(cSapModel SapModel, cPluginCallback Plugin, string fileName, string filePath, double rebarSpc, string rebarSpcPreference, double maxShearLinksSpacing, 
+        public WindowRCCSchedResult(cSapModel SapModel, cPluginCallback Plugin, double rebarSpc, string rebarSpcPreference, double maxShearLinksSpacing, 
             double minShearLinksSpacing, double shearLinksSpacingStep, double minimumRebarPercentage, double cover, int maxNoLayer, int[] rebarDiameterList, int[] shearLinksDiameterList,
-            List<string> listChoosenGroupName)
+            List<string> listChoosenGroupName, bool? doCluster)
         {
             _SapModel = SapModel;
             _Plugin = Plugin;
@@ -41,8 +41,9 @@ namespace WS_SG_ETABS_Plugin.src.rc_col_schedule
             }
 
             //Main logic
-            bool isError = src.rc_col_schedule.FunctionRCCSched.GetRCColumnSchedule(_SapModel, _Plugin, fileName, filePath,
-                    rebarSpc, rebarSpcPreference, maxShearLinksSpacing, minShearLinksSpacing, shearLinksSpacingStep, minimumRebarPercentage, cover, maxNoLayer, rebarDiameterList, shearLinksDiameterList, listChoosenGroupName);
+            bool isError = src.rc_col_schedule.FunctionRCCSched.GetRCColumnSchedule(_SapModel, _Plugin,
+                    rebarSpc, rebarSpcPreference, maxShearLinksSpacing, minShearLinksSpacing, shearLinksSpacingStep, minimumRebarPercentage, cover, maxNoLayer, rebarDiameterList, 
+                    shearLinksDiameterList, listChoosenGroupName, doCluster);
 
             if (isError)
             {

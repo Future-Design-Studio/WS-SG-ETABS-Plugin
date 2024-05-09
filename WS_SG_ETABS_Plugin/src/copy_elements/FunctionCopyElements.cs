@@ -272,7 +272,7 @@ namespace WS_SG_ETABS_Plugin.src.copy_elements
                     }
 
                 }
-
+                /*
                 // Open the stream and read it back.
                 using (StreamReader sr = File.OpenText(fileName))
                 {
@@ -282,6 +282,7 @@ namespace WS_SG_ETABS_Plugin.src.copy_elements
                         Console.WriteLine(s);
                     }
                 }
+                */
             }
             catch (Exception Ex)
             {

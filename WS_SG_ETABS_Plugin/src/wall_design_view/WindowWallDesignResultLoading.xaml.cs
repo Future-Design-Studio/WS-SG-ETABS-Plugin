@@ -241,7 +241,7 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
             }
             else if (extractExcel == true)
             {
-                if (wall.PierLabel != null)
+                if (wall.PierLabel != null && tableInListPierDesignResult != null)
                 {
 
                     foreach (Dictionary<string, string> row in tableInListPierDesignResult)
@@ -254,7 +254,7 @@ namespace WS_SG_ETABS_Plugin.src.wall_design_view
                     }
 
                 }
-                else if (wall.SpandrelLabel != null)
+                else if (wall.SpandrelLabel != null && tableInListSpandrelDesignResult != null)
                 {
                     foreach (Dictionary<string, string> row in tableInListSpandrelDesignResult)
                     {

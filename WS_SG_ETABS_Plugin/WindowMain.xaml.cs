@@ -29,7 +29,7 @@ namespace WS_SG_ETABS_Plugin
 
         public WindowMain(ref cSapModel SapModel, ref cPluginCallback Plugin)
         {
-            string version = "1.2.0d";
+            string version = "1.2.0g";
 
             _Plugin = Plugin;
             _SapModel = SapModel;
@@ -87,7 +87,7 @@ namespace WS_SG_ETABS_Plugin
                         "buttonRCBeamSchedule", "buttonCopyProperties", "buttonPlotReaction", "buttonLoadCombo", "buttonPadFooting", "buttonPunchingShear", "buttonTedds", "buttonRCColSchedule", "buttonPlotDrift", 
                         "buttonPlotSumMassParticip", "buttonWallDesignViewer", "buttonShellUni", "buttonSelUniqueName", "buttonEtabsToRhino", "buttonWindCoeff", "buttonReleaseSelectedNode", "buttonTrfEtabsLoads", 
                         "buttonTrfEtabstoSafe", "buttonCarbon", "buttonTransferMidas", "buttonTrussGrouping", "buttonDeleteFrames", "buttonColOptimizer", "buttonSteelTrussOptimizer", "buttonCircCrack", 
-                        "buttonPreWarning", "buttonAddLoadCombo", "buttonApplyModifier"
+                        "buttonPreWarning", "buttonAddLoadCombo", "buttonApplyModifier", "buttonJointForcesExtractor", "buttonApplySectProp", "buttonCopyElements"
                     };
 
                     foreach (string buttonName in listofButtons)
@@ -368,7 +368,12 @@ namespace WS_SG_ETABS_Plugin
             IsEnabled = true;
         }
 
-
-        
+        private void buttonJointForcesExtractor_Click(object sender, RoutedEventArgs e)
+        {
+            IsEnabled = false;
+            //Call up window
+            src.joint_forces_extractor.WindowJointForcesExtractorMain windowJointForcesExtractorMain = new src.joint_forces_extractor.WindowJointForcesExtractorMain(_SapModel, _Plugin);
+            IsEnabled = true;
+        }
     }
 }

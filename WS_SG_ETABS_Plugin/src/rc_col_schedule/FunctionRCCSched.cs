@@ -1,19 +1,29 @@
-﻿  using ETABSv1;
+﻿using Accord.Math;
+using Accord.Math.Distances;
+using ETABSv1;
+using LiveCharts.Helpers;
+using Microsoft.Office.Interop.Excel;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Reflection.Emit;
+using System.Text;
+using System.Windows.Automation.Peers;
 using System.Windows.Forms;
+using System.Windows.Shapes;
+using WS_SG_ETABS_Plugin.src.ML;
 
 namespace WS_SG_ETABS_Plugin.src.rc_col_schedule
 {
     internal class FunctionRCCSched
     {
-
         private static int Ret;
 
-        public static bool GetRCColumnSchedule(cSapModel Sap, cPluginCallback Plugin, string fileName, string filePath, double rebarSpc, string rebarSpcPreference, double maxShearLinksSpacing,
+        public static bool GetRCColumnSchedule(cSapModel Sap, cPluginCallback Plugin, double rebarSpc, string rebarSpcPreference, double maxShearLinksSpacing,
             double minShearLinksSpacing, double shearLinksSpacingStep, double minimumRebarPercentage, double cover, int maxNoLayer, int[] rebarDiameterList, int[] shearLinksDiameterList,
-            List<string> listChoosenGroupName)
+            List<string> listChoosenGroupName, bool? doCluster)
         {
             bool isError = false;
 
@@ -82,11 +92,30 @@ namespace WS_SG_ETABS_Plugin.src.rc_col_schedule
             //Calculate Av provided
             CalculateAvProv(rcColumnList);
 
+            //Do ML
+            if (doCluster == true)
+            {
+                //RcColClusteringUsingKMeans(rcColumnList);
+                RcColClustering(rcColumnList);
+            }
+
+            //Get column point list
+            GetRcColumnPoints(Sap, rcColumnList);
+
+            //Column with the same xy group it into 1 label
+            Dictionary<string, List<src.HelperEtabs.RcColumn>> groupedRcColumnOrderedList = new Dictionary<string, List<src.HelperEtabs.RcColumn>>();
+            List<double> uniqueZList = new List<double>();
+            double maxHeight = 0;
+            (groupedRcColumnOrderedList, uniqueZList, maxHeight) = GroupRcColumnWithTheSameCoord(rcColumnList);
+
+            //draw in ACAD
+            DrawAcad(Sap, groupedRcColumnOrderedList, uniqueZList, maxHeight);
+
             //Compile data to 2d array
             var result = CompileResutRcBeamToArray(rcColumnList);
             
             //Write to excel
-            WriteResultRcColumnToExcel(result, fileName, filePath);
+            WriteResultRcColumnToExcel(result);
            
             //Set back to original units
             src.HelperEtabs.SetOutputUnit(Sap, forceUnits, lengthUnits, temperatureUnits);
@@ -413,8 +442,11 @@ namespace WS_SG_ETABS_Plugin.src.rc_col_schedule
                 double avReqMajor = avMajor;
                 double avReqMinor = avMinor;
 
+                double widthNoRebar = 0;
+                double heightNoRebar = 0;
+
                 (numRebarLayer, numRebarPerLayer, rebarDiameter, asEvaluationComment, numShearLinksLegMajor, numShearLinksLegMinor, shearLinksDiameter, shearLinksSpacing,
-                    avEvaluationComment, warningRebarDiameterTooBigShown) = ConvertRcColumnAreaToRebar(
+                    avEvaluationComment, warningRebarDiameterTooBigShown, widthNoRebar, heightNoRebar) = ConvertRcColumnAreaToRebar(
                     As, avReqMajor, avMinor, width, height, diameter, shape, rebarSpc, rebarSpcPreference, maxShearLinksSpacing, minShearLinksSpacing, shearLinksSpacingStep, cover, shearLinksDiameterList,
                     rebarDiameterList, maxNoLayer, rcColumn.UniqueName, warningRebarDiameterTooBigShown);
                 
@@ -426,6 +458,8 @@ namespace WS_SG_ETABS_Plugin.src.rc_col_schedule
                 rcColumn.Rebar = rcColumn.Rebar.Remove(rcColumn.Rebar.Length - 1, 1);
                 rcColumn.RebarDiameterList = rebarDiameter;
                 rcColumn.NoRebarPerLayer = numRebarPerLayer;
+                rcColumn.WidthNoRebar = (int) widthNoRebar;
+                rcColumn.HeightNoRebar = (int) heightNoRebar;
 
                 rcColumn.ShearLinksMajor = "H" + shearLinksDiameter + "-" + shearLinksSpacing + " (Link)";
                 if (numShearLinksLegMajor > 2)
@@ -444,6 +478,21 @@ namespace WS_SG_ETABS_Plugin.src.rc_col_schedule
                 rcColumn.ShearLinksDiameter = shearLinksDiameter;
                 rcColumn.ShearLinksSpacing = shearLinksSpacing;
 
+                rcColumn.ShearLinks = "H" + shearLinksDiameter + "-" + shearLinksSpacing + " (Link)";
+                double numHooks = 0;
+                if (numShearLinksLegMajor > 2)
+                {
+                    numHooks += numShearLinksLegMajor - 2;
+                }
+                if (numShearLinksLegMinor > 2)
+                {
+                    numHooks += numShearLinksLegMinor - 2;
+                }
+                if (numHooks > 0)
+                {
+                    rcColumn.ShearLinks += " + " + (numHooks) + "H" + shearLinksDiameter + "-" + shearLinksSpacing + " (Hooks)";
+                }
+
                 //Gathering evaluation comment
                 if (asEvaluationComment != "")
                 {
@@ -457,7 +506,7 @@ namespace WS_SG_ETABS_Plugin.src.rc_col_schedule
             }
         }
         
-        private static (double, List<int>, List<int>, string, double, double, double, double, string, bool) ConvertRcColumnAreaToRebar(double asReq, double avReqMajor, double avReqMinor, double width, double height,
+        private static (double, List<int>, List<int>, string, double, double, double, double, string, bool, double, double) ConvertRcColumnAreaToRebar(double asReq, double avReqMajor, double avReqMinor, double width, double height,
             double diameter, string shape, double rebarSpc, string rebarSpcPreference, double maxShearLinksSpacing, double minShearLinksSpacing, double shearLinksSpacingStep, double cover, int[] shearLinksDiameterList, 
             int[] rebarDiameterList, int maxNoLayer, string uniqueName, bool warningRebarDiameterTooBigShown)
         {
@@ -942,7 +991,8 @@ namespace WS_SG_ETABS_Plugin.src.rc_col_schedule
             }
             */
 
-            return (noRebarLayer, noRebarPerLayer, rebarDiameterPerLayer, asEvaluationComment, noShearLinksLegMajor, noShearLinksLegMinor, shearLinksDiameter, shearLinksSpacing, avEvaluationComment, warningRebarDiameterTooBigShown);
+            return (noRebarLayer, noRebarPerLayer, rebarDiameterPerLayer, asEvaluationComment, noShearLinksLegMajor, noShearLinksLegMinor, 
+                shearLinksDiameter, shearLinksSpacing, avEvaluationComment, warningRebarDiameterTooBigShown, widthNoRebar, heightNoRebar);
         }
 
         private static bool IsNoRebarLayerValid(List<int> noRebarPerLayer)
@@ -978,7 +1028,7 @@ namespace WS_SG_ETABS_Plugin.src.rc_col_schedule
             {
                 "UniqueName", "Shape", "Width (mm)", "Height (mm)", "Diameter (mm)", "fyk (Mpa)", "fck (Mpa)", "d (ETABS) (mm)", "d calculated (mm)", "As Min(mm2)"
                 , "As (mm2)","Av Major (mm2/m)","Av Minor (mm2/m)"
-                , "Rebar", "Shear Links Major", "Shear Links Minor"
+                , "Rebar", "Shear Links", "Shear Links Major", "Shear Links Minor"
                 , "As Prov (mm2)", "As Prov (%)"
                 , "Av Major Prov (mm2/m)"
                 , "Av Minor Prov (mm2/m)"
@@ -986,6 +1036,7 @@ namespace WS_SG_ETABS_Plugin.src.rc_col_schedule
                 , "Av Major Ratio"
                 , "Av Minor Ratio"
                 , "ETABS warning", "Rebar warning", "Shear links warning"
+                , "Cluster"
             };
 
             int numOfRow = rcColumnList.Count();
@@ -1023,20 +1074,23 @@ namespace WS_SG_ETABS_Plugin.src.rc_col_schedule
                 result[i, 12] = rcColumn.AvMinor;
 
                 result[i, 13] = rcColumn.Rebar;
-                result[i, 14] = rcColumn.ShearLinksMajor;
-                result[i, 15] = rcColumn.ShearLinksMinor;
+                result[i, 14] = rcColumn.ShearLinks;
+                result[i, 15] = rcColumn.ShearLinksMajor;
+                result[i, 16] = rcColumn.ShearLinksMinor;
 
-                result[i, 16] = rcColumn.AsProv;
-                result[i, 17] = rcColumn.AsProvPercentage;
-                result[i, 18] = rcColumn.AvMajorProv;
-                result[i, 19] = rcColumn.AvMinorProv;
-                result[i, 20] = rcColumn.RatioAs;
-                result[i, 21] = rcColumn.RatioAvMajor;
-                result[i, 22] = rcColumn.RatioAvMinor;
+                result[i, 17] = rcColumn.AsProv;
+                result[i, 18] = rcColumn.AsProvPercentage;
+                result[i, 19] = rcColumn.AvMajorProv;
+                result[i, 20] = rcColumn.AvMinorProv;
+                result[i, 21] = rcColumn.RatioAs;
+                result[i, 22] = rcColumn.RatioAvMajor;
+                result[i, 23] = rcColumn.RatioAvMinor;
 
-                result[i, 23] = rcColumn.EtabsComment;
-                result[i, 24] = rcColumn.AsEvaluationComment;
-                result[i, 25] = rcColumn.AvEvaluationComment;
+                result[i, 24] = rcColumn.EtabsComment;
+                result[i, 25] = rcColumn.AsEvaluationComment;
+                result[i, 26] = rcColumn.AvEvaluationComment;
+
+                result[i, 27] = rcColumn.Cluster;
 
                 i++;
             }
@@ -1044,9 +1098,11 @@ namespace WS_SG_ETABS_Plugin.src.rc_col_schedule
             return result;
         }
 
-        public static void WriteResultRcColumnToExcel(object[,] result, string fileName, string filePath)
+        public static void WriteResultRcColumnToExcel(object[,] result)
         {
             Microsoft.Office.Interop.Excel.Application xlApp = new Microsoft.Office.Interop.Excel.Application();
+
+            xlApp.Visible = true;
 
             if (xlApp == null)
             {
@@ -1074,6 +1130,7 @@ namespace WS_SG_ETABS_Plugin.src.rc_col_schedule
 
             rng.Value2 = result;
 
+            /*
             //Here saving the file in xlsx
             string excelPath = filePath + fileName + ".xlsx";
 
@@ -1088,6 +1145,7 @@ namespace WS_SG_ETABS_Plugin.src.rc_col_schedule
 
             xlWorkBook.Close(true, misValue, misValue);
             xlApp.Quit();
+            */
         }
 
         public static double GetMinimumRcColumnRebarEC( double width, double height, double minimumRebarPercentage)
@@ -1294,5 +1352,666 @@ namespace WS_SG_ETABS_Plugin.src.rc_col_schedule
             }
 
         }
+
+        public static void RcColClusteringUsingKMeans(List<src.HelperEtabs.RcColumn> rcColumnList)
+        {
+
+            //Prepare data for ML
+            double[][] observations = new double[rcColumnList.Count()][];
+
+            int index = 0;
+            foreach (src.HelperEtabs.RcColumn rcColumn in rcColumnList)
+            {
+                observations[index] = new double[]
+                {
+                    rcColumn.Width,
+                    rcColumn.Height,
+                    rcColumn.Diameter,
+                    rcColumn.AsProv,
+                    rcColumn.AvMajorProv,
+                    rcColumn.AvMinorProv,
+                };
+                index++;
+            }
+
+            //Standardize data
+            observations = HelperML.StandardizeData(observations);
+
+            //Call up ML preference window
+            src.ML.WindowMLPrefence windowMLPrefence = new WindowMLPrefence(observations);
+            int[] labels = windowMLPrefence.GetLabels();
+
+            //Parsing cluster back to rcBeamList
+            index = 0;
+            foreach (src.HelperEtabs.RcColumn rcColumn in rcColumnList)
+            {
+                rcColumn.Cluster = Convert.ToString(labels[index]);
+                index++;
+            }
+
+
+        }
+
+        public static void RcColClustering(List<src.HelperEtabs.RcColumn> rcColumnList)
+        {
+
+            //Prepare data for clustering
+            double[][] observations = new double[rcColumnList.Count()][];
+
+            int index = 0;
+            foreach (src.HelperEtabs.RcColumn rcColumn in rcColumnList)
+            {
+                observations[index] = new double[]
+                {
+                    rcColumn.Width,
+                    rcColumn.Height,
+                    rcColumn.Diameter,
+                    rcColumn.AsProv,
+                    rcColumn.AvMajorProv,
+                    rcColumn.AvMinorProv,
+                };
+                index++;
+            }
+
+            List<double[]> uniqueObservations = new List<double[]>();
+            int indexUnique = 0;
+            List<int> labels = new List<int>();
+            bool firstLoop = true;
+            foreach (double[] observation in observations)
+            {
+                if (firstLoop)
+                {
+                    uniqueObservations.Add(observation);
+                    firstLoop = false;
+                    labels.Add(indexUnique);
+                    indexUnique++;
+                }
+                else
+                {
+                    bool isArrayExistInAlready = false;
+                    int indexInUniqueObservations = 0;
+                    (isArrayExistInAlready, indexInUniqueObservations) = IsArrayExistedInAlready(observation, uniqueObservations);
+
+                    if (!isArrayExistInAlready)
+                    {
+                        uniqueObservations.Add(observation);
+                        labels.Add(indexUnique);
+                        indexUnique++;
+                    }
+                    else
+                    {
+                        labels.Add(indexInUniqueObservations);
+                    }
+                }
+                
+            }
+
+            //Parsing cluster back to rcBeamList
+            index = 0;
+            foreach (src.HelperEtabs.RcColumn rcColumn in rcColumnList)
+            {
+                rcColumn.Cluster = Convert.ToString(labels[index]);
+                index++;
+            }
+
+
+
+        }
+
+        public static (bool, int) IsArrayExistedInAlready(double[] observationsA, List<double[]> uniqueObservations)
+        {
+            int indexUnique = 0;
+            foreach (double[] uniqueObservation in uniqueObservations)
+            {
+                //Check if size same
+                if (observationsA.Count() == uniqueObservation.Count())
+                {
+                    bool eachComponentMatch = true;
+                    for (int i = 0; i < observationsA.Count(); i++)
+                    {
+                        if (observationsA[i] != uniqueObservation[i])
+                        {
+                            eachComponentMatch = false;
+                            break;
+                        }
+                    }
+                    if (eachComponentMatch)
+                    {
+                        return (true, indexUnique);
+                    }
+                }
+                indexUnique++;
+            }
+            return (false, -1);
+        }
+
+        private static void DrawAcad(cSapModel Sap, Dictionary<string, List<src.HelperEtabs.RcColumn>> groupedRcColumnOrderedList, 
+            List<double> uniqueZCoordList, double maxHeight)
+        {
+            List<string> lisp = new List<string>();
+
+            //Turn off snap
+            lisp.Add("(setvar 'osmode 0)");
+
+            //Calculate y coordinate based on uniqueZlist
+            double yCoord = 0;
+            uniqueZCoordList.Reverse();
+            List<double> uniqueYCoordList = new List<double>();
+            foreach (double z in uniqueZCoordList)
+            {
+                uniqueYCoordList.Add(yCoord);
+                yCoord += maxHeight + 500;
+            }
+
+            double xCoordReference = 0;
+            double yCoordReference = 0;
+
+            List<double> xCoords = new List<double>();
+            List<double> yCoords = new List<double>();
+
+            foreach (KeyValuePair<string, List<src.HelperEtabs.RcColumn>> groupedRcColumn in groupedRcColumnOrderedList)
+            {
+                double maxWidth = 0;
+
+                foreach (src.HelperEtabs.RcColumn rcColumn in groupedRcColumn.Value)
+                {
+                    double bottomZ = Math.Min(rcColumn.PointI.ZCoordinate, rcColumn.PointJ.ZCoordinate);
+                    double topZ = Math.Max(rcColumn.PointI.ZCoordinate, rcColumn.PointJ.ZCoordinate);
+
+                    int uniqueZCoordIndex = uniqueZCoordList.IndexOf(bottomZ);
+
+                    //if zTop is > than the level after, then re draw in the next level
+                    while (uniqueZCoordIndex < uniqueZCoordList.Count() && topZ > uniqueZCoordList[uniqueZCoordIndex])
+                    {
+                        yCoordReference = uniqueYCoordList[uniqueZCoordIndex] + 400; //400 to give space for the rebar and shear link text
+
+                        if (rcColumn.Shape == "Rectangular")
+                        {
+                            //Draw outer lines
+                            double width = rcColumn.Width;
+                            double height = rcColumn.Height;
+
+                            xCoords = new List<double> { xCoordReference, xCoordReference + width, xCoordReference + width, xCoordReference, xCoordReference };
+                            yCoords = new List<double> { yCoordReference, yCoordReference, yCoordReference + height, yCoordReference + height, yCoordReference };
+
+                            HelperAutoLisp.DrawLine(ref lisp, xCoords, yCoords);
+
+                            if (width > maxWidth)
+                            {
+                                maxWidth = width;
+                            }
+
+                            //Draw rebar
+                            List<int> noRebarPerLayer = rcColumn.NoRebarPerLayer;
+                            List<int> rebarDiameterList = rcColumn.RebarDiameterList;
+                            int widthNoRebar = rcColumn.WidthNoRebar;
+                            int heightNoRebar = rcColumn.HeightNoRebar;
+                            double cover = rcColumn.Cover;
+                            int shearLinksDia = (int)rcColumn.ShearLinksDiameter;
+                            List<double> xCoordRebarList = new List<double>();
+                            List<double> yCoordRebarList = new List<double>();
+
+                            for (int layerIndex = 0; layerIndex < noRebarPerLayer.Count(); layerIndex++)
+                            {
+                                double xCoordRebar = xCoordReference + cover + (double)shearLinksDia + 0.5 * (double)rebarDiameterList[layerIndex];
+                                double yCoordRebarBottom = yCoordReference + cover + (double)shearLinksDia + 0.5 * (double)rebarDiameterList[layerIndex];
+                                double yCoordRebarTop = yCoordReference + height - cover - (double)shearLinksDia - 0.5 * (double)rebarDiameterList[layerIndex];
+
+                                for (int i = 0; i < widthNoRebar; i++)
+                                {
+                                    //Take note on 1st layer only
+                                    if (layerIndex == 0)
+                                    {
+                                        xCoordRebarList.Add(xCoordRebar);
+                                    }
+                                    
+                                    HelperAutoLisp.DrawCircle(ref lisp, xCoordRebar, yCoordRebarBottom, rebarDiameterList[layerIndex], true);
+                                    HelperAutoLisp.DrawCircle(ref lisp, xCoordRebar, yCoordRebarTop, rebarDiameterList[layerIndex], true);
+
+                                    xCoordRebar += (width - 2 * cover - 2 * shearLinksDia - (double) rebarDiameterList[layerIndex]) / ((double) widthNoRebar - 1);
+                                }
+
+                                double yCoordRebar = yCoordReference + cover + shearLinksDia + 0.5 * (double)rebarDiameterList[layerIndex];
+                                double xCoordRebarLeft = xCoordReference + cover + shearLinksDia + 0.5 * (double)rebarDiameterList[layerIndex];
+                                double xCoordRebarRight = xCoordReference + width - cover - shearLinksDia - 0.5 * (double)rebarDiameterList[layerIndex];
+
+                                for (int i = 0; i < heightNoRebar; i++)
+                                {
+                                    //Take note on 1st layer only
+                                    if (layerIndex == 0)
+                                    {
+                                        yCoordRebarList.Add(yCoordRebar);
+                                    }
+
+                                    //skip corner bars
+                                    if (i > 0 || i <= heightNoRebar - 1)
+                                    {
+                                        HelperAutoLisp.DrawCircle(ref lisp, xCoordRebarLeft, yCoordRebar, rebarDiameterList[layerIndex], true);
+                                        HelperAutoLisp.DrawCircle(ref lisp, xCoordRebarRight, yCoordRebar, rebarDiameterList[layerIndex], true);
+                                    }
+
+                                    yCoordRebar += (height - 2 * cover - 2 * shearLinksDia - (double) rebarDiameterList[layerIndex]) / ((double) heightNoRebar - 1);
+                                }
+                            }
+
+                            //Draw shear links
+                            double bendingRadius = HelperMethod.GetRebarBendingRadius(shearLinksDia); // unused for now
+                            double minXCoordRebar = xCoordRebarList.Min();
+                            double maxXCoordRebar = xCoordRebarList.Max();
+                            double minYCoordRebar = yCoordRebarList.Min();
+                            double maxYCoordRebar = yCoordRebarList.Max();
+                            double maxRebarDiameter = rebarDiameterList.Max();
+
+                            xCoords = new List<double> { xCoordReference + cover, xCoordReference + width - cover, xCoordReference + width - cover, xCoordReference + cover, xCoordReference + cover };
+                            yCoords = new List<double> { yCoordReference + cover, yCoordReference + cover, yCoordReference + height - cover, yCoordReference + height - cover, yCoordReference + cover };
+
+                            HelperAutoLisp.DrawLine(ref lisp, xCoords, yCoords);
+
+                            xCoords = new List<double> { xCoordReference + cover + shearLinksDia, xCoordReference + width - cover - shearLinksDia, 
+                                xCoordReference + width - cover - shearLinksDia, xCoordReference + cover + shearLinksDia, xCoordReference + cover + shearLinksDia};
+                            yCoords = new List<double> { yCoordReference + cover + shearLinksDia, yCoordReference + cover + shearLinksDia, 
+                                yCoordReference + height - cover - shearLinksDia, yCoordReference + height - cover - shearLinksDia, yCoordReference + cover + shearLinksDia };
+
+                            HelperAutoLisp.DrawLine(ref lisp, xCoords, yCoords);
+
+                            //Shear links end
+                            xCoords = new List<double> { minXCoordRebar - 0.5 * maxRebarDiameter, minXCoordRebar - 0.5 * maxRebarDiameter + 35,
+                                minXCoordRebar - 0.5 * maxRebarDiameter + 35 - Math.Sqrt(Math.Pow(shearLinksDia, 2) * 0.5), minXCoordRebar - 0.5 * maxRebarDiameter};
+                            yCoords = new List<double> { maxYCoordRebar - 0.5 * maxRebarDiameter, maxYCoordRebar - 0.5 * maxRebarDiameter - 35,
+                                maxYCoordRebar - 0.5 * maxRebarDiameter - 35 - Math.Sqrt(Math.Pow(shearLinksDia, 2) * 0.5), maxYCoordRebar - 0.5 * maxRebarDiameter - Math.Sqrt(Math.Pow(shearLinksDia, 2) + Math.Pow(shearLinksDia, 2))};
+
+                            HelperAutoLisp.DrawLine(ref lisp, xCoords, yCoords);
+
+                            xCoords = new List<double> { minXCoordRebar + 0.5 * maxRebarDiameter, minXCoordRebar + 0.5 * maxRebarDiameter + 35,
+                                minXCoordRebar + 0.5 * maxRebarDiameter + 35 + Math.Sqrt(Math.Pow(shearLinksDia, 2) * 0.5), minXCoordRebar + 0.5 * maxRebarDiameter + Math.Sqrt(Math.Pow(shearLinksDia, 2) + Math.Pow(shearLinksDia, 2))};
+                            yCoords = new List<double> { maxYCoordRebar + 0.5 * maxRebarDiameter, maxYCoordRebar + 0.5 * maxRebarDiameter - 35,
+                                maxYCoordRebar + 0.5 * maxRebarDiameter - 35 + Math.Sqrt(Math.Pow(shearLinksDia, 2) * 0.5), maxYCoordRebar + 0.5 * maxRebarDiameter};
+
+                            HelperAutoLisp.DrawLine(ref lisp, xCoords, yCoords);
+
+                            //Draw shear hooks
+                            double numShearLinksLegMajor = rcColumn.NumShearLinksLegMajor;
+                            double numShearLinksLegMinor = rcColumn.NumShearLinksLegMinor;
+
+                            //Draw shear hooks in y (top to bottom)
+                            double numShearLinksLeg = 0;
+                            if (height > width)
+                            {
+                                numShearLinksLeg = numShearLinksLegMajor;
+                            }
+                            else
+                            {
+                                numShearLinksLeg = numShearLinksLegMinor;
+                            }
+
+                            if (numShearLinksLeg - 2 > 0) //Need to -2 because the 2 is using links
+                            {
+                                int shearHookMultiplier = (int) Math.Floor(xCoordRebarList.Count() / (numShearLinksLeg - 2 + 1));
+                                int shearHookRebarIndex = shearHookMultiplier;
+
+                                while (shearHookRebarIndex < xCoordRebarList.Count() - 1)
+                                {
+                                    //Top to bottom line
+                                    xCoords = new List<double> { xCoordRebarList[shearHookRebarIndex] + 0.5 * maxRebarDiameter, 
+                                        xCoordRebarList[shearHookRebarIndex] + 0.5 * maxRebarDiameter };
+                                    yCoords = new List<double> { minYCoordRebar, maxYCoordRebar };
+
+                                    HelperAutoLisp.DrawLine(ref lisp, xCoords, yCoords);
+
+                                    xCoords = new List<double> { xCoordRebarList[shearHookRebarIndex] + 0.5 * maxRebarDiameter + shearLinksDia, 
+                                        xCoordRebarList[shearHookRebarIndex] + 0.5 * maxRebarDiameter + shearLinksDia };
+                                    yCoords = new List<double> { minYCoordRebar, maxYCoordRebar };
+
+                                    HelperAutoLisp.DrawLine(ref lisp, xCoords, yCoords);
+
+                                    //End anchor
+                                    xCoords = new List<double> { xCoordRebarList[shearHookRebarIndex] - 0.5 * maxRebarDiameter - shearLinksDia,
+                                        xCoordRebarList[shearHookRebarIndex] - 0.5 * maxRebarDiameter - shearLinksDia,
+                                        xCoordRebarList[shearHookRebarIndex] - 0.5 * maxRebarDiameter,
+                                        xCoordRebarList[shearHookRebarIndex] - 0.5 * maxRebarDiameter, };
+                                    yCoords = new List<double> { maxYCoordRebar, maxYCoordRebar - 50,
+                                        maxYCoordRebar - 50, maxYCoordRebar};
+
+                                    HelperAutoLisp.DrawLine(ref lisp, xCoords, yCoords);
+
+                                    xCoords = new List<double> { xCoordRebarList[shearHookRebarIndex] - 0.5 * maxRebarDiameter - shearLinksDia,
+                                        xCoordRebarList[shearHookRebarIndex] - 0.5 * maxRebarDiameter - shearLinksDia,
+                                        xCoordRebarList[shearHookRebarIndex] - 0.5 * maxRebarDiameter,
+                                        xCoordRebarList[shearHookRebarIndex] - 0.5 * maxRebarDiameter, };
+                                    yCoords = new List<double> { minYCoordRebar, minYCoordRebar + 50,
+                                        minYCoordRebar + 50, minYCoordRebar};
+
+                                    HelperAutoLisp.DrawLine(ref lisp, xCoords, yCoords);
+
+                                    //Arc
+                                    xCoords = new List<double> {  xCoordRebarList[shearHookRebarIndex] - 0.5 * maxRebarDiameter - shearLinksDia,
+                                        xCoordRebarList[shearHookRebarIndex],
+                                        xCoordRebarList[shearHookRebarIndex] + 0.5 * maxRebarDiameter + shearLinksDia};
+                                    yCoords = new List<double> { maxYCoordRebar, maxYCoordRebar + 0.5 * maxRebarDiameter + shearLinksDia,
+                                        maxYCoordRebar };
+
+                                    HelperAutoLisp.DrawArc(ref lisp, xCoords, yCoords);
+
+                                    xCoords = new List<double> {  xCoordRebarList[shearHookRebarIndex] - 0.5 * maxRebarDiameter - shearLinksDia,
+                                        xCoordRebarList[shearHookRebarIndex],
+                                        xCoordRebarList[shearHookRebarIndex] + 0.5 * maxRebarDiameter + shearLinksDia};
+                                    yCoords = new List<double> { minYCoordRebar, minYCoordRebar - 0.5 * maxRebarDiameter - shearLinksDia,
+                                        minYCoordRebar };
+
+                                    HelperAutoLisp.DrawArc(ref lisp, xCoords, yCoords);
+
+                                    shearHookRebarIndex += shearHookMultiplier;
+
+                                    shearHookRebarIndex += shearHookMultiplier;
+                                }
+                            }
+
+                            //Draw shear hooks in x (left to right)
+                            numShearLinksLeg = 0;
+                            if (height > width)
+                            {
+                                numShearLinksLeg = numShearLinksLegMinor;
+                            }
+                            else
+                            {
+                                numShearLinksLeg = numShearLinksLegMajor;
+                            }
+
+                            if (numShearLinksLeg - 2 > 0) //Need to -2 because the 2 is using links
+                            {
+                                int shearHookMultiplier = (int)Math.Floor(yCoordRebarList.Count() / (numShearLinksLeg - 2 + 1));
+                                int shearHookRebarIndex = shearHookMultiplier;
+
+                                while (shearHookRebarIndex < yCoordRebarList.Count() - 1)
+                                {
+                                    //Left to right line
+                                    xCoords = new List<double> { minXCoordRebar, maxXCoordRebar };
+                                    yCoords = new List<double> { yCoordRebarList[shearHookRebarIndex] + 0.5 * maxRebarDiameter, 
+                                        yCoordRebarList[shearHookRebarIndex] + 0.5 * maxRebarDiameter };
+
+                                    HelperAutoLisp.DrawLine(ref lisp, xCoords, yCoords);
+
+                                    xCoords = new List<double> { minXCoordRebar, maxXCoordRebar };
+                                    yCoords = new List<double> { yCoordRebarList[shearHookRebarIndex] + 0.5 * maxRebarDiameter + shearLinksDia, 
+                                        yCoordRebarList[shearHookRebarIndex] + 0.5 * maxRebarDiameter + shearLinksDia };
+
+                                    HelperAutoLisp.DrawLine(ref lisp, xCoords, yCoords);
+
+                                    //End anchor
+                                    xCoords = new List<double> { maxXCoordRebar, maxXCoordRebar - 50,
+                                        maxXCoordRebar - 50, maxXCoordRebar };
+                                    yCoords = new List<double> { yCoordRebarList[shearHookRebarIndex] - 0.5 * maxRebarDiameter - shearLinksDia,
+                                        yCoordRebarList[shearHookRebarIndex] - 0.5 * maxRebarDiameter - shearLinksDia,
+                                        yCoordRebarList[shearHookRebarIndex] - 0.5 * maxRebarDiameter,
+                                        yCoordRebarList[shearHookRebarIndex] - 0.5 * maxRebarDiameter};
+
+                                    HelperAutoLisp.DrawLine(ref lisp, xCoords, yCoords);
+
+                                    xCoords = new List<double> { minXCoordRebar, minXCoordRebar + 50,
+                                        minXCoordRebar + 50, minXCoordRebar };
+                                    yCoords = new List<double> { yCoordRebarList[shearHookRebarIndex] - 0.5 * maxRebarDiameter - shearLinksDia,
+                                        yCoordRebarList[shearHookRebarIndex] - 0.5 * maxRebarDiameter - shearLinksDia,
+                                        yCoordRebarList[shearHookRebarIndex] - 0.5 * maxRebarDiameter,
+                                        yCoordRebarList[shearHookRebarIndex] - 0.5 * maxRebarDiameter};
+
+                                    HelperAutoLisp.DrawLine(ref lisp, xCoords, yCoords);
+
+                                    //Arc
+                                    xCoords = new List<double> { minXCoordRebar, minXCoordRebar - 0.5 * maxRebarDiameter - shearLinksDia,
+                                        minXCoordRebar };
+                                    yCoords = new List<double> { yCoordRebarList[shearHookRebarIndex] - 0.5 * maxRebarDiameter - shearLinksDia,
+                                        yCoordRebarList[shearHookRebarIndex],
+                                        yCoordRebarList[shearHookRebarIndex] + 0.5 * maxRebarDiameter + shearLinksDia};
+
+                                    HelperAutoLisp.DrawArc(ref lisp, xCoords, yCoords);
+
+                                    xCoords = new List<double> { maxXCoordRebar, maxXCoordRebar + 0.5 * maxRebarDiameter + shearLinksDia,
+                                        maxXCoordRebar };
+                                    yCoords = new List<double> { yCoordRebarList[shearHookRebarIndex] - 0.5 * maxRebarDiameter - shearLinksDia,
+                                        yCoordRebarList[shearHookRebarIndex],
+                                        yCoordRebarList[shearHookRebarIndex] + 0.5 * maxRebarDiameter + shearLinksDia};
+
+                                    HelperAutoLisp.DrawArc(ref lisp, xCoords, yCoords);
+
+                                    shearHookRebarIndex += shearHookMultiplier;
+                                }
+                            }
+
+                            //Add text
+                            double xCoordText = xCoordReference;
+                            double yCoordText = yCoordReference - 100;
+                            HelperAutoLisp.AddText(ref lisp, xCoordText, yCoordText, 50, 0, $"Unique name: { rcColumn.UniqueName}");
+
+                            yCoordText -= 100;
+                            HelperAutoLisp.AddText(ref lisp, xCoordText, yCoordText, 50, 0, $"Rebar: {rcColumn.Rebar}");
+
+                            yCoordText -= 100;
+                            HelperAutoLisp.AddText(ref lisp, xCoordText, yCoordText, 50, 0, $"Shear links: {rcColumn.ShearLinks}");
+
+                            /*
+                            yCoordText -= 100;
+                            HelperAutoLisp.AddText(ref lisp, xCoordText, yCoordText, 50, 0, $"Shear links major: {rcColumn.ShearLinksMajor}");
+
+                            yCoordText -= 100;
+                            HelperAutoLisp.AddText(ref lisp, xCoordText, yCoordText, 50, 0, $"Shear links minor: {rcColumn.ShearLinksMinor}");
+                            */
+
+
+
+                        }
+                        else if (rcColumn.Shape == "Circular")
+                        {
+
+                        }
+
+                        uniqueZCoordIndex++;
+                    }
+
+                    
+                }
+
+                //Add text for the specific column
+                HelperAutoLisp.AddText(ref lisp, xCoordReference, uniqueYCoordList[0]-300 , 200, 0, Convert.ToString(groupedRcColumn.Key));
+
+                //Update xCoordReference to the right
+                xCoordReference += Math.Max(maxWidth + 1000, 2000);
+
+                //Draw vertical lines
+                xCoords = new List<double> { xCoordReference - 100, xCoordReference - 100 };
+                yCoords = new List<double> { uniqueYCoordList[0] - 400, uniqueYCoordList[uniqueYCoordList.Count() - 1] };
+
+                HelperAutoLisp.DrawLine(ref lisp, xCoords, yCoords);
+            }
+
+            //Draw horizontal lines
+            for (int i = 0; i < uniqueZCoordList.Count(); i++)
+            {
+                xCoords = new List<double> { 0, xCoordReference };
+                yCoords = new List<double> { uniqueYCoordList[i], uniqueYCoordList[i] };
+
+                HelperAutoLisp.DrawLine(ref lisp, xCoords, yCoords);
+                HelperAutoLisp.AddText(ref lisp, -2000, uniqueYCoordList[i] - 100, 200, 0, Convert.ToString(uniqueZCoordList[i]));
+            }
+
+            //HelperAutoLisp.DrawLine(ref lisp, xCoords, yCoords);
+
+            HelperAutoLisp.DrawCircle(ref lisp, -10, -10, 5, true);
+
+            WriteLispFile(Sap, lisp);
+        }
+
+        public static void WriteLispFile(cSapModel SapModel, List<string> lisp)
+        {
+            string filePath = SapModel.GetModelFilepath();
+            string fileName = filePath + @"\rc_column_autolisp";
+            string fileExtension = ".lsp";
+
+            try
+            {
+                // Check if file already exists. If yes, delete it.
+                while (File.Exists(fileName + fileExtension))
+                {
+                    fileName += "_1";
+                }
+
+                //Add extension
+                fileName += fileExtension;
+
+                // Create a new file
+                using (FileStream fs = File.Create(fileName))
+                {
+                    foreach (string line in lisp)
+                    {
+                        // Add some text to file
+                        Byte[] text = new UTF8Encoding(true).GetBytes($"{line}");
+                        fs.Write(text, 0, text.Length);
+
+                        //New line
+                        Byte[] newline = Encoding.ASCII.GetBytes(Environment.NewLine);
+                        fs.Write(newline, 0, newline.Length);
+                    }
+
+                }
+            }
+            catch (Exception Ex)
+            {
+                Console.WriteLine(Ex.ToString());
+            }
+        }
+
+        public static bool GetRcColumnPoints(cSapModel SapModel, List<src.HelperEtabs.RcColumn> rcColumnList)
+        {
+            int ret = 0;
+            bool isError = false;
+            HelperEtabs.DatabaseTable pointObjConnectivity = new HelperEtabs.DatabaseTable();
+
+            //Remove ~temp group if already exist
+            string[] existingGroupList = HelperEtabs.GetGroupList(SapModel);
+            if (existingGroupList.Contains("~temp"))
+            {
+                //Select points which is connected to the wall
+                //Delete temp group
+                ret = SapModel.GroupDef.Delete("~temp");
+                if (ret != 0) { isError = true; return isError; }
+            }
+
+            List<string> pointsConnectedToRcCol = new List<string>();
+            foreach (src.HelperEtabs.RcColumn rcColumn in rcColumnList)
+            {
+                string pointIUniqueName;
+                string pointJUniqueName;
+                (pointIUniqueName, pointJUniqueName, isError) = HelperEtabs.GetFramePointsUniqueName(SapModel, rcColumn.UniqueName);
+
+                rcColumn.PointIUniqueName = pointIUniqueName;
+                rcColumn.PointJUniqueName = pointJUniqueName;
+
+                pointsConnectedToRcCol.Add(pointIUniqueName);
+                pointsConnectedToRcCol.Add(pointJUniqueName);
+            }
+
+            isError = HelperEtabs.CreateNewGroup(SapModel, "~temp");
+            if (isError) { return isError; }
+            isError = HelperEtabs.AddPointsInsideGroup(SapModel, pointsConnectedToRcCol, "~temp");
+            if (isError) { return isError; }
+
+            List<string> tempListChoosenGroup = new List<string>();
+            tempListChoosenGroup.Add("~temp");
+            (isError, pointObjConnectivity) = src.HelperEtabs.GetTableDisplaySpecificGroup(SapModel, "Point Object Connectivity", tempListChoosenGroup, false);
+
+            //Convert point connectivity database to Point3D
+            List<HelperEtabs.Point3D> allPointList = HelperEtabs.ConvertPointDatabaseToPoint3D(pointObjConnectivity);
+
+            foreach (src.HelperEtabs.RcColumn rcColumn in rcColumnList)
+            {
+                List<HelperEtabs.Point3D> point3DList = new List<HelperEtabs.Point3D>();
+
+                HelperEtabs.Point3D point = null;
+                (isError, point) = HelperEtabs.GetSpecificPoint3D(rcColumn.PointIUniqueName, allPointList);
+                if (!isError) { rcColumn.PointI = point; } else { return isError; }
+
+                (isError, point) = HelperEtabs.GetSpecificPoint3D(rcColumn.PointJUniqueName, allPointList);
+                if (!isError) { rcColumn.PointJ = point; } else { return isError; }
+            }
+
+            return isError;
+        }
+
+        public static (Dictionary<string, List<src.HelperEtabs.RcColumn>>, List<double>, double) GroupRcColumnWithTheSameCoord(List<src.HelperEtabs.RcColumn> rcColumnList)
+        {
+            Dictionary<string, List<src.HelperEtabs.RcColumn>> groupedRcColumnList = new Dictionary<string, List<src.HelperEtabs.RcColumn>>();
+
+            List<List<string>> uniqueXYList = new List<List<string>>();
+
+            List<double> uniqueZList = new List<double>();
+            double maxHeight = 0;
+
+            foreach(HelperEtabs.RcColumn rcColumn in rcColumnList)
+            {
+                double bottomZ = Math.Min(rcColumn.PointI.ZCoordinate, rcColumn.PointJ.ZCoordinate);
+                double topZ = Math.Max(rcColumn.PointI.ZCoordinate, rcColumn.PointJ.ZCoordinate);
+                if (!uniqueZList.Contains(bottomZ)) { uniqueZList.Add(bottomZ); }
+                if (!uniqueZList.Contains(topZ)) { uniqueZList.Add(topZ); }
+
+                if (rcColumn.Height > maxHeight) { maxHeight = rcColumn.Height; }
+
+                //Check point i and j is same XY, means the column is vertical
+                if (rcColumn.PointI.XCoordinate == rcColumn.PointJ.XCoordinate && rcColumn.PointI.YCoordinate == rcColumn.PointJ.YCoordinate)
+                {
+                    //no need this check. just draw coord based on 1 point.
+                }
+
+                //If column is vertical can check using point i only
+                int uniqueXYIndex = 0; 
+                bool isUnique = true;
+                foreach (List<string> uniqueXY in uniqueXYList)
+                {
+                    double uniqueX = Convert.ToDouble(uniqueXY[0]);
+                    double uniqueY = Convert.ToDouble(uniqueXY[1]);
+
+                    if (rcColumn.PointI.XCoordinate == uniqueX && rcColumn.PointI.YCoordinate == uniqueY)
+                    {
+                        isUnique = false;
+                        break;
+                    }
+
+                    uniqueXYIndex++;
+                }
+
+                //Break go here
+                //If not unique put inside group
+                if (!isUnique)
+                {
+                    groupedRcColumnList[$"{Convert.ToString(uniqueXYIndex)}"].Add(rcColumn);
+                }
+                //If unique create new group
+                else
+                {
+                    List<string> uniqueXY = new List<string> { Convert.ToString(rcColumn.PointI.XCoordinate), Convert.ToString(rcColumn.PointI.YCoordinate) };
+                    uniqueXYList.Add(uniqueXY);
+                    groupedRcColumnList[$"{Convert.ToString(uniqueXYIndex)}"] = new List<HelperEtabs.RcColumn> { rcColumn };
+                }
+            }
+
+            //Sort by X then Y
+            var orderedList = groupedRcColumnList.OrderBy(x => x.Value[0].PointI.XCoordinate).ThenBy(x => x.Value[0].PointI.YCoordinate)
+                .ThenByDescending(x => x.Value[0].PointI.ZCoordinate);
+
+            Dictionary<string, List<src.HelperEtabs.RcColumn>> groupedRcColumnOrderedList = new Dictionary<string, List<src.HelperEtabs.RcColumn>>();
+            int index = 1; //Start at 1
+            foreach (var ordered in orderedList)
+            {
+                groupedRcColumnOrderedList[$"C{Convert.ToString(index)}"] = ordered.Value;
+                index++;
+            }
+
+            //Sort uniqueZList
+            uniqueZList.Sort();
+            uniqueZList.Reverse();
+
+            return (groupedRcColumnOrderedList, uniqueZList, maxHeight);
+
+        }
+
+
     }
 }

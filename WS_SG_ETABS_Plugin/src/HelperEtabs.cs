@@ -40,7 +40,6 @@ namespace WS_SG_ETABS_Plugin.src
             }
         }
 
-
         public class Shell
         {
             public string UniqueName { get; set; }
@@ -68,6 +67,10 @@ namespace WS_SG_ETABS_Plugin.src
             public List<string> PointUniqueNameList { get; set; }
             public List<Point3D> Points { get; set; }
             public string Group { get; set; }
+            public string PointIUniqueName { get; set; }
+            public string PointJUniqueName { get; set; }
+            public Point3D PointI { get; set; }
+            public Point3D PointJ { get; set; }
 
             public Frame(string name, List<string> pointUniqueNameList)
             {
@@ -80,12 +83,13 @@ namespace WS_SG_ETABS_Plugin.src
                 UniqueName = name;
                 Points = points;
             }
+
+            public Frame() { }
         }
 
 
-        public class Beam
+        public class Beam : Frame
         {
-            public string UniqueName { get; set; }
             public double Length { get; set; }
         }
 
@@ -198,9 +202,8 @@ namespace WS_SG_ETABS_Plugin.src
             public double RightShear { get; set; }
         }
 
-        public class Column
+        public class Column : Frame
         {
-            public string UniqueName { get; set; }
             public double Length { get; set; }
         }
 
@@ -225,6 +228,7 @@ namespace WS_SG_ETABS_Plugin.src
             public double AvMinor { get; set; }
             public string ShearLinksMajor { get; set; }
             public string ShearLinksMinor { get; set; }
+            public string ShearLinks { get; set; }
             public double Fyk { get; set; }
             public double Fck { get; set; }
             public double AsMin { get; set; }
@@ -248,6 +252,9 @@ namespace WS_SG_ETABS_Plugin.src
             public string AsEvaluationComment { get; set; }
             public string AvEvaluationComment { get; set; }
             public string EtabsComment { get; set; }
+            public string Cluster { get; set; }
+            public int WidthNoRebar { get; set; }
+            public int HeightNoRebar { get; set; }
 
             public RcColumn(string name)
             {
@@ -2976,7 +2983,7 @@ namespace WS_SG_ETABS_Plugin.src
         /// <param name="Sap"></param>
         /// <param name="sectionPropName"></param>
         /// <returns></returns>
-        public static (string, string, bool) GetEndPointsFrame(cSapModel Sap, string frameName)
+        public static (string, string, bool) GetFramePointsUniqueName(cSapModel Sap, string frameName)
         {
             string pointI = "";
             string pointJ = "";
