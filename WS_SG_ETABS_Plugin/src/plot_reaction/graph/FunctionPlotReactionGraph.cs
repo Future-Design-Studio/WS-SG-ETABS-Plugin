@@ -239,7 +239,6 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
                     double lowY = minYCoord;
                     double highY = minYCoord;
 
-
                     //List down coordinate for splitting
                     List<double> lowCoordUsed = new List<double>();
                     List<double> highCoordUsed = new List<double>();
@@ -308,6 +307,8 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
                         {
                             double lowX = lowCoordUsed[divisionXIndex];
                             double highX = highCoordUsed[divisionXIndex];
+
+                            double reactionSumPerDivision = 0;
 
                             //Inside each divison total reaction for each group
                             int groupSumIndex = 0;
@@ -431,9 +432,31 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
                                     txt.FontBold = true;
                                 }
 
+                                reactionSumPerDivision += reactionSum;
                                 groupSumIndex++;
 
                             }
+
+                            //Show total per division
+                            double textXCoordSumPerDivison;
+                            double textYCoordSumPerDivison;
+                            if (divisionYIndex == 0)
+                            {
+                                textXCoordSumPerDivison = (lowX + highX) / 2;
+                                textYCoordSumPerDivison = (lowY + highY) / 2 - offsetX - (groupSumIndex + 1) * separationX;
+                            }
+                            else
+                            {
+                                textXCoordSumPerDivison = (lowX + highX) / 2;
+                                textYCoordSumPerDivison = (lowY + highY) / 2 + offsetX + (groupSumIndex + 1) * separationX;
+                            }
+
+
+                            var txtSumPerDivision = ReactionPlot.Plot.AddText("Sum=" + Convert.ToString(Convert.ToInt32(reactionSumPerDivision)), 
+                                textXCoordSumPerDivison, textYCoordSumPerDivison, sumTextSizeX, System.Drawing.ColorTranslator.FromHtml("black"));
+                            txtSumPerDivision.Alignment = Alignment.MiddleCenter;
+                            txtSumPerDivision.FontBold = true;
+
                         }
 
                     }
@@ -511,6 +534,8 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
                         //Start from minXCoord
                         double lowY = minYCoord;
                         double highY = minYCoord;
+
+                        double reactionSumPerDivision = 0;
 
                         for (int divisionYIndex = 0; divisionYIndex < divisionY; divisionYIndex++)
                         {
@@ -623,9 +648,30 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.graph
                                     txt.FontBold = true;
                                 }
 
+                                reactionSumPerDivision += reactionSum;
                                 groupSumIndex++;
 
                             }
+
+                            //Show total per division
+                            double textXCoordSumPerDivison;
+                            double textYCoordSumPerDivison;
+                            if (divisionYIndex == 0)
+                            {
+                                textXCoordSumPerDivison = (lowX + highX) / 2 - offsetY;
+                                textYCoordSumPerDivison = (lowY + highY) / 2 - (groupSumIndex + 1) * separationY;
+                            }
+                            else
+                            {
+                                textXCoordSumPerDivison = (lowX + highX) / 2 + offsetY;
+                                textYCoordSumPerDivison = (lowY + highY) / 2 - (groupSumIndex + 1) * separationY;
+                            }
+
+
+                            var txtSumPerDivision = ReactionPlot.Plot.AddText("Sum=" + Convert.ToString(Convert.ToInt32(reactionSumPerDivision)),
+                                textXCoordSumPerDivison, textYCoordSumPerDivison, sumTextSizeX, System.Drawing.ColorTranslator.FromHtml("black"));
+                            txtSumPerDivision.Alignment = Alignment.MiddleCenter;
+                            txtSumPerDivision.FontBold = true;
                         }
 
                     }
