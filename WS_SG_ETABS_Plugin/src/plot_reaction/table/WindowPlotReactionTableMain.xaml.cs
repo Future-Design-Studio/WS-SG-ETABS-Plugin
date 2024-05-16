@@ -296,8 +296,12 @@ namespace WS_SG_ETABS_Plugin.src.plot_reaction.table
             buttonAddGroup.IsEnabled = true;
         }
 
+
         #endregion
 
+        private void textBoxFileName_TextChanged(object sender, TextChangedEventArgs e)
+        {
 
+        }
     }
 }

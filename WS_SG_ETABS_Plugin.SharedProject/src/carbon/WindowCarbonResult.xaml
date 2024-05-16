@@ -1,0 +1,66 @@
+﻿<Window x:Class="WS_SG_ETABS_Plugin.src.carbon.WindowCarbonResult"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WS_SG_ETABS_Plugin.src.carbon"
+             xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+             mc:Ignorable="d" Height="300" Width="600" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="1.5*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Column="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <Label Grid.Row="0" Grid.Column="0" FontSize="15" HorizontalAlignment="Center" VerticalAlignment="Center">Column</Label>
+            <Label x:Name="labelCarbonColumn" Grid.Row="0" Grid.Column="1" FontSize="15" HorizontalAlignment="Center" VerticalAlignment="Center"></Label>
+            <Label Grid.Row="0" Grid.Column="2" FontSize="15" HorizontalAlignment="Center" VerticalAlignment="Center">kg CO2e</Label>
+
+            <Label Grid.Row="1" Grid.Column="0" FontSize="15" HorizontalAlignment="Center" VerticalAlignment="Center">Beam</Label>
+            <Label x:Name="labelCarbonBeam" Grid.Row="1" Grid.Column="1" FontSize="15" HorizontalAlignment="Center" VerticalAlignment="Center"></Label>
+            <Label Grid.Row="1" Grid.Column="2" FontSize="15" HorizontalAlignment="Center" VerticalAlignment="Center">kg CO2e</Label>
+
+            <Label Grid.Row="2" Grid.Column="0" FontSize="15" HorizontalAlignment="Center" VerticalAlignment="Center">Brace</Label>
+            <Label x:Name="labelCarbonBrace" Grid.Row="2" Grid.Column="1" FontSize="15" HorizontalAlignment="Center" VerticalAlignment="Center"></Label>
+            <Label Grid.Row="2" Grid.Column="2" FontSize="15" HorizontalAlignment="Center" VerticalAlignment="Center">kg CO2e</Label>
+
+            <Label Grid.Row="3" Grid.Column="0" FontSize="15" HorizontalAlignment="Center" VerticalAlignment="Center">Floor</Label>
+            <Label x:Name="labelCarbonFloor" Grid.Row="3" Grid.Column="1" FontSize="15" HorizontalAlignment="Center" VerticalAlignment="Center"></Label>
+            <Label Grid.Row="3" Grid.Column="2" FontSize="15" HorizontalAlignment="Center" VerticalAlignment="Center">kg CO2e</Label>
+
+            <Label Grid.Row="4" Grid.Column="0" FontSize="15" HorizontalAlignment="Center" VerticalAlignment="Center">Wall</Label>
+            <Label x:Name="labelCarbonWall" Grid.Row="4" Grid.Column="1" FontSize="15" HorizontalAlignment="Center" VerticalAlignment="Center"></Label>
+            <Label Grid.Row="4" Grid.Column="2" FontSize="15" HorizontalAlignment="Center" VerticalAlignment="Center">kg CO2e</Label>
+
+            <Label Grid.Row="5" Grid.Column="0" FontSize="15" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold">Total</Label>
+            <Label x:Name="labelCarbonSum" Grid.Row="5" Grid.Column="1" FontSize="15" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold"></Label>
+            <Label Grid.Row="5" Grid.Column="2" FontSize="15" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold">kg CO2e</Label>
+        </Grid>
+
+        <lvc:PieChart Grid.Column="1" Name="Chart" Grid.Row="1" Series="{Binding SeriesCollection}" 
+                LegendLocation="Right" InnerRadius="30" Margin="10">
+            <lvc:PieChart.ChartLegend>
+                <lvc:DefaultLegend BulletSize="20"></lvc:DefaultLegend>
+            </lvc:PieChart.ChartLegend>
+            <lvc:PieChart.DataTooltip>
+                <lvc:DefaultTooltip BulletSize="20"></lvc:DefaultTooltip>
+            </lvc:PieChart.DataTooltip>
+        </lvc:PieChart>
+
+    </Grid>
+</Window>

@@ -43,13 +43,6 @@ namespace WS_SG_ETABS_Plugin.src.rc_col_schedule
 
             InitializeComponent();
 
-            //Fill in default excel result name
-            fileName.Text = "rc_column_schedule";
-
-            //Fill in model path (default path)
-            modelPath = SapModel.GetModelFilepath();
-            filePath.Text = modelPath;
-
             //Fill in combobox for available groups
             src.HelperUI.PopulateComboBoxAvailGroup(_SapModel, comBoxGroup);
 
@@ -59,33 +52,10 @@ namespace WS_SG_ETABS_Plugin.src.rc_col_schedule
             ShowDialog();
         }
 
-        private void buttonDefaultPath_Click(object sender, RoutedEventArgs e)
-        {
-            filePath.Text = modelPath;
-        }
-
-        private void buttonModifyPath_Click(object sender, RoutedEventArgs e)
-        {
-            var dialog = new System.Windows.Forms.FolderBrowserDialog();
-            dialog.SelectedPath = filePath.Text;
-
-            System.Windows.Forms.DialogResult result = dialog.ShowDialog();
-
-            if (result == System.Windows.Forms.DialogResult.OK)
-            {
-                filePath.Text = dialog.SelectedPath;
-            }
-
-        }
-
         private void buttonOk_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                string name = fileName.Text;
-                string path = filePath.Text;
-
-
                 double minimumRebarPercentage = Convert.ToDouble(textBoxMinimumRebar.Text)/100;
                 double cover = Convert.ToDouble(textBoxCover.Text);
                 int maxNoLayer = Convert.ToInt32(textBoxMaxNoLayer.Text);
@@ -123,10 +93,14 @@ namespace WS_SG_ETABS_Plugin.src.rc_col_schedule
                     rebarSpcPreference = "autoRamboll";
                 }
 
+                //ML checkbox
+                bool? doCluster = checkBoxCluster.IsChecked;
+
                 IsEnabled = false;
                 //Call up carbon result window
-                src.rc_col_schedule.WindowRCCSchedResult windowRCCSchedResult = new WindowRCCSchedResult(_SapModel, _Plugin, name, path,
-                    rebarSpc, rebarSpcPreference, maxShearLinksSpacing, minShearLinksSpacing, shearLinksSpacingStep, minimumRebarPercentage, cover, maxNoLayer, rebarDiameterList, shearLinksDiameterList, groupList);
+                src.rc_col_schedule.WindowRCCSchedResult windowRCCSchedResult = new WindowRCCSchedResult(_SapModel, _Plugin,
+                    rebarSpc, rebarSpcPreference, maxShearLinksSpacing, minShearLinksSpacing, shearLinksSpacingStep, minimumRebarPercentage, cover, maxNoLayer, rebarDiameterList, shearLinksDiameterList, 
+                    groupList, doCluster);
                 IsEnabled = true;
 
             }

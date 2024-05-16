@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,6 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using ETABSv1;
+using Xceed.Wpf.AvalonDock.Layout;
 
 namespace WS_SG_ETABS_Plugin.src
 {
@@ -45,6 +48,42 @@ namespace WS_SG_ETABS_Plugin.src
                 }
                 table.Add(dataRow);
             }
+            return table;
+
+        }
+
+        /// <summary>
+        /// Convert ETABS table which is in array to dictionary data structure
+        /// </summary>
+        /// <param name="tableArray">Table from ETABS</param>
+        /// <param name="columnKeys">Column label</param>
+        /// <returns>List of dictionary with key = column label, each dictionary is a row</returns>
+        public static List<Dictionary<string, string>> TransposedEtabsTableToDictionary(string[] tableArray, string[] columnKeys)
+        {
+            //Get number of items
+            int numItems = tableArray.Length / columnKeys.Length;
+
+            List<Dictionary<string, string>> table = new List<Dictionary<string, string>>();
+
+            int itemIndex = 0;
+           
+            while (itemIndex < numItems)
+            {
+                int columnIndex = 0;
+
+                Dictionary<string, string> dataRow = new Dictionary<string, string>();
+                foreach (string column in columnKeys)
+                {
+                    int rowIndex = itemIndex + columnIndex * numItems;
+                    dataRow[column] = tableArray[rowIndex];
+                    columnIndex++;
+                }
+                table.Add(dataRow);
+                itemIndex++;
+            }
+
+
+
             return table;
 
         }
@@ -107,8 +146,6 @@ namespace WS_SG_ETABS_Plugin.src
 
         #endregion
 
-
-
         #region Math Method
 
         /// <summary>
@@ -152,6 +189,26 @@ namespace WS_SG_ETABS_Plugin.src
             return result;
         }
 
+        public static double GetEcludianDistance(double[] dataA, double[] dataB)
+        {
+            if (dataA.Length != dataB.Length)
+            {
+                MessageBox.Show("Ecludian distance requires both data to have the same dimension!");
+                return 0;
+            }
+            else
+            {
+                double sumDimension = 0;
+                for (int indexData = 0;  indexData < dataA.Count(); indexData++)
+                {
+                    double dimension = Math.Pow(dataA[indexData] - dataB[indexData], 2);
+                    sumDimension += dimension;
+                }
+
+                return Math.Sqrt(sumDimension);
+            }
+        }
+
 
         #endregion
 
@@ -184,6 +241,8 @@ namespace WS_SG_ETABS_Plugin.src
         }
 
         #endregion
+
+        #region Dictionary Method
 
         /// <summary>
         /// Finding min and max value in list of dictionary based on given key. Value must be number
@@ -220,7 +279,42 @@ namespace WS_SG_ETABS_Plugin.src
             return (min, max);
         }
 
+        #endregion
 
+        #region Array method
+
+        public static string[] ConvertDoubleToStringArray(double[] array)
+        {
+            // converting int myArr to String conarr 
+            String[] newArray = Array.ConvertAll(array, new Converter<double, String>(DoubleToString));
+
+            return newArray;
+        }
+
+        // Defining the method 
+        public static String DoubleToString(double pf)
+        {
+            return pf.ToString();
+        }
+
+        #endregion
+
+        #region Rebar method
+
+        public static double GetRebarBendingRadius (int rebarDiameter)
+        {
+            if (rebarDiameter < 20)
+            {
+                return rebarDiameter * 2;
+            }
+            else
+            {
+                return rebarDiameter * 3.5;
+            }
+        }
+
+
+        #endregion
 
     }
 
