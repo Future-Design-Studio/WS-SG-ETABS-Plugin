@@ -98,7 +98,7 @@ namespace WS_SG_ETABS_Plugin.src
                                 }
                             }
                             MessageBox.Show("Superseded version of ETABS PowerAPP detected! You will be redirected to download page for latest version of FDS PowerAPP.");
-                            System.Diagnostics.Process.Start("https://ramboll.sharepoint.com/:f:/s/WSSGProgramsDevelopment/EjfGNYy_5t5BgD26_na9in0BwuU48Fhd36oCEbPDjeoUjQ?e=6piTdy");
+                            System.Diagnostics.Process.Start("https://ramboll.sharepoint.com/:f:/s/FutureDesignStudio289/EmoohnEVKYRHjNMT6_Ik1QkBkmNHsH_dyxFTFlH35NRaYA");
                             licenseValid = false;
                             return (licenseValid, null);
 

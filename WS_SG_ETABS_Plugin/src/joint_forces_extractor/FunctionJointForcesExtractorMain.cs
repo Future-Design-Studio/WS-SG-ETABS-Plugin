@@ -97,6 +97,7 @@ namespace WS_SG_ETABS_Plugin.src.joint_forces_extractor
             //Filter group by selected group name
             List<Dictionary<string, string>> groupAssignmentTableFiltered = new List<Dictionary<string, string>>();
             List<string> pointUniqueNames = new List<string>();
+            List<string> groupNamePoint = new List<string>();
             foreach (Dictionary<string, string> row in groupAssignmentTable.TableInList)
             {
                 if (listChoosenGroup.Contains(row["GroupName"]))
@@ -109,6 +110,7 @@ namespace WS_SG_ETABS_Plugin.src.joint_forces_extractor
                     else
                     {
                         pointUniqueNames.Add(row["UniqueName"]);
+                        groupNamePoint.Add(row["GroupName"]);
                     }
                 }
             }
@@ -608,7 +610,7 @@ namespace WS_SG_ETABS_Plugin.src.joint_forces_extractor
 
             List<string> colTitles = new List<string>()
             {
-                "Joint Unique Name", "Frame Unique Name", "Load Case/Combi", "Step Type", "Axial (kN)", "Shear Major (kN)", "Shear Minor (kN)", "Torsion (kN)", "Moment Minor (kN)", "Moment Major (kN)"
+                "Group", "Joint Unique Name", "Frame Unique Name", "Load Case/Combi", "Step Type", "Axial (kN)", "Shear Major (kN)", "Shear Minor (kN)", "Torsion (kN)", "Moment Minor (kN)", "Moment Major (kN)"
             };
             List<Dictionary<string, string>> finalTableToExcel = new List<Dictionary<string, string>>();
             foreach (Dictionary<string, string> row in frameForcesTableFiltered)
@@ -617,16 +619,17 @@ namespace WS_SG_ETABS_Plugin.src.joint_forces_extractor
                 {
                     Dictionary<string, string> rowinternal = new Dictionary<string, string>
                     {
-                        {colTitles[0], row["JointUniqueName"]},
-                        {colTitles[1], row["UniqueName"]},
-                        {colTitles[2], row["OutputCase"]},
-                        {colTitles[3], row["StepType"]},
-                        {colTitles[4], row["P"]},
-                        {colTitles[5], row["V2"]},
-                        {colTitles[6], row["V3"]},
-                        {colTitles[7], row["T"]},
-                        {colTitles[8], row["M2"]},
-                        {colTitles[9], row["M3"]},
+                        {colTitles[0], groupNamePoint[pointUniqueNames.IndexOf(row["JointUniqueName"])]},
+                        {colTitles[1], row["JointUniqueName"]},
+                        {colTitles[2], row["UniqueName"]},
+                        {colTitles[3], row["OutputCase"]},
+                        {colTitles[4], row["StepType"]},
+                        {colTitles[5], row["P"]},
+                        {colTitles[6], row["V2"]},
+                        {colTitles[7], row["V3"]},
+                        {colTitles[8], row["T"]},
+                        {colTitles[9], row["M2"]},
+                        {colTitles[10], row["M3"]},
                     };
                     finalTableToExcel.Add(rowinternal);
                 }
@@ -635,16 +638,17 @@ namespace WS_SG_ETABS_Plugin.src.joint_forces_extractor
                     row.Add("StepType", " ");
                     Dictionary<string, string> rowinternal = new Dictionary<string, string>
                     {
-                        {colTitles[0], row["JointUniqueName"]},
-                        {colTitles[1], row["UniqueName"]},
-                        {colTitles[2], row["OutputCase"]},
-                        {colTitles[3], row["StepType"]},
-                        {colTitles[4], row["P"]},
-                        {colTitles[5], row["V2"]},
-                        {colTitles[6], row["V3"]},
-                        {colTitles[7], row["T"]},
-                        {colTitles[8], row["M2"]},
-                        {colTitles[9], row["M3"]},
+                        {colTitles[0], groupNamePoint[pointUniqueNames.IndexOf(row["JointUniqueName"])]},
+                        {colTitles[1], row["JointUniqueName"]},
+                        {colTitles[2], row["UniqueName"]},
+                        {colTitles[3], row["OutputCase"]},
+                        {colTitles[4], row["StepType"]},
+                        {colTitles[5], row["P"]},
+                        {colTitles[6], row["V2"]},
+                        {colTitles[7], row["V3"]},
+                        {colTitles[8], row["T"]},
+                        {colTitles[9], row["M2"]},
+                        {colTitles[10], row["M3"]},
                     };
                     finalTableToExcel.Add(rowinternal);
                 }
@@ -685,6 +689,7 @@ namespace WS_SG_ETABS_Plugin.src.joint_forces_extractor
                 result[i, 7] = row[colTitles[7]];
                 result[i, 8] = row[colTitles[8]];
                 result[i, 9] = row[colTitles[9]];
+                result[i, 10] = row[colTitles[10]];
                 i++;
             }
 
