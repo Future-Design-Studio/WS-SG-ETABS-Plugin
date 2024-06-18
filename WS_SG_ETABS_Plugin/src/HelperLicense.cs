@@ -45,7 +45,7 @@ namespace WS_SG_ETABS_Plugin.src
                     }
                 }
 
-                if (licenseNumber.ToUpper() != "RWCPHLICE002" && licenseNumber.ToUpper() != "ME.CSI.LICENSE.RAMBOLLGRP.COM") 
+                if (licenseNumber.ToUpper() != "RWCPHLICE002" && licenseNumber.ToUpper() != "ME.CSI.LICENSE.RAMBOLLGRP.COM" && licenseNumber.ToUpper() != "RWCPHLICE011")  
                 {
                     MessageBox.Show("Illegal license. Your PC ID " + userComputerName + " has been reported to Ramboll IT as well as Singapore Police.");
                     licenseValid = false;
