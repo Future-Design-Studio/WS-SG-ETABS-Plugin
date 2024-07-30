@@ -1112,7 +1112,7 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
         {
             List<string> colTitles = new List<string>()
             {
-                "UniqueName", "Width (mm)", "Height (mm)", "fyk (Mpa)", "fck (Mpa)", "d (ETABS) (mm)", "d calculated (mm)", "Beam type", "As Min(mm2)"
+                "UniqueName", "Width (mm)", "Height (mm)", "fyk (Mpa)", "fck (Mpa)", "d (ETABS) (mm)", "d calculated (mm)", "Beam type"
                 , "Left Top As (mm2)", "Mid Top As (mm2)", "Right Top As (mm2)", "Left Bottom As (mm2)", "Mid Bottom As (mm2)", "Right Bottom As (mm2)"
                 , "Left Av (mm2/m)", "Mid Av (mm2/m)", "Right Av (mm2/m)"
                 , "Left Top Rebar", "Mid Top Rebar", "Right Top Rebar", "Left Bottom Rebar", "Mid Bottom Rebar", "Right Bottom Rebar"
@@ -1149,57 +1149,56 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
                 result[i, 5] = rcBeam.d;
                 result[i, 6] = rcBeam.dCalculated;
                 result[i, 7] = rcBeam.BeamType;
-                result[i, 8] = rcBeam.AsMin;
 
-                result[i, 9] = rcBeam.LeftTopAs;
-                result[i, 10] = rcBeam.MidTopAs;
-                result[i, 11] = rcBeam.RightTopAs;
-                result[i, 12] = rcBeam.LeftBottomAs;
-                result[i, 13] = rcBeam.MidBottomAs;
-                result[i, 14] = rcBeam.RightBottomAs;
+                result[i, 8] = rcBeam.LeftTopAs;
+                result[i, 9] = rcBeam.MidTopAs;
+                result[i, 10] = rcBeam.RightTopAs;
+                result[i, 11] = rcBeam.LeftBottomAs;
+                result[i, 12] = rcBeam.MidBottomAs;
+                result[i, 13] = rcBeam.RightBottomAs;
 
-                result[i, 15] = rcBeam.LeftAv;
-                result[i, 16] = rcBeam.MidAv;
-                result[i, 17] = rcBeam.RightAv;
+                result[i, 14] = rcBeam.LeftAv;
+                result[i, 15] = rcBeam.MidAv;
+                result[i, 16] = rcBeam.RightAv;
 
-                result[i, 18] = rcBeam.LeftTopRebar;
-                result[i, 19] = rcBeam.MidTopRebar;
-                result[i, 20] = rcBeam.RightTopRebar;
-                result[i, 21] = rcBeam.LeftBottomRebar;
-                result[i, 22] = rcBeam.MidBottomRebar;
-                result[i, 23] = rcBeam.RightBottomRebar;
+                result[i, 17] = rcBeam.LeftTopRebar;
+                result[i, 18] = rcBeam.MidTopRebar;
+                result[i, 19] = rcBeam.RightTopRebar;
+                result[i, 20] = rcBeam.LeftBottomRebar;
+                result[i, 21] = rcBeam.MidBottomRebar;
+                result[i, 22] = rcBeam.RightBottomRebar;
 
-                result[i, 24] = rcBeam.LeftShearLinks;
-                result[i, 25] = rcBeam.MidShearLinks;
-                result[i, 26] = rcBeam.RightShearLinks;
+                result[i, 23] = rcBeam.LeftShearLinks;
+                result[i, 24] = rcBeam.MidShearLinks;
+                result[i, 25] = rcBeam.RightShearLinks;
 
-                result[i, 27] = rcBeam.LeftTopAsProv;
-                result[i, 28] = rcBeam.MidTopAsProv;
-                result[i, 29] = rcBeam.RightTopAsProv;
-                result[i, 30] = rcBeam.LeftBottomAsProv;
-                result[i, 31] = rcBeam.MidBottomAsProv;
-                result[i, 32] = rcBeam.RightBottomAsProv;
+                result[i, 26] = rcBeam.LeftTopAsProv;
+                result[i, 27] = rcBeam.MidTopAsProv;
+                result[i, 28] = rcBeam.RightTopAsProv;
+                result[i, 29] = rcBeam.LeftBottomAsProv;
+                result[i, 30] = rcBeam.MidBottomAsProv;
+                result[i, 31] = rcBeam.RightBottomAsProv;
 
-                result[i, 33] = rcBeam.LeftAvProv;
-                result[i, 34] = rcBeam.MidAvProv;
-                result[i, 35] = rcBeam.RightAvProv;
+                result[i, 32] = rcBeam.LeftAvProv;
+                result[i, 33] = rcBeam.MidAvProv;
+                result[i, 34] = rcBeam.RightAvProv;
 
-                result[i, 36] = rcBeam.RatioLeftTopAs;
-                result[i, 37] = rcBeam.RatioMidTopAs;
-                result[i, 38] = rcBeam.RatioRightTopAs;
-                result[i, 39] = rcBeam.RatioLeftBottomAs;
-                result[i, 40] = rcBeam.RatioMidBottomAs;
-                result[i, 41] = rcBeam.RatioRightBottomAs;
+                result[i, 35] = rcBeam.RatioLeftTopAs;
+                result[i, 36] = rcBeam.RatioMidTopAs;
+                result[i, 37] = rcBeam.RatioRightTopAs;
+                result[i, 38] = rcBeam.RatioLeftBottomAs;
+                result[i, 39] = rcBeam.RatioMidBottomAs;
+                result[i, 40] = rcBeam.RatioRightBottomAs;
 
-                result[i, 42] = rcBeam.RatioLeftAv;
-                result[i, 43] = rcBeam.RatioMidAv;
-                result[i, 44] = rcBeam.RatioRightAv;
+                result[i, 41] = rcBeam.RatioLeftAv;
+                result[i, 42] = rcBeam.RatioMidAv;
+                result[i, 43] = rcBeam.RatioRightAv;
 
-                result[i, 45] = rcBeam.EtabsComment;
-                result[i, 46] = rcBeam.AsEvaluationComment;
-                result[i, 47] = rcBeam.AvEvaluationComment;
+                result[i, 44] = rcBeam.EtabsComment;
+                result[i, 45] = rcBeam.AsEvaluationComment;
+                result[i, 46] = rcBeam.AvEvaluationComment;
 
-                result[i, 48] = rcBeam.Cluster;
+                result[i, 47] = rcBeam.Cluster;
 
                 i++;
             }
@@ -1211,7 +1210,7 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
         {
             List<string> colTitles = new List<string>()
             {
-                "UniqueName", "Width (mm)", "Height (mm)", "fyk (Mpa)", "fck (Mpa)", "d (ETABS) (mm)", "d calculated (mm)", "Beam type", "As Min(mm2)", "Load case"
+                "UniqueName", "Width (mm)", "Height (mm)", "fyk (Mpa)", "fck (Mpa)", "d (ETABS) (mm)", "d calculated (mm)", "Beam type", "Load case"
                 , "Left Moment (-) (kNm)", "Mid Moment (-) (kNm)", "Right Moment (-) (kNm)", "Left Moment (+) (kNm)", "Mid Moment (+) (kNm)", "Right Moment (+) (kNm)"
                 , "Left Shear (kN)", "Mid Shear (kN)", "Right Shear (kN)"
                 , "Left Top As (mm2)", "Mid Top As (mm2)", "Right Top As (mm2)", "Left Bottom As (mm2)", "Mid Bottom As (mm2)", "Right Bottom As (mm2)"
@@ -1252,20 +1251,19 @@ namespace WS_SG_ETABS_Plugin.src.rc_beam_schedule
                     result[i, 5] = rcBeam.d;
                     result[i, 6] = rcBeam.dCalculated;
                     result[i, 7] = rcBeam.BeamType;
-                    result[i, 8] = rcBeam.AsMin;
 
-                    result[i, 9] = frameForceEachCase.LoadCaseName;
+                    result[i, 8] = frameForceEachCase.LoadCaseName;
 
-                    result[i, 10] = frameForceEachCase.LeftMomentNeg;
-                    result[i, 11] = frameForceEachCase.MidMomentNeg;
-                    result[i, 12] = frameForceEachCase.RightMomentNeg;
-                    result[i, 13] = frameForceEachCase.LeftMomentPos;
-                    result[i, 14] = frameForceEachCase.MidMomentPos;
-                    result[i, 15] = frameForceEachCase.RightMomentPos;
+                    result[i, 9] = frameForceEachCase.LeftMomentNeg;
+                    result[i, 10] = frameForceEachCase.MidMomentNeg;
+                    result[i, 11] = frameForceEachCase.RightMomentNeg;
+                    result[i, 12] = frameForceEachCase.LeftMomentPos;
+                    result[i, 13] = frameForceEachCase.MidMomentPos;
+                    result[i, 14] = frameForceEachCase.RightMomentPos;
 
-                    result[i, 16] = frameForceEachCase.LeftShear;
-                    result[i, 17] = frameForceEachCase.MidShear;
-                    result[i, 18] = frameForceEachCase.RightShear;
+                    result[i, 15] = frameForceEachCase.LeftShear;
+                    result[i, 16] = frameForceEachCase.MidShear;
+                    result[i, 17] = frameForceEachCase.RightShear;
 
                     i++;
                     Console.WriteLine(i);
