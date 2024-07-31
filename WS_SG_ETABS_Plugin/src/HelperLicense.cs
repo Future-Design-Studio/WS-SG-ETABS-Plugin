@@ -19,6 +19,7 @@ namespace WS_SG_ETABS_Plugin.src
             string licenseNumber;
             List<string> allowedPlugins = new List<string>();
 
+            /*
             //Read license number
             try
             {
@@ -59,6 +60,7 @@ namespace WS_SG_ETABS_Plugin.src
                 return (licenseValid, null);
 
             }
+            */
 
 
             //Read online allowed user

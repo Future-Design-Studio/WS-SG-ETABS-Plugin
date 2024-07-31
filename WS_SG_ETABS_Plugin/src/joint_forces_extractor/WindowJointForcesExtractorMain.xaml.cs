@@ -83,7 +83,7 @@ namespace WS_SG_ETABS_Plugin.src.joint_forces_extractor
 
             if (result == System.Windows.Forms.DialogResult.OK)
             {
-                textBoxFilePath.Text = dialog.SelectedPath;
+                textBoxFilePath.Text = dialog.SelectedPath + @"\";
             }
 
         }

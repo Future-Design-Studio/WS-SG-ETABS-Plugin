@@ -374,5 +374,14 @@ namespace WS_SG_ETABS_Plugin
             src.joint_forces_extractor.WindowJointForcesExtractorMain windowJointForcesExtractorMain = new src.joint_forces_extractor.WindowJointForcesExtractorMain(_SapModel, _Plugin);
             IsEnabled = true;
         }
+
+        private void buttonChangelog_Click(object sender, RoutedEventArgs e)
+        {
+            //IsEnabled = false;
+            //Call up Changelog window
+            string folder = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            System.Diagnostics.Process.Start($"{folder}\\src\\resources\\Changelog.pdf");
+            //IsEnabled = true;
+        }
     }
 }
