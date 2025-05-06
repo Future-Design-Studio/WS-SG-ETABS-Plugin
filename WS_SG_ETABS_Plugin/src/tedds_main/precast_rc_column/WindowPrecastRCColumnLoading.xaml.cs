@@ -14,7 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using ETABSv1;
-using ScottPlot.Drawing.Colormaps;
+//using ScottPlot.Drawing.Colormaps;
 
 namespace WS_SG_ETABS_Plugin.src.tedds_main.precast_rc_column
 {

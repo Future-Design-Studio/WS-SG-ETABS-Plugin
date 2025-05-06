@@ -68,7 +68,7 @@ namespace WS_SG_ETABS_Plugin.src
             {
 
                 List<List<string>> licenseCsv = new List<List<string>>();
-                licenseCsv = SplitCSV("https://raw.githubusercontent.com/manikandan-ramboll/licensing/main/etabs_powerapps_lic.csv");
+                licenseCsv = SplitCSV("https://gitlab.com/JOLG/testing/-/raw/main/etabs_powerapps_lic.csv");
 
                 foreach (List<string> eachLicenseCsv in licenseCsv)
                 {
@@ -90,7 +90,7 @@ namespace WS_SG_ETABS_Plugin.src
                         {
 
                             List<List<string>> versionCsv = new List<List<string>>();
-                            versionCsv = SplitCSV("https://raw.githubusercontent.com/manikandan-ramboll/licensing/main/etabs_powerapps_allowed_versions.csv");
+                            versionCsv = SplitCSV("https://gitlab.com/JOLG/testing/-/raw/main/etabs_powerapps_allowed_versions.csv");
                             foreach (List<string> eachVersionCsv in versionCsv)
                             {
                                 string versionCSV = eachVersionCsv[0];

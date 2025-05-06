@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
-using static WS_SG_ETABS_Plugin.src.pad_footing_plot.ClassPadFootPlot;
+//using static WS_SG_ETABS_Plugin.src.pad_footing_plot.ClassPadFootPlot;
 
 namespace WS_SG_ETABS_Plugin.src.apply_modifier
 {

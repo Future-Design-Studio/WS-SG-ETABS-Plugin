@@ -1,4 +1,5 @@
-﻿using ScottPlot;
+﻿using ScottPlot.WPF;
+using ScottPlot;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,6 +27,7 @@ namespace WS_SG_ETABS_Plugin.src
         {
 
             var myBubblePlot = Plot.Plot.AddBubblePlot();
+
             myBubblePlot.Add(
                 x: xCoord,
                 y: yCoord,

@@ -29,7 +29,7 @@ namespace WS_SG_ETABS_Plugin
 
         public WindowMain(ref cSapModel SapModel, ref cPluginCallback Plugin)
         {
-            string version = "1.2.0M";
+            string version = "2.0.0";
 
             _Plugin = Plugin;
             _SapModel = SapModel;
@@ -315,7 +315,7 @@ namespace WS_SG_ETABS_Plugin
         {
             IsEnabled = false;
             //Call up window
-            src.plot_drift.WindowDriftPlotSelectLoad windowDriftPlotSelectLoad = new src.plot_drift.WindowDriftPlotSelectLoad(_SapModel, _Plugin);
+            //src.plot_drift.WindowDriftPlotSelectLoad windowDriftPlotSelectLoad = new src.plot_drift.WindowDriftPlotSelectLoad(_SapModel, _Plugin);
             IsEnabled = true;
         }
 

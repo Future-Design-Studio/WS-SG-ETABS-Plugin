@@ -13,7 +13,7 @@ using System.Text;
 using System.Windows.Automation.Peers;
 using System.Windows.Forms;
 using System.Windows.Shapes;
-using WS_SG_ETABS_Plugin.src.ML;
+//using WS_SG_ETABS_Plugin.src.ML;
 
 namespace WS_SG_ETABS_Plugin.src.rc_col_schedule
 {
@@ -1375,17 +1375,17 @@ namespace WS_SG_ETABS_Plugin.src.rc_col_schedule
             }
 
             //Standardize data
-            observations = HelperML.StandardizeData(observations);
+            //observations = HelperML.StandardizeData(observations);
 
             //Call up ML preference window
-            src.ML.WindowMLPrefence windowMLPrefence = new WindowMLPrefence(observations);
-            int[] labels = windowMLPrefence.GetLabels();
+            //src.ML.WindowMLPrefence windowMLPrefence = new WindowMLPrefence(observations);
+            //int[] labels = windowMLPrefence.GetLabels();
 
             //Parsing cluster back to rcBeamList
             index = 0;
             foreach (src.HelperEtabs.RcColumn rcColumn in rcColumnList)
             {
-                rcColumn.Cluster = Convert.ToString(labels[index]);
+                //rcColumn.Cluster = Convert.ToString(labels[index]);
                 index++;
             }
 

@@ -10,7 +10,7 @@ using ETABSv1;
 using System.Windows.Controls;
 using Tekla.Structural.InteropAssemblies.TeddsCalc;
 using Microsoft.Office.Interop.Excel;
-using ScottPlot.Drawing.Colormaps;
+//using ScottPlot.Drawing.Colormaps;
 
 namespace WS_SG_ETABS_Plugin.src.tedds_main.precast_rc_column
 {

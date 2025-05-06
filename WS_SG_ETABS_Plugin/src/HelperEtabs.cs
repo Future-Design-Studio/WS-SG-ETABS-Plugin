@@ -3,7 +3,7 @@ using ETABSv1;
 using Microsoft.Office.Interop.Excel;
 using Rhino.Collections;
 //using SAFEv1;
-using ScottPlot.Drawing.Colormaps;
+//using ScottPlot.Drawing.Colormaps;
 using System;
 using System.Collections.Generic;
 using System.Linq;

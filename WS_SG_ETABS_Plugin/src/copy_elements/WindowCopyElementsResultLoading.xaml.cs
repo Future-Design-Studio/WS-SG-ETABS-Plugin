@@ -13,8 +13,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using ETABSv1;
-using ScottPlot.Drawing.Colormaps;
-using WS_SG_ETABS_Plugin.src.wall_design_view;
+//using ScottPlot.Drawing.Colormaps;
+//using WS_SG_ETABS_Plugin.src.wall_design_view;
 
 namespace WS_SG_ETABS_Plugin.src.copy_elements
 {
