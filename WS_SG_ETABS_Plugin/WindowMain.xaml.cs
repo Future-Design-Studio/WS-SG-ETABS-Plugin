@@ -16,6 +16,7 @@ using System.Reflection;
 using ETABSv1;
 using System.IO;
 using System.Data;
+using System.Diagnostics;
 
 namespace WS_SG_ETABS_Plugin
 {
@@ -217,11 +218,34 @@ namespace WS_SG_ETABS_Plugin
 
         private void buttonHelper_Click(object sender, RoutedEventArgs e)
         {
-            //IsEnabled = false;
-            //Call up helper window
-            string folder = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            System.Diagnostics.Process.Start($"{folder}\\src\\resources\\Tools.PDF");
-            //IsEnabled = true;
+            buttonHelper.IsEnabled = false; // Disable button during operation
+
+            try
+            {
+                string folder = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+                string pdfPath = System.IO.Path.Combine(folder, "src", "resources", "Tools.pdf");
+
+                if (System.IO.File.Exists(pdfPath))
+                {
+                    Process.Start(new ProcessStartInfo
+                    {
+                        FileName = pdfPath,
+                        UseShellExecute = true
+                    });
+                }
+                else
+                {
+                    MessageBox.Show("Tools.pdf not found!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                buttonHelper.IsEnabled = true; // Re-enable button
+            }
         }
 
         private void buttonTrfEtabstoSafe_Click(object sender, RoutedEventArgs e)
@@ -272,7 +296,24 @@ namespace WS_SG_ETABS_Plugin
 
         private void buttonFeedback_Click(object sender, RoutedEventArgs e)
         {
-            System.Diagnostics.Process.Start("https://forms.office.com/e/qaiKf5e3a4");
+            buttonFeedback.IsEnabled = false; // Disable button during operation
+
+            try
+            {
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = "https://forms.office.com/e/qaiKf5e3a4",
+                    UseShellExecute = true
+                });
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                buttonFeedback.IsEnabled = true; // Re-enable button
+            }
         }
 
         private void buttonPunchingShear_Click(object sender, RoutedEventArgs e)
@@ -315,7 +356,7 @@ namespace WS_SG_ETABS_Plugin
         {
             IsEnabled = false;
             //Call up window
-            //src.plot_drift.WindowDriftPlotSelectLoad windowDriftPlotSelectLoad = new src.plot_drift.WindowDriftPlotSelectLoad(_SapModel, _Plugin);
+            src.plot_drift.WindowDriftPlotSelectLoad windowDriftPlotSelectLoad = new src.plot_drift.WindowDriftPlotSelectLoad(_SapModel, _Plugin);
             IsEnabled = true;
         }
 
@@ -377,11 +418,49 @@ namespace WS_SG_ETABS_Plugin
 
         private void buttonChangelog_Click(object sender, RoutedEventArgs e)
         {
-            //IsEnabled = false;
-            //Call up Changelog window
-            string folder = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            System.Diagnostics.Process.Start($"{folder}\\src\\resources\\Changelog.pdf");
-            //IsEnabled = true;
+            buttonChangelog.IsEnabled = false; // Disable button
+
+            try
+            {
+                // Get the current assembly
+                Assembly assembly = Assembly.GetExecutingAssembly();
+
+                // Resource name format: "Namespace.Folder.FileName.Extension"
+                string resourceName = "WS_SG_ETABS_Plugin.src.resources.Changelog.pdf";
+
+                using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+                {
+                    if (stream == null)
+                    {
+                        MessageBox.Show("Changelog.pdf embedded resource not found!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        return;
+                    }
+
+                    // Temp file path
+                    string tempFilePath = System.IO.Path.Combine(System.IO.Path.GetTempPath(), "Changelog.pdf");
+
+                    // Write to temp file
+                    using (FileStream fileStream = new FileStream(tempFilePath, FileMode.Create, FileAccess.Write))
+                    {
+                        stream.CopyTo(fileStream);
+                    }
+
+                    // Open the PDF from the temp file path
+                    Process.Start(new ProcessStartInfo
+                    {
+                        FileName = tempFilePath,
+                        UseShellExecute = true
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                buttonChangelog.IsEnabled = true; // Re-enable button
+            }
         }
     }
 }

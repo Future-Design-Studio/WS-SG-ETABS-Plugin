@@ -397,6 +397,20 @@
     <Compile Include="src\pad_footing_plot\WindowPadFootPlotResult.xaml.cs">
       <DependentUpon>WindowPadFootPlotResult.xaml</DependentUpon>
     </Compile>
+    <Compile Include="src\plot_drift\ClassPlotDrift.cs" />
+    <Compile Include="src\plot_drift\FunctionPlotDrift.cs" />
+    <Compile Include="src\plot_drift\WindowDriftPlotLoading.xaml.cs">
+      <DependentUpon>WindowDriftPlotLoading.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\plot_drift\WindowDriftPlotMain.xaml.cs">
+      <DependentUpon>WindowDriftPlotMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\plot_drift\WindowDriftPlotResult.xaml.cs">
+      <DependentUpon>WindowDriftPlotResult.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\plot_drift\WindowDriftPlotSelectLoad.xaml.cs">
+      <DependentUpon>WindowDriftPlotSelectLoad.xaml</DependentUpon>
+    </Compile>
     <Compile Include="src\plot_reaction\graph\ClassPlotGraph.cs" />
     <Compile Include="src\plot_reaction\graph\FunctionPlotReactionGraph.cs" />
     <Compile Include="src\plot_reaction\graph\WindowPlotReactionGraphBaseReaction.xaml.cs">
@@ -678,6 +692,22 @@
       <SubType>Designer</SubType>
       <Generator>XamlIntelliSenseFileGenerator</Generator>
     </Page>
+    <Page Include="src\plot_drift\WindowDriftPlotLoading.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="src\plot_drift\WindowDriftPlotMain.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="src\plot_drift\WindowDriftPlotResult.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="src\plot_drift\WindowDriftPlotSelectLoad.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="src\plot_reaction\graph\WindowPlotReactionGraphBaseReaction.xaml">
       <SubType>Designer</SubType>
       <Generator>XamlIntelliSenseFileGenerator</Generator>
@@ -836,18 +866,18 @@
     <None Include="OpenTK.dll.config" />
     <None Include="packages.config" />
     <None Include="src\rc_beam_schedule\FlowchartConvertAsToRebar.drawio" />
-    <Resource Include="src\resources\Changelog.pdf">
+    <EmbeddedResource Include="src\resources\Changelog.pdf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
+    </EmbeddedResource>
     <Resource Include="src\resources\TEDDS_API.pdf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
     <Resource Include="src\resources\TEDDS_by_Future_Design_Studio.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="src\resources\Tools.pdf">
+    <EmbeddedResource Include="src\resources\Tools.pdf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="src\group_rc_beam_by_force\" />

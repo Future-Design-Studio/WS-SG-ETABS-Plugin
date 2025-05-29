@@ -1110,5 +1110,9 @@ C:\Users\JOLG\Source\Repos\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\p
 C:\Users\JOLG\Source\Repos\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\plot_drift\WindowDriftPlotMain.baml
 C:\Users\JOLG\Source\Repos\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\plot_drift\WindowDriftPlotResult.baml
 C:\Users\JOLG\Source\Repos\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\plot_drift\WindowDriftPlotSelectLoad.baml
-C:\Users\JOLG\Source\Repos\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\beam_rename\WindowBeamRenameMain.baml
-C:\Users\JOLG\Source\Repos\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\beam_rename\WindowBeamRenameResult.baml
+C:\Users\JOLG\Source\Repos\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\plot_drift\WindowDriftPlotLoading.g.cs
+C:\Users\JOLG\Source\Repos\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\plot_drift\WindowDriftPlotMain.g.cs
+C:\Users\JOLG\Source\Repos\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\plot_drift\WindowDriftPlotResult.g.cs
+C:\Users\JOLG\Source\Repos\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\obj\Debug\src\plot_drift\WindowDriftPlotSelectLoad.g.cs
+C:\Users\JOLG\Source\Repos\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\src\resources\Changelog.pdf
+C:\Users\JOLG\Source\Repos\ws-sg-etabs-plugin\WS_SG_ETABS_Plugin\bin\Debug\src\resources\Tools.pdf

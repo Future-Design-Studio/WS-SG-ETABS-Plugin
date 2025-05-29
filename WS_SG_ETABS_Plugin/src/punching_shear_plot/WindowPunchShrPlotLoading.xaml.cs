@@ -13,7 +13,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using ETABSv1;
 
 namespace WS_SG_ETABS_Plugin.src.punching_shear_plot
 {
